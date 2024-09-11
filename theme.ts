@@ -1,31 +1,19 @@
 export interface Theme {
-	primary: string;
+	main: string;
 	gray: string;
 	borderRadius: 'none' | 'sm' | 'base' | 'md' | 'lg' | 'xl' | 'full';
 	googleFonts: {
 		[key: string]: boolean | number[];
 	};
-	fonts: {
-		display: string;
-		sans: string;
-		code: string;
-		signature: string;
-	};
 }
 
 export const theme = {
-	primary: 'primary',
+	main: 'main',
 	secondary: 'secondary',
 	gray: 'slate',
 	borderRadius: 'lg',
 	googleFonts: {
-		'Nunito': true,
-	},
-	fonts: {
-		display: 'Nunito',
-		sans: 'Nunito',
-		code: 'Nunito',
-		signature: 'Nunito',
+		Nunito: true,
 	},
 } as Theme;
 

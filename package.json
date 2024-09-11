@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "nuxt build",
-		"dev": "nuxt dev",
+		"start:dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare",
@@ -13,16 +13,20 @@
 		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
-		"nuxt": "^3.13.1",
 		"@nuxt/eslint": "^0.5.6",
 		"@nuxt/image": "1.8.0",
 		"@nuxt/ui": "^2.18.4",
 		"@types/nodemailer": "^6.4.15",
 		"@types/uuid": "^10.0.0",
+		"@vee-validate/zod": "^4.13.2",
 		"nodemailer": "^6.9.15",
+		"nuxt": "^3.13.1",
 		"nuxt-mail": "^5.0.1",
+		"pinia": "^2.2.2",
+		"vee-validate": "^4.13.2",
 		"vue": "latest",
-		"vue-router": "latest"
+		"vue-router": "latest",
+		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@headlessui/vue": "1.7.23",

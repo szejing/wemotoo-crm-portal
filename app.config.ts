@@ -7,12 +7,24 @@ export default defineAppConfig({
 	theme,
 	ui: {
 		strategy: 'override',
-		primary: theme.primary,
+		primary: theme.main,
 		gray: theme.gray,
+
+		//* Notification *//
 		notifications: {
 			// Show toasts at the top right of the screen
 			position: 'top-0 right-0 bottom-auto left-auto',
 		},
+
+		notification: {
+			default: {
+				closeButton: {
+					icon: 'i-octicon-x-24',
+				},
+			},
+		},
+
+		//* Card *//
 		card: {
 			base: 'transition duration-200',
 			shadow: 'shadow-none',
@@ -22,9 +34,9 @@ export default defineAppConfig({
 			rounded: `rounded`,
 		},
 
+		//* Button *//
 		button: {
 			base: 'button',
-			// base: 'hover:scale-105 active:hover:scale-95 transition duration-150',
 			font: 'font-bold font-nunito',
 			rounded: 'rounded',
 			default: {
@@ -40,15 +52,9 @@ export default defineAppConfig({
 			},
 			color: {
 				primary: {
-					solid:
-						'ring-1 ring-inset ring-primary text-white hover:button-hover disabled:bg-white bg-primary dark:hover:button-hover dark:disabled:bg-secondary-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400',
-					outline:
-						'ring-1 ring-inset ring-secondary-800 dark:ring-white text-secondary-800 dark:text-white hover:text-white hover:button-hover disabled:bg-transparent dark:hover:button-hover dark:disabled:bg-transparent focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary',
+					solid: 'button-color-primary-solid',
+					outline: 'button-color-primary-outline disabled:button-color-primary-outline-disabled',
 				},
-			},
-			variant: {
-				outline:
-					'ring-1 ring-inset ring-current text-{color}-500 dark:text-{color}-400 hover:bg-{color}-50 disabled:bg-transparent dark:hover:bg-{color}-950 dark:disabled:bg-transparent focus-visible:ring-2 focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
 			},
 			padding: {
 				'2xs': 'px-2 py-1',
@@ -59,15 +65,63 @@ export default defineAppConfig({
 				'xl': 'px-10 py-3',
 			},
 		},
+
+		//* Badge *//
 		badge: {
 			rounded: 'rounded',
 		},
-		input: {
-			default: {
-				loadingIcon: 'material-symbols:sync-rounded',
-			},
-			rounded: `rounded-${theme.borderRadius}`,
+
+		//* Input *//
+		// input: {
+		// 	size: {
+		// 		'2xs': 'text-xs md:text-xs',
+		// 		'xs': 'text-xs md:text-xs',
+		// 		'sm': 'text-sm md:text-sm',
+		// 		'md': 'text-sm md:text-base',
+		// 		'lg': 'text-sm md:text-xl',
+		// 		'xl': 'text-sm md:text-2xl',
+		// 	},
+		// 	padding: {
+		// 		'2xs': 'px-2 py-1',
+		// 		'xs': 'px-3 py-2',
+		// 		'sm': 'px-3 py-2',
+		// 		'md': 'px-4 py-3',
+		// 		'lg': 'px-4 py-3',
+		// 		'xl': 'px-4 py-3',
+		// 	},
+		// 	leading: {
+		// 		padding: {
+		// 			'2xs': 'ps-8',
+		// 			'xs': 'ps-9',
+		// 			'sm': 'ps-10',
+		// 			'md': 'ps-11',
+		// 			'lg': 'ps-12',
+		// 			'xl': 'ps-13',
+		// 		},
+		// 	},
+		// 	trailing: {
+		// 		padding: {
+		// 			'2xs': 'pe-8',
+		// 			'xs': 'pe-9',
+		// 			'sm': 'pe-10',
+		// 			'md': 'pe-11',
+		// 			'lg': 'pe-12',
+		// 			'xl': 'pe-13',
+		// 		},
+		// 	},
+		// 	default: {
+		// 		size: 'md',
+		// 		loadingIcon: 'material-symbols:sync-rounded',
+		// 	},
+		// 	rounded: `rounded`,
+		// },
+
+		//* Textarea *//
+		textarea: {
+			rounded: 'rounded',
 		},
+
+		//* Select *//
 		select: {
 			rounded: 'rounded',
 			default: {
@@ -75,22 +129,16 @@ export default defineAppConfig({
 				trailingIcon: 'material-symbols:expand-more-rounded',
 			},
 		},
-		textarea: {
-			rounded: 'rounded',
-		},
+
+		//* Select Menu *//
 		selectMenu: {
 			rounded: 'rounded',
 			default: {
 				selectedIcon: 'material-symbols:fitbit-check-small-rounded',
 			},
 		},
-		notification: {
-			default: {
-				closeButton: {
-					icon: 'i-octicon-x-24',
-				},
-			},
-		},
+
+		//* Command Palette *//
 		commandPalette: {
 			default: {
 				icon: 'material-symbols:search-rounded',
@@ -101,6 +149,8 @@ export default defineAppConfig({
 				},
 			},
 		},
+
+		//* Table *//
 		table: {
 			default: {
 				sortAscIcon: 'octicon:sort-asc-24',
@@ -116,15 +166,21 @@ export default defineAppConfig({
 				},
 			},
 		},
+
+		//* Avatar *//
 		avatar: {
 			default: {},
 			rounded: 'rounded',
 		},
+
+		//* Breadcrumb *//
 		breadcrumb: {
 			default: {
 				divider: 'material-symbols:chevron-right',
 			},
 		},
+
+		//* Pagination *//
 		pagination: {
 			rounded: 'first:rounded-l-button last:rounded-r-button',
 			default: {
