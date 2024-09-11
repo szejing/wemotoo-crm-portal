@@ -62,7 +62,7 @@ export default {
 				},
 			},
 			colors: {
-				primary: {
+				main: {
 					DEFAULT: '#F37323',
 					100: '#FEF1E9',
 					200: '#FCDCC8',

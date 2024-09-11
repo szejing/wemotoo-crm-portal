@@ -25,3 +25,12 @@ html {
 	object-fit: cover;
 	object-position: top;
 }
+
+/* Placeholder colors */
+::placeholder {
+	@apply text-neutral-400 opacity-100;
+}
+
+::-ms-input-placeholder {
+	@apply text-neutral-400;
+}
