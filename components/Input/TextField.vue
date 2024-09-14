@@ -24,19 +24,6 @@
 				/>
 			</div>
 		</div>
-
-		<!-- <UInput
-			:icon="icon"
-			:v-model="value"
-			:name="props.name"
-			:disabled="disabled"
-			:class="['w-full outline-none bg-transparent', { 'cursor-not-allowed': disabled }]"
-			:type="type || 'text'"
-			:placeholder="placeHolder"
-			size="md"
-			@blur="isFocus = false"
-			@focus="isFocus = true"
-		/> -->
 		<div v-if="errorMessage" class="error-message">
 			{{ errorMessage }}
 		</div>

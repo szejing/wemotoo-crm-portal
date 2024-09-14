@@ -1,3 +1,6 @@
+import type { LoginRequest } from '~/stores/Auth/model/request/login-request';
+import type { LoginResponse } from '~/stores/Auth/model/response/login-response';
+
 export abstract class BaseApiService {
 	async call<T>(job: () => Promise<AsyncData<T>>, errorHandler?: (error: any) => Promise<void>) {
 		try {
@@ -10,12 +13,12 @@ export abstract class BaseApiService {
 		} catch (error: any) {
 			console.error(error.data);
 
-			// // handle 401 error here
-			// if (error.status == 401) {
-			// 	// fire events to logout user
-			// 	const authStore = useAuthStore();
-			// 	authStore.logout();
-			// }
+			// handle 401 error here
+			if (error.status == 401) {
+				// fire events to logout user
+				// const authStore = useAuthStore();
+				// authStore.logout();
+			}
 			if (errorHandler) {
 				await errorHandler(error);
 			}
@@ -23,7 +26,21 @@ export abstract class BaseApiService {
 	}
 }
 
-export class ApiService extends BaseApiService {}
+export class ApiService extends BaseApiService {
+	async performLogin(data: LoginRequest): Promise<LoginResponse | undefined> {
+		return super.call<LoginResponse>(
+			() =>
+				$fetch('/api/auth/login', {
+					method: 'POST',
+					body: data,
+				}),
+			(error) => {
+				console.error(error);
+				throw error;
+			},
+		);
+	}
+}
 
 type AsyncData<T> = {
 	data: T;

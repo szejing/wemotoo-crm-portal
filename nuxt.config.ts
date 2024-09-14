@@ -20,6 +20,8 @@ export default defineNuxtConfig({
 		// https://devtools.nuxtjs.org/
 		// https://motion.vueuse.org/nuxt.html
 		// https://vueuse.org/
+
+		'@pinia/nuxt',
 		'@nuxt/devtools', // https://github.com/nuxt-modules/icon
 		'@nuxt/image', // https://nuxtseo.com/sitemap/getting-started/how-it-works
 		[

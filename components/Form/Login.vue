@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useForm } from 'vee-validate';
+import { useAuthStore } from '~/stores/Auth/Auth';
 import { LoginValidation } from '~/utils/schema/LoginValidation';
 
 const { handleSubmit } = useForm({
@@ -7,7 +8,10 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
-	alert(JSON.stringify(values, null, 2));
+	// alert(JSON.stringify(values, null, 2));
+
+	const authStore = useAuthStore();
+	authStore.login(values.email, values.password);
 });
 </script>
 
