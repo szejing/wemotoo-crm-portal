@@ -52,8 +52,12 @@ export default defineAppConfig({
 			},
 			color: {
 				primary: {
-					solid: 'button-color-primary-solid',
-					outline: 'button-color-primary-outline disabled:button-color-primary-outline-disabled',
+					solid: 'button-primary-solid disabled:button-primary-solid-disabled',
+					outline: 'button-primary-outline disabled:button-primary-outline-disabled',
+				},
+				green: {
+					solid: 'button-green-solid',
+					outline: 'button-green-outline disabled:button-green-outline-disabled',
 				},
 			},
 			padding: {

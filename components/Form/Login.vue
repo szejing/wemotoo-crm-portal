@@ -1,20 +1,3 @@
-<script lang="ts" setup>
-import { useForm } from 'vee-validate';
-import { useAuthStore } from '~/stores/Auth/Auth';
-import { LoginValidation } from '~/utils/schema/LoginValidation';
-
-const { handleSubmit } = useForm({
-	validationSchema: LoginValidation,
-});
-
-const onSubmit = handleSubmit((values) => {
-	// alert(JSON.stringify(values, null, 2));
-
-	const authStore = useAuthStore();
-	authStore.login(values.email, values.password);
-});
-</script>
-
 <template>
 	<div class="h-screen flex justify-center items-center">
 		<form @submit="onSubmit">
@@ -28,10 +11,10 @@ const onSubmit = handleSubmit((values) => {
 						</div>
 					</template>
 					<h1 class="font-nunito text-2xl text-secondary text-center">Merchant Login</h1>
-					<Placeholder class="h-4" />
+					<!-- <Placeholder class="h-4" /> -->
 
 					<InputTextField label="Email Address" type="email" name="email" value="email" place-holder="abc@wemotoo.com" />
-					<Placeholder class="h-4" />
+					<!-- <Placeholder class="h-4" /> -->
 					<InputTextField label="Password" type="password" name="password" value="password" />
 
 					<template #footer>
@@ -43,4 +26,21 @@ const onSubmit = handleSubmit((values) => {
 	</div>
 </template>
 
-<style></style>
+<script lang="ts" setup>
+import { useForm } from 'vee-validate';
+import { useAuthStore } from '~/stores';
+import { LoginValidation } from '~/utils/schema';
+
+const { handleSubmit } = useForm({
+	validationSchema: LoginValidation,
+});
+
+const onSubmit = handleSubmit((values) => {
+	// alert(JSON.stringify(values, null, 2));
+
+	const authStore = useAuthStore();
+	authStore.login(values.email, values.password);
+});
+</script>
+
+<style scoped lang="css"></style>

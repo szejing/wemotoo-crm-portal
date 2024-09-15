@@ -1,9 +1,19 @@
 <template>
-	<div class="container mx-auto">
-		<slot />
+	<div>
+		<Topbar />
+		<div class="flex">
+			<Sidebar />
+			<div class="transform duration-200" :class="showSidebar ? 'ml-60' : 'ml-12'">
+				<slot />
+			</div>
+		</div>
 	</div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const sidebarStore = useSidebarStore();
 
-<style></style>
+const { showSidebar } = storeToRefs(sidebarStore);
+</script>
+
+<style scoped lang="css"></style>

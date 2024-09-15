@@ -14,6 +14,9 @@ export const useAuthStore = defineStore({
 		// login
 		async login(email: string, password: string) {
 			try {
+				console.log(email);
+				console.log(password);
+
 				const response = await new ApiService().performLogin({
 					email: email,
 					password: password,

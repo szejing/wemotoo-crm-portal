@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 		const data = await readBody(event);
 
 		const result = await $fetch(`${'Path.login'}`, {
-			baseURL: config.hostUrl,
+			baseURL: config.baseUrl,
 			method: 'POST',
 			body: data,
 			headers: {
