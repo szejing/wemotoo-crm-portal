@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 
 	runtimeConfig: {
-		hostUrl: process.env.HOST_URL,
+		baseUrl: process.env.BASE_URL,
 	},
 
 	components: [

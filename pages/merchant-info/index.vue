@@ -1,6 +1,6 @@
 <template>
 	<div class="">
-		<h1 class="font-nunito text-2xl">Overview</h1>
+		<h1 class="font-nunito text-2xl">Merchant Info</h1>
 	</div>
 </template>
 

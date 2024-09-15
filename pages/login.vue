@@ -1,7 +1,11 @@
 <template>
-	<div></div>
+	<FormLogin />
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+definePageMeta({
+	layout: 'auth',
+});
+</script>
 
-<style></style>
+<style scoped lang="css"></style>

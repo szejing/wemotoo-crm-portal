@@ -1,7 +1,5 @@
 <template>
-	<div class="">
-		<h1 class="font-nunito text-2xl">Overview</h1>
-	</div>
+	<div></div>
 </template>
 
 <script lang="ts" setup></script>

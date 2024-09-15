@@ -64,6 +64,7 @@ export default {
 			colors: {
 				main: {
 					DEFAULT: '#F37323',
+					50: '#FFF4E6',
 					100: '#FEF1E9',
 					200: '#FCDCC8',
 					300: '#FAC7A7',
@@ -76,6 +77,7 @@ export default {
 				},
 				secondary: {
 					DEFAULT: '#003B72',
+					50: '#F2F6FA',
 					100: '#E6EBF1',
 					200: '#BFCEDC',
 					300: '#99B1C7',
@@ -88,6 +90,7 @@ export default {
 				},
 				neutral: {
 					DEFAULT: '#6A7077',
+					50: '#F5F5F5',
 					100: '#EEEEEE',
 					200: '#E8E8E8',
 					300: '#C4C4C4',
