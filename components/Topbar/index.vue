@@ -1,5 +1,5 @@
 <template>
-	<div class="background">
+	<div class="topbar-bg">
 		<NuxtLink class="link" to="/login">
 			<UIcon name="i-material-symbols-light-logout" class="text-neutral-900 w-6 h-6" />
 		</NuxtLink>
@@ -9,7 +9,7 @@
 <script lang="ts" setup></script>
 
 <style scoped lang="css">
-.background {
+.topbar-bg {
 	@apply w-full h-14 bg-white flex justify-end items-center px-4;
 }
 

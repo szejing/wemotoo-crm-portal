@@ -26,12 +26,25 @@ export default defineAppConfig({
 
 		//* Card *//
 		card: {
-			base: 'transition duration-200',
-			shadow: 'shadow-none',
-			body: {
-				base: 'h-full flex flex-col',
-			},
+			base: 'transition duration-200 py-2',
+			shadow: 'shadow-md',
+			divide: 'divide-none',
 			rounded: `rounded`,
+			header: {
+				base: '',
+				background: '',
+				padding: 'px-4 py-2',
+			},
+			body: {
+				base: '',
+				background: '',
+				padding: 'px-4 py-3',
+			},
+			footer: {
+				base: '',
+				background: '',
+				padding: 'px-4 pt-2 pb-2',
+			},
 		},
 
 		//* Button *//
@@ -179,8 +192,12 @@ export default defineAppConfig({
 
 		//* Breadcrumb *//
 		breadcrumb: {
+			li: 'flex items-center gap-x-1.5 text-secondary-200  text-sm leading-6 min-w-0',
+			base: 'flex items-center gap-x-1.5 group font-light min-w-0',
+			active: 'text-secondary-800 font-medium',
+			inactive: 'hover:text-secondary-500',
 			default: {
-				divider: 'material-symbols:chevron-right',
+				divider: 'i-material-symbols-light-chevron-right',
 			},
 		},
 

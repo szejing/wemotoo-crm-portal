@@ -10,15 +10,17 @@
 							<!-- <img class="w-[180px] mx-auto mt-2 text-center" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" /> -->
 						</div>
 					</template>
-					<h1 class="font-nunito text-2xl text-secondary text-center">Merchant Login</h1>
-					<!-- <Placeholder class="h-4" /> -->
 
-					<InputTextField label="Email Address" type="email" name="email" value="email" place-holder="abc@wemotoo.com" />
-					<!-- <Placeholder class="h-4" /> -->
-					<InputTextField label="Password" type="password" name="password" value="password" />
+					<div class="flex flex-col gap-2">
+						<h1 class="font-nunito text-2xl text-secondary text-center">Merchant Login</h1>
+						<InputTextField label="Email Address" type="email" name="email" value="email" place-holder="abc@wemotoo.com" />
+						<InputTextField label="Password" type="password" name="password" value="password" />
+					</div>
 
 					<template #footer>
-						<UButton block size="md" color="primary" variant="outline" @click="onSubmit">Submit</UButton>
+						<div>
+							<UButton block size="md" color="primary" variant="outline" @click="onSubmit">Submit</UButton>
+						</div>
 					</template>
 				</UCard>
 			</div>
