@@ -1,7 +1,19 @@
 <template>
-	<div></div>
+	<div class="header-container">
+		<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
+	</div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useMerchantInfoStore } from '~/stores/MerchantInfo/MerchantInfo';
 
-<style scoped lang="css"></style>
+const merchantInfoStore = useMerchantInfoStore();
+
+const { merchant } = storeToRefs(merchantInfoStore);
+</script>
+
+<style scoped lang="css">
+.header-container {
+	@apply px-4 py-10 border-b-[1px] border-secondary-400;
+}
+</style>

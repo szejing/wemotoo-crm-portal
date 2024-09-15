@@ -3,13 +3,16 @@
 		<div v-if="!forcedShow" class="flex items-center justify-end p-4">
 			<UIcon :name="showSidebar ? 'i-heroicons-x-mark' : 'i-heroicons-chevron-double-right'" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
-		<div v-for="(navigate, index) in navigations" :key="index" class="flex flex-col space-y-4 px-2 mt-4">
-			<NuxtLink :to="navigate.to" class="active-link" exact-active-class="exact-active-link">
-				<div class="flex items-center gap-4">
-					<UIcon v-if="navigate.icon" :name="navigate.icon" class="w-5 h-5" />
-					{{ navigate.title }}
-				</div>
-			</NuxtLink>
+		<div class="space-y-4 px-2 mt-4">
+			<SidebarHeader />
+			<div v-for="(navigate, index) in navigations" :key="index" class="flex flex-col">
+				<NuxtLink :to="navigate.to" class="active-link" exact-active-class="exact-active-link">
+					<div class="flex items-center gap-4">
+						<UIcon v-if="navigate.icon" :name="navigate.icon" class="w-5 h-5" />
+						{{ navigate.title }}
+					</div>
+				</NuxtLink>
+			</div>
 		</div>
 	</div>
 </template>
