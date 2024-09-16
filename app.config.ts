@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/quotes */
 import { theme } from '~/theme';
 
 export default defineAppConfig({
@@ -49,7 +50,7 @@ export default defineAppConfig({
 
 		//* Button *//
 		button: {
-			base: 'button',
+			base: 'transition duration-200',
 			font: 'font-bold font-nunito',
 			rounded: 'rounded',
 			default: {
@@ -88,50 +89,77 @@ export default defineAppConfig({
 			rounded: 'rounded',
 		},
 
+		// * FormGroup *//
+		formGroup: {
+			wrapper: '',
+			inner: '',
+			label: {
+				wrapper: 'flex content-center items-center justify-between',
+				base: 'block font-normal text-neutral-400',
+				required: "after:content-['*'] after:ms-0.5 after:text-red-500",
+			},
+			size: {
+				'2xs': 'text-xs md:text-xs',
+				'xs': 'text-xs md:text-xs',
+				'sm': 'text-sm md:text-sm',
+				'md': 'text-sm md:text-base',
+				'lg': 'text-sm md:text-xl',
+				'xl': 'text-sm md:text-2xl',
+			},
+			container: 'mt-1 relative',
+			description: 'text-gray-500',
+			hint: 'text-gray-500',
+			help: 'mt-2 text-gray-500',
+			error: 'mt-2 text-red-500',
+			default: {
+				size: 'sm',
+			},
+		},
+
 		//* Input *//
-		// input: {
-		// 	size: {
-		// 		'2xs': 'text-xs md:text-xs',
-		// 		'xs': 'text-xs md:text-xs',
-		// 		'sm': 'text-sm md:text-sm',
-		// 		'md': 'text-sm md:text-base',
-		// 		'lg': 'text-sm md:text-xl',
-		// 		'xl': 'text-sm md:text-2xl',
-		// 	},
-		// 	padding: {
-		// 		'2xs': 'px-2 py-1',
-		// 		'xs': 'px-3 py-2',
-		// 		'sm': 'px-3 py-2',
-		// 		'md': 'px-4 py-3',
-		// 		'lg': 'px-4 py-3',
-		// 		'xl': 'px-4 py-3',
-		// 	},
-		// 	leading: {
-		// 		padding: {
-		// 			'2xs': 'ps-8',
-		// 			'xs': 'ps-9',
-		// 			'sm': 'ps-10',
-		// 			'md': 'ps-11',
-		// 			'lg': 'ps-12',
-		// 			'xl': 'ps-13',
-		// 		},
-		// 	},
-		// 	trailing: {
-		// 		padding: {
-		// 			'2xs': 'pe-8',
-		// 			'xs': 'pe-9',
-		// 			'sm': 'pe-10',
-		// 			'md': 'pe-11',
-		// 			'lg': 'pe-12',
-		// 			'xl': 'pe-13',
-		// 		},
-		// 	},
-		// 	default: {
-		// 		size: 'md',
-		// 		loadingIcon: 'material-symbols:sync-rounded',
-		// 	},
-		// 	rounded: `rounded`,
-		// },
+		input: {
+			size: {
+				'2xs': 'text-xs md:text-xs',
+				'xs': 'text-xs md:text-xs',
+				'sm': 'text-sm md:text-sm',
+				'md': 'text-sm md:text-base',
+				'lg': 'text-sm md:text-xl',
+				'xl': 'text-sm md:text-2xl',
+			},
+			padding: {
+				'2xs': 'px-2 py-1',
+				'xs': 'px-2 py-1',
+				'sm': 'px-2 py-1',
+				'md': 'px-4 py-2',
+				'lg': 'px-4 py-2',
+				'xl': 'px-4 py-3',
+			},
+			leading: {
+				padding: {
+					'2xs': 'ps-8',
+					'xs': 'ps-9',
+					'sm': 'ps-10',
+					'md': 'ps-11',
+					'lg': 'ps-12',
+					'xl': 'ps-13',
+				},
+			},
+			trailing: {
+				padding: {
+					'2xs': 'pe-8',
+					'xs': 'pe-9',
+					'sm': 'pe-10',
+					'md': 'pe-11',
+					'lg': 'pe-12',
+					'xl': 'pe-13',
+				},
+			},
+			default: {
+				size: 'md',
+				loadingIcon: 'material-symbols:sync-rounded',
+			},
+			rounded: `rounded`,
+		},
 
 		//* Textarea *//
 		textarea: {
@@ -141,6 +169,22 @@ export default defineAppConfig({
 		//* Select *//
 		select: {
 			rounded: 'rounded',
+			size: {
+				'2xs': 'text-xs md:text-xs',
+				'xs': 'text-xs md:text-xs',
+				'sm': 'text-sm md:text-sm',
+				'md': 'text-sm md:text-base',
+				'lg': 'text-sm md:text-xl',
+				'xl': 'text-sm md:text-2xl',
+			},
+			padding: {
+				'2xs': 'px-2 py-1',
+				'xs': 'px-2 py-1',
+				'sm': 'px-2 py-1',
+				'md': 'px-4 py-2',
+				'lg': 'px-4 py-2',
+				'xl': 'px-4 py-3',
+			},
 			default: {
 				loadingIcon: 'material-symbols:sync-rounded',
 				trailingIcon: 'material-symbols:expand-more-rounded',
@@ -150,6 +194,7 @@ export default defineAppConfig({
 		//* Select Menu *//
 		selectMenu: {
 			rounded: 'rounded',
+			padding: 'px-4 py-2',
 			default: {
 				selectedIcon: 'material-symbols:fitbit-check-small-rounded',
 			},

@@ -29,7 +29,7 @@ const { toggleSidebar } = sidebarStore;
 <style scoped lang="css">
 /**************************** sidebar styling ****************************/
 .sidebar {
-	@apply absolute z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200;
+	@apply fixed z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200;
 }
 
 .active-link {

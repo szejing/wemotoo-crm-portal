@@ -1,5 +1,5 @@
 import type { Package } from '../enum/package';
-import type { AccountStatus } from '../enum/status';
+import type { AccountStatus } from '../enum/account-status';
 import type { Address } from './address';
 
 export type MerchantInfo = {

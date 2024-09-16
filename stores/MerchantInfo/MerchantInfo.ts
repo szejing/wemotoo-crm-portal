@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
+import { AccountStatus } from '~/utils/enum/account-status';
 import { Package } from '~/utils/enum/package';
-import { AccountStatus } from '~/utils/enum/status';
 import type { MerchantInfo } from '~/utils/types/merchant';
 
 const initial: MerchantInfo = {
