@@ -1,9 +1,9 @@
 <template>
 	<div class="sidebar" :class="showSidebar ? 'translate-x-0 ease-out' : '-translate-x-[12rem] ease-in'">
-		<div v-if="!forcedShow" class="flex items-center justify-end p-4">
+		<div v-if="!forcedShow" class="flex items-center justify-end pt-4 px-4">
 			<UIcon :name="showSidebar ? 'i-heroicons-x-mark' : 'i-heroicons-chevron-double-right'" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
-		<div class="space-y-4 px-2 mt-4">
+		<div class="space-y-4 px-2">
 			<SidebarHeader />
 			<div v-for="(navigate, index) in navigations" :key="index" class="flex flex-col">
 				<NuxtLink :to="navigate.to" class="active-link" exact-active-class="exact-active-link">

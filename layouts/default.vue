@@ -1,7 +1,7 @@
 <template>
-	<div class="bg-slate-100 min-h-screen">
+	<div class="default-bg">
 		<Topbar />
-		<div class="flex">
+		<div class="flex w-s=creen h-full">
 			<Sidebar />
 			<div class="main-content" :class="showSidebar ? 'ml-60' : 'ml-12'">
 				<slot />
@@ -22,6 +22,6 @@ const { showSidebar } = storeToRefs(sidebarStore);
 }
 
 .main-content {
-	@apply p-8;
+	@apply w-full px-8 py-4 transform duration-500;
 }
 </style>

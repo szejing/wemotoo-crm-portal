@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<h1 class="font-nunito text-2xl">Orders</h1>
+		<div class="container">
+			<ZSectionFilterOrders />
+		</div>
 	</div>
 </template>
 
