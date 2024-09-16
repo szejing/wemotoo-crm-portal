@@ -1,48 +1,58 @@
 <template>
 	<div class="h-screen flex justify-center items-center">
-		<form @submit="onSubmit">
-			<div class="sm:w-[180px] md:w-[400px]">
+		<div class="w-[80%] xs:w-[400px] sm:w-[420px]">
+			<UForm :schema="LoginValidation" :state="state" class="space-y-4" @submit="onSubmit">
 				<UCard>
 					<template #header>
 						<div class="w-full">
 							<h1 class="font-nunito font-semibold text-2xl text-center">Wemotoo CRM</h1>
-							<img class="my-2 text-center" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
+							<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
 							<!-- <img class="w-[180px] mx-auto mt-2 text-center" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" /> -->
 						</div>
 					</template>
 
 					<div class="flex flex-col gap-2">
 						<h1 class="font-nunito text-2xl text-secondary text-center">Merchant Login</h1>
-						<InputTextField label="Email Address" type="email" name="email" value="email" place-holder="abc@wemotoo.com" />
-						<InputTextField label="Password" type="password" name="password" value="password" />
+						<UFormGroup v-slot="{ error }" label="Email" name="email" required>
+							<UInput v-model="state.email" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+						</UFormGroup>
+
+						<UFormGroup v-slot="{ error }" label="Password" name="password" required>
+							<UInput v-model="state.password" type="password" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+						</UFormGroup>
 					</div>
 
 					<template #footer>
 						<div>
-							<UButton block size="md" color="primary" variant="outline" @click="onSubmit">Submit</UButton>
+							<UButton block size="md" color="primary" variant="outline" type="submit">Submit</UButton>
 						</div>
 					</template>
 				</UCard>
-			</div>
-		</form>
+			</UForm>
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from 'vee-validate';
-import { useAuthStore } from '~/stores';
 import { LoginValidation } from '~/utils/schema';
+import type { FormSubmitEvent } from '#ui/types';
+import type { z } from 'zod';
 
-const { handleSubmit } = useForm({
-	validationSchema: LoginValidation,
+type Schema = z.output<typeof LoginValidation>;
+
+const state = reactive({
+	email: undefined,
+	password: undefined,
 });
 
-const onSubmit = handleSubmit((values) => {
-	// alert(JSON.stringify(values, null, 2));
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+	const { email, password } = event.data;
 
 	const authStore = useAuthStore();
-	authStore.login(values.email, values.password);
-});
+	authStore.login(email, password);
+
+	await navigateTo('/');
+};
 </script>
 
 <style scoped lang="css"></style>

@@ -1,3 +1,4 @@
+import { CustomerFilterValidation } from './CustomerFilterValidation';
 import { LoginValidation } from './LoginValidation';
 
-export { LoginValidation };
+export { LoginValidation, CustomerFilterValidation };

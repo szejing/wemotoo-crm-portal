@@ -1,16 +1,54 @@
 <template>
 	<UCard>
-		<div class="grid grid-cols-4 gap-4">
-			<InputTextField label="Email Address" type="email" name="email" value="email" />
-			<InputTextField label="Name" type="text" name="name" value="name" />
-			<InputTextField label="Phone" type="text" name="phone" value="phone" />
-			<!-- <InputTextField label="Postal Code" type="number" name="postal" value="postal" /> -->
-			<InputTextField label="Country" type="text" name="country" value="country" />
-			<InputSelectMenu label="Status" />
-		</div>
+		<UForm :schema="CustomerFilterValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
+			<UFormGroup label="Keyword" name="query" class="col-span-2">
+				<UInput v-model="state.query" placeholder="Search by Name / Phone No / Email..." icon="i-material-symbols-search-rounded" />
+			</UFormGroup>
+
+			<UFormGroup label="Account Status" name="status" class="col-start-4">
+				<USelectMenu
+					v-model="state.status"
+					v-model:query="query"
+					:options="options_account_status"
+					searchable
+					size="md"
+					value-attribute="name"
+					option-attribute="name"
+					multiple
+				>
+					<template #label>
+						<span v-if="state.status.length" class="truncate">{{ state.status.join(', ') }}</span>
+						<span v-else>Select Status</span>
+					</template>
+				</USelectMenu>
+			</UFormGroup>
+		</UForm>
 	</UCard>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import type { FormSubmitEvent } from '#ui/types';
+import type { z } from 'zod';
+import { options_account_status } from '~/utils/options';
+import { CustomerFilterValidation } from '~/utils/schema';
+
+type Schema = z.output<typeof CustomerFilterValidation>;
+
+const query = ref('');
+const state = reactive({
+	query: undefined,
+	status: [] as string[],
+});
+
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+	const { name, phone, email, postal, country, status } = event.data;
+
+	console.log(name, phone, email, postal, country, status);
+
+	// const authStore = useAuthStore();
+	// authStore.login(email, password);
+	// await navigateTo('/');
+};
+</script>
 
 <style></style>
