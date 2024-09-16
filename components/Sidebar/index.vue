@@ -3,7 +3,7 @@
 		<div v-if="!forcedShow" class="flex items-center justify-end pt-4 px-4">
 			<UIcon :name="showSidebar ? 'i-heroicons-x-mark' : 'i-heroicons-chevron-double-right'" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
-		<div class="space-y-4 px-2">
+		<div class="space-y-2 px-2">
 			<SidebarHeader />
 			<div v-for="(navigate, index) in navigations" :key="index" class="flex flex-col">
 				<NuxtLink :to="navigate.to" class="active-link" exact-active-class="exact-active-link">
@@ -33,7 +33,7 @@ const { toggleSidebar } = sidebarStore;
 }
 
 .active-link {
-	@apply p-4 mx-2 rounded-md text-base font-light cursor-pointer text-secondary-100 bg-transparent
+	@apply px-4 py-3 mx-2 rounded-md text-base font-light cursor-pointer text-secondary-100 bg-transparent
 	hover:bg-main-50 hover:text-secondary-700 hover:font-semibold transition duration-500 ease-in-out;
 }
 .exact-active-link {

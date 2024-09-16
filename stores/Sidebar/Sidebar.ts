@@ -31,7 +31,7 @@ const merchantNavigation = [
 export const useSidebarStore = defineStore({
 	id: 'sidebarStore',
 	state: () => ({
-		forcedShow: false as boolean,
+		forcedShow: true as boolean,
 		showSidebar: true as boolean,
 		navigations: merchantNavigation as Array<{ title: string; icon: string; to: string }>,
 	}),
