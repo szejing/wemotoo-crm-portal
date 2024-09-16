@@ -9,12 +9,9 @@
 }
 
 @layer components {
-	.container-px {
-		@apply px-10 md:px-14 lg:px-32;
-	}
-
-	.container-mt {
-		@apply mt-10 md:mt-20;
+	/**************************** container styling ****************************/
+	.container {
+		@apply py-4;
 	}
 
 	/**************************** button styling ****************************/
