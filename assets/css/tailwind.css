@@ -9,6 +9,27 @@
 }
 
 @layer components {
+	/**************************** word styling ****************************/
+	h1 {
+		@apply font-nunito font-semibold text-2xl text-secondary-600;
+	}
+
+	h2 {
+		@apply font-nunito font-semibold text-xl text-secondary-600;
+	}
+
+	h3 {
+		@apply font-nunito font-semibold text-base text-secondary-600;
+	}
+
+	h4 {
+		@apply font-nunito font-medium text-base text-secondary-600;
+	}
+
+	p {
+		@apply font-nunito font-normal text-base;
+	}
+
 	/**************************** container styling ****************************/
 	.container {
 		@apply py-4;

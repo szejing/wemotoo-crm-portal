@@ -2,7 +2,7 @@
 	<UCard>
 		<template #header>
 			<div class="w-full">
-				<h1 class="font-nunito font-semibold text-xl text-secondary-600">Sales</h1>
+				<h1>Sales</h1>
 			</div>
 		</template>
 		<Bar id="my-chart-id" :options="chartOptions" :data="chartData" />

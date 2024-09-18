@@ -28,6 +28,7 @@ export default defineAppConfig({
 		//* Card *//
 		card: {
 			base: 'transition duration-200 py-2',
+			background: 'bg-white',
 			shadow: 'shadow-md',
 			divide: 'divide-none',
 			rounded: `rounded`,
@@ -89,13 +90,15 @@ export default defineAppConfig({
 			rounded: 'rounded',
 		},
 
+		checkbox: {},
+
 		// * FormGroup *//
 		formGroup: {
 			wrapper: '',
 			inner: '',
 			label: {
 				wrapper: 'flex content-center items-center justify-between',
-				base: 'block font-normal text-neutral-400',
+				base: 'block font-normal text-secondary-700',
 				required: "after:content-['*'] after:ms-0.5 after:text-red-500",
 			},
 			size: {
