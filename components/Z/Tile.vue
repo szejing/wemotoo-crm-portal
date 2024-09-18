@@ -2,7 +2,7 @@
 	<div class="tile-container">
 		<NuxtImg format="webp" :src="thumbnailUrl" width="60" height="60" class="rounded-[50%]" preload />
 		<div class="inner-tile-container">
-			<h1 class="text-xl font-medium text-secondary-100">{{ title }}</h1>
+			<h2 class="font-medium text-secondary-100">{{ title }}</h2>
 			<p class="text-sm text-secondary-400">{{ subtitle }}</p>
 		</div>
 	</div>

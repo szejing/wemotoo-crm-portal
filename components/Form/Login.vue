@@ -5,14 +5,14 @@
 				<UCard>
 					<template #header>
 						<div class="w-full">
-							<h1 class="font-nunito font-semibold text-2xl text-center">Wemotoo CRM</h1>
+							<h1 class="text-center">Wemotoo CRM</h1>
 							<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
 							<!-- <img class="w-[180px] mx-auto mt-2 text-center" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" /> -->
 						</div>
 					</template>
 
 					<div class="flex flex-col gap-2">
-						<h1 class="font-nunito text-2xl text-secondary text-center">Merchant Login</h1>
+						<h1 class="text-center">Merchant Login</h1>
 						<UFormGroup v-slot="{ error }" label="Email" name="email" required>
 							<UInput v-model="state.email" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 						</UFormGroup>

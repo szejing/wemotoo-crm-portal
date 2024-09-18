@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CustomerFilterValidation = z.object({
+export const FilterCustomerValidation = z.object({
 	name: z.string().optional(),
 	email: z.string().optional(),
 	phone: z.string().optional(),

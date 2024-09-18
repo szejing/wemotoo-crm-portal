@@ -16,7 +16,7 @@
 								Export
 							</UButton>
 
-							<UButton class="w-42 h-10" block color="green">
+							<UButton class="w-42 h-10" block color="green" @click="navigateTo('/products/create')">
 								<UIcon name="i-ic-round-add-circle-outline" class="w-5 h-5" />
 								Create Product
 							</UButton>
@@ -47,7 +47,7 @@ const links = [
 	{
 		label: 'Products',
 		icon: 'i-material-symbols-light-box-add-outline-rounded',
-		to: '/',
+		to: '/products',
 	},
 ];
 

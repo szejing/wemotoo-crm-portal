@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<h1 class="font-nunito text-2xl">Settings</h1>
+		<h1>Settings</h1>
 	</div>
 </template>
 

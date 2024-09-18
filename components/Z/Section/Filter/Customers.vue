@@ -1,6 +1,6 @@
 <template>
 	<UCard>
-		<UForm :schema="CustomerFilterValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
+		<UForm :schema="FilterCustomerValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
 			<UFormGroup label="Keyword" name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Name / Phone No / Email..." icon="i-material-symbols-search-rounded" />
 			</UFormGroup>
@@ -30,9 +30,9 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { options_account_status } from '~/utils/options';
-import { CustomerFilterValidation } from '~/utils/schema';
+import { FilterCustomerValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CustomerFilterValidation>;
+type Schema = z.output<typeof FilterCustomerValidation>;
 
 const query = ref('');
 const state = reactive({
