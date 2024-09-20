@@ -1,6 +1,6 @@
 <template>
 	<div class="header-container">
-		<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
+		<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" @click-thumbnail="navigateTo('/')" />
 	</div>
 </template>
 
