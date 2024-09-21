@@ -9,6 +9,7 @@
 				<UCard :ui="cardBg">
 					<template #header>
 						<h3>Categories</h3>
+						<ZSelectMenuCategories />
 					</template>
 				</UCard>
 
@@ -16,6 +17,7 @@
 				<UCard :ui="cardBg">
 					<template #header>
 						<h3>Tags</h3>
+						<ZSelectMenuTags />
 					</template>
 				</UCard>
 

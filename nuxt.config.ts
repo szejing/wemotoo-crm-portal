@@ -6,19 +6,14 @@ export default defineNuxtConfig({
 			link: [{ rel: 'stylesheet', href: 'https://unpkg.com/@vueup/vue-quill@1.2.0/dist/vue-quill.snow.prod.cs' }],
 		},
 	},
+
 	compatibilityDate: '2024-04-03',
+
 	devtools: { enabled: true },
 
 	runtimeConfig: {
 		baseUrl: process.env.BASE_URL,
 	},
-
-	components: [
-		// Disable prefixing base components with `Base`
-		{ path: '~/components/base', pathPrefix: false },
-		// Auto import components from `~/components`
-		'~/components',
-	],
 
 	css: ['~/assets/css/main.css'],
 
@@ -44,7 +39,6 @@ export default defineNuxtConfig({
 		],
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
-		'nuxt-icon',
 		'@nuxt/eslint',
 		'@nuxt/ui',
 		'@vueuse/nuxt',
