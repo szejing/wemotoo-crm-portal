@@ -3,26 +3,31 @@
 		<UForm :schema="CreateProductValidation" :state="state" class="space-y-4" @submit="onSubmit">
 			<UCard>
 				<template #header>
-					<div class="flex justify-between">
-						<h2>Basic</h2>
-						<UCheckbox v-model="state.isActive" name="isActive" label="Active" color="green" />
+					<div class="w-full flex justify-between items-center">
+						<h2>Details</h2>
+						<div class="w-[50%] flex justify-end items-center gap-4">
+							<UCheckbox v-model="state.isActive" name="isActive" label="Active" color="green" />
+							<UCheckbox v-model="state.isService" name="isService" label="Service" color="green" />
+						</div>
 					</div>
 				</template>
 
-				<div class="grid grid-cols-2 gap-2">
+				<div class="grid grid-cols-2 gap-4">
 					<UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
 						<UInput v-model="state.code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 					</UFormGroup>
 
-					<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-						<UInput v-model="state.name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+					<UFormGroup v-slot="{ error }" label="Title" name="title" required>
+						<UInput v-model="state.title" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+					</UFormGroup>
+
+					<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
+						<UInput v-model="state.subtitle" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 					</UFormGroup>
 				</div>
 
-				<UFormGroup label="Description" name="description" class="mt-2">
-					<ClientOnly placeholder="loading...">
-						<QuillEditor v-model:content="state.description" content-type="html" theme="snow" :options="options" />
-					</ClientOnly>
+				<UFormGroup class="mt-4" label="Description" name="description">
+					<ZTextEditor v-model:value="state.description" placeholder="Product Description" />
 				</UFormGroup>
 			</UCard>
 
@@ -43,21 +48,17 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { CreateProductValidation } from '~/utils/schema';
-import { QuillEditor } from '@vueup/vue-quill';
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 type Schema = z.output<typeof CreateProductValidation>;
 
 const state = reactive({
 	code: undefined,
-	name: undefined,
+	title: undefined,
+	subtitle: undefined,
 	description: undefined,
 	isActive: true,
+	isService: false,
 });
-
-const options = {
-	placeholder: 'Product description',
-};
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	console.log(event);
@@ -69,11 +70,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	min-height: 200px;
 }
 :deep(.ql-toolbar.ql-snow) {
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
 }
 :deep(.ql-container.ql-snow) {
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
+	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
 }
 </style>
