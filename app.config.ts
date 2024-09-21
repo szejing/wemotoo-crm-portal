@@ -55,7 +55,7 @@ export default defineAppConfig({
 			font: 'font-bold font-nunito',
 			rounded: 'rounded',
 			default: {
-				loadingIcon: 'material-symbols:sync-rounded',
+				loadingIcon: 'i-material-symbols-sync-rounded',
 			},
 			size: {
 				'2xs': 'text-xs md:text-xs',
@@ -90,7 +90,13 @@ export default defineAppConfig({
 			rounded: 'rounded',
 		},
 
-		checkbox: {},
+		checkbox: {
+			container: 'flex items-center h-6',
+			base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
+			label: 'text-md font-medium text-gray-700',
+			required: 'text-md text-red-500 ',
+			help: 'text-md text-gray-500 ',
+		},
 
 		// * FormGroup *//
 		formGroup: {
@@ -159,7 +165,7 @@ export default defineAppConfig({
 			},
 			default: {
 				size: 'md',
-				loadingIcon: 'material-symbols:sync-rounded',
+				loadingIcon: 'i-material-symbols-sync-rounded',
 			},
 			rounded: `rounded`,
 		},
@@ -189,8 +195,8 @@ export default defineAppConfig({
 				'xl': 'px-4 py-3',
 			},
 			default: {
-				loadingIcon: 'material-symbols:sync-rounded',
-				trailingIcon: 'material-symbols:expand-more-rounded',
+				loadingIcon: 'i-material-symbols-sync-rounded',
+				trailingIcon: 'i-material-symbols-expand-more-rounded',
 			},
 		},
 
@@ -199,18 +205,18 @@ export default defineAppConfig({
 			rounded: 'rounded',
 			padding: 'px-4 py-2',
 			default: {
-				selectedIcon: 'material-symbols:fitbit-check-small-rounded',
+				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 			},
 		},
 
 		//* Command Palette *//
 		commandPalette: {
 			default: {
-				icon: 'material-symbols:search-rounded',
-				loadingIcon: 'material-symbols:sync-rounded',
-				selectedIcon: 'material-symbols:fitbit-check-small-rounded',
+				icon: 'i-material-symbols-search-rounded',
+				loadingIcon: 'i-material-symbols-sync-rounded',
+				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 				emptyState: {
-					icon: 'material-symbols:search-rounded',
+					icon: 'i-material-symbols-search-rounded',
 				},
 			},
 		},
@@ -224,10 +230,10 @@ export default defineAppConfig({
 				// 	icon: 'octicon-arrow-switch-24',
 				// },
 				loadingState: {
-					icon: 'material-symbols:sync-rounded',
+					icon: 'i-material-symbols-sync-rounded',
 				},
 				emptyState: {
-					icon: 'material-symbols:database-outline',
+					icon: 'i-material-symbols-database-outline',
 				},
 			},
 		},
@@ -254,10 +260,10 @@ export default defineAppConfig({
 			rounded: 'first:rounded-l-button last:rounded-r-button',
 			default: {
 				prevButton: {
-					icon: 'material-symbols:arrow-back-rounded',
+					icon: 'i-material-symbols-arrow-back-rounded',
 				},
 				nextButton: {
-					icon: 'material-symbols:arrow-forward-rounded',
+					icon: 'i-material-symbols-arrow-forward-rounded',
 				},
 			},
 		},

@@ -12,7 +12,7 @@
 		>
 			<template #label>
 				<span v-if="categories.length" class="truncate">{{ categories.join(', ') }}</span>
-				<span v-else>Select Categories</span>
+				<span v-else class="text-gray-400">Select Categories</span>
 			</template>
 		</USelectMenu>
 	</UFormGroup>

@@ -5,6 +5,14 @@
 		<div class="grid grid-cols-4 gap-4">
 			<FormProductCreation class="col-span-3" />
 			<div class="col-span-1 space-y-4">
+				<!-- ***** Status ***** -->
+				<UCard :ui="cardBg">
+					<template #header>
+						<h3>Status</h3>
+						<ZSelectMenuProductStatus />
+					</template>
+				</UCard>
+
 				<!-- ***** Categories ***** -->
 				<UCard :ui="cardBg">
 					<template #header>

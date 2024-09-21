@@ -3,7 +3,7 @@
 		<USelectMenu v-model="tags" v-model:query="query" :options="options_tags" searchable size="md" value-attribute="name" option-attribute="name" multiple>
 			<template #label>
 				<span v-if="tags.length" class="truncate">{{ tags.join(', ') }}</span>
-				<span v-else>Select Tags</span>
+				<span v-else class="text-gray-400">Select Tags</span>
 			</template>
 		</USelectMenu>
 	</UFormGroup>
