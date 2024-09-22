@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 
-import { ApiService } from '~/utils/api';
-
 export const useAuthStore = defineStore({
 	id: 'authStore',
 	state: () => ({
@@ -13,16 +11,31 @@ export const useAuthStore = defineStore({
 	actions: {
 		// login
 		async login(email: string, password: string) {
+			const { $api } = useNuxtApp();
+
 			try {
 				console.log(email);
 				console.log(password);
 
-				const response = await new ApiService().performLogin({
-					email: email,
-					password: password,
-				});
+				$api.auth
+					.login(email, password)
+					.then((data) => {
+						console.log(data);
+					})
+					.catch((error) => {
+						console.error(error);
+					});
 
-				console.log(response);
+				// const response = await new ApiService().performLogin({
+				// 	email: email,
+				// 	password: password,
+				// });
+
+				// const { $api } = useNuxtApp();
+
+				// const { data: ProductTag, pending, error } = await $api.auth.login(email, password);
+
+				// console.log(response);
 				// set user
 				// this.accessToken = response?.access_token;
 

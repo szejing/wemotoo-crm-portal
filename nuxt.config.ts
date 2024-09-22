@@ -13,6 +13,10 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		baseUrl: process.env.BASE_URL,
+		version: process.env.APP_VERSION,
+		public: {
+			apiBaseUrl: process.env.BASE_URL,
+		},
 	},
 
 	css: ['~/assets/css/main.css'],
