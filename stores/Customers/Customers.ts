@@ -48,7 +48,7 @@ export const useCustomersStore = defineStore({
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
-		async fetchCustomers() {
+		async getCustomers() {
 			this.loading = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			this.customers = structuredClone(initial);

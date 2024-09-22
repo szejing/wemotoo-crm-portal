@@ -42,8 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useSidebarStore } from '~/stores';
-
 const sidebarStore = useSidebarStore();
 
 const { forcedShow, showSidebar, navigations } = storeToRefs(sidebarStore);
@@ -61,7 +59,7 @@ const toggleCollapse = (id: number) => {
 <style scoped lang="css">
 /**************************** sidebar styling ****************************/
 .sidebar {
-	@apply fixed z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200;
+	@apply fixed z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200 hidden sm:block;
 }
 
 .active-link {

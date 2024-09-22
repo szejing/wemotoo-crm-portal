@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMerchantInfoStore } from '~/stores/MerchantInfo/MerchantInfo';
-
 const merchantInfoStore = useMerchantInfoStore();
 
 const { merchant } = storeToRefs(merchantInfoStore);

@@ -4,8 +4,6 @@
 		<div class="container">
 			<ZSectionFilterCustomers />
 
-			<!-- Table  -->
-
 			<UCard class="mt-4">
 				<div class="x-4">
 					<div class="flex justify-between">
@@ -27,6 +25,7 @@
 					</div>
 				</div>
 
+				<!-- Table  -->
 				<UTable :rows="rows" :columns="customer_columns">
 					<template #actions-data="{ row }">
 						<UDropdown :items="options(row)">

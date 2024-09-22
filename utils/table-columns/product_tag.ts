@@ -1,0 +1,15 @@
+export const product_tag_columns = [
+	{
+		key: 'tag_id',
+		label: 'Id',
+		sortable: true,
+	},
+	{
+		key: 'name',
+		label: 'Name',
+		sortable: true,
+	},
+	{
+		key: 'actions',
+	},
+];
