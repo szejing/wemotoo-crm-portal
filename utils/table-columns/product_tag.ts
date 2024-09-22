@@ -10,6 +10,11 @@ export const product_tag_columns = [
 		sortable: true,
 	},
 	{
+		key: 'item_count',
+		label: 'No of Items',
+		sortable: true,
+	},
+	{
 		key: 'actions',
 	},
 ];

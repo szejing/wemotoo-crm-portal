@@ -1,11 +1,11 @@
 <template>
 	<UCard>
 		<UForm :schema="FilterProductValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup label="Keyword" name="query" class="col-span-2">
+			<UFormGroup name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." icon="i-material-symbols-search-rounded" />
 			</UFormGroup>
 
-			<UFormGroup label="Status" name="status" class="col-start-4">
+			<UFormGroup name="status" class="col-start-4">
 				<USelectMenu
 					v-model="state.status"
 					v-model:query="query"
@@ -18,7 +18,7 @@
 				>
 					<template #label>
 						<span v-if="state.status.length" class="truncate">{{ state.status.join(', ') }}</span>
-						<span v-else>Select Status</span>
+						<span v-else>Product Status</span>
 					</template>
 				</USelectMenu>
 			</UFormGroup>
