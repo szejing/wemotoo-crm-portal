@@ -10,8 +10,8 @@ class AuthModule extends HttpFactory {
 	 * @returns
 	 */
 	async login(email: string, password: string) {
-		console.log(email);
-		console.log(password);
+		console.log('AuthModule', email);
+		console.log('AuthModule', password);
 		return this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Login()}`,

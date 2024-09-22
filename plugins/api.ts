@@ -6,39 +6,16 @@ interface IApiInstance {
 	auth: AuthModule;
 }
 
-// export default defineNuxtPlugin((_) => {
-// 	const config = useRuntimeConfig();
-
-// 	const fetchOptions: FetchOptions = {
-// 		baseURL: config.public.apiBaseUrl,
-// 	};
-
-// 	// Create a new instance of $fecther with custom option
-// 	const apiFecther = $fetch.create(fetchOptions);
-
-// 	// An object containing all repositories we need to expose
-// 	const modules: IApiInstance = {
-// 		productTags: new ProductTagsModule(apiFecther),
-// 		auth: new AuthModule(apiFecther),
-// 	};
-
-// 	return {
-// 		provide: {
-// 			api: modules,
-// 		},
-// 	};
-// });
-
 export default defineNuxtPlugin((_) => {
 	const config = useRuntimeConfig();
 	const NUXT_BASE_URL_PROXY_SERVER: string = config.public.apiBaseUrl;
 
 	const apiFetcher = $fetch.create({
 		baseURL: NUXT_BASE_URL_PROXY_SERVER,
-		onRequest({ request, response }) {
-			console.log('Request:', request);
-			console.log('Response:', response);
-		},
+		// onRequest({ request, response }) {
+		// 	console.log('Request:', request);
+		// 	console.log('Response:', response);
+		// },
 	});
 
 	const productTagModule = new ProductTagsModule(apiFetcher);
