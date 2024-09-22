@@ -51,4 +51,4 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style></style>
+<style scoped lang="css"></style>

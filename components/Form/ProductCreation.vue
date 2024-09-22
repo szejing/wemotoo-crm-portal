@@ -6,8 +6,8 @@
 					<div class="w-full flex justify-between items-center">
 						<h2>Details</h2>
 						<div class="w-[50%] flex justify-end items-center gap-4">
-							<UCheckbox v-model="state.isActive" name="isActive" label="Active" color="green" />
-							<UCheckbox v-model="state.isService" name="isService" label="Service" color="green" />
+							<UCheckbox v-model="state.is_active" name="isActive" label="Active" color="green" />
+							<UCheckbox v-model="state.is_service" name="isService" label="Service" color="green" />
 						</div>
 					</div>
 				</template>
@@ -56,8 +56,8 @@ const state = reactive({
 	title: undefined,
 	subtitle: undefined,
 	description: undefined,
-	isActive: true,
-	isService: false,
+	is_active: true,
+	is_service: false,
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

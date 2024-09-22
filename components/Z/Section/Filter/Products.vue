@@ -41,9 +41,9 @@ const state = reactive({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description, tag } = event.data;
+	const { code, name, description } = event.data;
 
-	console.log(code, name, description, tag);
+	console.log(code, name, description);
 
 	// const authStore = useAuthStore();
 	// authStore.login(email, password);
@@ -51,4 +51,4 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style></style>
+<style scoped lang="css"></style>

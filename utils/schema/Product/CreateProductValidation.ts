@@ -5,6 +5,6 @@ export const CreateProductValidation = z.object({
 	title: z.string(),
 	subtitle: z.string(),
 	description: z.string().optional(),
-	isActive: z.boolean().default(true),
-	isService: z.boolean().default(false),
+	is_active: z.boolean().default(true),
+	is_service: z.boolean().default(false),
 });
