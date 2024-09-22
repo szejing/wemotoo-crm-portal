@@ -27,6 +27,7 @@
 		"nodemailer": "^6.9.15",
 		"nuxt": "^3.13.1",
 		"nuxt-mail": "^5.0.1",
+		"ofetch": "^1.4.0",
 		"pinia": "^2.2.2",
 		"six-dropzone": "^0.3.4",
 		"vee-validate": "^4.13.2",
