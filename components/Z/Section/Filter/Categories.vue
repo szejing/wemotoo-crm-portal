@@ -1,7 +1,7 @@
 <template>
 	<UCard>
-		<UForm :schema="FilterCategoryValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup label="Keyword" name="query" class="col-span-2">
+		<UForm :schema="FilterCategoryValidation" :state="state" @submit="onSubmit">
+			<UFormGroup name="query">
 				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." icon="i-material-symbols-search-rounded" />
 			</UFormGroup>
 		</UForm>
