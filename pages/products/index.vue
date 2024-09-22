@@ -49,6 +49,11 @@ const links = [
 		icon: 'i-material-symbols-light-box-add-outline-rounded',
 		to: '/products',
 	},
+	{
+		label: 'All Products',
+		icon: 'i-material-symbols-light-lists-rounded',
+		to: '/products',
+	},
 ];
 
 const pageSize = ref(1);
