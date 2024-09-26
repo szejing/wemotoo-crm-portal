@@ -14,6 +14,10 @@
 				<span v-if="categories.length" class="truncate">{{ categories.join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Categories</span>
 			</template>
+
+			<template #option-empty>
+				<UButton color="green" variant="ghost">Create "{{ query }}"</UButton>
+			</template>
 		</USelectMenu>
 	</UFormGroup>
 </template>

@@ -93,9 +93,9 @@ export default defineAppConfig({
 		checkbox: {
 			container: 'flex items-center h-6',
 			base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
-			label: 'text-md font-medium text-gray-700',
-			required: 'text-md text-red-500 ',
-			help: 'text-md text-gray-500 ',
+			label: 'text-base font-medium text-gray-700',
+			required: 'text-base text-red-500 ',
+			help: 'text-base text-gray-500 ',
 		},
 
 		// * FormGroup *//
