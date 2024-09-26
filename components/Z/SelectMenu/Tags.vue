@@ -5,6 +5,10 @@
 				<span v-if="tags.length" class="truncate">{{ tags.join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Tags</span>
 			</template>
+
+			<template #option-empty>
+				<UButton color="green" variant="ghost">Create "{{ query }}"</UButton>
+			</template>
 		</USelectMenu>
 	</UFormGroup>
 </template>

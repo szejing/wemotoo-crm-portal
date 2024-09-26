@@ -2,9 +2,9 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<h2 class="my-6">Add Product</h2>
-		<div class="grid grid-cols-4 gap-4">
+		<div class="wrapper-grid">
 			<FormProductCreation class="col-span-3" />
-			<div class="col-span-1 space-y-4">
+			<div class="inner-wrapper">
 				<!-- ***** Status ***** -->
 				<UCard :ui="cardBg">
 					<template #header>
@@ -43,9 +43,9 @@
 							@update:model-value="modelValueFile"
 						>
 							<template #default>
-								<label for="single" class="flex flex-col justify-center items-center gap-1 text-secondary-400">
-									<UIcon name="i-material-symbols-upload-rounded" class="w-6 h-6" />
-									<h3 class="text-secondary-400">Drop here</h3>
+								<label for="single" class="flex-col-center gap-1 text-secondary-400">
+									<UIcon name="i-material-symbols-upload-rounded" class="size-6" />
+									<h3>Drop here</h3>
 								</label>
 							</template>
 						</SixDropzone>
@@ -65,11 +65,11 @@
 							@update:model-value="modelValueFileMultiple"
 						>
 							<template #default>
-								<label for="multiple" class="flex flex-col justify-center items-center gap-1 text-secondary-400">
-									<UIcon name="i-material-symbols-upload-rounded" class="w-6 h-6" />
+								<label for="multiple" class="flex-col-center gap-1 text-secondary-400">
+									<UIcon name="i-material-symbols-upload-rounded" class="size-6" />
 									<span class="text-center">
-										<h3 class="text-secondary-400">Drop here</h3>
-										<p class="text-secondary-400 text-sm font-nunito font-normal">*max 3 photos</p>
+										<h3>Drop here</h3>
+										<p>*max 3 photos</p>
 									</span>
 								</label>
 							</template>
@@ -142,8 +142,24 @@ const modelValueFileMultiple = (e: any) => {
 </script>
 
 <style scoped lang="css">
+.wrapper-grid {
+	@apply grid grid-cols-4 gap-4;
+}
+
+.inner-wrapper {
+	@apply col-span-1 space-y-4;
+}
+
 h2 {
 	@apply text-secondary-600 font-normal;
+}
+
+h3 {
+	@apply text-secondary-400;
+}
+
+p {
+	@apply text-secondary-400 text-sm font-nunito font-normal;
 }
 
 .dropzone {

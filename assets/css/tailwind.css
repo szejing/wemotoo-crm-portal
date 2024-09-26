@@ -6,9 +6,78 @@
 	body {
 		@apply bg-neutral-100;
 	}
+
+	.section-page-size {
+		@apply flex text-base font-nunito text-neutral-400 items-center gap-4;
+	}
+
+	.section-pagination {
+		@apply flex justify-end px-3 py-3.5 border-t border-gray-200;
+	}
 }
 
 @layer components {
+	/**************************** flex styling ****************************/
+	.flex-col-center {
+		@apply flex flex-col justify-center items-center;
+	}
+
+	.flex-col-jcenter {
+		@apply flex flex-col justify-center;
+	}
+
+	.flex-col-icenter {
+		@apply flex flex-col items-center;
+	}
+
+	.flex-col-start {
+		@apply flex flex-col justify-start items-start;
+	}
+
+	.flex-col-jstart {
+		@apply flex flex-col justify-start;
+	}
+
+	.flex-col-istart {
+		@apply flex flex-col items-start;
+	}
+
+	.flex-col-end {
+		@apply flex flex-col justify-end items-end;
+	}
+
+	.flex-col-jend {
+		@apply flex flex-col justify-end;
+	}
+
+	.flex-col-iend {
+		@apply flex flex-col items-end;
+	}
+
+	.flex-center {
+		@apply flex items-center justify-center;
+	}
+
+	.flex-jcenter {
+		@apply flex justify-center;
+	}
+
+	.flex-icenter {
+		@apply flex items-center;
+	}
+
+	.flex-jend {
+		@apply flex justify-end;
+	}
+
+	.flex-iend {
+		@apply flex items-end;
+	}
+
+	.flex-between {
+		@apply flex justify-between;
+	}
+
 	/**************************** word styling ****************************/
 	h1 {
 		@apply font-nunito font-semibold text-2xl text-secondary-600;

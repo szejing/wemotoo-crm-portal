@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="container grid grid-cols-1 sm:grid-cols-2 gap-4">
+		<div class="base">
 			<div>
 				<ZSectionFilterCategories />
 				<UCard class="mt-4"></UCard>
@@ -16,7 +16,7 @@
 					</template>
 				</UTable>
 
-				<div class="flex justify-end px-3 py-3.5 border-t border-gray-200">
+				<div class="section-pagination">
 					<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
 				</div>
 			</UCard>
@@ -67,4 +67,8 @@ const rows = computed(() => {
 });
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="css">
+.base {
+	@apply container grid grid-cols-1 sm:grid-cols-2 gap-4;
+}
+</style>
