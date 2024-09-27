@@ -23,9 +23,7 @@
 					</div>
 
 					<template #footer>
-						<div>
-							<UButton block size="md" color="primary" variant="outline" type="submit">Submit</UButton>
-						</div>
+						<UButton block size="md" color="primary" variant="outline" type="submit">Submit</UButton>
 					</template>
 				</UCard>
 			</UForm>

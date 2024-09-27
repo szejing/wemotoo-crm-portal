@@ -7,17 +7,27 @@
 				<UCard class="mt-4"></UCard>
 			</div>
 			<UCard>
-				<!-- Table  -->
-				<UTable :rows="rows" :columns="product_category_columns">
-					<template #actions-data="{ row }">
-						<UDropdown :items="options(row)">
-							<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-						</UDropdown>
-					</template>
-				</UTable>
+				<div v-if="productCategories.length == 0">
+					<!-- Table  -->
+					<UTable :rows="rows" :columns="product_category_columns">
+						<template #actions-data="{ row }">
+							<UDropdown :items="options(row)">
+								<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+							</UDropdown>
+						</template>
+					</UTable>
 
-				<div class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
+					<!-- Pagination  -->
+					<div class="section-pagination">
+						<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
+					</div>
+				</div>
+
+				<div v-else class="flex-center section-empty">
+					<div>
+						<h2>No Categories Found</h2>
+						<p>Create a new category to get started</p>
+					</div>
 				</div>
 			</UCard>
 		</div>
@@ -69,6 +79,22 @@ const rows = computed(() => {
 
 <style scoped lang="css">
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-2 gap-4;
+	@apply container grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4;
+}
+
+.section-empty {
+	@apply h-52;
+}
+
+.section-empty div {
+	@apply text-center;
+}
+
+.section-empty h2 {
+	@apply text-2xl font-semibold;
+}
+
+.section-empty p {
+	@apply text-gray-400;
 }
 </style>

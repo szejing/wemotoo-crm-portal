@@ -7,4 +7,9 @@ export const CreateProductValidation = z.object({
 	description: z.string().optional(),
 	is_active: z.boolean().default(true),
 	is_service: z.boolean().default(false),
+	// price details
+	// currency: undefined,
+	costPrice: z.string().optional(),
+	origSellPrice: z.string(),
+	salePrice: z.string().optional(),
 });
