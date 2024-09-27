@@ -3,7 +3,9 @@
 		<UBreadcrumb :links="links" />
 		<h2 class="my-6">Add Product</h2>
 		<div class="wrapper-grid">
+			<!-- ***** Form ***** -->
 			<FormProductCreation class="col-span-3" />
+
 			<div class="inner-wrapper">
 				<!-- ***** Status ***** -->
 				<UCard :ui="cardBg">
