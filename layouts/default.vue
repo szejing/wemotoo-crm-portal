@@ -3,10 +3,12 @@
 		<Topbar />
 		<div class="flex w-s=creen h-full">
 			<Sidebar />
-			<div class="main-content" :class="['ml-0', showSidebar ? 'sm:ml-60' : 'sm:ml-12']">
+			<div class="main-content" :class="['ml-0', showSidebar ? 'md:ml-60' : 'md:ml-12']">
 				<slot />
 			</div>
 		</div>
+
+		<SidebarModal />
 	</div>
 </template>
 
