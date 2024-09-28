@@ -78,6 +78,10 @@
 		@apply flex justify-between;
 	}
 
+	.flex-jbetween-icenter {
+		@apply flex justify-between items-center;
+	}
+
 	/**************************** word styling ****************************/
 	h1 {
 		@apply font-nunito font-semibold text-2xl text-secondary-600;

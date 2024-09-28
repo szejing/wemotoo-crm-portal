@@ -1,28 +1,33 @@
 <template>
 	<div class="topbar-bg">
-		<div class="sm:hidden flex justify-center items-center gap-2">
+		<div class="md:hidden flex justify-center items-center gap-2" @click="toggleSidebarModal">
 			<NuxtImg format="webp" :src="merchant.profile_thumbnail" width="40" height="40" class="rounded-[50%] cursor-pointer" preload />
 
-			<h2 class="font-medium text-secondary-900">{{ merchant.name }}</h2>
+			<div class="flex-col-start leading-tight">
+				<h2 class="font-semibold text-secondary-900">{{ merchant.name }}</h2>
+				<p class="font-normal text-xs text-secondary-700">{{ merchant.merchant_id }}</p>
+			</div>
 		</div>
 		<NuxtLink class="link" to="/login">
-			<UIcon name="i-material-symbols-light-logout" class="text-neutral-900 w-6 h-6" />
+			<UIcon name="i-material-symbols-light-logout" class="size-6" />
 		</NuxtLink>
 	</div>
 </template>
 
 <script lang="ts" setup>
 const merchantInfoStore = useMerchantInfoStore();
+const sidebarStore = useSidebarStore();
 
 const { merchant } = storeToRefs(merchantInfoStore);
+const { toggleSidebarModal } = sidebarStore;
 </script>
 
 <style scoped lang="css">
 .topbar-bg {
-	@apply w-full h-14 bg-white flex justify-between sm:justify-end items-center px-4;
+	@apply w-full h-16 bg-white flex justify-between md:justify-end items-center px-4;
 }
 
 .link {
-	@apply bg-secondary-50 w-10 h-10 rounded-full text-center flex justify-center items-center;
+	@apply bg-secondary-50 w-10 h-10 rounded-full text-center flex justify-center items-center text-neutral-900;
 }
 </style>

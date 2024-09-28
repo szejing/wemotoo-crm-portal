@@ -56,11 +56,16 @@ export const useSidebarStore = defineStore({
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: true as boolean,
+		showSidebarModal: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
 	}),
 	actions: {
 		toggleSidebar() {
 			this.showSidebar = !this.showSidebar;
+		},
+
+		toggleSidebarModal() {
+			this.showSidebarModal = !this.showSidebarModal;
 		},
 	},
 });

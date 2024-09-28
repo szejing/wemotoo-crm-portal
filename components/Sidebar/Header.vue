@@ -12,6 +12,6 @@ const { merchant } = storeToRefs(merchantInfoStore);
 
 <style scoped lang="css">
 .header-container {
-	@apply px-4 py-10 border-b-[1px] border-secondary-400;
+	@apply px-4 border-b-[1px] border-secondary-400;
 }
 </style>
