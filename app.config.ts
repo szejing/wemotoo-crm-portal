@@ -74,6 +74,10 @@ export default defineAppConfig({
 					solid: 'button-green-solid',
 					outline: 'button-green-outline disabled:button-green-outline-disabled',
 				},
+				danger: {
+					solid: 'button-red-solid',
+					outline: 'button-red-outline disabled:button-red-outline-disabled',
+				},
 			},
 			padding: {
 				'2xs': 'px-2 py-1',
