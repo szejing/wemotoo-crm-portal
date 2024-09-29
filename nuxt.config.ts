@@ -3,7 +3,10 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			script: ['https://unpkg.com/vue@next', 'https://unpkg.com/@vueup/vue-quill@1.2.0'],
-			link: [{ rel: 'stylesheet', href: 'https://unpkg.com/@vueup/vue-quill@1.2.0/dist/vue-quill.snow.prod.cs' }],
+			link: [
+				{ rel: 'stylesheet', href: 'https://unpkg.com/@vueup/vue-quill@1.2.0/dist/vue-quill.snow.prod.cs' },
+				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+			],
 		},
 	},
 

@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-const cardBg = { background: 'bg-secondary-100', shadow: 'shadow-sm' };
+const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-sm' };
 </script>
 
 <style scoped lang="css">
