@@ -3,13 +3,13 @@
 		<UBreadcrumb :links="links" />
 		<div class="base">
 			<div>
-				<ZSectionFilterTags />
-				<UCard class="mt-4"> </UCard>
+				<ZSectionFilterCategories />
+				<UCard class="mt-4"></UCard>
 			</div>
 			<UCard>
-				<div v-if="productTags.length > 0">
+				<div v-if="productOptions.length > 0">
 					<!-- Table  -->
-					<UTable :rows="rows" :columns="product_tag_columns">
+					<UTable :rows="rows" :columns="product_option_columns">
 						<template #actions-data="{ row }">
 							<UDropdown :items="options(row)">
 								<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
@@ -18,15 +18,15 @@
 					</UTable>
 
 					<!-- Pagination  -->
-					<div v-if="productTags.length == 0" class="section-pagination">
-						<UPagination v-model="page" :page-count="pageSize" :total="productTags.length" />
+					<div class="section-pagination">
+						<UPagination v-model="page" :page-count="pageSize" :total="productOptions.length" />
 					</div>
 				</div>
 
-				<div v-else class="flex-center h-52 section-empty">
+				<div v-else class="flex-center section-empty">
 					<div>
-						<h2>No Tags Found</h2>
-						<p>Create a new tag to get started</p>
+						<h2>No Options Found</h2>
+						<p>Create a new option to get started</p>
 					</div>
 				</div>
 			</UCard>
@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
-import { product_tag_columns } from '~/utils/table-columns';
+import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
+import { product_option_columns } from '~/utils/table-columns';
 
 const links = [
 	{
@@ -45,9 +45,9 @@ const links = [
 		to: '/products',
 	},
 	{
-		label: 'All Tags',
+		label: 'All Options',
 		icon: 'i-material-symbols-light-lists-rounded',
-		to: '/tags',
+		to: '/products/options',
 	},
 ];
 
@@ -68,12 +68,12 @@ const options = (row: any) => [
 ];
 
 const page = ref(1);
-const productTagsStore = useProductTagsStore();
+const productOptionsStore = useProductOptionsStore();
 
-const { productTags, pageSize } = storeToRefs(productTagsStore);
+const { productOptions, pageSize } = storeToRefs(productOptionsStore);
 
 const rows = computed(() => {
-	return productTags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return productOptions.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 </script>
 

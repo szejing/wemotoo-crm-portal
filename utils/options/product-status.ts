@@ -1,10 +1,10 @@
+import { ProductStatus } from '../enum/product-status';
+
 export const options_product_status = [
 	{
-		value: 0,
-		name: 'Draft',
+		value: ProductStatus.DRAFT,
 	},
 	{
-		value: 1,
-		name: 'Published',
+		value: ProductStatus.PUBLISHED,
 	},
 ];

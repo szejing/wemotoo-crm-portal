@@ -22,24 +22,9 @@
 
 <script lang="ts" setup>
 const photoFileMultiple = ref();
-const urlsMultiple = ref();
-// const urlsMultiple = ref([
-// 	{
-// 		path: 'https://i.imgur.com/PcRn7hB.jpeg',
-// 	},
-// 	{
-// 		path: 'https://i.imgur.com/HkulqHb.jpeg',
-// 	},
-// 	{
-// 		path: 'https://i.imgur.com/cJNCe4F.jpeg',
-// 	},
-// 	{
-// 		path: 'https://i.imgur.com/osJyAlk.jpeg',
-// 	},
-// 	{
-// 		path: 'https://i.imgur.com/AVU0Q0z.jpeg',
-// 	},
-// ]);
+
+defineProps<{ urlsMultiple: undefined | string[] }>();
+const emit = defineEmits(['update:urlsMultiple']);
 
 // MULTIPLE
 const dropMultiple = (e: any) => {
@@ -49,7 +34,18 @@ const selectedFileMultiple = (e: any) => {
 	console.log(e, 'change');
 };
 const modelValueFileMultiple = (e: any) => {
-	console.log(e, 'model-value');
+	console.log('model-value', e);
+
+	if (e.length > 0) {
+		emit(
+			'update:urlsMultiple',
+			e.map((file: any) => file.name),
+		);
+	} else if (e.length == 0) {
+		emit('update:urlsMultiple', e.name);
+	} else {
+		emit('update:urlsMultiple', undefined);
+	}
 };
 </script>
 
