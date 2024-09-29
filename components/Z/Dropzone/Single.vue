@@ -18,18 +18,22 @@
 </template>
 
 <script lang="ts" setup>
+defineProps({
+	urlSingle: String,
+});
+
+const emit = defineEmits(['update:urlSingle']);
 const photoFile = ref();
-const urlSingle = ref();
-// const url = ref('https://i.imgur.com/PcRn7hB.jpeg');
 
 const dropSingle = (e: any) => {
 	console.log(e.dataTransfer.files[0], 'drop');
 };
 const selectedFile = (e: any) => {
-	console.log(e, 'change');
+	console.log(e, 'selected-file');
 };
 const modelValueFile = (e: any) => {
-	console.log(e, 'model-value');
+	console.log('e.name', e.name);
+	emit('update:urlSingle', e.name);
 };
 </script>
 

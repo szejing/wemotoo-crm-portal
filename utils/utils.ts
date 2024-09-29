@@ -23,3 +23,7 @@ export function formatCurrency(value: number, fractionDigits: number = 2): strin
 
 	return formattedValue;
 }
+
+export const capitalizeFirstLetter = (value: string) => {
+	return value.charAt(0).toUpperCase() + value.slice(1);
+};

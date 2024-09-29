@@ -23,19 +23,24 @@
 </template>
 
 <script lang="ts" setup>
-const options_categories = [
-	{
-		id: 0,
-		name: 'Spare Parts',
-	},
-	{
-		id: 1,
-		name: 'Services',
-	},
-];
+import type { ProductCategory } from '~/utils/types/product-category';
 
 const query = ref('');
-const categories = ref([]);
+const categoryStore = useProductCategoriesStore();
+const { productCategories: options_categories } = storeToRefs(categoryStore);
+
+const props = defineProps<{ productCategories: ProductCategory[] }>();
+
+const emit = defineEmits(['update:productCategories']);
+
+const categories = computed({
+	get() {
+		return props.productCategories;
+	},
+	set(value) {
+		emit('update:productCategories', value);
+	},
+});
 </script>
 
 <style></style>

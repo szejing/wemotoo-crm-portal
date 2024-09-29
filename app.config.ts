@@ -207,7 +207,10 @@ export default defineAppConfig({
 		//* Select Menu *//
 		selectMenu: {
 			rounded: 'rounded',
-			padding: 'px-4 py-2',
+			padding: 'px-2 py-2',
+			option: {
+				padding: 'px-4 py-1.5',
+			},
 			default: {
 				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 			},

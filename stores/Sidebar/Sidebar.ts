@@ -22,18 +22,19 @@ const merchantNavigation = [
 		children: [
 			{
 				title: 'Products',
-				icon: 'i-material-symbols-light-box-add-outline-rounded',
 				to: '/products',
 			},
 			{
 				title: 'Categories',
-				icon: 'i-material-symbols-light-box-add-outline-rounded',
 				to: '/products/categories',
 			},
 			{
 				title: 'Tags',
-				icon: 'i-material-symbols-light-box-add-outline-rounded',
 				to: '/products/tags',
+			},
+			{
+				title: 'Options',
+				to: '/products/options',
 			},
 		],
 	},

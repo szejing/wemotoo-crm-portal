@@ -7,7 +7,7 @@
 				<UCard class="mt-4"></UCard>
 			</div>
 			<UCard>
-				<div v-if="productCategories.length == 0">
+				<div v-if="productCategories.length > 0">
 					<!-- Table  -->
 					<UTable :rows="rows" :columns="product_category_columns">
 						<template #actions-data="{ row }">

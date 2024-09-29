@@ -14,19 +14,24 @@
 </template>
 
 <script lang="ts" setup>
-const options_tags = [
-	{
-		id: 0,
-		name: 'Spare Parts',
-	},
-	{
-		id: 1,
-		name: 'Services',
-	},
-];
+import type { ProductTag } from '~/utils/types/product-tag';
 
 const query = ref('');
-const tags = ref([]);
+const tagStore = useProductTagsStore();
+const { productTags: options_tags } = storeToRefs(tagStore);
+
+const props = defineProps<{ productTags: ProductTag[] }>();
+
+const emit = defineEmits(['update:productTags']);
+
+const tags = computed({
+	get() {
+		return props.productTags;
+	},
+	set(value) {
+		emit('update:productTags', value);
+	},
+});
 </script>
 
 <style></style>
