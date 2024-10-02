@@ -16,9 +16,9 @@
 
 			<!-- *********************** Pricing *********************** -->
 			<ZInputProductPricing
-				v-model:product-selling-price="newProduct.origSellPrice"
-				v-model:product-cost-price="newProduct.costPrice"
-				v-model:product-sale-price="newProduct.salePrice"
+				v-model:product-selling-price.number="origSellPrice"
+				v-model:product-cost-price.number="costPrice"
+				v-model:product-sale-price.number="salePrice"
 			/>
 			<!-- *********************** Pricing *********************** -->
 
@@ -41,24 +41,35 @@ import { CreateProductValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateProductValidation>;
 
-// const state = reactive({
-// 	code: undefined,
-// 	title: undefined,
-// 	subtitle: undefined,
-// 	description: undefined,
-// 	is_discountable: true,
-// 	is_giftcard: false,
-// 	is_active: true,
-// 	is_service: false,
-// 	// price details
-// 	currency: undefined,
-// 	origSellPrice: undefined,
-// 	costPrice: undefined,
-// 	salePrice: undefined,
-// });
-
 const productStore = useProductStore();
 const { newProduct } = storeToRefs(productStore);
+
+const origSellPrice = computed({
+	get() {
+		return newProduct.value.price?.origSellPrice ?? undefined;
+	},
+	set(value) {
+		newProduct.value.price!.origSellPrice = value;
+	},
+});
+
+const costPrice = computed({
+	get() {
+		return newProduct.value.price?.costPrice ?? undefined;
+	},
+	set(value) {
+		newProduct.value.price!.costPrice = value;
+	},
+});
+
+const salePrice = computed({
+	get() {
+		return newProduct.value.price?.salePrice ?? undefined;
+	},
+	set(value) {
+		newProduct.value.price!.salePrice = value;
+	},
+});
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	console.log(event);

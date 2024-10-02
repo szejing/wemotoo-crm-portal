@@ -27,10 +27,12 @@ const initialEmptyProduct: ProductCreate = {
 	galleries: undefined,
 
 	// price
-	currency: undefined,
-	origSellPrice: undefined,
-	costPrice: undefined,
-	salePrice: undefined,
+	price: {
+		currency: 'RM',
+		origSellPrice: undefined,
+		costPrice: undefined,
+		salePrice: undefined,
+	},
 
 	// variants
 	options: [],

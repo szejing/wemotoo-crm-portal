@@ -2,6 +2,8 @@ import type { ProductStatus } from '~/utils/enum/product-status';
 import type { ProductOption } from '../product-option';
 import type { ProductCategory } from '../product-category';
 import type { ProductTag } from '../product-tag';
+import type { ProductVariant } from '../product-variant';
+import type { ProductPrice } from '../product-price';
 
 export type ProductCreate = {
 	code: string | undefined;
@@ -28,12 +30,9 @@ export type ProductCreate = {
 	galleries: string[] | undefined;
 
 	// price
-	currency: string | undefined;
-	origSellPrice: string | undefined;
-	costPrice: string | undefined;
-	salePrice: string | undefined;
+	price: ProductPrice | undefined;
 
 	// variants
 	options: ProductOption[] | undefined;
-	variants: [];
+	variants: ProductVariant[] | undefined;
 };

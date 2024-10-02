@@ -1,3 +1,5 @@
+export const fractionDigits = 2;
+
 /**
  * Checks if the input is numeric.
  * @param value The value to check.
@@ -15,12 +17,14 @@ export function formatCurrency(value: number, fractionDigits: number = 2): strin
 		throw new Error('value cannot be null or undefined');
 	}
 
+	console.log('value', value);
 	// Convert cents into hundreds.
 	value = value / 100;
 
 	// Format the number to the specified fraction digits
 	const formattedValue = value.toFixed(fractionDigits);
 
+	console.log('formattedValue', formattedValue);
 	return formattedValue;
 }
 

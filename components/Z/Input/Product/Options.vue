@@ -3,7 +3,7 @@
 		<h3>Options</h3>
 
 		<!-- ************* MOBILE ************* -->
-		<div v-for="(option, index) in productOptions" :key="index" class="flex flex-col sm:hidden gap-4">
+		<div v-for="(option, index) in prodOptions" :key="index" class="flex flex-col sm:hidden gap-4">
 			<div class="flex-jbetween-icenter gap-2">
 				<UInput v-model="option.name" placeholder="Name" class="w-52" />
 				<UButton
@@ -21,7 +21,7 @@
 		<!-- ************* MOBILE ************* -->
 
 		<!-- ************* DESKTOP ************* -->
-		<div v-for="(option, index) in productOptions" :key="index" class="hidden sm:flex gap-4">
+		<div v-for="(option, index) in prodOptions" :key="index" class="hidden sm:flex gap-4">
 			<UInput v-model="option.name" placeholder="Name" class="w-36" />
 			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
 			<UButton
@@ -46,7 +46,7 @@ import type { ProductOption } from '~/utils/types/product-option';
 const props = defineProps<{ options: ProductOption[] | undefined }>();
 const emit = defineEmits(['update:productOption']);
 
-const productOptions = computed({
+const prodOptions = computed({
 	get() {
 		return props.options ?? [];
 	},
@@ -56,12 +56,12 @@ const productOptions = computed({
 });
 
 const removeOption = (index: number) => {
-	productOptions.value = productOptions.value.filter((_, i) => i !== index);
+	prodOptions.value = prodOptions.value.filter((_, i) => i !== index);
 };
 
 const addOption = () => {
-	productOptions.value = [
-		...productOptions.value,
+	prodOptions.value = [
+		...prodOptions.value,
 		{
 			name: '',
 			values: [],
