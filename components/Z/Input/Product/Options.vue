@@ -3,7 +3,7 @@
 		<h3>Options</h3>
 
 		<!-- ************* MOBILE ************* -->
-		<div v-for="(option, index) in options" :key="index" class="flex flex-col sm:hidden gap-4">
+		<div v-for="(option, index) in productOptions" :key="index" class="flex flex-col sm:hidden gap-4">
 			<div class="flex-jbetween-icenter gap-2">
 				<UInput v-model="option.name" placeholder="Name" class="w-52" />
 				<UButton
@@ -13,7 +13,7 @@
 					icon="i-material-symbols-delete-outline-rounded"
 					size="sm"
 					color="danger"
-					@click="() => options.splice(index, 1)"
+					@click="() => removeOption(index)"
 				/>
 			</div>
 			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
@@ -21,7 +21,7 @@
 		<!-- ************* MOBILE ************* -->
 
 		<!-- ************* DESKTOP ************* -->
-		<div v-for="(option, index) in options" :key="index" class="hidden sm:flex gap-4">
+		<div v-for="(option, index) in productOptions" :key="index" class="hidden sm:flex gap-4">
 			<UInput v-model="option.name" placeholder="Name" class="w-36" />
 			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
 			<UButton
@@ -31,7 +31,7 @@
 				icon="i-material-symbols-delete-outline-rounded"
 				size="sm"
 				color="danger"
-				@click="() => options.splice(index, 1)"
+				@click="() => removeOption(index)"
 			/>
 		</div>
 		<!-- ************* DESKTOP ************* -->
@@ -43,13 +43,30 @@
 <script lang="ts" setup>
 import type { ProductOption } from '~/utils/types/product-option';
 
-const options = ref<ProductOption[]>([]);
+const props = defineProps<{ options: ProductOption[] | undefined }>();
+const emit = defineEmits(['update:productOption']);
+
+const productOptions = computed({
+	get() {
+		return props.options ?? [];
+	},
+	set(value) {
+		emit('update:productOption', value);
+	},
+});
+
+const removeOption = (index: number) => {
+	productOptions.value = productOptions.value.filter((_, i) => i !== index);
+};
 
 const addOption = () => {
-	options.value.push({
-		name: '',
-		values: [],
-	});
+	productOptions.value = [
+		...productOptions.value,
+		{
+			name: '',
+			values: [],
+		},
+	];
 };
 </script>
 

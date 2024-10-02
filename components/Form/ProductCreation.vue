@@ -23,7 +23,7 @@
 			<!-- *********************** Pricing *********************** -->
 
 			<!-- *********************** Additional Info *********************** -->
-			<ZInputProductAdditionalInfo :state="newProduct" />
+			<ZInputProductAdditionalInfo />
 			<!-- *********************** Additional Info *********************** -->
 
 			<div class="flex-center text-center">

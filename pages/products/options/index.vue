@@ -3,13 +3,17 @@
 		<UBreadcrumb :links="links" />
 		<div class="base">
 			<div>
-				<ZSectionFilterCategories />
+				<ZSectionFilterOptions />
 				<UCard class="mt-4"></UCard>
 			</div>
 			<UCard>
 				<div v-if="productOptions.length > 0">
 					<!-- Table  -->
 					<UTable :rows="rows" :columns="product_option_columns">
+						<template #values-data="{ row }">
+							<span>{{ row.values.join(' · ') }}</span>
+						</template>
+
 						<template #actions-data="{ row }">
 							<UDropdown :items="options(row)">
 								<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />

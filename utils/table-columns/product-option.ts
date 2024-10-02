@@ -1,8 +1,7 @@
 export const product_option_columns = [
 	{
-		key: 'tag_id',
+		key: 'id',
 		label: 'Id',
-		sortable: true,
 	},
 	{
 		key: 'name',
@@ -10,9 +9,8 @@ export const product_option_columns = [
 		sortable: true,
 	},
 	{
-		key: 'item_count',
-		label: 'No of Items',
-		sortable: true,
+		key: 'values',
+		label: 'Values',
 	},
 	{
 		key: 'actions',

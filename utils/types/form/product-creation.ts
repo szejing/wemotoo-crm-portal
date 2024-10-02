@@ -1,4 +1,7 @@
 import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductOption } from '../product-option';
+import type { ProductCategory } from '../product-category';
+import type { ProductTag } from '../product-tag';
 
 export type ProductCreate = {
 	code: string | undefined;
@@ -13,10 +16,10 @@ export type ProductCreate = {
 	status: ProductStatus;
 
 	// categories
-	categories: [];
+	categories: ProductCategory[] | undefined;
 
 	// tags
-	tags: [];
+	tags: ProductTag[] | undefined;
 
 	// thumbnail
 	thumbnail: string | undefined;
@@ -31,6 +34,6 @@ export type ProductCreate = {
 	salePrice: string | undefined;
 
 	// variants
-	options: [];
+	options: ProductOption[] | undefined;
 	variants: [];
 };
