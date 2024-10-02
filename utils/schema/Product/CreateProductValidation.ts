@@ -8,8 +8,10 @@ export const CreateProductValidation = z.object({
 	is_active: z.boolean().default(true),
 	is_service: z.boolean().default(false),
 	// price details
-	// currency: undefined,
-	costPrice: z.string().optional(),
-	origSellPrice: z.string(),
-	salePrice: z.string().optional(),
+	price: z.object({
+		currency: z.string(),
+		origSellPrice: z.number(),
+		costPrice: z.number().optional(),
+		salePrice: z.number().optional(),
+	}),
 });

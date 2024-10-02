@@ -124,7 +124,7 @@
 
 	/**************************** primary button ****************************/
 	.button-primary-solid {
-		@apply ring-1 ring-inset ring-main hover:ring-main-700 text-white disabled:bg-white bg-main focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
+		@apply ring-1 ring-inset ring-main hover:ring-main-700 text-white bg-main focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
 	}
 
 	.button-primary-solid-disabled {
@@ -136,12 +136,12 @@
 	}
 
 	.button-primary-outline-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-white bg-neutral-300;
+		@apply ring-1 ring-inset ring-neutral-100 text-main-300 bg-transparent aria-disabled:bg-transparent;
 	}
 
 	/**************************** green button ****************************/
 	.button-green-solid {
-		@apply ring-1 ring-inset ring-green-400 hover:ring-green-700 text-white disabled:bg-white bg-green-400 focus-visible:ring-2 focus-visible:ring-green-500 hover:bg-green-700;
+		@apply ring-1 ring-inset ring-green-400 hover:ring-green-700 text-white bg-green-400 focus-visible:ring-2 focus-visible:ring-green-500 hover:bg-green-700;
 	}
 
 	.button-green-solid-disabled {

@@ -18,7 +18,7 @@
 
 						<div class="space-y-4 mt-4">
 							<ZInputProductOptions v-model:options="newProduct.options" @update:product-option="updateProductOptions" />
-							<ZInputProductVariants />
+							<ZInputProductVariants :options="newProduct.options" :variants="newProduct.variants" @update:product-variant="updateProductVariants" />
 						</div>
 					</div>
 				</template>
@@ -48,7 +48,7 @@
 
 						<div class="space-y-4 mt-4">
 							<ZInputProductOptions :options="newProduct.options" @update:product-option="updateProductOptions" />
-							<ZInputProductVariants />
+							<ZInputProductVariants :options="newProduct.options" :variants="newProduct.variants" @update:product-variant="updateProductVariants" />
 						</div>
 					</div>
 				</template>
@@ -114,6 +114,10 @@ const { newProduct } = storeToRefs(productStore);
 
 const updateProductOptions = (value: any) => {
 	newProduct.value.options = value;
+};
+
+const updateProductVariants = (value: any) => {
+	newProduct.value.variants = value;
 };
 </script>
 

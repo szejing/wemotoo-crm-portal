@@ -53,17 +53,19 @@
 </template>
 
 <script lang="ts" setup>
+import { fractionDigits } from '~/utils/utils';
+
 const props = defineProps({
-	productSellingPrice: String,
-	productCostPrice: String,
-	productSalePrice: String,
+	productSellingPrice: Number,
+	productCostPrice: Number,
+	productSalePrice: Number,
 });
 
 const emit = defineEmits(['update:productSellingPrice', 'update:productCostPrice', 'update:productSalePrice']);
 
 const origSellPrice = computed({
-	get() {
-		return props.productSellingPrice;
+	get(): string | undefined {
+		return props.productSellingPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:productSellingPrice', value);
@@ -71,8 +73,8 @@ const origSellPrice = computed({
 });
 
 const costPrice = computed({
-	get() {
-		return props.productCostPrice;
+	get(): string | undefined {
+		return props.productCostPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:productCostPrice', value);
@@ -80,8 +82,8 @@ const costPrice = computed({
 });
 
 const salePrice = computed({
-	get() {
-		return props.productSalePrice;
+	get(): string | undefined {
+		return props.productSalePrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:productSalePrice', value);
@@ -92,7 +94,7 @@ const formatCurrencyInput = (input: string, event: any) => {
 		let value = input.replace(/\D/g, ''); // Remove non-numeric characters
 		let cursorLength = value.length;
 		if (value.length > 0) {
-			value = formatCurrency(parseFloat(value), 2);
+			value = formatCurrency(parseFloat(value), fractionDigits);
 			cursorLength = value.length;
 		}
 		event.focus();
