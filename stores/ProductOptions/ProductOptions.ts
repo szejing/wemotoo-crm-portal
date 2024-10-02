@@ -2,7 +2,33 @@ import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { ProductOption } from '~/utils/types/product-option';
 
-const initial: ProductOption[] = [];
+const initial: ProductOption[] = [
+	{
+		id: '1',
+		name: 'Color',
+		values: ['Red', 'Blue', 'Green'],
+	},
+	{
+		id: '2',
+		name: 'Size',
+		values: ['S', 'M', 'L'],
+	},
+	{
+		id: '3',
+		name: 'Material',
+		values: ['Cotton', 'Polyester', 'Wool'],
+	},
+	{
+		id: '4',
+		name: 'Style',
+		values: ['Casual', 'Formal', 'Sport'],
+	},
+	{
+		id: '5',
+		name: 'Pattern',
+		values: ['Solid', 'Striped', 'Checkered'],
+	},
+];
 
 export const useProductOptionsStore = defineStore({
 	id: 'productOptionsStore',

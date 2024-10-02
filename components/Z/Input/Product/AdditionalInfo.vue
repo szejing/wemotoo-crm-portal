@@ -4,34 +4,7 @@
 			<h2>Additional Info</h2>
 		</template>
 
-		<div class="sm:hidden">
-			<UTabs :items="product_additional_info" :ui="normal_ui_tabs">
-				<template #default="{ item, selected }">
-					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
-				</template>
-
-				<template #variants>
-					<div class="flex flex-col h-full">
-						<h1>Variants</h1>
-						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
-
-						<div class="space-y-4 mt-4">
-							<ZInputProductOptions />
-							<ZInputProductVariants />
-						</div>
-					</div>
-				</template>
-
-				<template #shipping>
-					<h1>Shipping</h1>
-				</template>
-
-				<template #tax>
-					<h1>Tax</h1>
-				</template>
-			</UTabs>
-		</div>
-
+		<!-- DESKTOP -->
 		<div class="hidden sm:block">
 			<UTabs :items="product_additional_info" orientation="vertical" :ui="vertical_ui_tabs">
 				<template #default="{ item, selected }">
@@ -44,7 +17,7 @@
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
 						<div class="space-y-4 mt-4">
-							<ZInputProductOptions />
+							<ZInputProductOptions v-model:options="newProduct.options" @update:product-option="updateProductOptions" />
 							<ZInputProductVariants />
 						</div>
 					</div>
@@ -59,10 +32,43 @@
 				</template>
 			</UTabs>
 		</div>
+		<!-- DESKTOP -->
+
+		<!-- MOBILE -->
+		<div class="sm:hidden">
+			<UTabs :items="product_additional_info" :ui="normal_ui_tabs">
+				<template #default="{ item, selected }">
+					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
+				</template>
+
+				<template #variants>
+					<div class="flex flex-col h-full">
+						<h1>Variants</h1>
+						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
+
+						<div class="space-y-4 mt-4">
+							<ZInputProductOptions :options="newProduct.options" @update:product-option="updateProductOptions" />
+							<ZInputProductVariants />
+						</div>
+					</div>
+				</template>
+
+				<template #shipping>
+					<h1>Shipping</h1>
+				</template>
+
+				<template #tax>
+					<h1>Tax</h1>
+				</template>
+			</UTabs>
+		</div>
+		<!-- MOBILE -->
 	</UCard>
 </template>
 
 <script lang="ts" setup>
+import { useProductStore } from '~/stores/Products/Products';
+
 const product_additional_info = [
 	{
 		label: 'Variants',
@@ -101,6 +107,13 @@ const normal_ui_tabs = {
 			height: 'h-10',
 		},
 	},
+};
+
+const productStore = useProductStore();
+const { newProduct } = storeToRefs(productStore);
+
+const updateProductOptions = (value: any) => {
+	newProduct.value.options = value;
 };
 </script>
 
