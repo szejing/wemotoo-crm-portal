@@ -44,14 +44,14 @@
 import type { ProductOption } from '~/utils/types/product-option';
 
 const props = defineProps<{ options: ProductOption[] | undefined }>();
-const emit = defineEmits(['update:productOption']);
+const emit = defineEmits(['update:productOptions']);
 
 const prodOptions = computed({
 	get() {
 		return props.options ?? [];
 	},
 	set(value) {
-		emit('update:productOption', value);
+		emit('update:productOptions', value);
 	},
 });
 

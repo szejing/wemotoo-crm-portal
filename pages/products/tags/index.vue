@@ -11,9 +11,7 @@
 					<!-- Table  -->
 					<UTable :rows="rows" :columns="product_tag_columns">
 						<template #actions-data="{ row }">
-							<UDropdown :items="options(row)">
-								<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-							</UDropdown>
+							<ZActionDropdown :items="options(row)" />
 						</template>
 					</UTable>
 
@@ -37,6 +35,7 @@
 <script lang="ts" setup>
 import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { product_tag_columns } from '~/utils/table-columns';
+import type { ProductTag } from '~/utils/types/product-tag';
 
 const links = [
 	{
@@ -51,7 +50,7 @@ const links = [
 	},
 ];
 
-const options = (row: any) => [
+const options = (row: ProductTag) => [
 	[
 		{
 			label: 'Edit',
@@ -63,6 +62,8 @@ const options = (row: any) => [
 		{
 			label: 'Delete',
 			icon: 'i-heroicons-trash-20-solid',
+			slot: 'danger',
+			click: () => console.log('Delete', row.id),
 		},
 	],
 ];
