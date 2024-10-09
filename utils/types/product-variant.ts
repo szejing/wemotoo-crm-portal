@@ -2,7 +2,7 @@ import type { ProductOption } from './product-option';
 import type { ProductPrice } from './product-price';
 
 export type ProductVariant = {
-	title: string;
+	title?: string;
 
 	sku?: string;
 
@@ -34,9 +34,9 @@ export type ProductVariant = {
 
 	material?: string;
 
-	price: ProductPrice[] | undefined;
+	price?: ProductPrice[] | undefined;
 
-	options: ProductOption[];
+	options?: ProductOption[];
 
 	metadata?: Record<string, unknown>;
 };

@@ -15,9 +15,7 @@
 						</template>
 
 						<template #actions-data="{ row }">
-							<UDropdown :items="options(row)">
-								<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-							</UDropdown>
+							<ZActionDropdown :items="options(row)" />
 						</template>
 					</UTable>
 
@@ -41,6 +39,7 @@
 <script lang="ts" setup>
 import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import { product_option_columns } from '~/utils/table-columns';
+import type { ProductOption } from '~/utils/types/product-option';
 
 const links = [
 	{
@@ -55,7 +54,7 @@ const links = [
 	},
 ];
 
-const options = (row: any) => [
+const options = (row: ProductOption) => [
 	[
 		{
 			label: 'Edit',
@@ -67,6 +66,8 @@ const options = (row: any) => [
 		{
 			label: 'Delete',
 			icon: 'i-heroicons-trash-20-solid',
+			slot: 'danger',
+			click: () => console.log('Delete', row.id),
 		},
 	],
 ];

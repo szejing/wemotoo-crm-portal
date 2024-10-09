@@ -24,9 +24,7 @@
 				<!-- Table  -->
 				<UTable :rows="rows" :columns="customer_columns">
 					<template #actions-data="{ row }">
-						<UDropdown :items="options(row)">
-							<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-						</UDropdown>
+						<ZActionDropdown :items="options(row)" />
 					</template>
 				</UTable>
 
@@ -42,6 +40,7 @@
 import { useCustomersStore } from '~/stores/Customers/Customers';
 import { options_page_size } from '~/utils/options';
 import { customer_columns } from '~/utils/table-columns';
+import type { Customer } from '~/utils/types/customer';
 
 const links = [
 	{
@@ -51,18 +50,20 @@ const links = [
 	},
 ];
 
-const options = (row: any) => [
+const options = (row: Customer) => [
 	[
 		{
 			label: 'Edit',
 			icon: 'i-heroicons-pencil-square-20-solid',
-			click: () => console.log('Edit', row.id),
+			click: () => console.log('Edit', row.customer_no),
 		},
 	],
 	[
 		{
 			label: 'Delete',
 			icon: 'i-heroicons-trash-20-solid',
+			slot: 'danger',
+			click: () => console.log('Delete', row.customer_no),
 		},
 	],
 ];
