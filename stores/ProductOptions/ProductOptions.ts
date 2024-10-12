@@ -42,6 +42,9 @@ export const useProductOptionsStore = defineStore({
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
+		currentProductOptions() {
+			return JSON.parse(JSON.stringify(this.productOptions));
+		},
 		async getOptions() {
 			this.loading = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -64,7 +67,6 @@ export const useProductOptionsStore = defineStore({
 			this.loading = false;
 		},
 		async deleteProductOption(id: string) {
-			this.loading = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			this.productOptions = this.productOptions.filter((c) => c.id !== id);
 			this.loading = false;

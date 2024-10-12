@@ -73,6 +73,15 @@ const props = withDefaults(defineProps<InputTags>(), {
 	showCount: false,
 });
 
+const selectedTags = computed({
+	get() {
+		return props.modelValue ?? [];
+	},
+	set(value) {
+		emit('update:modelValue', value);
+	},
+});
+
 const emit = defineEmits(['update:modelValue', 'update:newOption']);
 
 const slugify = (str: string | undefined) => {
@@ -104,8 +113,6 @@ const existingPadding = 12;
 const availableTags = computed(() =>
 	search.value ? props.options.filter((option: any) => option.toLowerCase().includes(slugify(search.value)?.toLowerCase())) : props.options,
 );
-
-const selectedTags = ref(props.modelValue);
 
 const tagsChanged = () => {
 	paddingLeft.value = elementSelectedTags.value.clientWidth ? `${elementSelectedTags.value.clientWidth + existingPadding + 2}px` : `${existingPadding}px`;
@@ -169,8 +176,8 @@ const addTag = (tag: string | undefined) => {
 
 	if (_existingTag >= 0) return;
 
-	selectedTags.value.push(tag);
-	emit('update:modelValue', selectedTags.value);
+	selectedTags.value = [...selectedTags.value, tag];
+	// emit('update:modelValue', selectedTags.value);
 
 	const _existingOption = availableTags.value.findIndex((t: string) => t.toLowerCase() === tag.toLowerCase());
 
@@ -189,8 +196,9 @@ onBeforeUnmount(() => {
 });
 
 const removeTag = (index: number) => {
-	selectedTags.value.splice(index, 1);
-	emit('update:modelValue', selectedTags.value);
+	// selectedTags.value.splice(index, 1);
+	selectedTags.value = selectedTags.value.filter((tag) => tag !== selectedTags.value[index]);
+	// emit('update:modelValue', selectedTags.value);
 };
 
 const removeLastTag = () => {

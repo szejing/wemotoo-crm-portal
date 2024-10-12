@@ -52,7 +52,7 @@
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
 						<div class="space-y-4 mt-4">
-							<ZInputProductOptions :options="newProduct.options" @update:product-options="updateProductOptions" />
+							<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
 							<ZInputProductVariants
 								:options="newProduct.options"
 								:variants="newProduct.variants"
