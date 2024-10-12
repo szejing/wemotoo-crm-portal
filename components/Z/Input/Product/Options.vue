@@ -3,9 +3,9 @@
 		<h3>Options</h3>
 
 		<!-- ************* MOBILE ************* -->
-		<div v-for="(option, index) in prodOptions" :key="index" class="flex flex-col sm:hidden gap-4">
-			<div class="flex-jbetween-icenter gap-2">
-				<UInput v-model="option.name" placeholder="Name" class="w-52" />
+		<div v-for="(option, index) in prodOptions" :key="index" class="flex flex-col sm:hidden">
+			<div class="flex-jbetween-icenter gap-2 mt-4">
+				<UInput v-model="option.name" disabled placeholder="Name" class="w-52" />
 				<UButton
 					variant="outline"
 					class="flex-none"
@@ -16,34 +16,49 @@
 					@click="() => removeOption(index)"
 				/>
 			</div>
-			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
+			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1 mt-2" />
 		</div>
 		<!-- ************* MOBILE ************* -->
 
 		<!-- ************* DESKTOP ************* -->
-		<div v-for="(option, index) in prodOptions" :key="index" class="hidden sm:flex gap-4">
-			<UInput v-model="option.name" placeholder="Name" class="w-36" />
-			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
-			<UButton
-				variant="outline"
-				class="flex-none"
-				square
-				icon="i-material-symbols-delete-outline-rounded"
-				size="sm"
-				color="danger"
-				@click="() => removeOption(index)"
-			/>
+		<div v-for="(option, index) in prodOptions" :key="index" class="hidden sm:flex">
+			<div class="w-full flex mt-2 gap-4">
+				<UInput v-model="option.name" disabled placeholder="Name" class="w-36" />
+				<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
+
+				<UButton
+					variant="outline"
+					class="flex-none"
+					square
+					icon="i-material-symbols-delete-outline-rounded"
+					size="sm"
+					color="danger"
+					@click="() => removeOption(index)"
+				/>
+			</div>
 		</div>
 		<!-- ************* DESKTOP ************* -->
 
-		<UButton color="primary" block variant="outline" @click="addOption">Add Option</UButton>
+		<UButton color="primary" block variant="outline" @click="isOptionSelectionModal = true">Add Option</UButton>
+
+		<UModal v-model="isOptionSelectionModal">
+			<ZSelectionOptions :options="prodOptions" @update:product-options="updateProductOptions" />
+		</UModal>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import type { ProductOption } from '~/utils/types/product-option';
 
-const props = defineProps<{ options: ProductOption[] | undefined }>();
+const isOptionSelectionModal = ref(false);
+
+const props = defineProps({
+	options: {
+		type: Array as PropType<ProductOption[]>,
+		required: false,
+	},
+});
+
 const emit = defineEmits(['update:productOptions']);
 
 const prodOptions = computed({
@@ -59,14 +74,10 @@ const removeOption = (index: number) => {
 	prodOptions.value = prodOptions.value.filter((_, i) => i !== index);
 };
 
-const addOption = () => {
-	prodOptions.value = [
-		...prodOptions.value,
-		{
-			name: '',
-			values: [],
-		},
-	];
+const updateProductOptions = (options: ProductOption[]) => {
+	console.log(options);
+	prodOptions.value = options;
+	isOptionSelectionModal.value = false;
 };
 </script>
 

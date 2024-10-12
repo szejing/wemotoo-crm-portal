@@ -135,9 +135,9 @@ export default defineAppConfig({
 				'2xs': 'text-xs md:text-xs',
 				'xs': 'text-xs md:text-xs',
 				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
+				'md': 'text-sm md:text-md',
+				'lg': 'text-base md:text-xl',
+				'xl': 'text-base md:text-2xl',
 			},
 			padding: {
 				'2xs': 'px-2 py-1',

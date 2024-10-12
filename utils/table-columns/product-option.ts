@@ -1,8 +1,8 @@
 export const product_option_columns = [
-	{
-		key: 'id',
-		label: 'Id',
-	},
+	// {
+	// 	key: 'id',
+	// 	label: 'Id',
+	// },
 	{
 		key: 'name',
 		label: 'Name',
