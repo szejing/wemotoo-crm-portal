@@ -9,9 +9,16 @@
 		}"
 	>
 		<div class="flex-jbetween-icenter">
-			{{ values?.join(' · ') }}
+			<!-- <h4>{{ prodVariant.id }}</h4> -->
 
-			<UButton variant="ghost" class="flex-none" square icon="i-material-symbols-more-vert" size="sm" color="danger" @click="() => viewVariant()" />
+			<div>
+				<h4>{{ values?.join(' · ') }}</h4>
+				<h5 v-if="prodVariant.prices && prodVariant.prices.length > 0">
+					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].origSellPrice ?? 0) * 100) }}
+				</h5>
+			</div>
+
+			<UButton variant="ghost" class="flex-none" square icon="i-material-symbols-more-vert" size="sm" color="danger" @click="viewVariant" />
 		</div>
 	</UCard>
 </template>
@@ -40,4 +47,12 @@ const viewVariant = () => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="css">
+h4 {
+	@apply font-bold;
+}
+
+h5 {
+	@apply font-medium text-sm text-main;
+}
+</style>

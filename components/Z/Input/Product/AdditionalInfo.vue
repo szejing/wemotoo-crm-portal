@@ -16,9 +16,9 @@
 						<h1>Variants</h1>
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
-						<div class="space-y-4 mt-4">
+						<div class="space-y-8 mt-4">
 							<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
-							<ZInputProductVariants
+							<ZInputProductVariantList
 								:options="newProduct.options"
 								:variants="newProduct.variants"
 								:product="newProduct"
@@ -51,9 +51,9 @@
 						<h1>Variants</h1>
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
-						<div class="space-y-4 mt-4">
+						<div class="space-y-8 mt-4">
 							<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
-							<ZInputProductVariants
+							<ZInputProductVariantList
 								:options="newProduct.options"
 								:variants="newProduct.variants"
 								:product="newProduct"
@@ -96,7 +96,7 @@ const product_additional_info = [
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
-	container: 'relative w-full h-[450px] max-h-[450px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
+	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
 	list: {
 		width: 'w-80',
 		rounded: 'rounded-md',
@@ -108,7 +108,7 @@ const vertical_ui_tabs = {
 };
 
 const normal_ui_tabs = {
-	container: 'relative w-full h-[450px] max-h-[450px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
+	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
 	list: {
 		rounded: 'rounded-md',
 		height: 'h-12',

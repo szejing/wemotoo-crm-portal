@@ -1,6 +1,9 @@
 <template>
 	<div class="space-y-2">
-		<h3>Options</h3>
+		<div class="flex-jbetween-icenter">
+			<h3>Options</h3>
+			<UButton color="primary" variant="outline" @click="isOptionSelectionModal = true">Add Option</UButton>
+		</div>
 
 		<!-- ************* MOBILE ************* -->
 		<div v-for="(option, index) in prodOptions" :key="index" class="flex flex-col sm:hidden">
@@ -39,8 +42,6 @@
 		</div>
 		<!-- ************* DESKTOP ************* -->
 
-		<UButton color="primary" block variant="outline" @click="isOptionSelectionModal = true">Add Option</UButton>
-
 		<UModal v-model="isOptionSelectionModal">
 			<ZSelectionOptions :options="prodOptions" @update:product-options="updateProductOptions" />
 		</UModal>
@@ -75,7 +76,6 @@ const removeOption = (index: number) => {
 };
 
 const updateProductOptions = (options: ProductOption[]) => {
-	console.log(options);
 	prodOptions.value = options;
 	isOptionSelectionModal.value = false;
 };

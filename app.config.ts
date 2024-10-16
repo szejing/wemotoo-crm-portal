@@ -11,6 +11,10 @@ export default defineAppConfig({
 		primary: theme.main,
 		gray: theme.gray,
 
+		//* Modal *//
+		modal: {
+			width: 'w-full max-w-[90%] sm:max-w-[60%]',
+		},
 		//* Notification *//
 		notifications: {
 			// Show toasts at the top right of the screen

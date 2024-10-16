@@ -5,11 +5,14 @@
 			<UButton v-if="prodOptions?.length > 0 && totalPossibleVariants > prodVariants.length" color="green" variant="ghost" @click="autoGenerate">
 				Auto Generate
 			</UButton>
+
+			<UButton v-if="prodVariants.length > 0" color="green" variant="ghost" @click="autoGenerate">Update</UButton>
 		</div>
 
 		<div v-for="(variant, index) in prodVariants" :key="index">
 			<ZInputProductVariant :variant="variant" @view:productvariant="viewVariant" />
 		</div>
+
 		<UButton
 			v-if="totalPossibleVariants > prodVariants.length"
 			color="primary"
@@ -21,10 +24,8 @@
 			Add Variant
 		</UButton>
 
-		<UModal v-model="isVariantDetailsModalOpen">
-			<div class="p-4">
-				<h1>{{ variantDetail?.title }}</h1>
-			</div>
+		<UModal v-if="variantDetail" v-model="isVariantDetailsModalOpen">
+			<ZInputProductVariantDetails :product="props.product" :details="variantDetail" @update:product-variant-detail="updateVariantDetail" />
 		</UModal>
 	</div>
 </template>
@@ -82,11 +83,13 @@ const autoGenerate = () => {
 
 		variant.title = variant.options?.map((option) => option.values[0]).join('_');
 
-		if (variant.price || !props.product.price?.origSellPrice) return;
+		if (variant.prices) return;
 
-		variant.price = [props.product.price];
-
-		console.log(variant);
+		if (props.product.prices) {
+			variant.prices = [JSON.parse(JSON.stringify(props.product.prices[0]))];
+		} else {
+			variant.prices = undefined;
+		}
 	});
 
 	prodVariants.value = variants;
@@ -102,6 +105,11 @@ const addVariant = () => {
 const viewVariant = (variant: ProductVariant) => {
 	isVariantDetailsModalOpen.value = true;
 	variantDetail.value = variant;
+};
+
+const updateVariantDetail = (variant: ProductVariant) => {
+	isVariantDetailsModalOpen.value = false;
+	console.log(variant);
 };
 </script>
 

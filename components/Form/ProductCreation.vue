@@ -46,28 +46,34 @@ const { newProduct } = storeToRefs(productStore);
 
 const origSellPrice = computed({
 	get() {
-		return newProduct.value.price?.origSellPrice ?? undefined;
+		return newProduct.value.prices?.[0]?.origSellPrice ?? undefined;
 	},
 	set(value) {
-		newProduct.value.price!.origSellPrice = value;
+		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
+			newProduct.value.prices[0].origSellPrice = value;
+		}
 	},
 });
 
 const costPrice = computed({
 	get() {
-		return newProduct.value.price?.costPrice ?? undefined;
+		return newProduct.value.prices?.[0]?.costPrice ?? undefined;
 	},
 	set(value) {
-		newProduct.value.price!.costPrice = value;
+		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
+			newProduct.value.prices[0].costPrice = value;
+		}
 	},
 });
 
 const salePrice = computed({
 	get() {
-		return newProduct.value.price?.salePrice ?? undefined;
+		return newProduct.value.prices?.[0]?.salePrice ?? undefined;
 	},
 	set(value) {
-		newProduct.value.price!.salePrice = value;
+		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
+			newProduct.value.prices[0].salePrice = value;
+		}
 	},
 });
 
