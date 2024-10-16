@@ -25,7 +25,7 @@
 		</UButton>
 
 		<UModal v-if="variantDetail" v-model="isVariantDetailsModalOpen">
-			<ZInputProductVariantDetails :product="props.product" :details="variantDetail" @update:product-variant-detail="updateVariantDetail" />
+			<ZInputProductVariantDetails :product="props.product" :details="variantDetail" @update:variant-detail="updateVariantDetail" />
 		</UModal>
 	</div>
 </template>
@@ -109,7 +109,10 @@ const viewVariant = (variant: ProductVariant) => {
 
 const updateVariantDetail = (variant: ProductVariant) => {
 	isVariantDetailsModalOpen.value = false;
-	console.log(variant);
+	const index = prodVariants.value.findIndex((v: ProductVariant) => v.title === variant.title); // Find variant by title
+	if (index !== -1) {
+		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
+	}
 };
 </script>
 
