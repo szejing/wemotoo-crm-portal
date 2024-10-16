@@ -1,5 +1,5 @@
 <template>
-	<UCard>
+	<UCard :ui="cardUi">
 		<template #header>
 			<h2>Pricing</h2>
 			<div class="section-grid-price-details mt-4">
@@ -59,6 +59,7 @@ const props = defineProps({
 	productSellingPrice: Number,
 	productCostPrice: Number,
 	productSalePrice: Number,
+	cardUi: Object,
 });
 
 const emit = defineEmits(['update:productSellingPrice', 'update:productCostPrice', 'update:productSalePrice']);

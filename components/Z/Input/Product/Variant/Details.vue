@@ -1,0 +1,66 @@
+<template>
+	<UCard>
+		<template #header>
+			<h1>{{ variantDetail?.title?.replace('_', ' · ') }}</h1>
+		</template>
+
+		<div class="space-y-4 divide-y divide-gray-300">
+			<!-- *********************** Pricing *********************** -->
+			<div v-if="variantDetail.prices && variantDetail.prices.length > 0">
+				<div v-for="(price, index) in variantDetail.prices" :key="index">
+					<ZInputProductPricing
+						v-model:product-selling-price.number="price.origSellPrice"
+						v-model:product-cost-price.number="price.costPrice"
+						v-model:product-sale-price.number="price.salePrice"
+						:card-ui="cardUi"
+					/>
+				</div>
+			</div>
+			<!-- *********************** Pricing *********************** -->
+
+			<!-- *********************** Info *********************** -->
+			<ZInputProductVariantInfo v-model:details="variantDetail" :card-ui="cardUi" />
+			<!-- *********************** Info *********************** -->
+
+			<!-- *********************** Inventory *********************** -->
+			<ZInputProductInventory v-model:details="variantDetail" :card-ui="cardUi" />
+			<!-- *********************** Inventory *********************** -->
+		</div>
+
+		<template #footer>
+			<UButton size="md" color="primary" variant="outline" block @click="updateProductVariant">Confirm</UButton>
+		</template>
+	</UCard>
+</template>
+
+<script lang="ts" setup>
+import type { Product } from '~/utils/types/product';
+import type { ProductVariant } from '~/utils/types/product-variant';
+
+const cardUi = { shadow: 'shadow-none', ring: 'ring-none' };
+
+const props = defineProps({
+	product: {
+		type: Object as PropType<Product>,
+		required: true,
+	},
+	details: {
+		type: Object as PropType<ProductVariant>,
+		required: true,
+	},
+});
+const emit = defineEmits(['update:variantDetail']);
+
+const variantDetail = computed({
+	get() {
+		return props.details ?? [];
+	},
+	set(_) {},
+});
+
+const updateProductVariant = () => {
+	emit('update:variantDetail', variantDetail.value);
+};
+</script>
+
+<style></style>

@@ -1,5 +1,5 @@
 <template>
-	<UModal v-model="showSidebarModal" :ui="{ background: 'bg-secondary-600' }">
+	<UModal v-model="showSidebarModal" :ui="{ background: 'bg-secondary-600', width: 'w-full' }">
 		<div class="space-y-2 px-2 py-4">
 			<SidebarNavigation />
 		</div>

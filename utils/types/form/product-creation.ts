@@ -30,7 +30,7 @@ export type ProductCreate = {
 	galleries: string[] | undefined;
 
 	// price
-	price: ProductPrice | undefined;
+	prices: ProductPrice[] | undefined;
 
 	// variants
 	options: ProductOption[] | undefined;

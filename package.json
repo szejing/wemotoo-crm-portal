@@ -37,6 +37,10 @@
 	},
 	"devDependencies": {
 		"@headlessui/vue": "1.7.23",
+		"@iconify-json/ic": "^1.2.1",
+		"@iconify-json/material-symbols": "^1.2.4",
+		"@iconify-json/material-symbols-light": "^1.2.4",
+		"@iconify-json/ri": "^1.2.1",
 		"@nuxt/devtools": "^1.5.2",
 		"@nuxt/eslint-config": "^0.5.7",
 		"@nuxtjs/eslint-config-typescript": "12.1.0",

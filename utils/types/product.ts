@@ -31,7 +31,7 @@ export type Product = {
 	galleries: string[] | undefined;
 
 	// price
-	price: ProductPrice | undefined;
+	prices: ProductPrice[] | undefined;
 
 	// variants
 	options: ProductOption[] | undefined;
