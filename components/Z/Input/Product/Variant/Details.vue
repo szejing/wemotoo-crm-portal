@@ -53,7 +53,7 @@ const emit = defineEmits(['update:variantDetail']);
 
 const variantDetail = computed({
 	get() {
-		return props.details ?? [];
+		return JSON.parse(JSON.stringify(props.details));
 	},
 	set(_) {},
 });
