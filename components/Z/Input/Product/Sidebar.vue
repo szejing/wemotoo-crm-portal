@@ -4,7 +4,7 @@
 		<UCard :ui="cardBg">
 			<template #header>
 				<h3>Status</h3>
-				<ZSelectMenuProductStatus v-model:product-status="newProduct.status" />
+				<ZSelectMenuProductStatus v-model:status="newProduct.status" />
 			</template>
 		</UCard>
 
@@ -12,7 +12,7 @@
 		<UCard :ui="cardBg">
 			<template #header>
 				<h3>Categories</h3>
-				<ZSelectMenuCategories v-model:product-categories="newProduct.categories" />
+				<ZSelectMenuCategories v-model:categories="newProduct.categories" />
 			</template>
 		</UCard>
 
@@ -20,7 +20,7 @@
 		<UCard :ui="cardBg">
 			<template #header>
 				<h3>Tags</h3>
-				<ZSelectMenuTags v-model:product-tags="newProduct.tags" />
+				<ZSelectMenuTags v-model:tags="newProduct.tags" />
 			</template>
 		</UCard>
 

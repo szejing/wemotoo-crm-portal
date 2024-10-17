@@ -16,16 +16,16 @@
 import type { ProductStatus } from '~/utils/enum/product-status';
 import { options_product_status } from '~/utils/options';
 
-const props = defineProps<{ productStatus: ProductStatus }>();
+const props = defineProps<{ status: ProductStatus }>();
 
-const emit = defineEmits(['update:productStatus']);
+const emit = defineEmits(['update:status']);
 
 const status = computed({
 	get() {
-		return props.productStatus;
+		return props.status;
 	},
 	set(value) {
-		emit('update:productStatus', value);
+		emit('update:status', value);
 	},
 });
 </script>
