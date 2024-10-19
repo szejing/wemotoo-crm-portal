@@ -40,6 +40,10 @@ type Schema = z.output<typeof CreateProductValidation>;
 const productStore = useProductStore();
 const { newProduct } = storeToRefs(productStore);
 
+onMounted(() => {
+	productStore.resetNewProduct();
+});
+
 const origSellPrice = computed({
 	get() {
 		return newProduct.value.prices?.[0]?.origSellPrice ?? undefined;

@@ -66,6 +66,9 @@ export const useProductCategoriesStore = defineStore({
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewProductCategory() {
+			this.newProductCategory = structuredClone(initialEmptyCategory);
+		},
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},

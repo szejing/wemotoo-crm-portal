@@ -44,6 +44,9 @@ export const useProductTagsStore = defineStore({
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewProductTag() {
+			this.newProductTag = structuredClone(initialEmptyTag);
+		},
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},

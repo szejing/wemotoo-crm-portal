@@ -23,6 +23,10 @@ type Schema = z.output<typeof CreateProductTagValidation>;
 const tagStore = useProductTagsStore();
 const { newProductTag } = storeToRefs(tagStore);
 
+onMounted(() => {
+	tagStore.resetNewProductTag();
+});
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	console.log(event);
 };

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
+import type { ProductOptionCreate } from '~/utils/types/form/product-option-creation';
 import type { ProductOption } from '~/utils/types/product-option';
 
 const initial: ProductOption[] = [
@@ -30,15 +31,24 @@ const initial: ProductOption[] = [
 	},
 ];
 
+const initialEmptyOption: ProductOptionCreate = {
+	name: undefined,
+	values: undefined,
+};
+
 export const useProductOptionsStore = defineStore({
 	id: 'productOptionsStore',
 	state: () => ({
 		loading: false as boolean,
 		productOptions: structuredClone(initial),
+		newProductOption: structuredClone(initialEmptyOption),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewProductOption() {
+			this.newProductOption = structuredClone(initialEmptyOption);
+		},
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
