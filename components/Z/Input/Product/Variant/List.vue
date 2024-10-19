@@ -79,9 +79,9 @@ const autoGenerate = () => {
 	combine([], 0);
 
 	variants.forEach((variant) => {
-		if (variant.title) return;
+		if (variant.name) return;
 
-		variant.title = variant.options?.map((option) => option.values[0]).join('_');
+		variant.name = variant.options?.map((option) => option.values[0]).join('_');
 
 		if (variant.prices) return;
 
@@ -109,7 +109,7 @@ const viewVariant = (variant: ProductVariant) => {
 
 const updateVariantDetail = (variant: ProductVariant) => {
 	isVariantDetailsModalOpen.value = false;
-	const index = prodVariants.value.findIndex((v: ProductVariant) => v.title === variant.title); // Find variant by title
+	const index = prodVariants.value.findIndex((v: ProductVariant) => v.name === variant.name); // Find variant by name
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
 	}

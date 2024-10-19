@@ -4,7 +4,7 @@ import type { ProductCreate } from '~/utils/types/form/product-creation';
 
 const initialEmptyProduct: ProductCreate = {
 	code: undefined,
-	title: undefined,
+	name: undefined,
 	subtitle: undefined,
 	description: undefined,
 	is_active: true,

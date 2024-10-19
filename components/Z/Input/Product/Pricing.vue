@@ -107,6 +107,6 @@ const formatCurrencyInput = (input: string, event: any) => {
 
 <style scoped lang="css">
 .section-grid-price-details {
-	@apply grid grid-cols-3 gap-4;
+	@apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
 }
 </style>

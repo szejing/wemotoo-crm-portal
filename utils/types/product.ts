@@ -8,7 +8,7 @@ import type { ProductVariant } from './product-variant';
 export type Product = {
 	id?: string | undefined;
 	code: string | undefined;
-	title: string | undefined;
+	name: string | undefined;
 	subtitle: string | undefined;
 	description: string | undefined;
 	is_discountable: boolean;

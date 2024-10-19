@@ -8,7 +8,7 @@
 				v-model:is-giftcard="newProduct.is_giftcard"
 				v-model:is-discountable="newProduct.is_discountable"
 				v-model:code="newProduct.code"
-				v-model:title="newProduct.title"
+				v-model:name="newProduct.name"
 				v-model:subtitle="newProduct.subtitle"
 				v-model:description="newProduct.description"
 			/>
