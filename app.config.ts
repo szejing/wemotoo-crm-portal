@@ -215,6 +215,7 @@ export default defineAppConfig({
 			option: {
 				padding: 'px-4 py-1.5',
 			},
+			placeholder: 'text-gray-400',
 			default: {
 				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 			},

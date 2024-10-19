@@ -9,9 +9,9 @@
 			<div v-if="variantDetail.prices && variantDetail.prices.length > 0">
 				<div v-for="(price, index) in variantDetail.prices" :key="index">
 					<ZInputProductPricing
-						v-model:product-selling-price.number="price.origSellPrice"
-						v-model:product-cost-price.number="price.costPrice"
-						v-model:product-sale-price.number="price.salePrice"
+						v-model:selling-price.number="price.origSellPrice"
+						v-model:cost-price.number="price.costPrice"
+						v-model:sale-price.number="price.salePrice"
 						:card-ui="cardUi"
 					/>
 				</div>

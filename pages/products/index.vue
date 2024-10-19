@@ -51,7 +51,7 @@ const links = [
 	},
 ];
 
-const pageSize = ref(1);
+const pageSize = ref(15);
 </script>
 
 <style scoped lang="css"></style>

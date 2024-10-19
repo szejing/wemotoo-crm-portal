@@ -1,9 +1,5 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
-			<UInput v-model="code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
-		</UFormGroup>
-
 		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
 			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 		</UFormGroup>
@@ -22,15 +18,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:code', 'update:name', 'update:description', 'update:parents']);
-
-const code = computed({
-	get() {
-		return props.code;
-	},
-	set(value) {
-		emit('update:code', value);
-	},
-});
 
 const name = computed({
 	get() {

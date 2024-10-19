@@ -19,7 +19,7 @@
 					@click="() => removeOption(index)"
 				/>
 			</div>
-			<ZInputTags v-model="option.values" placeholder="Values" class="flex-1 mt-2" />
+			<InputTags v-model="option.values" placeholder="Values" class="flex-1 mt-2" />
 		</div>
 		<!-- ************* MOBILE ************* -->
 
@@ -27,7 +27,7 @@
 		<div v-for="(option, index) in prodOptions" :key="index" class="hidden sm:flex">
 			<div class="w-full flex mt-2 gap-4">
 				<UInput v-model="option.name" disabled placeholder="Name" class="w-36" />
-				<ZInputTags v-model="option.values" placeholder="Values" class="flex-1" />
+				<InputTags v-model="option.values" placeholder="Values" class="flex-1" />
 
 				<UButton
 					variant="outline"

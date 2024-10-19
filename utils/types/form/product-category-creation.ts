@@ -1,3 +1,5 @@
+import type { ProductCategory } from '../product-category';
+
 export type ProductCategoryCreate = {
 	// name
 	name: string | undefined;
@@ -15,5 +17,5 @@ export type ProductCategoryCreate = {
 	thumbnail?: string | undefined;
 
 	// parent_category
-	parent_category?: string | undefined;
+	parent_category?: ProductCategory | undefined;
 };

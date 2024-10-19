@@ -7,19 +7,15 @@
 				v-model:is-service="newProduct.is_service"
 				v-model:is-giftcard="newProduct.is_giftcard"
 				v-model:is-discountable="newProduct.is_discountable"
-				v-model:product-code="newProduct.code"
-				v-model:product-title="newProduct.title"
-				v-model:product-subtitle="newProduct.subtitle"
-				v-model:product-description="newProduct.description"
+				v-model:code="newProduct.code"
+				v-model:title="newProduct.title"
+				v-model:subtitle="newProduct.subtitle"
+				v-model:description="newProduct.description"
 			/>
 			<!-- *********************** General Info *********************** -->
 
 			<!-- *********************** Pricing *********************** -->
-			<ZInputProductPricing
-				v-model:product-selling-price.number="origSellPrice"
-				v-model:product-cost-price.number="costPrice"
-				v-model:product-sale-price.number="salePrice"
-			/>
+			<ZInputProductPricing v-model:selling-price.number="origSellPrice" v-model:cost-price.number="costPrice" v-model:sale-price.number="salePrice" />
 			<!-- *********************** Pricing *********************** -->
 
 			<!-- *********************** Additional Info *********************** -->
