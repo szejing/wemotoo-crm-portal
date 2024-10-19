@@ -3,7 +3,7 @@
 		<USelectMenu
 			v-model="categories"
 			v-model:query="query"
-			:options="options_categories"
+			:options="productCategories"
 			searchable
 			size="md"
 			value-attribute="name"
@@ -27,18 +27,18 @@ import type { ProductCategory } from '~/utils/types/product-category';
 
 const query = ref('');
 const categoryStore = useProductCategoriesStore();
-const { productCategories: options_categories } = storeToRefs(categoryStore);
+const { productCategories } = storeToRefs(categoryStore);
 
-const props = defineProps<{ productCategories: ProductCategory[] }>();
+const props = defineProps<{ categories: ProductCategory[] | undefined }>();
 
-const emit = defineEmits(['update:productCategories']);
+const emit = defineEmits(['update:categories']);
 
 const categories = computed({
 	get() {
-		return props.productCategories;
+		return props.categories ?? [];
 	},
 	set(value) {
-		emit('update:productCategories', value);
+		emit('update:categories', value);
 	},
 });
 </script>

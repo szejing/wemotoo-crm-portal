@@ -3,11 +3,15 @@
 		<UBreadcrumb :links="links" />
 		<div class="base">
 			<div>
-				<ZSectionFilterCategories />
-				<UCard class="mt-4"></UCard>
+				<UCard class="mt-4">
+					<h3>Add New Category</h3>
+					<FormProductCategoryCreation class="mt-4" />
+				</UCard>
 			</div>
 			<UCard>
-				<div v-if="productCategories.length > 0">
+				<ZSectionFilterCategories />
+
+				<div v-if="productCategories.length > 0" class="mt-4">
 					<!-- Table  -->
 					<UTable :rows="rows" :columns="product_category_columns">
 						<template #actions-data="{ row }">

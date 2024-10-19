@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
+import type { ProductCategoryCreate } from '~/utils/types/form/product-category-creation';
 import type { ProductCategory } from '~/utils/types/product-category';
 
 const initial: ProductCategory[] = [
@@ -40,11 +41,27 @@ const initial: ProductCategory[] = [
 	},
 ];
 
+const initialEmptyCategory: ProductCategoryCreate = {
+	code: undefined,
+	name: undefined,
+	description: undefined,
+
+	// thumbnail
+	thumbnail: undefined,
+
+	// galleries
+	images: undefined,
+
+	// parent category
+	parent_category: undefined,
+};
+
 export const useProductCategoriesStore = defineStore({
 	id: 'productCategoriesStore',
 	state: () => ({
 		loading: false as boolean,
 		productCategories: structuredClone(initial),
+		newProductCategory: structuredClone(initialEmptyCategory),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
