@@ -7,7 +7,7 @@ import type { ProductPrice } from '../product-price';
 
 export type ProductCreate = {
 	code: string | undefined;
-	title: string | undefined;
+	name: string | undefined;
 	subtitle: string | undefined;
 	description: string | undefined;
 	is_discountable: boolean;

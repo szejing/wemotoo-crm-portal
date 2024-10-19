@@ -18,8 +18,8 @@
 				<UInput v-model="code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 			</UFormGroup>
 
-			<UFormGroup v-slot="{ error }" label="Title" name="title" required>
-				<UInput v-model="title" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+			<UFormGroup v-slot="{ error }" label="Name" name="name" required>
+				<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 			</UFormGroup>
 
 			<UFormGroup label="Subtitle" name="subtitle">
@@ -40,7 +40,7 @@ const props = defineProps({
 	isDiscountable: Boolean,
 	isGiftcard: Boolean,
 	code: String,
-	title: String,
+	name: String,
 	subtitle: String,
 	description: String,
 });
@@ -51,7 +51,7 @@ const emit = defineEmits([
 	'update:isDiscountable',
 	'update:isGiftcard',
 	'update:code',
-	'update:title',
+	'update:name',
 	'update:subtitle',
 	'update:description',
 ]);
@@ -103,12 +103,12 @@ const code = computed({
 	},
 });
 
-const title = computed({
+const name = computed({
 	get() {
-		return props.title;
+		return props.name;
 	},
 	set(value) {
-		emit('update:title', value);
+		emit('update:name', value);
 	},
 });
 

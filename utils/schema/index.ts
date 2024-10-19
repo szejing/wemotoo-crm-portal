@@ -1,13 +1,13 @@
-import { FilterProductValidation } from './Product/FilterProductValidation';
-import { CreateProductValidation } from './Product/CreateProductValidation';
+import { FilterProductValidation } from './Product/Filter/ProductValidation';
+import { CreateProductValidation } from './Product/Create/ProductValidation';
 import { FilterCustomerValidation } from './Customer/FilterCustomerValidation';
 import { LoginValidation } from './Auth/LoginValidation';
-import { FilterTagValidation } from './Product/FilterTagValidation';
-import { FilterCategoryValidation } from './Product/FilterCategoryValidation';
-import { FilterOptionValidation } from './Product/FilterOptionValidation';
-import { CreateProductCategoryValidation } from './Product/CreateProductCategoryValidation';
-import { CreateProductOptionValidation } from './Product/CreateProductOptionValidation';
-import { CreateProductTagValidation } from './Product/CreateProductTagValidation';
+import { FilterTagValidation } from './Product/Filter/TagValidation';
+import { FilterCategoryValidation } from './Product/Filter/CategoryValidation';
+import { FilterOptionValidation } from './Product/Filter/OptionValidation';
+import { CreateProductCategoryValidation } from './Product/Create/ProductCategoryValidation';
+import { CreateProductOptionValidation } from './Product/Create/ProductOptionValidation';
+import { CreateProductTagValidation } from './Product/Create/ProductTagValidation';
 
 export {
 	LoginValidation,
