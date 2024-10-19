@@ -1,15 +1,15 @@
 <template>
 	<div class="section-grid-basic-details">
 		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
-			<UInput v-model="code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+			<UInput v-model="code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Code" />
 		</UFormGroup>
 
 		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Name" />
 		</UFormGroup>
 
 		<UFormGroup label="Description" name="description">
-			<UInput v-model="description" />
+			<UInput v-model="description" placeholder="Description" />
 		</UFormGroup>
 	</div>
 </template>

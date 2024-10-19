@@ -37,6 +37,10 @@ type Schema = z.output<typeof CreateProductCategoryValidation>;
 const categoryStore = useProductCategoriesStore();
 const { newProductCategory } = storeToRefs(categoryStore);
 
+onMounted(() => {
+	categoryStore.resetNewProductCategory();
+});
+
 const updateThumbnail = (url: string) => {
 	newProductCategory.value.thumbnail = url;
 };

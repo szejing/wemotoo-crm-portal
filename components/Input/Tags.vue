@@ -60,6 +60,7 @@ interface InputTags {
 	removeIcon?: string;
 	selectedIcon?: string;
 	showCount?: boolean;
+	searchable?: boolean;
 }
 
 const props = withDefaults(defineProps<InputTags>(), {
@@ -71,6 +72,7 @@ const props = withDefaults(defineProps<InputTags>(), {
 	removeIcon: 'i-material-symbols-close-small-rounded',
 	selectedIcon: 'i-material-symbols-check-small-rounded',
 	showCount: false,
+	searchable: true,
 });
 
 const selectedTags = computed({
@@ -104,7 +106,7 @@ const search = ref<string | undefined>('');
 const isMenuOpen = ref(false);
 
 const openMenu = () => {
-	isMenuOpen.value = true;
+	if (props.searchable) isMenuOpen.value = true;
 };
 
 const paddingLeft = ref();

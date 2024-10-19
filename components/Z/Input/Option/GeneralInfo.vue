@@ -1,23 +1,24 @@
 <template>
 	<div class="section-grid-basic-details">
 		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Name" />
 		</UFormGroup>
 
-		<UFormGroup label="Description" name="description">
-			<UInput v-model="description" />
+		<UFormGroup label="Values" name="values" required>
+			<InputTags v-model="values" placeholder="Values" class="flex-1 mt-2" :searchable="false" />
 		</UFormGroup>
 	</div>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
-	code: String,
 	name: String,
-	description: String,
+	values: {
+		type: Array as PropType<string[]>,
+	},
 });
 
-const emit = defineEmits(['update:code', 'update:name', 'update:description', 'update:parents']);
+const emit = defineEmits(['update:name', 'update:values']);
 
 const name = computed({
 	get() {
@@ -28,12 +29,12 @@ const name = computed({
 	},
 });
 
-const description = computed({
+const values = computed({
 	get() {
-		return props.description;
+		return props.values ?? [];
 	},
 	set(value) {
-		emit('update:description', value);
+		emit('update:values', value);
 	},
 });
 </script>

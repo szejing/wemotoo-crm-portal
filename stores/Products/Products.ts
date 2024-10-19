@@ -50,6 +50,9 @@ export const useProductStore = defineStore({
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewProduct() {
+			this.newProduct = structuredClone(initialEmptyProduct);
+		},
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
