@@ -56,38 +56,38 @@
 import { fractionDigits } from '~/utils/utils';
 
 const props = defineProps({
-	productSellingPrice: Number,
-	productCostPrice: Number,
-	productSalePrice: Number,
+	sellingPrice: Number,
+	costPrice: Number,
+	salePrice: Number,
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update:productSellingPrice', 'update:productCostPrice', 'update:productSalePrice']);
+const emit = defineEmits(['update:sellingPrice', 'update:costPrice', 'update:salePrice']);
 
 const origSellPrice = computed({
 	get(): string | undefined {
-		return props.productSellingPrice?.toFixed(fractionDigits);
+		return props.sellingPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
-		emit('update:productSellingPrice', value);
+		emit('update:sellingPrice', value);
 	},
 });
 
 const costPrice = computed({
 	get(): string | undefined {
-		return props.productCostPrice?.toFixed(fractionDigits);
+		return props.costPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
-		emit('update:productCostPrice', value);
+		emit('update:costPrice', value);
 	},
 });
 
 const salePrice = computed({
 	get(): string | undefined {
-		return props.productSalePrice?.toFixed(fractionDigits);
+		return props.salePrice?.toFixed(fractionDigits);
 	},
 	set(value) {
-		emit('update:productSalePrice', value);
+		emit('update:salePrice', value);
 	},
 });
 const formatCurrencyInput = (input: string, event: any) => {

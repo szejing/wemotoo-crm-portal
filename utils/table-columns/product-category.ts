@@ -1,6 +1,6 @@
 export const product_category_columns = [
 	{
-		key: 'tag_id',
+		key: 'id',
 		label: 'Id',
 		sortable: true,
 	},
@@ -10,7 +10,7 @@ export const product_category_columns = [
 		sortable: true,
 	},
 	{
-		key: 'item_count',
+		key: 'no_of_items',
 		label: 'No of Items',
 		sortable: true,
 	},

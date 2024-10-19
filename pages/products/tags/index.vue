@@ -2,32 +2,38 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="base">
-			<div>
-				<ZSectionFilterTags />
-				<UCard class="mt-4"> </UCard>
+			<div class="sm:col-span-2">
+				<UCard>
+					<h3>Add New Tag</h3>
+					<FormProductTagCreation class="mt-4" />
+				</UCard>
 			</div>
-			<UCard>
-				<div v-if="productTags.length > 0">
-					<!-- Table  -->
-					<UTable :rows="rows" :columns="product_tag_columns">
-						<template #actions-data="{ row }">
-							<ZActionDropdown :items="options(row)" />
-						</template>
-					</UTable>
 
-					<!-- Pagination  -->
-					<div v-if="productTags.length == 0" class="section-pagination">
-						<UPagination v-model="page" :page-count="pageSize" :total="productTags.length" />
-					</div>
-				</div>
+			<div class="sm:col-span-4">
+				<UCard>
+					<ZSectionFilterTags />
+					<div v-if="productTags.length > 0">
+						<!-- Table  -->
+						<UTable :rows="rows" :columns="product_tag_columns">
+							<template #actions-data="{ row }">
+								<ZActionDropdown :items="options(row)" />
+							</template>
+						</UTable>
 
-				<div v-else class="flex-center h-52 section-empty">
-					<div>
-						<h2>No Tags Found</h2>
-						<p>Create a new tag to get started</p>
+						<!-- Pagination  -->
+						<div v-if="productTags.length == 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="productTags.length" />
+						</div>
 					</div>
-				</div>
-			</UCard>
+
+					<div v-else class="flex-center h-52 section-empty">
+						<div>
+							<h2>No Tags Found</h2>
+							<p>Create a new tag to get started</p>
+						</div>
+					</div>
+				</UCard>
+			</div>
 		</div>
 	</div>
 </template>
@@ -80,7 +86,7 @@ const rows = computed(() => {
 
 <style scoped lang="css">
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4;
+	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
 }
 
 .section-empty {

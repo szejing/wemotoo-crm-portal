@@ -2,36 +2,39 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="base">
-			<div>
-				<UCard class="mt-4">
+			<div class="sm:col-span-2">
+				<UCard>
 					<h3>Add New Category</h3>
 					<FormProductCategoryCreation class="mt-4" />
 				</UCard>
 			</div>
-			<UCard>
-				<ZSectionFilterCategories />
 
-				<div v-if="productCategories.length > 0" class="mt-4">
-					<!-- Table  -->
-					<UTable :rows="rows" :columns="product_category_columns">
-						<template #actions-data="{ row }">
-							<ZActionDropdown :items="options(row)" />
-						</template>
-					</UTable>
+			<div class="sm:col-span-4">
+				<UCard>
+					<ZSectionFilterCategories />
 
-					<!-- Pagination  -->
-					<div class="section-pagination">
-						<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
+					<div v-if="productCategories.length > 0" class="mt-4">
+						<!-- Table  -->
+						<UTable :rows="rows" :columns="product_category_columns">
+							<template #actions-data="{ row }">
+								<ZActionDropdown :items="options(row)" />
+							</template>
+						</UTable>
+
+						<!-- Pagination  -->
+						<div class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
+						</div>
 					</div>
-				</div>
 
-				<div v-else class="flex-center section-empty">
-					<div>
-						<h2>No Categories Found</h2>
-						<p>Create a new category to get started</p>
+					<div v-else class="flex-center section-empty">
+						<div>
+							<h2>No Categories Found</h2>
+							<p>Create a new category to get started</p>
+						</div>
 					</div>
-				</div>
-			</UCard>
+				</UCard>
+			</div>
 		</div>
 	</div>
 </template>
@@ -84,7 +87,7 @@ const rows = computed(() => {
 
 <style scoped lang="css">
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4;
+	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
 }
 
 .section-empty {

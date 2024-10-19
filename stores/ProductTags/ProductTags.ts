@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
+import type { ProductTagCreate } from '~/utils/types/form/product-tag-creation';
 import type { ProductTag } from '~/utils/types/product-tag';
 
 const initial: ProductTag[] = [
@@ -30,11 +31,15 @@ const initial: ProductTag[] = [
 	},
 ];
 
+const initialEmptyTag: ProductTagCreate = {
+	name: undefined,
+};
 export const useProductTagsStore = defineStore({
 	id: 'productTagsStore',
 	state: () => ({
 		loading: false as boolean,
 		productTags: structuredClone(initial),
+		newProductTag: structuredClone(initialEmptyTag),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),

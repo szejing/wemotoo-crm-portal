@@ -22,8 +22,8 @@
 				<UInput v-model="title" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 			</UFormGroup>
 
-			<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
-				<UInput v-model="subtitle" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+			<UFormGroup label="Subtitle" name="subtitle">
+				<UInput v-model="subtitle" />
 			</UFormGroup>
 		</div>
 
@@ -39,10 +39,10 @@ const props = defineProps({
 	isService: Boolean,
 	isDiscountable: Boolean,
 	isGiftcard: Boolean,
-	productCode: String,
-	productTitle: String,
-	productSubtitle: String,
-	productDescription: String,
+	code: String,
+	title: String,
+	subtitle: String,
+	description: String,
 });
 
 const emit = defineEmits([
@@ -50,10 +50,10 @@ const emit = defineEmits([
 	'update:isService',
 	'update:isDiscountable',
 	'update:isGiftcard',
-	'update:productCode',
-	'update:productTitle',
-	'update:productSubtitle',
-	'update:productDescription',
+	'update:code',
+	'update:title',
+	'update:subtitle',
+	'update:description',
 ]);
 
 const is_active = computed({
@@ -96,37 +96,37 @@ const is_giftcard = computed({
 
 const code = computed({
 	get() {
-		return props.productCode;
+		return props.code;
 	},
 	set(value) {
-		emit('update:productCode', value);
+		emit('update:code', value);
 	},
 });
 
 const title = computed({
 	get() {
-		return props.productTitle;
+		return props.title;
 	},
 	set(value) {
-		emit('update:productTitle', value);
+		emit('update:title', value);
 	},
 });
 
 const subtitle = computed({
 	get() {
-		return props.productSubtitle;
+		return props.subtitle;
 	},
 	set(value) {
-		emit('update:productSubtitle', value);
+		emit('update:subtitle', value);
 	},
 });
 
 const description = computed({
 	get() {
-		return props.productDescription;
+		return props.description;
 	},
 	set(value) {
-		emit('update:productDescription', value);
+		emit('update:description', value);
 	},
 });
 </script>
