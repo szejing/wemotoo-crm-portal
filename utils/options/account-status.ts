@@ -1,18 +1,18 @@
 export const options_account_status = [
 	{
-		value: 0,
 		name: 'New',
+		value: 0,
 	},
 	{
-		value: 1,
 		name: 'Active',
+		value: 1,
 	},
 	{
-		value: 2,
 		name: 'Inactive',
+		value: 2,
 	},
 	{
-		value: 3,
 		name: 'Expired',
+		value: 3,
 	},
 ];

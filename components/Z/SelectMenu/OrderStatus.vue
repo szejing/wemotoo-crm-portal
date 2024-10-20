@@ -1,9 +1,9 @@
 <template>
 	<UFormGroup name="status">
-		<USelectMenu v-model="status" :options="options_product_status" size="md">
+		<USelectMenu v-model="status" :options="options_order_status" size="md">
 			<template #label>
 				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
-				<span v-else class="text-gray-400">Select Product Status</span>
+				<span v-else class="text-gray-400">Select Order Status</span>
 			</template>
 
 			<template #option="{ option }">
@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductStatus } from '~/utils/enum/product-status';
-import { options_product_status } from '~/utils/options';
+import type { OrderStatus } from '~/utils/enum/order-status';
+import { options_order_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
-const props = defineProps<{ status: ProductStatus | undefined }>();
+const props = defineProps<{ status: OrderStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
 const status = computed({

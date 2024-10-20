@@ -4,7 +4,7 @@
 		<UCard :ui="cardBg">
 			<template #header>
 				<h3>Status</h3>
-				<ZSelectMenuProductStatus v-model:status="newProduct.status" />
+				<ZSelectMenuProductStatus v-model:status="newProduct.status" class="mt-2" />
 			</template>
 		</UCard>
 

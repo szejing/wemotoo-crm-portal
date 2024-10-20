@@ -26,6 +26,15 @@ export function formatCurrency(value: number, fractionDigits: number = 2): strin
 	return formattedValue;
 }
 
-export const capitalizeFirstLetter = (value: string) => {
+export const capitalizeFirstLetter = (value: string | any) => {
+	if (value === undefined) return undefined;
+
+	if (value.includes('_')) {
+		return value
+			.split('_')
+			.map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' ');
+	}
+
 	return value.charAt(0).toUpperCase() + value.slice(1);
 };

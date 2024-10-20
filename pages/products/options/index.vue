@@ -4,7 +4,7 @@
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
-					<h3>Add New Option</h3>
+					<h2>Add New Option</h2>
 					<FormProductOptionCreation class="mt-4" />
 				</UCard>
 			</div>

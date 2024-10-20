@@ -202,6 +202,7 @@ export default defineAppConfig({
 				'lg': 'px-4 py-2',
 				'xl': 'px-4 py-3',
 			},
+			placeholder: 'text-gray-400',
 			default: {
 				loadingIcon: 'i-material-symbols-sync-rounded',
 				trailingIcon: 'i-material-symbols-expand-more-rounded',
