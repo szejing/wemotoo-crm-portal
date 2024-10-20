@@ -4,7 +4,7 @@
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
-					<h3>Add New Category</h3>
+					<h2>Add New Category</h2>
 					<FormProductCategoryCreation class="mt-4" />
 				</UCard>
 			</div>

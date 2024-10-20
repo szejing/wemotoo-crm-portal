@@ -4,7 +4,7 @@
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
-					<h3>Add New Tag</h3>
+					<h2>Add New Tag</h2>
 					<FormProductTagCreation class="mt-4" />
 				</UCard>
 			</div>

@@ -1,27 +1,13 @@
 <template>
 	<UCard>
-		<UForm :schema="FilterProductValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
+		<UForm :schema="FilterProductValidation" :state="state" class="grid grid-cols-1 sm:grid-cols-4 gap-4" @submit="onSubmit">
 			<UFormGroup name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." icon="i-material-symbols-search-rounded" />
 			</UFormGroup>
 
-			<UFormGroup name="status" class="col-start-4">
-				<USelectMenu
-					v-model="state.status"
-					v-model:query="query"
-					:options="options_product_status"
-					searchable
-					size="md"
-					value-attribute="name"
-					option-attribute="name"
-					multiple
-				>
-					<template #label>
-						<span v-if="state.status.length" class="truncate">{{ state.status.join(', ') }}</span>
-						<span v-else>Product Status</span>
-					</template>
-				</USelectMenu>
-			</UFormGroup>
+			<div class="sm:col-start-4">
+				<ZSelectMenuProductStatus v-model:status="state.status" />
+			</div>
 		</UForm>
 	</UCard>
 </template>
@@ -29,15 +15,14 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { options_product_status } from '~/utils/options';
+import type { ProductStatus } from '~/utils/enum/product-status';
 import { FilterProductValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof FilterProductValidation>;
 
-const query = ref('');
-const state = reactive({
+const state = ref<{ query: string | undefined; status: ProductStatus | undefined }>({
 	query: undefined,
-	status: [] as string[],
+	status: undefined,
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

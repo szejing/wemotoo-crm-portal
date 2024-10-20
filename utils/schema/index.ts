@@ -8,6 +8,7 @@ import { FilterOptionValidation } from './Product/Filter/OptionValidation';
 import { CreateProductCategoryValidation } from './Product/Create/ProductCategoryValidation';
 import { CreateProductOptionValidation } from './Product/Create/ProductOptionValidation';
 import { CreateProductTagValidation } from './Product/Create/ProductTagValidation';
+import { FilterOrderValidation } from './Product/Filter/OrderValidation';
 
 export {
 	LoginValidation,
@@ -17,6 +18,7 @@ export {
 	CreateProductTagValidation,
 	CreateProductOptionValidation,
 	FilterProductValidation,
+	FilterOrderValidation,
 	FilterCategoryValidation,
 	FilterTagValidation,
 	FilterOptionValidation,

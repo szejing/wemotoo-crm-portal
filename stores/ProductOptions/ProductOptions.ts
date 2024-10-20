@@ -3,33 +3,33 @@ import { options_page_size } from '~/utils/options';
 import type { ProductOptionCreate } from '~/utils/types/form/product-option-creation';
 import type { ProductOption } from '~/utils/types/product-option';
 
-const initial: ProductOption[] = [
-	{
-		id: '1',
-		name: 'Color',
-		values: ['Red', 'Blue', 'Green'],
-	},
-	{
-		id: '2',
-		name: 'Size',
-		values: ['S', 'M', 'L'],
-	},
-	{
-		id: '3',
-		name: 'Material',
-		values: ['Cotton', 'Polyester', 'Wool'],
-	},
-	{
-		id: '4',
-		name: 'Style',
-		values: ['Casual', 'Formal', 'Sport'],
-	},
-	{
-		id: '5',
-		name: 'Pattern',
-		values: ['Solid', 'Striped', 'Checkered'],
-	},
-];
+// const initial: ProductOption[] = [
+// 	{
+// 		id: '1',
+// 		name: 'Color',
+// 		values: ['Red', 'Blue', 'Green'],
+// 	},
+// 	{
+// 		id: '2',
+// 		name: 'Size',
+// 		values: ['S', 'M', 'L'],
+// 	},
+// 	{
+// 		id: '3',
+// 		name: 'Material',
+// 		values: ['Cotton', 'Polyester', 'Wool'],
+// 	},
+// 	{
+// 		id: '4',
+// 		name: 'Style',
+// 		values: ['Casual', 'Formal', 'Sport'],
+// 	},
+// 	{
+// 		id: '5',
+// 		name: 'Pattern',
+// 		values: ['Solid', 'Striped', 'Checkered'],
+// 	},
+// ];
 
 const initialEmptyOption: ProductOptionCreate = {
 	name: undefined,
@@ -40,7 +40,7 @@ export const useProductOptionsStore = defineStore({
 	id: 'productOptionsStore',
 	state: () => ({
 		loading: false as boolean,
-		productOptions: structuredClone(initial),
+		productOptions: [] as ProductOption[],
 		newProductOption: structuredClone(initialEmptyOption),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
@@ -58,7 +58,7 @@ export const useProductOptionsStore = defineStore({
 		async getOptions() {
 			this.loading = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
-			this.productOptions = structuredClone(initial);
+			// this.productOptions = structuredClone(initial);
 			this.loading = false;
 		},
 		async addProductOption(option: ProductOption) {
