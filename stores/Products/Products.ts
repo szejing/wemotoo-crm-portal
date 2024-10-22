@@ -1,6 +1,7 @@
 import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
 import type { ProductCreate } from '~/utils/types/form/product-creation';
+import type { Product } from '~/utils/types/product';
 
 const initialEmptyProduct: ProductCreate = {
 	code: undefined,
@@ -46,6 +47,7 @@ export const useProductStore = defineStore({
 	state: () => ({
 		loading: false as boolean,
 		newProduct: structuredClone(initialEmptyProduct),
+		products: [] as Product[],
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),

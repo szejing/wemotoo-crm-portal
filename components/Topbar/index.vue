@@ -1,13 +1,16 @@
 <template>
 	<div class="topbar-bg">
 		<div class="md:hidden flex justify-center items-center gap-2" @click="toggleSidebarModal">
-			<NuxtImg format="webp" :src="merchant.profile_thumbnail" width="40" height="40" class="rounded-[50%] cursor-pointer" preload />
+			<!-- <NuxtImg format="webp" :src="merchant.profile_thumbnail" width="40" height="40" class="rounded-[50%] cursor-pointer" preload />
 
 			<div class="flex-col-start leading-tight">
 				<h2 class="font-semibold text-secondary-900">{{ merchant.name }}</h2>
 				<p class="font-normal text-xs text-secondary-700">{{ merchant.merchant_id }}</p>
-			</div>
+			</div> -->
+
+			<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
 		</div>
+
 		<NuxtLink class="link" to="/login">
 			<UIcon name="i-material-symbols-light-logout" class="size-6" />
 		</NuxtLink>
@@ -29,5 +32,13 @@ const { toggleSidebarModal } = sidebarStore;
 
 .link {
 	@apply bg-secondary-50 w-10 h-10 rounded-full text-center flex justify-center items-center text-neutral-900;
+}
+
+:deep(h2) {
+	@apply font-semibold text-secondary-900;
+}
+
+:deep(p) {
+	@apply font-normal text-xs text-secondary-700;
 }
 </style>

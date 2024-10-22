@@ -18,6 +18,10 @@ const { toggleSidebar } = sidebarStore;
 </script>
 
 <style scoped lang="css">
+.header-container {
+	@apply px-4 py-10 border-b-[1px] border-secondary-400;
+}
+
 .sidebar {
 	@apply fixed z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200 hidden md:block;
 }

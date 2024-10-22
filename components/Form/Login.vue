@@ -7,7 +7,6 @@
 						<div class="w-full">
 							<h1 class="text-center">Wemotoo CRM</h1>
 							<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
-							<!-- <img class="w-[180px] mx-auto mt-2 text-center" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" /> -->
 						</div>
 					</template>
 
