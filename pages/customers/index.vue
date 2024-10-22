@@ -7,7 +7,6 @@
 			<UCard class="mt-4">
 				<div class="flex justify-between">
 					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
-
 					<div class="flex gap-4">
 						<UButton>
 							<UIcon name="i-ri-file-excel-2-line" class="size-5" />
@@ -16,7 +15,7 @@
 
 						<UButton color="green">
 							<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
-							Create Customer
+							Create
 						</UButton>
 					</div>
 				</div>
@@ -26,9 +25,19 @@
 					<template #actions-data="{ row }">
 						<ZActionDropdown :items="options(row)" />
 					</template>
+
+					<template #empty-state>
+						<div class="flex flex-col items-center justify-center py-6 gap-3">
+							<span class="italic text-sm">No one here!</span>
+							<UButton color="green">
+								<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
+								Create
+							</UButton>
+						</div>
+					</template>
 				</UTable>
 
-				<div class="section-pagination">
+				<div v-if="customers.length > 0" class="section-pagination">
 					<UPagination v-model="page" :page-count="pageSize" :total="customers.length" />
 				</div>
 			</UCard>
