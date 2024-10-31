@@ -1,6 +1,11 @@
 import HttpFactory from '../factory';
 import Routes from '../routes.client';
 
+export type LoginReq = {
+	email_address: string;
+	password: string;
+};
+
 class AuthModule extends HttpFactory {
 	private readonly RESOURCE = Routes.Auth;
 
@@ -9,13 +14,22 @@ class AuthModule extends HttpFactory {
 	 * @param email && @param password
 	 * @returns
 	 */
-	async login(email: string, password: string) {
-		console.log('AuthModule', email);
-		console.log('AuthModule', password);
+	async login(data: LoginReq) {
 		return this.call<any>({
-			method: 'GET',
+			method: 'POST',
 			url: `${this.RESOURCE.Login()}`,
+			body: data,
 		});
+		// const config = useRuntimeConfig();
+
+		// return $fetch(`http://localhost:8888/${this.RESOURCE.Login()}`, {
+		// 	method: 'POST',
+		// 	body: data,
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		'X-API-KEY': config.public.apiKey,
+		// 	},
+		// });
 	}
 }
 

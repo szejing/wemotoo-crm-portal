@@ -46,9 +46,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { email, password } = event.data;
 
 	const authStore = useAuthStore();
-	authStore.login(email, password);
-
-	await navigateTo('/');
+	await authStore.login(email, password);
 };
 </script>
 

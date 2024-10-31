@@ -5,5 +5,5 @@ export const LoginValidation = z.object({
 	password: z
 		.string({ message: 'Password is required' })
 		.min(6, { message: 'Password must be at least 6 characters' })
-		.regex(/^[a-zA-Z0-9]+$/, { message: 'Password must contain only alphanumeric characters' }),
+		.regex(/^[a-zA-Z0-9!@#$%^&*()_+={}[\]:;"'<>,.?~`-]+$/, { message: 'Password must contain only alphanumeric characters and special characters' }),
 });

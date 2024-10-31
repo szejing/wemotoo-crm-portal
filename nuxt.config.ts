@@ -14,11 +14,44 @@ export default defineNuxtConfig({
 
 	devtools: { enabled: true },
 
+	routeRules: {
+		'/api**': {
+			// enable CORS
+			cors: true, // if enabled, also needs cors-preflight-request.ts Nitro middleware to answer CORS preflight requests
+			headers: {
+				// CORS headers
+				'Access-Control-Allow-Origin': '*', // 'http://example:6006', has to be set to the requesting domain that you want to send the credentials back to
+				'Access-Control-Allow-Methods': '*', // 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
+				'Access-Control-Allow-Credentials': 'true',
+				'Access-Control-Allow-Headers': '*', // 'Origin, Content-Type, Accept, Authorization, X-Requested-With'
+				'Access-Control-Expose-Headers': '*',
+				// 'Access-Control-Max-Age': '7200', // 7200 = caching 2 hours (Chromium default), https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age#directives
+			},
+		},
+	},
+
+	// routeRules: {
+	// 	'/**': {
+	// 		proxy: { to: 'http://127.0.0.1:8888/**' },
+	// 	},
+	// },
+	// nitro: {
+	// 	devProxy: {
+	// 		'/api': {
+	// 			target: 'http://localhost:8888',
+	// 			headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*' },
+	// 			prependPath: true,
+	// 			changeOrigin: true,
+	// 		},
+	// 	},
+	// },
+
 	runtimeConfig: {
-		baseUrl: process.env.BASE_URL,
 		version: process.env.APP_VERSION,
 		public: {
-			apiBaseUrl: process.env.BASE_URL,
+			baseUrl: process.env.BASE_URL,
+			apiKey: process.env.API_KEY,
+			jwtSecret: process.env.JWT_SECRET,
 		},
 	},
 

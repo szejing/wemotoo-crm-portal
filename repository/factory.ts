@@ -23,6 +23,7 @@ interface IHttpFactory {
 	url: string;
 	fetchOptions?: NitroFetchOptions<'json'>;
 	body?: object;
+	headers?: Record<string, string>;
 }
 
 class HttpFactory {
@@ -32,13 +33,19 @@ class HttpFactory {
 		this.$fetch = fetch;
 	}
 
-	async call<T>({ method, url, fetchOptions, body }: IHttpFactory): Promise<T> {
+	async call<T>({
+		method,
+		url,
+		fetchOptions,
+		body,
+		headers = {
+			'Content-Type': 'application/json',
+		},
+	}: IHttpFactory): Promise<T> {
 		return this.$fetch<T>(url, {
 			method,
 			body,
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			...headers,
 			...fetchOptions,
 		});
 	}
