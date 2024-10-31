@@ -1,10 +1,13 @@
+const prefix: string = '/api';
+const prefixAuth: string = 'auth';
+
 export const Routes = {
-	external: {
-		name: '/api/another',
-		regex: /^\/api\/another$/,
+	ProductTag: {
+		FetchAll: () => `${prefix}/product-tags`,
+		FetchDetail: (id: number) => `${prefix}/product-tags/${id}`,
+		CreatePost: () => `${prefix}/product-tags`,
 	},
-	core: {
-		name: '/api',
-		regex: /^\/api\//,
+	Auth: {
+		Login: () => `${prefixAuth}/merchant-user/login`,
 	},
 };

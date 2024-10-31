@@ -10,15 +10,15 @@ export const useAuthStore = defineStore({
 	}),
 	actions: {
 		// login
-		async login(email: string, password: string) {
+		async login(email_address: string, password: string) {
 			const { $api } = useNuxtApp();
 
 			try {
-				console.log(email);
+				console.log(email_address);
 				console.log(password);
 
 				$api.auth
-					.login(email, password)
+					.login({ email_address, password })
 					.then((data) => {
 						console.log(data);
 					})

@@ -2,11 +2,11 @@
  * Prefix /api for api server
  */
 const prefix: string = '/api';
+const prefixAuth: string = 'auth';
 
 /*
  * Prefix /api/another for another server
  * */
-const anotherPrefix: string = '/api/another';
 
 const Routes = {
 	ProductTag: {
@@ -15,7 +15,7 @@ const Routes = {
 		CreatePost: () => `${prefix}/product-tags`,
 	},
 	Auth: {
-		Login: () => `${anotherPrefix}/login`,
+		Login: () => `${prefix}/${prefixAuth}/merchant-user/login`,
 	},
 };
 
