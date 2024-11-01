@@ -77,6 +77,7 @@ const options = (row: ProductCategory) => [
 
 const page = ref(1);
 const productCategoriesStore = useProductCategoriesStore();
+await productCategoriesStore.getCategories();
 
 const { productCategories, pageSize } = storeToRefs(productCategoriesStore);
 

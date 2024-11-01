@@ -1,29 +1,33 @@
 import AuthModule from '~/repository/modules/auth';
-import ProductTagsModule from '~/repository/modules/product-tags';
+import ProductCategoryModule from '~/repository/modules/product-category';
+import ProductTagModule from '~/repository/modules/product-tag';
 
 interface IApiInstance {
-	productTag: ProductTagsModule;
+	productTag: ProductTagModule;
+	productCategory: ProductCategoryModule;
 	auth: AuthModule;
 }
 
 export default defineNuxtPlugin((_) => {
-	const config = useRuntimeConfig();
-	const NUXT_BASE_URL_PROXY_SERVER: string = config.public.apiBaseUrl;
+	// const config = useRuntimeConfig();
+	// const NUXT_BASE_URL_PROXY_SERVER: string = config.public.apiBaseUrl;
 
 	const apiFetcher = $fetch.create({
-		baseURL: NUXT_BASE_URL_PROXY_SERVER,
+		// baseURL: NUXT_BASE_URL_PROXY_SERVER,
 		// onRequest({ request, response }) {
 		// 	console.log('Request:', request);
 		// 	console.log('Response:', response);
 		// },
 	});
 
-	const productTagModule = new ProductTagsModule(apiFetcher);
 	const authModule = new AuthModule(apiFetcher);
+	const productTagModule = new ProductTagModule(apiFetcher);
+	const productCategoryModule = new ProductCategoryModule(apiFetcher);
 
 	const modules: IApiInstance = {
-		productTag: productTagModule,
 		auth: authModule,
+		productTag: productTagModule,
+		productCategory: productCategoryModule,
 	};
 	/*
 	 * ! This code below is example for the case you want to authenticate user and set token to headers.
@@ -31,6 +35,7 @@ export default defineNuxtPlugin((_) => {
 	 * => Cookie only exist on client.
 	 *  */
 	if (import.meta.client) {
+		// const token = useCookie('token', { maxAge: 60 * 60 * 24 * 7 });
 		// modules.auth
 		// 	.login(email, password)
 		// 	.then((data) => {

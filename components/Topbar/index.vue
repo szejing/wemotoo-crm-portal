@@ -11,9 +11,9 @@
 			<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
 		</div>
 
-		<NuxtLink class="link" to="/login">
+		<div class="link" @click="logout">
 			<UIcon name="i-material-symbols-light-logout" class="size-6" />
-		</NuxtLink>
+		</div>
 	</div>
 </template>
 
@@ -23,6 +23,13 @@ const sidebarStore = useSidebarStore();
 
 const { merchant } = storeToRefs(merchantInfoStore);
 const { toggleSidebarModal } = sidebarStore;
+
+const logout = async () => {
+	const authStore = useAuthStore();
+	await authStore.logout();
+
+	navigateTo('/login');
+};
 </script>
 
 <style scoped lang="css">

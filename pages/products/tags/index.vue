@@ -76,6 +76,7 @@ const options = (row: ProductTag) => [
 
 const page = ref(1);
 const productTagsStore = useProductTagsStore();
+await productTagsStore.getTags();
 
 const { productTags, pageSize } = storeToRefs(productTagsStore);
 

@@ -12,8 +12,12 @@
 
 					<div class="flex flex-col gap-2">
 						<h1 class="text-center">Merchant Login</h1>
-						<UFormGroup v-slot="{ error }" label="Email" name="email" required>
-							<UInput v-model="state.email" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+						<UFormGroup v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
+							<UInput v-model="state.merchant_id" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+						</UFormGroup>
+
+						<UFormGroup v-slot="{ error }" label="Email" name="email_address" required>
+							<UInput v-model="state.email_address" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 						</UFormGroup>
 
 						<UFormGroup v-slot="{ error }" label="Password" name="password" required>
@@ -38,15 +42,18 @@ import type { z } from 'zod';
 type Schema = z.output<typeof LoginValidation>;
 
 const state = reactive({
-	email: undefined,
+	merchant_id: undefined,
+	email_address: undefined,
 	password: undefined,
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { email, password } = event.data;
+	const { merchant_id, email_address, password } = event.data;
 
 	const authStore = useAuthStore();
-	await authStore.login(email, password);
+	await authStore.login(merchant_id, email_address, password);
+
+	navigateTo('/');
 };
 </script>
 
