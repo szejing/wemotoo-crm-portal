@@ -1,14 +1,27 @@
+import type { ProductTag } from '~/utils/types/product-tag';
 import HttpFactory from '../factory';
 import Routes from '../routes.client';
 
-class ProductTagsModule extends HttpFactory {
+export type ProductTagsResp = {
+	count: number;
+	productTags: ProductTag[];
+};
+
+class ProductTagModule extends HttpFactory {
 	private RESOURCE = Routes.ProductTag;
 	private accessToken: string = '';
 
-	async fetchAll() {
+	async fetchMany(): Promise<ProductTagsResp> {
+		return this.call<ProductTagsResp>({
+			method: 'GET',
+			url: `${this.RESOURCE.Many()}`,
+		});
+	}
+
+	async fetchSingle(id: string) {
 		return this.call<any>({
 			method: 'GET',
-			url: `${this.RESOURCE.FetchAll()}`,
+			url: `${this.RESOURCE.Single(id)}`,
 		});
 	}
 
@@ -49,4 +62,4 @@ class ProductTagsModule extends HttpFactory {
 	}
 }
 
-export default ProductTagsModule;
+export default ProductTagModule;

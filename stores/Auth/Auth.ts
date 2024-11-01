@@ -1,54 +1,51 @@
 import { defineStore } from 'pinia';
+import type { LoginResp } from '~/repository/modules/auth';
 
 export const useAuthStore = defineStore({
 	id: 'authStore',
 	state: () => ({
 		loading: false as boolean,
-		email: undefined as string | undefined,
-		password: undefined as string | undefined,
 		errors: [] as string[],
 	}),
 	actions: {
 		// login
-		async login(email_address: string, password: string) {
+		async login(merchant_id: string, email_address: string, password: string) {
 			const { $api } = useNuxtApp();
 
 			try {
-				console.log(email_address);
-				console.log(password);
+				const data: LoginResp = await $api.auth.login({ merchant_id, email_address, password });
 
-				$api.auth
-					.login({ email_address, password })
-					.then((data) => {
-						console.log(data);
-					})
-					.catch((error) => {
-						console.error(error);
-					});
+				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
+				accessToken.value = data.token;
+			} catch (err: any) {
+				this.errors.push(err.message);
+				// this.errors.push(`[${err.response_code}] : ${err.message}`);
+			}
+		},
+		// refresh session
+		async refreshToken() {
+			const { $api } = useNuxtApp();
 
-				// const response = await new ApiService().performLogin({
-				// 	email: email,
-				// 	password: password,
-				// });
+			try {
+				const token: string = await $api.auth.refreshToken();
 
-				// const { $api } = useNuxtApp();
-
-				// const { data: ProductTag, pending, error } = await $api.auth.login(email, password);
-
-				// console.log(response);
-				// set user
-				// this.accessToken = response?.access_token;
-
-				// const userStore = useUserStore();
-				// if (response?.user !== undefined && response?.user !== null) {
-				// 	userStore.setUser(response?.user);
-				// }
-
-				// if (this.accessToken !== undefined && this.accessToken !== null) {
-				// 	localStorage.setItem(Constants.ACCESS_TOKEN, this.accessToken);
-				// }
+				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
+				accessToken.value = token;
 			} catch (err: any) {
 				console.error(err);
+			}
+		},
+		// logout
+		async logout(): Promise<boolean> {
+			const { $api } = useNuxtApp();
+
+			try {
+				const response_code: number = await $api.auth.logout();
+
+				return response_code === 200;
+			} catch (err: any) {
+				console.error(err);
+				return true;
 			}
 		},
 	},

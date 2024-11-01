@@ -10,7 +10,7 @@ export const product_category_columns = [
 		sortable: true,
 	},
 	{
-		key: 'no_of_items',
+		key: 'total_items',
 		label: 'No of Items',
 		sortable: true,
 	},

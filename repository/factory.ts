@@ -42,12 +42,16 @@ class HttpFactory {
 			'Content-Type': 'application/json',
 		},
 	}: IHttpFactory): Promise<T> {
-		return this.$fetch<T>(url, {
-			method,
-			body,
-			...headers,
-			...fetchOptions,
-		});
+		try {
+			return await this.$fetch<T>(url, {
+				method,
+				body,
+				...headers,
+				...fetchOptions,
+			});
+		} catch (error: any) {
+			throw error.data?.data;
+		}
 	}
 }
 export default HttpFactory;

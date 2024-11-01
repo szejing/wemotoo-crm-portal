@@ -4,7 +4,7 @@ export type ProductCategory = {
 	code: string;
 	description?: string | undefined;
 
-	no_of_items: number;
+	total_items: number;
 
 	is_active: boolean;
 	images?: string[] | undefined;

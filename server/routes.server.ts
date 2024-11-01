@@ -1,13 +1,37 @@
-const prefix: string = '/api';
-const prefixAuth: string = 'auth';
+const auth: string = 'auth';
+const prodCatg: string = 'product-category';
+const prodTag: string = 'product-tag';
 
 export const Routes = {
-	ProductTag: {
-		FetchAll: () => `${prefix}/product-tags`,
-		FetchDetail: (id: number) => `${prefix}/product-tags/${id}`,
-		CreatePost: () => `${prefix}/product-tags`,
-	},
 	Auth: {
-		Login: () => `${prefixAuth}/merchant-user/login`,
+		Login: () => `${auth}/merchant-user/login`,
+		Logout: () => `${auth}/merchant-user/logout`,
+	},
+	ProductTag: {
+		Create: () => `${prodTag}/`,
+		Single: (id: string) => `${prodTag}/${id}`,
+		Many: () => `${prodTag}/`,
+		Update: () => `${prodTag}/`,
+		Remove: () => `${prodTag}/`,
+		RevertRemove: () => `${prodTag}/`,
+	},
+	ProdCategory: {
+		Create: () => `${prodCatg}/`,
+		Single: (id: string) => `${prodCatg}/${id}`,
+		Many: () => `${prodCatg}/`,
+		Update: () => `${prodCatg}/`,
+		Remove: () => `${prodCatg}/`,
+		RevertRemove: () => `${prodCatg}/`,
 	},
 };
+
+// export const Routes = {
+// 	external: {
+// 		name: '/api/another',
+// 		regex: /^\/api\/another$/,
+// 	},
+// 	core: {
+// 		name: '/api',
+// 		regex: /^\/api\//,
+// 	},
+// };

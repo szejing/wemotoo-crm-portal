@@ -5,12 +5,12 @@ export const product_tag_columns = [
 		sortable: true,
 	},
 	{
-		key: 'name',
+		key: 'value',
 		label: 'Name',
 		sortable: true,
 	},
 	{
-		key: 'no_of_items',
+		key: 'total_items',
 		label: 'No of Items',
 		sortable: true,
 	},
