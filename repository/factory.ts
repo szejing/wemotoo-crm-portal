@@ -1,4 +1,5 @@
 import type { $Fetch, NitroFetchOptions } from 'nitropack';
+import { ApiErrorModel } from '~/utils/types/api-error-model';
 
 interface IHttpFactory {
 	method:
@@ -50,7 +51,7 @@ class HttpFactory {
 				...fetchOptions,
 			});
 		} catch (error: any) {
-			throw error.data?.data;
+			throw error.data?.data ? error.data?.data : new ApiErrorModel(500, 'Internal Server Error');
 		}
 	}
 }
