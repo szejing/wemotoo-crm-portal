@@ -8,6 +8,9 @@ export const useAuthStore = defineStore({
 		errors: [] as string[],
 	}),
 	actions: {
+		clearErrors() {
+			this.errors = [];
+		},
 		// login
 		async login(merchant_id: string, email_address: string, password: string) {
 			const { $api } = useNuxtApp();
@@ -18,8 +21,8 @@ export const useAuthStore = defineStore({
 				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
 				accessToken.value = data.token;
 			} catch (err: any) {
+				console.log(err);
 				this.errors.push(err.message);
-				// this.errors.push(`[${err.response_code}] : ${err.message}`);
 			}
 		},
 		// refresh session
