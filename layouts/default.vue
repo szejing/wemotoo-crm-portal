@@ -13,9 +13,9 @@
 </template>
 
 <script lang="ts" setup>
-const sidebarStore = useSidebarStore();
+const appUiStore = useAppUiStore();
 
-const { showSidebar } = storeToRefs(sidebarStore);
+const { showSidebar } = storeToRefs(appUiStore);
 </script>
 
 <style scoped lang="css">

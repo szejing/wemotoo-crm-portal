@@ -5,13 +5,13 @@ import { useProductStore } from './Products/Products';
 import { useSettingsStore } from './Settings/Settings';
 import { useCustomersStore } from './Customers/Customers';
 import { useAuthStore } from './Auth/Auth';
-import { useSidebarStore } from './Sidebar/Sidebar';
+import { useAppUiStore } from './AppUi/AppUi';
 import { useMerchantInfoStore } from './MerchantInfo/MerchantInfo';
 import { useOrderStore } from './Order/Order';
 
 export {
 	useAuthStore,
-	useSidebarStore,
+	useAppUiStore,
 	useMerchantInfoStore,
 	useCustomersStore,
 	useSettingsStore,

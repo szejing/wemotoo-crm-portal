@@ -31,21 +31,23 @@
 					</div>
 
 					<template #footer>
-						<UButton block size="md" color="primary" variant="outline" type="submit">Submit</UButton>
+						<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
 					</template>
 				</UCard>
 			</UForm>
 
-			<div v-if="errors.length > 0" class="mt-4">
+			<!-- <div v-if="errors.length > 0" class="mt-4">
 				<UAlert
+					v-for="(error, index) in errors"
+					:key="index"
 					icon="material-symbols-warning-outline-rounded"
 					color="red"
 					variant="solid"
-					:title="errors.join(', ')"
+					:title="error"
 					:close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'white', variant: 'link', padded: false }"
-					@close="errors = []"
+					@close="clearError(index)"
 				/>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
@@ -54,6 +56,7 @@
 import { LoginValidation } from '~/utils/schema';
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
+import type { EventNotification } from '~/utils/types/event-notification';
 
 type Schema = z.output<typeof LoginValidation>;
 
@@ -64,10 +67,27 @@ const state = reactive({
 });
 
 const authStore = useAuthStore();
-const { errors } = storeToRefs(authStore);
+const { loading, errors } = storeToRefs(authStore);
+const toast = useToast();
 
-const clearError = () => {
-	authStore.clearErrors();
+watch(errors.value, () => {
+	if (errors.value.length > 0) {
+		errors.value.forEach((en: EventNotification) => {
+			toast.add({
+				id: en.id,
+				color: en.color,
+				title: en.title,
+				description: en.description,
+				icon: en.icon,
+				timeout: en.timeout,
+				// actions: en.actions,
+			});
+		});
+	}
+});
+
+const clearError = (index: number) => {
+	authStore.clearErrors(index);
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

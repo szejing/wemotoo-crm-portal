@@ -34,9 +34,9 @@
 </template>
 
 <script lang="ts" setup>
-const sidebarStore = useSidebarStore();
+const appUiStore = useAppUiStore();
 
-const { navigations } = storeToRefs(sidebarStore);
+const { navigations } = storeToRefs(appUiStore);
 
 const toggleCollapse = (id: number) => {
 	navigations.value.forEach((el, index) => {

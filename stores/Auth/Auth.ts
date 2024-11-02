@@ -1,20 +1,22 @@
 import { defineStore } from 'pinia';
 import type { LoginResp } from '~/repository/modules/auth';
+import type { EventNotification } from '~/utils/types/event-notification';
 
 export const useAuthStore = defineStore({
 	id: 'authStore',
 	state: () => ({
 		loading: false as boolean,
-		errors: [] as string[],
+		errors: [] as EventNotification[],
 	}),
 	actions: {
-		clearErrors() {
-			this.errors = [];
+		clearErrors(index: number) {
+			this.errors.splice(index, 1);
 		},
 		// login
 		async login(merchant_id: string, email_address: string, password: string) {
 			const { $api } = useNuxtApp();
 
+			this.loading = true;
 			try {
 				const data: LoginResp = await $api.auth.login({ merchant_id, email_address, password });
 
@@ -22,7 +24,16 @@ export const useAuthStore = defineStore({
 				accessToken.value = data.token;
 			} catch (err: any) {
 				console.log(err);
-				this.errors.push(err.message);
+				this.errors.push({
+					color: 'red',
+					icon: 'i-material-symbols-light-error-outline-rounded',
+					id: 'error',
+					title: err.message,
+					timeout: 3000,
+					actions: [],
+				});
+			} finally {
+				this.loading = false;
 			}
 		},
 		// refresh session
@@ -41,6 +52,7 @@ export const useAuthStore = defineStore({
 		// logout
 		async logout(): Promise<boolean> {
 			const { $api } = useNuxtApp();
+			this.loading = true;
 
 			try {
 				const response_code: number = await $api.auth.logout();
@@ -49,6 +61,8 @@ export const useAuthStore = defineStore({
 			} catch (err: any) {
 				console.error(err);
 				return true;
+			} finally {
+				this.loading = false;
 			}
 		},
 	},

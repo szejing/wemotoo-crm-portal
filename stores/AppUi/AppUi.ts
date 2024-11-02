@@ -52,13 +52,14 @@ const merchantNavigation = [
 	},
 ];
 
-export const useSidebarStore = defineStore({
-	id: 'sidebarStore',
+export const useAppUiStore = defineStore({
+	id: 'appUiStore',
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: true as boolean,
 		showSidebarModal: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
+		notifications: [] as Array<NotificationEvent>,
 	}),
 	actions: {
 		toggleSidebar() {

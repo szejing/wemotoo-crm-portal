@@ -17,8 +17,7 @@ export default defineAppConfig({
 		},
 		//* Notification *//
 		notifications: {
-			// Show toasts at the top right of the screen
-			position: 'top-0 right-0 bottom-auto left-auto',
+			position: 'bottom-0 right-0 top-auto left-auto',
 		},
 
 		notification: {

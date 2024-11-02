@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts" setup>
-const sidebarStore = useSidebarStore();
+const appUiStore = useAppUiStore();
 
-const { forcedShow, showSidebar } = storeToRefs(sidebarStore);
-const { toggleSidebar } = sidebarStore;
+const { forcedShow, showSidebar } = storeToRefs(appUiStore);
+const { toggleSidebar } = appUiStore;
 </script>
 
 <style scoped lang="css">
