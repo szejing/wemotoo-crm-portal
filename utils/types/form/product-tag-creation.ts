@@ -1,4 +1,4 @@
 export type ProductTagCreate = {
 	// name
-	name: string | undefined;
+	value: string | undefined;
 };

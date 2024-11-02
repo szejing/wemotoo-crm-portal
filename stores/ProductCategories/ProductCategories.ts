@@ -39,7 +39,7 @@ export const useProductCategoriesStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			try {
-				$api.productCategory
+				await $api.productCategory
 					.fetchMany()
 					.then((data) => {
 						this.productCategories = data.productCategories;

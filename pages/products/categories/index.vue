@@ -13,24 +13,24 @@
 				<UCard>
 					<ZSectionFilterCategories />
 
-					<div v-if="productCategories.length > 0" class="mt-4">
+					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_category_columns">
+						<UTable :rows="rows" :columns="product_category_columns" :loading="loading">
 							<template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
+							</template>
+
+							<template #empty-state>
+								<div class="flex-col-center section-empty">
+									<h2>No Categories Found</h2>
+									<p>Create a new category to get started</p>
+								</div>
 							</template>
 						</UTable>
 
 						<!-- Pagination  -->
-						<div class="section-pagination">
+						<div v-if="productCategories.length > 0" class="section-pagination">
 							<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
-						</div>
-					</div>
-
-					<div v-else class="flex-center section-empty">
-						<div>
-							<h2>No Categories Found</h2>
-							<p>Create a new category to get started</p>
 						</div>
 					</div>
 				</UCard>
@@ -79,7 +79,7 @@ const page = ref(1);
 const productCategoriesStore = useProductCategoriesStore();
 await productCategoriesStore.getCategories();
 
-const { productCategories, pageSize } = storeToRefs(productCategoriesStore);
+const { loading, productCategories, pageSize } = storeToRefs(productCategoriesStore);
 
 const rows = computed(() => {
 	return productCategories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
