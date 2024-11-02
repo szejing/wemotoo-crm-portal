@@ -1,7 +1,7 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Name" />
+		<UFormGroup v-slot="{ error }" label="Value" name="value" required>
+			<UInput v-model="value" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Value" />
 		</UFormGroup>
 	</div>
 </template>
@@ -9,18 +9,18 @@
 <script lang="ts" setup>
 const props = defineProps({
 	code: String,
-	name: String,
+	value: String,
 	description: String,
 });
 
-const emit = defineEmits(['update:name']);
+const emit = defineEmits(['update:value']);
 
-const name = computed({
+const value = computed({
 	get() {
-		return props.name;
+		return props.value;
 	},
 	set(value) {
-		emit('update:name', value);
+		emit('update:value', value);
 	},
 });
 </script>

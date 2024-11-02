@@ -4,13 +4,14 @@ import type { ProductTagCreate } from '~/utils/types/form/product-tag-creation';
 import type { ProductTag } from '~/utils/types/product-tag';
 
 const initialEmptyTag: ProductTagCreate = {
-	name: undefined,
+	value: undefined,
 };
 
 export const useProductTagsStore = defineStore({
 	id: 'productTagsStore',
 	state: () => ({
 		loading: false as boolean,
+		adding: false as boolean,
 		productTags: [] as ProductTag[],
 		newProductTag: structuredClone(initialEmptyTag),
 		pageSize: options_page_size[0],
@@ -26,9 +27,8 @@ export const useProductTagsStore = defineStore({
 		async getTags() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
-
 			try {
-				$api.productTag
+				await $api.productTag
 					.fetchMany()
 					.then((data) => {
 						this.productTags = data.productTags;
@@ -41,13 +41,41 @@ export const useProductTagsStore = defineStore({
 			} finally {
 				this.loading = false;
 			}
-			this.loading = false;
 		},
-		async addProductTag(tag: ProductTag) {
-			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			this.productTags.push(tag);
-			this.loading = false;
+		async addProductTag(value: string) {
+			this.adding = true;
+
+			const { $api } = useNuxtApp();
+
+			try {
+				await $api.productTag
+					.create({ value })
+					.then((data) => {
+						if (data.productTag) {
+							const appUiStore = useAppUiStore();
+							appUiStore.addNotification({
+								color: 'green',
+								icon: 'i-material-symbols-check-circle-outline-rounded',
+								title: `${value} - Product Tag Created !`,
+							});
+
+							this.productTags.push(data.productTag);
+						}
+					})
+					.catch((err) => {
+						console.error(err);
+						const appUiStore = useAppUiStore();
+						appUiStore.addNotification({
+							color: 'red',
+							icon: 'i-material-symbols-error-outline-rounded',
+							title: err.message,
+						});
+					});
+			} catch (err: any) {
+				console.error(err);
+			} finally {
+				this.adding = false;
+			}
 		},
 		async updateProductTag(tag: ProductTag) {
 			this.loading = true;

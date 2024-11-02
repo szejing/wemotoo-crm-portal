@@ -29,7 +29,7 @@ class AuthModule extends HttpFactory {
 	 * @returns
 	 */
 	async login(data: LoginReq): Promise<LoginResp> {
-		return this.call<LoginResp>({
+		return await this.call<LoginResp>({
 			method: 'POST',
 			url: `${this.RESOURCE.Login()}`,
 			body: data,
@@ -41,7 +41,7 @@ class AuthModule extends HttpFactory {
 	 * @returns
 	 */
 	async refreshToken(): Promise<string> {
-		return this.call<string>({
+		return await this.call<string>({
 			method: 'POST',
 			url: `${this.RESOURCE.Refresh()}`,
 		});
@@ -52,7 +52,7 @@ class AuthModule extends HttpFactory {
 	 * @returns
 	 */
 	async logout(): Promise<number> {
-		return this.call<number>({
+		return await this.call<number>({
 			method: 'POST',
 			url: `${this.RESOURCE.Logout()}`,
 		});

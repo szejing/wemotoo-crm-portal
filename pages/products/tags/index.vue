@@ -12,24 +12,24 @@
 			<div class="sm:col-span-4">
 				<UCard>
 					<ZSectionFilterTags />
-					<div v-if="productTags.length > 0">
+					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_tag_columns">
+						<UTable :rows="rows" :columns="product_tag_columns" :loading="loading">
 							<template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
+							</template>
+
+							<template #empty-state>
+								<div class="flex-col-center section-empty">
+									<h2>No Tags Found</h2>
+									<p>Create a new tag to get started</p>
+								</div>
 							</template>
 						</UTable>
 
 						<!-- Pagination  -->
-						<div v-if="productTags.length == 0" class="section-pagination">
+						<div v-if="productTags.length > 0" class="section-pagination">
 							<UPagination v-model="page" :page-count="pageSize" :total="productTags.length" />
-						</div>
-					</div>
-
-					<div v-else class="flex-center h-52 section-empty">
-						<div>
-							<h2>No Tags Found</h2>
-							<p>Create a new tag to get started</p>
 						</div>
 					</div>
 				</UCard>
@@ -78,7 +78,7 @@ const page = ref(1);
 const productTagsStore = useProductTagsStore();
 await productTagsStore.getTags();
 
-const { productTags, pageSize } = storeToRefs(productTagsStore);
+const { loading, productTags, pageSize } = storeToRefs(productTagsStore);
 
 const rows = computed(() => {
 	return productTags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);

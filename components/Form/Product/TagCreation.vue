@@ -2,11 +2,11 @@
 	<div>
 		<UForm :schema="CreateProductTagValidation" :state="newProductTag" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputTagGeneralInfo v-model:name="newProductTag.name" />
+			<ZInputTagGeneralInfo v-model:value="newProductTag.value" />
 			<!-- *********************** General Info *********************** -->
 
 			<div class="flex-center text-center mt-3">
-				<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block>Create</UButton>
+				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
 			</div>
 		</UForm>
 	</div>
@@ -21,14 +21,15 @@ import { CreateProductTagValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateProductTagValidation>;
 
 const tagStore = useProductTagsStore();
-const { newProductTag } = storeToRefs(tagStore);
+const { adding, newProductTag } = storeToRefs(tagStore);
 
 onMounted(() => {
 	tagStore.resetNewProductTag();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	console.log(event);
+	const { value } = event.data;
+	await tagStore.addProductTag(value);
 };
 </script>
 

@@ -7,58 +7,37 @@ export type ProductTagsResp = {
 	productTags: ProductTag[];
 };
 
+export type CreateProductTagReq = {
+	value: string;
+};
+
+export type CreateProductTagResp = {
+	productTag: ProductTag;
+};
+
 class ProductTagModule extends HttpFactory {
 	private RESOURCE = Routes.ProductTag;
-	private accessToken: string = '';
 
 	async fetchMany(): Promise<ProductTagsResp> {
-		return this.call<ProductTagsResp>({
+		return await this.call<ProductTagsResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 		});
 	}
 
 	async fetchSingle(id: string) {
-		return this.call<any>({
+		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(id)}`,
 		});
 	}
 
-	// async createPost(dto: IPost) {
-	// 	return this.call<IPost>({
-	// 		method: 'POST',
-	// 		url: `${this.RESOURCE.CreatePost()}`,
-	// 		body: dto,
-	// 		fetchOptions: {
-	// 			headers: {
-	// 				...(this.accessToken
-	// 					? {
-	// 							'Authorization': `Bearer ${this.accessToken}`,
-	// 					  }
-	// 					: {}),
-	// 			},
-	// 		},
-	// 	});
-	// }
-	// async fetchDetail(id: number) {
-	// 	return this.call<IPost>({
-	// 		method: 'GET',
-	// 		url: `${this.RESOURCE.FetchDetail(id)}`,
-	// 		fetchOptions: {
-	// 			headers: {
-	// 				...(this.accessToken
-	// 					? {
-	// 							'Authorization': `Bearer ${this.accessToken}`,
-	// 					  }
-	// 					: {}),
-	// 			},
-	// 		},
-	// 	});
-	// }
-
-	setAccessToken(accessToken: string) {
-		this.accessToken = accessToken;
+	async create(tag: CreateProductTagReq): Promise<CreateProductTagResp> {
+		return await this.call<any>({
+			method: 'POST',
+			url: `${this.RESOURCE.Create()}`,
+			body: tag,
+		});
 	}
 }
 
