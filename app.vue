@@ -5,30 +5,35 @@
 			<NuxtLoadingIndicator color="repeating-linear-gradient(to right,#C2C9FF 0%,#402E7A 100%)" />
 			<NuxtPage />
 		</NuxtLayout>
-		<UNotifications />
+		<UNotifications
+			:close-button="{
+				icon: 'i-material-symbols-close-rounded',
+				variant: 'link',
+				color: 'white',
+				padded: true,
+			}"
+		/>
 	</div>
 </template>
 
 //
 <script lang="ts" setup>
-// const toast = useToast();
+const toast = useToast();
 
-// onMounted(() => {
-// 	const appUiStore = useAppUiStore();
-// 	const { notifications } = storeToRefs(appUiStore);
+const appUiStore = useAppUiStore();
+const { notification } = storeToRefs(appUiStore);
 
-// 	if (notifications.value.length > 0) {
-// 		notifications.value.forEach((event: NotificationEvent) => {
-// 			toast.add({
-// 				id: event.id,
-// 				title: event.title,
-// 				description: event.description,
-// 				icon: event.icon,
-// 				timeout: event.timeout,
-// 				// actions: event.actions,
-// 			});
-// 		});
-// 	}
-// });
-//
+watch(notification, () => {
+	if (notification.value) {
+		toast.add({
+			id: notification.value?.id,
+			color: notification.value?.color,
+			title: notification.value?.title,
+			description: notification.value?.description,
+			icon: notification.value?.icon,
+			timeout: notification.value?.timeout,
+			closeButton: notification.value?.closeButton,
+		});
+	}
+});
 </script>

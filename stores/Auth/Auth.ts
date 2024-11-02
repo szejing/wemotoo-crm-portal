@@ -1,17 +1,12 @@
 import { defineStore } from 'pinia';
 import type { LoginResp } from '~/repository/modules/auth';
-import type { EventNotification } from '~/utils/types/event-notification';
 
 export const useAuthStore = defineStore({
 	id: 'authStore',
 	state: () => ({
 		loading: false as boolean,
-		errors: [] as EventNotification[],
 	}),
 	actions: {
-		clearErrors(index: number) {
-			this.errors.splice(index, 1);
-		},
 		// login
 		async login(merchant_id: string, email_address: string, password: string) {
 			const { $api } = useNuxtApp();
@@ -24,13 +19,12 @@ export const useAuthStore = defineStore({
 				accessToken.value = data.token;
 			} catch (err: any) {
 				console.log(err);
-				this.errors.push({
+
+				const appUiStore = useAppUiStore();
+				appUiStore.addNotification({
 					color: 'red',
-					icon: 'i-material-symbols-light-error-outline-rounded',
-					id: 'error',
+					icon: 'i-material-symbols-error-outline-rounded',
 					title: err.message,
-					timeout: 3000,
-					actions: [],
 				});
 			} finally {
 				this.loading = false;

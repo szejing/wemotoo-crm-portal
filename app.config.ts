@@ -21,10 +21,14 @@ export default defineAppConfig({
 		},
 
 		notification: {
-			default: {
-				closeButton: {
-					icon: 'i-octicon-x-24',
-				},
+			background: 'bg-{color}-500',
+			title: 'text-sm font-medium text-white',
+			description: 'mt-1 text-sm leading-4 text-white',
+			icon: {
+				color: 'text-white',
+			},
+			progress: {
+				background: 'bg-white',
 			},
 		},
 
@@ -80,6 +84,9 @@ export default defineAppConfig({
 				danger: {
 					solid: 'button-red-solid',
 					outline: 'button-red-outline disabled:button-red-outline-disabled',
+				},
+				white: {
+					link: 'button-white-link',
 				},
 			},
 			padding: {

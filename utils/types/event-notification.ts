@@ -6,4 +6,5 @@ export type EventNotification = {
 	description?: string | undefined;
 	timeout?: number | undefined;
 	actions?: [] | undefined;
+	closeButton?: object | undefined;
 };
