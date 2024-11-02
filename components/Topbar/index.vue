@@ -19,10 +19,10 @@
 
 <script lang="ts" setup>
 const merchantInfoStore = useMerchantInfoStore();
-const sidebarStore = useSidebarStore();
+const appUiStore = useAppUiStore();
 
 const { merchant } = storeToRefs(merchantInfoStore);
-const { toggleSidebarModal } = sidebarStore;
+const { toggleSidebarModal } = appUiStore;
 
 const logout = async () => {
 	const authStore = useAuthStore();

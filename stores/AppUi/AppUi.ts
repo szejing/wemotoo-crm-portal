@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { EventNotification } from '~/utils/types/event-notification';
 import type { Navigation } from '~/utils/types/navigation.ts';
 
 const merchantNavigation = [
@@ -52,13 +53,14 @@ const merchantNavigation = [
 	},
 ];
 
-export const useSidebarStore = defineStore({
-	id: 'sidebarStore',
+export const useAppUiStore = defineStore({
+	id: 'appUiStore',
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: true as boolean,
 		showSidebarModal: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
+		notification: undefined as EventNotification | undefined,
 	}),
 	actions: {
 		toggleSidebar() {
@@ -67,6 +69,30 @@ export const useSidebarStore = defineStore({
 
 		toggleSidebarModal() {
 			this.showSidebarModal = !this.showSidebarModal;
+		},
+
+		addNotification(notification: EventNotification) {
+			this.notification = notification;
+
+			if (this.notification.id === undefined) {
+				this.notification.id = Date.now().toString();
+			}
+
+			if (this.notification.timeout === undefined) {
+				this.notification.timeout = 3000;
+			}
+
+			if (this.notification.closeButton === undefined) {
+				this.notification.closeButton = {
+					icon: 'i-material-symbols-close-rounded',
+					color: 'white',
+					variant: 'link',
+				};
+			}
+		},
+
+		clearNotification() {
+			this.notification = undefined;
 		},
 	},
 });

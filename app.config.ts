@@ -17,15 +17,18 @@ export default defineAppConfig({
 		},
 		//* Notification *//
 		notifications: {
-			// Show toasts at the top right of the screen
-			position: 'top-0 right-0 bottom-auto left-auto',
+			position: 'bottom-0 right-0 top-auto left-auto',
 		},
 
 		notification: {
-			default: {
-				closeButton: {
-					icon: 'i-octicon-x-24',
-				},
+			background: 'bg-{color}-500',
+			title: 'text-sm font-medium text-white',
+			description: 'mt-1 text-sm leading-4 text-white',
+			icon: {
+				color: 'text-white',
+			},
+			progress: {
+				background: 'bg-white',
 			},
 		},
 
@@ -81,6 +84,9 @@ export default defineAppConfig({
 				danger: {
 					solid: 'button-red-solid',
 					outline: 'button-red-outline disabled:button-red-outline-disabled',
+				},
+				white: {
+					link: 'button-white-link',
 				},
 			},
 			padding: {

@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts" setup>
-const sidebarStore = useSidebarStore();
+const appUiStore = useAppUiStore();
 
-const { showSidebarModal } = storeToRefs(sidebarStore);
+const { showSidebarModal } = storeToRefs(appUiStore);
 
 // <UCard
 // :ui="{

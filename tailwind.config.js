@@ -93,6 +93,7 @@ export default {
 				},
 				neutral: {
 					DEFAULT: '#6A7077',
+					0: '#FFFFFF',
 					50: '#F5F5F5',
 					100: '#EEEEEE',
 					200: '#E8E8E8',

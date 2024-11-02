@@ -5,16 +5,13 @@ export const useAuthStore = defineStore({
 	id: 'authStore',
 	state: () => ({
 		loading: false as boolean,
-		errors: [] as string[],
 	}),
 	actions: {
-		clearErrors() {
-			this.errors = [];
-		},
 		// login
 		async login(merchant_id: string, email_address: string, password: string) {
 			const { $api } = useNuxtApp();
 
+			this.loading = true;
 			try {
 				const data: LoginResp = await $api.auth.login({ merchant_id, email_address, password });
 
@@ -22,7 +19,15 @@ export const useAuthStore = defineStore({
 				accessToken.value = data.token;
 			} catch (err: any) {
 				console.log(err);
-				this.errors.push(err.message);
+
+				const appUiStore = useAppUiStore();
+				appUiStore.addNotification({
+					color: 'red',
+					icon: 'i-material-symbols-error-outline-rounded',
+					title: err.message,
+				});
+			} finally {
+				this.loading = false;
 			}
 		},
 		// refresh session
@@ -41,6 +46,7 @@ export const useAuthStore = defineStore({
 		// logout
 		async logout(): Promise<boolean> {
 			const { $api } = useNuxtApp();
+			this.loading = true;
 
 			try {
 				const response_code: number = await $api.auth.logout();
@@ -49,6 +55,8 @@ export const useAuthStore = defineStore({
 			} catch (err: any) {
 				console.error(err);
 				return true;
+			} finally {
+				this.loading = false;
 			}
 		},
 	},

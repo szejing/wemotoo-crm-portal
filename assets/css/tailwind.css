@@ -172,5 +172,10 @@
 	.button-red-outline-disabled {
 		@apply ring-1 ring-inset ring-neutral-100 text-red-100 bg-neutral-300;
 	}
+
+	/**************************** white button ****************************/
+	.button-white-link {
+		@apply bg-transparent text-white;
+	}
 	/**************************** button styling ****************************/
 }

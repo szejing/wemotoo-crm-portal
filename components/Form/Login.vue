@@ -13,39 +13,23 @@
 					<div class="flex flex-col gap-2">
 						<h1 class="text-center">Merchant Login</h1>
 						<UFormGroup v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
-							<UInput v-model="state.merchant_id" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" @input="clearError" />
+							<UInput v-model="state.merchant_id" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 						</UFormGroup>
 
 						<UFormGroup v-slot="{ error }" label="Email" name="email_address" required>
-							<UInput v-model="state.email_address" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" @input="clearError" />
+							<UInput v-model="state.email_address" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 						</UFormGroup>
 
 						<UFormGroup v-slot="{ error }" label="Password" name="password" required>
-							<UInput
-								v-model="state.password"
-								type="password"
-								:trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
-								@input="clearError"
-							/>
+							<UInput v-model="state.password" type="password" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
 						</UFormGroup>
 					</div>
 
 					<template #footer>
-						<UButton block size="md" color="primary" variant="outline" type="submit">Submit</UButton>
+						<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
 					</template>
 				</UCard>
 			</UForm>
-
-			<div v-if="errors.length > 0" class="mt-4">
-				<UAlert
-					icon="material-symbols-warning-outline-rounded"
-					color="red"
-					variant="solid"
-					:title="errors.join(', ')"
-					:close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'white', variant: 'link', padded: false }"
-					@close="errors = []"
-				/>
-			</div>
 		</div>
 	</div>
 </template>
@@ -64,11 +48,7 @@ const state = reactive({
 });
 
 const authStore = useAuthStore();
-const { errors } = storeToRefs(authStore);
-
-const clearError = () => {
-	authStore.clearErrors();
-};
+const { loading } = storeToRefs(authStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { merchant_id, email_address, password } = event.data;
