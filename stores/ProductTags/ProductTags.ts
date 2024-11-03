@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { ProductTagCreate } from '~/utils/types/form/product-tag-creation';
 import type { ProductTag } from '~/utils/types/product-tag';
+import { failedNotification, successNotificateion } from '../AppUi/AppUi';
 
 const initialEmptyTag: ProductTagCreate = {
 	value: undefined,
@@ -21,9 +22,11 @@ export const useProductTagsStore = defineStore({
 		resetNewProductTag() {
 			this.newProductTag = structuredClone(initialEmptyTag);
 		},
+
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
+
 		async getTags() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -42,41 +45,30 @@ export const useProductTagsStore = defineStore({
 				this.loading = false;
 			}
 		},
+
 		async addProductTag(value: string) {
 			this.adding = true;
+			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				await $api.productTag
-					.create({ value })
-					.then((data) => {
-						if (data.productTag) {
-							const appUiStore = useAppUiStore();
-							appUiStore.addNotification({
-								color: 'green',
-								icon: 'i-material-symbols-check-circle-outline-rounded',
-								title: `${value} - Product Tag Created !`,
-							});
-
-							this.productTags.push(data.productTag);
-						}
-					})
-					.catch((err) => {
-						console.error(err);
-						const appUiStore = useAppUiStore();
-						appUiStore.addNotification({
-							color: 'red',
-							icon: 'i-material-symbols-error-outline-rounded',
-							title: err.message,
-						});
-					});
+				await $api.productTag.create({ value }).then((data) => {
+					if (data.productTag) {
+						successNotificateion(`${value} - Product Tag Created !`);
+						this.productTags.push(data.productTag);
+					}
+				});
 			} catch (err: any) {
 				console.error(err);
+				failedNotification(err.message);
 			} finally {
 				this.adding = false;
+				this.loading = true;
+				this.resetNewProductTag();
 			}
 		},
+
 		async updateProductTag(tag: ProductTag) {
 			this.loading = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -86,11 +78,33 @@ export const useProductTagsStore = defineStore({
 			}
 			this.loading = false;
 		},
+
 		async deleteProductTag(id: string) {
 			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			this.productTags = this.productTags.filter((c) => c.id !== id);
-			this.loading = false;
+
+			const { $api } = useNuxtApp();
+
+			try {
+				await $api.productTag
+					.delete({ id: parseInt(id) })
+					.then((data) => {
+						if (data.productTag) {
+							successNotificateion(`Product Tag Deleted !`);
+
+							const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
+							this.productTags.splice(index, 1);
+						}
+					})
+					.catch((err) => {
+						console.error(err);
+
+						failedNotification(err.message);
+					});
+			} catch (err: any) {
+				console.error(err);
+			} finally {
+				this.loading = false;
+			}
 		},
 	},
 });

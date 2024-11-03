@@ -1,7 +1,7 @@
 <template>
 	<div class="section-grid-basic-details">
 		<UFormGroup v-slot="{ error }" label="Value" name="value" required>
-			<UInput v-model="value" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Value" />
+			<UInput v-model="value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
 		</UFormGroup>
 	</div>
 </template>

@@ -13,15 +13,15 @@
 					<div class="flex flex-col gap-2">
 						<h1 class="text-center">Merchant Login</h1>
 						<UFormGroup v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
-							<UInput v-model="state.merchant_id" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+							<UInput v-model="state.merchant_id" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 						</UFormGroup>
 
 						<UFormGroup v-slot="{ error }" label="Email" name="email_address" required>
-							<UInput v-model="state.email_address" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+							<UInput v-model="state.email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 						</UFormGroup>
 
 						<UFormGroup v-slot="{ error }" label="Password" name="password" required>
-							<UInput v-model="state.password" type="password" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+							<UInput v-model="state.password" type="password" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 						</UFormGroup>
 					</div>
 

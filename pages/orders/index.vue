@@ -9,12 +9,12 @@
 
 					<div class="flex gap-4">
 						<UButton>
-							<UIcon name="i-ri-file-excel-2-line" class="size-5" />
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
 							Export
 						</UButton>
 
 						<UButton color="green" @click="navigateTo('/orders/create')">
-							<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
+							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
 					</div>
@@ -22,7 +22,7 @@
 				<UTable :rows="rows" :columns="order_columns">
 					<template #actions-data="{ row }">
 						<UDropdown :items="options(row)">
-							<UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+							<UButton color="gray" variant="ghost" :icon="ICONS.HORIZONTAL_ELLIPSIS" />
 						</UDropdown>
 					</template>
 
@@ -31,7 +31,7 @@
 							<span class="italic text-sm">No Order !</span>
 
 							<UButton color="green" @click="navigateTo('/products/create')">
-								<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
+								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 								Create
 							</UButton>
 						</div>
@@ -55,12 +55,12 @@ import type { Order } from '~/utils/types/order';
 const links = [
 	{
 		label: 'Orders',
-		icon: 'i-material-symbols-light-order-approve-outline-rounded',
+		icon: ICONS.ORDER,
 		to: '/',
 	},
 	{
 		label: 'All Orders',
-		icon: 'i-material-symbols-light-lists-rounded',
+		icon: ICONS.LIST,
 		to: '/products',
 	},
 ];
@@ -69,14 +69,14 @@ const options = (order: Order) => [
 	[
 		{
 			label: 'Edit',
-			icon: 'i-heroicons-pencil-square-20-solid',
+			icon: ICONS.PENCIL,
 			click: () => console.log('Edit', order.id),
 		},
 	],
 	[
 		{
 			label: 'Delete',
-			icon: 'i-heroicons-trash-20-solid',
+			icon: ICONS.TRASH,
 			slot: 'danger',
 			click: () => console.log('Delete', order.id),
 		},

@@ -9,15 +9,7 @@
 		<div v-for="(option, index) in prodOptions" :key="index" class="flex flex-col sm:hidden">
 			<div class="flex-jbetween-icenter gap-2 mt-4">
 				<UInput v-model="option.name" disabled placeholder="Name" class="w-52" />
-				<UButton
-					variant="outline"
-					class="flex-none"
-					square
-					icon="i-material-symbols-delete-outline-rounded"
-					size="sm"
-					color="danger"
-					@click="() => removeOption(index)"
-				/>
+				<UButton variant="outline" class="flex-none" square :icon="ICONS.TRASH" size="sm" color="danger" @click="() => removeOption(index)" />
 			</div>
 			<InputTags v-model="option.values" placeholder="Values" class="flex-1 mt-2" />
 		</div>
@@ -29,15 +21,7 @@
 				<UInput v-model="option.name" disabled placeholder="Name" class="w-36" />
 				<InputTags v-model="option.values" placeholder="Values" class="flex-1" />
 
-				<UButton
-					variant="outline"
-					class="flex-none"
-					square
-					icon="i-material-symbols-delete-outline-rounded"
-					size="sm"
-					color="danger"
-					@click="() => removeOption(index)"
-				/>
+				<UButton variant="outline" class="flex-none" square :icon="ICONS.TRASH" size="sm" color="danger" @click="() => removeOption(index)" />
 			</div>
 		</div>
 		<!-- ************* DESKTOP ************* -->

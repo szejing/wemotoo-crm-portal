@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="link" @click="logout">
-			<UIcon name="i-material-symbols-light-logout" class="size-6" />
+			<UIcon :name="ICONS.LOGOUT" class="size-6" />
 		</div>
 	</div>
 </template>

@@ -5,7 +5,7 @@
 				<UIcon :name="navigate.icon" class="w-5 h-5" />
 				{{ navigate.title }}
 			</div>
-			<UIcon :class="['w-5 h-5', { 'rotate-90': props.collapsed }]" name="i-material-symbols-chevron-right-rounded" />
+			<UIcon :class="['w-5 h-5', { 'rotate-90': props.collapsed }]" :name="ICONS.CHEVRON_RIGHT" />
 		</div>
 		<transition name="slide-fade">
 			<div v-if="props.collapsed" class="space-y-2 mt-2 wrapper-border">

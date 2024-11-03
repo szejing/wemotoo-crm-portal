@@ -15,6 +15,14 @@ export type CreateProductTagResp = {
 	productTag: ProductTag;
 };
 
+export type DeleteProductTagReq = {
+	id: number;
+};
+
+export type DeleteProductTagResp = {
+	productTag: number;
+};
+
 class ProductTagModule extends HttpFactory {
 	private RESOURCE = Routes.ProductTag;
 
@@ -37,6 +45,14 @@ class ProductTagModule extends HttpFactory {
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
 			body: tag,
+		});
+	}
+
+	async delete(tag: DeleteProductTagReq): Promise<DeleteProductTagResp> {
+		return await this.call<any>({
+			method: 'DELETE',
+			url: `${this.RESOURCE.Delete()}`,
+			query: tag,
 		});
 	}
 }

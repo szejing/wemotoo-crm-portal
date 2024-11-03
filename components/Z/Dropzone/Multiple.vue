@@ -10,7 +10,7 @@
 	>
 		<template #default>
 			<label for="multiple" class="flex-col-center gap-1 text-secondary-400">
-				<UIcon name="i-material-symbols-upload-rounded" class="size-6" />
+				<UIcon :name="ICONS.UPLOAD" class="size-6" />
 				<span class="text-center">
 					<h3>Drop here</h3>
 					<p>*max 3 photos</p>

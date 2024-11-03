@@ -9,7 +9,7 @@
 const links = [
 	{
 		label: 'Overview',
-		icon: 'i-material-symbols-light-dashboard-outline-rounded',
+		icon: ICONS.DASHBOARD_ROUNDED,
 		to: '/',
 	},
 ];

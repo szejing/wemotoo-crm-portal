@@ -1,11 +1,11 @@
 <template>
 	<div class="section-grid-basic-details">
 		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
-			<UInput v-model="code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Code" />
+			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" />
 		</UFormGroup>
 
 		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-			<UInput v-model="name" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" placeholder="Name" />
+			<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
 		</UFormGroup>
 
 		<UFormGroup label="Description" name="description">

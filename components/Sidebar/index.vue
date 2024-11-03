@@ -1,7 +1,7 @@
 <template>
 	<div class="sidebar" :class="showSidebar ? 'translate-x-0 ease-out' : '-translate-x-[12rem] ease-in'">
 		<div v-if="!forcedShow" class="flex items-center justify-end pt-4 px-4">
-			<UIcon :name="showSidebar ? 'i-heroicons-x-mark' : 'i-heroicons-chevron-double-right'" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
+			<UIcon :name="showSidebar ? ICONS.CLOSE_ROUNDED : ICONS.CHEVRON_DOUBLE_RIGHT" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
 		<div class="space-y-2 px-2">
 			<SidebarHeader class="py-10" />

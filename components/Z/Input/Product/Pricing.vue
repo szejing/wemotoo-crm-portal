@@ -13,7 +13,7 @@
 			<UFormGroup v-slot="{ error }" label="Selling Price" name="origSellPrice" required>
 				<UInput
 					v-model="origSellPrice"
-					:trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
+					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
 				>
@@ -26,7 +26,7 @@
 			<UFormGroup v-slot="{ error }" label="Cost Price" name="costPrice">
 				<UInput
 					v-model="costPrice"
-					:trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
+					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
 				>
@@ -39,7 +39,7 @@
 			<UFormGroup v-slot="{ error }" label="Sale Price" name="salePrice">
 				<UInput
 					v-model="salePrice"
-					:trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined"
+					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
 				>
