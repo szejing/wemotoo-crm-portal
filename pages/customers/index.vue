@@ -9,12 +9,12 @@
 					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
 					<div class="flex gap-4">
 						<UButton>
-							<UIcon name="i-ri-file-excel-2-line" class="size-5" />
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
 							Export
 						</UButton>
 
 						<UButton color="green">
-							<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
+							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
 					</div>
@@ -30,7 +30,7 @@
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No one here!</span>
 							<UButton color="green">
-								<UIcon name="i-ic-round-add-circle-outline" class="size-5" />
+								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 								Create
 							</UButton>
 						</div>
@@ -54,7 +54,7 @@ import type { Customer } from '~/utils/types/customer';
 const links = [
 	{
 		label: 'Customers',
-		icon: 'i-material-symbols-light-groups-outline-rounded',
+		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 		to: '/',
 	},
 ];
@@ -63,14 +63,14 @@ const options = (row: Customer) => [
 	[
 		{
 			label: 'Edit',
-			icon: 'i-heroicons-pencil-square-20-solid',
+			icon: ICONS.PENCIL,
 			click: () => console.log('Edit', row.customer_no),
 		},
 	],
 	[
 		{
 			label: 'Delete',
-			icon: 'i-heroicons-trash-20-solid',
+			icon: ICONS.TRASH,
 			slot: 'danger',
 			click: () => console.log('Delete', row.customer_no),
 		},

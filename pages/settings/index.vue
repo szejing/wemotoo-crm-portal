@@ -9,7 +9,7 @@
 const links = [
 	{
 		label: 'Settings',
-		icon: 'i-material-symbols-light-settings-outline-rounded',
+		icon: ICONS.SETTINGS_ROUNDED,
 		to: '/',
 	},
 ];

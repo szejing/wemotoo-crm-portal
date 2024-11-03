@@ -11,11 +11,11 @@
 
 		<div v-if="variantDetail.manage_inventory" class="section-grid-basic-details">
 			<UFormGroup v-slot="{ error }" label="Sku" name="sku">
-				<UInput v-model="variantDetail.sku" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+				<UInput v-model="variantDetail.sku" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup>
 
 			<UFormGroup v-slot="{ error }" label="Quantity" name="quantity">
-				<UInput v-model="variantDetail.inventory_quantity" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" type="number" />
+				<UInput v-model="variantDetail.inventory_quantity" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" type="number" />
 			</UFormGroup>
 		</div>
 	</UCard>

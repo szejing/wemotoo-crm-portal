@@ -24,6 +24,7 @@ interface IHttpFactory {
 	url: string;
 	fetchOptions?: NitroFetchOptions<'json'>;
 	body?: object;
+	query?: object;
 	headers?: Record<string, string>;
 }
 
@@ -39,6 +40,7 @@ class HttpFactory {
 		url,
 		fetchOptions,
 		body,
+		query,
 		headers = {
 			'Content-Type': 'application/json',
 		},
@@ -47,6 +49,7 @@ class HttpFactory {
 			return await this.$fetch<T>(url, {
 				method,
 				body,
+				query,
 				...headers,
 				...fetchOptions,
 			});

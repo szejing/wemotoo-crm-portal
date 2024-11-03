@@ -15,15 +15,15 @@
 
 		<div class="section-grid-basic-details">
 			<!-- <UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
-				<UInput v-model="variantDetail.hs_code" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+				<UInput v-model="variantDetail.hs_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup>
 
 			<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
-				<UInput v-model="variantDetail.barcode" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+				<UInput v-model="variantDetail.barcode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup>
 
 			<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
-				<UInput v-model="variantDetail.ean" :trailing-icon="error ? 'i-heroicons-exclamation-triangle-20-solid' : undefined" />
+				<UInput v-model="variantDetail.ean" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup> -->
 		</div>
 	</UCard>

@@ -1,7 +1,7 @@
 <template>
 	<UForm :schema="FilterOptionValidation" :state="state" @submit="onSubmit">
 		<UFormGroup name="query">
-			<UInput v-model="state.query" placeholder="Search by Name / Value..." icon="i-material-symbols-search-rounded" />
+			<UInput v-model="state.query" placeholder="Search by Name / Value..." :icon="ICONS.SEARCH_ROUNDED" />
 		</UFormGroup>
 	</UForm>
 </template>

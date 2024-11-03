@@ -16,7 +16,7 @@
 						<!-- Table  -->
 						<UTable :rows="rows" :columns="product_tag_columns" :loading="loading">
 							<template #actions-data="{ row }">
-								<ZActionDropdown :items="options(row)" />
+								<UIcon :name="ICONS.TRASH" class="size-5 text-red-600" @click="deleteProductTag(row.id)" />
 							</template>
 
 							<template #empty-state>
@@ -41,37 +41,18 @@
 <script lang="ts" setup>
 import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { product_tag_columns } from '~/utils/table-columns';
-import type { ProductTag } from '~/utils/types/product-tag';
 
 const links = [
 	{
 		label: 'Products',
-		icon: 'i-material-symbols-light-box-add-outline-rounded',
+		icon: ICONS.PRODUCT,
 		to: '/products',
 	},
 	{
 		label: 'All Tags',
-		icon: 'i-material-symbols-light-lists-rounded',
+		icon: ICONS.LIST,
 		to: '/tags',
 	},
-];
-
-const options = (row: ProductTag) => [
-	[
-		{
-			label: 'Edit',
-			icon: 'i-heroicons-pencil-square-20-solid',
-			click: () => console.log('Edit', row.id),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: 'i-heroicons-trash-20-solid',
-			slot: 'danger',
-			click: () => console.log('Delete', row.id),
-		},
-	],
 ];
 
 const page = ref(1);
@@ -83,6 +64,15 @@ const { loading, productTags, pageSize } = storeToRefs(productTagsStore);
 const rows = computed(() => {
 	return productTags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
+
+const deleteProductTag = async (id: string) => {
+	await productTagsStore.deleteProductTag(id);
+};
+
+// const editProductTag = async (id: string) => {
+// 	console.log(id);
+// 	// await productTagsStore.deleteProductTag(id);
+// };
 </script>
 
 <style scoped lang="css">

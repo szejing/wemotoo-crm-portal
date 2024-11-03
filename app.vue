@@ -7,7 +7,7 @@
 		</NuxtLayout>
 		<UNotifications
 			:close-button="{
-				icon: 'i-material-symbols-close-rounded',
+				icon: ICONS.CLOSE_ROUNDED,
 				variant: 'link',
 				color: 'white',
 				padded: true,

@@ -21,16 +21,16 @@ const Routes = {
 		Single: (id: string) => `${prefix}/${prodTag}/single/${id}`,
 		Many: () => `${prefix}/${prodTag}/many`,
 		Update: () => `${prefix}/${prodTag}/update`,
-		Remove: () => `${prefix}/${prodTag}/remove`,
-		RevertRemove: () => `${prefix}/${prodTag}/revert-remove`,
+		Delete: () => `${prefix}/${prodTag}/delete`,
+		RevertDelete: () => `${prefix}/${prodTag}/revert-delete`,
 	},
 	ProdCategory: {
 		Create: () => `${prefix}/${prodCatg}/create`,
 		Single: (id: string) => `${prefix}/${prodCatg}/single/${id}`,
 		Many: () => `${prefix}/${prodCatg}/many`,
-		Update: () => `${prefix}/${prodCatg}/update`,
+		Delete: () => `${prefix}/${prodCatg}/delete`,
 		Remove: () => `${prefix}/${prodCatg}/remove`,
-		RevertRemove: () => `${prefix}/${prodCatg}/revert-remove`,
+		RevertDelete: () => `${prefix}/${prodCatg}/revert-delete`,
 	},
 };
 

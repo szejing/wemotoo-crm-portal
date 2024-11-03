@@ -5,19 +5,19 @@ import type { Navigation } from '~/utils/types/navigation.ts';
 const merchantNavigation = [
 	{
 		title: 'Overview',
-		icon: 'i-material-symbols-light-dashboard-outline-rounded',
+		icon: ICONS.DASHBOARD_ROUNDED,
 		to: '/',
 		isCollapsed: true,
 	},
 	{
 		title: 'Orders',
-		icon: 'i-material-symbols-light-order-approve-outline-rounded',
+		icon: ICONS.ORDER,
 		to: '/orders',
 		isCollapsed: true,
 	},
 	{
 		title: 'Products',
-		icon: 'i-material-symbols-light-box-add-outline-rounded',
+		icon: ICONS.PRODUCT,
 		to: '/products',
 		isCollapsed: true,
 		children: [
@@ -41,13 +41,13 @@ const merchantNavigation = [
 	},
 	{
 		title: 'Customers',
-		icon: 'i-material-symbols-light-groups-outline-rounded',
+		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 		to: '/customers',
 		isCollapsed: true,
 	},
 	{
 		title: 'Settings',
-		icon: 'i-material-symbols-light-settings-outline-rounded',
+		icon: ICONS.SETTINGS_ROUNDED,
 		to: '/settings',
 		isCollapsed: true,
 	},
@@ -84,7 +84,7 @@ export const useAppUiStore = defineStore({
 
 			if (this.notification.closeButton === undefined) {
 				this.notification.closeButton = {
-					icon: 'i-material-symbols-close-rounded',
+					icon: ICONS.CLOSE_ROUNDED,
 					color: 'white',
 					variant: 'link',
 				};
@@ -96,3 +96,21 @@ export const useAppUiStore = defineStore({
 		},
 	},
 });
+
+export const successNotificateion = (description: string) => {
+	const appUiStore = useAppUiStore();
+	appUiStore.addNotification({
+		color: 'green',
+		icon: ICONS.CHECK_OUTLINE_ROUNDED,
+		description,
+	});
+};
+
+export const failedNotification = (description: string) => {
+	const appUiStore = useAppUiStore();
+	appUiStore.addNotification({
+		color: 'red',
+		icon: ICONS.ERROR_OUTLINE,
+		description,
+	});
+};

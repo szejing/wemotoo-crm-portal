@@ -9,7 +9,7 @@
 		<template #footer>
 			<div class="w-full flex justify-end items-center text-secondary-400 gap-2">
 				<p class="font-nunito text-sm text-end">Details</p>
-				<UIcon name="i-material-symbols-light-chevron-right-rounded" class="w-6 h-6" />
+				<UIcon :name="ICONS.CHEVRON_RIGHT" class="w-6 h-6" />
 			</div>
 		</template>
 	</UCard>

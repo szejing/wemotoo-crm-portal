@@ -69,8 +69,8 @@ const props = withDefaults(defineProps<InputTags>(), {
 	modelValue: () => [],
 	options: () => [],
 	placeholder: 'Select one or more tags...',
-	removeIcon: 'i-material-symbols-close-small-rounded',
-	selectedIcon: 'i-material-symbols-check-small-rounded',
+	removeIcon: ICONS.CLOSE_ROUNDED,
+	selectedIcon: ICONS.CHECK_ROUNDED,
 	showCount: false,
 	searchable: true,
 });

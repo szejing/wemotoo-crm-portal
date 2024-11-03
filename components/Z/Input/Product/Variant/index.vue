@@ -18,7 +18,7 @@
 				</h5>
 			</div>
 
-			<UButton variant="ghost" class="flex-none" square icon="i-material-symbols-more-vert" size="sm" color="danger" @click="viewVariant" />
+			<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" @click="viewVariant" />
 		</div>
 	</UCard>
 </template>

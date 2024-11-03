@@ -5,7 +5,7 @@
 			<h2 class="my-6">Add Product</h2>
 			<div class="block sm:hidden">
 				<div class="section-menu" @click="isOpen = !isOpen">
-					<UIcon name="i-material-symbols-menu-open-rounded" class="size-7 block sm:hidden" />
+					<UIcon :name="ICONS.MENU_OPEN_ROUNDED" class="size-7 block sm:hidden" />
 				</div>
 			</div>
 		</div>
@@ -30,7 +30,7 @@
 					<template #header>
 						<div class="flex-jbetween-icenter">
 							<h2>Product Status & Thumbnails</h2>
-							<UIcon name="i-material-symbols-close-rounded" class="size-7 text-secondary-600" @click="isOpen = false" />
+							<UIcon :name="ICONS.CLOSE_ROUNDED" class="size-7 text-secondary-600" @click="isOpen = false" />
 						</div>
 					</template>
 
@@ -45,7 +45,7 @@
 const links = [
 	{
 		label: 'Products',
-		icon: 'i-material-symbols-light-box-add-outline-rounded',
+		icon: ICONS.PRODUCT,
 		to: '/products',
 	},
 	{

@@ -47,12 +47,12 @@ import type { ProductCategory } from '~/utils/types/product-category';
 const links = [
 	{
 		label: 'Products',
-		icon: 'i-material-symbols-light-box-add-outline-rounded',
+		icon: ICONS.PRODUCT,
 		to: '/products',
 	},
 	{
 		label: 'All Categories',
-		icon: 'i-material-symbols-light-lists-rounded',
+		icon: ICONS.LIST,
 		to: '/products/categories',
 	},
 ];
@@ -61,14 +61,14 @@ const options = (row: ProductCategory) => [
 	[
 		{
 			label: 'Edit',
-			icon: 'i-heroicons-pencil-square-20-solid',
+			icon: ICONS.PENCIL,
 			click: () => console.log('Edit', row.id),
 		},
 	],
 	[
 		{
 			label: 'Delete',
-			icon: 'i-heroicons-trash-20-solid',
+			icon: ICONS.TRASH,
 			slot: 'danger',
 			click: () => console.log('Delete', row.id),
 		},

@@ -23,7 +23,7 @@ export const useAuthStore = defineStore({
 				const appUiStore = useAppUiStore();
 				appUiStore.addNotification({
 					color: 'red',
-					icon: 'i-material-symbols-error-outline-rounded',
+					icon: ICONS.ERROR_OUTLINE,
 					title: err.message,
 				});
 			} finally {

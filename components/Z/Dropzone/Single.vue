@@ -10,7 +10,7 @@
 	>
 		<template #default>
 			<label for="single" class="flex-col-center gap-1 text-secondary-400">
-				<UIcon name="i-material-symbols-upload-rounded" class="size-6" />
+				<UIcon :name="ICONS.UPLOAD" class="size-6" />
 				<h3>Drop here</h3>
 			</label>
 		</template>
