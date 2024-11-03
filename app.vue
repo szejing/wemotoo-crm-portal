@@ -13,6 +13,7 @@
 				padded: true,
 			}"
 		/>
+		<UModals />
 	</div>
 </template>
 

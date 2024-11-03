@@ -177,5 +177,31 @@
 	.button-white-link {
 		@apply bg-transparent text-white;
 	}
+
+	/**************************** neutral button ****************************/
+	.button-neutral-solid {
+		@apply ring-1 ring-inset ring-neutral-600 hover:ring-neutral-700 text-white disabled:bg-white bg-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-500 hover:bg-neutral-700;
+	}
+
+	.button-neutral-solid-disabled {
+		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 disabled:bg-neutral-50;
+	}
+
+	.button-neutral-ghost {
+		@apply text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
+	}
+
+	.button-neutral-ghost-disabled {
+		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
+	}
+
+	.button-neutral-soft {
+		@apply text-neutral-400 bg-neutral-50 hover:bg-neutral-100 disabled:bg-neutral-50 aria-disabled:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-300;
+	}
+
+	.button-neutral-soft-disabled {
+		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
+	}
+
 	/**************************** button styling ****************************/
 }

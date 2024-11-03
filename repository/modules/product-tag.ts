@@ -23,6 +23,15 @@ export type DeleteProductTagResp = {
 	productTag: number;
 };
 
+export type UpdateProductTagReq = {
+	value: string;
+	metadata?: Record<string, any> | undefined;
+};
+
+export type UpdateProductTagResp = {
+	productTag: ProductTag;
+};
+
 class ProductTagModule extends HttpFactory {
 	private RESOURCE = Routes.ProductTag;
 
@@ -44,6 +53,15 @@ class ProductTagModule extends HttpFactory {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
+			body: tag,
+		});
+	}
+
+	async update(id: string, tag: UpdateProductTagReq): Promise<UpdateProductTagResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			query: { id },
 			body: tag,
 		});
 	}
