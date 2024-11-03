@@ -31,16 +31,14 @@ export const useProductTagsStore = defineStore({
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				await $api.productTag
-					.fetchMany()
-					.then((data) => {
-						this.productTags = data.productTags;
-					})
-					.catch((error) => {
-						console.error(error);
-					});
+				const data = await $api.productTag.fetchMany();
+
+				if (data.productTags) {
+					this.productTags = data.productTags;
+				}
 			} catch (err: any) {
 				console.error(err);
+				failedNotification(err.message);
 			} finally {
 				this.loading = false;
 			}
@@ -53,12 +51,12 @@ export const useProductTagsStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			try {
-				await $api.productTag.create({ value }).then((data) => {
-					if (data.productTag) {
-						successNotificateion(`${value} - Product Tag Created !`);
-						this.productTags.push(data.productTag);
-					}
-				});
+				const data = await $api.productTag.create({ value });
+
+				if (data.productTag) {
+					successNotificateion(`${value} - Product Tag Created !`);
+					this.productTags.push(data.productTag);
+				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
@@ -69,14 +67,26 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async updateProductTag(tag: ProductTag) {
+		async updateProductTag(id: string, tag: ProductTag) {
 			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			const index = this.productTags.findIndex((c) => c.id === tag.id);
-			if (index > -1) {
-				this.productTags[index] = tag;
+
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.productTag.update(id, tag);
+
+				if (data.productTag) {
+					successNotificateion(`Product Tag Updated !`);
+
+					// const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
+					// this.productTags.splice(index, 1);
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.loading = false;
 			}
-			this.loading = false;
 		},
 
 		async deleteProductTag(id: string) {
@@ -85,23 +95,17 @@ export const useProductTagsStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			try {
-				await $api.productTag
-					.delete({ id: parseInt(id) })
-					.then((data) => {
-						if (data.productTag) {
-							successNotificateion(`Product Tag Deleted !`);
+				const data = await $api.productTag.delete({ id: parseInt(id) });
 
-							const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
-							this.productTags.splice(index, 1);
-						}
-					})
-					.catch((err) => {
-						console.error(err);
+				if (data.productTag) {
+					successNotificateion(`Product Tag Deleted !`);
 
-						failedNotification(err.message);
-					});
+					const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
+					this.productTags.splice(index, 1);
+				}
 			} catch (err: any) {
 				console.error(err);
+				failedNotification(err.message);
 			} finally {
 				this.loading = false;
 			}

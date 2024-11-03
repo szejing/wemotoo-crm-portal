@@ -16,7 +16,7 @@
 						<!-- Table  -->
 						<UTable :rows="rows" :columns="product_tag_columns" :loading="loading">
 							<template #actions-data="{ row }">
-								<UIcon :name="ICONS.TRASH" class="size-5 text-red-600" @click="deleteProductTag(row.id)" />
+								<ZActionDropdown :items="options(row)" />
 							</template>
 
 							<template #empty-state>
@@ -39,8 +39,10 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalConfirmation } from '#components';
 import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { product_tag_columns } from '~/utils/table-columns';
+import type { ProductTag } from '~/utils/types/product-tag';
 
 const links = [
 	{
@@ -55,6 +57,25 @@ const links = [
 	},
 ];
 
+const options = (row: ProductTag) => [
+	[
+		{
+			label: 'Edit',
+			icon: ICONS.PENCIL,
+			click: async () => await editProductTag(row.id),
+		},
+	],
+	[
+		{
+			label: 'Delete',
+			icon: ICONS.TRASH,
+			slot: 'danger',
+			click: () => deleteProductTag(row.id),
+		},
+	],
+];
+
+const modal = useModal();
 const page = ref(1);
 const productTagsStore = useProductTagsStore();
 await productTagsStore.getTags();
@@ -66,13 +87,23 @@ const rows = computed(() => {
 });
 
 const deleteProductTag = async (id: string) => {
-	await productTagsStore.deleteProductTag(id);
+	modal.open(ZModalConfirmation, {
+		message: 'Are you sure you want to delete this tag?',
+		action: 'delete',
+		onConfirm: async () => {
+			await productTagsStore.deleteProductTag(id);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 
-// const editProductTag = async (id: string) => {
-// 	console.log(id);
-// 	// await productTagsStore.deleteProductTag(id);
-// };
+const editProductTag = async (id: string) => {
+	console.log(id);
+	// await productTagsStore.deleteProductTag(id);
+};
 </script>
 
 <style scoped lang="css">
