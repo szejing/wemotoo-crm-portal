@@ -188,7 +188,7 @@
 	}
 
 	.button-neutral-ghost {
-		@apply text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
+		@apply text-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
 	}
 
 	.button-neutral-ghost-disabled {

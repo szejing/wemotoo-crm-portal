@@ -35,10 +35,6 @@ defineProps({
 		type: String,
 		default: 'Are you sure you want to proceed?',
 	},
-	count: {
-		type: Number,
-		default: 0,
-	},
 	action: {
 		type: String,
 		default: 'confirm',
