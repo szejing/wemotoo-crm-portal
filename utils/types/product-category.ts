@@ -1,12 +1,14 @@
 export type ProductCategory = {
 	id: string;
 	name: string;
-	code: string;
 	description?: string | undefined;
+	slug?: string | undefined;
 
 	total_items: number;
 
 	is_active: boolean;
+	is_internal: boolean;
+
 	images?: string[] | undefined;
 	thumbnail?: string | undefined;
 

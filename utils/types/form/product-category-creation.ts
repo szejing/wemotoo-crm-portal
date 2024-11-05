@@ -4,11 +4,15 @@ export type ProductCategoryCreate = {
 	// name
 	name: string | undefined;
 
-	// code
-	code: string | undefined;
+	// id
+	id: string | undefined;
 
 	// description
 	description?: string | undefined;
+
+	is_active?: true;
+
+	is_internal?: false;
 
 	// images
 	images?: string[] | undefined;

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const query = getQuery(event);
 		const accessToken = getCookie(event, 'accessToken') || '';
 
-		const result = await $fetch(`${Routes.ProdCategory.Remove()}`, {
+		const result = await $fetch(`${Routes.Product.Remove()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'DELETE',
 			query: query,

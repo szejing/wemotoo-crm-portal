@@ -20,7 +20,7 @@ export type DeleteProductTagReq = {
 };
 
 export type DeleteProductTagResp = {
-	productTag: number;
+	tag_id: number;
 };
 
 export type UpdateProductTagReq = {
