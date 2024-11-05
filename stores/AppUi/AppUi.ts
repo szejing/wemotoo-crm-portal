@@ -97,7 +97,7 @@ export const useAppUiStore = defineStore({
 	},
 });
 
-export const successNotificateion = (description: string) => {
+export const successNotification = (description: string) => {
 	const appUiStore = useAppUiStore();
 	appUiStore.addNotification({
 		color: 'green',

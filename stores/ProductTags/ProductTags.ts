@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { ProductTagCreate } from '~/utils/types/form/product-tag-creation';
 import type { ProductTag } from '~/utils/types/product-tag';
-import { failedNotification, successNotificateion } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 
 const initialEmptyTag: ProductTagCreate = {
 	value: undefined,
@@ -13,6 +13,7 @@ export const useProductTagsStore = defineStore({
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,
+		updating: false as boolean,
 		productTags: [] as ProductTag[],
 		newProductTag: structuredClone(initialEmptyTag),
 		pageSize: options_page_size[0],
@@ -54,7 +55,7 @@ export const useProductTagsStore = defineStore({
 				const data = await $api.productTag.create({ value });
 
 				if (data.productTag) {
-					successNotificateion(`${value} - Product Tag Created !`);
+					successNotification(`${value} - Product Tag Created !`);
 					this.productTags.push(data.productTag);
 				}
 			} catch (err: any) {
@@ -68,24 +69,24 @@ export const useProductTagsStore = defineStore({
 		},
 
 		async updateProductTag(id: string, tag: ProductTag) {
-			this.loading = true;
+			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productTag.update(id, tag);
+				const data = await $api.productTag.update(id, {
+					value: tag.value,
+					// metadata: tag.metadata,
+				});
 
 				if (data.productTag) {
-					successNotificateion(`Product Tag Updated !`);
-
-					// const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
-					// this.productTags.splice(index, 1);
+					successNotification(`Product Tag Updated !`);
 				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.loading = false;
+				this.updating = false;
 			}
 		},
 
@@ -98,7 +99,7 @@ export const useProductTagsStore = defineStore({
 				const data = await $api.productTag.delete({ id: parseInt(id) });
 
 				if (data.productTag) {
-					successNotificateion(`Product Tag Deleted !`);
+					successNotification(`Product Tag Deleted !`);
 
 					const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
 					this.productTags.splice(index, 1);

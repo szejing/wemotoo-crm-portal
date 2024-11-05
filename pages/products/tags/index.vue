@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation } from '#components';
+import { ZModalConfirmation, ZModalTagDetail } from '#components';
 import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { product_tag_columns } from '~/utils/table-columns';
 import type { ProductTag } from '~/utils/types/product-tag';
@@ -53,7 +53,7 @@ const links = [
 	{
 		label: 'All Tags',
 		icon: ICONS.LIST,
-		to: '/tags',
+		to: '/products/tags',
 	},
 ];
 
@@ -101,8 +101,20 @@ const deleteProductTag = async (id: string) => {
 };
 
 const editProductTag = async (id: string) => {
-	console.log(id);
-	// await productTagsStore.deleteProductTag(id);
+	const tag: ProductTag | undefined = productTags.value.find((tag) => tag.id === id);
+
+	if (!tag) return;
+
+	modal.open(ZModalTagDetail, {
+		productTag: JSON.parse(JSON.stringify(tag)),
+		onUpdate: async (tag: ProductTag) => {
+			await productTagsStore.updateProductTag(id, tag);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 </script>
 

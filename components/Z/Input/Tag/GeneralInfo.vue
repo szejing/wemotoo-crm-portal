@@ -8,9 +8,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-	code: String,
 	value: String,
-	description: String,
 });
 
 const emit = defineEmits(['update:value']);
