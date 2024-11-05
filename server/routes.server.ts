@@ -1,11 +1,20 @@
 const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
+const prod: string = 'product';
 
 export const Routes = {
 	Auth: {
 		Login: () => `${auth}/merchant-user/login`,
 		Logout: () => `${auth}/merchant-user/logout`,
+	},
+	Product: {
+		Create: () => `${prod}/`,
+		Single: (id: string) => `${prod}/${id}`,
+		Many: () => `${prod}/`,
+		Update: () => `${prod}/`,
+		Remove: () => `${prod}/`,
+		RevertRemove: () => `${prod}/`,
 	},
 	ProductTag: {
 		Create: () => `${prodTag}/`,

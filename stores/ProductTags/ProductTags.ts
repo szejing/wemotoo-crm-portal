@@ -58,13 +58,13 @@ export const useProductTagsStore = defineStore({
 					successNotification(`${value} - Product Tag Created !`);
 					this.productTags.push(data.productTag);
 				}
+				this.resetNewProductTag();
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
 				this.adding = false;
-				this.loading = true;
-				this.resetNewProductTag();
+				this.loading = false;
 			}
 		},
 
@@ -98,10 +98,10 @@ export const useProductTagsStore = defineStore({
 			try {
 				const data = await $api.productTag.delete({ id: parseInt(id) });
 
-				if (data.productTag) {
+				if (data.tag_id) {
 					successNotification(`Product Tag Deleted !`);
 
-					const index = this.productTags.findIndex((t) => t.id === data.productTag.toString());
+					const index = this.productTags.findIndex((t) => t.id === data.tag_id.toString());
 					this.productTags.splice(index, 1);
 				}
 			} catch (err: any) {

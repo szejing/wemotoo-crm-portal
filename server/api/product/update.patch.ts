@@ -3,13 +3,15 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
+		const data = await readBody(event);
 		const query = getQuery(event);
 		const accessToken = getCookie(event, 'accessToken') || '';
 
-		const result = await $fetch(`${Routes.ProdCategory.Remove()}`, {
+		const result = await $fetch(`${Routes.Product.Update()}`, {
 			baseURL: config.public.baseUrl,
-			method: 'DELETE',
+			method: 'PATCH',
 			query: query,
+			body: data,
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
