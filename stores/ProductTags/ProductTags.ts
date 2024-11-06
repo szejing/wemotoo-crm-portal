@@ -81,6 +81,7 @@ export const useProductTagsStore = defineStore({
 
 				if (data.productTag) {
 					successNotification(`Product Tag Updated !`);
+					this.getTags();
 				}
 			} catch (err: any) {
 				console.error(err);

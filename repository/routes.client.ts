@@ -28,7 +28,7 @@ const Routes = {
 		Create: () => `${prefix}/${prodCatg}/create`,
 		Single: (id: string) => `${prefix}/${prodCatg}/single/${id}`,
 		Many: () => `${prefix}/${prodCatg}/many`,
-		Update: () => `${prefix}/${prodTag}/update`,
+		Update: () => `${prefix}/${prodCatg}/update`,
 		Delete: () => `${prefix}/${prodCatg}/delete`,
 		RevertDelete: () => `${prefix}/${prodCatg}/revert-delete`,
 	},

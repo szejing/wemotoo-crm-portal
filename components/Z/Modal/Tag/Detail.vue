@@ -5,9 +5,8 @@
 		}"
 	>
 		<UCard>
+			<template #header><h3>Update Product Tag</h3></template>
 			<UForm :schema="UpdateProductTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
-				<template #header><h3>Update Product Tag</h3></template>
-
 				<!-- *********************** General Info *********************** -->
 				<ZInputTagGeneralInfo v-model:value="state.tag.value" />
 				<!-- *********************** General Info *********************** -->
