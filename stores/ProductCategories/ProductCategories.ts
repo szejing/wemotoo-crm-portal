@@ -120,6 +120,7 @@ export const useProductCategoriesStore = defineStore({
 
 				if (data.productCategory) {
 					successNotification(`Product Category Updated !`);
+					this.getCategories();
 				}
 			} catch (err: any) {
 				console.error(err);

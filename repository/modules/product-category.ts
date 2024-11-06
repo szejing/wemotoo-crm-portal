@@ -76,7 +76,7 @@ class ProductCategoryModule extends HttpFactory {
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
 			query: { id },
-			body: category,
+			body: removeNullValues(category),
 		});
 	}
 

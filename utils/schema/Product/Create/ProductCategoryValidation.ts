@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const CreateProductCategoryValidation = z.object({
-	id: z.string().max(6),
+	id: z.string().max(10),
 	name: z.string(),
 	description: z.string().optional(),
 	is_active: z.boolean().default(true),

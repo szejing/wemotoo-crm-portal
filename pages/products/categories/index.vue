@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation } from '#components';
+import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
 import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 import { product_category_columns } from '~/utils/table-columns';
 import type { ProductCategory } from '~/utils/types/product-category';
@@ -102,19 +102,18 @@ const deleteProductCategory = async (id: string) => {
 };
 
 const editProductCategory = async (id: string) => {
-	console.log(id);
-	// const category: ProductCategory | undefined = productCategories.value.find((category) => category.id === id);
-	// if (!category) return;
-	// modal.open(ZModalTagDetail, {
-	// 	category: JSON.parse(JSON.stringify(category)),
-	// 	onUpdate: async (category: ProductCategorie) => {
-	// 		await categoryStore.updateProductTag(id, category);
-	// 		modal.close();
-	// 	},
-	// 	onCancel: () => {
-	// 		modal.close();
-	// 	},
-	// });
+	const category: ProductCategory | undefined = productCategories.value.find((category) => category.id === id);
+	if (!category) return;
+	modal.open(ZModalCategoryDetail, {
+		productCategory: JSON.parse(JSON.stringify(category)),
+		onUpdate: async (category: ProductCategory) => {
+			await categoryStore.updateProductCategory(category);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 </script>
 

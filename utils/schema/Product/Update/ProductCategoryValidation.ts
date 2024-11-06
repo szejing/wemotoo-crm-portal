@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
-export const CreateProductCategoryValidation = z.object({
+export const UpdateProductCategoryValidation = z.object({
+	id: z.string().max(10),
 	name: z.string(),
-	code: z.string().max(10),
-	description: z.string().optional(),
-	images: z.array(z.string()).optional(),
-	thumbnail: z.string().optional(),
-	parent_category: z.string().optional(),
+	description: z.string().optional().nullable(),
+	is_active: z.boolean().default(true),
+	is_internal: z.boolean().default(false).nullable(),
+	images: z.array(z.string()).optional().nullable(),
+	thumbnail: z.string().optional().nullable(),
+	parent_category: z.string().optional().nullable(),
 });

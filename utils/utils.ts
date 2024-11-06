@@ -38,3 +38,7 @@ export const capitalizeFirstLetter = (value: string | any) => {
 
 	return value.charAt(0).toUpperCase() + value.slice(1);
 };
+
+export const removeNullValues = (obj: any): any => {
+	return JSON.parse(JSON.stringify(obj, (_, value) => (value === null ? undefined : value)));
+};

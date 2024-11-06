@@ -6,7 +6,7 @@
 			:options="productCategories"
 			searchable
 			size="md"
-			value-attribute="name"
+			value-attribute="id"
 			option-attribute="name"
 			placeholder="Select Category"
 		/>
