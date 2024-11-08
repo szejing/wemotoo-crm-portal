@@ -1,5 +1,7 @@
+import type { ProductOptionValue } from './product-option-value';
+
 export type ProductOption = {
-	id?: string | undefined;
+	id: string;
 	name: string;
-	values: string[];
+	values: ProductOptionValue[];
 };

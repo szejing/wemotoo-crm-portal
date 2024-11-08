@@ -3,6 +3,7 @@ import { options_page_size } from '~/utils/options';
 import type { ProductOptionCreate } from '~/utils/types/form/product-option-creation';
 import type { ProductOption } from '~/utils/types/product-option';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ProductOptionValue } from '~/utils/types/product-option-value';
 
 // const initial: ProductOption[] = [
 // 	{
@@ -81,7 +82,7 @@ export const useProductOptionsStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productOption.create({ name, values });
+				const data = await $api.productOption.create({ name, values: values.map((v) => ({ value: v })) });
 
 				if (data.productOption) {
 					successNotification(`${name} - Product Option Created !`);
@@ -96,7 +97,7 @@ export const useProductOptionsStore = defineStore({
 				this.loading = false;
 			}
 		},
-		async updateProductOption(id: number, name: string, values: string[]) {
+		async updateProductOption(id: number, name: string, values: ProductOptionValue[]) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();

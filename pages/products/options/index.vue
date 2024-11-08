@@ -13,28 +13,30 @@
 				<UCard>
 					<ZSectionFilterOptions />
 
-					<div v-if="productOptions.length > 0">
+					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_option_columns">
+						<UTable :rows="rows" :columns="product_option_columns" :loading="loading">
 							<template #values-data="{ row }">
-								<span>{{ row.values.join(' · ') }}</span>
+								<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
 							</template>
 
 							<template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
 							</template>
+
+							<template #empty-state>
+								<div class="flex-center section-empty">
+									<div>
+										<h2>No Options Found</h2>
+										<p>Create a new option to get started</p>
+									</div>
+								</div>
+							</template>
 						</UTable>
 
 						<!-- Pagination  -->
-						<div class="section-pagination">
+						<div v-if="productOptions.length > 0" class="section-pagination">
 							<UPagination v-model="page" :page-count="pageSize" :total="productOptions.length" />
-						</div>
-					</div>
-
-					<div v-else class="flex-center section-empty">
-						<div>
-							<h2>No Options Found</h2>
-							<p>Create a new option to get started</p>
 						</div>
 					</div>
 				</UCard>
@@ -44,9 +46,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalConfirmation, ZModalOptionDetail } from '#components';
 import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import { product_option_columns } from '~/utils/table-columns';
 import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductOptionValue } from '~/utils/types/product-option-value';
 
 const links = [
 	{
@@ -66,7 +70,7 @@ const options = (row: ProductOption) => [
 		{
 			label: 'Edit',
 			icon: ICONS.PENCIL,
-			click: () => console.log('Edit', row.id),
+			click: async () => await editProductOption(row.id),
 		},
 	],
 	[
@@ -74,19 +78,52 @@ const options = (row: ProductOption) => [
 			label: 'Delete',
 			icon: ICONS.TRASH,
 			slot: 'danger',
-			click: () => console.log('Delete', row.id),
+			click: async () => await deleteProductOption(row.id),
 		},
 	],
 ];
 
+const modal = useModal();
 const page = ref(1);
 const productOptionsStore = useProductOptionsStore();
+productOptionsStore.getOptions();
 
-const { productOptions, pageSize } = storeToRefs(productOptionsStore);
+const { loading, productOptions, pageSize } = storeToRefs(productOptionsStore);
 
 const rows = computed(() => {
 	return productOptions.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
+
+const deleteProductOption = async (id: string) => {
+	modal.open(ZModalConfirmation, {
+		message: 'Are you sure you want to delete this tag?',
+		action: 'delete',
+		onConfirm: async () => {
+			await productOptionsStore.deleteProductOption(id);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+
+const editProductOption = async (id: string) => {
+	const option: ProductOption | undefined = productOptions.value.find((option) => option.id === id);
+
+	if (!option) return;
+
+	modal.open(ZModalOptionDetail, {
+		productOption: JSON.parse(JSON.stringify(option)),
+		onUpdate: async (name: string, values: ProductOptionValue[]) => {
+			await productOptionsStore.updateProductOption(parseInt(id), name, values);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
 </script>
 
 <style scoped lang="css">

@@ -76,7 +76,6 @@ export const useProductTagsStore = defineStore({
 			try {
 				const data = await $api.productTag.update(id, {
 					value: tag.value,
-					// metadata: tag.metadata,
 				});
 
 				if (data.productTag) {
