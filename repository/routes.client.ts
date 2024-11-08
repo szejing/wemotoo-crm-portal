@@ -5,6 +5,7 @@ const prefix: string = '/api';
 const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
+const prodOption: string = 'product-option';
 
 /*
  * Prefix /api/another for another server
@@ -31,6 +32,14 @@ const Routes = {
 		Update: () => `${prefix}/${prodCatg}/update`,
 		Delete: () => `${prefix}/${prodCatg}/delete`,
 		RevertDelete: () => `${prefix}/${prodCatg}/revert-delete`,
+	},
+	ProductOption: {
+		Create: () => `${prefix}/${prodOption}/create`,
+		Single: (id: string) => `${prefix}/${prodOption}/single/${id}`,
+		Many: () => `${prefix}/${prodOption}/many`,
+		Update: () => `${prefix}/${prodOption}/update`,
+		Delete: () => `${prefix}/${prodOption}/delete`,
+		RevertDelete: () => `${prefix}/${prodOption}/revert-delete`,
 	},
 };
 

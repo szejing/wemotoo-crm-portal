@@ -1,6 +1,7 @@
 const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
+const prodOption: string = 'product-option';
 const prod: string = 'product';
 
 export const Routes = {
@@ -31,6 +32,14 @@ export const Routes = {
 		Update: () => `${prodCatg}/`,
 		Remove: () => `${prodCatg}/`,
 		RevertRemove: () => `${prodCatg}/`,
+	},
+	ProdOption: {
+		Create: () => `${prodOption}/`,
+		Single: (id: string) => `${prodOption}/${id}`,
+		Many: () => `${prodOption}/`,
+		Update: () => `${prodOption}/`,
+		Remove: () => `${prodOption}/`,
+		RevertRemove: () => `${prodOption}/`,
 	},
 };
 

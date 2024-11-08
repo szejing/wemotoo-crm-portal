@@ -1,10 +1,12 @@
 import AuthModule from '~/repository/modules/auth';
 import ProductCategoryModule from '~/repository/modules/product-category';
+import ProductOptionModule from '~/repository/modules/product-option';
 import ProductTagModule from '~/repository/modules/product-tag';
 
 interface IApiInstance {
 	productTag: ProductTagModule;
 	productCategory: ProductCategoryModule;
+	productOption: ProductOptionModule;
 	auth: AuthModule;
 }
 
@@ -23,30 +25,14 @@ export default defineNuxtPlugin((_) => {
 	const authModule = new AuthModule(apiFetcher);
 	const productTagModule = new ProductTagModule(apiFetcher);
 	const productCategoryModule = new ProductCategoryModule(apiFetcher);
+	const productOptionModule = new ProductOptionModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
 		productTag: productTagModule,
 		productCategory: productCategoryModule,
+		productOption: productOptionModule,
 	};
-	/*
-	 * ! This code below is example for the case you want to authenticate user and set token to headers.
-	 * Why call api in process.client?
-	 * => Cookie only exist on client.
-	 *  */
-	if (import.meta.client) {
-		// const token = useCookie('token', { maxAge: 60 * 60 * 24 * 7 });
-		// modules.auth
-		// 	.login(email, password)
-		// 	.then((data) => {
-		// 		if (data.accessToken) {
-		// 			productTagModule.setAccessToken(data.accessToken);
-		// 		}
-		// 	})
-		// 	.catch((err: any) => {
-		// 		console.error('Error occur:' + err);
-		// 	});
-	}
 
 	return {
 		provide: {
