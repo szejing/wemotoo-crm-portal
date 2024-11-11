@@ -42,7 +42,7 @@ class ProductTagModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(id: string) {
+	async fetchSingle(id: number) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(id)}`,
@@ -57,7 +57,7 @@ class ProductTagModule extends HttpFactory {
 		});
 	}
 
-	async update(id: string, tag: UpdateProductTagReq): Promise<UpdateProductTagResp> {
+	async update(id: number, tag: UpdateProductTagReq): Promise<UpdateProductTagResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,

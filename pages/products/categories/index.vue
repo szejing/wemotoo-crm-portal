@@ -89,7 +89,7 @@ const rows = computed(() => {
 
 const deleteProductCategory = async (id: string) => {
 	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this tag?',
+		message: 'Are you sure you want to delete this category?',
 		action: 'delete',
 		onConfirm: async () => {
 			await categoryStore.deleteProductCategory(id);

@@ -6,7 +6,7 @@
 			<!-- *********************** General Info *********************** -->
 
 			<div class="flex-center text-center mt-3">
-				<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block>Create</UButton>
+				<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
 			</div>
 		</UForm>
 	</div>
@@ -22,14 +22,15 @@ import { CreateProductOptionValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateProductOptionValidation>;
 
 const optionStore = useProductOptionsStore();
-const { newProductOption } = storeToRefs(optionStore);
+const { adding, newProductOption } = storeToRefs(optionStore);
 
 onMounted(() => {
 	optionStore.resetNewProductOption();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	console.log(event);
+	const { name, values } = event.data;
+	await optionStore.addProductOption(name, values ?? []);
 };
 </script>
 

@@ -1,6 +1,7 @@
 const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
+const prodOption: string = 'product-option';
 const prod: string = 'product';
 
 export const Routes = {
@@ -10,7 +11,7 @@ export const Routes = {
 	},
 	Product: {
 		Create: () => `${prod}/`,
-		Single: (id: string) => `${prod}/${id}`,
+		Single: (id: number) => `${prod}/${id}`,
 		Many: () => `${prod}/`,
 		Update: () => `${prod}/`,
 		Remove: () => `${prod}/`,
@@ -18,7 +19,7 @@ export const Routes = {
 	},
 	ProductTag: {
 		Create: () => `${prodTag}/`,
-		Single: (id: string) => `${prodTag}/${id}`,
+		Single: (id: number) => `${prodTag}/${id}`,
 		Many: () => `${prodTag}/`,
 		Update: () => `${prodTag}/`,
 		Remove: () => `${prodTag}/`,
@@ -26,11 +27,19 @@ export const Routes = {
 	},
 	ProdCategory: {
 		Create: () => `${prodCatg}/`,
-		Single: (id: string) => `${prodCatg}/${id}`,
+		Single: (id: number) => `${prodCatg}/${id}`,
 		Many: () => `${prodCatg}/`,
 		Update: () => `${prodCatg}/`,
 		Remove: () => `${prodCatg}/`,
 		RevertRemove: () => `${prodCatg}/`,
+	},
+	ProdOption: {
+		Create: () => `${prodOption}/`,
+		Single: (id: number) => `${prodOption}/${id}`,
+		Many: () => `${prodOption}/`,
+		Update: () => `${prodOption}/`,
+		Remove: () => `${prodOption}/`,
+		RevertRemove: () => `${prodOption}/`,
 	},
 };
 

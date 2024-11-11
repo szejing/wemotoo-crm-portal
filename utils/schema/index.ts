@@ -9,11 +9,9 @@ import { CreateProductValidation } from './Product/Create/ProductValidation';
 import { CreateProductCategoryValidation } from './Product/Create/ProductCategoryValidation';
 import { CreateProductOptionValidation } from './Product/Create/ProductOptionValidation';
 import { CreateProductTagValidation } from './Product/Create/ProductTagValidation';
-// import { UpdateProductValidation } from './Product/Update/ProductValidation';
-// import { UpdateProductCategoryValidation } from './Product/Update/ProductCategoryValidation';
-// import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
 import { UpdateProductTagValidation } from './Product/Update/ProductTagValidation';
 import { UpdateProductCategoryValidation } from './Product/Update/ProductCategoryValidation';
+import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
 
 export {
 	LoginValidation,
@@ -29,4 +27,5 @@ export {
 	FilterOptionValidation,
 	UpdateProductTagValidation,
 	UpdateProductCategoryValidation,
+	UpdateProductOptionValidation,
 };
