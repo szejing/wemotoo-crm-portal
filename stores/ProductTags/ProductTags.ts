@@ -68,7 +68,7 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async updateProductTag(id: string, tag: ProductTag) {
+		async updateProductTag(id: number, tag: ProductTag) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
@@ -90,18 +90,18 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async deleteProductTag(id: string) {
+		async deleteProductTag(id: number) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productTag.delete({ id: parseInt(id) });
+				const data = await $api.productTag.delete({ id });
 
 				if (data.tag_id) {
 					successNotification(`Product Tag Deleted !`);
 
-					const index = this.productTags.findIndex((t) => t.id === data.tag_id.toString());
+					const index = this.productTags.findIndex((t) => t.id === data.tag_id);
 					this.productTags.splice(index, 1);
 				}
 			} catch (err: any) {

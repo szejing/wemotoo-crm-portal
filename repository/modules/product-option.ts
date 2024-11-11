@@ -45,7 +45,7 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(id: string) {
+	async fetchSingle(id: number) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(id)}`,
@@ -65,7 +65,7 @@ class ProductOptionModule extends HttpFactory {
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
 			query: { id },
-			body: option,
+			body: removeNullValues(option),
 		});
 	}
 

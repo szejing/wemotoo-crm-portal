@@ -86,7 +86,7 @@ const rows = computed(() => {
 	return productTags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const deleteProductTag = async (id: string) => {
+const deleteProductTag = async (id: number) => {
 	modal.open(ZModalConfirmation, {
 		message: 'Are you sure you want to delete this tag?',
 		action: 'delete',
@@ -100,7 +100,7 @@ const deleteProductTag = async (id: string) => {
 	});
 };
 
-const editProductTag = async (id: string) => {
+const editProductTag = async (id: number) => {
 	const tag: ProductTag | undefined = productTags.value.find((tag) => tag.id === id);
 
 	if (!tag) return;

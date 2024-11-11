@@ -19,7 +19,7 @@ const Routes = {
 	},
 	ProductTag: {
 		Create: () => `${prefix}/${prodTag}/create`,
-		Single: (id: string) => `${prefix}/${prodTag}/single/${id}`,
+		Single: (id: number) => `${prefix}/${prodTag}/single/${id}`,
 		Many: () => `${prefix}/${prodTag}/many`,
 		Update: () => `${prefix}/${prodTag}/update`,
 		Delete: () => `${prefix}/${prodTag}/delete`,
@@ -35,7 +35,7 @@ const Routes = {
 	},
 	ProductOption: {
 		Create: () => `${prefix}/${prodOption}/create`,
-		Single: (id: string) => `${prefix}/${prodOption}/single/${id}`,
+		Single: (id: number) => `${prefix}/${prodOption}/single/${id}`,
 		Many: () => `${prefix}/${prodOption}/many`,
 		Update: () => `${prefix}/${prodOption}/update`,
 		Delete: () => `${prefix}/${prodOption}/delete`,

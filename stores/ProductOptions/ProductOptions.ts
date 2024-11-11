@@ -5,34 +5,6 @@ import type { ProductOption } from '~/utils/types/product-option';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 
-// const initial: ProductOption[] = [
-// 	{
-// 		id: '1',
-// 		name: 'Color',
-// 		values: ['Red', 'Blue', 'Green'],
-// 	},
-// 	{
-// 		id: '2',
-// 		name: 'Size',
-// 		values: ['S', 'M', 'L'],
-// 	},
-// 	{
-// 		id: '3',
-// 		name: 'Material',
-// 		values: ['Cotton', 'Polyester', 'Wool'],
-// 	},
-// 	{
-// 		id: '4',
-// 		name: 'Style',
-// 		values: ['Casual', 'Formal', 'Sport'],
-// 	},
-// 	{
-// 		id: '5',
-// 		name: 'Pattern',
-// 		values: ['Solid', 'Striped', 'Checkered'],
-// 	},
-// ];
-
 const initialEmptyOption: ProductOptionCreate = {
 	name: undefined,
 	values: undefined,
@@ -97,13 +69,13 @@ export const useProductOptionsStore = defineStore({
 				this.loading = false;
 			}
 		},
-		async updateProductOption(id: number, name: string, values: ProductOptionValue[]) {
+		async updateProductOption(optionId: number, name: string, values: ProductOptionValue[]) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productOption.update(id, {
+				const data = await $api.productOption.update(optionId, {
 					name,
 					values,
 				});
@@ -119,18 +91,18 @@ export const useProductOptionsStore = defineStore({
 				this.updating = false;
 			}
 		},
-		async deleteProductOption(id: string) {
+		async deleteProductOption(id: number) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productOption.delete({ id: parseInt(id) });
+				const data = await $api.productOption.delete({ id });
 
 				if (data.option_id) {
 					successNotification(`Product Option Deleted !`);
 
-					const index = this.productOptions.findIndex((t) => t.id === data.option_id.toString());
+					const index = this.productOptions.findIndex((t) => t.id === data.option_id);
 					this.productOptions.splice(index, 1);
 				}
 			} catch (err: any) {

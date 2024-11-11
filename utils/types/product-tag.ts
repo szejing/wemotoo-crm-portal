@@ -1,5 +1,5 @@
 export type ProductTag = {
-	id: string;
+	id: number;
 
 	value: string;
 

@@ -94,9 +94,9 @@ const rows = computed(() => {
 	return productOptions.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const deleteProductOption = async (id: string) => {
+const deleteProductOption = async (id: number) => {
 	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this tag?',
+		message: 'Are you sure you want to delete this option?',
 		action: 'delete',
 		onConfirm: async () => {
 			await productOptionsStore.deleteProductOption(id);
@@ -108,15 +108,15 @@ const deleteProductOption = async (id: string) => {
 	});
 };
 
-const editProductOption = async (id: string) => {
-	const option: ProductOption | undefined = productOptions.value.find((option) => option.id === id);
+const editProductOption = async (optionId: number) => {
+	const option: ProductOption | undefined = productOptions.value.find((option) => option.id === optionId);
 
 	if (!option) return;
 
 	modal.open(ZModalOptionDetail, {
 		productOption: JSON.parse(JSON.stringify(option)),
 		onUpdate: async (name: string, values: ProductOptionValue[]) => {
-			await productOptionsStore.updateProductOption(parseInt(id), name, values);
+			await productOptionsStore.updateProductOption(optionId, name, values);
 			modal.close();
 		},
 		onCancel: () => {

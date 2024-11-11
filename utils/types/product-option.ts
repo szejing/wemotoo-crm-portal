@@ -1,7 +1,7 @@
 import type { ProductOptionValue } from './product-option-value';
 
 export type ProductOption = {
-	id: string;
+	id: number;
 	name: string;
 	values: ProductOptionValue[];
 };
