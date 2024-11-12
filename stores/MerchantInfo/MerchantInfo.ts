@@ -1,25 +1,7 @@
 import { defineStore } from 'pinia';
-import { AccountStatus } from '~/utils/enum/account-status';
-import { Package } from '~/utils/enum/package';
-import type { MerchantInfo } from '~/utils/types/merchant';
+import type { MerchantInfo } from '~/utils/types/merchant-info';
 
-const initial: MerchantInfo = {
-	name: 'Wemotoo',
-	merchant_id: 'Wemotoo_888',
-	expires_date: new Date(2025, 12, 31),
-	date_joined: new Date(),
-	status: AccountStatus.ACTIVE,
-	package: Package.GOLD,
-	profile_thumbnail: 'https://play-lh.googleusercontent.com/wQy4wAUVQPanpINDiu2uY4sNy3TxHobxkD3ZamfCAQm1rrtcd5idA13cZEhqb27C_LqP',
-	address: {
-		address1: 'A-3A-08, Block A, Menara Prima, Jalan PJU 1/39',
-		address2: 'Dataran Prima',
-		city: 'Bandar Utama',
-		country_code: 'MY',
-		state: 'Selangor',
-		postal_code: '47800',
-	},
-};
+const initial: MerchantInfo[] = [];
 
 export const useMerchantInfoStore = defineStore({
 	id: 'merchantInfoStore',
@@ -29,5 +11,15 @@ export const useMerchantInfoStore = defineStore({
 		merchant: structuredClone(initial),
 		errors: [] as string[],
 	}),
-	actions: {},
+	actions: {
+		setMerchantInfo(merchantInfo: MerchantInfo[]) {
+			this.merchant = merchantInfo;
+		},
+
+		getMerchantInfo(group_code: string, set_code: string): MerchantInfo | null {
+			const info = this.merchant.find((info) => info.group_code === group_code && info.set_code === set_code);
+
+			return info || null;
+		},
+	},
 });

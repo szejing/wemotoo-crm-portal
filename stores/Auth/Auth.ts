@@ -17,6 +17,9 @@ export const useAuthStore = defineStore({
 
 				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
 				accessToken.value = data.token;
+
+				const merchantInfo = useMerchantInfoStore();
+				merchantInfo.setMerchantInfo(data.merchant_info);
 			} catch (err: any) {
 				console.log(err);
 

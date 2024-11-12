@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="header-container cursor-pointer" @click="isMerchantInfoModal = true">
-			<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
+			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
 		<UModal v-model="isMerchantInfoModal">
 			<UCard>
 				<template #header>
 					<div class="merchant-info-modal">
-						<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
+						<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 					</div>
 				</template>
 			</UCard>
@@ -17,10 +17,24 @@
 </template>
 
 <script lang="ts" setup>
+import { GROUP_CODE } from '~/utils/constants/group-code';
+import { SETTING_CODE } from '~/utils/constants/setting-code';
+
 const merchantInfoStore = useMerchantInfoStore();
 
-const { merchant } = storeToRefs(merchantInfoStore);
 const isMerchantInfoModal = ref(false);
+
+const merchantName = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_NAME)?.set_value ?? '';
+});
+
+const merchantId = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_ID)?.set_value ?? '';
+});
+
+const thumbnail = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_THUMBNAIL)?.set_value ?? '';
+});
 </script>
 
 <style scoped lang="css">
