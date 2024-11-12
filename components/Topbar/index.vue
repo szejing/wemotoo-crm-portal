@@ -8,7 +8,7 @@
 				<p class="font-normal text-xs text-secondary-700">{{ merchant.merchant_id }}</p>
 			</div> -->
 
-			<ZTile :thumbnail-url="merchant.profile_thumbnail" :title="merchant.name" :subtitle="merchant.merchant_id" />
+			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
 		<div class="link" @click="logout">
@@ -18,11 +18,25 @@
 </template>
 
 <script lang="ts" setup>
+import { GROUP_CODE } from '~/utils/constants/group-code';
+import { SETTING_CODE } from '~/utils/constants/setting-code';
+
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();
 
-const { merchant } = storeToRefs(merchantInfoStore);
 const { toggleSidebarModal } = appUiStore;
+
+const merchantName = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_NAME)?.set_value ?? '';
+});
+
+const merchantId = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_ID)?.set_value ?? '';
+});
+
+const thumbnail = computed(() => {
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_THUMBNAIL)?.set_value ?? '';
+});
 
 const logout = async () => {
 	const authStore = useAuthStore();

@@ -72,7 +72,7 @@ const autoGenerate = () => {
 
 		const option = prodOptions.value[optionIndex];
 		for (const value of option.values) {
-			combine([...currentOptions, { name: option.name, values: [value] }], optionIndex + 1);
+			combine([...currentOptions, { id: option.id, name: option.name, values: [value] }], optionIndex + 1);
 		}
 	};
 
