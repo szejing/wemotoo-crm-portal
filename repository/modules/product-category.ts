@@ -1,6 +1,6 @@
 import type { ProductCategory } from '~/utils/types/product-category';
 import HttpFactory from '../factory';
-import Routes from '../routes.client';
+import MerchantRoutes from '../routes.client';
 
 export type ProductCategoriesResp = {
 	count: number;
@@ -47,7 +47,7 @@ export type UpdateProductCategoryResp = {
 };
 
 class ProductCategoryModule extends HttpFactory {
-	private RESOURCE = Routes.ProdCategory;
+	private RESOURCE = MerchantRoutes.ProdCategory;
 
 	async fetchMany(): Promise<ProductCategoriesResp> {
 		return this.call<ProductCategoriesResp>({

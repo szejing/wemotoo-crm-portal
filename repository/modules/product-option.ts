@@ -1,6 +1,6 @@
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import HttpFactory from '../factory';
-import Routes from '../routes.client';
+import MerchantRoutes from '../routes.client';
 import type { ProductOption } from '~/utils/types/product-option';
 
 export type ProductOptionsResp = {
@@ -36,7 +36,7 @@ export type UpdateProductOptionResp = {
 };
 
 class ProductOptionModule extends HttpFactory {
-	private RESOURCE = Routes.ProductOption;
+	private RESOURCE = MerchantRoutes.ProductOption;
 
 	async fetchMany(): Promise<ProductOptionsResp> {
 		return await this.call<ProductOptionsResp>({

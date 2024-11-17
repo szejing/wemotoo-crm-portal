@@ -1,6 +1,6 @@
 import type { ProductTag } from '~/utils/types/product-tag';
 import HttpFactory from '../factory';
-import Routes from '../routes.client';
+import MerchantRoutes from '../routes.client';
 
 export type ProductTagsResp = {
 	count: number;
@@ -33,7 +33,7 @@ export type UpdateProductTagResp = {
 };
 
 class ProductTagModule extends HttpFactory {
-	private RESOURCE = Routes.ProductTag;
+	private RESOURCE = MerchantRoutes.ProductTag;
 
 	async fetchMany(): Promise<ProductTagsResp> {
 		return await this.call<ProductTagsResp>({

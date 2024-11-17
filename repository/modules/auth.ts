@@ -1,6 +1,6 @@
 import type { UserRoles } from '~/utils/enum/user-role';
 import HttpFactory from '../factory';
-import Routes from '../routes.client';
+import MerchantRoutes from '../routes.client';
 import type { MerchantInfo } from '~/utils/types/merchant-info';
 
 export type LoginReq = {
@@ -22,11 +22,10 @@ export type LoginResp = {
 };
 
 class AuthModule extends HttpFactory {
-	private readonly RESOURCE = Routes.Auth;
+	private readonly RESOURCE = MerchantRoutes.Auth;
 
 	/**
-	 * login with merchant_id, email_address and password
-	 * @param merchant_id
+	 * login with email_address and password
 	 * @param email_address
 	 * @param password
 	 * @returns
