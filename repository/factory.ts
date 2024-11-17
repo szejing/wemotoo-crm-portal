@@ -50,8 +50,8 @@ class HttpFactory {
 				method,
 				body,
 				query,
-				...headers,
 				...fetchOptions,
+				...headers,
 			});
 		} catch (error: any) {
 			throw error.data?.data ? error.data?.data : new ApiErrorModel(500, 'Internal Server Error');

@@ -25,8 +25,7 @@ class AuthModule extends HttpFactory {
 	private readonly RESOURCE = Routes.Auth;
 
 	/**
-	 * login with merchant_id, email_address and password
-	 * @param merchant_id
+	 * login with email_address and password
 	 * @param email_address
 	 * @param password
 	 * @returns

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import type { LoginResp } from '~/repository/modules/auth';
+import { KEY } from '~/utils/constants/key';
 
 export const useAuthStore = defineStore({
 	id: 'authStore',
@@ -12,15 +13,23 @@ export const useAuthStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			this.loading = true;
+
+			const mid = useCookie(KEY.X_MERCHANT_ID, { maxAge: 60 * 60 * 24 * 7 });
+			mid.value = merchant_id;
+
 			try {
 				const data: LoginResp = await $api.auth.login({ merchant_id, email_address, password });
 
-				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
-				accessToken.value = data.token;
+				const mid = useCookie(KEY.X_MERCHANT_ID, { maxAge: 60 * 60 * 24 * 7 });
+				mid.value = merchant_id;
+
+				const access_token = useCookie(KEY.ACCESS_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
+				access_token.value = data.token;
 
 				const merchantInfo = useMerchantInfoStore();
 				merchantInfo.setMerchantInfo(data.merchant_info);
 			} catch (err: any) {
+				this.clearCookies();
 				console.log(err);
 
 				const appUiStore = useAppUiStore();
@@ -40,9 +49,10 @@ export const useAuthStore = defineStore({
 			try {
 				const token: string = await $api.auth.refreshToken();
 
-				const accessToken = useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7 });
-				accessToken.value = token;
+				const access_token = useCookie(KEY.ACCESS_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
+				access_token.value = token;
 			} catch (err: any) {
+				this.clearCookies();
 				console.error(err);
 			}
 		},
@@ -54,6 +64,10 @@ export const useAuthStore = defineStore({
 			try {
 				const response_code: number = await $api.auth.logout();
 
+				if (response_code === 200) {
+					this.clearCookies();
+				}
+
 				return response_code === 200;
 			} catch (err: any) {
 				console.error(err);
@@ -61,6 +75,14 @@ export const useAuthStore = defineStore({
 			} finally {
 				this.loading = false;
 			}
+		},
+
+		clearCookies() {
+			const access_token = useCookie(KEY.ACCESS_TOKEN);
+			access_token.value = null;
+
+			const merchant_id = useCookie(KEY.X_MERCHANT_ID);
+			merchant_id.value = null;
 		},
 	},
 });

@@ -1,3 +1,4 @@
+import { generateHeaders } from '~/server/base_api';
 import { Routes } from '~/server/routes.server';
 
 export default defineEventHandler(async (event) => {
@@ -9,11 +10,7 @@ export default defineEventHandler(async (event) => {
 			baseURL: config.public.baseUrl,
 			method: 'POST',
 			body: data,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'x-api-key': config.public.apiKey,
-			},
+			headers: generateHeaders(event, false, data.merchant_id),
 		});
 		return result;
 	} catch (err) {

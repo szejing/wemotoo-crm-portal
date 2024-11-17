@@ -1,3 +1,4 @@
+import { generateHeaders } from '~/server/base_api';
 import { Routes } from '~/server/routes.server';
 
 export default defineEventHandler(async (event) => {
@@ -8,12 +9,7 @@ export default defineEventHandler(async (event) => {
 		const result = await $fetch(`${Routes.ProdCategory.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
-			// body: data,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'x-api-key': config.public.apiKey,
-			},
+			headers: generateHeaders(event, true),
 		});
 		return result;
 	} catch (err) {
