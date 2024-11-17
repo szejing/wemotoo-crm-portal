@@ -1,3 +1,4 @@
+const merchant: string = 'merchant';
 const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
@@ -6,40 +7,40 @@ const prod: string = 'product';
 
 export const Routes = {
 	Auth: {
-		Login: () => `${auth}/merchant-user/login`,
-		Logout: () => `${auth}/merchant-user/logout`,
+		Login: () => `${merchant}/${auth}/login`,
+		Logout: () => `${merchant}/${auth}/logout`,
 	},
 	Product: {
-		Create: () => `${prod}/`,
-		Single: (id: number) => `${prod}/${id}`,
-		Many: () => `${prod}/`,
-		Update: () => `${prod}/`,
-		Remove: () => `${prod}/`,
-		RevertRemove: () => `${prod}/`,
+		Create: () => `${merchant}/${prod}/`,
+		Single: (id: number) => `${merchant}/${prod}/${id}`,
+		Many: () => `${merchant}/${prod}/`,
+		Update: () => `${merchant}/${prod}/`,
+		Remove: () => `${merchant}/${prod}/`,
+		RevertRemove: () => `${merchant}/${prod}/`,
 	},
 	ProductTag: {
-		Create: () => `${prodTag}/`,
-		Single: (id: number) => `${prodTag}/${id}`,
-		Many: () => `${prodTag}/`,
-		Update: () => `${prodTag}/`,
-		Remove: () => `${prodTag}/`,
-		RevertRemove: () => `${prodTag}/`,
+		Create: () => `${merchant}/${prodTag}/`,
+		Single: (id: number) => `${merchant}/${prodTag}/${id}`,
+		Many: () => `${merchant}/${prodTag}/`,
+		Update: () => `${merchant}/${prodTag}/`,
+		Remove: () => `${merchant}/${prodTag}/`,
+		RevertRemove: () => `${merchant}/${prodTag}/`,
 	},
 	ProdCategory: {
-		Create: () => `${prodCatg}/`,
-		Single: (id: number) => `${prodCatg}/${id}`,
-		Many: () => `${prodCatg}/`,
-		Update: () => `${prodCatg}/`,
-		Remove: () => `${prodCatg}/`,
-		RevertRemove: () => `${prodCatg}/`,
+		Create: () => `${merchant}/${prodCatg}/`,
+		Single: (id: number) => `${merchant}/${prodCatg}/${id}`,
+		Many: () => `${merchant}/${prodCatg}/`,
+		Update: () => `${merchant}/${prodCatg}/`,
+		Remove: () => `${merchant}/${prodCatg}/`,
+		RevertRemove: () => `${merchant}/${prodCatg}/`,
 	},
 	ProdOption: {
-		Create: () => `${prodOption}/`,
-		Single: (id: number) => `${prodOption}/${id}`,
-		Many: () => `${prodOption}/`,
-		Update: () => `${prodOption}/`,
-		Remove: () => `${prodOption}/`,
-		RevertRemove: () => `${prodOption}/`,
+		Create: () => `${merchant}/${prodOption}/`,
+		Single: (id: number) => `${merchant}/${prodOption}/${id}`,
+		Many: () => `${merchant}/${prodOption}/`,
+		Update: () => `${merchant}/${prodOption}/`,
+		Remove: () => `${merchant}/${prodOption}/`,
+		RevertRemove: () => `${merchant}/${prodOption}/`,
 	},
 };
 
