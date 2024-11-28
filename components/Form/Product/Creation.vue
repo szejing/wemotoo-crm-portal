@@ -15,7 +15,12 @@
 			<!-- *********************** General Info *********************** -->
 
 			<!-- *********************** Pricing *********************** -->
-			<ZInputProductPricing v-model:selling-price.number="origSellPrice" v-model:cost-price.number="costPrice" v-model:sale-price.number="salePrice" />
+			<ZInputProductPricing
+				v-model:selling-price.number="origSellPrice"
+				v-model:cost-price.number="costPrice"
+				v-model:sale-price.number="salePrice"
+				v-model:currency="currency"
+			/>
 			<!-- *********************** Pricing *********************** -->
 
 			<!-- *********************** Additional Info *********************** -->
@@ -44,6 +49,19 @@ onMounted(() => {
 	productStore.resetNewProduct();
 });
 
+const currency = computed({
+	get() {
+		return newProduct.value.prices?.[0]?.currency ?? undefined;
+	},
+	set(value) {
+		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
+			newProduct.value.prices[0].currency = value;
+		} else {
+			newProduct.value.prices = [{ origSellPrice: origSellPrice.value, costPrice: costPrice.value, salePrice: salePrice.value, currency: value }];
+		}
+	},
+});
+
 const origSellPrice = computed({
 	get() {
 		return newProduct.value.prices?.[0]?.origSellPrice ?? undefined;
@@ -51,6 +69,8 @@ const origSellPrice = computed({
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
 			newProduct.value.prices[0].origSellPrice = value;
+		} else {
+			newProduct.value.prices = [{ origSellPrice: value, costPrice: costPrice.value, salePrice: salePrice.value, currency: currency.value }];
 		}
 	},
 });
@@ -62,6 +82,8 @@ const costPrice = computed({
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
 			newProduct.value.prices[0].costPrice = value;
+		} else {
+			newProduct.value.prices = [{ costPrice: value, origSellPrice: origSellPrice.value, salePrice: salePrice.value, currency: currency.value }];
 		}
 	},
 });
@@ -73,12 +95,14 @@ const salePrice = computed({
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
 			newProduct.value.prices[0].salePrice = value;
+		} else {
+			newProduct.value.prices = [{ salePrice: value, origSellPrice: origSellPrice.value, costPrice: costPrice.value, currency: currency.value }];
 		}
 	},
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	console.log(event);
+	console.log(event.data);
 };
 </script>
 

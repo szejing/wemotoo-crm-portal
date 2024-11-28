@@ -5,7 +5,7 @@ import type { ProductCategory } from '~/utils/types/product-category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 
 const initialEmptyCategory: ProductCategoryCreate = {
-	id: undefined,
+	code: undefined,
 	name: undefined,
 	description: undefined,
 
@@ -61,14 +61,14 @@ export const useProductCategoriesStore = defineStore({
 			}
 		},
 		async addProductCategory(
-			id: string,
+			code: string,
 			name: string,
 			description: string | undefined,
 			is_internal: boolean,
 			is_active: boolean,
 			images: string[] | undefined,
 			thumbnail: string | undefined,
-			parent_category_id: string | undefined,
+			parent_category_code: string | undefined,
 		) {
 			this.adding = true;
 			this.loading = true;
@@ -77,7 +77,7 @@ export const useProductCategoriesStore = defineStore({
 
 			try {
 				const data = await $api.productCategory.create({
-					id: id,
+					code: code,
 					name: name,
 					description: description ?? null,
 					slug: null,
@@ -85,7 +85,7 @@ export const useProductCategoriesStore = defineStore({
 					is_active: is_active,
 					images: images ?? null,
 					thumbnail: thumbnail ?? null,
-					parent_category_id: parent_category_id ?? null,
+					parent_category_code: parent_category_code ?? null,
 				});
 
 				if (data.productCategory) {
@@ -107,7 +107,7 @@ export const useProductCategoriesStore = defineStore({
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productCategory.update(category.id, {
+				const data = await $api.productCategory.update(category.code, {
 					name: category.name,
 					description: category.description ?? null,
 					slug: category.slug ?? null,
@@ -115,7 +115,7 @@ export const useProductCategoriesStore = defineStore({
 					is_active: category.is_active,
 					images: category.images ?? null,
 					thumbnail: category.thumbnail ?? null,
-					parent_category_id: category.parent_category?.id ?? null,
+					parent_category_code: category.parent_category?.code ?? null,
 				});
 
 				if (data.productCategory) {
@@ -129,18 +129,18 @@ export const useProductCategoriesStore = defineStore({
 				this.updating = false;
 			}
 		},
-		async deleteProductCategory(id: string) {
+		async deleteProductCategory(code: string) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productCategory.delete({ id });
+				const data = await $api.productCategory.delete({ code });
 
-				if (data.category_id) {
+				if (data.category_code) {
 					successNotification(`Product Category Deleted !`);
 
-					const index = this.productCategories.findIndex((catg) => catg.id === data.category_id);
+					const index = this.productCategories.findIndex((catg) => catg.code === data.category_code);
 					this.productCategories.splice(index, 1);
 				}
 			} catch (err: any) {

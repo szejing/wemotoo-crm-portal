@@ -63,7 +63,7 @@ const options = (row: ProductCategory) => [
 		{
 			label: 'Edit',
 			icon: ICONS.PENCIL,
-			click: async () => await editProductCategory(row.id),
+			click: async () => await editProductCategory(row.code),
 		},
 	],
 	[
@@ -71,7 +71,7 @@ const options = (row: ProductCategory) => [
 			label: 'Delete',
 			icon: ICONS.TRASH,
 			slot: 'danger',
-			click: () => deleteProductCategory(row.id),
+			click: () => deleteProductCategory(row.code),
 		},
 	],
 ];
@@ -87,12 +87,12 @@ const rows = computed(() => {
 	return productCategories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const deleteProductCategory = async (id: string) => {
+const deleteProductCategory = async (code: string) => {
 	modal.open(ZModalConfirmation, {
 		message: 'Are you sure you want to delete this category?',
 		action: 'delete',
 		onConfirm: async () => {
-			await categoryStore.deleteProductCategory(id);
+			await categoryStore.deleteProductCategory(code);
 			modal.close();
 		},
 		onCancel: () => {
@@ -101,8 +101,8 @@ const deleteProductCategory = async (id: string) => {
 	});
 };
 
-const editProductCategory = async (id: string) => {
-	const category: ProductCategory | undefined = productCategories.value.find((category) => category.id === id);
+const editProductCategory = async (code: string) => {
+	const category: ProductCategory | undefined = productCategories.value.find((category) => category.code === code);
 	if (!category) return;
 	modal.open(ZModalCategoryDetail, {
 		productCategory: JSON.parse(JSON.stringify(category)),

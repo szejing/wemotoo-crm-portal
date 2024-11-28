@@ -5,7 +5,7 @@ export type ProductCategoryCreate = {
 	name: string | undefined;
 
 	// id
-	id: string | undefined;
+	code: string | undefined;
 
 	// description
 	description?: string | undefined;

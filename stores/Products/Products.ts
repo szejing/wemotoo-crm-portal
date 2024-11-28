@@ -30,7 +30,7 @@ const initialEmptyProduct: ProductCreate = {
 	// price
 	prices: [
 		{
-			currency: 'RM',
+			currency: 'MYR',
 			origSellPrice: undefined,
 			costPrice: undefined,
 			salePrice: undefined,
@@ -68,9 +68,9 @@ export const useProductStore = defineStore({
 
 			this.loading = false;
 		},
-		async deleteProduct(id: string) {
+		async deleteProduct(code: string) {
 			this.loading = true;
-			console.log(id);
+			console.log(code);
 
 			this.loading = false;
 		},
