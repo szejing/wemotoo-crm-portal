@@ -1,5 +1,5 @@
 export type ProductCategory = {
-	id: string;
+	code: string;
 	name: string;
 	description?: string | undefined;
 	slug?: string | undefined;
@@ -12,6 +12,7 @@ export type ProductCategory = {
 	images?: string[] | undefined;
 	thumbnail?: string | undefined;
 
+	parent_category_code?: string | undefined;
 	parent_category?: ProductCategory | undefined;
 	category_children?: ProductCategory[] | undefined;
 };

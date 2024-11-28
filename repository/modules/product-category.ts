@@ -8,7 +8,7 @@ export type ProductCategoriesResp = {
 };
 
 export type CreateProductCategoryReq = {
-	id: string;
+	code: string;
 	name: string;
 	description: string | null;
 	slug: string | null;
@@ -16,7 +16,7 @@ export type CreateProductCategoryReq = {
 	is_active: boolean | null;
 	images: string[] | null;
 	thumbnail: string | null;
-	parent_category_id: string | null;
+	parent_category_code: string | null;
 };
 
 export type CreateProductCategoryResp = {
@@ -24,11 +24,11 @@ export type CreateProductCategoryResp = {
 };
 
 export type DeleteProductCategoryReq = {
-	id: string;
+	code: string;
 };
 
 export type DeleteProductCategoryResp = {
-	category_id: string;
+	category_code: string;
 };
 
 export type UpdateProductCategoryReq = {
@@ -39,7 +39,7 @@ export type UpdateProductCategoryReq = {
 	is_active: boolean | null;
 	images: string[] | null;
 	thumbnail: string | null;
-	parent_category_id: string | null;
+	parent_category_code: string | null;
 };
 
 export type UpdateProductCategoryResp = {

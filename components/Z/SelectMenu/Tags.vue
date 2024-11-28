@@ -1,6 +1,6 @@
 <template>
 	<UFormGroup name="tags" class="mt-2">
-		<USelectMenu v-model="tags" v-model:query="query" :options="productTags" searchable size="md" value-attribute="name" option-attribute="name" multiple>
+		<USelectMenu v-model="tags" v-model:query="query" :options="productTags" searchable size="md" value-attribute="value" option-attribute="value" multiple>
 			<template #label>
 				<span v-if="tags.length" class="truncate">{{ tags.join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Tags</span>

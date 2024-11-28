@@ -27,7 +27,7 @@ export const useAuthStore = defineStore({
 				access_token.value = data.token;
 
 				const merchantInfo = useMerchantInfoStore();
-				merchantInfo.setMerchantInfo(data.merchant_info);
+				await merchantInfo.setMerchantInfo(data.merchant_info);
 			} catch (err: any) {
 				this.clearCookies();
 				console.log(err);

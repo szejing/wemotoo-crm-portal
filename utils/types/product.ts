@@ -6,7 +6,6 @@ import type { ProductTag } from './product-tag';
 import type { ProductVariant } from './product-variant';
 
 export type Product = {
-	id?: string | undefined;
 	code: string | undefined;
 	name: string | undefined;
 	subtitle: string | undefined;

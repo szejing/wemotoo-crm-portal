@@ -1,7 +1,7 @@
 export const product_category_columns = [
 	{
-		key: 'id',
-		label: 'Id',
+		key: 'code',
+		label: 'Code',
 		sortable: true,
 	},
 	{

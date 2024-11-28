@@ -3,7 +3,7 @@
 		<UForm :schema="CreateProductCategoryValidation" :state="newProductCategory" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
 			<ZInputCategoryGeneralInfo
-				v-model:id="newProductCategory.id"
+				v-model:code="newProductCategory.code"
 				v-model:name="newProductCategory.name"
 				v-model:description="newProductCategory.description"
 			/>
@@ -45,8 +45,8 @@ const updateThumbnail = (url: string) => {
 	newProductCategory.value.thumbnail = url;
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { id, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
-	await categoryStore.addProductCategory(id, name, description, is_internal, is_active, images, thumbnail, parent_category);
+	const { code, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
+	await categoryStore.addProductCategory(code, name, description, is_internal, is_active, images, thumbnail, parent_category);
 };
 </script>
 

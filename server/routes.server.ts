@@ -3,12 +3,24 @@ const auth: string = 'auth';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
 const prodOption: string = 'product-option';
+const currency: string = 'currency';
+const country: string = 'country';
 const prod: string = 'product';
 
 export const Routes = {
 	Auth: {
 		Login: () => `${merchant}/${auth}/login`,
 		Logout: () => `${merchant}/${auth}/logout`,
+	},
+	Country: {
+		Single: (id: number) => `${merchant}/${country}/${id}`,
+		Many: () => `${merchant}/${country}/`,
+		Update: () => `${merchant}/${country}/`,
+	},
+	Currency: {
+		Single: (id: number) => `${merchant}/${currency}/${id}`,
+		Many: () => `${merchant}/${currency}/`,
+		Update: () => `${merchant}/${currency}/`,
 	},
 	Product: {
 		Create: () => `${merchant}/${prod}/`,

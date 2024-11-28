@@ -3,12 +3,12 @@
 		<USelectMenu
 			v-model="currency"
 			v-model:query="query"
-			:options="options_currencies"
+			:options="currencies"
 			searchable
 			size="md"
-			value-attribute="name"
-			option-attribute="name"
-			:disabled="options_currencies.length == 1"
+			value-attribute="code"
+			option-attribute="code"
+			:disabled="currencies.length == 1"
 		>
 			<template #label>
 				<span v-if="currency" class="truncate">{{ currency }}</span>
@@ -19,15 +19,22 @@
 </template>
 
 <script lang="ts" setup>
-const options_currencies = [
-	{
-		id: 0,
-		name: 'MYR',
-	},
-];
-
 const query = ref('');
-const currency = ref(options_currencies[0].name);
+const merchantInfoStore = useMerchantInfoStore();
+const { currencies } = storeToRefs(merchantInfoStore);
+
+const props = defineProps<{ currency: string | undefined }>();
+
+const emit = defineEmits(['update:currency']);
+
+const currency = computed({
+	get() {
+		return props.currency ?? undefined;
+	},
+	set(value) {
+		emit('update:currency', value);
+	},
+});
 </script>
 
 <style></style>
