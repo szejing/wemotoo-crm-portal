@@ -15,18 +15,18 @@
 		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
-		"@nuxt/eslint": "^0.6.1",
-		"@nuxt/image": "1.8.0",
-		"@nuxt/ui": "^2.18.7",
-		"@pinia/nuxt": "^0.5.4",
+		"@nuxt/eslint": "^0.7.2",
+		"@nuxt/image": "1.8.1",
+		"@nuxt/ui": "^2.19.2",
+		"@pinia/nuxt": "^0.8.0",
 		"@types/uuid": "^10.0.0",
-		"@vee-validate/zod": "^4.13.2",
+		"@vee-validate/zod": "^4.14.7",
 		"@vueup/vue-quill": "^1.2.0",
 		"chart.js": "^4.4.6",
-		"nuxt": "^3.13.2",
-		"pinia": "^2.2.2",
+		"nuxt": "^3.14.1592",
+		"pinia": "^2.2.8",
 		"six-dropzone": "^0.3.4",
-		"vee-validate": "^4.13.2",
+		"vee-validate": "^4.14.7",
 		"vue": "latest",
 		"vue-chartjs": "^5.3.2",
 		"vue-router": "latest",
@@ -35,23 +35,23 @@
 	"devDependencies": {
 		"@headlessui/vue": "1.7.23",
 		"@iconify-json/ic": "^1.2.1",
-		"@iconify-json/material-symbols": "^1.2.5",
-		"@iconify-json/material-symbols-light": "^1.2.5",
+		"@iconify-json/material-symbols": "^1.2.8",
+		"@iconify-json/material-symbols-light": "^1.2.8",
 		"@iconify-json/ri": "^1.2.3",
-		"@nuxt/devtools": "^1.6.0",
-		"@nuxt/eslint-config": "^0.6.1",
+		"@nuxt/devtools": "^1.6.1",
+		"@nuxt/eslint-config": "^0.7.2",
 		"@nuxtjs/eslint-config-typescript": "12.1.0",
 		"@nuxtjs/eslint-module": "4.1.0",
 		"@nuxtjs/google-fonts": "^3.2.0",
-		"@stylistic/eslint-plugin-ts": "^2.10.1",
+		"@stylistic/eslint-plugin-ts": "^2.11.0",
 		"@types/bun": "latest",
-		"@vueuse/core": "^11.2.0",
+		"@vueuse/core": "^12.0.0",
 		"@vueuse/motion": "2.2.6",
-		"@vueuse/nuxt": "^11.2.0",
-		"eslint": "^9.14.0"
+		"@vueuse/nuxt": "^12.0.0",
+		"eslint": "^9.15.0"
 	},
 	"module": "index.ts",
 	"peerDependencies": {
-		"typescript": "^5.6.2"
+		"typescript": "^5.7.2"
 	}
 }
