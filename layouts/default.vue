@@ -1,14 +1,23 @@
 <template>
 	<div class="default-bg">
-		<Topbar />
-		<div class="flex w-s=creen h-full">
-			<Sidebar />
-			<div class="main-content" :class="['ml-0', showSidebar ? 'md:ml-60' : 'md:ml-12']">
-				<slot />
-			</div>
-		</div>
+		<ClientOnly>
+			<Topbar />
+			<div class="flex w-s=creen h-full">
+				<Sidebar />
 
-		<SidebarModal />
+				<div class="main-content" :class="['ml-0', showSidebar ? 'md:ml-60' : 'md:ml-12']">
+					<slot />
+				</div>
+			</div>
+
+			<SidebarModal />
+
+			<template #fallback>
+				<div class="w-full h-svh flex-col-center bg-primary-500">
+					<ZLoader />
+				</div>
+			</template>
+		</ClientOnly>
 	</div>
 </template>
 

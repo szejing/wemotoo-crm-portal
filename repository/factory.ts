@@ -54,6 +54,9 @@ class HttpFactory {
 				...headers,
 			});
 		} catch (error: any) {
+			// if (error instanceof 401) {
+			// 	refresh token -> call again
+			// }
 			throw error.data?.data ? error.data?.data : new ApiErrorModel(500, 'Internal Server Error');
 		}
 	}

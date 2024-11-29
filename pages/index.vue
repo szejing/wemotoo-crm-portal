@@ -17,6 +17,9 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+	middleware: ['verify'],
+});
 const links = [
 	{
 		label: 'Overview',

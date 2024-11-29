@@ -11,6 +11,7 @@ const MerchantRoutes = {
 	Auth: {
 		Login: () => `${prefix}/${merchant}/${auth}/login`,
 		Refresh: () => `${prefix}/${merchant}/${auth}/refresh`,
+		Verify: () => `${prefix}/${merchant}/${auth}/verify`,
 		Logout: () => `${prefix}/${merchant}/${auth}/logout`,
 	},
 	Country: {

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { LoginResp } from '~/repository/modules/auth';
+import type { LoginResp, VerifyResp } from '~/repository/modules/auth';
 import { KEY } from '~/utils/constants/key';
 
 export const useAuthStore = defineStore({
@@ -26,11 +26,13 @@ export const useAuthStore = defineStore({
 				const access_token = useCookie(KEY.ACCESS_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
 				access_token.value = data.token;
 
+				const refresh_token = useCookie(KEY.REFRESH_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
+				refresh_token.value = data.refresh_token;
+
 				const merchantInfo = useMerchantInfoStore();
 				await merchantInfo.setMerchantInfo(data.merchant_info);
 			} catch (err: any) {
 				this.clearCookies();
-				console.log(err);
 
 				const appUiStore = useAppUiStore();
 				appUiStore.addNotification({
@@ -43,19 +45,19 @@ export const useAuthStore = defineStore({
 			}
 		},
 		// refresh session
-		async refreshToken() {
-			const { $api } = useNuxtApp();
+		// async refreshToken() {
+		// 	const { $api } = useNuxtApp();
 
-			try {
-				const token: string = await $api.auth.refreshToken();
+		// 	try {
+		// 		const token: string = await $api.auth.refreshToken();
 
-				const access_token = useCookie(KEY.ACCESS_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
-				access_token.value = token;
-			} catch (err: any) {
-				this.clearCookies();
-				console.error(err);
-			}
-		},
+		// 		const access_token = useCookie(KEY.ACCESS_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
+		// 		access_token.value = token;
+		// 	} catch (err: any) {
+		// 		this.clearCookies();
+		// 		console.error(err);
+		// 	}
+		// },
 		// logout
 		async logout(): Promise<boolean> {
 			const { $api } = useNuxtApp();
@@ -72,6 +74,28 @@ export const useAuthStore = defineStore({
 			} catch (err: any) {
 				console.error(err);
 				return true;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async verify(): Promise<boolean> {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const data: VerifyResp = await $api.auth.verify();
+
+				if (!data.user || !data.merchant_info) {
+					this.clearCookies();
+				}
+
+				const merchantInfo = useMerchantInfoStore();
+				await merchantInfo.setMerchantInfo(data.merchant_info);
+				return true;
+			} catch (err: any) {
+				console.error(err);
+				return false;
 			} finally {
 				this.loading = false;
 			}

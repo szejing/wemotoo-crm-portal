@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="header-container cursor-pointer" @click="isMerchantInfoModal = true">
+		<div class="header-container cursor-pointer pb-8" @click="isMerchantInfoModal = true">
 			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
