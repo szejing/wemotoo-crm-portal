@@ -3,21 +3,18 @@
 		<template #header>
 			<h1 class="text-center">Product Options</h1>
 		</template>
-		<div v-if="productOptions.length > 0">
-			<!-- Table  -->
-			<UTable v-model="selectedOptions" :rows="productOptions" :columns="product_option_columns" @select="select">
-				<template #values-data="{ row }">
-					<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
-				</template>
-			</UTable>
-		</div>
+		<UTable v-model="selectedOptions" :rows="productOptions" :columns="product_option_columns" by="name" @select="select">
+			<template #values-data="{ row }">
+				<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
+			</template>
 
-		<div v-else class="flex-center section-empty">
-			<div>
-				<h2>No Options Found</h2>
-				<p>Create a new option to get started</p>
-			</div>
-		</div>
+			<template #empty-state>
+				<div class="flex-center section-empty">
+					<h2>No Options Found</h2>
+					<p>Create a new option to get started</p>
+				</div>
+			</template>
+		</UTable>
 
 		<template #footer>
 			<UButton size="md" color="primary" variant="outline" @click="updateProductOptions">Confirm</UButton>
