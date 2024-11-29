@@ -86,7 +86,7 @@ const options = (row: ProductOption) => [
 const modal = useModal();
 const page = ref(1);
 const productOptionsStore = useProductOptionsStore();
-productOptionsStore.getOptions();
+await productOptionsStore.getOptions();
 
 const { loading, productOptions, pageSize } = storeToRefs(productOptionsStore);
 
