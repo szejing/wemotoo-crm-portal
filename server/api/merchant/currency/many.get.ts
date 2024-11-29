@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			query: query,
-			headers: generateHeaders(event, true),
+			headers: generateHeaders(event),
 		});
 		return result;
 	} catch (err) {

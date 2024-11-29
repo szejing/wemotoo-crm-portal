@@ -19,6 +19,18 @@ export type LoginResp = {
 	};
 	merchant_info: MerchantInfo[];
 	token: string;
+	refresh_token: string;
+};
+
+export type VerifyResp = {
+	user: {
+		role: UserRoles;
+		email_address: string;
+		first_name: string;
+		last_name: string;
+		phone_number: string;
+	};
+	merchant_info: MerchantInfo[];
 };
 
 class AuthModule extends HttpFactory {
@@ -35,6 +47,17 @@ class AuthModule extends HttpFactory {
 			method: 'POST',
 			url: `${this.RESOURCE.Login()}`,
 			body: data,
+		});
+	}
+
+	/**
+	 * refresh session
+	 * @returns
+	 */
+	async verify(): Promise<VerifyResp> {
+		return await this.call<VerifyResp>({
+			method: 'POST',
+			url: `${this.RESOURCE.Verify()}`,
 		});
 	}
 

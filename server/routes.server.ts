@@ -10,6 +10,7 @@ const prod: string = 'product';
 export const Routes = {
 	Auth: {
 		Login: () => `${merchant}/${auth}/login`,
+		Verify: () => `${merchant}/${auth}/verify`,
 		Logout: () => `${merchant}/${auth}/logout`,
 	},
 	Country: {
