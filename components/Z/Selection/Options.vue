@@ -7,7 +7,7 @@
 			<!-- Table  -->
 			<UTable v-model="selectedOptions" :rows="productOptions" :columns="product_option_columns" @select="select">
 				<template #values-data="{ row }">
-					<span>{{ row.values.join(' · ') }}</span>
+					<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
 				</template>
 			</UTable>
 		</div>
@@ -29,6 +29,7 @@
 import { product_option_columns } from '~/utils/table-columns';
 import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductOptionValue } from '~/utils/types/product-option-value';
 
 const props = defineProps({
 	options: {

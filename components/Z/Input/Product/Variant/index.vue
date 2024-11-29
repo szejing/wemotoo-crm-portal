@@ -12,7 +12,7 @@
 			<!-- <h4>{{ prodVariant.id }}</h4> -->
 
 			<div>
-				<h4>{{ values?.join(' · ') }}</h4>
+				<h4>{{ values?.map((v: ProductOptionValue) => v.value).join(' · ') }}</h4>
 				<h5 v-if="prodVariant.prices && prodVariant.prices.length > 0">
 					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].origSellPrice ?? 0) * 100) }}
 				</h5>
@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import type { ProductVariant } from '~/utils/types/product-variant';
 
 const props = defineProps<{ variant: ProductVariant | undefined }>();
