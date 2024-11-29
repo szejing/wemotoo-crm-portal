@@ -17,7 +17,6 @@ export const useMerchantInfoStore = defineStore({
 	actions: {
 		async setMerchantInfo(merchantInfo: MerchantInfo[]) {
 			this.merchant = merchantInfo;
-			await this.getCurrencies();
 		},
 
 		getMerchantInfo(group_code: string, set_code: string): MerchantInfo | null {
