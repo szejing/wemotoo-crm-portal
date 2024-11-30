@@ -1,15 +1,14 @@
 <template>
 	<UCard>
-		<template #header>
-			<h1 class="text-center">Product Options</h1>
-		</template>
+		<h1 class="text-center">Product Options</h1>
+
 		<UTable v-model="selectedOptions" :rows="productOptions" :columns="product_option_columns" by="name" @select="select">
 			<template #values-data="{ row }">
-				<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
+				<span>{{ row.values.map((v: ProdOptionValuesInput) => v.value).join(' · ') }}</span>
 			</template>
 
 			<template #empty-state>
-				<div class="flex-center section-empty">
+				<div class="flex-col-center section-empty h-32">
 					<h2>No Options Found</h2>
 					<p>Create a new option to get started</p>
 				</div>
@@ -25,12 +24,11 @@
 <script lang="ts" setup>
 import { product_option_columns } from '~/utils/table-columns';
 import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
-import type { ProductOption } from '~/utils/types/product-option';
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import type { ProdOptionInput, ProdOptionValuesInput } from '~/utils/types/product';
 
 const props = defineProps({
 	options: {
-		type: Array as PropType<ProductOption[]>,
+		type: Array as PropType<ProdOptionInput[]>,
 		required: false,
 	},
 });
@@ -38,13 +36,13 @@ const emit = defineEmits(['update:productOptions']);
 const productOptionsStore = useProductOptionsStore();
 const productOptions = productOptionsStore.currentProductOptions();
 
-const selectedOptions = ref<ProductOption[]>([]);
+const selectedOptions = ref<ProdOptionInput[]>([]);
 selectedOptions.value = computed(() => {
 	return props.options?.map((option) => ({ ...option })) ?? [];
 }).value;
 
-const select = (row: ProductOption) => {
-	const index = selectedOptions.value.findIndex((item: ProductOption) => item.id === row.id);
+const select = (row: ProdOptionInput) => {
+	const index = selectedOptions.value.findIndex((item: ProdOptionInput) => item.id === row.id);
 	if (index === -1) {
 		selectedOptions.value.push(row);
 	} else {

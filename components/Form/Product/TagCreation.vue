@@ -4,7 +4,6 @@
 			<!-- *********************** General Info *********************** -->
 			<ZInputTagGeneralInfo v-model:value="newProductTag.value" />
 			<!-- *********************** General Info *********************** -->
-
 			<div class="flex-center text-center mt-3">
 				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
 			</div>

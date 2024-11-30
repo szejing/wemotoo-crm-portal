@@ -33,13 +33,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProdOptionInput } from '~/utils/types/product';
 
 const isOptionSelectionModal = ref(false);
 
 const props = defineProps({
 	options: {
-		type: Array as PropType<ProductOption[]>,
+		type: Array as PropType<ProdOptionInput[]>,
 		required: false,
 	},
 });
@@ -51,7 +51,7 @@ const prodOptions = computed({
 		return props.options ?? [];
 	},
 	set(value) {
-		emit('update:productOptions', value);
+		emit('update:productOptions', JSON.parse(JSON.stringify(value)));
 	},
 });
 
@@ -59,7 +59,7 @@ const removeOption = (index: number) => {
 	prodOptions.value = prodOptions.value.filter((_, i) => i !== index);
 };
 
-const updateProductOptions = (options: ProductOption[]) => {
+const updateProductOptions = (options: ProdOptionInput[]) => {
 	prodOptions.value = options;
 	isOptionSelectionModal.value = false;
 };

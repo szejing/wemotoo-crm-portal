@@ -1,17 +1,8 @@
 <template>
 	<UFormGroup name="categories" class="mt-2">
-		<USelectMenu
-			v-model="categories"
-			v-model:query="query"
-			:options="productCategories"
-			searchable
-			size="md"
-			value-attribute="name"
-			option-attribute="name"
-			multiple
-		>
+		<USelectMenu v-model="categories" v-model:query="query" :options="productCategories" searchable size="md" option-attribute="name" multiple by="code">
 			<template #label>
-				<span v-if="categories.length" class="truncate">{{ categories.join(', ') }}</span>
+				<span v-if="categories.length" class="truncate">{{ categories.map((category) => category.name).join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Categories</span>
 			</template>
 
@@ -38,7 +29,7 @@ const categories = computed({
 		return props.categories ?? [];
 	},
 	set(value) {
-		emit('update:categories', value);
+		emit('update:categories', JSON.parse(JSON.stringify(value)));
 	},
 });
 </script>

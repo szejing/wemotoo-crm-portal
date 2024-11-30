@@ -12,6 +12,7 @@
 						v-model:selling-price.number="price.origSellPrice"
 						v-model:cost-price.number="price.costPrice"
 						v-model:sale-price.number="price.salePrice"
+						v-model:currency="price.currency"
 						:card-ui="cardUi"
 					/>
 				</div>
@@ -34,8 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '~/utils/types/product';
-import type { ProductVariant } from '~/utils/types/product-variant';
+import type { Product, ProdVariantInput } from '~/utils/types/product';
 
 const cardUi = {
 	shadow: 'shadow-none',
@@ -57,12 +57,11 @@ const props = defineProps({
 		required: true,
 	},
 	details: {
-		type: Object as PropType<ProductVariant>,
+		type: Object as PropType<ProdVariantInput>,
 		required: true,
 	},
 });
 
-console.log(props.product);
 const emit = defineEmits(['update:variantDetail']);
 
 const variantDetail = computed({

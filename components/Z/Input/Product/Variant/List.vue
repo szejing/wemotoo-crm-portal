@@ -31,13 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '~/utils/types/product';
-import type { ProductOption } from '~/utils/types/product-option';
-import type { ProductVariant } from '~/utils/types/product-variant';
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 
 const isVariantDetailsModalOpen = ref(false);
-const variantDetail = ref<ProductVariant>();
-const props = defineProps<{ product: Product; options: ProductOption[] | undefined; variants: ProductVariant[] | undefined }>();
+const variantDetail = ref<ProdVariantInput>();
+const props = defineProps<{ product: Product; options: ProdOptionInput[] | undefined; variants: ProdVariantInput[] | undefined }>();
 const emit = defineEmits(['update:productVariants']);
 
 const prodOptions = computed({
@@ -57,21 +55,21 @@ const prodVariants = computed({
 });
 
 const totalPossibleVariants = computed(() => {
-	return prodOptions.value.reduce((acc, option) => acc * option.values.length, 1);
+	return prodOptions.value.reduce((acc, option) => acc * option?.values!.length, 1);
 });
 
 const autoGenerate = () => {
 	if (prodOptions.value.length === 0) return;
-	const variants: ProductVariant[] = [];
+	const variants: ProdVariantInput[] = [];
 
-	const combine = (currentOptions: ProductOption[], optionIndex: number) => {
+	const combine = (currentOptions: ProdOptionInput[], optionIndex: number) => {
 		if (optionIndex === prodOptions.value.length) {
 			variants.push({ options: [...currentOptions] });
 			return;
 		}
 
 		const option = prodOptions.value[optionIndex];
-		for (const value of option.values) {
+		for (const value of option.values!) {
 			combine([...currentOptions, { id: option.id, name: option.name, values: [value] }], optionIndex + 1);
 		}
 	};
@@ -81,7 +79,8 @@ const autoGenerate = () => {
 	variants.forEach((variant) => {
 		if (variant.name) return;
 
-		variant.name = variant.options?.map((option) => option.values[0]).join('_');
+		variant.name = variant.options?.map((option) => option.values![0].value).join('_');
+		variant.id = props.product.code + '_' + variant.name;
 
 		if (variant.prices) return;
 
@@ -102,14 +101,14 @@ const addVariant = () => {
 	// });
 };
 
-const viewVariant = (variant: ProductVariant) => {
+const viewVariant = (variant: ProdVariantInput) => {
 	isVariantDetailsModalOpen.value = true;
 	variantDetail.value = variant;
 };
 
-const updateVariantDetail = (variant: ProductVariant) => {
+const updateVariantDetail = (variant: ProdVariantInput) => {
 	isVariantDetailsModalOpen.value = false;
-	const index = prodVariants.value.findIndex((v: ProductVariant) => v.name === variant.name); // Find variant by name
+	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.name === variant.name); // Find variant by name
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
 	}

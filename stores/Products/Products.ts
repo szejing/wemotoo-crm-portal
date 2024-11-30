@@ -1,9 +1,8 @@
 import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
-import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product } from '~/utils/types/product';
 
-const initialEmptyProduct: ProductCreate = {
+const initialEmptyProduct: Product = {
 	code: undefined,
 	name: undefined,
 	subtitle: undefined,
@@ -63,7 +62,8 @@ export const useProductStore = defineStore({
 			console.log(skip);
 			this.loading = false;
 		},
-		async addProduct() {
+		async addProduct(input: Product) {
+			console.log(input);
 			this.loading = true;
 
 			this.loading = false;
