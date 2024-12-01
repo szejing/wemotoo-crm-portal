@@ -12,9 +12,9 @@
 			<!-- <h4>{{ prodVariant.id }}</h4> -->
 
 			<div>
-				<h4>{{ values?.map((v: ProductOptionValue) => v.value).join(' · ') }}</h4>
+				<h4>{{ values }}</h4>
 				<h5 v-if="prodVariant.prices && prodVariant.prices.length > 0">
-					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].origSellPrice ?? 0) * 100) }}
+					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].orig_sell_price ?? 0) * 100) }}
 				</h5>
 			</div>
 
@@ -24,10 +24,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
-import type { ProductVariant } from '~/utils/types/product-variant';
+import type { ProdVariantInput } from '~/utils/types/product';
 
-const props = defineProps<{ variant: ProductVariant | undefined }>();
+const props = defineProps<{ variant: ProdVariantInput | undefined }>();
 const emit = defineEmits(['update:productvariant', 'view:productvariant']);
 
 const prodVariant = computed({
@@ -40,7 +39,7 @@ const prodVariant = computed({
 });
 
 const values = computed(() => {
-	return prodVariant.value.options?.map((option) => option.values[0]);
+	return prodVariant.value.options?.map((option) => option.values?.map((value) => value.value)).join(' · ');
 });
 
 const viewVariant = () => {

@@ -51,11 +51,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import type { ProdOptionValuesInput } from '~/utils/types/product';
 
 interface InputTags {
 	canAdd?: boolean;
-	modelValue: ProductOptionValue[];
+	modelValue: ProdOptionValuesInput[];
 	name?: string;
 	options?: string[];
 	placeholder?: string;
@@ -79,7 +79,7 @@ const props = withDefaults(defineProps<InputTags>(), {
 
 const selectedTags = computed({
 	get() {
-		return props.modelValue.map((optionValue: ProductOptionValue) => optionValue.value) ?? [];
+		return props.modelValue.map((optionValue: ProdOptionValuesInput) => optionValue.value) ?? [];
 	},
 	set(value) {
 		const merged = value.map((strValue) => {

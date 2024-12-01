@@ -1,6 +1,6 @@
 export type ProductPrice = {
 	currency: string | undefined;
-	origSellPrice: number | undefined;
-	costPrice: number | undefined;
-	salePrice: number | undefined;
+	orig_sell_price: number | undefined;
+	cost_price: number | undefined;
+	sale_price: number | undefined;
 };

@@ -9,9 +9,10 @@
 			<div v-if="variantDetail.prices && variantDetail.prices.length > 0">
 				<div v-for="(price, index) in variantDetail.prices" :key="index">
 					<ZInputProductPricing
-						v-model:selling-price.number="price.origSellPrice"
-						v-model:cost-price.number="price.costPrice"
-						v-model:sale-price.number="price.salePrice"
+						v-model:orig-sell-price.number="price.orig_sell_price"
+						v-model:cost-price.number="price.cost_price"
+						v-model:sale-price.number="price.sale_price"
+						v-model:currency="price.currency"
 						:card-ui="cardUi"
 					/>
 				</div>
@@ -34,8 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '~/utils/types/product';
-import type { ProductVariant } from '~/utils/types/product-variant';
+import type { Product, ProdVariantInput } from '~/utils/types/product';
 
 const cardUi = {
 	shadow: 'shadow-none',
@@ -57,12 +57,11 @@ const props = defineProps({
 		required: true,
 	},
 	details: {
-		type: Object as PropType<ProductVariant>,
+		type: Object as PropType<ProdVariantInput>,
 		required: true,
 	},
 });
 
-console.log(props.product);
 const emit = defineEmits(['update:variantDetail']);
 
 const variantDetail = computed({

@@ -31,6 +31,9 @@ export const useAuthStore = defineStore({
 
 				const merchantInfo = useMerchantInfoStore();
 				await merchantInfo.setMerchantInfo(data.merchant_info);
+
+				const app = useAppStore();
+				await app.init();
 			} catch (err: any) {
 				this.clearCookies();
 

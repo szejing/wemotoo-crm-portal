@@ -13,7 +13,7 @@ export type CountriesResp = {
 	countries: Country[];
 };
 
-class CurrencyModule extends HttpFactory {
+class CountryModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Country;
 
 	/**
@@ -28,4 +28,4 @@ class CurrencyModule extends HttpFactory {
 	}
 }
 
-export default CurrencyModule;
+export default CountryModule;

@@ -10,8 +10,8 @@ export const CreateProductValidation = z.object({
 	// price details
 	price: z.object({
 		currency: z.string(),
-		origSellPrice: z.number(),
-		costPrice: z.number().optional(),
-		salePrice: z.number().optional(),
+		orig_sell_price: z.number(),
+		cost_price: z.number().optional(),
+		sale_price: z.number().optional(),
 	}),
 });

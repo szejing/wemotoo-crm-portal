@@ -1,9 +1,47 @@
 import type { ProductStatus } from '~/utils/enum/product-status';
-import type { ProductCategory } from './product-category';
-import type { ProductOption } from './product-option';
 import type { ProductPrice } from './product-price';
-import type { ProductTag } from './product-tag';
-import type { ProductVariant } from './product-variant';
+
+export type ProdCategoryInput = {
+	code: string;
+};
+
+export type ProdTagInput = {
+	id: number;
+};
+
+export type ProdOptionValuesInput = {
+	id: number;
+	value: string;
+};
+
+export type ProdOptionInput = {
+	id: number;
+	name: string;
+	values: ProdOptionValuesInput[] | undefined;
+};
+
+export type ProdVariantInput = {
+	id?: string;
+	name?: string;
+	sku?: string;
+	ean?: string;
+	upc?: string;
+	barcode?: string;
+	hs_code?: string;
+	inventory_quantity?: number;
+	allow_backorder?: boolean;
+	manage_inventory?: boolean;
+	weight?: number;
+	length?: number;
+	height?: number;
+	width?: number;
+	origin_country?: string;
+	mid_code?: string;
+	material?: string;
+	prices?: ProductPrice[] | undefined;
+	options?: ProdOptionInput[];
+	metadata?: Record<string, unknown>;
+};
 
 export type Product = {
 	code: string | undefined;
@@ -18,10 +56,10 @@ export type Product = {
 	status: ProductStatus;
 
 	// categories
-	categories: ProductCategory[] | undefined;
+	categories: ProdCategoryInput[] | undefined;
 
 	// tags
-	tags: ProductTag[] | undefined;
+	tags: ProdTagInput[] | undefined;
 
 	// thumbnail
 	thumbnail: string | undefined;
@@ -33,6 +71,6 @@ export type Product = {
 	prices: ProductPrice[] | undefined;
 
 	// variants
-	options: ProductOption[] | undefined;
-	variants: ProductVariant[] | undefined;
+	options: ProdOptionInput[] | undefined;
+	variants: ProdVariantInput[] | undefined;
 };
