@@ -82,13 +82,12 @@ const autoGenerate = () => {
 		variant.name = variant.options?.map((option) => option.values![0].value).join('_');
 		variant.id = props.product.code + '_' + variant.name;
 
-		if (variant.prices) return;
+		if (variant.price_types) return;
 
-		console.log(props.product.prices);
-		if (props.product.prices) {
-			variant.prices = [JSON.parse(JSON.stringify(props.product.prices[0]))];
+		if (props.product.price_types) {
+			variant.price_types = [JSON.parse(JSON.stringify(props.product.price_types[0]))];
 		} else {
-			variant.prices = undefined;
+			variant.price_types = undefined;
 		}
 	});
 

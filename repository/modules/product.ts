@@ -34,7 +34,7 @@ export type CreateProductReq = {
 	galleries: string[] | undefined;
 
 	// price
-	prices: ProductPrice[] | undefined;
+	price_types: ProductPrice[] | undefined;
 
 	// variants
 	options: ProdOptionInput[] | undefined;

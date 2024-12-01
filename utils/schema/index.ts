@@ -12,6 +12,7 @@ import { CreateProductTagValidation } from './Product/Create/ProductTagValidatio
 import { UpdateProductTagValidation } from './Product/Update/ProductTagValidation';
 import { UpdateProductCategoryValidation } from './Product/Update/ProductCategoryValidation';
 import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
+import { UpdateProductValidation } from './Product/Update/ProductValidation';
 
 export {
 	LoginValidation,
@@ -28,4 +29,5 @@ export {
 	UpdateProductTagValidation,
 	UpdateProductCategoryValidation,
 	UpdateProductOptionValidation,
+	UpdateProductValidation,
 };

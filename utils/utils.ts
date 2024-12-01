@@ -42,3 +42,17 @@ export const capitalizeFirstLetter = (value: string | any) => {
 export const removeNullValues = (obj: any): any => {
 	return JSON.parse(JSON.stringify(obj, (_, value) => (value === null ? undefined : value)));
 };
+
+export const borderless_card_ui = {
+	shadow: 'shadow-none',
+	ring: 'ring-none',
+	header: {
+		padding: 'px-0 py-2',
+	},
+	body: {
+		padding: 'px-0 py-3',
+	},
+	footer: {
+		padding: 'px-0 pt-2 pb-2',
+	},
+};
