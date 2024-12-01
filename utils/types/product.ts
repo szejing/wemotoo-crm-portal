@@ -3,18 +3,17 @@ import type { ProductPrice } from './product-price';
 
 export type ProdCategoryInput = {
 	code: string;
-	name: string;
 };
 
 export type ProdTagInput = {
 	id: number;
-	value: string;
 };
 
 export type ProdOptionValuesInput = {
 	id: number;
 	value: string;
 };
+
 export type ProdOptionInput = {
 	id: number;
 	name: string;

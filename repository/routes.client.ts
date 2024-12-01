@@ -5,6 +5,7 @@ const country: string = 'country';
 const currency: string = 'currency';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
+const prod: string = 'product';
 const prodOption: string = 'product-option';
 
 const MerchantRoutes = {
@@ -23,6 +24,14 @@ const MerchantRoutes = {
 		Single: (id: number) => `${prefix}/${merchant}/${currency}/single/${id}`,
 		Many: () => `${prefix}/${merchant}/${currency}/many`,
 		Update: () => `${prefix}/${merchant}/${currency}/update`,
+	},
+	Product: {
+		Create: () => `${prefix}/${merchant}/${prod}/create`,
+		Single: (code: string) => `${prefix}/${merchant}/${prod}/single/${code}`,
+		Many: () => `${prefix}/${merchant}/${prod}/many`,
+		Update: () => `${prefix}/${merchant}/${prod}/update`,
+		Delete: () => `${prefix}/${merchant}/${prod}/delete`,
+		RevertDelete: () => `${prefix}/${merchant}/${prod}/revert-delete`,
 	},
 	ProductTag: {
 		Create: () => `${prefix}/${merchant}/${prodTag}/create`,

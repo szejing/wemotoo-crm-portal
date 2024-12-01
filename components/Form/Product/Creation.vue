@@ -121,7 +121,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	categories?.forEach((category) => {
 		prodCategories.push({
 			code: category.code!,
-			name: category.name!,
 		});
 	});
 
@@ -130,7 +129,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	tags?.forEach((tag) => {
 		prodTags.push({
 			id: tag.id!,
-			value: tag.value!,
 		});
 	});
 

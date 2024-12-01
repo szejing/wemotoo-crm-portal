@@ -14,6 +14,9 @@ export const useAppStore = defineStore({
 			const categoryStore = useProductCategoriesStore();
 			await categoryStore.getCategories();
 
+			const productStore = useProductStore();
+			await productStore.getProducts();
+
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();
 		},
