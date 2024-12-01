@@ -15,9 +15,9 @@
 
 		<!-- *********************** Pricing *********************** -->
 		<ZInputProductPricing
-			v-model:selling-price.number="origSellPrice"
-			v-model:cost-price.number="costPrice"
-			v-model:sale-price.number="salePrice"
+			v-model:orig-sell-price.number="orig_sell_price"
+			v-model:cost-price.number="cost_price"
+			v-model:sale-price.number="sale_price"
 			v-model:currency="currency"
 		/>
 		<!-- *********************** Pricing *********************** -->
@@ -58,46 +58,46 @@ const currency = computed({
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
 			newProduct.value.prices[0].currency = value;
 		} else {
-			newProduct.value.prices = [{ origSellPrice: origSellPrice.value, costPrice: costPrice.value, salePrice: salePrice.value, currency: value }];
+			newProduct.value.prices = [{ orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency: value }];
 		}
 	},
 });
 
-const origSellPrice = computed({
+const orig_sell_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.origSellPrice ?? undefined;
+		return newProduct.value.prices?.[0]?.orig_sell_price ?? undefined;
 	},
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].origSellPrice = value;
+			newProduct.value.prices[0].orig_sell_price = value;
 		} else {
-			newProduct.value.prices = [{ origSellPrice: value, costPrice: costPrice.value, salePrice: salePrice.value, currency: currency.value }];
+			newProduct.value.prices = [{ orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency: currency.value }];
 		}
 	},
 });
 
-const costPrice = computed({
+const cost_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.costPrice ?? undefined;
+		return newProduct.value.prices?.[0]?.cost_price ?? undefined;
 	},
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].costPrice = value;
+			newProduct.value.prices[0].cost_price = value;
 		} else {
-			newProduct.value.prices = [{ costPrice: value, origSellPrice: origSellPrice.value, salePrice: salePrice.value, currency: currency.value }];
+			newProduct.value.prices = [{ cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency: currency.value }];
 		}
 	},
 });
 
-const salePrice = computed({
+const sale_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.salePrice ?? undefined;
+		return newProduct.value.prices?.[0]?.sale_price ?? undefined;
 	},
 	set(value) {
 		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].salePrice = value;
+			newProduct.value.prices[0].sale_price = value;
 		} else {
-			newProduct.value.prices = [{ salePrice: value, origSellPrice: origSellPrice.value, costPrice: costPrice.value, currency: currency.value }];
+			newProduct.value.prices = [{ sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency: currency.value }];
 		}
 	},
 });
@@ -109,9 +109,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const prodPrice: ProductPrice[] = [];
 	prices?.forEach((price) => {
 		prodPrice.push({
-			origSellPrice: price.origSellPrice,
-			costPrice: price.costPrice,
-			salePrice: price.salePrice,
+			orig_sell_price: price.orig_sell_price,
+			cost_price: price.cost_price,
+			sale_price: price.sale_price,
 			currency: price.currency,
 		});
 	});
@@ -155,9 +155,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			name: variant.name!,
 			prices: variant.prices?.map((price) => {
 				return {
-					origSellPrice: price.origSellPrice,
-					costPrice: price.costPrice,
-					salePrice: price.salePrice,
+					orig_sell_price: price.orig_sell_price,
+					cost_price: price.cost_price,
+					sale_price: price.sale_price,
 					currency: price.currency,
 				};
 			}),

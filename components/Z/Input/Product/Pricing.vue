@@ -10,9 +10,9 @@
 		</template>
 
 		<div class="section-grid-price-details gap-4 mt-4">
-			<UFormGroup v-slot="{ error }" label="Selling Price" name="origSellPrice" required>
+			<UFormGroup v-slot="{ error }" label="Selling Price" name="orig_sell_price" required>
 				<UInput
-					v-model="origSellPrice"
+					v-model="orig_sell_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
@@ -23,9 +23,9 @@
 				</UInput>
 			</UFormGroup>
 
-			<UFormGroup v-slot="{ error }" label="Cost Price" name="costPrice">
+			<UFormGroup v-slot="{ error }" label="Cost Price" name="cost_price">
 				<UInput
-					v-model="costPrice"
+					v-model="cost_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
@@ -36,9 +36,9 @@
 				</UInput>
 			</UFormGroup>
 
-			<UFormGroup v-slot="{ error }" label="Sale Price" name="salePrice">
+			<UFormGroup v-slot="{ error }" label="Sale Price" name="sale_price">
 				<UInput
-					v-model="salePrice"
+					v-model="sale_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 					placeholder="0.00"
 					@input="formatCurrencyInput($event.target.value, $event.target)"
@@ -57,13 +57,13 @@ import { fractionDigits } from '~/utils/utils';
 
 const props = defineProps({
 	currency: String,
-	sellingPrice: Number,
+	origSellPrice: Number,
 	costPrice: Number,
 	salePrice: Number,
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update:currency', 'update:sellingPrice', 'update:costPrice', 'update:salePrice']);
+const emit = defineEmits(['update:currency', 'update:origSellPrice', 'update:costPrice', 'update:salePrice']);
 
 const currency = computed({
 	get(): string | undefined {
@@ -74,16 +74,16 @@ const currency = computed({
 	},
 });
 
-const origSellPrice = computed({
+const orig_sell_price = computed({
 	get(): string | undefined {
-		return props.sellingPrice?.toFixed(fractionDigits);
+		return props.origSellPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
-		emit('update:sellingPrice', value);
+		emit('update:origSellPrice', value);
 	},
 });
 
-const costPrice = computed({
+const cost_price = computed({
 	get(): string | undefined {
 		return props.costPrice?.toFixed(fractionDigits);
 	},
@@ -92,7 +92,7 @@ const costPrice = computed({
 	},
 });
 
-const salePrice = computed({
+const sale_price = computed({
 	get(): string | undefined {
 		return props.salePrice?.toFixed(fractionDigits);
 	},

@@ -84,6 +84,7 @@ const autoGenerate = () => {
 
 		if (variant.prices) return;
 
+		console.log(props.product.prices);
 		if (props.product.prices) {
 			variant.prices = [JSON.parse(JSON.stringify(props.product.prices[0]))];
 		} else {

@@ -31,9 +31,9 @@ const initialEmptyProduct: Product = {
 	prices: [
 		{
 			currency: 'MYR',
-			origSellPrice: undefined,
-			costPrice: undefined,
-			salePrice: undefined,
+			orig_sell_price: undefined,
+			cost_price: undefined,
+			sale_price: undefined,
 		},
 	],
 

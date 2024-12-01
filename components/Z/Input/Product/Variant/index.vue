@@ -14,7 +14,7 @@
 			<div>
 				<h4>{{ values }}</h4>
 				<h5 v-if="prodVariant.prices && prodVariant.prices.length > 0">
-					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].origSellPrice ?? 0) * 100) }}
+					{{ prodVariant.prices[0].currency }} {{ formatCurrency((prodVariant.prices[0].orig_sell_price ?? 0) * 100) }}
 				</h5>
 			</div>
 
