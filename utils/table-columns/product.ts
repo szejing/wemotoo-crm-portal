@@ -1,7 +1,7 @@
 export const product_columns = [
 	{
-		key: 'id',
-		label: 'Id',
+		key: 'code',
+		label: 'Code',
 		sortable: true,
 	},
 	{
@@ -10,8 +10,13 @@ export const product_columns = [
 		sortable: true,
 	},
 	{
-		key: 'price',
-		label: 'Price',
+		key: 'orig_sell_price',
+		label: 'Selling Price',
+		sortable: true,
+	},
+	{
+		key: 'sale_price',
+		label: 'Sale Price',
 		sortable: true,
 	},
 	{

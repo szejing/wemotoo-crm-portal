@@ -18,7 +18,7 @@
 			v-model:orig-sell-price.number="orig_sell_price"
 			v-model:cost-price.number="cost_price"
 			v-model:sale-price.number="sale_price"
-			v-model:currency="currency"
+			v-model:currency-code="currency_code"
 		/>
 		<!-- *********************** Pricing *********************** -->
 
@@ -50,69 +50,79 @@ onMounted(() => {
 	productStore.resetNewProduct();
 });
 
-const currency = computed({
+const currency_code = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.currency ?? undefined;
+		return newProduct.value.price_types?.[0]?.currency_code ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].currency = value;
+		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
+			newProduct.value.price_types[0].currency_code = value;
 		} else {
-			newProduct.value.prices = [{ orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency: value }];
+			newProduct.value.price_types = [
+				{ orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: value },
+			];
 		}
 	},
 });
 
 const orig_sell_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.orig_sell_price ?? undefined;
+		return newProduct.value.price_types?.[0]?.orig_sell_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].orig_sell_price = value;
+		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
+			newProduct.value.price_types[0].orig_sell_price = value;
 		} else {
-			newProduct.value.prices = [{ orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency: currency.value }];
+			newProduct.value.price_types = [
+				{ orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
+			];
 		}
 	},
 });
 
 const cost_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.cost_price ?? undefined;
+		return newProduct.value.price_types?.[0]?.cost_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].cost_price = value;
+		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
+			newProduct.value.price_types[0].cost_price = value;
 		} else {
-			newProduct.value.prices = [{ cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency: currency.value }];
+			newProduct.value.price_types = [
+				{ cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
+			];
 		}
 	},
 });
 
 const sale_price = computed({
 	get() {
-		return newProduct.value.prices?.[0]?.sale_price ?? undefined;
+		return newProduct.value.price_types?.[0]?.sale_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.prices && newProduct.value.prices.length > 0) {
-			newProduct.value.prices[0].sale_price = value;
+		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
+			newProduct.value.price_types[0].sale_price = value;
 		} else {
-			newProduct.value.prices = [{ sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency: currency.value }];
+			newProduct.value.price_types = [
+				{ sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency_code: currency_code.value },
+			];
 		}
 	},
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, subtitle, description, is_active, is_service, prices, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
+	// eslint-disable-next-line @stylistic/operator-linebreak
+	const { code, name, subtitle, description, is_active, is_service, price_types, categories, tags, status, galleries, thumbnail, options, variants } =
+		event.data;
 
-	// prices
+	// price_types
 	const prodPrice: ProductPrice[] = [];
-	prices?.forEach((price) => {
+	price_types?.forEach((price) => {
 		prodPrice.push({
 			orig_sell_price: price.orig_sell_price,
 			cost_price: price.cost_price,
 			sale_price: price.sale_price,
-			currency: price.currency,
+			currency_code: price.currency_code,
 		});
 	});
 
@@ -153,12 +163,12 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		prodVariants.push({
 			id: variant.id!,
 			name: variant.name!,
-			prices: variant.prices?.map((price) => {
+			price_types: variant.price_types?.map((price) => {
 				return {
 					orig_sell_price: price.orig_sell_price,
 					cost_price: price.cost_price,
 					sale_price: price.sale_price,
-					currency: price.currency,
+					currency_code: price.currency_code,
 				};
 			}),
 			options: variant.options?.map((option) => {
@@ -185,7 +195,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		is_service,
 		is_discountable: true,
 		is_giftcard: false,
-		prices: prodPrice,
+		price_types: prodPrice,
 		categories: prodCategories,
 		tags: prodTags,
 		status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,

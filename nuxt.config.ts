@@ -29,6 +29,7 @@ export default defineNuxtConfig({
 	],
 
 	devtools: { enabled: true },
+
 	app: {
 		head: {
 			script: ['https://unpkg.com/vue@next', 'https://unpkg.com/@vueup/vue-quill@1.2.0'],
@@ -40,6 +41,9 @@ export default defineNuxtConfig({
 	},
 
 	css: ['~/assets/css/main.css'],
+	colorMode: {
+		preference: 'light',
+	},
 
 	// routeRules: {
 	// 	'/**': {

@@ -4,7 +4,7 @@
 			<h2>Pricing</h2>
 			<div class="section-grid-price-details mt-4">
 				<UFormGroup label="Currency" name="currency">
-					<ZSelectMenuCurrency v-model:currency="currency" />
+					<ZSelectMenuCurrency v-model:currency-code="currency_code" />
 				</UFormGroup>
 			</div>
 		</template>
@@ -56,21 +56,21 @@
 import { fractionDigits } from '~/utils/utils';
 
 const props = defineProps({
-	currency: String,
+	currencyCode: String,
 	origSellPrice: Number,
 	costPrice: Number,
 	salePrice: Number,
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update:currency', 'update:origSellPrice', 'update:costPrice', 'update:salePrice']);
+const emit = defineEmits(['update:currencyCode', 'update:origSellPrice', 'update:costPrice', 'update:salePrice']);
 
-const currency = computed({
+const currency_code = computed({
 	get(): string | undefined {
-		return props.currency;
+		return props.currencyCode;
 	},
 	set(value) {
-		emit('update:currency', value);
+		emit('update:currencyCode', value);
 	},
 });
 

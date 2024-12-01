@@ -1,7 +1,7 @@
 <template>
 	<UFormGroup name="currencies" class="mt-2">
 		<USelectMenu
-			v-model="currency"
+			v-model="currency_code"
 			v-model:query="query"
 			:options="currencies"
 			searchable
@@ -11,7 +11,7 @@
 			:disabled="currencies.length == 1"
 		>
 			<template #label>
-				<span v-if="currency" class="truncate">{{ currency }}</span>
+				<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
 				<span v-else class="text-gray-400">Select Currency</span>
 			</template>
 		</USelectMenu>
@@ -23,16 +23,16 @@ const query = ref('');
 const merchantInfoStore = useMerchantInfoStore();
 const { currencies } = storeToRefs(merchantInfoStore);
 
-const props = defineProps<{ currency: string | undefined }>();
+const props = defineProps<{ currencyCode: string | undefined }>();
 
-const emit = defineEmits(['update:currency']);
+const emit = defineEmits(['update:currencyCode']);
 
-const currency = computed({
+const currency_code = computed({
 	get() {
-		return props.currency ?? undefined;
+		return props.currencyCode ?? undefined;
 	},
 	set(value) {
-		emit('update:currency', value);
+		emit('update:currencyCode', value);
 	},
 });
 </script>

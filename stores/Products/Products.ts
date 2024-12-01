@@ -28,9 +28,9 @@ const initialEmptyProduct: Product = {
 	galleries: undefined,
 
 	// price
-	prices: [
+	price_types: [
 		{
-			currency: 'MYR',
+			currency_code: 'MYR',
 			orig_sell_price: undefined,
 			cost_price: undefined,
 			sale_price: undefined,
@@ -99,7 +99,7 @@ export const useProductStore = defineStore({
 			}
 		},
 
-		async updateProductTag(code: string, input: Product) {
+		async updateProduct(code: string, input: Product) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();

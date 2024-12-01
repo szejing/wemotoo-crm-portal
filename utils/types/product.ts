@@ -38,7 +38,7 @@ export type ProdVariantInput = {
 	origin_country?: string;
 	mid_code?: string;
 	material?: string;
-	prices?: ProductPrice[] | undefined;
+	price_types?: ProductPrice[] | undefined;
 	options?: ProdOptionInput[];
 	metadata?: Record<string, unknown>;
 };
@@ -68,7 +68,7 @@ export type Product = {
 	galleries: string[] | undefined;
 
 	// price
-	prices: ProductPrice[] | undefined;
+	price_types: ProductPrice[] | undefined;
 
 	// variants
 	options: ProdOptionInput[] | undefined;

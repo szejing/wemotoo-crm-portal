@@ -11,7 +11,7 @@
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
 				</div>
 				<!-- *********************** General Info *********************** -->
-				<ZInputCategoryGeneralInfo v-model:id="state.category.id" v-model:name="state.category.name" v-model:description="state.category.description" />
+				<ZInputCategoryGeneralInfo v-model:code="state.category.code" v-model:name="state.category.name" v-model:description="state.category.description" />
 				<!-- *********************** General Info *********************** -->
 
 				<div>

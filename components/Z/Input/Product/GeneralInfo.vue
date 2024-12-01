@@ -1,5 +1,5 @@
 <template>
-	<UCard>
+	<UCard :ui="cardUi">
 		<template #header>
 			<div class="w-full flex-between items-center">
 				<h2>General Info</h2>
@@ -15,7 +15,7 @@
 
 		<div class="section-grid-basic-details">
 			<UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
-				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
+				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :disabled="disabledCode" />
 			</UFormGroup>
 
 			<UFormGroup v-slot="{ error }" label="Name" name="name" required>
@@ -26,6 +26,10 @@
 				<UInput v-model="subtitle" />
 			</UFormGroup>
 		</div>
+
+		<!-- <UFormGroup class="mt-4" label="Description" name="description">
+			<UInput v-model="description" />
+		</UFormGroup> -->
 
 		<UFormGroup class="mt-4" label="Description" name="description">
 			<ZTextEditor v-model:value="description" placeholder="Product Description" />
@@ -43,6 +47,8 @@ const props = defineProps({
 	name: String,
 	subtitle: String,
 	description: String,
+	disabledCode: Boolean,
+	cardUi: Object,
 });
 
 const emit = defineEmits([
