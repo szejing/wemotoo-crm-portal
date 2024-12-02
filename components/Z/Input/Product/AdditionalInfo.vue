@@ -1,5 +1,5 @@
 <template>
-	<UCard>
+	<UCard :ui="cardUi">
 		<template #header>
 			<h2>Additional Info</h2>
 		</template>
@@ -17,11 +17,11 @@
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
 						<div class="space-y-8 mt-4">
-							<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
+							<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
 							<ZInputProductVariantList
-								:options="newProduct.options"
-								:variants="newProduct.variants"
-								:product="newProduct"
+								:options="product.options"
+								:variants="product.variants"
+								:product="product"
 								@update:product-variants="updateProductVariants"
 							/>
 						</div>
@@ -52,11 +52,11 @@
 						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
 
 						<div class="space-y-8 mt-4">
-							<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
+							<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
 							<ZInputProductVariantList
-								:options="newProduct.options"
-								:variants="newProduct.variants"
-								:product="newProduct"
+								:options="product.options"
+								:variants="product.variants"
+								:product="product"
 								@update:product-variants="updateProductVariants"
 							/>
 						</div>
@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useProductStore } from '~/stores/Products/Products';
+import type { Product } from '~/utils/types/product';
 
 const product_additional_info = [
 	{
@@ -119,15 +119,23 @@ const normal_ui_tabs = {
 	},
 };
 
-const productStore = useProductStore();
-const { newProduct } = storeToRefs(productStore);
+const props = defineProps({
+	product: {
+		type: Object as PropType<Product>,
+		required: true,
+	},
+	cardUi: Object,
+});
+
+const emit = defineEmits(['update_options', 'update_variants']);
+const product = computed(() => props.product);
 
 const updateProductOptions = (value: any) => {
-	newProduct.value.options = value;
+	emit('update_options', value);
 };
 
 const updateProductVariants = (value: any) => {
-	newProduct.value.variants = value;
+	emit('update_variants', value);
 };
 </script>
 

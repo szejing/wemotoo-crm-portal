@@ -38,9 +38,7 @@ const prodVariant = computed({
 	},
 });
 
-const values = computed(() => {
-	return prodVariant.value.options?.map((option) => option.values?.map((value) => value.value)).join(' · ');
-});
+const values = ref(prodVariant.value.options?.map((option) => option.value).join(' · '));
 
 const viewVariant = () => {
 	emit('view:productvariant', prodVariant.value);
