@@ -17,6 +17,7 @@ export type ProdOptionValuesInput = {
 export type ProdOptionInput = {
 	id: number;
 	name: string;
+	value: string | undefined;
 	values: ProdOptionValuesInput[] | undefined;
 };
 
@@ -39,7 +40,7 @@ export type ProdVariantInput = {
 	mid_code?: string;
 	material?: string;
 	price_types?: ProductPrice[] | undefined;
-	options?: ProdOptionInput[];
+	options?: ProdOptionValuesInput[];
 	metadata?: Record<string, unknown>;
 };
 

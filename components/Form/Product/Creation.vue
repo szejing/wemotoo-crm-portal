@@ -23,7 +23,7 @@
 		<!-- *********************** Pricing *********************** -->
 
 		<!-- *********************** Additional Info *********************** -->
-		<ZInputProductAdditionalInfo />
+		<ZInputProductAdditionalInfo :product="newProduct" @update_options="updateProductOptions" @update_variants="updateProductVariants" />
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
@@ -49,6 +49,14 @@ const { newProduct } = storeToRefs(productStore);
 onMounted(() => {
 	productStore.resetNewProduct();
 });
+
+const updateProductOptions = (value: any) => {
+	newProduct.value.options = value;
+};
+
+const updateProductVariants = (value: any) => {
+	newProduct.value.variants = value;
+};
 
 const currency_code = computed({
 	get() {

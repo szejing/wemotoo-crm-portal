@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProdOptionInput, ProdOptionValuesInput, Product, ProdVariantInput } from '~/utils/types/product';
 
 const isVariantDetailsModalOpen = ref(false);
 const variantDetail = ref<ProdVariantInput>();
@@ -62,7 +62,7 @@ const autoGenerate = () => {
 	if (prodOptions.value.length === 0) return;
 	const variants: ProdVariantInput[] = [];
 
-	const combine = (currentOptions: ProdOptionInput[], optionIndex: number) => {
+	const combine = (currentOptions: ProdOptionValuesInput[], optionIndex: number) => {
 		if (optionIndex === prodOptions.value.length) {
 			variants.push({ options: [...currentOptions] });
 			return;
@@ -70,7 +70,7 @@ const autoGenerate = () => {
 
 		const option = prodOptions.value[optionIndex];
 		for (const value of option.values!) {
-			combine([...currentOptions, { id: option.id, name: option.name, values: [value] }], optionIndex + 1);
+			combine([...currentOptions, { id: value.id, value: value.value }], optionIndex + 1);
 		}
 	};
 
@@ -79,7 +79,7 @@ const autoGenerate = () => {
 	variants.forEach((variant) => {
 		if (variant.name) return;
 
-		variant.name = variant.options?.map((option) => option.values![0].value).join('_');
+		variant.name = variant.options?.map((option) => option.value).join('_');
 		variant.id = props.product.code + '_' + variant.name;
 
 		if (variant.price_types) return;
