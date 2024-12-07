@@ -109,9 +109,11 @@ const viewVariant = (variant: ProdVariantInput) => {
 const updateVariantDetail = (variant: ProdVariantInput) => {
 	isVariantDetailsModalOpen.value = false;
 	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.name === variant.name); // Find variant by name
+
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
 	}
+	emit('update:productVariants', prodVariants.value);
 };
 </script>
 

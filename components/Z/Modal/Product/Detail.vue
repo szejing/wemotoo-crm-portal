@@ -23,7 +23,7 @@
 				<!-- *********************** General Info *********************** -->
 
 				<!-- *********************** Pricing *********************** -->
-				<div v-for="(price, index) in current_product.price_types" :key="index">
+				<div v-for="price in current_product.price_types" :key="price.id">
 					<ZInputProductPricing
 						v-model:orig-sell-price.number="price.orig_sell_price"
 						v-model:cost-price.number="price.cost_price"
@@ -60,20 +60,6 @@ import type { Product } from '~/utils/types/product';
 
 type Schema = z.output<typeof UpdateProductValidation>;
 
-// const state = reactive({
-// 	code: props.product.code,
-// 	name: props.product.name,
-// 	is_active: props.product.is_active,
-// 	is_service: props.product.is_service,
-// 	is_giftcard: props.product.is_giftcard,
-// 	is_discountable: props.product.is_discountable,
-// 	subtitle: props.product.subtitle,
-// 	description: props.product.description,
-// 	price_types: props.product.price_types,
-// 	variants: props.product.variants,
-// 	options: props.product.options,
-// });
-
 const props = defineProps({
 	product: {
 		type: Object as PropType<Product> | undefined,
@@ -97,11 +83,7 @@ const updateProductVariants = (value: any) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	// const { name, values } = event.data;
-	// if (name === '' || name === undefined) {
-	// 	return;
-	// }
-	// emit('update', name, values ?? []);
+	emit('update', event.data);
 };
 
 const onCancel = () => {

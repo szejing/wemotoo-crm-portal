@@ -11,13 +11,13 @@ export type ProdTagInput = {
 
 export type ProdOptionValuesInput = {
 	id: number;
-	value: string;
+	value: string | undefined;
 };
 
 export type ProdOptionInput = {
 	id: number;
 	name: string;
-	value: string | undefined;
+	value?: string | undefined;
 	values: ProdOptionValuesInput[] | undefined;
 };
 
