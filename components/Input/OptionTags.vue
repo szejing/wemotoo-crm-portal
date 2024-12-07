@@ -55,7 +55,7 @@ import type { ProdOptionValuesInput } from '~/utils/types/product';
 
 interface InputTags {
 	canAdd?: boolean;
-	modelValue: ProdOptionValuesInput[];
+	modelValue: ProdOptionValuesInput[] | undefined;
 	name?: string;
 	options?: string[];
 	placeholder?: string;
@@ -182,7 +182,7 @@ const newTags = ref<string[]>([]);
 const addTag = (tag: string | undefined) => {
 	if (!tag) return;
 
-	const _existingTag = selectedTags.value.findIndex((t) => t.toLowerCase() === tag.toLowerCase());
+	const _existingTag = selectedTags.value.findIndex((t) => t?.toLowerCase() === tag.toLowerCase());
 
 	if (_existingTag >= 0) return;
 

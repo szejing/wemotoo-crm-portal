@@ -1,4 +1,5 @@
 export type ProductPrice = {
+	id: number | undefined;
 	currency_code: string | undefined;
 	orig_sell_price: number | undefined;
 	cost_price: number | undefined;

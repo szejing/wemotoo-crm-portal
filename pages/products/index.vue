@@ -8,10 +8,10 @@
 					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
 
 					<div class="flex gap-4">
-						<UButton>
+						<!-- <UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />
 							Export
-						</UButton>
+						</UButton> -->
 
 						<UButton color="green" @click="navigateTo('/products/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
@@ -21,11 +21,11 @@
 				</div>
 				<UTable :rows="rows" :columns="product_columns">
 					<template #orig_sell_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price }}</p>
+						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price.toFixed(2) }}</p>
 					</template>
 
 					<template #sale_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.sale_price }}</p>
+						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</p>
 					</template>
 
 					<template #code-data="{ row }">
@@ -67,9 +67,11 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalProductDetail } from '#components';
 import { useProductStore } from '~/stores/Products/Products';
+import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
-import type { Product } from '~/utils/types/product';
+import type { ProdCategoryInput, ProdOptionInput, ProdTagInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProductPrice } from '~/utils/types/product-price';
 
 const links = [
 	{
@@ -133,7 +135,90 @@ const editProduct = async (code: string) => {
 	modal.open(ZModalProductDetail, {
 		product: JSON.parse(JSON.stringify(product)),
 		onUpdate: async (prod: Product) => {
-			await productStore.updateProduct(code, prod);
+			const { code, name, subtitle, description, is_active, is_service, price_types, categories, tags, status, galleries, thumbnail, options, variants } = prod;
+
+			// price_types
+			const prodPrice: ProductPrice[] = [];
+			price_types?.forEach((price) => {
+				prodPrice.push({
+					id: price.id,
+					orig_sell_price: price.orig_sell_price,
+					cost_price: price.cost_price,
+					sale_price: price.sale_price,
+					currency_code: price.currency_code,
+				});
+			});
+
+			// product categories
+			const prodCategories: ProdCategoryInput[] = [];
+			categories?.forEach((category) => {
+				prodCategories.push({
+					code: category.code!,
+				});
+			});
+
+			// product tags
+			const prodTags: ProdTagInput[] = [];
+			tags?.forEach((tag) => {
+				prodTags.push({
+					id: tag.id!,
+				});
+			});
+
+			// product options
+			const prodOptions: ProdOptionInput[] = [];
+			options?.forEach((option) => {
+				prodOptions.push({
+					id: option.id!,
+					name: option.name!,
+					value: undefined,
+					values: option.values?.map((value) => {
+						return {
+							id: value.id!,
+							value: value.value!,
+						};
+					}),
+				});
+			});
+
+			// product variants
+			const prodVariants: ProdVariantInput[] = [];
+			variants?.forEach((variant) => {
+				prodVariants.push({
+					id: variant.id!,
+					name: variant.name!,
+					price_types: variant.price_types?.map((price) => {
+						return {
+							id: price.id,
+							orig_sell_price: price.orig_sell_price,
+							cost_price: price.cost_price,
+							sale_price: price.sale_price,
+							currency_code: price.currency_code,
+						};
+					}),
+					options: variant.options,
+				});
+			});
+
+			await productStore.updateProduct(code!, {
+				code,
+				name,
+				subtitle: subtitle ?? undefined,
+				description: description ?? undefined,
+				is_active,
+				is_service,
+				is_discountable: true,
+				is_giftcard: false,
+				price_types: prodPrice,
+				categories: prodCategories,
+				tags: prodTags,
+				status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,
+				galleries: galleries ?? undefined,
+				thumbnail: thumbnail ?? undefined,
+				options: prodOptions,
+				variants: prodVariants,
+			});
+
 			modal.close();
 		},
 		onCancel: () => {

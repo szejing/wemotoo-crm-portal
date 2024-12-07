@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 const Price = z.object({
+	id: z.number(),
 	currency_code: z.string(),
 	orig_sell_price: z.number(),
 	cost_price: z.number().optional(),
@@ -16,45 +17,45 @@ const OptionValues = z.object({ id: z.number().optional(), value: z.string().opt
 const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
 
 const Variant = z.object({
-	id: z.string().optional(),
-	name: z.string().optional(),
-	sku: z.string().optional(),
-	ean: z.string().optional(),
-	upc: z.string().optional(),
-	barcode: z.string().optional(),
-	hs_code: z.string().optional(),
-	inventory_quantity: z.number().optional(),
-	allow_backorder: z.boolean().optional(),
-	manage_inventory: z.boolean().optional(),
-	weight: z.number().optional(),
-	length: z.number().optional(),
-	height: z.number().optional(),
-	width: z.number().optional(),
-	origin_country: z.string().optional(),
-	mid_code: z.string().optional(),
-	material: z.string().optional(),
-	price_types: z.array(Price).optional(),
-	options: z.array(Option).optional(),
+	id: z.string().optional().nullable(),
+	name: z.string().optional().nullable(),
+	sku: z.string().optional().nullable(),
+	ean: z.string().optional().nullable(),
+	upc: z.string().optional().nullable(),
+	barcode: z.string().optional().nullable(),
+	hs_code: z.string().optional().nullable(),
+	inventory_quantity: z.number().optional().nullable(),
+	allow_backorder: z.boolean().optional().nullable(),
+	manage_inventory: z.boolean().optional().nullable(),
+	weight: z.number().optional().nullable(),
+	length: z.number().optional().nullable(),
+	height: z.number().optional().nullable(),
+	width: z.number().optional().nullable(),
+	origin_country: z.string().optional().nullable(),
+	mid_code: z.string().optional().nullable(),
+	material: z.string().optional().nullable(),
+	price_types: z.array(Price).optional().nullable(),
+	options: z.array(Option).optional().nullable(),
 });
 
 export const UpdateProductValidation = z.object({
 	code: z.string().max(16),
 	name: z.string(),
-	subtitle: z.string().optional(),
-	description: z.string().optional(),
+	subtitle: z.string().optional().nullable(),
+	description: z.string().optional().nullable(),
 	is_active: z.boolean().default(true),
 	is_service: z.boolean().default(false),
 	status: z.string(),
-	thumbnail: z.string().optional(),
-	galleries: z.array(z.string()).optional(),
+	thumbnail: z.string().optional().nullable(),
+	galleries: z.array(z.string()).optional().nullable(),
 	// categories
-	categories: z.array(Category).optional(),
+	categories: z.array(Category).optional().nullable(),
 	// tags
-	tags: z.array(Tag).optional(),
+	tags: z.array(Tag).optional().nullable(),
 	// price_types
-	price_types: z.array(Price).optional(),
+	price_types: z.array(Price).optional().nullable(),
 	// options
-	options: z.array(Option).optional(),
+	options: z.array(Option).optional().nullable(),
 	// variants
-	variants: z.array(Variant).optional(),
+	variants: z.array(Variant).optional().nullable(),
 });

@@ -27,7 +27,7 @@
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
-			<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block>Submit</UButton>
+			<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block :loading="adding">Submit</UButton>
 		</div>
 	</UForm>
 </template>
@@ -44,7 +44,7 @@ import type { ProductPrice } from '~/utils/types/product-price';
 type Schema = z.output<typeof CreateProductValidation>;
 
 const productStore = useProductStore();
-const { newProduct } = storeToRefs(productStore);
+const { newProduct, adding } = storeToRefs(productStore);
 
 onMounted(() => {
 	productStore.resetNewProduct();
@@ -67,7 +67,7 @@ const currency_code = computed({
 			newProduct.value.price_types[0].currency_code = value;
 		} else {
 			newProduct.value.price_types = [
-				{ orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: value },
+				{ id: undefined, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: value },
 			];
 		}
 	},
@@ -82,7 +82,7 @@ const orig_sell_price = computed({
 			newProduct.value.price_types[0].orig_sell_price = value;
 		} else {
 			newProduct.value.price_types = [
-				{ orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
+				{ id: undefined, orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
 	},
@@ -97,7 +97,7 @@ const cost_price = computed({
 			newProduct.value.price_types[0].cost_price = value;
 		} else {
 			newProduct.value.price_types = [
-				{ cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
+				{ id: undefined, cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
 	},
@@ -112,7 +112,7 @@ const sale_price = computed({
 			newProduct.value.price_types[0].sale_price = value;
 		} else {
 			newProduct.value.price_types = [
-				{ sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency_code: currency_code.value },
+				{ id: undefined, sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency_code: currency_code.value },
 			];
 		}
 	},
@@ -127,6 +127,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const prodPrice: ProductPrice[] = [];
 	price_types?.forEach((price) => {
 		prodPrice.push({
+			id: undefined,
 			orig_sell_price: price.orig_sell_price,
 			cost_price: price.cost_price,
 			sale_price: price.sale_price,
@@ -173,6 +174,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			name: variant.name!,
 			price_types: variant.price_types?.map((price) => {
 				return {
+					id: undefined,
 					orig_sell_price: price.orig_sell_price,
 					cost_price: price.cost_price,
 					sale_price: price.sale_price,
@@ -194,7 +196,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		});
 	});
 
-	await productStore.addProduct({
+	const result = await productStore.addProduct({
 		code,
 		name,
 		subtitle,
@@ -212,6 +214,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		options: prodOptions,
 		variants: prodVariants,
 	});
+
+	if (result) {
+		navigateTo('/products');
+	}
 };
 </script>
 

@@ -30,6 +30,7 @@ const initialEmptyProduct: Product = {
 	// price
 	price_types: [
 		{
+			id: undefined,
 			currency_code: 'MYR',
 			orig_sell_price: undefined,
 			cost_price: undefined,
@@ -76,7 +77,7 @@ export const useProductStore = defineStore({
 				this.loading = false;
 			}
 		},
-		async addProduct(input: Product) {
+		async addProduct(input: Product): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 
@@ -90,9 +91,11 @@ export const useProductStore = defineStore({
 					this.products.push(data.product);
 				}
 				this.resetNewProduct();
+				return true;
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
+				return false;
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -128,7 +131,7 @@ export const useProductStore = defineStore({
 				const data = await $api.product.delete({ code });
 
 				if (data.code) {
-					successNotification(`Product Tag Deleted !`);
+					successNotification(`Product Code #${data.code} Deleted !`);
 
 					const index = this.products.findIndex((t) => t.code === data.code);
 					this.products.splice(index, 1);

@@ -8,10 +8,10 @@
 					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
 
 					<div class="flex gap-4">
-						<UButton>
+						<!-- <UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />
 							Export
-						</UButton>
+						</UButton> -->
 
 						<UButton color="green" @click="navigateTo('/orders/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
