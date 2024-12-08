@@ -42,6 +42,8 @@ export type CreateProductReq = {
 };
 
 export type CreateProductResp = {
+	count: number;
+	products: Product[];
 	product: Product;
 };
 

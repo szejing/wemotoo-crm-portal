@@ -14,13 +14,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { ProdTagInput } from '~/utils/types/product';
 import type { ProductTag } from '~/utils/types/product-tag';
 
 const query = ref('');
 const tagStore = useProductTagsStore();
 const { productTags } = storeToRefs(tagStore);
 
-const props = defineProps<{ tags: ProductTag[] | undefined }>();
+const props = defineProps<{ tags: ProductTag[] | ProdTagInput[] | undefined }>();
 
 const emit = defineEmits(['update:tags']);
 

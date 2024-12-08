@@ -22,6 +22,26 @@
 				/>
 				<!-- *********************** General Info *********************** -->
 
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+					<!-- ***** Status ***** -->
+					<div>
+						<h3>Status</h3>
+						<ZSelectMenuProductStatus v-model:status="current_product.status" class="mt-2" />
+					</div>
+
+					<!-- ***** Categories ***** -->
+					<div>
+						<h3>Categories</h3>
+						<ZSelectMenuCategories v-model:categories="current_product.categories" />
+					</div>
+
+					<!-- ***** Tags ***** -->
+					<div>
+						<h3>Tags</h3>
+						<ZSelectMenuTags v-model:tags="current_product.tags" />
+					</div>
+				</div>
+
 				<!-- *********************** Pricing *********************** -->
 				<div v-for="price in current_product.price_types" :key="price.id">
 					<ZInputProductPricing
