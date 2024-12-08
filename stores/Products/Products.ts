@@ -77,6 +77,7 @@ export const useProductStore = defineStore({
 				this.loading = false;
 			}
 		},
+
 		async addProduct(input: Product): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
@@ -88,8 +89,12 @@ export const useProductStore = defineStore({
 
 				if (data.product) {
 					successNotification(`${data.product.code} - Product Created !`);
-					this.products.push(data.product);
 				}
+
+				if (data.products) {
+					this.products = data.products;
+				}
+
 				this.resetNewProduct();
 				return true;
 			} catch (err: any) {

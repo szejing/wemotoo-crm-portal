@@ -14,18 +14,20 @@
 </template>
 
 <script lang="ts" setup>
+import type { ProdCategoryInput } from '~/utils/types/product';
 import type { ProductCategory } from '~/utils/types/product-category';
 
 const query = ref('');
 const categoryStore = useProductCategoriesStore();
 const { productCategories } = storeToRefs(categoryStore);
 
-const props = defineProps<{ categories: ProductCategory[] | undefined }>();
+const props = defineProps<{ categories: ProductCategory[] | ProdCategoryInput[] | undefined }>();
 
 const emit = defineEmits(['update:categories']);
 
 const categories = computed({
 	get() {
+		console.log(props.categories);
 		return props.categories ?? [];
 	},
 	set(value) {
