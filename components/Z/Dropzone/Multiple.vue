@@ -23,7 +23,11 @@
 <script lang="ts" setup>
 const photoFileMultiple = ref();
 
-defineProps<{ urlsMultiple: undefined | string[] }>();
+defineProps({
+	urlsMultiple: String,
+	path: String,
+});
+
 const emit = defineEmits(['update:urlsMultiple']);
 
 // MULTIPLE

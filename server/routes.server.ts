@@ -1,5 +1,6 @@
 const merchant: string = 'merchant';
 const auth: string = 'auth';
+const image: string = 'image';
 const prodCatg: string = 'product-category';
 const prodTag: string = 'product-tag';
 const prodOption: string = 'product-option';
@@ -8,6 +9,9 @@ const country: string = 'country';
 const prod: string = 'product';
 
 export const Routes = {
+	Image: {
+		Upload: () => `${merchant}/${image}/upload`,
+	},
 	Auth: {
 		Login: () => `${merchant}/${auth}/login`,
 		Verify: () => `${merchant}/${auth}/verify`,

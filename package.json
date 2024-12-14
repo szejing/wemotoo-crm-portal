@@ -16,7 +16,7 @@
 	"dependencies": {
 		"@nuxt/eslint": "^0.7.2",
 		"@nuxt/image": "1.8.1",
-		"@nuxt/ui": "^2.19.2",
+		"@nuxt/ui": "^2.20.0",
 		"@pinia/nuxt": "^0.8.0",
 		"@types/uuid": "^10.0.0",
 		"@vee-validate/zod": "^4.14.7",

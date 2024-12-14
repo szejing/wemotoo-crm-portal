@@ -1,6 +1,7 @@
 const prefix: string = '/api';
 const merchant: string = '/merchant';
 const auth: string = 'auth';
+const image: string = 'image';
 const country: string = 'country';
 const currency: string = 'currency';
 const prodCatg: string = 'product-category';
@@ -9,6 +10,9 @@ const prod: string = 'product';
 const prodOption: string = 'product-option';
 
 const MerchantRoutes = {
+	Image: {
+		Upload: () => `${prefix}/${merchant}/${image}/upload`,
+	},
 	Auth: {
 		Login: () => `${prefix}/${merchant}/${auth}/login`,
 		Refresh: () => `${prefix}/${merchant}/${auth}/refresh`,
