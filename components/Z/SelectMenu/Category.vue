@@ -6,7 +6,7 @@
 			:options="productCategories"
 			searchable
 			size="md"
-			value-attribute="id"
+			value-attribute="code"
 			option-attribute="name"
 			placeholder="Select Category"
 		/>
@@ -32,6 +32,8 @@ const category = computed({
 		emit('update:category', value);
 	},
 });
+
+console.log(category.value);
 </script>
 
 <style></style>

@@ -22,3 +22,21 @@ export const generateHeaders = (event: any, includeAccessToken: boolean = true, 
 		Authorization: 'Bearer ' + cookie_access_token,
 	};
 };
+
+export const generateImageHeaders = (event: any) => {
+	const config = useRuntimeConfig(event);
+
+	const cookie_access_token = getCookie(event, KEY.ACCESS_TOKEN) || '';
+	const cookie_merchant_id = getCookie(event, KEY.X_MERCHANT_ID) || '';
+
+	const headers = {
+		'Accept': 'application/json',
+		'x-api-key': config.public.apiKey,
+		'x-merchant-id': cookie_merchant_id,
+	};
+
+	return {
+		...headers,
+		Authorization: 'Bearer ' + cookie_access_token,
+	};
+};

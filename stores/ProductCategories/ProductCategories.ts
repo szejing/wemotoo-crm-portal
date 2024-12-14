@@ -38,9 +38,11 @@ export const useProductCategoriesStore = defineStore({
 		resetNewProductCategory() {
 			this.newProductCategory = structuredClone(initialEmptyCategory);
 		},
+
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
+
 		async getCategories() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
