@@ -16,7 +16,7 @@
 
 				<div>
 					<h4>Parent Category</h4>
-					<ZSelectMenuCategory v-model:category="state.category.parent_category" />
+					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
 				</div>
 
 				<div class="w-[50%]">
