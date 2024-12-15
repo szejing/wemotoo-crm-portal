@@ -18,26 +18,10 @@ defineProps({
 const emit = defineEmits(['update:urlSingle']);
 const photoFile = ref<any>();
 
-const dropSingle = async (e: any) => {
-	try {
-		const { $api } = useNuxtApp();
+const dropSingle = async (e: any) => uploadImage(e);
+const selectedFile = async (e: any) => uploadImage(e);
 
-		const res = await $api.image.upload(e, 'new', 'category');
-		// photoFile.value = res;
-		emit('update:urlSingle', res.image.url);
-	} catch (err: any) {
-		console.log(err);
-
-		const appUiStore = useAppUiStore();
-		appUiStore.addNotification({
-			color: 'red',
-			icon: ICONS.ERROR_OUTLINE,
-			title: err.message,
-		});
-	}
-};
-
-const selectedFile = async (e: any) => {
+const uploadImage = async (e: any) => {
 	try {
 		const { $api } = useNuxtApp();
 
