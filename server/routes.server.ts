@@ -11,6 +11,7 @@ const prod: string = 'product';
 export const Routes = {
 	Image: {
 		Upload: () => `${merchant}/${image}/upload`,
+		UploadMultiple: () => `${merchant}/${image}/upload-multiple`,
 	},
 	Auth: {
 		Login: () => `${merchant}/${auth}/login`,

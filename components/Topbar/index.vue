@@ -48,7 +48,7 @@ const logout = async () => {
 
 <style scoped lang="css">
 .topbar-bg {
-	@apply w-full h-16 bg-white flex justify-between md:justify-end items-center px-4;
+	@apply w-full h-20 md:h-16 bg-white flex justify-between md:justify-end items-center px-4;
 }
 
 .link {

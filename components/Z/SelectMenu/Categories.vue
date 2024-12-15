@@ -27,7 +27,6 @@ const emit = defineEmits(['update:categories']);
 
 const categories = computed({
 	get() {
-		console.log(props.categories);
 		return props.categories ?? [];
 	},
 	set(value) {

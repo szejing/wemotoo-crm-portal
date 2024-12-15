@@ -12,6 +12,7 @@ const prodOption: string = 'product-option';
 const MerchantRoutes = {
 	Image: {
 		Upload: () => `${prefix}/${merchant}/${image}/upload`,
+		UploadMultiple: () => `${prefix}/${merchant}/${image}/upload-multiple`,
 	},
 	Auth: {
 		Login: () => `${prefix}/${merchant}/${auth}/login`,

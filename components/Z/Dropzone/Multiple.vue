@@ -1,13 +1,5 @@
 <template>
-	<SixDropzone
-		id="multiple"
-		v-model="photoFileMultiple"
-		:drop-mounted="urlsMultiple"
-		multiple
-		@drop.prevent="dropMultiple"
-		@change="selectedFileMultiple"
-		@update:model-value="modelValueFileMultiple"
-	>
+	<SixDropzone id="multiple" v-model="photoFileMultiple" :drop-mounted="urlsMultiple" multiple @drop.prevent="dropMultiple" @change="selectedFileMultiple">
 		<template #default>
 			<label for="multiple" class="flex-col-center gap-1 text-secondary-400">
 				<UIcon :name="ICONS.UPLOAD" class="size-6" />
@@ -21,34 +13,35 @@
 </template>
 
 <script lang="ts" setup>
-const photoFileMultiple = ref();
-
 defineProps({
-	urlsMultiple: String,
-	path: String,
+	urlsMultiple: Array,
+	path: Array,
 });
+const photoFileMultiple = ref([]);
 
 const emit = defineEmits(['update:urlsMultiple']);
 
 // MULTIPLE
-const dropMultiple = (e: any) => {
-	console.log(e.dataTransfer.files[0], 'drop');
-};
-const selectedFileMultiple = (e: any) => {
-	console.log(e, 'change');
-};
-const modelValueFileMultiple = (e: any) => {
-	console.log('model-value', e);
+const dropMultiple = (e: any) => uploadImages(e);
+const selectedFileMultiple = (e: any) => uploadImages(e);
 
-	if (e.length > 0) {
+const uploadImages = async (e: any) => {
+	try {
+		const { $api } = useNuxtApp();
+
+		const res = await $api.image.uploadMultiple(e, 'new', 'category');
 		emit(
 			'update:urlsMultiple',
-			e.map((file: any) => file.name),
+			res.images.map((image) => image.url),
 		);
-	} else if (e.length == 0) {
-		emit('update:urlsMultiple', e.name);
-	} else {
-		emit('update:urlsMultiple', undefined);
+	} catch (err: any) {
+		console.log(err);
+		const appUiStore = useAppUiStore();
+		appUiStore.addNotification({
+			color: 'red',
+			icon: ICONS.ERROR_OUTLINE,
+			title: err.message,
+		});
 	}
 };
 </script>
