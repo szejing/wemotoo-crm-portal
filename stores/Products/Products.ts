@@ -9,7 +9,6 @@ const initialEmptyProduct: Product = {
 	subtitle: undefined,
 	description: undefined,
 	is_active: true,
-	is_service: false,
 	is_discountable: true,
 	is_giftcard: false,
 

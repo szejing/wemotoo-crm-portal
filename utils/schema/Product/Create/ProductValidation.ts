@@ -43,7 +43,6 @@ export const CreateProductValidation = z.object({
 	subtitle: z.string().optional(),
 	description: z.string().optional(),
 	is_active: z.boolean().default(true),
-	is_service: z.boolean().default(false),
 	status: z.string(),
 	thumbnail: z.string().optional(),
 	galleries: z.array(z.string()).optional(),

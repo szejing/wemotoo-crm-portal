@@ -5,7 +5,6 @@
 				<h2>General Info</h2>
 				<div class="w-[50%] flex-jend items-center gap-4">
 					<UCheckbox v-model="is_active" name="isActive" label="Active" color="green" />
-					<UCheckbox v-model="is_service" name="isService" label="Service" color="green" />
 
 					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="green" />
 					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="green" /> -->
@@ -40,7 +39,6 @@
 <script lang="ts" setup>
 const props = defineProps({
 	isActive: Boolean,
-	isService: Boolean,
 	isDiscountable: Boolean,
 	isGiftcard: Boolean,
 	code: String,
@@ -53,7 +51,6 @@ const props = defineProps({
 
 const emit = defineEmits([
 	'update:isActive',
-	'update:isService',
 	'update:isDiscountable',
 	'update:isGiftcard',
 	'update:code',
@@ -68,15 +65,6 @@ const is_active = computed({
 	},
 	set(value) {
 		emit('update:isActive', value);
-	},
-});
-
-const is_service = computed({
-	get() {
-		return props.isService;
-	},
-	set(value) {
-		emit('update:isService', value);
 	},
 });
 
