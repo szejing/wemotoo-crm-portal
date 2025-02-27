@@ -44,7 +44,6 @@ export const UpdateProductValidation = z.object({
 	subtitle: z.string().optional().nullable(),
 	description: z.string().optional().nullable(),
 	is_active: z.boolean().default(true),
-	is_service: z.boolean().default(false),
 	status: z.string(),
 	thumbnail: z.string().optional().nullable(),
 	galleries: z.array(z.string()).optional().nullable(),

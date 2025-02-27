@@ -10,7 +10,6 @@
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
 					v-model:is-active="current_product.is_active"
-					v-model:is-service="current_product.is_service"
 					v-model:is-giftcard="current_product.is_giftcard"
 					v-model:is-discountable="current_product.is_discountable"
 					v-model:code="current_product.code"

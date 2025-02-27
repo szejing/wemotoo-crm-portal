@@ -3,7 +3,6 @@
 		<!-- *********************** General Info *********************** -->
 		<ZInputProductGeneralInfo
 			v-model:is-active="newProduct.is_active"
-			v-model:is-service="newProduct.is_service"
 			v-model:is-giftcard="newProduct.is_giftcard"
 			v-model:is-discountable="newProduct.is_discountable"
 			v-model:code="newProduct.code"
@@ -120,8 +119,7 @@ const sale_price = computed({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	// eslint-disable-next-line @stylistic/operator-linebreak
-	const { code, name, subtitle, description, is_active, is_service, price_types, categories, tags, status, galleries, thumbnail, options, variants } =
-		event.data;
+	const { code, name, subtitle, description, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
 
 	// price_types
 	const prodPrice: ProductPrice[] = [];
@@ -202,7 +200,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		subtitle,
 		description,
 		is_active,
-		is_service,
 		is_discountable: true,
 		is_giftcard: false,
 		price_types: prodPrice,

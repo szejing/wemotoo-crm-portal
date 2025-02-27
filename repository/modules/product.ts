@@ -17,7 +17,6 @@ export type CreateProductReq = {
 	is_discountable: boolean;
 	is_giftcard: boolean;
 	is_active: boolean;
-	is_service: boolean;
 
 	status: ProductStatus;
 
