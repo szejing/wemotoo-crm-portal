@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateProductCategoryValidation = z.object({
+export const CreateCategoryValidation = z.object({
 	code: z.string().max(16),
 	name: z.string(),
 	description: z.string().optional(),

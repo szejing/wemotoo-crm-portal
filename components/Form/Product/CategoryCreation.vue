@@ -1,22 +1,18 @@
 <template>
 	<div>
-		<UForm :schema="CreateProductCategoryValidation" :state="newProductCategory" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateCategoryValidation" :state="newCategory" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputCategoryGeneralInfo
-				v-model:code="newProductCategory.code"
-				v-model:name="newProductCategory.name"
-				v-model:description="newProductCategory.description"
-			/>
+			<ZInputCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />
 			<!-- *********************** General Info *********************** -->
 
 			<div>
 				<h4>Parent Category</h4>
-				<ZSelectMenuCategory v-model:category="newProductCategory.parent_category" />
+				<ZSelectMenuCategory v-model:category="newCategory.parent_category" />
 			</div>
 
 			<div>
 				<h4>Thumbnail</h4>
-				<ZDropzoneSingle :url-single="newProductCategory.thumbnail" @update:url-single="updateThumbnail" />
+				<ZDropzoneSingle :url-single="newCategory.thumbnail" @update:url-single="updateThumbnail" />
 			</div>
 
 			<div class="flex-center text-center mt-3">
@@ -29,24 +25,25 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
+import { useCategoriesStore } from '~/stores/Categories/Categories';
 
-import { CreateProductCategoryValidation } from '~/utils/schema';
+import { CreateCategoryValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateProductCategoryValidation>;
+type Schema = z.output<typeof CreateCategoryValidation>;
 
-const categoryStore = useProductCategoriesStore();
-const { adding, newProductCategory } = storeToRefs(categoryStore);
+const categoryStore = useCategoriesStore();
+const { adding, newCategory } = storeToRefs(categoryStore);
 
 onMounted(() => {
-	categoryStore.resetNewProductCategory();
+	categoryStore.resetNewCategory();
 });
 
 const updateThumbnail = (url: string) => {
-	newProductCategory.value.thumbnail = url;
+	newCategory.value.thumbnail = url;
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
-	await categoryStore.addProductCategory(code, name, description, is_internal, is_active, images, thumbnail, parent_category);
+	await categoryStore.addCategory(code, name, description, is_internal, is_active, images, thumbnail, parent_category);
 };
 </script>
 

@@ -3,14 +3,14 @@ import CountryModule from '~/repository/modules/country';
 import CurrencyModule from '~/repository/modules/currency';
 import ImageModule from '~/repository/modules/image';
 import ProductModule from '~/repository/modules/product';
-import ProductCategoryModule from '~/repository/modules/product-category';
+import CategoryModule from '~/repository/modules/category';
 import ProductOptionModule from '~/repository/modules/product-option';
-import ProductTagModule from '~/repository/modules/product-tag';
+import TagModule from '~/repository/modules/tag';
 
 interface IApiInstance {
 	product: ProductModule;
-	productTag: ProductTagModule;
-	productCategory: ProductCategoryModule;
+	tag: TagModule;
+	category: CategoryModule;
 	productOption: ProductOptionModule;
 	auth: AuthModule;
 	currency: CurrencyModule;
@@ -34,8 +34,8 @@ export default defineNuxtPlugin((_) => {
 	const countryModule = new CountryModule(apiFetcher);
 	const currencyModule = new CurrencyModule(apiFetcher);
 	const productModule = new ProductModule(apiFetcher);
-	const productTagModule = new ProductTagModule(apiFetcher);
-	const productCategoryModule = new ProductCategoryModule(apiFetcher);
+	const tagModule = new TagModule(apiFetcher);
+	const categoryModule = new CategoryModule(apiFetcher);
 	const productOptionModule = new ProductOptionModule(apiFetcher);
 	const imageModule = new ImageModule(apiFetcher);
 
@@ -44,8 +44,8 @@ export default defineNuxtPlugin((_) => {
 		country: countryModule,
 		currency: currencyModule,
 		product: productModule,
-		productTag: productTagModule,
-		productCategory: productCategoryModule,
+		tag: tagModule,
+		category: categoryModule,
 		productOption: productOptionModule,
 		image: imageModule,
 	};

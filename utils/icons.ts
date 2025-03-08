@@ -26,4 +26,5 @@ export const ICONS = {
 	ARROW_LEFT: 'i-material-symbols-arrow-back-rounded',
 	ARROW_RIGHT: 'i-material-symbols-arrow-forward-rounded',
 	MENU_OPEN_ROUNDED: 'i-material-symbols-arrow-forward-rounded',
+	MAINTENANCE_SERVICE: 'i-map-car-repair',
 };

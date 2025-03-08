@@ -14,7 +14,7 @@
 					<ZSectionFilterTags />
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_tag_columns" :loading="loading">
+						<UTable :rows="rows" :columns="tag_columns" :loading="loading">
 							<template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
 							</template>
@@ -28,8 +28,8 @@
 						</UTable>
 
 						<!-- Pagination  -->
-						<div v-if="productTags.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="productTags.length" />
+						<div v-if="tags.length > 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="tags.length" />
 						</div>
 					</div>
 				</UCard>
@@ -40,9 +40,9 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
-import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
-import { product_tag_columns } from '~/utils/table-columns';
-import type { ProductTag } from '~/utils/types/product-tag';
+import { useTagsStore } from '~/stores/Tags/Tags';
+import { tag_columns } from '~/utils/table-columns';
+import type { Tag } from '~/utils/types/tag';
 
 const links = [
 	{
@@ -57,7 +57,7 @@ const links = [
 	},
 ];
 
-const options = (row: ProductTag) => [
+const options = (row: Tag) => [
 	[
 		{
 			label: 'Edit',
@@ -77,13 +77,13 @@ const options = (row: ProductTag) => [
 
 const modal = useModal();
 const page = ref(1);
-const productTagsStore = useProductTagsStore();
-await productTagsStore.getTags();
+const tagsStore = useTagsStore();
+await tagsStore.getTags();
 
-const { loading, productTags, pageSize } = storeToRefs(productTagsStore);
+const { loading, tags, pageSize } = storeToRefs(tagsStore);
 
 const rows = computed(() => {
-	return productTags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return tags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
 const deleteProductTag = async (id: number) => {
@@ -91,7 +91,7 @@ const deleteProductTag = async (id: number) => {
 		message: 'Are you sure you want to delete this tag?',
 		action: 'delete',
 		onConfirm: async () => {
-			await productTagsStore.deleteProductTag(id);
+			await tagsStore.deleteTag(id);
 			modal.close();
 		},
 		onCancel: () => {
@@ -101,14 +101,14 @@ const deleteProductTag = async (id: number) => {
 };
 
 const editProductTag = async (id: number) => {
-	const tag: ProductTag | undefined = productTags.value.find((tag) => tag.id === id);
+	const tag: Tag | undefined = tags.value.find((tag) => tag.id === id);
 
 	if (!tag) return;
 
 	modal.open(ZModalTagDetail, {
-		productTag: JSON.parse(JSON.stringify(tag)),
-		onUpdate: async (tag: ProductTag) => {
-			await productTagsStore.updateProductTag(id, tag);
+		tag: JSON.parse(JSON.stringify(tag)),
+		onUpdate: async (tag: Tag) => {
+			await tagsStore.updateTag(id, tag);
 			modal.close();
 		},
 		onCancel: () => {

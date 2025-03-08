@@ -5,9 +5,9 @@
 		}"
 	>
 		<UCard>
-			<UForm :schema="UpdateProductCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
-					<h3>Update Product Category</h3>
+					<h3>Update Category</h3>
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
 				</div>
 				<!-- *********************** General Info *********************** -->
@@ -36,21 +36,21 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { UpdateProductCategoryValidation } from '~/utils/schema';
-import type { ProductCategory } from '~/utils/types/product-category';
+import { UpdateCategoryValidation } from '~/utils/schema';
+import type { Category } from '~/utils/types/category';
 
-type Schema = z.output<typeof UpdateProductCategoryValidation>;
+type Schema = z.output<typeof UpdateCategoryValidation>;
 
 const props = defineProps({
-	productCategory: {
-		type: Object as PropType<ProductCategory> | undefined,
+	category: {
+		type: Object as PropType<Category> | undefined,
 		required: true,
 	},
 });
 const emit = defineEmits(['update', 'cancel']);
 
 const state = reactive({
-	category: props.productCategory,
+	category: props.category,
 });
 
 const categoryStore = useProductCategoriesStore();

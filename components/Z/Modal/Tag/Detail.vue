@@ -5,8 +5,8 @@
 		}"
 	>
 		<UCard>
-			<template #header><h3>Update Product Tag</h3></template>
-			<UForm :schema="UpdateProductTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
+			<template #header><h3>Update Tag</h3></template>
+			<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputTagGeneralInfo v-model:value="state.tag.value" />
 				<!-- *********************** General Info *********************** -->
@@ -23,24 +23,25 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { UpdateProductTagValidation } from '~/utils/schema';
-import type { ProductTag } from '~/utils/types/product-tag';
+import { useTagsStore } from '~/stores/Tags/Tags';
+import { UpdateTagValidation } from '~/utils/schema';
+import type { Tag } from '~/utils/types/tag';
 
-type Schema = z.output<typeof UpdateProductTagValidation>;
+type Schema = z.output<typeof UpdateTagValidation>;
 
 const props = defineProps({
-	productTag: {
-		type: Object as PropType<ProductTag> | undefined,
+	tag: {
+		type: Object as PropType<Tag> | undefined,
 		required: true,
 	},
 });
 const emit = defineEmits(['update', 'cancel']);
 
 const state = reactive({
-	tag: props.productTag,
+	tag: props.tag,
 });
 
-const tagStore = useProductTagsStore();
+const tagStore = useTagsStore();
 const { updating } = storeToRefs(tagStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

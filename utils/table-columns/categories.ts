@@ -1,11 +1,11 @@
-export const product_tag_columns = [
+export const category_columns = [
 	{
-		key: 'id',
-		label: 'Id',
+		key: 'code',
+		label: 'Code',
 		sortable: true,
 	},
 	{
-		key: 'value',
+		key: 'name',
 		label: 'Name',
 		sortable: true,
 	},

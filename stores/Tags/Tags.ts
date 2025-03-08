@@ -1,27 +1,27 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
-import type { ProductTagCreate } from '~/utils/types/form/product-tag-creation';
-import type { ProductTag } from '~/utils/types/product-tag';
+import type { TagCreate } from '~/utils/types/form/tag-creation';
+import type { Tag } from '~/utils/types/tag';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 
-const initialEmptyTag: ProductTagCreate = {
+const initialEmptyTag: TagCreate = {
 	value: undefined,
 };
 
-export const useProductTagsStore = defineStore({
-	id: 'productTagsStore',
+export const useTagsStore = defineStore({
+	id: 'tagsStore',
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
-		productTags: [] as ProductTag[],
-		newProductTag: structuredClone(initialEmptyTag),
+		tags: [] as Tag[],
+		newTag: structuredClone(initialEmptyTag),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
 	actions: {
-		resetNewProductTag() {
-			this.newProductTag = structuredClone(initialEmptyTag);
+		resetNewTag() {
+			this.newTag = structuredClone(initialEmptyTag);
 		},
 
 		updatePageSize(size: number) {
@@ -32,10 +32,10 @@ export const useProductTagsStore = defineStore({
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.productTag.fetchMany();
+				const data = await $api.tag.fetchMany();
 
-				if (data.productTags) {
-					this.productTags = data.productTags;
+				if (data.tags) {
+					this.tags = data.tags;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -45,20 +45,20 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async addProductTag(value: string) {
+		async addTag(value: string) {
 			this.adding = true;
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productTag.create({ value });
+				const data = await $api.tag.create({ value });
 
-				if (data.productTag) {
-					successNotification(`${value} - Product Tag Created !`);
-					this.productTags.push(data.productTag);
+				if (data.tag) {
+					successNotification(`${value} - Tag Created !`);
+					this.tags.push(data.tag);
 				}
-				this.resetNewProductTag();
+				this.resetNewTag();
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
@@ -68,18 +68,18 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async updateProductTag(id: number, tag: ProductTag) {
+		async updateTag(id: number, tag: Tag) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productTag.update(id, {
+				const data = await $api.tag.update(id, {
 					value: tag.value,
 				});
 
-				if (data.productTag) {
-					successNotification(`Product Tag Updated !`);
+				if (data.tag) {
+					successNotification(`Tag Updated !`);
 					this.getTags();
 				}
 			} catch (err: any) {
@@ -90,19 +90,19 @@ export const useProductTagsStore = defineStore({
 			}
 		},
 
-		async deleteProductTag(id: number) {
+		async deleteTag(id: number) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productTag.delete({ id });
+				const data = await $api.tag.delete({ id });
 
 				if (data.tag_id) {
-					successNotification(`Product Tag Deleted !`);
+					successNotification(`Tag Deleted !`);
 
-					const index = this.productTags.findIndex((t) => t.id === data.tag_id);
-					this.productTags.splice(index, 1);
+					const index = this.tags.findIndex((t) => t.id === data.tag_id);
+					this.tags.splice(index, 1);
 				}
 			} catch (err: any) {
 				console.error(err);

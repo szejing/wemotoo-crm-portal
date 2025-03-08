@@ -1,6 +1,6 @@
 <template>
 	<UFormGroup name="tags" class="mt-2">
-		<USelectMenu v-model="tags" v-model:query="query" :options="productTags" searchable size="md" option-attribute="value" multiple by="id">
+		<USelectMenu v-model="tags" v-model:query="query" :options="tag_options" searchable size="md" option-attribute="value" multiple by="id">
 			<template #label>
 				<span v-if="tags.length" class="truncate">{{ tags.map((tag) => tag.value).join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Tags</span>
@@ -15,13 +15,13 @@
 
 <script lang="ts" setup>
 import type { ProdTagInput } from '~/utils/types/product';
-import type { ProductTag } from '~/utils/types/product-tag';
+import type { Tag } from '~/utils/types/tag';
 
 const query = ref('');
 const tagStore = useProductTagsStore();
-const { productTags } = storeToRefs(tagStore);
+const { tags: tag_options } = storeToRefs(tagStore);
 
-const props = defineProps<{ tags: ProductTag[] | ProdTagInput[] | undefined }>();
+const props = defineProps<{ tags: Tag[] | ProdTagInput[] | undefined }>();
 
 const emit = defineEmits(['update:tags']);
 

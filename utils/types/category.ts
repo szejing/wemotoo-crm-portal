@@ -1,4 +1,4 @@
-export type ProductCategory = {
+export type Category = {
 	code: string;
 	name: string;
 	description?: string | undefined;
@@ -13,6 +13,6 @@ export type ProductCategory = {
 	thumbnail?: string | undefined;
 
 	parent_category_code?: string | undefined;
-	parent_category?: ProductCategory | undefined;
-	category_children?: ProductCategory[] | undefined;
+	parent_category?: Category | undefined;
+	category_children?: Category[] | undefined;
 };

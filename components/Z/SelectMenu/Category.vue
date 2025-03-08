@@ -20,16 +20,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductCategory } from '~/utils/types/product-category';
+import type { Category } from '~/utils/types/category';
 
 const query = ref('');
 const categoryStore = useProductCategoriesStore();
-const { productCategories } = storeToRefs(categoryStore);
+const { categories } = storeToRefs(categoryStore);
 
-const props = defineProps<{ category: ProductCategory | undefined; ignoreCodes?: string[] }>();
+const props = defineProps<{ category: Category | undefined; ignoreCodes?: string[] }>();
 
 const availableCategories = computed(() => {
-	return productCategories.value.filter((catg) => !props.ignoreCodes?.includes(catg.code));
+	return categories.value.filter((catg) => !props.ignoreCodes?.includes(catg.code));
 });
 
 const emit = defineEmits(['update:category']);
