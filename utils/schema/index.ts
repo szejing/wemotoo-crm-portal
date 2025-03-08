@@ -1,16 +1,16 @@
 import { FilterProductValidation } from './Product/Filter/ProductValidation';
 import { FilterCustomerValidation } from './Customer/FilterCustomerValidation';
 import { LoginValidation } from './Auth/LoginValidation';
-import { FilterTagValidation } from './Product/Filter/TagValidation';
-import { FilterCategoryValidation } from './Product/Filter/CategoryValidation';
+import { FilterTagValidation } from './Tag/Filter/TagValidation';
+import { FilterCategoryValidation } from './Category/Filter/CategoryValidation';
 import { FilterOptionValidation } from './Product/Filter/OptionValidation';
 import { FilterOrderValidation } from './Product/Filter/OrderValidation';
 import { CreateProductValidation } from './Product/Create/ProductValidation';
-import { CreateProductCategoryValidation } from './Product/Create/ProductCategoryValidation';
+import { CreateCategoryValidation } from './Category/Create/CategoryValidation';
 import { CreateProductOptionValidation } from './Product/Create/ProductOptionValidation';
-import { CreateProductTagValidation } from './Product/Create/ProductTagValidation';
-import { UpdateProductTagValidation } from './Product/Update/ProductTagValidation';
-import { UpdateProductCategoryValidation } from './Product/Update/ProductCategoryValidation';
+import { CreateTagValidation } from './Tag/Create/TagValidation';
+import { UpdateTagValidation } from './Tag/Update/TagValidation';
+import { UpdateCategoryValidation } from './Category/Update/CategoryValidation';
 import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
 import { UpdateProductValidation } from './Product/Update/ProductValidation';
 
@@ -18,16 +18,16 @@ export {
 	LoginValidation,
 	FilterCustomerValidation,
 	CreateProductValidation,
-	CreateProductCategoryValidation,
-	CreateProductTagValidation,
+	CreateCategoryValidation,
+	CreateTagValidation,
 	CreateProductOptionValidation,
 	FilterProductValidation,
 	FilterOrderValidation,
 	FilterCategoryValidation,
 	FilterTagValidation,
 	FilterOptionValidation,
-	UpdateProductTagValidation,
-	UpdateProductCategoryValidation,
+	UpdateTagValidation,
+	UpdateCategoryValidation,
 	UpdateProductOptionValidation,
 	UpdateProductValidation,
 };

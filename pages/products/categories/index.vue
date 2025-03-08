@@ -15,7 +15,7 @@
 
 					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_category_columns" :loading="loading">
+						<UTable :rows="rows" :columns="category_columns" :loading="loading">
 							<template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
 							</template>
@@ -29,8 +29,8 @@
 						</UTable>
 
 						<!-- Pagination  -->
-						<div v-if="productCategories.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="productCategories.length" />
+						<div v-if="categories.length > 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="categories.length" />
 						</div>
 					</div>
 				</UCard>
@@ -41,9 +41,9 @@
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
-import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
-import { product_category_columns } from '~/utils/table-columns';
-import type { ProductCategory } from '~/utils/types/product-category';
+import { useCategoriesStore } from '~/stores/Categories/Categories';
+import { category_columns } from '~/utils/table-columns';
+import type { Category } from '~/utils/types/category';
 
 const links = [
 	{
@@ -58,12 +58,12 @@ const links = [
 	},
 ];
 
-const options = (row: ProductCategory) => [
+const options = (row: Category) => [
 	[
 		{
 			label: 'Edit',
 			icon: ICONS.PENCIL,
-			click: async () => await editProductCategory(row.code),
+			click: async () => await editCategory(row.code),
 		},
 	],
 	[
@@ -71,28 +71,28 @@ const options = (row: ProductCategory) => [
 			label: 'Delete',
 			icon: ICONS.TRASH,
 			slot: 'danger',
-			click: () => deleteProductCategory(row.code),
+			click: () => deleteCategory(row.code),
 		},
 	],
 ];
 
 const modal = useModal();
 const page = ref(1);
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useCategoriesStore();
 await categoryStore.getCategories();
 
-const { loading, productCategories, pageSize } = storeToRefs(categoryStore);
+const { loading, categories, pageSize } = storeToRefs(categoryStore);
 
 const rows = computed(() => {
-	return productCategories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return categories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const deleteProductCategory = async (code: string) => {
+const deleteCategory = async (code: string) => {
 	modal.open(ZModalConfirmation, {
 		message: 'Are you sure you want to delete this category?',
 		action: 'delete',
 		onConfirm: async () => {
-			await categoryStore.deleteProductCategory(code);
+			await categoryStore.deleteCategory(code);
 			modal.close();
 		},
 		onCancel: () => {
@@ -101,13 +101,13 @@ const deleteProductCategory = async (code: string) => {
 	});
 };
 
-const editProductCategory = async (code: string) => {
-	const category: ProductCategory | undefined = productCategories.value.find((category) => category.code === code);
+const editCategory = async (code: string) => {
+	const category: Category | undefined = categories.value.find((category) => category.code === code);
 	if (!category) return;
 	modal.open(ZModalCategoryDetail, {
-		productCategory: JSON.parse(JSON.stringify(category)),
-		onUpdate: async (category: ProductCategory) => {
-			await categoryStore.updateProductCategory(category);
+		category: JSON.parse(JSON.stringify(category)),
+		onUpdate: async (category: Category) => {
+			await categoryStore.updateCategory(category);
 			modal.close();
 		},
 		onCancel: () => {

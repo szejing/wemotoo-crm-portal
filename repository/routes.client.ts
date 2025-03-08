@@ -4,8 +4,8 @@ const auth: string = 'auth';
 const image: string = 'image';
 const country: string = 'country';
 const currency: string = 'currency';
-const prodCatg: string = 'product-category';
-const prodTag: string = 'product-tag';
+const category: string = 'category';
+const tag: string = 'tag';
 const prod: string = 'product';
 const prodOption: string = 'product-option';
 
@@ -38,21 +38,21 @@ const MerchantRoutes = {
 		Delete: () => `${prefix}/${merchant}/${prod}/delete`,
 		RevertDelete: () => `${prefix}/${merchant}/${prod}/revert-delete`,
 	},
-	ProductTag: {
-		Create: () => `${prefix}/${merchant}/${prodTag}/create`,
-		Single: (id: number) => `${prefix}/${merchant}/${prodTag}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${prodTag}/many`,
-		Update: () => `${prefix}/${merchant}/${prodTag}/update`,
-		Delete: () => `${prefix}/${merchant}/${prodTag}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${prodTag}/revert-delete`,
+	Tag: {
+		Create: () => `${prefix}/${merchant}/${tag}/create`,
+		Single: (id: number) => `${prefix}/${merchant}/${tag}/single/${id}`,
+		Many: () => `${prefix}/${merchant}/${tag}/many`,
+		Update: () => `${prefix}/${merchant}/${tag}/update`,
+		Delete: () => `${prefix}/${merchant}/${tag}/delete`,
+		RevertDelete: () => `${prefix}/${merchant}/${tag}/revert-delete`,
 	},
-	ProdCategory: {
-		Create: () => `${prefix}/${merchant}/${prodCatg}/create`,
-		Single: (id: string) => `${prefix}/${merchant}/${prodCatg}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${prodCatg}/many`,
-		Update: () => `${prefix}/${merchant}/${prodCatg}/update`,
-		Delete: () => `${prefix}/${merchant}/${prodCatg}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${prodCatg}/revert-delete`,
+	Category: {
+		Create: () => `${prefix}/${merchant}/${category}/create`,
+		Single: (id: string) => `${prefix}/${merchant}/${category}/single/${id}`,
+		Many: () => `${prefix}/${merchant}/${category}/many`,
+		Update: () => `${prefix}/${merchant}/${category}/update`,
+		Delete: () => `${prefix}/${merchant}/${category}/delete`,
+		RevertDelete: () => `${prefix}/${merchant}/${category}/revert-delete`,
 	},
 	ProductOption: {
 		Create: () => `${prefix}/${merchant}/${prodOption}/create`,

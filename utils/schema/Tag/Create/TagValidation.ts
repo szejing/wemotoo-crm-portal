@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const CreateProductTagValidation = z.object({
+export const CreateTagValidation = z.object({
 	value: z.string(),
 	metadata: z.record(z.unknown()).optional(),
 });

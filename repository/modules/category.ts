@@ -1,13 +1,13 @@
-import type { ProductCategory } from '~/utils/types/product-category';
+import type { Category } from '~/utils/types/category';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-export type ProductCategoriesResp = {
+export type CategoriesResp = {
 	count: number;
-	productCategories: ProductCategory[];
+	categories: Category[];
 };
 
-export type CreateProductCategoryReq = {
+export type CreateCategoryReq = {
 	code: string;
 	name: string;
 	description: string | null;
@@ -19,19 +19,19 @@ export type CreateProductCategoryReq = {
 	parent_category_code: string | null;
 };
 
-export type CreateProductCategoryResp = {
-	productCategory: ProductCategory;
+export type CreateCategoryResp = {
+	category: Category;
 };
 
-export type DeleteProductCategoryReq = {
+export type DeleteCategoryReq = {
 	code: string;
 };
 
-export type DeleteProductCategoryResp = {
+export type DeleteCategoryResp = {
 	category_code: string;
 };
 
-export type UpdateProductCategoryReq = {
+export type UpdateCategoryReq = {
 	name: string | null;
 	description: string | null;
 	slug: string | null;
@@ -42,15 +42,15 @@ export type UpdateProductCategoryReq = {
 	parent_category_code: string | null;
 };
 
-export type UpdateProductCategoryResp = {
-	productCategory: ProductCategory;
+export type UpdateCategoryResp = {
+	category: Category;
 };
 
-class ProductCategoryModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.ProdCategory;
+class CategoryModule extends HttpFactory {
+	private RESOURCE = MerchantRoutes.Category;
 
-	async fetchMany(): Promise<ProductCategoriesResp> {
-		return this.call<ProductCategoriesResp>({
+	async fetchMany(): Promise<CategoriesResp> {
+		return this.call<CategoriesResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 		});
@@ -63,7 +63,7 @@ class ProductCategoryModule extends HttpFactory {
 		});
 	}
 
-	async create(category: CreateProductCategoryReq): Promise<CreateProductCategoryResp> {
+	async create(category: CreateCategoryReq): Promise<CreateCategoryResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -71,7 +71,7 @@ class ProductCategoryModule extends HttpFactory {
 		});
 	}
 
-	async update(id: string, category: UpdateProductCategoryReq): Promise<UpdateProductCategoryResp> {
+	async update(id: string, category: UpdateCategoryReq): Promise<UpdateCategoryResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
@@ -80,7 +80,7 @@ class ProductCategoryModule extends HttpFactory {
 		});
 	}
 
-	async delete(category: DeleteProductCategoryReq): Promise<DeleteProductCategoryResp> {
+	async delete(category: DeleteCategoryReq): Promise<DeleteCategoryResp> {
 		return await this.call<any>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete()}`,
@@ -89,4 +89,4 @@ class ProductCategoryModule extends HttpFactory {
 	}
 }
 
-export default ProductCategoryModule;
+export default CategoryModule;

@@ -1,6 +1,6 @@
 <template>
 	<UFormGroup name="categories" class="mt-2">
-		<USelectMenu v-model="categories" v-model:query="query" :options="productCategories" searchable size="md" option-attribute="name" multiple by="code">
+		<USelectMenu v-model="categories" v-model:query="query" :options="category_options" searchable size="md" option-attribute="name" multiple by="code">
 			<template #label>
 				<span v-if="categories.length" class="truncate">{{ categories.map((category) => category.name).join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Categories</span>
@@ -15,13 +15,14 @@
 
 <script lang="ts" setup>
 import type { ProdCategoryInput } from '~/utils/types/product';
-import type { ProductCategory } from '~/utils/types/product-category';
+import type { Category } from '~/utils/types/category';
+import { useCategoriesStore } from '~/stores/Categories/Categories';
 
 const query = ref('');
-const categoryStore = useProductCategoriesStore();
-const { productCategories } = storeToRefs(categoryStore);
+const categoryStore = useCategoriesStore();
+const { categories: category_options } = storeToRefs(categoryStore);
 
-const props = defineProps<{ categories: ProductCategory[] | ProdCategoryInput[] | undefined }>();
+const props = defineProps<{ categories: Category[] | ProdCategoryInput[] | undefined }>();
 
 const emit = defineEmits(['update:categories']);
 

@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<UForm :schema="CreateProductTagValidation" :state="newProductTag" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateTagValidation" :state="newTag" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputTagGeneralInfo v-model:value="newProductTag.value" />
+			<ZInputTagGeneralInfo v-model:value="newTag.value" />
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
 				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
@@ -14,21 +14,22 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
+import { useTagsStore } from '~/stores/Tags/Tags';
 
-import { CreateProductTagValidation } from '~/utils/schema';
+import { CreateTagValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateProductTagValidation>;
+type Schema = z.output<typeof CreateTagValidation>;
 
-const tagStore = useProductTagsStore();
-const { adding, newProductTag } = storeToRefs(tagStore);
+const tagStore = useTagsStore();
+const { adding, newTag } = storeToRefs(tagStore);
 
 onMounted(() => {
-	tagStore.resetNewProductTag();
+	tagStore.resetNewTag();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { value } = event.data;
-	await tagStore.addProductTag(value);
+	await tagStore.addTag(value);
 };
 </script>
 

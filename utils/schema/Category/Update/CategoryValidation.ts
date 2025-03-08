@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const UpdateProductCategoryValidation = z.object({
+export const UpdateCategoryValidation = z.object({
 	id: z.string().max(10),
 	name: z.string(),
 	description: z.string().optional().nullable(),

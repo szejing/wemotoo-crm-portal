@@ -10,10 +10,15 @@ const merchantNavigation = [
 		isCollapsed: true,
 	},
 	{
-		title: 'Orders',
+		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
 		isCollapsed: true,
+	},
+	{
+		title: 'Maintenance',
+		icon: ICONS.MAINTENANCE_SERVICE,
+		to: '/maintenance-service',
 	},
 	{
 		title: 'Products',

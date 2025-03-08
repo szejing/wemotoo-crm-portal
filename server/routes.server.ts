@@ -1,12 +1,12 @@
 const merchant: string = 'merchant';
 const auth: string = 'auth';
 const image: string = 'image';
-const prodCatg: string = 'product-category';
-const prodTag: string = 'product-tag';
+const categories: string = 'categories';
+const tags: string = 'tags';
 const prodOption: string = 'product-option';
-const currency: string = 'currency';
-const country: string = 'country';
-const prod: string = 'product';
+const currency: string = 'currencies';
+const country: string = 'countries';
+const prod: string = 'products';
 
 export const Routes = {
 	Image: {
@@ -37,20 +37,20 @@ export const Routes = {
 		RevertRemove: () => `${merchant}/${prod}/`,
 	},
 	ProductTag: {
-		Create: () => `${merchant}/${prodTag}/`,
-		Single: (id: number) => `${merchant}/${prodTag}/${id}`,
-		Many: () => `${merchant}/${prodTag}/`,
-		Update: () => `${merchant}/${prodTag}/`,
-		Remove: () => `${merchant}/${prodTag}/`,
-		RevertRemove: () => `${merchant}/${prodTag}/`,
+		Create: () => `${merchant}/${tags}/`,
+		Single: (id: number) => `${merchant}/${tags}/${id}`,
+		Many: () => `${merchant}/${tags}/`,
+		Update: () => `${merchant}/${tags}/`,
+		Remove: () => `${merchant}/${tags}/`,
+		RevertRemove: () => `${merchant}/${tags}/`,
 	},
 	ProdCategory: {
-		Create: () => `${merchant}/${prodCatg}/`,
-		Single: (id: number) => `${merchant}/${prodCatg}/${id}`,
-		Many: () => `${merchant}/${prodCatg}/`,
-		Update: () => `${merchant}/${prodCatg}/`,
-		Remove: () => `${merchant}/${prodCatg}/`,
-		RevertRemove: () => `${merchant}/${prodCatg}/`,
+		Create: () => `${merchant}/${categories}/`,
+		Single: (id: number) => `${merchant}/${categories}/${id}`,
+		Many: () => `${merchant}/${categories}/`,
+		Update: () => `${merchant}/${categories}/`,
+		Remove: () => `${merchant}/${categories}/`,
+		RevertRemove: () => `${merchant}/${categories}/`,
 	},
 	ProdOption: {
 		Create: () => `${merchant}/${prodOption}/`,
