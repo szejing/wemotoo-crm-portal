@@ -70,8 +70,10 @@ import { useProductStore } from '~/stores/Products/Products';
 import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
-import type { ProdCategoryInput, ProdOptionInput, ProdTagInput, Product, ProdVariantInput } from '~/utils/types/product';
-import type { ProductPrice } from '~/utils/types/product-price';
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { PriceInput } from '~/utils/types/price';
+import type { CategoryInput } from '~/utils/types/category';
+import type { TagInput } from '~/utils/types/tag';
 
 const links = [
 	{
@@ -138,7 +140,7 @@ const editProduct = async (code: string) => {
 			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = prod;
 
 			// price_types
-			const prodPrice: ProductPrice[] = [];
+			const prodPrice: PriceInput[] = [];
 			price_types?.forEach((price) => {
 				prodPrice.push({
 					id: price.id,
@@ -150,7 +152,7 @@ const editProduct = async (code: string) => {
 			});
 
 			// product categories
-			const prodCategories: ProdCategoryInput[] = [];
+			const prodCategories: CategoryInput[] = [];
 			categories?.forEach((category) => {
 				prodCategories.push({
 					code: category.code!,
@@ -158,7 +160,7 @@ const editProduct = async (code: string) => {
 			});
 
 			// product tags
-			const prodTags: ProdTagInput[] = [];
+			const prodTags: TagInput[] = [];
 			tags?.forEach((tag) => {
 				prodTags.push({
 					id: tag.id!,

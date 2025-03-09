@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProdCategoryInput } from '~/utils/types/product';
+import type { CategoryInput } from '~/utils/types/product';
 import type { Category } from '~/utils/types/category';
 import { useCategoriesStore } from '~/stores/Categories/Categories';
 
@@ -22,7 +22,7 @@ const query = ref('');
 const categoryStore = useCategoriesStore();
 const { categories: category_options } = storeToRefs(categoryStore);
 
-const props = defineProps<{ categories: Category[] | ProdCategoryInput[] | undefined }>();
+const props = defineProps<{ categories: Category[] | CategoryInput[] | undefined }>();
 
 const emit = defineEmits(['update:categories']);
 

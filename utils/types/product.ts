@@ -1,15 +1,7 @@
 import type { ProductStatus } from '~/utils/enum/product-status';
-import type { ProductPrice } from './product-price';
-
-export type ProdCategoryInput = {
-	code: string;
-	name: string;
-};
-
-export type ProdTagInput = {
-	id: number;
-	value: string;
-};
+import type { PriceInput } from './price';
+import type { CategoryInput } from './category';
+import type { TagInput } from './tag';
 
 export type ProdOptionValuesInput = {
 	id: number;
@@ -41,7 +33,7 @@ export type ProdVariantInput = {
 	origin_country?: string;
 	mid_code?: string;
 	material?: string;
-	price_types?: ProductPrice[] | undefined;
+	price_types?: PriceInput[] | undefined;
 	options?: ProdOptionValuesInput[];
 	metadata?: Record<string, unknown>;
 };
@@ -58,10 +50,10 @@ export type Product = {
 	status: ProductStatus;
 
 	// categories
-	categories: ProdCategoryInput[] | undefined;
+	categories: CategoryInput[] | undefined;
 
 	// tags
-	tags: ProdTagInput[] | undefined;
+	tags: TagInput[] | undefined;
 
 	// thumbnail
 	thumbnail: string | undefined;
@@ -70,7 +62,7 @@ export type Product = {
 	galleries: string[] | undefined;
 
 	// price
-	price_types: ProductPrice[] | undefined;
+	price_types: PriceInput[] | undefined;
 
 	// variants
 	options: ProdOptionInput[] | undefined;

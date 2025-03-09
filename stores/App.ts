@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useMaintenanceServiceStore } from './MaintenanceService/MaintenanceService';
 
 export const useAppStore = defineStore({
 	id: 'appStore',
@@ -16,6 +17,9 @@ export const useAppStore = defineStore({
 
 			const productStore = useProductStore();
 			await productStore.getProducts();
+
+			const maintenanceServiceStore = useMaintenanceServiceStore();
+			await maintenanceServiceStore.getMaintenanceServices();
 
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();

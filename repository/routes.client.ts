@@ -8,6 +8,7 @@ const category: string = 'category';
 const tag: string = 'tag';
 const prod: string = 'product';
 const prodOption: string = 'product-option';
+const maintenance: string = 'maintenance';
 
 const MerchantRoutes = {
 	Image: {
@@ -29,6 +30,14 @@ const MerchantRoutes = {
 		Single: (id: number) => `${prefix}/${merchant}/${currency}/single/${id}`,
 		Many: () => `${prefix}/${merchant}/${currency}/many`,
 		Update: () => `${prefix}/${merchant}/${currency}/update`,
+	},
+	Maintenance: {
+		Create: () => `${prefix}/${merchant}/${maintenance}/create`,
+		Single: (code: string) => `${prefix}/${merchant}/${maintenance}/single/${code}`,
+		Many: () => `${prefix}/${merchant}/${maintenance}/many`,
+		Update: () => `${prefix}/${merchant}/${maintenance}/update`,
+		Delete: () => `${prefix}/${merchant}/${maintenance}/delete`,
+		RevertDelete: () => `${prefix}/${merchant}/${maintenance}/revert-delete`,
 	},
 	Product: {
 		Create: () => `${prefix}/${merchant}/${prod}/create`,

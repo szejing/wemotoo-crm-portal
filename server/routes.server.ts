@@ -7,6 +7,7 @@ const prodOption: string = 'product-options';
 const currency: string = 'currencies';
 const country: string = 'countries';
 const prod: string = 'products';
+const maintenances: string = 'maintenances';
 
 export const Routes = {
 	Image: {
@@ -35,6 +36,14 @@ export const Routes = {
 		Update: () => `${merchant}/${prod}/`,
 		Remove: () => `${merchant}/${prod}/`,
 		RevertRemove: () => `${merchant}/${prod}/`,
+	},
+	Maintenance: {
+		Create: () => `${merchant}/${maintenances}/`,
+		Single: (id: number) => `${merchant}/${maintenances}/${id}`,
+		Many: () => `${merchant}/${maintenances}/`,
+		Update: () => `${merchant}/${maintenances}/`,
+		Remove: () => `${merchant}/${maintenances}/`,
+		RevertRemove: () => `${merchant}/${maintenances}/`,
 	},
 	ProductTag: {
 		Create: () => `${merchant}/${tags}/`,

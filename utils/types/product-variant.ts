@@ -1,5 +1,5 @@
 import type { ProductOption } from './product-option';
-import type { ProductPrice } from './product-price';
+import type { PriceInput } from './price';
 
 export type ProductVariant = {
 	id?: string;
@@ -19,7 +19,7 @@ export type ProductVariant = {
 	origin_country?: string;
 	mid_code?: string;
 	material?: string;
-	prices?: ProductPrice[] | undefined;
+	prices?: PriceInput[] | undefined;
 	options?: ProductOption[];
 	metadata?: Record<string, unknown>;
 };
