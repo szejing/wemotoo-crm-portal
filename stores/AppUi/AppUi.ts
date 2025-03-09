@@ -18,13 +18,13 @@ const merchantNavigation = [
 	{
 		title: 'Categories',
 		icon: ICONS.CATEGORY,
-		to: '/products/categories',
+		to: '/categories',
 		isCollapsed: true,
 	},
 	{
 		title: 'Tags',
 		icon: ICONS.TAG,
-		to: '/products/tags',
+		to: '/tags',
 		isCollapsed: true,
 	},
 	{

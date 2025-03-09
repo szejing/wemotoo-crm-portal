@@ -46,14 +46,9 @@ import type { Tag } from '~/utils/types/tag';
 
 const links = [
 	{
-		label: 'Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-	},
-	{
 		label: 'All Tags',
 		icon: ICONS.LIST,
-		to: '/products/tags',
+		to: '/tags',
 	},
 ];
 

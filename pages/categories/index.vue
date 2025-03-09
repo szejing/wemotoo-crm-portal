@@ -47,14 +47,9 @@ import type { Category } from '~/utils/types/category';
 
 const links = [
 	{
-		label: 'Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-	},
-	{
 		label: 'All Categories',
 		icon: ICONS.LIST,
-		to: '/products/categories',
+		to: '/categories',
 	},
 ];
 
