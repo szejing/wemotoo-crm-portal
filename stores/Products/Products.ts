@@ -57,9 +57,11 @@ export const useProductStore = defineStore({
 		resetNewProduct() {
 			this.newProduct = structuredClone(initialEmptyProduct);
 		},
+
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
+
 		async getProducts() {
 			this.loading = true;
 			const { $api } = useNuxtApp();

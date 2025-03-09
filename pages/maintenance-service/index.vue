@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalConfirmation } from '#components';
 import { useMaintenanceServiceStore } from '~/stores/MaintenanceService/MaintenanceService';
 import { options_page_size } from '~/utils/options';
 import { maintenance_service_columns } from '~/utils/table-columns';
@@ -112,17 +113,17 @@ const rows = computed(() => {
 });
 
 const deleteMaintenanceService = async (code: string) => {
-	// modal.open(ZModalConfirmation, {
-	// 	message: 'Are you sure you want to delete this product ?',
-	// 	action: 'delete',
-	// 	onConfirm: async () => {
-	// 		await productStore.deleteProduct(code);
-	// 		modal.close();
-	// 	},
-	// 	onCancel: () => {
-	// 		modal.close();
-	// 	},
-	// });
+	modal.open(ZModalConfirmation, {
+		message: 'Are you sure you want to delete this maintenance service ?',
+		action: 'delete',
+		onConfirm: async () => {
+			await maintenanceServiceStore.deleteMaintenanceService(code);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 
 const editMaintenanceService = async (code: string) => {

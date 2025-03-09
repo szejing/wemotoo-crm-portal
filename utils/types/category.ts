@@ -1,3 +1,8 @@
+export type CategoryInput = {
+	code: string;
+	name: string;
+};
+
 export type Category = {
 	code: string;
 	name: string;

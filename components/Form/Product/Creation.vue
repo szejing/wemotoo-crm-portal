@@ -37,8 +37,8 @@ import type { z } from 'zod';
 import { useProductStore } from '~/stores/Products/Products';
 import { ProductStatus } from '~/utils/enum/product-status';
 import { CreateProductValidation } from '~/utils/schema';
-import type { ProdCategoryInput, ProdTagInput, ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
-import type { ProductPrice } from '~/utils/types/product-price';
+import type { CategoryInput, TagInput, ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
+import type { PriceInput } from '~/utils/types/price';
 
 type Schema = z.output<typeof CreateProductValidation>;
 
@@ -122,7 +122,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
 
 	// price_types
-	const prodPrice: ProductPrice[] = [];
+	const prodPrice: PriceInput[] = [];
 	price_types?.forEach((price) => {
 		prodPrice.push({
 			id: undefined,
@@ -134,7 +134,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	});
 
 	// product categories
-	const prodCategories: ProdCategoryInput[] = [];
+	const prodCategories: CategoryInput[] = [];
 	categories?.forEach((category) => {
 		prodCategories.push({
 			code: category.code!,
@@ -142,7 +142,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	});
 
 	// product tags
-	const prodTags: ProdTagInput[] = [];
+	const prodTags: TagInput[] = [];
 	tags?.forEach((tag) => {
 		prodTags.push({
 			id: tag.id!,

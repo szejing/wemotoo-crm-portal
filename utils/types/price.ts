@@ -1,4 +1,4 @@
-export type ProductPrice = {
+export type PriceInput = {
 	id: number | undefined;
 	currency_code: string | undefined;
 	orig_sell_price: number | undefined;

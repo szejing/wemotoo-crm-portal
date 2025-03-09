@@ -1,8 +1,10 @@
-import type { ProdCategoryInput, ProdOptionInput, ProdTagInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { ProductStatus } from '~/utils/enum/product-status';
-import type { ProductPrice } from '~/utils/types/product-price';
+import type { PriceInput } from '~/utils/types/price';
+import type { CategoryInput } from '~/utils/types/category';
+import type { TagInput } from '~/utils/types/tag';
 
 export type ProductsResp = {
 	count: number;
@@ -21,10 +23,10 @@ export type CreateProductReq = {
 	status: ProductStatus;
 
 	// categories
-	categories: ProdCategoryInput[] | undefined;
+	categories: CategoryInput[] | undefined;
 
 	// tags
-	tags: ProdTagInput[] | undefined;
+	tags: TagInput[] | undefined;
 
 	// thumbnail
 	thumbnail: string | undefined;
@@ -33,7 +35,7 @@ export type CreateProductReq = {
 	galleries: string[] | undefined;
 
 	// price
-	price_types: ProductPrice[] | undefined;
+	price_types: PriceInput[] | undefined;
 
 	// variants
 	options: ProdOptionInput[] | undefined;
