@@ -14,15 +14,11 @@
 		</template>
 
 		<div class="section-grid-basic-details">
-			<!-- <UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
-				<UInput v-model="variantDetail.hs_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
-
-			<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
+			<!-- <UFormGroup v-slot="{ error }" label="Short Description" name="short_desc">
 				<UInput v-model="variantDetail.barcode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
+			</UFormGroup> -->
 
-			<UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
+			<!-- <UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
 				<UInput v-model="variantDetail.ean" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup> -->
 		</div>

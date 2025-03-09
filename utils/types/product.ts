@@ -49,8 +49,8 @@ export type ProdVariantInput = {
 export type Product = {
 	code: string | undefined;
 	name: string | undefined;
-	subtitle: string | undefined;
-	description: string | undefined;
+	short_desc: string | undefined;
+	long_desc: string | undefined;
 	is_discountable: boolean;
 	is_giftcard: boolean;
 	is_active: boolean;

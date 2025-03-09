@@ -40,8 +40,8 @@ const Variant = z.object({
 export const CreateProductValidation = z.object({
 	code: z.string().max(16),
 	name: z.string(),
-	subtitle: z.string().optional(),
-	description: z.string().optional(),
+	short_desc: z.string().optional(),
+	long_desc: z.string().optional(),
 	is_active: z.boolean().default(true),
 	status: z.string(),
 	thumbnail: z.string().optional(),

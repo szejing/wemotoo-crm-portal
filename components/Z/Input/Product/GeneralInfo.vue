@@ -21,8 +21,8 @@
 				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormGroup>
 
-			<UFormGroup label="Subtitle" name="subtitle">
-				<UInput v-model="subtitle" />
+			<UFormGroup label="Short Description" name="shortDesc">
+				<UInput v-model="short_desc" />
 			</UFormGroup>
 		</div>
 
@@ -30,8 +30,8 @@
 			<UInput v-model="description" />
 		</UFormGroup> -->
 
-		<UFormGroup class="mt-4" label="Description" name="description">
-			<ZTextEditor v-model:value="description" placeholder="Product Description" />
+		<UFormGroup class="mt-4" label="Long Description" name="longDesc">
+			<ZTextEditor v-model:value="long_desc" placeholder="Product Description" />
 		</UFormGroup>
 	</UCard>
 </template>
@@ -43,8 +43,8 @@ const props = defineProps({
 	isGiftcard: Boolean,
 	code: String,
 	name: String,
-	subtitle: String,
-	description: String,
+	shortDesc: String,
+	longDesc: String,
 	disabledCode: Boolean,
 	cardUi: Object,
 });
@@ -55,8 +55,8 @@ const emit = defineEmits([
 	'update:isGiftcard',
 	'update:code',
 	'update:name',
-	'update:subtitle',
-	'update:description',
+	'update:shortDesc',
+	'update:longDesc',
 ]);
 
 const is_active = computed({
@@ -106,21 +106,21 @@ const name = computed({
 	},
 });
 
-const subtitle = computed({
+const short_desc = computed({
 	get() {
-		return props.subtitle;
+		return props.shortDesc;
 	},
 	set(value) {
-		emit('update:subtitle', value);
+		emit('update:shortDesc', value);
 	},
 });
 
-const description = computed({
+const long_desc = computed({
 	get() {
-		return props.description;
+		return props.longDesc;
 	},
 	set(value) {
-		emit('update:description', value);
+		emit('update:longDesc', value);
 	},
 });
 </script>

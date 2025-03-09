@@ -14,8 +14,8 @@
 					v-model:is-discountable="current_product.is_discountable"
 					v-model:code="current_product.code"
 					v-model:name="current_product.name"
-					v-model:subtitle="current_product.subtitle"
-					v-model:description="current_product.description"
+					v-model:short-desc="current_product.short_desc"
+					v-model:long-desc="current_product.long_desc"
 					disabled-code
 					:card-ui="borderless_card_ui"
 				/>

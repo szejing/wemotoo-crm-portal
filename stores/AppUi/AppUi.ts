@@ -16,6 +16,18 @@ const merchantNavigation = [
 		isCollapsed: true,
 	},
 	{
+		title: 'Categories',
+		icon: ICONS.CATEGORY,
+		to: '/products/categories',
+		isCollapsed: true,
+	},
+	{
+		title: 'Tags',
+		icon: ICONS.TAG,
+		to: '/products/tags',
+		isCollapsed: true,
+	},
+	{
 		title: 'Maintenance',
 		icon: ICONS.MAINTENANCE_SERVICE,
 		to: '/maintenance-service',
@@ -29,14 +41,6 @@ const merchantNavigation = [
 			{
 				title: 'Products',
 				to: '/products',
-			},
-			{
-				title: 'Categories',
-				to: '/products/categories',
-			},
-			{
-				title: 'Tags',
-				to: '/products/tags',
 			},
 			{
 				title: 'Options',
