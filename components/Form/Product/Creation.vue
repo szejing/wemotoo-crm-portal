@@ -7,8 +7,8 @@
 			v-model:is-discountable="newProduct.is_discountable"
 			v-model:code="newProduct.code"
 			v-model:name="newProduct.name"
-			v-model:subtitle="newProduct.subtitle"
-			v-model:description="newProduct.description"
+			v-model:short_desc="newProduct.short_desc"
+			v-model:long_desc="newProduct.long_desc"
 		/>
 		<!-- *********************** General Info *********************** -->
 
@@ -119,7 +119,7 @@ const sale_price = computed({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	// eslint-disable-next-line @stylistic/operator-linebreak
-	const { code, name, subtitle, description, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
+	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
 
 	// price_types
 	const prodPrice: ProductPrice[] = [];
@@ -197,8 +197,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const result = await productStore.addProduct({
 		code,
 		name,
-		subtitle,
-		description,
+		short_desc,
+		long_desc,
 		is_active,
 		is_discountable: true,
 		is_giftcard: false,

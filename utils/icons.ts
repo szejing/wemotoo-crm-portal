@@ -4,6 +4,8 @@ export const ICONS = {
 	PENCIL: 'i-heroicons-pencil-20-solid',
 	ORDER: 'i-material-symbols-light-order-approve-outline-rounded',
 	PRODUCT: 'i-material-symbols-light-box-add-outline-rounded',
+	TAG: 'i-mdi-tag-plus-outline',
+	CATEGORY: 'i-mdi-archive-cog-outline',
 	LIST: 'i-material-symbols-light-lists-rounded',
 	HORIZONTAL_ELLIPSIS: 'i-heroicons-ellipsis-horizontal-20-solid',
 	VERTICAL_ELLIPSIS: 'i-material-symbols-more-vert',

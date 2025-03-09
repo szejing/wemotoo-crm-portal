@@ -6,8 +6,8 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 const initialEmptyProduct: Product = {
 	code: undefined,
 	name: undefined,
-	subtitle: undefined,
-	description: undefined,
+	short_desc: undefined,
+	long_desc: undefined,
 	is_active: true,
 	is_discountable: true,
 	is_giftcard: false,

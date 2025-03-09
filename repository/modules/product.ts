@@ -12,8 +12,8 @@ export type ProductsResp = {
 export type CreateProductReq = {
 	code: string | undefined;
 	name: string | undefined;
-	subtitle: string | undefined;
-	description: string | undefined;
+	short_desc: string | undefined;
+	long_desc: string | undefined;
 	is_discountable: boolean;
 	is_giftcard: boolean;
 	is_active: boolean;
