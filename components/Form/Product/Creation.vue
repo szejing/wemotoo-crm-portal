@@ -13,7 +13,7 @@
 		<!-- *********************** General Info *********************** -->
 
 		<!-- *********************** Pricing *********************** -->
-		<ZInputProductPricing
+		<ZInputPricing
 			v-model:orig-sell-price.number="orig_sell_price"
 			v-model:cost-price.number="cost_price"
 			v-model:sale-price.number="sale_price"
@@ -37,8 +37,11 @@ import type { z } from 'zod';
 import { useProductStore } from '~/stores/Products/Products';
 import { ProductStatus } from '~/utils/enum/product-status';
 import { CreateProductValidation } from '~/utils/schema';
-import type { CategoryInput, TagInput, ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
+import type { CategoryInput } from '~/utils/types/category';
+
 import type { PriceInput } from '~/utils/types/price';
+import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
+import type { TagInput } from '~/utils/types/tag';
 
 type Schema = z.output<typeof CreateProductValidation>;
 
