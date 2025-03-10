@@ -119,7 +119,7 @@ const sale_price = computed({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	// eslint-disable-next-line @stylistic/operator-linebreak
-	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
+	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail } = event.data;
 
 	// price_types
 	const prodPrice: PriceInput[] = [];

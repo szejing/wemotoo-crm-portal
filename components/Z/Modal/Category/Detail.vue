@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
+import { useCategoriesStore } from '~/stores';
 import { UpdateCategoryValidation } from '~/utils/schema';
 import type { Category } from '~/utils/types/category';
 
@@ -53,7 +54,7 @@ const state = reactive({
 	category: props.category,
 });
 
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useCategoriesStore();
 const { updating } = storeToRefs(categoryStore);
 
 const updateThumbnail = (url: string) => {

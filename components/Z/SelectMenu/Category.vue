@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts" setup>
+import { useCategoriesStore } from '~/stores';
 import type { Category } from '~/utils/types/category';
 
 const query = ref('');
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useCategoriesStore();
 const { categories } = storeToRefs(categoryStore);
 
 const props = defineProps<{ category: Category | undefined; ignoreCodes?: string[] }>();

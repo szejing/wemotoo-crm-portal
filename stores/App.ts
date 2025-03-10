@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useMaintenanceServiceStore } from './MaintenanceService/MaintenanceService';
+import { useCategoriesStore, useMaintenanceServiceStore, useTagsStore } from '.';
 
 export const useAppStore = defineStore({
 	id: 'appStore',
@@ -9,10 +9,10 @@ export const useAppStore = defineStore({
 			const productOptionsStore = useProductOptionsStore();
 			await productOptionsStore.getOptions();
 
-			const productTagsStore = useProductTagsStore();
+			const productTagsStore = useTagsStore();
 			await productTagsStore.getTags();
 
-			const categoryStore = useProductCategoriesStore();
+			const categoryStore = useCategoriesStore();
 			await categoryStore.getCategories();
 
 			const productStore = useProductStore();

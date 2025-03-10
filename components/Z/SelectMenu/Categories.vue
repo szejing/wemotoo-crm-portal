@@ -14,8 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CategoryInput } from '~/utils/types/product';
-import type { Category } from '~/utils/types/category';
+import type { Category, CategoryInput } from '~/utils/types/category';
 import { useCategoriesStore } from '~/stores/Categories/Categories';
 
 const query = ref('');
