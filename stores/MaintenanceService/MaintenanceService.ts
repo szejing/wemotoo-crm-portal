@@ -63,11 +63,9 @@ export const useMaintenanceServiceStore = defineStore({
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.maintenanceService.fetchMany();
-				console.log(data.maintenances);
 
 				if (data.maintenances) {
 					this.maintenanceServices = data.maintenances;
-					console.log(this.maintenanceServices);
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -114,7 +112,7 @@ export const useMaintenanceServiceStore = defineStore({
 			try {
 				const data = await $api.maintenanceService.update(code, input);
 
-				if (data.maintenanceService) {
+				if (data.maintenance) {
 					successNotification(`Maintenance Service Updated !`);
 					this.getMaintenanceServices();
 				}

@@ -13,7 +13,7 @@
 							Export
 						</UButton> -->
 
-						<UButton color="green" @click="navigateTo('/maintenance-service/create')">
+						<UButton color="green" @click="navigateTo('/maintenance-services/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
@@ -25,7 +25,10 @@
 					</template>
 
 					<template #sale_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</p>
+						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
+							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
+							<span v-else> - </span>
+						</p>
 					</template>
 
 					<template #code-data="{ row }">
@@ -69,7 +72,10 @@ import { ZModalConfirmation, ZModalMaintenanceServiceDetail } from '#components'
 import { useMaintenanceServiceStore } from '~/stores';
 import { options_page_size } from '~/utils/options';
 import { maintenance_service_columns } from '~/utils/table-columns';
+import type { CategoryInput } from '~/utils/types/category';
 import type { MaintenanceService } from '~/utils/types/maintenance-service';
+import type { PriceInput } from '~/utils/types/price';
+import type { TagInput } from '~/utils/types/tag';
 
 const links = [
 	{
@@ -132,7 +138,50 @@ const editMaintenanceService = async (code: string) => {
 	modal.open(ZModalMaintenanceServiceDetail, {
 		maintenanceService: JSON.parse(JSON.stringify(maintenanceService)),
 		onUpdate: async (maintenanceService: MaintenanceService) => {
-			console.log(maintenanceService);
+			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail } = maintenanceService;
+
+			// price_types
+			const _price_types: PriceInput[] = [];
+			price_types?.forEach((price) => {
+				_price_types.push({
+					id: price.id,
+					orig_sell_price: price.orig_sell_price,
+					cost_price: price.cost_price,
+					sale_price: price.sale_price,
+					currency_code: price.currency_code,
+				});
+			});
+
+			// product categories
+			const _categories: CategoryInput[] = [];
+			categories?.forEach((category) => {
+				_categories.push({
+					code: category.code!,
+				});
+			});
+
+			// produc
+			const _tags: TagInput[] = [];
+			tags?.forEach((tag) => {
+				_tags.push({
+					id: tag.id!,
+				});
+			});
+
+			await maintenanceServiceStore.updateMaintenanceService(maintenanceService.code!, {
+				code,
+				name,
+				short_desc: short_desc ?? undefined,
+				long_desc: long_desc ?? undefined,
+				is_active,
+				is_discountable: true,
+				price_types: _price_types,
+				categories: _categories,
+				tags: _tags,
+				status: status,
+				galleries: galleries ?? undefined,
+				thumbnail: thumbnail ?? undefined,
+			});
 			modal.close();
 		},
 		onCancel: () => {

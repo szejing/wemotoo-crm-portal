@@ -43,8 +43,6 @@ const category = computed({
 		emit('update:category', value);
 	},
 });
-
-console.log(category.value);
 </script>
 
 <style></style>

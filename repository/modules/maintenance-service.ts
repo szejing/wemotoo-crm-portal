@@ -1,10 +1,10 @@
 import HttpFactory from '../factory';
-import type { MaintenanceService } from '~/utils/types/maintenance-service';
 import MerchantRoutes from '../routes.client';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';
 import type { PriceInput } from '~/utils/types/price';
 import type { MaintenanceStatus } from '~/utils/enum/maintenance-status';
+import type { MaintenanceService } from '~/utils/types/maintenance-service';
 
 export type MaintenanceServicesResp = {
 	count: number;
@@ -54,7 +54,7 @@ export type DeleteMaintenanceServiceResp = {
 export type UpdateMaintenanceServiceReq = CreateMaintenanceServiceReq;
 
 export type UpdateMaintenanceServiceResp = {
-	maintenanceService: MaintenanceService;
+	maintenance: MaintenanceService;
 };
 
 class MaintenanceServiceModule extends HttpFactory {
@@ -74,28 +74,28 @@ class MaintenanceServiceModule extends HttpFactory {
 		});
 	}
 
-	async create(MaintenanceService: CreateMaintenanceServiceReq): Promise<CreateMaintenanceServiceResp> {
+	async create(maintenanceService: CreateMaintenanceServiceReq): Promise<CreateMaintenanceServiceResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
-			body: MaintenanceService,
+			body: maintenanceService,
 		});
 	}
 
-	async update(code: string, MaintenanceService: UpdateMaintenanceServiceReq): Promise<UpdateMaintenanceServiceResp> {
+	async update(code: string, maintenanceService: UpdateMaintenanceServiceReq): Promise<UpdateMaintenanceServiceResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
 			query: { code },
-			body: MaintenanceService,
+			body: maintenanceService,
 		});
 	}
 
-	async delete(MaintenanceService: DeleteMaintenanceServiceReq): Promise<DeleteMaintenanceServiceResp> {
+	async delete(maintenanceService: DeleteMaintenanceServiceReq): Promise<DeleteMaintenanceServiceResp> {
 		return await this.call<any>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete()}`,
-			query: MaintenanceService,
+			query: maintenanceService,
 		});
 	}
 }

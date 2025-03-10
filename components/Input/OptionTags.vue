@@ -87,7 +87,6 @@ const selectedTags = computed({
 			return matchingOption ? { id: matchingOption.id, value: strValue } : { id: undefined, value: strValue };
 		});
 
-		console.log(merged);
 		emit('update:modelValue', merged);
 	},
 });

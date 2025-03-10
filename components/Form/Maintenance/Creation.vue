@@ -6,8 +6,8 @@
 			v-model:is-discountable="newMaintenance.is_discountable"
 			v-model:code="newMaintenance.code"
 			v-model:name="newMaintenance.name"
-			v-model:short_desc="newMaintenance.short_desc"
-			v-model:long_desc="newMaintenance.long_desc"
+			v-model:short-desc="newMaintenance.short_desc"
+			v-model:long-desc="newMaintenance.long_desc"
 		/>
 		<!-- *********************** General Info *********************** -->
 
@@ -141,12 +141,12 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		});
 	});
 
+
 	// product tags
 	const maintenanceTags: TagInput[] = [];
 	tags?.forEach((tag) => {
 		maintenanceTags.push({
 			id: tag.id!,
-			value: tag.value!,
 		});
 	});
 

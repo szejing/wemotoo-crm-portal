@@ -76,7 +76,7 @@ const currency_code = computed({
 
 const orig_sell_price = computed({
 	get(): string | undefined {
-		return props.origSellPrice?.toFixed(fractionDigits);
+		return props.origSellPrice == null ? undefined : props.origSellPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:origSellPrice', value);
@@ -85,7 +85,7 @@ const orig_sell_price = computed({
 
 const cost_price = computed({
 	get(): string | undefined {
-		return props.costPrice?.toFixed(fractionDigits);
+		return props.costPrice == null ? undefined : props.costPrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:costPrice', value);
@@ -94,12 +94,25 @@ const cost_price = computed({
 
 const sale_price = computed({
 	get(): string | undefined {
-		return props.salePrice?.toFixed(fractionDigits);
+		return props.salePrice == null ? undefined : props.salePrice?.toFixed(fractionDigits);
 	},
 	set(value) {
 		emit('update:salePrice', value);
 	},
 });
+
+if (orig_sell_price.value == undefined) {
+	orig_sell_price.value = undefined;
+}
+
+if (cost_price.value == undefined) {
+	cost_price.value = undefined;
+}
+
+if (sale_price.value == undefined) {
+	sale_price.value = undefined;
+}
+
 const formatCurrencyInput = (input: string, event: any) => {
 	if (event instanceof HTMLInputElement) {
 		let value = input.replace(/\D/g, ''); // Remove non-numeric characters
