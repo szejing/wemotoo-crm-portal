@@ -25,7 +25,10 @@
 					</template>
 
 					<template #sale_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</p>
+						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
+							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
+							<span v-else> - </span>
+						</p>
 					</template>
 
 					<template #code-data="{ row }">
@@ -212,7 +215,7 @@ const editProduct = async (code: string) => {
 				price_types: prodPrice,
 				categories: prodCategories,
 				tags: prodTags,
-				status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,
+				status: status,
 				galleries: galleries ?? undefined,
 				thumbnail: thumbnail ?? undefined,
 				options: prodOptions,

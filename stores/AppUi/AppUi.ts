@@ -30,7 +30,7 @@ const merchantNavigation = [
 	{
 		title: 'Maintenance',
 		icon: ICONS.MAINTENANCE_SERVICE,
-		to: '/maintenance-service',
+		to: '/maintenance-services',
 	},
 	{
 		title: 'Products',
