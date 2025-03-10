@@ -65,8 +65,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation } from '#components';
-import { useMaintenanceServiceStore } from '~/stores/MaintenanceService/MaintenanceService';
+import { ZModalConfirmation, ZModalMaintenanceServiceDetail } from '#components';
+import { useMaintenanceServiceStore } from '~/stores';
 import { options_page_size } from '~/utils/options';
 import { maintenance_service_columns } from '~/utils/table-columns';
 import type { MaintenanceService } from '~/utils/types/maintenance-service';
@@ -127,17 +127,18 @@ const deleteMaintenanceService = async (code: string) => {
 };
 
 const editMaintenanceService = async (code: string) => {
-	// const product: Product | undefined = products.value.find((prod) => prod.code === code);
-	// if (!product) return;
-	// modal.open(ZModalProductDetail, {
-	// 	product: JSON.parse(JSON.stringify(product)),
-	// 	onUpdate: async (prod: Product) => {
-	// 		modal.close();
-	// 	},
-	// 	onCancel: () => {
-	// 		modal.close();
-	// 	},
-	// });
+	const maintenanceService: MaintenanceService | undefined = maintenanceServices.value.find((maint: MaintenanceService) => maint.code === code);
+	if (!maintenanceService) return;
+	modal.open(ZModalMaintenanceServiceDetail, {
+		maintenanceService: JSON.parse(JSON.stringify(maintenanceService)),
+		onUpdate: async (maintenanceService: MaintenanceService) => {
+			console.log(maintenanceService);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 </script>
 
