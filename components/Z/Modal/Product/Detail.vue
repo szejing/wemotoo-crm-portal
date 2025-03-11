@@ -43,7 +43,7 @@
 
 				<!-- *********************** Pricing *********************** -->
 				<div v-for="price in current_product.price_types" :key="price.id">
-					<ZInputProductPricing
+					<ZInputPricing
 						v-model:orig-sell-price.number="price.orig_sell_price"
 						v-model:cost-price.number="price.cost_price"
 						v-model:sale-price.number="price.sale_price"
