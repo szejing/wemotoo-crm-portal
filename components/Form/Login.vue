@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import { LoginValidation } from '~/utils/schema';
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent } from '@nuxt/ui';
 import type { z } from 'zod';
 
 type Schema = z.output<typeof LoginValidation>;

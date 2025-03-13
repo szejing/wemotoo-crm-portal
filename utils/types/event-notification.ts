@@ -1,5 +1,5 @@
 export type EventNotification = {
-	color: 'green' | 'red' | 'orange';
+	color: 'error' | 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'neutral';
 	icon?: string | undefined;
 	id?: string | undefined;
 	title?: string | undefined;

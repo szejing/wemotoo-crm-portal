@@ -6,7 +6,7 @@ html {
 }
 
 body {
-	@apply bg-neutral;
+	/* @apply bg-neutral; */
 }
 
 :target {
@@ -35,9 +35,9 @@ body {
 
 /* Placeholder colors */
 ::placeholder {
-	@apply text-neutral-400 opacity-100;
+	/* @apply text-neutral-400 opacity-100; */
 }
 
 ::-ms-input-placeholder {
-	@apply text-neutral-400;
+	/* @apply text-neutral-400; */
 }
