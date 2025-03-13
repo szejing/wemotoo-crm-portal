@@ -62,8 +62,7 @@ const merchantNavigation = [
 	},
 ];
 
-export const useAppUiStore = defineStore({
-	id: 'appUiStore',
+export const useAppUiStore = defineStore('appUiStore', {
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: true as boolean,

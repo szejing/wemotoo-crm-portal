@@ -1,5 +1,5 @@
 const prefix: string = '/api';
-const merchant: string = '/merchant';
+const merchant: string = 'merchant';
 const auth: string = 'auth';
 const image: string = 'image';
 const country: string = 'country';
@@ -10,6 +10,7 @@ const prod: string = 'product';
 const prodOption: string = 'product-option';
 const maintenance: string = 'maintenance';
 const setting: string = 'setting';
+
 const MerchantRoutes = {
 	Image: {
 		Upload: () => `${prefix}/${merchant}/${image}/upload`,
