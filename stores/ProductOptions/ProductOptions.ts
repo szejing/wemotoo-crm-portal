@@ -10,8 +10,7 @@ const initialEmptyOption: ProductOptionCreate = {
 	values: undefined,
 };
 
-export const useProductOptionsStore = defineStore({
-	id: 'productOptionsStore',
+export const useProductOptionsStore = defineStore('productOptionsStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,

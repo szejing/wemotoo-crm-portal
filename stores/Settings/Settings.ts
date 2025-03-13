@@ -2,8 +2,7 @@ import { defineStore } from 'pinia';
 import type { Setting } from '~/utils/types/setting';
 import type { SettingSegment } from '~/utils/types/setting-segment';
 
-export const useSettingsStore = defineStore({
-	id: 'settingsStore',
+export const useSettingsStore = defineStore('settingsStore', {
 	state: () => ({
 		loading: false as boolean,
 		segments: [] as SettingSegment[],

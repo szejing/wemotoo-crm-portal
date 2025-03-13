@@ -2,8 +2,7 @@ import { defineStore } from 'pinia';
 import type { LoginResp, VerifyResp } from '~/repository/modules/auth';
 import { KEY } from '~/utils/constants/key';
 
-export const useAuthStore = defineStore({
-	id: 'authStore',
+export const useAuthStore = defineStore('authStore', {
 	state: () => ({
 		loading: false as boolean,
 	}),

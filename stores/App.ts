@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import { useCategoriesStore, useMaintenanceServiceStore, useTagsStore } from '.';
 
-export const useAppStore = defineStore({
-	id: 'appStore',
+export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
 	actions: {
 		async init() {
