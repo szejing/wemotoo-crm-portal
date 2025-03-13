@@ -9,7 +9,7 @@ const tag: string = 'tag';
 const prod: string = 'product';
 const prodOption: string = 'product-option';
 const maintenance: string = 'maintenance';
-
+const setting: string = 'setting';
 const MerchantRoutes = {
 	Image: {
 		Upload: () => `${prefix}/${merchant}/${image}/upload`,
@@ -70,6 +70,10 @@ const MerchantRoutes = {
 		Update: () => `${prefix}/${merchant}/${prodOption}/update`,
 		Delete: () => `${prefix}/${merchant}/${prodOption}/delete`,
 		RevertDelete: () => `${prefix}/${merchant}/${prodOption}/revert-delete`,
+	},
+	Setting: {
+		Many: () => `${prefix}/${merchant}/${setting}/many`,
+		Update: () => `${prefix}/${merchant}/${setting}/update`,
 	},
 };
 
