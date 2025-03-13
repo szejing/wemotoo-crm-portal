@@ -4,7 +4,7 @@
 			<h1>{{ product.name }} - [{{ variantDetail?.name?.replace('_', ' · ') }}]</h1>
 		</template>
 
-		<div class="space-y-4 divide-y divide-gray-300">
+		<div class="space-y-4 divide-y divide-neutral-300">
 			<!-- *********************** Pricing *********************** -->
 			<div v-if="variantDetail.price_types && variantDetail.price_types.length > 0">
 				<div v-for="(price, index) in variantDetail.price_types" :key="index">

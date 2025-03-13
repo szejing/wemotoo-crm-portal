@@ -1,9 +1,9 @@
 <template>
 	<UFormGroup name="status">
-		<USelectMenu v-model="status" :options="options_maintenance_status" size="md">
+		<USelectMenu v-model="status" :items="options_maintenance_status" size="md">
 			<template #label>
 				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
-				<span v-else class="text-gray-400">Select Maintenance Status</span>
+				<span v-else class="text-neutral-400">Select Maintenance Status</span>
 			</template>
 
 			<template #option="{ option }">

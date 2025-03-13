@@ -27,7 +27,7 @@ import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import type { ProdOptionInput, ProdOptionValuesInput } from '~/utils/types/product';
 
 const props = defineProps({
-	options: {
+	items: {
 		type: Array as PropType<ProdOptionInput[]>,
 		required: false,
 	},
@@ -38,7 +38,7 @@ const productOptions = productOptionsStore.currentProductOptions();
 
 const selectedOptions = ref<ProdOptionInput[]>([]);
 selectedOptions.value = computed(() => {
-	return props.options?.map((option) => ({ ...option })) ?? [];
+	return props.items?.map((option) => ({ ...option })) ?? [];
 }).value;
 
 const select = (row: ProdOptionInput) => {

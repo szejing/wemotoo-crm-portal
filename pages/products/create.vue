@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="flex-jbetween-icenter">
 			<h2 class="my-6">Add Product</h2>
 			<div class="block sm:hidden">
@@ -17,7 +17,7 @@
 				<ZInputProductSidebar />
 			</div>
 
-			<UModal v-model="isOpen">
+			<UModal v-model:open="isOpen">
 				<UCard
 					:ui="{
 						body: {
@@ -71,6 +71,6 @@ h2 {
 }
 
 .section-menu {
-	@apply bg-white shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
+	@apply bg-neutral shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
 }
 </style>

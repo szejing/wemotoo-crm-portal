@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="container">
 			<ZSectionFilterProducts />
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="pageSize" :items="options_page_size" /> </span>
 
 					<div class="flex gap-4">
 						<!-- <UButton>
@@ -108,7 +108,7 @@ const options = (product: Product) => [
 	],
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const page = ref(1);
 const productStore = useProductStore();
 
@@ -119,15 +119,17 @@ const rows = computed(() => {
 });
 
 const deleteProduct = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this product ?',
-		action: 'delete',
-		onConfirm: async () => {
-			await productStore.deleteProduct(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this product ?',
+			action: 'delete',
+			onConfirm: async () => {
+				await productStore.deleteProduct(code);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -136,96 +138,98 @@ const editProduct = async (code: string) => {
 	const product: Product | undefined = products.value.find((prod) => prod.code === code);
 	if (!product) return;
 
-	modal.open(ZModalProductDetail, {
-		product: JSON.parse(JSON.stringify(product)),
-		onUpdate: async (prod: Product) => {
-			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = prod;
+	const modal = overlay.create(ZModalProductDetail, {
+		props: {
+			product: JSON.parse(JSON.stringify(product)),
+			onUpdate: async (prod: Product) => {
+				const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = prod;
 
-			// price_types
-			const prodPrice: PriceInput[] = [];
-			price_types?.forEach((price) => {
-				prodPrice.push({
-					id: price.id,
-					orig_sell_price: price.orig_sell_price,
-					cost_price: price.cost_price,
-					sale_price: price.sale_price,
-					currency_code: price.currency_code,
+				// price_types
+				const prodPrice: PriceInput[] = [];
+				price_types?.forEach((price) => {
+					prodPrice.push({
+						id: price.id,
+						orig_sell_price: price.orig_sell_price,
+						cost_price: price.cost_price,
+						sale_price: price.sale_price,
+						currency_code: price.currency_code,
+					});
 				});
-			});
 
-			// product categories
-			const prodCategories: CategoryInput[] = [];
-			categories?.forEach((category) => {
-				prodCategories.push({
-					code: category.code!,
+				// product categories
+				const prodCategories: CategoryInput[] = [];
+				categories?.forEach((category) => {
+					prodCategories.push({
+						code: category.code!,
+					});
 				});
-			});
 
-			// product tags
-			const prodTags: TagInput[] = [];
-			tags?.forEach((tag) => {
-				prodTags.push({
-					id: tag.id!,
+				// product tags
+				const prodTags: TagInput[] = [];
+				tags?.forEach((tag) => {
+					prodTags.push({
+						id: tag.id!,
+					});
 				});
-			});
 
-			// product options
-			const prodOptions: ProdOptionInput[] = [];
-			options?.forEach((option) => {
-				prodOptions.push({
-					id: option.id!,
-					name: option.name!,
-					value: undefined,
-					values: option.values?.map((value) => {
-						return {
-							id: value.id!,
-							value: value.value!,
-						};
-					}),
+				// product options
+				const prodOptions: ProdOptionInput[] = [];
+				options?.forEach((option) => {
+					prodOptions.push({
+						id: option.id!,
+						name: option.name!,
+						value: undefined,
+						values: option.values?.map((value) => {
+							return {
+								id: value.id!,
+								value: value.value!,
+							};
+						}),
+					});
 				});
-			});
 
-			// product variants
-			const prodVariants: ProdVariantInput[] = [];
-			variants?.forEach((variant) => {
-				prodVariants.push({
-					id: variant.id!,
-					name: variant.name!,
-					price_types: variant.price_types?.map((price) => {
-						return {
-							id: price.id,
-							orig_sell_price: price.orig_sell_price,
-							cost_price: price.cost_price,
-							sale_price: price.sale_price,
-							currency_code: price.currency_code,
-						};
-					}),
-					options: variant.options,
+				// product variants
+				const prodVariants: ProdVariantInput[] = [];
+				variants?.forEach((variant) => {
+					prodVariants.push({
+						id: variant.id!,
+						name: variant.name!,
+						price_types: variant.price_types?.map((price) => {
+							return {
+								id: price.id,
+								orig_sell_price: price.orig_sell_price,
+								cost_price: price.cost_price,
+								sale_price: price.sale_price,
+								currency_code: price.currency_code,
+							};
+						}),
+						options: variant.options,
+					});
 				});
-			});
 
-			await productStore.updateProduct(code!, {
-				code,
-				name,
-				short_desc: short_desc ?? undefined,
-				long_desc: long_desc ?? undefined,
-				is_active,
-				is_discountable: true,
-				is_giftcard: false,
-				price_types: prodPrice,
-				categories: prodCategories,
-				tags: prodTags,
-				status: status,
-				galleries: galleries ?? undefined,
-				thumbnail: thumbnail ?? undefined,
-				options: prodOptions,
-				variants: prodVariants,
-			});
+				await productStore.updateProduct(code!, {
+					code,
+					name,
+					short_desc: short_desc ?? undefined,
+					long_desc: long_desc ?? undefined,
+					is_active,
+					is_discountable: true,
+					is_giftcard: false,
+					price_types: prodPrice,
+					categories: prodCategories,
+					tags: prodTags,
+					status: status,
+					galleries: galleries ?? undefined,
+					thumbnail: thumbnail ?? undefined,
+					options: prodOptions,
+					variants: prodVariants,
+				});
 
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };

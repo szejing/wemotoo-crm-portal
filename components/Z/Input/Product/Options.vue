@@ -26,8 +26,8 @@
 		</div>
 		<!-- ************* DESKTOP ************* -->
 
-		<UModal v-model="isOptionSelectionModal">
-			<ZSelectionOptions :options="prodOptions" @update:product-options="updateProductOptions" />
+		<UModal v-model:open="isOptionSelectionModal">
+			<ZSelectionOptions :items="prodOptions" @update:product-options="updateProductOptions" />
 		</UModal>
 	</div>
 </template>

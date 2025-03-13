@@ -1,20 +1,20 @@
 <template>
-	<div>
+	<UApp>
 		<NuxtRouteAnnouncer />
 		<NuxtLayout>
 			<NuxtLoadingIndicator color="repeating-linear-gradient(to right,#C2C9FF 0%,#402E7A 100%)" />
 			<NuxtPage />
 		</NuxtLayout>
-		<UNotifications
+		<!-- <UNotifications
 			:close-button="{
 				icon: ICONS.CLOSE_ROUNDED,
 				variant: 'link',
-				color: 'white',
+				color: 'neutral',
 				padded: true,
 			}"
 		/>
-		<UModals />
-	</div>
+		<UModals /> -->
+	</UApp>
 </template>
 
 //
@@ -32,8 +32,8 @@ watch(notification, () => {
 			title: notification.value?.title,
 			description: notification.value?.description,
 			icon: notification.value?.icon,
-			timeout: notification.value?.timeout,
-			closeButton: notification.value?.closeButton,
+			duration: notification.value?.timeout,
+			close: notification.value?.closeButton,
 		});
 	}
 });

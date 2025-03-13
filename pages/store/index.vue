@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<h1>Store</h1>
 	</div>
 </template>

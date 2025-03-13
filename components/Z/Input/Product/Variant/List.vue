@@ -24,7 +24,7 @@
 			Add Variant
 		</UButton>
 
-		<UModal v-if="variantDetail" v-model="isVariantDetailsModalOpen">
+		<UModal v-if="variantDetail" v-model:open="isVariantDetailsModalOpen">
 			<ZInputProductVariantDetails :product="props.product" :details="variantDetail" @update:variant-detail="updateVariantDetail" />
 		</UModal>
 	</div>

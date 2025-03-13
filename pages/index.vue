@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="container">
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 md:grid-rows-2 gap-4">
 				<DashboardChartSales class="col-span-1 sm:col-span-2 sm:row-span-2 md:col-span-4" />

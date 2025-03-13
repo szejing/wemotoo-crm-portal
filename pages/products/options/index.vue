@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
@@ -83,7 +83,7 @@ const options = (row: ProductOption) => [
 	],
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const page = ref(1);
 const productOptionsStore = useProductOptionsStore();
 await productOptionsStore.getOptions();
@@ -95,15 +95,17 @@ const rows = computed(() => {
 });
 
 const deleteProductOption = async (id: number) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this option?',
-		action: 'delete',
-		onConfirm: async () => {
-			await productOptionsStore.deleteProductOption(id);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this option?',
+			action: 'delete',
+			onConfirm: async () => {
+				await productOptionsStore.deleteProductOption(id);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -113,14 +115,16 @@ const editProductOption = async (optionId: number) => {
 
 	if (!option) return;
 
-	modal.open(ZModalOptionDetail, {
-		productOption: JSON.parse(JSON.stringify(option)),
-		onUpdate: async (name: string, values: ProductOptionValue[]) => {
-			await productOptionsStore.updateProductOption(optionId, name, values);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalOptionDetail, {
+		props: {
+			productOption: JSON.parse(JSON.stringify(option)),
+			onUpdate: async (name: string, values: ProductOptionValue[]) => {
+				await productOptionsStore.updateProductOption(optionId, name, values);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -144,6 +148,6 @@ const editProductOption = async (optionId: number) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

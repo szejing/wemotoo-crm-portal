@@ -3,7 +3,7 @@
 		<USelectMenu
 			v-model="currency_code"
 			v-model:query="query"
-			:options="currencies"
+			:items="currencies"
 			searchable
 			size="md"
 			value-attribute="code"
@@ -12,7 +12,7 @@
 		>
 			<template #label>
 				<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
-				<span v-else class="text-gray-400">Select Currency</span>
+				<span v-else class="text-neutral-400">Select Currency</span>
 			</template>
 		</USelectMenu>
 	</UFormGroup>

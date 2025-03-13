@@ -94,7 +94,7 @@ export const useAppUiStore = defineStore({
 			if (this.notification.closeButton === undefined) {
 				this.notification.closeButton = {
 					icon: ICONS.CLOSE_ROUNDED,
-					color: 'white',
+					color: 'neutral',
 					variant: 'link',
 				};
 			}

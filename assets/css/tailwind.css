@@ -1,6 +1,338 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+	--breakpoint-*: initial;
+	--breakpoint-xs: 475px;
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+	--breakpoint-2xl: 1536px;
+
+	--text-*: initial;
+	--text-xs: 0.8rem;
+	--text-sm: 0.9rem;
+	--text-md: 0.95rem;
+	--text-base: 1rem;
+	--text-lg: 1.12rem;
+	--text-xl: 1.25rem;
+	--text-2xl: 1.5rem;
+	--text-3xl: 1.75rem;
+	--text-4xl: 2.441rem;
+	--text-5xl: 3.052rem;
+
+	--font-nunito: Nunito;
+
+	--radius-card: var(--border-radius-card);
+	--radius-button: var(--border-radius-button);
+	--radius-input: var(--border-radius-input);
+	--radius-panel: var(--border-radius-panel);
+
+	--animate-fade-in: fade-in 0.5s linear forwards;
+
+	--color-main-50: #fff4e6;
+	--color-main-100: #fef1e9;
+	--color-main-200: #fcdcc8;
+	--color-main-300: #fac7a7;
+	--color-main-400: #f79d65;
+	--color-main-500: #f37323;
+	--color-main-600: #db6820;
+	--color-main-700: #924515;
+	--color-main-800: #6d3410;
+	--color-main-900: #49230b;
+	--color-main: #f37323;
+
+	--color-secondary-50: #f2f6fa;
+	--color-secondary-100: #e6ebf1;
+	--color-secondary-200: #bfcedc;
+	--color-secondary-300: #99b1c7;
+	--color-secondary-400: #4d769c;
+	--color-secondary-500: #003b72;
+	--color-secondary-600: #003567;
+	--color-secondary-700: #002344;
+	--color-secondary-800: #001b33;
+	--color-secondary-900: #001222;
+	--color-secondary: #003b72;
+
+	--color-neutral-0: #ffffff;
+	--color-neutral-50: #f5f5f5;
+	--color-neutral-100: #eeeeee;
+	--color-neutral-200: #e8e8e8;
+	--color-neutral-300: #c4c4c4;
+	--color-neutral-400: #9e9e9e;
+	--color-neutral-500: #6a7077;
+	--color-neutral-600: #61676d;
+	--color-neutral-700: #3e4348;
+	--color-neutral-800: #1f2326;
+	--color-neutral-900: #151414;
+	--color-neutral: #6a7077;
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-neutral-200, currentColor);
+	}
+}
+
+@utility flex-col-center {
+	/**************************** flex styling ****************************/
+	@apply flex flex-col justify-center items-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-jcenter {
+	@apply flex flex-col justify-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-icenter {
+	@apply flex flex-col items-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-start {
+	@apply flex flex-col justify-start items-start;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-jstart {
+	@apply flex flex-col justify-start;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-istart {
+	@apply flex flex-col items-start;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-end {
+	@apply flex flex-col justify-end items-end;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-jend {
+	@apply flex flex-col justify-end;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-col-iend {
+	@apply flex flex-col items-end;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-center {
+	@apply flex items-center justify-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-jcenter {
+	@apply flex justify-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-icenter {
+	@apply flex items-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-jend {
+	@apply flex justify-end;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-iend {
+	@apply flex items-end;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-between {
+	@apply flex justify-between;
+
+	/**************************** button styling ****************************/
+}
+
+@utility flex-jbetween-icenter {
+	@apply flex justify-between items-center;
+
+	/**************************** button styling ****************************/
+}
+
+@utility container {
+	/**************************** container styling ****************************/
+	@apply py-4;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button {
+	/**************************** button styling ****************************/
+	-webkit-transition: all ease 0.5s;
+	-moz-transition: all ease 0.5s;
+	transition: all ease 0.5s;
+
+	&:hover {
+		-webkit-transform: translateY(-5px);
+		-moz-transform: translateY(-5px);
+		transform: translateY(-5px);
+		@apply shadow-lg;
+	}
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-primary-solid {
+	/**************************** primary button ****************************/
+	@apply ring-1 ring-inset ring-main hover:ring-main-700 text-neutral bg-main focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-primary-solid-disabled {
+	@apply ring-1 ring-inset ring-main text-neutral disabled:bg-neutral;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-primary-outline {
+	@apply ring-1 ring-inset ring-main text-main focus-visible:ring-2 focus-visible:ring-main hover:bg-main-100;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-primary-outline-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-main-300 bg-transparent aria-disabled:bg-transparent;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-green-solid {
+	/**************************** green button ****************************/
+	@apply ring-1 ring-inset ring-green-400 hover:ring-green-700 text-neutral bg-green-400 focus-visible:ring-2 focus-visible:ring-green-500 hover:bg-green-700;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-green-solid-disabled {
+	@apply ring-1 ring-inset ring-green-100 text-green-100 disabled:bg-green-50;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-green-outline {
+	@apply ring-1 ring-inset ring-green-400 text-green-400 focus-visible:ring-2 focus-visible:ring-green-400 hover:bg-green-100;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-green-outline-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-green-100 bg-neutral-300;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-red-solid {
+	/**************************** danger button ****************************/
+	@apply ring-1 ring-inset ring-red-600 hover:ring-red-700 text-neutral disabled:bg-neutral bg-red-600 focus-visible:ring-2 focus-visible:ring-red-500 hover:bg-red-700;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-red-solid-disabled {
+	@apply ring-1 ring-inset ring-red-100 text-red-100 disabled:bg-red-50;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-red-outline {
+	@apply ring-1 ring-inset ring-red-600 text-red-600 focus-visible:ring-2 focus-visible:ring-red-600 hover:bg-red-100;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-red-outline-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-red-100 bg-neutral-300;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-link {
+	/**************************** neutral button ****************************/
+	@apply bg-transparent text-neutral;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-solid {
+	/**************************** neutral button ****************************/
+	@apply ring-1 ring-inset ring-neutral-600 hover:ring-neutral-700 text-neutral disabled:bg-neutral bg-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-500 hover:bg-neutral-700;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-solid-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 disabled:bg-neutral-50;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-ghost {
+	@apply text-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-ghost-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-soft {
+	@apply text-neutral-400 bg-neutral-50 hover:bg-neutral-100 disabled:bg-neutral-50 aria-disabled:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-300;
+
+	/**************************** button styling ****************************/
+}
+
+@utility button-neutral-soft-disabled {
+	@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
+
+	/**************************** button styling ****************************/
+}
 
 @layer base {
 	body {
@@ -12,76 +344,11 @@
 	}
 
 	.section-pagination {
-		@apply flex justify-end px-3 py-3.5 border-t border-gray-200;
+		@apply flex justify-end px-3 py-3.5 border-t border-neutral-200;
 	}
 }
 
 @layer components {
-	/**************************** flex styling ****************************/
-	.flex-col-center {
-		@apply flex flex-col justify-center items-center;
-	}
-
-	.flex-col-jcenter {
-		@apply flex flex-col justify-center;
-	}
-
-	.flex-col-icenter {
-		@apply flex flex-col items-center;
-	}
-
-	.flex-col-start {
-		@apply flex flex-col justify-start items-start;
-	}
-
-	.flex-col-jstart {
-		@apply flex flex-col justify-start;
-	}
-
-	.flex-col-istart {
-		@apply flex flex-col items-start;
-	}
-
-	.flex-col-end {
-		@apply flex flex-col justify-end items-end;
-	}
-
-	.flex-col-jend {
-		@apply flex flex-col justify-end;
-	}
-
-	.flex-col-iend {
-		@apply flex flex-col items-end;
-	}
-
-	.flex-center {
-		@apply flex items-center justify-center;
-	}
-
-	.flex-jcenter {
-		@apply flex justify-center;
-	}
-
-	.flex-icenter {
-		@apply flex items-center;
-	}
-
-	.flex-jend {
-		@apply flex justify-end;
-	}
-
-	.flex-iend {
-		@apply flex items-end;
-	}
-
-	.flex-between {
-		@apply flex justify-between;
-	}
-
-	.flex-jbetween-icenter {
-		@apply flex justify-between items-center;
-	}
-
 	/**************************** word styling ****************************/
 	h1 {
 		@apply font-nunito font-semibold text-2xl text-secondary-600;
@@ -102,106 +369,4 @@
 	p {
 		@apply font-nunito font-normal text-base;
 	}
-
-	/**************************** container styling ****************************/
-	.container {
-		@apply py-4;
-	}
-
-	/**************************** button styling ****************************/
-	.button {
-		-webkit-transition: all ease 0.5s;
-		-moz-transition: all ease 0.5s;
-		transition: all ease 0.5s;
-	}
-
-	.button:hover {
-		-webkit-transform: translateY(-5px);
-		-moz-transform: translateY(-5px);
-		transform: translateY(-5px);
-		@apply shadow-lg;
-	}
-
-	/**************************** primary button ****************************/
-	.button-primary-solid {
-		@apply ring-1 ring-inset ring-main hover:ring-main-700 text-white bg-main focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
-	}
-
-	.button-primary-solid-disabled {
-		@apply ring-1 ring-inset ring-main text-white disabled:bg-white;
-	}
-
-	.button-primary-outline {
-		@apply ring-1 ring-inset ring-main text-main focus-visible:ring-2 focus-visible:ring-main hover:bg-main-100;
-	}
-
-	.button-primary-outline-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-main-300 bg-transparent aria-disabled:bg-transparent;
-	}
-
-	/**************************** green button ****************************/
-	.button-green-solid {
-		@apply ring-1 ring-inset ring-green-400 hover:ring-green-700 text-white bg-green-400 focus-visible:ring-2 focus-visible:ring-green-500 hover:bg-green-700;
-	}
-
-	.button-green-solid-disabled {
-		@apply ring-1 ring-inset ring-green-100 text-green-100 disabled:bg-green-50;
-	}
-
-	.button-green-outline {
-		@apply ring-1 ring-inset ring-green-400 text-green-400 focus-visible:ring-2 focus-visible:ring-green-400 hover:bg-green-100;
-	}
-
-	.button-green-outline-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-green-100 bg-neutral-300;
-	}
-
-	/**************************** danger button ****************************/
-	.button-red-solid {
-		@apply ring-1 ring-inset ring-red-600 hover:ring-red-700 text-white disabled:bg-white bg-red-600 focus-visible:ring-2 focus-visible:ring-red-500 hover:bg-red-700;
-	}
-
-	.button-red-solid-disabled {
-		@apply ring-1 ring-inset ring-red-100 text-red-100 disabled:bg-red-50;
-	}
-
-	.button-red-outline {
-		@apply ring-1 ring-inset ring-red-600 text-red-600 focus-visible:ring-2 focus-visible:ring-red-600 hover:bg-red-100;
-	}
-
-	.button-red-outline-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-red-100 bg-neutral-300;
-	}
-
-	/**************************** white button ****************************/
-	.button-white-link {
-		@apply bg-transparent text-white;
-	}
-
-	/**************************** neutral button ****************************/
-	.button-neutral-solid {
-		@apply ring-1 ring-inset ring-neutral-600 hover:ring-neutral-700 text-white disabled:bg-white bg-neutral-600 focus-visible:ring-2 focus-visible:ring-neutral-500 hover:bg-neutral-700;
-	}
-
-	.button-neutral-solid-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 disabled:bg-neutral-50;
-	}
-
-	.button-neutral-ghost {
-		@apply text-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
-	}
-
-	.button-neutral-ghost-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
-	}
-
-	.button-neutral-soft {
-		@apply text-neutral-400 bg-neutral-50 hover:bg-neutral-100 disabled:bg-neutral-50 aria-disabled:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-300;
-	}
-
-	.button-neutral-soft-disabled {
-		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
-	}
-
-	/**************************** button styling ****************************/
 }

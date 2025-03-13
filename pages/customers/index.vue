@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="container">
 			<ZSectionFilterCustomers />
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="pageSize" :items="options_page_size" /> </span>
 					<div class="flex gap-4">
 						<UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />

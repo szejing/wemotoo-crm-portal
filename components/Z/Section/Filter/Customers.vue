@@ -9,7 +9,7 @@
 				<USelectMenu
 					v-model="state.status"
 					v-model:query="query"
-					:options="options_account_status"
+					:items="options_account_status"
 					searchable
 					size="md"
 					value-attribute="name"

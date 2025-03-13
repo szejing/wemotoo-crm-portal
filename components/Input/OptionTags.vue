@@ -221,7 +221,7 @@ useDetectClickOutside(elementInputTags, () => {
 
 <style lang="css" scoped>
 .tag-icon {
-	@apply size-5 ml-1 hover:bg-black hover:bg-opacity-10 rounded-sm transition duration-100;
+	@apply size-5 ml-1 hover:bg-neutral hover:bg-opacity/10 rounded-xs transition duration-100;
 }
 .wrapper-selected-tag {
 	@apply flex gap-x-1 items-center absolute inset-2 right-auto cursor-pointer;
@@ -231,13 +231,13 @@ useDetectClickOutside(elementInputTags, () => {
 }
 
 .section-available-tag {
-	@apply p-2 border border-gray-200 rounded-md bg-white flex flex-col gap-y-2 absolute translate-y-10 left-0 right-0 top-0;
+	@apply p-2 border border-neutral-200 rounded-md bg-neutral flex flex-col gap-y-2 absolute translate-y-10 left-0 right-0 top-0;
 }
 
 .wrapper-available-tag {
 }
 
 .wrapper-available-tag li {
-	@apply px-2 py-1.5 hover:bg-gray-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
+	@apply px-2 py-1.5 hover:bg-neutral-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
 }
 </style>

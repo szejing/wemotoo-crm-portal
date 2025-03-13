@@ -3,7 +3,7 @@
 		<USelectMenu
 			v-model="category"
 			v-model:query="query"
-			:options="availableCategories"
+			:items="availableCategories"
 			searchable
 			size="md"
 			value-attribute="code"

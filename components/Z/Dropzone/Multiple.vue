@@ -48,6 +48,6 @@ const uploadImages = async (e: any) => {
 
 <style scoped lang="css">
 .dropzone {
-	@apply border-2 border-dashed border-gray-400 h-auto aspect-1 bg-transparent mt-4 rounded-md min-h-[150px];
+	@apply border-2 border-dashed border-neutral-400 h-auto aspect-1 bg-transparent mt-4 rounded-md min-h-[150px];
 }
 </style>

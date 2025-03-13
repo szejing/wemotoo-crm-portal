@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="container">
 			<ZSectionFilterMaintenanceService />
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="pageSize" :items="options_page_size" /> </span>
 
 					<div class="flex gap-4">
 						<!-- <UButton>
@@ -108,7 +108,7 @@ const options = (maintenanceService: MaintenanceService) => [
 	],
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const page = ref(1);
 const maintenanceServiceStore = useMaintenanceServiceStore();
 
@@ -119,15 +119,17 @@ const rows = computed(() => {
 });
 
 const deleteMaintenanceService = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this maintenance service ?',
-		action: 'delete',
-		onConfirm: async () => {
-			await maintenanceServiceStore.deleteMaintenanceService(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this maintenance service ?',
+			action: 'delete',
+			onConfirm: async () => {
+				await maintenanceServiceStore.deleteMaintenanceService(code);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -135,57 +137,56 @@ const deleteMaintenanceService = async (code: string) => {
 const editMaintenanceService = async (code: string) => {
 	const maintenanceService: MaintenanceService | undefined = maintenanceServices.value.find((maint: MaintenanceService) => maint.code === code);
 	if (!maintenanceService) return;
-	modal.open(ZModalMaintenanceServiceDetail, {
-		maintenanceService: JSON.parse(JSON.stringify(maintenanceService)),
-		onUpdate: async (maintenanceService: MaintenanceService) => {
-			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail } = maintenanceService;
+	const modal = overlay.create(ZModalMaintenanceServiceDetail, {
+		props: {
+			maintenanceService: JSON.parse(JSON.stringify(maintenanceService)),
+			onUpdate: async (maintenanceService: MaintenanceService) => {
+				const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail } = maintenanceService;
 
-			// price_types
-			const _price_types: PriceInput[] = [];
-			price_types?.forEach((price) => {
-				_price_types.push({
-					id: price.id,
-					orig_sell_price: price.orig_sell_price,
-					cost_price: price.cost_price,
-					sale_price: price.sale_price,
-					currency_code: price.currency_code,
+				// price_types
+				const _price_types: PriceInput[] = [];
+				price_types?.forEach((price) => {
+					_price_types.push({
+						id: price.id,
+						orig_sell_price: price.orig_sell_price,
+						cost_price: price.cost_price,
+						sale_price: price.sale_price,
+						currency_code: price.currency_code,
+					});
 				});
-			});
 
-			// product categories
-			const _categories: CategoryInput[] = [];
-			categories?.forEach((category) => {
-				_categories.push({
-					code: category.code!,
+				// product categories
+				const _categories: CategoryInput[] = [];
+				categories?.forEach((category) => {
+					_categories.push({
+						code: category.code!,
+					});
 				});
-			});
 
-			// produc
-			const _tags: TagInput[] = [];
-			tags?.forEach((tag) => {
-				_tags.push({
-					id: tag.id!,
+				// produc
+				const _tags: TagInput[] = [];
+				tags?.forEach((tag) => {
+					_tags.push({
+						id: tag.id!,
+					});
 				});
-			});
 
-			await maintenanceServiceStore.updateMaintenanceService(maintenanceService.code!, {
-				code,
-				name,
-				short_desc: short_desc ?? undefined,
-				long_desc: long_desc ?? undefined,
-				is_active,
-				is_discountable: true,
-				price_types: _price_types,
-				categories: _categories,
-				tags: _tags,
-				status: status,
-				galleries: galleries ?? undefined,
-				thumbnail: thumbnail ?? undefined,
-			});
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+				await maintenanceServiceStore.updateMaintenanceService(maintenanceService.code!, {
+					code,
+					name,
+					short_desc: short_desc ?? undefined,
+					long_desc: long_desc ?? undefined,
+					is_active,
+					is_discountable: true,
+					price_types: _price_types,
+					categories: _categories,
+					tags: _tags,
+					status: status,
+					galleries: galleries ?? undefined,
+					thumbnail: thumbnail ?? undefined,
+				});
+				modal.close();
+			},
 		},
 	});
 };

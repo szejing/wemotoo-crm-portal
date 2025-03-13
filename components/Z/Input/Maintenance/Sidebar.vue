@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import { useMaintenanceServiceStore } from '~/stores/MaintenanceService/MaintenanceService';
 
-const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
+const cardBg = { background: 'bg-secondary-50', shadow-xs: 'shadow-md' };
 
 const maintenanceServiceStore = useMaintenanceServiceStore();
 const { newMaintenance } = storeToRefs(maintenanceServiceStore);

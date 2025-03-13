@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
@@ -70,7 +70,7 @@ const options = (row: Tag) => [
 	],
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const page = ref(1);
 const tagsStore = useTagsStore();
 await tagsStore.getTags();
@@ -82,15 +82,17 @@ const rows = computed(() => {
 });
 
 const deleteProductTag = async (id: number) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this tag?',
-		action: 'delete',
-		onConfirm: async () => {
-			await tagsStore.deleteTag(id);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this tag?',
+			action: 'delete',
+			onConfirm: async () => {
+				await tagsStore.deleteTag(id);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -100,14 +102,16 @@ const editProductTag = async (id: number) => {
 
 	if (!tag) return;
 
-	modal.open(ZModalTagDetail, {
-		tag: JSON.parse(JSON.stringify(tag)),
-		onUpdate: async (tag: Tag) => {
-			await tagsStore.updateTag(id, tag);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalTagDetail, {
+		props: {
+			tag: JSON.parse(JSON.stringify(tag)),
+			onUpdate: async (tag: Tag) => {
+				await tagsStore.updateTag(id, tag);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -131,6 +135,6 @@ const editProductTag = async (id: number) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

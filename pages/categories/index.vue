@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="base">
 			<div class="sm:col-span-2">
 				<UCard>
@@ -71,7 +71,7 @@ const options = (row: Category) => [
 	],
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const page = ref(1);
 const categoryStore = useCategoriesStore();
 await categoryStore.getCategories();
@@ -83,15 +83,17 @@ const rows = computed(() => {
 });
 
 const deleteCategory = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this category?',
-		action: 'delete',
-		onConfirm: async () => {
-			await categoryStore.deleteCategory(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const modal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this category?',
+			action: 'delete',
+			onConfirm: async () => {
+				await categoryStore.deleteCategory(code);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
 };
@@ -99,16 +101,21 @@ const deleteCategory = async (code: string) => {
 const editCategory = async (code: string) => {
 	const category: Category | undefined = categories.value.find((category) => category.code === code);
 	if (!category) return;
-	modal.open(ZModalCategoryDetail, {
-		category: JSON.parse(JSON.stringify(category)),
-		onUpdate: async (category: Category) => {
-			await categoryStore.updateCategory(category);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+
+	const modal = overlay.create(ZModalCategoryDetail, {
+		props: {
+			category: JSON.parse(JSON.stringify(category)),
+			onUpdate: async (category: Category) => {
+				await categoryStore.updateCategory(category);
+				modal.close();
+			},
+			onCancel: () => {
+				modal.close();
+			},
 		},
 	});
+
+	modal.open();
 };
 </script>
 
@@ -130,6 +137,6 @@ const editCategory = async (code: string) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

@@ -22,20 +22,20 @@ export default defineAppConfig({
 
 		notification: {
 			background: 'bg-{color}-500',
-			title: 'text-sm font-medium text-white',
-			description: 'mt-1 text-sm leading-4 text-white',
+			title: 'text-sm font-medium text-neutral',
+			description: 'mt-1 text-sm leading-4 text-neutral',
 			icon: {
-				color: 'text-white',
+				color: 'text-neutral',
 			},
 			progress: {
-				background: 'bg-white',
+				background: 'bg-neutral',
 			},
 		},
 
 		//* Card *//
 		card: {
 			base: 'transition duration-200 py-2',
-			background: 'bg-white',
+			background: 'bg-neutral',
 			shadow: 'shadow-md',
 			divide: 'divide-none',
 			rounded: `rounded`,
@@ -89,9 +89,7 @@ export default defineAppConfig({
 					solid: 'button-neutral-solid',
 					ghost: 'button-neutral-ghost',
 					soft: 'button-neutral-soft',
-				},
-				white: {
-					link: 'button-white-link',
+					link: 'button-neutral-link',
 				},
 			},
 			padding: {
@@ -112,9 +110,9 @@ export default defineAppConfig({
 		checkbox: {
 			container: 'flex items-center h-6',
 			base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
-			label: 'text-base font-medium text-gray-700',
+			label: 'text-base font-medium text-neutral-700',
 			required: 'text-base text-red-500 ',
-			help: 'text-base text-gray-500 ',
+			help: 'text-base text-neutral-500 ',
 		},
 
 		// * FormGroup *//
@@ -135,9 +133,9 @@ export default defineAppConfig({
 				'xl': 'text-sm md:text-2xl',
 			},
 			container: 'mt-1 relative',
-			description: 'text-gray-500',
-			hint: 'text-gray-500',
-			help: 'mt-2 text-gray-500',
+			description: 'text-neutral-500',
+			hint: 'text-neutral-500',
+			help: 'mt-2 text-neutral-500',
 			error: 'mt-2 text-red-500',
 			default: {
 				size: 'sm',
@@ -213,7 +211,7 @@ export default defineAppConfig({
 				'lg': 'px-4 py-2',
 				'xl': 'px-4 py-3',
 			},
-			placeholder: 'text-gray-400',
+			placeholder: 'text-neutral-400',
 			default: {
 				loadingIcon: 'i-material-symbols-sync-rounded',
 				trailingIcon: 'i-material-symbols-expand-more-rounded',
@@ -227,7 +225,7 @@ export default defineAppConfig({
 			option: {
 				padding: 'px-4 py-1.5',
 			},
-			placeholder: 'text-gray-400',
+			placeholder: 'text-neutral-400',
 			default: {
 				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 			},
@@ -299,7 +297,7 @@ export default defineAppConfig({
 		// 	base: 'focus:outline-none',
 		// 	list: {
 		// 		base: 'relative',
-		// 		background: 'bg-gray-100',
+		// 		background: 'bg-neutral-100',
 		// 		rounded: 'rounded-lg',
 		// 		shadow: '',
 		// 		padding: 'p-1',
@@ -308,22 +306,22 @@ export default defineAppConfig({
 		// 		marker: {
 		// 			wrapper: 'absolute top-[4px] left-[4px] duration-200 ease-out focus:outline-none',
 		// 			base: 'w-full h-full',
-		// 			background: 'bg-white',
+		// 			background: 'bg-neutral',
 		// 			rounded: 'rounded-md',
-		// 			shadow: 'shadow-sm',
+		// 			shadow: 'shadow-xs',
 		// 		},
 		// 		tab: {
-		// 			base: 'relative inline-flex items-center justify-center flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500  ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
+		// 			base: 'relative inline-flex items-center justify-center flex-shrink/0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500  ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
 		// 			background: '',
-		// 			active: 'text-gray-900',
-		// 			inactive: 'text-gray-500',
+		// 			active: 'text-neutral-900',
+		// 			inactive: 'text-neutral-500',
 		// 			height: 'h-8',
 		// 			padding: 'px-3',
 		// 			size: 'text-sm',
 		// 			font: 'font-medium',
 		// 			rounded: 'rounded-md',
 		// 			shadow: '',
-		// 			icon: 'w-4 h-4 flex-shrink-0 me-2',
+		// 			icon: 'w-4 h-4 flex-shrink/0 me-2',
 		// 		},
 		// 	},
 		// },

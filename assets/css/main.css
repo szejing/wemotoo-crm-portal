@@ -1,9 +1,12 @@
+@import 'tailwindcss' theme(static);
+@import '@nuxt/ui';
+
 html {
 	scroll-behavior: smooth;
 }
 
 body {
-	@apply bg-white;
+	@apply bg-neutral;
 }
 
 :target {
@@ -11,7 +14,7 @@ body {
 }
 
 /* ::selection {
-    @apply bg-primary text-white;
+    @apply bg-primary text-neutral;
 } */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */

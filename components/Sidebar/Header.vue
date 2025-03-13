@@ -4,7 +4,7 @@
 			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
-		<UModal v-model="isMerchantInfoModal">
+		<UModal v-model:open="isMerchantInfoModal">
 			<UCard>
 				<template #header>
 					<div class="merchant-info-modal">

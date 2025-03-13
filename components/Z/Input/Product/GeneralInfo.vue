@@ -133,9 +133,9 @@ const long_desc = computed({
 	min-height: 200px;
 }
 :deep(.ql-toolbar.ql-snow) {
-	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
+	@apply shadow-xs bg-neutral text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
 }
 :deep(.ql-container.ql-snow) {
-	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
+	@apply shadow-xs bg-neutral text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
 }
 </style>

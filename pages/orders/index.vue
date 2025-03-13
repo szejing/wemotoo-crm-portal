@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<UBreadcrumb :links="links" />
+		<UBreadcrumb :items="links" />
 		<div class="container">
 			<ZSectionFilterOrders />
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="pageSize" :items="options_page_size" /> </span>
 
 					<div class="flex gap-4">
 						<!-- <UButton>
@@ -22,7 +22,7 @@
 				<UTable :rows="rows" :columns="order_columns">
 					<template #actions-data="{ row }">
 						<UDropdown :items="options(row)">
-							<UButton color="gray" variant="ghost" :icon="ICONS.HORIZONTAL_ELLIPSIS" />
+							<UButton color="neutral" variant="ghost" :icon="ICONS.HORIZONTAL_ELLIPSIS" />
 						</UDropdown>
 					</template>
 

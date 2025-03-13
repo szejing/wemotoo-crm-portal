@@ -1,9 +1,9 @@
 <template>
 	<UFormGroup name="categories" class="mt-2">
-		<USelectMenu v-model="categories" v-model:query="query" :options="category_options" searchable size="md" option-attribute="name" multiple by="code">
+		<USelectMenu v-model="categories" v-model:query="query" :items="category_options" searchable size="md" option-attribute="name" multiple by="code">
 			<template #label>
 				<span v-if="categories.length" class="truncate">{{ categories.map((category) => category.name).join(', ') }}</span>
-				<span v-else class="text-gray-400">Select Categories</span>
+				<span v-else class="text-neutral-400">Select Categories</span>
 			</template>
 
 			<template #option-empty>
