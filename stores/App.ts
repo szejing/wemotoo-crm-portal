@@ -23,6 +23,9 @@ export const useAppStore = defineStore({
 
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();
+
+			const settingsStore = useSettingsStore();
+			await settingsStore.getSettings();
 		},
 	},
 });

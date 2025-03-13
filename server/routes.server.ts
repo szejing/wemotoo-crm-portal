@@ -8,7 +8,7 @@ const currency: string = 'currencies';
 const country: string = 'countries';
 const prod: string = 'products';
 const maintenances: string = 'maintenances';
-
+const setting: string = 'settings';
 export const Routes = {
 	Image: {
 		Upload: () => `${merchant}/${image}/upload`,
@@ -68,6 +68,10 @@ export const Routes = {
 		Update: () => `${merchant}/${prodOption}/`,
 		Remove: () => `${merchant}/${prodOption}/`,
 		RevertRemove: () => `${merchant}/${prodOption}/`,
+	},
+	Setting: {
+		Many: () => `${merchant}/${setting}/`,
+		Update: () => `${merchant}/${setting}/`,
 	},
 };
 
