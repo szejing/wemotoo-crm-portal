@@ -42,8 +42,7 @@ const initialEmptyProduct: Product = {
 	variants: [],
 };
 
-export const useProductStore = defineStore({
-	id: 'productStore',
+export const useProductStore = defineStore('productStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,

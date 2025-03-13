@@ -38,8 +38,7 @@ const initialEmptyMaintenance: MaintenanceService = {
 	],
 };
 
-export const useMaintenanceServiceStore = defineStore({
-	id: 'maintenanceServiceStore',
+export const useMaintenanceServiceStore = defineStore('maintenanceServiceStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,

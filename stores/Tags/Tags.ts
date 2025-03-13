@@ -8,8 +8,7 @@ const initialEmptyTag: TagCreate = {
 	value: undefined,
 };
 
-export const useTagsStore = defineStore({
-	id: 'tagsStore',
+export const useTagsStore = defineStore('tagsStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,

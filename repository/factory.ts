@@ -46,7 +46,7 @@ class HttpFactory {
 		},
 	}: IHttpFactory): Promise<T> {
 		try {
-			return await this.$fetch<T>(url, {
+			return await $fetch<T>(url, {
 				method,
 				body,
 				query,

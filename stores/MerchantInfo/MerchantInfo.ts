@@ -5,8 +5,7 @@ import type { Currency } from '~/utils/types/currency';
 
 const initial: MerchantInfo[] = [];
 
-export const useMerchantInfoStore = defineStore({
-	id: 'merchantInfoStore',
+export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 	state: () => ({
 		loading: false as boolean,
 		// merchant: undefined as MerchantInfo | undefined,
