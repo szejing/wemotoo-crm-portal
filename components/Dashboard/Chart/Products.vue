@@ -8,7 +8,7 @@
 		<Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
 		<template #footer>
 			<div class="w-full flex justify-end items-center text-secondary-400 gap-2">
-				<p class="font-nunito text-sm text-end">Details</p>
+				<p class="text-sm text-end">Details</p>
 				<UIcon :name="ICONS.CHEVRON_RIGHT" class="w-6 h-6" />
 			</div>
 		</template>

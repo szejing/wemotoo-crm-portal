@@ -13,7 +13,7 @@ export const theme = {
 	gray: 'slate',
 	borderRadius: 'lg',
 	googleFonts: {
-		Nunito: true,
+		lato: true,
 	},
 } as Theme;
 

@@ -43,7 +43,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				nunito: ['Nunito'],
+				lato: ['Lato'],
 			},
 			borderRadius: {
 				card: 'var(--border-radius-card)',
