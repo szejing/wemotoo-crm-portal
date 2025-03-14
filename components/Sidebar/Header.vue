@@ -37,7 +37,7 @@ const thumbnail = computed(() => {
 });
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .header-container {
 	@apply px-4 border-b-[1px] border-secondary-400;
 }

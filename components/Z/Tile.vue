@@ -47,7 +47,7 @@ const props = defineProps({
 const { title, subtitle, thumbnailUrl } = props;
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .tile-container {
 	@apply flex justify-start items-center gap-2;
 }

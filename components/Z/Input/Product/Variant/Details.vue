@@ -62,4 +62,4 @@ const updateProductVariant = () => {
 };
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

@@ -27,7 +27,7 @@ const appUiStore = useAppUiStore();
 const { showSidebar } = storeToRefs(appUiStore);
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .default-bg {
 	@apply bg-slate-100 min-h-screen;
 }

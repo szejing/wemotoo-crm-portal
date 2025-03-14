@@ -20,9 +20,6 @@ export const useSettingsStore = defineStore('settingsStore', {
 				if (data.settings) {
 					this.settings = data.settings;
 				}
-
-				console.log(this.segments);
-				console.log(this.settings);
 			} catch (error) {
 				console.error(error);
 			} finally {

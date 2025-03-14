@@ -126,7 +126,7 @@ const editProductOption = async (optionId: number) => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .base {
 	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
 }

@@ -31,4 +31,4 @@ const chartOptions = {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>
