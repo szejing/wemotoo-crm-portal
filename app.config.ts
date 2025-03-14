@@ -8,8 +8,10 @@ export default defineAppConfig({
 	theme,
 	ui: {
 		strategy: 'override',
-		primary: theme.main,
-		gray: theme.gray,
+		colors: {
+			primary: theme.main,
+			gray: theme.gray,
+		},
 
 		//* Modal *//
 		modal: {
