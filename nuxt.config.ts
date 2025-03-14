@@ -6,33 +6,38 @@ export default defineNuxtConfig({
 		// https://vueuse.org/
 
 		// https://github.com/nuxt-modules/icon
-		'@pinia/nuxt', // https://nuxtseo.com/sitemap/getting-started/how-it-works
+		// https://nuxtseo.com/sitemap/getting-started/how-it-works
+		'@pinia/nuxt',
 		'@nuxt/devtools',
 		'@nuxt/image',
-		[
-			'@nuxtjs/google-fonts',
-			{
-				families: {
-					Nunito: {
-						wght: '200..800',
-						ital: '200..800',
-					},
-				},
-			},
-		],
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
 		'@nuxt/eslint',
 		'@nuxt/ui',
 		'@vueuse/nuxt',
 		'six-dropzone',
+		[
+			'@nuxtjs/google-fonts',
+			{
+				families: {
+					Lato: {
+						wght: '300..900',
+						italic: '300..900',
+					},
+				},
+				preload: true,
+			},
+		],
 	],
 
 	devtools: { enabled: true },
 
 	app: {
 		head: {
-			script: ['https://unpkg.com/vue@next', 'https://unpkg.com/@vueup/vue-quill@1.2.0'],
+			script: [
+				{ src: 'https://unpkg.com/vue@next', async: true },
+				{ src: 'https://unpkg.com/@vueup/vue-quill@1.2.0', async: true },
+			],
 			link: [
 				{ rel: 'stylesheet', href: 'https://unpkg.com/@vueup/vue-quill@1.2.0/dist/vue-quill.snow.prod.cs' },
 				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
@@ -40,7 +45,7 @@ export default defineNuxtConfig({
 		},
 	},
 
-	css: ['~/assets/css/main.css'],
+	css: ['~/assets/css/main.css', '~/assets/css/tailwind.css'],
 
 	colorMode: {
 		preference: 'light',

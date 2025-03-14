@@ -59,7 +59,7 @@ export default defineAppConfig({
 		//* Button *//
 		button: {
 			base: 'transition duration-200',
-			font: 'font-bold font-nunito',
+			font: 'font-bold',
 			rounded: 'rounded',
 			default: {
 				loadingIcon: 'i-material-symbols-sync-rounded',

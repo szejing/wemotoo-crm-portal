@@ -16,15 +16,15 @@
 		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
-		"@nuxt/eslint": "^1.0.1",
+		"@nuxt/eslint": "^1.2.0",
 		"@nuxt/image": "1.9.0",
 		"@nuxt/ui": "^3.0.0",
 		"@pinia/nuxt": "^0.10.1",
 		"@types/uuid": "^10.0.0",
 		"@vee-validate/zod": "^4.15.0",
 		"@vueup/vue-quill": "^1.2.0",
-		"chart.js": "^4.4.7",
-		"nuxt": "^3.15.4",
+		"chart.js": "^4.4.8",
+		"nuxt": "^3.16.0",
 		"pinia": "^3.0.1",
 		"six-dropzone": "^0.3.4",
 		"tailwindcss": "^4.0.13",
@@ -37,23 +37,23 @@
 	"devDependencies": {
 		"@headlessui/vue": "1.7.23",
 		"@iconify-json/ic": "^1.2.2",
-		"@iconify-json/material-symbols": "^1.2.14",
-		"@iconify-json/material-symbols-light": "^1.2.14",
+		"@iconify-json/material-symbols": "^1.2.15",
+		"@iconify-json/material-symbols-light": "^1.2.15",
 		"@iconify-json/ri": "^1.2.5",
-		"@nuxt/devtools": "^2.1.0",
-		"@nuxt/eslint-config": "^1.0.1",
+		"@nuxt/devtools": "^2.3.0",
+		"@nuxt/eslint-config": "^1.2.0",
 		"@nuxtjs/eslint-config-typescript": "12.1.0",
 		"@nuxtjs/eslint-module": "4.1.0",
 		"@nuxtjs/google-fonts": "^3.2.0",
-		"@stylistic/eslint-plugin-ts": "^3.1.0",
+		"@stylistic/eslint-plugin-ts": "^4.2.0",
 		"@types/bun": "latest",
-		"@vueuse/core": "^12.7.0",
-		"@vueuse/motion": "2.2.6",
-		"@vueuse/nuxt": "^12.7.0",
-		"eslint": "^9.20.1"
+		"@vueuse/core": "^13.0.0",
+		"@vueuse/motion": "3.0.3",
+		"@vueuse/nuxt": "^13.0.0",
+		"eslint": "^9.22.0"
 	},
 	"module": "index.ts",
 	"peerDependencies": {
-		"typescript": "^5.7.3"
+		"typescript": "^5.8.2"
 	}
 }
