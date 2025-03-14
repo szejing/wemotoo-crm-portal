@@ -51,7 +51,7 @@ const description = computed({
 });
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .section-grid-basic-details {
 	@apply grid grid-cols-1 gap-3;
 }

@@ -58,4 +58,4 @@ const updateGalleries = (urls: string[]) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

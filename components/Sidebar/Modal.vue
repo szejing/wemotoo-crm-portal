@@ -13,4 +13,4 @@ const appUiStore = useAppUiStore();
 const { showSidebarModal } = storeToRefs(appUiStore);
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

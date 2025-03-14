@@ -45,7 +45,7 @@ const viewVariant = () => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 h4 {
 	@apply font-bold;
 }

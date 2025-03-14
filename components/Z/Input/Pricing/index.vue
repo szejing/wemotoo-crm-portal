@@ -128,7 +128,7 @@ const formatCurrencyInput = (input: string, event: any) => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .section-grid-price-details {
 	@apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
 }

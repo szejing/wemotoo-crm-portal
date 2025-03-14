@@ -106,7 +106,7 @@ const long_desc = computed({
 });
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .section-grid-basic-details {
 	@apply grid grid-cols-2 gap-4;
 }

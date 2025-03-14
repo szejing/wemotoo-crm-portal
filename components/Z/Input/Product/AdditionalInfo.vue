@@ -139,7 +139,7 @@ const updateProductVariants = (value: any) => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 h2 {
 	@apply leading-tight;
 }

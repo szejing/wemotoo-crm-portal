@@ -57,7 +57,7 @@ const links = [
 const isOpen = ref(false);
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .wrapper-grid {
 	@apply grid grid-cols-1 sm:grid-cols-4 gap-4;
 }
