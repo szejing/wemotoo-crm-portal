@@ -1,7 +1,7 @@
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
-import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from '~/utils/types/price';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';

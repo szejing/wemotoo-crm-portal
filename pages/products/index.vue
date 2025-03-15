@@ -69,7 +69,6 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalProductDetail } from '#components';
-import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';

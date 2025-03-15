@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import type { OrderStatus } from '~/utils/enum/order-status';
+import type { OrderStatus } from 'wemotoo-common';
 import { FilterOrderValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof FilterOrderValidation>;

@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import type { SettingTempl } from '~/utils/types/setting-templ';
-import { InputType as InputTypeEnum } from '~/utils/enum/input-type';
+import { InputType as InputTypeEnum } from 'wemotoo-common';
 import type { Setting } from '~/utils/types/setting';
 
 const props = defineProps({

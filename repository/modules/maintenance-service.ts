@@ -3,7 +3,7 @@ import MerchantRoutes from '../routes.client';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';
 import type { PriceInput } from '~/utils/types/price';
-import type { MaintenanceStatus } from '~/utils/enum/maintenance-status';
+import type { MaintenanceStatus } from 'wemotoo-common';
 import type { MaintenanceService } from '~/utils/types/maintenance-service';
 
 export type MaintenanceServicesResp = {

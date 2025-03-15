@@ -1,4 +1,4 @@
-import { ProductStatus } from '~/utils/enum/product-status';
+import { ProductStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';

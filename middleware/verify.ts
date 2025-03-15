@@ -1,4 +1,4 @@
-// import { KEY } from '~/utils/constants/key';
+// import { KEY } from 'wemotoo-common';
 
 // export default defineNuxtRouteMiddleware(async (to, _from) => {
 // 	if (import.meta.client) {
