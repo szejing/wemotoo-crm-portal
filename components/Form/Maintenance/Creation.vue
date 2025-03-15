@@ -34,7 +34,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { useMaintenanceServiceStore } from '~/stores/MaintenanceService/MaintenanceService';
-import { MaintenanceStatus } from '~/utils/enum/maintenance-status';
+import { MaintenanceStatus } from 'wemotoo-common';
 import { CreateMaintenanceValidation } from '~/utils/schema/Maintenance/Create/MaintenanceValidation';
 import type { CategoryInput } from '~/utils/types/category';
 import type { PriceInput } from '~/utils/types/price';

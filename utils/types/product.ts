@@ -1,4 +1,4 @@
-import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from './price';
 import type { CategoryInput } from './category';
 import type { TagInput } from './tag';

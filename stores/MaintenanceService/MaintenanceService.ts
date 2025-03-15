@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { MaintenanceService } from '~/utils/types/maintenance-service';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import { MaintenanceStatus } from '~/utils/enum/maintenance-status';
+import { MaintenanceStatus } from 'wemotoo-common';
 
 const initialEmptyMaintenance: MaintenanceService = {
 	code: undefined,

@@ -37,8 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE } from '~/utils/constants/group-code';
-import { MAINTENANCE_SETTING_CODE } from '~/utils/constants/setting-code';
+import { GROUP_CODE, MAINTENANCE_SETTING_CODE } from 'wemotoo-common';
 
 const settingsStore = useSettingsStore();
 const { getSetting } = settingsStore;

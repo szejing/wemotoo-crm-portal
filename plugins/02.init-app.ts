@@ -1,4 +1,4 @@
-import { KEY } from '~/utils/constants/key';
+import { KEY } from 'wemotoo-common';
 
 export default defineNuxtPlugin(async (_) => {
 	if (import.meta.client) {

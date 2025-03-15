@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { MaintenanceStatus } from '~/utils/enum/maintenance-status';
+import type { MaintenanceStatus } from 'wemotoo-common';
 import { options_maintenance_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 

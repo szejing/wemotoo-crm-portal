@@ -1,4 +1,4 @@
-import type { UserRoles } from '~/utils/enum/user-role';
+import type { UserRoles } from 'wemotoo-common';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { MerchantInfo } from '~/utils/types/merchant-info';

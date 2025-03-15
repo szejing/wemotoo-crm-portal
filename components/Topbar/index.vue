@@ -18,8 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE } from '~/utils/constants/group-code';
-import { MERCHANT_SETTING_CODE } from '~/utils/constants/setting-code';
+import { GROUP_CODE, MERCHANT_SETTING_CODE } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();
