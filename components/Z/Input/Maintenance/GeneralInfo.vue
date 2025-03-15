@@ -30,13 +30,25 @@
 			<UInput v-model="description" />
 		</UFormGroup> -->
 
-		<UFormGroup class="mt-4" label="Long Description" name="longDesc">
+		<UFormGroup v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
 			<ZTextEditor v-model:value="long_desc" placeholder="Long Description" />
 		</UFormGroup>
 	</UCard>
 </template>
 
 <script lang="ts" setup>
+import { GROUP_CODE } from '~/utils/constants/group-code';
+import { MAINTENANCE_SETTING_CODE } from '~/utils/constants/setting-code';
+
+const settingsStore = useSettingsStore();
+const { getSetting } = settingsStore;
+
+const hideLongDesc = computed(() => {
+	const value = getSetting(GROUP_CODE.MAINTENANCE_SETTING, MAINTENANCE_SETTING_CODE.HIDE_LONG_DESC);
+
+	return value?.getBoolean() ?? false;
+});
+
 const props = defineProps({
 	isActive: Boolean,
 	isDiscountable: Boolean,

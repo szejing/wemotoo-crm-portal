@@ -18,22 +18,22 @@
 
 <script lang="ts" setup>
 import { GROUP_CODE } from '~/utils/constants/group-code';
-import { SETTING_CODE } from '~/utils/constants/setting-code';
+import { MERCHANT_SETTING_CODE } from '~/utils/constants/setting-code';
 
 const merchantInfoStore = useMerchantInfoStore();
 
 const isMerchantInfoModal = ref(false);
 
 const merchantName = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_NAME)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.NAME)?.getString() ?? '';
 });
 
 const merchantId = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_ID)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.ID)?.getString() ?? '';
 });
 
 const thumbnail = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_THUMBNAIL)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.THUMBNAIL)?.getString() ?? '';
 });
 </script>
 

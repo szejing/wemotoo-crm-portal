@@ -3,7 +3,22 @@
 		<UBreadcrumb :links="links" />
 		<h1>Settings</h1>
 
-		<UTabs :items="items" class="w-full">
+		<UTabs
+			:items="items"
+			class="w-full"
+			:ui="{
+				list: {
+					height: 'h-12',
+					tab: {
+						height: 'h-10',
+					},
+				},
+			}"
+		>
+			<template #default="{ item }">
+				<h3 class="truncate py-4">{{ item.label }}</h3>
+			</template>
+
 			<template #item="{ item }">
 				<UCard>
 					<ZSettingSegment :segment="item.segment" />
