@@ -1,21 +1,47 @@
-export const SETTING_CODE = {
-	MERCHANT_ID: 'MerchantId',
-	MERCHANT_NAME: 'MerchantName',
-	MERCHANT_THUMBNAIL: 'MerchantThumbnail',
-	MERCHANT_BANNER: 'MerchantBanner',
-	MERCHANT_PACKAGE: 'MerchantPackage',
-	MERCHANT_ACCOUNT_STATUS: 'MerchantAccountStatus',
-	MERCHANT_COMPANY_NAME: 'MerchantCompanyName',
-	MERCHANT_COMPANY_SSM: 'MerchantCompanySsm',
-	MERCHANT_COMPANY_EMAIL_ADDRESS: 'MerchantCompanyEmailAddress',
-	MERCHANT_CONTACT_PERSON: 'MerchantContactPerson',
-	MERCHANT_CONTACT_NO: 'MerchantContactNo',
-	MERCHANT_JOINED_DATE: 'MerchantJoinedDate',
-	MERCHANT_EXPIRED_DATE: 'MerchantExpiredDate',
-	MERCHANT_ADDRESS_1: 'MerchantAddress_1',
-	MERCHANT_ADDRESS_2: 'MerchantAddress_2',
-	MERCHANT_ADDRESS_CITY: 'MerchantAddressCity',
-	MERCHANT_ADDRESS_COUNTRY: 'MerchantAddressCountry',
-	MERCHANT_ADDRESS_STATE: 'MerchantAddressState',
-	MERCHANT_ADDRESS_POSTAL_CODE: 'MerchantAddressPostalCode',
+export const MERCHANT_SETTING_CODE = {
+	ID: 'MerchantId',
+	NAME: 'MerchantName',
+	THUMBNAIL: 'MerchantThumbnail',
+	BANNER: 'MerchantBanner',
+	PACKAGE: 'MerchantPackage',
+	ACCOUNT_STATUS: 'MerchantAccountStatus',
+	COMPANY_NAME: 'MerchantCompanyName',
+	COMPANY_SSM: 'MerchantCompanySsm',
+	COMPANY_EMAIL_ADDRESS: 'MerchantCompanyEmailAddress',
+	CONTACT_PERSON: 'MerchantContactPerson',
+	CONTACT_NO: 'MerchantContactNo',
+	JOINED_DATE: 'MerchantJoinedDate',
+	EXPIRED_DATE: 'MerchantExpiredDate',
+	ADDRESS_1: 'MerchantAddress_1',
+	ADDRESS_2: 'MerchantAddress_2',
+	ADDRESS_CITY: 'MerchantAddressCity',
+	ADDRESS_COUNTRY: 'MerchantAddressCountry',
+	ADDRESS_STATE: 'MerchantAddressState',
+	ADDRESS_POSTAL_CODE: 'MerchantAddressPostalCode',
+};
+
+export const GENERAL_SETTING_CODE = {
+	MAX_PRODUCTS: 'MaxProducts',
+};
+
+export const CART_SETTING_CODE = {
+	PREFIX_CART_NO: 'PrefixCartNo',
+	MIN_CART_NO_LENGTH: 'MinCartNoLength',
+	INITIAL_CART_NO: 'InitialCartNo',
+};
+
+export const ORDER_SETTING_CODE = {
+	PREFIX_ORDER_NO: 'PrefixOrderNo',
+};
+
+export const REPORT_SETTING_CODE = {
+	REPORT_STATUS: 'ReportStatus',
+};
+
+export const PRODUCT_SETTING_CODE = {
+	HIDE_LONG_DESC: 'HideLongDesc',
+};
+
+export const MAINTENANCE_SETTING_CODE = {
+	HIDE_LONG_DESC: 'HideLongDesc',
 };
