@@ -138,10 +138,10 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 			try {
 				const data = await $api.category.delete({ code });
 
-				if (data.category_code) {
+				if (data.category.code) {
 					successNotification(`Category Deleted !`);
 
-					const index = this.categories.findIndex((catg) => catg.code === data.category_code);
+					const index = this.categories.findIndex((catg) => catg.code === data.category.code);
 					this.categories.splice(index, 1);
 				}
 			} catch (err: any) {

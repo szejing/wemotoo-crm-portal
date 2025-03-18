@@ -63,7 +63,7 @@ export type UpdateProductResp = {
 };
 
 class ProductModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Product;
+	private RESOURCE = MerchantRoutes.Products;
 
 	async fetchMany(): Promise<ProductsResp> {
 		return await this.call<ProductsResp>({
@@ -90,8 +90,7 @@ class ProductModule extends HttpFactory {
 	async update(code: string, product: UpdateProductReq): Promise<UpdateProductResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { code },
+			url: `${this.RESOURCE.Update(code)}`,
 			body: product,
 		});
 	}
@@ -99,7 +98,7 @@ class ProductModule extends HttpFactory {
 	async delete(product: DeleteProductReq): Promise<DeleteProductResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
+			url: `${this.RESOURCE.Delete(product.code)}`,
 			query: product,
 		});
 	}

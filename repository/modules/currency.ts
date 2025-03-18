@@ -14,7 +14,7 @@ export type CurrenciesResp = {
 };
 
 class CurrencyModule extends HttpFactory {
-	private readonly RESOURCE = MerchantRoutes.Currency;
+	private readonly RESOURCE = MerchantRoutes.Currencies;
 
 	/**
 	 * Fetches all currencies

@@ -14,7 +14,7 @@ export type CountriesResp = {
 };
 
 class CountryModule extends HttpFactory {
-	private readonly RESOURCE = MerchantRoutes.Country;
+	private readonly RESOURCE = MerchantRoutes.Countries;
 
 	/**
 	 * Fetches all Countries

@@ -58,7 +58,7 @@ export type UpdateMaintenanceServiceResp = {
 };
 
 class MaintenanceServiceModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Maintenance;
+	private RESOURCE = MerchantRoutes.Maintenances;
 
 	async fetchMany(): Promise<MaintenanceServicesResp> {
 		return await this.call<MaintenanceServicesResp>({
@@ -85,8 +85,7 @@ class MaintenanceServiceModule extends HttpFactory {
 	async update(code: string, maintenanceService: UpdateMaintenanceServiceReq): Promise<UpdateMaintenanceServiceResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { code },
+			url: `${this.RESOURCE.Update(code)}`,
 			body: maintenanceService,
 		});
 	}
@@ -94,8 +93,7 @@ class MaintenanceServiceModule extends HttpFactory {
 	async delete(maintenanceService: DeleteMaintenanceServiceReq): Promise<DeleteMaintenanceServiceResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: maintenanceService,
+			url: `${this.RESOURCE.Delete(maintenanceService.code)}`,
 		});
 	}
 }

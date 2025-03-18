@@ -28,7 +28,7 @@ export type DeleteCategoryReq = {
 };
 
 export type DeleteCategoryResp = {
-	category_code: string;
+	category: Category;
 };
 
 export type UpdateCategoryReq = {
@@ -47,7 +47,7 @@ export type UpdateCategoryResp = {
 };
 
 class CategoryModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Category;
+	private RESOURCE = MerchantRoutes.Categories;
 
 	async fetchMany(): Promise<CategoriesResp> {
 		return this.call<CategoriesResp>({
@@ -56,10 +56,10 @@ class CategoryModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(id: string) {
+	async fetchSingle(code: string) {
 		return this.call<any>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(id)}`,
+			url: `${this.RESOURCE.Single(code)}`,
 		});
 	}
 
@@ -71,11 +71,10 @@ class CategoryModule extends HttpFactory {
 		});
 	}
 
-	async update(id: string, category: UpdateCategoryReq): Promise<UpdateCategoryResp> {
+	async update(code: string, category: UpdateCategoryReq): Promise<UpdateCategoryResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(code)}`,
 			body: removeNullValues(category),
 		});
 	}
@@ -83,8 +82,7 @@ class CategoryModule extends HttpFactory {
 	async delete(category: DeleteCategoryReq): Promise<DeleteCategoryResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: category,
+			url: `${this.RESOURCE.Delete(category.code)}`,
 		});
 	}
 }
