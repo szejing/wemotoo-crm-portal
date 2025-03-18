@@ -51,7 +51,30 @@ export type DeleteMaintenanceServiceResp = {
 	code: string;
 };
 
-export type UpdateMaintenanceServiceReq = CreateMaintenanceServiceReq;
+export type UpdateMaintenanceServiceReq = {
+	name: string | undefined;
+	short_desc: string | undefined;
+	long_desc: string | undefined;
+	is_discountable: boolean;
+	is_active: boolean;
+
+	status: MaintenanceStatus;
+
+	// categories
+	categories: CategoryInput[] | undefined;
+
+	// tags
+	tags: TagInput[] | undefined;
+
+	// thumbnail
+	thumbnail: string | undefined;
+
+	// galleries
+	galleries: string[] | undefined;
+
+	// price
+	price_types: PriceInput[] | undefined;
+};
 
 export type UpdateMaintenanceServiceResp = {
 	maintenance: MaintenanceService;
@@ -86,7 +109,7 @@ class MaintenanceServiceModule extends HttpFactory {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: maintenanceService,
+			body: removeNullValues(maintenanceService),
 		});
 	}
 
