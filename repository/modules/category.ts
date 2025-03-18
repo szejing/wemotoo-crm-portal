@@ -72,6 +72,7 @@ class CategoryModule extends HttpFactory {
 	}
 
 	async update(code: string, category: UpdateCategoryReq): Promise<UpdateCategoryResp> {
+		console.log(category);
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,

@@ -6,9 +6,19 @@
 			:options="availableCategories"
 			searchable
 			size="md"
-			value-attribute="code"
 			placeholder="Select Category"
+			option-attribute="code"
+			by="code"
 		>
+			<template #label>
+				<span v-if="category" class="truncate">
+					<div class="flex items-center gap-2">
+						<p class="text-neutral-700 font-semibold">[{{ category.code }}] - {{ category.name }}</p>
+					</div>
+				</span>
+				<span v-else>Select Category</span>
+			</template>
+
 			<template #option="{ option: catg }">
 				<div class="flex items-center gap-2">
 					<p class="text-neutral-300 font-light">[{{ catg.code }}]</p>
@@ -40,7 +50,7 @@ const category = computed({
 		return props.category ?? undefined;
 	},
 	set(value) {
-		emit('update:category', value);
+		emit('update:category', JSON.parse(JSON.stringify(value)));
 	},
 });
 </script>

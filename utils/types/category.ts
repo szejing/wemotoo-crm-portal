@@ -9,8 +9,6 @@ export type Category = {
 	description?: string | undefined;
 	slug?: string | undefined;
 
-	total_items: number;
-
 	is_active: boolean;
 	is_internal: boolean;
 

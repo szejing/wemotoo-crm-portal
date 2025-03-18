@@ -43,7 +43,7 @@ const updateThumbnail = (url: string) => {
 };
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
-	await categoryStore.addCategory(code, name, description, is_internal, is_active, images, thumbnail, parent_category);
+	await categoryStore.addCategory({ code, name, description, is_internal, is_active, images, thumbnail, parent_category });
 };
 </script>
 
