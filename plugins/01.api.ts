@@ -6,12 +6,10 @@ import ProductModule from '~/repository/modules/product';
 import CategoryModule from '~/repository/modules/category';
 import ProductOptionModule from '~/repository/modules/product-option';
 import TagModule from '~/repository/modules/tag';
-import MaintenanceServiceModule from '~/repository/modules/maintenance-service';
 import SettingModule from '~/repository/modules/setting';
 
 interface IApiInstance {
 	product: ProductModule;
-	maintenanceService: MaintenanceServiceModule;
 	tag: TagModule;
 	category: CategoryModule;
 	productOption: ProductOptionModule;
@@ -42,7 +40,6 @@ export default defineNuxtPlugin((_) => {
 	const categoryModule = new CategoryModule(apiFetcher);
 	const productOptionModule = new ProductOptionModule(apiFetcher);
 	const imageModule = new ImageModule(apiFetcher);
-	const maintenanceServiceModule = new MaintenanceServiceModule(apiFetcher);
 	const settingModule = new SettingModule(apiFetcher);
 
 	const modules: IApiInstance = {
@@ -54,7 +51,6 @@ export default defineNuxtPlugin((_) => {
 		category: categoryModule,
 		productOption: productOptionModule,
 		image: imageModule,
-		maintenanceService: maintenanceServiceModule,
 		setting: settingModule,
 	};
 

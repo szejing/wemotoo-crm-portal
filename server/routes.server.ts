@@ -28,14 +28,6 @@ export const Routes = {
 		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 		RevertRemove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 	},
-	Maintenances: {
-		Create: () => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/`,
-		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		Many: () => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/`,
-		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		RevertRemove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-	},
 	Tags: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/`,
 		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,

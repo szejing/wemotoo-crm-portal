@@ -1,18 +1,6 @@
 import { API_PATH } from 'wemotoo-common';
 
 const prefix: string = '/api';
-// const merchant: string = 'merchant';
-// const auth: string = 'auth';
-// const image: string = 'image';
-// const country: string = 'country';
-// const currency: string = 'currency';
-// const category: string = 'category';
-// const tag: string = 'tag';
-// const prod: string = 'product';
-// const prodOption: string = 'product-option';
-// const maintenance: string = 'maintenance';
-// const setting: string = 'setting';
-// const crmUsers: string = 'crm-users';
 
 const MerchantRoutes = {
 	Image: {
@@ -34,14 +22,6 @@ const MerchantRoutes = {
 		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/many`,
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
-	},
-	Maintenances: {
-		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/create`,
-		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/many`,
-		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
-		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/revert-delete/${code}`,
 	},
 	Products: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/create`,
