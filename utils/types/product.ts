@@ -3,9 +3,16 @@ import type { PriceInput } from './price';
 import type { CategoryInput } from './category';
 import type { TagInput } from './tag';
 
+export type ProdVariantOptionValuesInput = {
+	id: number;
+	option_id?: number;
+	value?: string | undefined;
+};
+
 export type ProdOptionValuesInput = {
 	id: number;
-	value: string | undefined;
+	option_id?: number;
+	value?: string | undefined;
 };
 
 export type ProdOptionInput = {
@@ -16,7 +23,8 @@ export type ProdOptionInput = {
 };
 
 export type ProdVariantInput = {
-	id?: string;
+	variant_code?: string;
+	product_code?: string;
 	name?: string;
 	sku?: string;
 	ean?: string;

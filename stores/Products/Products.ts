@@ -113,7 +113,22 @@ export const useProductStore = defineStore('productStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.product.update(code, input);
+				const data = await $api.product.update(code, {
+					name: input.name,
+					short_desc: input.short_desc ?? undefined,
+					long_desc: input.long_desc ?? undefined,
+					is_active: input.is_active,
+					is_discountable: input.is_discountable,
+					is_giftcard: input.is_giftcard,
+					price_types: input.price_types,
+					categories: input.categories,
+					tags: input.tags,
+					status: input.status,
+					galleries: input.galleries ?? undefined,
+					thumbnail: input.thumbnail ?? undefined,
+					options: input.options,
+					variants: input.variants,
+				});
 
 				if (data.product) {
 					successNotification(`Product Updated !`);

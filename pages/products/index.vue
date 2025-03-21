@@ -178,6 +178,7 @@ const editProduct = async (code: string) => {
 					values: option.values?.map((value) => {
 						return {
 							id: value.id!,
+							option_id: option.id!,
 							value: value.value!,
 						};
 					}),
@@ -188,7 +189,8 @@ const editProduct = async (code: string) => {
 			const prodVariants: ProdVariantInput[] = [];
 			variants?.forEach((variant) => {
 				prodVariants.push({
-					id: variant.id!,
+					variant_code: variant.variant_code!,
+					product_code: variant.product_code!,
 					name: variant.name!,
 					price_types: variant.price_types?.map((price) => {
 						return {

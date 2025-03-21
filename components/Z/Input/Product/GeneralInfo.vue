@@ -93,7 +93,7 @@ const code = computed({
 		return props.code;
 	},
 	set(value) {
-		emit('update:code', value);
+		emit('update:code', value?.toUpperCase());
 	},
 });
 

@@ -1,6 +1,6 @@
 export type CategoryInput = {
 	code: string;
-	name: string;
+	name?: string;
 };
 
 export type Category = {

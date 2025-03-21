@@ -12,7 +12,7 @@ export type ProductsResp = {
 };
 
 export type CreateProductReq = {
-	code: string | undefined;
+	code?: string | undefined;
 	name: string | undefined;
 	short_desc: string | undefined;
 	long_desc: string | undefined;
