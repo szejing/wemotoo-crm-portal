@@ -1,6 +1,6 @@
 export type TagInput = {
 	id: number;
-	value: string;
+	value?: string;
 };
 
 export type Tag = {

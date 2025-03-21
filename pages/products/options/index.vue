@@ -70,7 +70,7 @@ const options = (row: ProductOption) => [
 		{
 			label: 'Edit',
 			icon: ICONS.PENCIL,
-			click: async () => await editProductOption(row.id),
+			click: async () => await editProductOption(row.id!),
 		},
 	],
 	[
@@ -78,7 +78,7 @@ const options = (row: ProductOption) => [
 			label: 'Delete',
 			icon: ICONS.TRASH,
 			slot: 'danger',
-			click: async () => await deleteProductOption(row.id),
+			click: async () => await deleteProductOption(row.id!),
 		},
 	],
 ];

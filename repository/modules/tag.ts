@@ -20,7 +20,7 @@ export type DeleteTagReq = {
 };
 
 export type DeleteTagResp = {
-	tag_id: number;
+	tag: Tag;
 };
 
 export type UpdateTagReq = {
@@ -33,7 +33,7 @@ export type UpdateTagResp = {
 };
 
 class TagModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Tag;
+	private RESOURCE = MerchantRoutes.Tags;
 
 	async fetchMany(): Promise<TagsResp> {
 		return await this.call<TagsResp>({
@@ -60,8 +60,7 @@ class TagModule extends HttpFactory {
 	async update(id: number, tag: UpdateTagReq): Promise<UpdateTagResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(id)}`,
 			body: tag,
 		});
 	}
@@ -69,8 +68,7 @@ class TagModule extends HttpFactory {
 	async delete(tag: DeleteTagReq): Promise<DeleteTagResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: tag,
+			url: `${this.RESOURCE.Delete(tag.id)}`,
 		});
 	}
 }

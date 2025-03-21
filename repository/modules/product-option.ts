@@ -36,7 +36,7 @@ export type UpdateProductOptionResp = {
 };
 
 class ProductOptionModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.ProductOption;
+	private RESOURCE = MerchantRoutes.ProdOptions;
 
 	async fetchMany(): Promise<ProductOptionsResp> {
 		return await this.call<ProductOptionsResp>({
@@ -63,8 +63,7 @@ class ProductOptionModule extends HttpFactory {
 	async update(id: number, option: UpdateProductOptionReq): Promise<UpdateProductOptionResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(id)}`,
 			body: removeNullValues(option),
 		});
 	}
@@ -72,7 +71,7 @@ class ProductOptionModule extends HttpFactory {
 	async delete(option: DeleteProductOptionReq): Promise<DeleteProductOptionResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
+			url: `${this.RESOURCE.Delete(option.id)}`,
 			query: option,
 		});
 	}

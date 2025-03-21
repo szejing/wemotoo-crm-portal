@@ -17,7 +17,8 @@ const OptionValues = z.object({ id: z.number().optional(), value: z.string().opt
 const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
 
 const Variant = z.object({
-	id: z.string().optional().nullable(),
+	variant_code: z.string().optional().nullable(),
+	product_code: z.string().optional().nullable(),
 	name: z.string().optional().nullable(),
 	sku: z.string().optional().nullable(),
 	ean: z.string().optional().nullable(),

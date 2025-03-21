@@ -109,7 +109,19 @@ export const useMaintenanceServiceStore = defineStore('maintenanceServiceStore',
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.maintenanceService.update(code, input);
+				const data = await $api.maintenanceService.update(code, {
+					name: input.name,
+					short_desc: input.short_desc,
+					long_desc: input.long_desc,
+					is_discountable: input.is_discountable,
+					is_active: input.is_active,
+					status: input.status,
+					categories: input.categories,
+					tags: input.tags,
+					thumbnail: input.thumbnail,
+					galleries: input.galleries,
+					price_types: input.price_types,
+				});
 
 				if (data.maintenance) {
 					successNotification(`Maintenance Service Updated !`);

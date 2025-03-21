@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const Category = z.object({ code: z.string().optional(), name: z.string().optional() });
+
 export const CreateCategoryValidation = z.object({
 	code: z.string().max(16),
 	name: z.string(),
@@ -8,5 +10,5 @@ export const CreateCategoryValidation = z.object({
 	is_internal: z.boolean().default(false),
 	images: z.array(z.string()).optional(),
 	thumbnail: z.string().optional(),
-	parent_category: z.string().optional(),
+	parent_category: Category.optional().nullable(),
 });

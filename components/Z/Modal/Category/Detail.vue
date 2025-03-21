@@ -19,7 +19,7 @@
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
 				</div>
 
-				<div class="w-[50%]">
+				<div class="w-[100%]">
 					<h4>Thumbnail</h4>
 					<ZDropzoneSingle :url-single="state.category.thumbnail" @update:url-single="updateThumbnail" />
 				</div>
@@ -62,8 +62,8 @@ const updateThumbnail = (url: string) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { id, name, description, is_active, is_internal, thumbnail, parent_category } = event.data;
-	emit('update', { id, name, description, is_active, is_internal, images: null, thumbnail, parent_category });
+	const { code, name, description, is_active, is_internal, thumbnail, parent_category } = event.data;
+	emit('update', { code, name, description, is_active, is_internal, images: null, thumbnail, parent_category });
 };
 
 const onCancel = () => {

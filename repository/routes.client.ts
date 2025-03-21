@@ -1,80 +1,91 @@
+import { API_PATH } from 'wemotoo-common';
+
 const prefix: string = '/api';
-const merchant: string = 'merchant';
-const auth: string = 'auth';
-const image: string = 'image';
-const country: string = 'country';
-const currency: string = 'currency';
-const category: string = 'category';
-const tag: string = 'tag';
-const prod: string = 'product';
-const prodOption: string = 'product-option';
-const maintenance: string = 'maintenance';
-const setting: string = 'setting';
+// const merchant: string = 'merchant';
+// const auth: string = 'auth';
+// const image: string = 'image';
+// const country: string = 'country';
+// const currency: string = 'currency';
+// const category: string = 'category';
+// const tag: string = 'tag';
+// const prod: string = 'product';
+// const prodOption: string = 'product-option';
+// const maintenance: string = 'maintenance';
+// const setting: string = 'setting';
+// const crmUsers: string = 'crm-users';
 
 const MerchantRoutes = {
 	Image: {
-		Upload: () => `${prefix}/${merchant}/${image}/upload`,
-		UploadMultiple: () => `${prefix}/${merchant}/${image}/upload-multiple`,
+		Upload: () => `${prefix}/${API_PATH.IMAGE}/upload`,
+		UploadMultiple: () => `${prefix}/${API_PATH.IMAGE}/upload-multiple`,
 	},
 	Auth: {
-		Login: () => `${prefix}/${merchant}/${auth}/login`,
-		Refresh: () => `${prefix}/${merchant}/${auth}/refresh`,
-		Verify: () => `${prefix}/${merchant}/${auth}/verify`,
-		Logout: () => `${prefix}/${merchant}/${auth}/logout`,
+		Login: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/login`,
+		Refresh: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/refresh`,
+		Verify: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/verify`,
+		Logout: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/logout`,
 	},
-	Country: {
-		Single: (id: number) => `${prefix}/${merchant}/${country}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${country}/many`,
-		Update: () => `${prefix}/${merchant}/${country}/update`,
+	Countries: {
+		Single: (iso2: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/${iso2}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/many`,
+		Update: (iso2: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/${iso2}`,
 	},
-	Currency: {
-		Single: (id: number) => `${prefix}/${merchant}/${currency}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${currency}/many`,
-		Update: () => `${prefix}/${merchant}/${currency}/update`,
+	Currencies: {
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
 	},
-	Maintenance: {
-		Create: () => `${prefix}/${merchant}/${maintenance}/create`,
-		Single: (code: string) => `${prefix}/${merchant}/${maintenance}/single/${code}`,
-		Many: () => `${prefix}/${merchant}/${maintenance}/many`,
-		Update: () => `${prefix}/${merchant}/${maintenance}/update`,
-		Delete: () => `${prefix}/${merchant}/${maintenance}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${maintenance}/revert-delete`,
+	Maintenances: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/create`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/${code}`,
+		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.MAINTENANCES}/revert-delete/${code}`,
 	},
-	Product: {
-		Create: () => `${prefix}/${merchant}/${prod}/create`,
-		Single: (code: string) => `${prefix}/${merchant}/${prod}/single/${code}`,
-		Many: () => `${prefix}/${merchant}/${prod}/many`,
-		Update: () => `${prefix}/${merchant}/${prod}/update`,
-		Delete: () => `${prefix}/${merchant}/${prod}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${prod}/revert-delete`,
+	Products: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/create`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/revert-delete/${code}`,
 	},
-	Tag: {
-		Create: () => `${prefix}/${merchant}/${tag}/create`,
-		Single: (id: number) => `${prefix}/${merchant}/${tag}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${tag}/many`,
-		Update: () => `${prefix}/${merchant}/${tag}/update`,
-		Delete: () => `${prefix}/${merchant}/${tag}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${tag}/revert-delete`,
+	Tags: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/create`,
+		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/many`,
+		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		RevertDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/revert-delete/${id}`,
 	},
-	Category: {
-		Create: () => `${prefix}/${merchant}/${category}/create`,
-		Single: (id: string) => `${prefix}/${merchant}/${category}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${category}/many`,
-		Update: () => `${prefix}/${merchant}/${category}/update`,
-		Delete: () => `${prefix}/${merchant}/${category}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${category}/revert-delete`,
+	Categories: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/create`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/revert-delete/${code}`,
 	},
-	ProductOption: {
-		Create: () => `${prefix}/${merchant}/${prodOption}/create`,
-		Single: (id: number) => `${prefix}/${merchant}/${prodOption}/single/${id}`,
-		Many: () => `${prefix}/${merchant}/${prodOption}/many`,
-		Update: () => `${prefix}/${merchant}/${prodOption}/update`,
-		Delete: () => `${prefix}/${merchant}/${prodOption}/delete`,
-		RevertDelete: () => `${prefix}/${merchant}/${prodOption}/revert-delete`,
+	ProdOptions: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/create`,
+		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/many`,
+		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		RevertDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/revert-delete/${id}`,
 	},
-	Setting: {
-		Many: () => `${prefix}/${merchant}/${setting}/many`,
-		Update: () => `${prefix}/${merchant}/${setting}/update`,
+	Settings: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/many`,
+		Update: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}`,
+	},
+	CrmUsers: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/many`,
+		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Remove: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		RevertRemove: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/revert-delete/${id}`,
 	},
 };
 

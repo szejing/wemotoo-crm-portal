@@ -78,6 +78,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		return;
 	}
 
+	values.forEach((value) => {
+		value.option_id = props.productOption.id;
+	});
+
 	emit('update', name, values ?? []);
 };
 

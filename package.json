@@ -4,8 +4,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "nuxt build",
-		"clean": "rm -rf node_modules",
-		"reinstall": "bun run clean && bun install",
+		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lockb",
+		"rebuild": "bun run clean && bun install",
 		"start:dev": "nuxt dev --dotenv .env.dev",
 		"start:prod": "nuxt dev --dotenv .env.production",
 		"generate": "nuxt generate",

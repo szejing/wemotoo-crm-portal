@@ -121,7 +121,6 @@ const sale_price = computed({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	// eslint-disable-next-line @stylistic/operator-linebreak
 	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
 
 	// price_types
@@ -169,9 +168,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 	// product variants
 	const prodVariants: ProdVariantInput[] = [];
+	console.log(variants);
 	variants?.forEach((variant) => {
 		prodVariants.push({
-			id: variant.id!,
+			variant_code: variant.variant_code!,
+			product_code: variant.product_code!,
 			name: variant.name!,
 			price_types: variant.price_types?.map((price) => {
 				return {
@@ -185,13 +186,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			options: variant.options?.map((option) => {
 				return {
 					id: option.id!,
-					name: option.name!,
-					values: option.values?.map((value) => {
-						return {
-							id: value.id!,
-							value: value.value!,
-						};
-					}),
+					option_id: option.option_id!,
+					value: option.value!,
 				};
 			}),
 		});

@@ -70,7 +70,7 @@ const autoGenerate = () => {
 
 		const option = prodOptions.value[optionIndex];
 		for (const value of option.values!) {
-			combine([...currentOptions, { id: value.id, value: value.value }], optionIndex + 1);
+			combine([...currentOptions, { id: value.id, option_id: option.id, value: value.value }], optionIndex + 1);
 		}
 	};
 
@@ -80,7 +80,8 @@ const autoGenerate = () => {
 		if (variant.name) return;
 
 		variant.name = variant.options?.map((option) => option.value).join('_');
-		variant.id = props.product.code + '_' + variant.name;
+		variant.variant_code = props.product.code + '_' + variant.name;
+		variant.product_code = props.product.code;
 
 		if (variant.price_types) return;
 
