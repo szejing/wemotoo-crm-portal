@@ -28,11 +28,6 @@ const merchantNavigation = [
 		isCollapsed: true,
 	},
 	{
-		title: 'Maintenance',
-		icon: ICONS.MAINTENANCE_SERVICE,
-		to: '/maintenance-services',
-	},
-	{
 		title: 'Products',
 		icon: ICONS.PRODUCT,
 		to: '/products',
