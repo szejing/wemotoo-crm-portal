@@ -30,13 +30,21 @@
 			<UInput v-model="description" />
 		</UFormGroup> -->
 
-		<UFormGroup class="mt-4" label="Long Description" name="longDesc">
+		<UFormGroup v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
 			<ZTextEditor v-model:value="long_desc" placeholder="Product Description" />
 		</UFormGroup>
 	</UCard>
 </template>
 
 <script lang="ts" setup>
+import { GROUP_CODE, PRODUCT_SETTING_CODE } from 'wemotoo-common';
+
+const settingsStore = useSettingsStore();
+
+const hideLongDesc = computed(() => {
+	return settingsStore.getSetting(GROUP_CODE.PRODUCT_SETTING, PRODUCT_SETTING_CODE.HIDE_LONG_DESC)?.getBoolean() ?? true;
+});
+
 const props = defineProps({
 	isActive: Boolean,
 	isDiscountable: Boolean,

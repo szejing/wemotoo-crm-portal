@@ -7,6 +7,7 @@ import CategoryModule from '~/repository/modules/category';
 import ProductOptionModule from '~/repository/modules/product-option';
 import TagModule from '~/repository/modules/tag';
 import SettingModule from '~/repository/modules/setting';
+import ProductTypeModule from '~/repository/modules/product-type';
 
 interface IApiInstance {
 	product: ProductModule;
@@ -18,6 +19,7 @@ interface IApiInstance {
 	country: CountryModule;
 	image: ImageModule;
 	setting: SettingModule;
+	productType: ProductTypeModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -41,6 +43,7 @@ export default defineNuxtPlugin((_) => {
 	const productOptionModule = new ProductOptionModule(apiFetcher);
 	const imageModule = new ImageModule(apiFetcher);
 	const settingModule = new SettingModule(apiFetcher);
+	const productTypeModule = new ProductTypeModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -52,6 +55,7 @@ export default defineNuxtPlugin((_) => {
 		productOption: productOptionModule,
 		image: imageModule,
 		setting: settingModule,
+		productType: productTypeModule,
 	};
 
 	return {

@@ -40,6 +40,9 @@ export type CreateProductReq = {
 	// variants
 	options: ProdOptionInput[] | undefined;
 	variants: ProdVariantInput[] | undefined;
+
+	// type
+	type: number;
 };
 
 export type CreateProductResp = {

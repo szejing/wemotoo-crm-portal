@@ -138,7 +138,7 @@ const editProduct = async (code: string) => {
 	modal.open(ZModalProductDetail, {
 		product: JSON.parse(JSON.stringify(product)),
 		onUpdate: async (prod: Product) => {
-			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = prod;
+			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = prod;
 
 			// price_types
 			const prodPrice: PriceInput[] = [];
@@ -213,6 +213,7 @@ const editProduct = async (code: string) => {
 				is_active,
 				is_discountable: true,
 				is_giftcard: false,
+				type: type,
 				price_types: prodPrice,
 				categories: prodCategories,
 				tags: prodTags,
