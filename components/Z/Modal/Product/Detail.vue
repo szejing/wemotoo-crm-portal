@@ -5,7 +5,6 @@
 		}"
 	>
 		<UCard>
-			<template #header><h3>Update Product</h3></template>
 			<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
@@ -92,7 +91,6 @@ const { updating } = storeToRefs(productStore);
 const emit = defineEmits(['update', 'cancel']);
 
 const { product: current_product } = toRefs(props);
-console.log(current_product.value);
 
 const updateProductOptions = (value: any) => {
 	current_product.value.options = value;

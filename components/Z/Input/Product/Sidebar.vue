@@ -8,6 +8,14 @@
 			</template>
 		</UCard>
 
+		<!-- ***** Product Type ***** -->
+		<UCard :ui="cardBg">
+			<template #header>
+				<h3>Type</h3>
+				<ZSelectMenuProductType v-model:type-id="newProduct.type" />
+			</template>
+		</UCard>
+
 		<!-- ***** Categories ***** -->
 		<UCard :ui="cardBg">
 			<template #header>

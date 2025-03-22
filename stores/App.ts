@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useCategoriesStore, useTagsStore } from '.';
+import { useProductTypesStore } from './ProductTypes/ProductTypes';
 
 export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
@@ -22,6 +23,9 @@ export const useAppStore = defineStore('appStore', {
 
 			const settingsStore = useSettingsStore();
 			await settingsStore.getSettings();
+
+			const productTypeStore = useProductTypesStore();
+			await productTypeStore.getProductTypes();
 		},
 	},
 });

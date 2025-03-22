@@ -14,6 +14,9 @@ const initialEmptyProduct: Product = {
 
 	status: ProductStatus.DRAFT,
 
+	// product types
+	type: 1,
+
 	// categories
 	categories: [],
 
@@ -122,6 +125,7 @@ export const useProductStore = defineStore('productStore', {
 					is_giftcard: input.is_giftcard,
 					price_types: input.price_types,
 					categories: input.categories,
+					type: input.type,
 					tags: input.tags,
 					status: input.status,
 					galleries: input.galleries ?? undefined,

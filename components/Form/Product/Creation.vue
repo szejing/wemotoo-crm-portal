@@ -121,7 +121,7 @@ const sale_price = computed({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
+	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = event.data;
 
 	// price_types
 	const prodPrice: PriceInput[] = [];
@@ -168,7 +168,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 	// product variants
 	const prodVariants: ProdVariantInput[] = [];
-	console.log(variants);
 	variants?.forEach((variant) => {
 		prodVariants.push({
 			variant_code: variant.variant_code!,
@@ -203,6 +202,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		is_giftcard: false,
 		price_types: prodPrice,
 		categories: prodCategories,
+		type: type,
 		tags: prodTags,
 		status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,
 		galleries,

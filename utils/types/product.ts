@@ -60,6 +60,9 @@ export type Product = {
 	// categories
 	categories: CategoryInput[] | undefined;
 
+	// product types
+	type: number;
+
 	// tags
 	tags: TagInput[] | undefined;
 
