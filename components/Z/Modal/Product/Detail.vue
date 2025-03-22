@@ -21,6 +21,11 @@
 				<!-- *********************** General Info *********************** -->
 
 				<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+					<div>
+						<h3>Type</h3>
+						<ZSelectMenuProductType v-model:type-id="current_product.type" />
+					</div>
+
 					<!-- ***** Status ***** -->
 					<div>
 						<h3>Status</h3>

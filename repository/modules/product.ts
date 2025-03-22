@@ -5,7 +5,6 @@ import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from '~/utils/types/price';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';
-import type { ProductTypeInput } from '~/utils/types/product-type';
 
 export type ProductsResp = {
 	count: number;
@@ -43,7 +42,7 @@ export type CreateProductReq = {
 	variants: ProdVariantInput[] | undefined;
 
 	// type
-	type: ProductTypeInput | undefined;
+	type: number;
 };
 
 export type CreateProductResp = {

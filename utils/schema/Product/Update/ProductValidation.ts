@@ -58,4 +58,6 @@ export const UpdateProductValidation = z.object({
 	options: z.array(Option).optional().nullable(),
 	// variants
 	variants: z.array(Variant).optional().nullable(),
+	// type
+	type: z.number().default(1),
 });
