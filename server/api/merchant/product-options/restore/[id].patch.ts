@@ -10,11 +10,11 @@ export default defineEventHandler(async (event) => {
 		if (!id) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Tag Id is required',
+				statusMessage: 'Product Option Id is required',
 			});
 		}
 
-		const result = await $fetch(`${Routes.Tags.RevertRemove(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdOptions.Restore(Number(id))}`, {
 			baseURL: config.public.baseUrl,
 			method: 'PATCH',
 			body: data,

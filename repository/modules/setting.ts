@@ -3,7 +3,7 @@ import type { SettingSegment } from '~/utils/types/setting-segment';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-export type SettingsResp = {
+type SettingsResp = {
 	segments: SettingSegment[];
 	settings: Setting[];
 };
