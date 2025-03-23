@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const Price = z.object({
-	id: z.number(),
+	id: z.number().optional(),
 	currency_code: z.string(),
 	orig_sell_price: z.number(),
 	cost_price: z.number().optional(),
@@ -12,7 +12,7 @@ const Category = z.object({ code: z.string().optional(), name: z.string().option
 
 const Tag = z.object({ id: z.number().optional(), value: z.string().optional() });
 
-const OptionValues = z.object({ id: z.number().optional(), value: z.string().optional() });
+const OptionValues = z.object({ id: z.number().optional(), option_id: z.number().optional(), value: z.string().optional() });
 
 const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
 
@@ -36,7 +36,7 @@ const Variant = z.object({
 	mid_code: z.string().optional().nullable(),
 	material: z.string().optional().nullable(),
 	price_types: z.array(Price).optional().nullable(),
-	options: z.array(Option).optional().nullable(),
+	options: z.array(OptionValues).optional().nullable(),
 });
 
 export const UpdateProductValidation = z.object({

@@ -5,12 +5,10 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
-		const query = getQuery(event);
 
 		const result = await $fetch(`${Routes.Settings.Save()}`, {
 			baseURL: config.public.baseUrl,
-			method: 'PATCH',
-			query: query,
+			method: 'POST',
 			body: data,
 			headers: generateHeaders(event),
 		});

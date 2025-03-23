@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '~/utils/types/product';
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 
 const product_additional_info = [
 	{
@@ -128,13 +128,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update_options', 'update_variants']);
-const product = computed(() => props.product);
-
-const updateProductOptions = (value: any) => {
+const product = computed({
+	get() {
+		return props.product;
+	},
+	set(_) {},
+});
+const updateProductOptions = (value: ProdOptionInput[]) => {
 	emit('update_options', value);
 };
 
-const updateProductVariants = (value: any) => {
+const updateProductVariants = (value: ProdVariantInput[]) => {
 	emit('update_variants', value);
 };
 </script>

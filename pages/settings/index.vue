@@ -1,7 +1,18 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<h1>Settings</h1>
+		<div class="flex justify-between items-center my-4">
+			<div>
+				<h1>Settings</h1>
+				<p class="text-base text-gray-400">
+					These settings are used to configure the system. <br />
+					Please note that changes will take effect immediately.
+				</p>
+			</div>
+			<div class="w-[20%]">
+				<UButton size="md" color="green" variant="solid" block @click="settingsStore.updateSettings">Save</UButton>
+			</div>
+		</div>
 
 		<UTabs
 			:items="items"

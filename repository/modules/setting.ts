@@ -8,6 +8,16 @@ type SettingsResp = {
 	settings: Setting[];
 };
 
+type SettingReq = {
+	group_code: string;
+	set_code: string;
+	set_value: string;
+};
+
+type UpdateSettingReq = {
+	settings: SettingReq[];
+};
+
 class SettingModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Settings;
 
@@ -18,14 +28,13 @@ class SettingModule extends HttpFactory {
 		});
 	}
 
-	// async update(id: number, tag: UpdateTagReq): Promise<UpdateTagResp> {
-	// 	return await this.call<any>({
-	// 		method: 'PATCH',
-	// 		url: `${this.RESOURCE.Update()}`,
-	// 		query: { id },
-	// 		body: tag,
-	// 	});
-	// }
+	async saveMany(settings: UpdateSettingReq): Promise<SettingsResp> {
+		return await this.call<SettingsResp>({
+			method: 'POST',
+			url: `${this.RESOURCE.SaveMany()}`,
+			body: settings,
+		});
+	}
 }
 
 export default SettingModule;

@@ -174,11 +174,9 @@ const editProduct = async (code: string) => {
 				prodOptions.push({
 					id: option.id!,
 					name: option.name!,
-					value: undefined,
 					values: option.values?.map((value) => {
 						return {
 							id: value.id!,
-							option_id: option.id!,
 							value: value.value!,
 						};
 					}),
@@ -201,7 +199,13 @@ const editProduct = async (code: string) => {
 							currency_code: price.currency_code,
 						};
 					}),
-					options: variant.options,
+					options: variant.options?.map((option) => {
+						return {
+							id: option.id!,
+							option_id: option.option_id!,
+							value: option.value!,
+						};
+					}),
 				});
 			});
 

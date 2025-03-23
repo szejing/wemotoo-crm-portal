@@ -65,7 +65,7 @@ const MerchantRoutes = {
 	},
 	Settings: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/many`,
-		Update: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}`,
+		SaveMany: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/update`,
 	},
 	CrmUsers: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/create`,
