@@ -9,6 +9,7 @@
 			v-model:name="newProduct.name"
 			v-model:short_desc="newProduct.short_desc"
 			v-model:long_desc="newProduct.long_desc"
+			v-model:type="newProduct.type"
 		/>
 		<!-- *********************** General Info *********************** -->
 

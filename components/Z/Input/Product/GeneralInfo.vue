@@ -3,6 +3,12 @@
 		<template #header>
 			<div class="w-full flex-between items-center">
 				<h2>General Info</h2>
+				<UTabs v-if="productTypes.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
+					<template #default="{ item }">
+						<span>{{ item.label.toUpperCase() }}</span>
+					</template>
+				</UTabs>
+
 				<div class="w-[50%] flex-jend items-center gap-4">
 					<UCheckbox v-model="is_active" name="isActive" label="Active" color="green" />
 
@@ -38,11 +44,38 @@
 
 <script lang="ts" setup>
 import { GROUP_CODE, PRODUCT_SETTING_CODE } from 'wemotoo-common';
+import { useProductTypesStore } from '~/stores/ProductTypes/ProductTypes';
+
+const ui_tabs = {
+	list: {
+		base: 'relative',
+		background: 'bg-primary-500',
+		tab: {
+			active: 'text-primary-600',
+			inactive: 'text-primary-400',
+			font: 'font-bold',
+		},
+	},
+};
 
 const settingsStore = useSettingsStore();
+const productTypeStore = useProductTypesStore();
+const { productTypes } = storeToRefs(productTypeStore);
 
 const hideLongDesc = computed(() => {
 	return settingsStore.getSetting(GROUP_CODE.PRODUCT_SETTING, PRODUCT_SETTING_CODE.HIDE_LONG_DESC)?.getBoolean() ?? true;
+});
+
+const items = computed(() => {
+	if (productTypes.value.length > 0) {
+		const list = [];
+		for (const type of productTypes.value) {
+			list.push({ label: type.value, slot: type.value });
+		}
+		return list;
+	}
+
+	return [];
 });
 
 const props = defineProps({
@@ -54,6 +87,7 @@ const props = defineProps({
 	shortDesc: String,
 	longDesc: String,
 	disabledCode: Boolean,
+	type: Number,
 	cardUi: Object,
 });
 
@@ -65,6 +99,7 @@ const emit = defineEmits([
 	'update:name',
 	'update:shortDesc',
 	'update:longDesc',
+	'update:type',
 ]);
 
 const is_active = computed({
@@ -129,6 +164,17 @@ const long_desc = computed({
 	},
 	set(value) {
 		emit('update:longDesc', value);
+	},
+});
+
+// -1 because the type is 0-indexed
+// +1 because the type is 1-indexed
+const product_type = computed({
+	get() {
+		return props.type - 1;
+	},
+	set(value) {
+		emit('update:type', value + 1);
 	},
 });
 </script>

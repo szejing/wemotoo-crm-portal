@@ -79,21 +79,6 @@
 <script lang="ts" setup>
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 
-const product_additional_info = [
-	{
-		label: 'Variants',
-		slot: 'variants',
-	},
-	{
-		label: 'Shipping',
-		slot: 'shipping',
-	},
-	{
-		label: 'Tax',
-		slot: 'tax',
-	},
-];
-
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
 	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
@@ -133,6 +118,17 @@ const product = computed({
 		return props.product;
 	},
 	set(_) {},
+});
+
+const product_additional_info = computed(() => {
+	return [
+		// Conditionally add maintenance for type 2
+		...(product.value.type === 2 ? [{ label: 'Maintenance*', slot: 'maintenance' }] : []),
+		// Always add these items
+		{ label: 'Variants', slot: 'variants' },
+		{ label: 'Shipping', slot: 'shipping' },
+		{ label: 'Tax', slot: 'tax' },
+	];
 });
 const updateProductOptions = (value: ProdOptionInput[]) => {
 	emit('update_options', value);
