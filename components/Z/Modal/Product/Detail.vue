@@ -15,17 +15,13 @@
 					v-model:name="current_product.name"
 					v-model:short-desc="current_product.short_desc"
 					v-model:long-desc="current_product.long_desc"
+					v-model:type="current_product.type"
 					disabled-code
 					:card-ui="borderless_card_ui"
 				/>
 				<!-- *********************** General Info *********************** -->
 
 				<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-					<div>
-						<h3>Type</h3>
-						<ZSelectMenuProductType v-model:type-id="current_product.type" />
-					</div>
-
 					<!-- ***** Status ***** -->
 					<div>
 						<h3>Status</h3>
