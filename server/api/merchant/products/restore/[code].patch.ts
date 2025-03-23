@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.Products.RevertRemove(code)}`, {
+		const result = await $fetch(`${Routes.Products.Restore(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'PATCH',
 			headers: generateHeaders(event),

@@ -29,7 +29,7 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/many`,
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
-		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/revert-delete/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
 	Tags: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/create`,
@@ -37,7 +37,7 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/many`,
 		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
 		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		RevertDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/revert-delete/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/restore/${id}`,
 	},
 	ProductTypes: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/create`,
@@ -45,7 +45,7 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/many`,
 		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
 		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
-		RevertDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/revert-delete/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/restore/${id}`,
 	},
 	Categories: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/create`,
@@ -53,7 +53,7 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/many`,
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		RevertDelete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/revert-delete/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/restore/${code}`,
 	},
 	ProdOptions: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/create`,
@@ -61,7 +61,7 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/many`,
 		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
 		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
-		RevertDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/revert-delete/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/restore/${id}`,
 	},
 	Settings: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/many`,
@@ -73,7 +73,7 @@ const MerchantRoutes = {
 		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Remove: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
-		RevertRemove: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/revert-delete/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},
 };
 

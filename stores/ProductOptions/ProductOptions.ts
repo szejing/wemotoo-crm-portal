@@ -98,10 +98,10 @@ export const useProductOptionsStore = defineStore('productOptionsStore', {
 			try {
 				const data = await $api.productOption.delete({ id });
 
-				if (data.option_id) {
-					successNotification(`Product Option Deleted !`);
+				if (data.productOption) {
+					successNotification(`Option #${data.productOption.name} Deleted !`);
 
-					const index = this.productOptions.findIndex((t) => t.id === data.option_id);
+					const index = this.productOptions.findIndex((t) => t.id === data.productOption.id);
 					this.productOptions.splice(index, 1);
 				}
 			} catch (err: any) {

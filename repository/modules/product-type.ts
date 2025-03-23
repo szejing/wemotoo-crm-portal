@@ -2,32 +2,24 @@ import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { ProductType } from '~/utils/types/product-type';
 
-export type ProductTypesResp = {
+type BaseProductTypeReq = {
+	id: number;
+};
+
+type ProductTypeResp = {
+	productType: ProductType;
+};
+
+type ProductTypesResp = {
 	count: number;
 	productTypes: ProductType[];
 };
 
-export type CreateProductTypeReq = {
+type CreateProductTypeReq = {
 	value: string;
 };
 
-export type CreateProductTypeResp = {
-	productType: ProductType;
-};
-
-export type DeleteProductTypeReq = {
-	id: number;
-};
-
-export type DeleteProductTypeResp = {
-	id: number;
-};
-
-export type UpdateProductTypeReq = CreateProductTypeReq;
-
-export type UpdateProductTypeResp = {
-	product_type: ProductType;
-};
+type UpdateProductTypeReq = CreateProductTypeReq;
 
 class ProductTypeModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.ProductTypes;
@@ -46,7 +38,7 @@ class ProductTypeModule extends HttpFactory {
 		});
 	}
 
-	async create(product: CreateProductTypeReq): Promise<CreateProductTypeResp> {
+	async create(product: CreateProductTypeReq): Promise<ProductTypeResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -54,7 +46,7 @@ class ProductTypeModule extends HttpFactory {
 		});
 	}
 
-	async update(id: number, product: UpdateProductTypeReq): Promise<UpdateProductTypeResp> {
+	async update(id: number, product: UpdateProductTypeReq): Promise<ProductTypeResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(id)}`,
@@ -62,10 +54,17 @@ class ProductTypeModule extends HttpFactory {
 		});
 	}
 
-	async delete(id: number): Promise<DeleteProductTypeResp> {
+	async delete(type: BaseProductTypeReq): Promise<ProductTypeResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete(id)}`,
+			url: `${this.RESOURCE.Delete(type.id)}`,
+		});
+	}
+
+	async restore(type: BaseProductTypeReq): Promise<ProductTypeResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(type.id)}`,
 		});
 	}
 }

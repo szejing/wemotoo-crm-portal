@@ -2,13 +2,7 @@ import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { Currency } from '~/utils/types/currency';
 
-// export type LoginReq = {
-// 	merchant_id: string;
-// 	email_address: string;
-// 	password: string;
-// };
-
-export type CurrenciesResp = {
+type CurrenciesResp = {
 	count: number;
 	currencies: Currency[];
 };

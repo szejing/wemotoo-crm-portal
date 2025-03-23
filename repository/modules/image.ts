@@ -1,16 +1,16 @@
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-export type ImageUploadResp = {
+type ImageUploadResp = {
 	id: number;
 	url: string;
 };
 
-export type SingleImageUploadResp = {
+type SingleImageUploadResp = {
 	image: ImageUploadResp;
 };
 
-export type MultipleImageUploadResp = {
+type MultipleImageUploadResp = {
 	images: ImageUploadResp[];
 };
 

@@ -6,12 +6,20 @@ import type { PriceInput } from '~/utils/types/price';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';
 
-export type ProductsResp = {
+type BaseProductReq = {
+	code: string;
+};
+
+type ProductResp = {
+	product: Product;
+};
+
+type ProductsResp = {
 	count: number;
 	products: Product[];
 };
 
-export type CreateProductReq = {
+type CreateProductReq = {
 	code?: string | undefined;
 	name: string | undefined;
 	short_desc: string | undefined;
@@ -45,25 +53,12 @@ export type CreateProductReq = {
 	type: number;
 };
 
-export type CreateProductResp = {
+type CreateProductResp = {
 	count: number;
 	products: Product[];
-	product: Product;
 };
 
-export type DeleteProductReq = {
-	code: string;
-};
-
-export type DeleteProductResp = {
-	code: string;
-};
-
-export type UpdateProductReq = CreateProductReq;
-
-export type UpdateProductResp = {
-	product: Product;
-};
+type UpdateProductReq = CreateProductReq;
 
 class ProductModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Products;
@@ -90,7 +85,7 @@ class ProductModule extends HttpFactory {
 		});
 	}
 
-	async update(code: string, product: UpdateProductReq): Promise<UpdateProductResp> {
+	async update(code: string, product: UpdateProductReq): Promise<ProductResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
@@ -98,11 +93,17 @@ class ProductModule extends HttpFactory {
 		});
 	}
 
-	async delete(product: DeleteProductReq): Promise<DeleteProductResp> {
+	async delete(product: BaseProductReq): Promise<ProductResp> {
 		return await this.call<any>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(product.code)}`,
-			query: product,
+		});
+	}
+
+	async restore(product: BaseProductReq): Promise<ProductResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(product.code)}`,
 		});
 	}
 }

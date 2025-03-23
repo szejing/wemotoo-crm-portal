@@ -3,36 +3,28 @@ import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { ProductOption } from '~/utils/types/product-option';
 
-export type ProductOptionsResp = {
+type BaseProductOptionReq = {
+	id: number;
+};
+
+type ProductOptionResp = {
+	productOption: ProductOption;
+};
+
+type ProductOptionsResp = {
 	count: number;
 	productOptions: ProductOption[];
 };
 
-export type CreateProductOptionReq = {
+type CreateProductOptionReq = {
 	name: string;
 	values: ProductOptionValue[];
 };
 
-export type CreateProductOptionResp = {
-	productOption: ProductOption;
-};
-
-export type DeleteProductOptionReq = {
-	id: number;
-};
-
-export type DeleteProductOptionResp = {
-	option_id: number;
-};
-
-export type UpdateProductOptionReq = {
+type UpdateProductOptionReq = {
 	name: string;
 	values: ProductOptionValue[];
 	metadata?: Record<string, any> | undefined;
-};
-
-export type UpdateProductOptionResp = {
-	productOption: ProductOption;
 };
 
 class ProductOptionModule extends HttpFactory {
@@ -52,7 +44,7 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async create(option: CreateProductOptionReq): Promise<CreateProductOptionResp> {
+	async create(option: CreateProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -60,7 +52,7 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async update(id: number, option: UpdateProductOptionReq): Promise<UpdateProductOptionResp> {
+	async update(id: number, option: UpdateProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(id)}`,
@@ -68,11 +60,17 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async delete(option: DeleteProductOptionReq): Promise<DeleteProductOptionResp> {
+	async delete(option: BaseProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(option.id)}`,
-			query: option,
+		});
+	}
+
+	async restore(option: BaseProductOptionReq): Promise<ProductOptionResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(option.id)}`,
 		});
 	}
 }

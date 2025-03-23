@@ -81,7 +81,7 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 				});
 
 				if (data.category) {
-					successNotification(`${name} - Category Created !`);
+					successNotification(`${category.name} - Category Created !`);
 					this.categories.push(data.category);
 				}
 				this.resetNewCategory();
@@ -130,7 +130,7 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 				const data = await $api.category.delete({ code });
 
 				if (data.category.code) {
-					successNotification(`Category Deleted !`);
+					successNotification(`Category #${data.category.code} Deleted !`);
 
 					const index = this.categories.findIndex((catg) => catg.code === data.category.code);
 					this.categories.splice(index, 1);

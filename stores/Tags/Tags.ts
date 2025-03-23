@@ -98,7 +98,7 @@ export const useTagsStore = defineStore('tagsStore', {
 				const data = await $api.tag.delete({ id });
 
 				if (data.tag.id) {
-					successNotification(`Tag Deleted !`);
+					successNotification(`Tag #${data.tag.value} Deleted !`);
 
 					const index = this.tags.findIndex((t) => t.id === data.tag.id);
 					this.tags.splice(index, 1);

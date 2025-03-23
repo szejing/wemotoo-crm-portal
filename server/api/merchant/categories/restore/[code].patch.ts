@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.Categories.RevertRemove(code)}`, {
+		const result = await $fetch(`${Routes.Categories.Restore(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'PATCH',
 			body: data,
