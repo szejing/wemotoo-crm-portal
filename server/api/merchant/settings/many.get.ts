@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		// const data = await readBody(event);
-
 		const result = await $fetch(`${Routes.Settings.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',

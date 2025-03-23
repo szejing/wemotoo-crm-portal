@@ -90,6 +90,12 @@ const autoGenerate = () => {
 		} else {
 			variant.price_types = undefined;
 		}
+
+		for (const price of variant.price_types ?? []) {
+			if (price.id == props.product.price_types?.[0].id) {
+				price.id = undefined;
+			}
+		}
 	});
 
 	prodVariants.value = variants;
@@ -109,7 +115,7 @@ const viewVariant = (variant: ProdVariantInput) => {
 
 const updateVariantDetail = (variant: ProdVariantInput) => {
 	isVariantDetailsModalOpen.value = false;
-	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.name === variant.name); // Find variant by name
+	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.variant_code === variant.variant_code && v.product_code === variant.product_code); // Find variant by codes
 
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
