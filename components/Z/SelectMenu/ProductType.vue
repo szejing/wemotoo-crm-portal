@@ -5,10 +5,6 @@
 				<span v-if="productTypeId" class="truncate">{{ productTypes.find((type) => type.id === productTypeId)?.value?.toUpperCase() }}</span>
 				<span v-else class="text-gray-400">Select Type</span>
 			</template>
-
-			<template #option="{ option }">
-				<span class="truncate">{{ option.value?.toUpperCase() }}</span>
-			</template>
 		</USelectMenu>
 	</UFormGroup>
 </template>

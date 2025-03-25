@@ -11,6 +11,12 @@
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
 				</template>
 
+				<template #maintenance>
+					<h1>Maintenance</h1>
+					<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
+					<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+				</template>
+
 				<template #variants>
 					<div class="flex flex-col h-full">
 						<h1>Variants</h1>
@@ -44,6 +50,14 @@
 			<UTabs :items="product_additional_info" :ui="normal_ui_tabs">
 				<template #default="{ item, selected }">
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
+				</template>
+
+				<template #maintenance>
+					<div class="flex flex-col h-full">
+						<h1>Maintenance</h1>
+						<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
+						<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+					</div>
 				</template>
 
 				<template #variants>
@@ -112,7 +126,7 @@ const props = defineProps({
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update_options', 'update_variants']);
+const emit = defineEmits(['update_options', 'update_variants', 'update_metadata']);
 const product = computed({
 	get() {
 		return props.product;
@@ -123,7 +137,7 @@ const product = computed({
 const product_additional_info = computed(() => {
 	return [
 		// Conditionally add maintenance for type 2
-		...(product.value.type === 2 ? [{ label: 'Maintenance*', slot: 'maintenance' }] : []),
+		...(product.value.type === 2 ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
 		// Always add these items
 		{ label: 'Variants', slot: 'variants' },
 		{ label: 'Shipping', slot: 'shipping' },
@@ -136,6 +150,10 @@ const updateProductOptions = (value: ProdOptionInput[]) => {
 
 const updateProductVariants = (value: ProdVariantInput[]) => {
 	emit('update_variants', value);
+};
+
+const updateProductMetadata = (value: Record<string, unknown>) => {
+	emit('update_metadata', value);
 };
 </script>
 
