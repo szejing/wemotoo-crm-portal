@@ -24,7 +24,7 @@ type CreateProductOptionReq = {
 type UpdateProductOptionReq = {
 	name: string;
 	values: ProductOptionValue[];
-	metadata?: Record<string, any> | undefined;
+	metadata?: Record<string, unknown> | undefined;
 };
 
 class ProductOptionModule extends HttpFactory {
