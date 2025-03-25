@@ -23,7 +23,12 @@
 		<!-- *********************** Pricing *********************** -->
 
 		<!-- *********************** Additional Info *********************** -->
-		<ZInputProductAdditionalInfo :product="newProduct" @update_options="updateProductOptions" @update_variants="updateProductVariants" />
+		<ZInputProductAdditionalInfo
+			:product="newProduct"
+			@update_options="updateProductOptions"
+			@update_variants="updateProductVariants"
+			@update_metadata="updateProductMetadata"
+		/>
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
@@ -59,6 +64,10 @@ const updateProductOptions = (value: any) => {
 
 const updateProductVariants = (value: any) => {
 	newProduct.value.variants = value;
+};
+
+const updateProductMetadata = (value: any) => {
+	newProduct.value.metadata = value;
 };
 
 const currency_code = computed({
@@ -210,6 +219,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		thumbnail,
 		options: prodOptions,
 		variants: prodVariants,
+		metadata: JSON.parse(JSON.stringify(newProduct.value.metadata)),
 	});
 
 	if (result) {

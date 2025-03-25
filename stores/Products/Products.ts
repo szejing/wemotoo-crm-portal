@@ -43,6 +43,9 @@ const initialEmptyProduct: Product = {
 	// variants
 	options: [],
 	variants: [],
+
+	// metadata
+	metadata: null,
 };
 
 export const useProductStore = defineStore('productStore', {
