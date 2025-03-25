@@ -21,7 +21,7 @@ type CreateTagReq = {
 
 type UpdateTagReq = {
 	value: string;
-	metadata?: Record<string, any> | undefined;
+	metadata?: Record<string, unknown> | undefined;
 };
 
 class TagModule extends HttpFactory {

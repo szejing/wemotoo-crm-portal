@@ -24,6 +24,7 @@
 				<div>
 					<h3>Off Day</h3>
 					<p class="text-sm text-gray-500">Select your off days</p>
+					<p class="text-sm text-gray-500">Note: If no off days are selected, the available days will follow the default off days.</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
@@ -70,6 +71,7 @@
 				<div>
 					<h3>Off Day</h3>
 					<p class="text-sm text-gray-500">Select your off days</p>
+					<p class="text-sm text-gray-500">Note: If no off days are selected, the available days will follow the default off days.</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
@@ -99,9 +101,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { MaintenanceMetadata } from 'wemotoo-common';
+
 const props = defineProps({
 	metadata: {
-		type: Object as PropType<Record<string, any> | null>,
+		type: Object as PropType<Record<string, unknown> | null>,
 		required: true,
 	},
 });
@@ -111,7 +115,7 @@ const emit = defineEmits(['update:productMetadata']);
 const prodMetadata = computed({
 	get() {
 		return (
-			props.metadata ?? {
+			(props.metadata as MaintenanceMetadata) ?? {
 				requires_booking: false,
 				duration: null,
 				start_time: null,
@@ -135,7 +139,7 @@ const updateDuration = (value: string) => {
 	prodMetadata.value = JSON.parse(JSON.stringify(prodMetadata.value));
 };
 
-const updateOffDay = (value: string) => {
+const updateOffDay = (value: string[]) => {
 	prodMetadata.value.off_day = value;
 	prodMetadata.value = JSON.parse(JSON.stringify(prodMetadata.value));
 };
