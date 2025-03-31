@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE, PRODUCT_SETTING_CODE } from 'wemotoo-common';
+import { GROUP_CODE, PRODUCT } from 'wemotoo-common';
 import { useProductTypesStore } from '~/stores/ProductTypes/ProductTypes';
 
 const ui_tabs = {
@@ -63,7 +63,7 @@ const productTypeStore = useProductTypesStore();
 const { productTypes } = storeToRefs(productTypeStore);
 
 const hideLongDesc = computed(() => {
-	return settingsStore.getSetting(GROUP_CODE.PRODUCT_SETTING, PRODUCT_SETTING_CODE.HIDE_LONG_DESC)?.getBoolean() ?? true;
+	return settingsStore.getSetting(GROUP_CODE.PRODUCT, PRODUCT.HIDE_LONG_DESC)?.getBoolean() ?? true;
 });
 
 const items = computed(() => {
