@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE, MERCHANT_SETTING_CODE } from 'wemotoo-common';
+import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();
@@ -26,15 +26,15 @@ const appUiStore = useAppUiStore();
 const { toggleSidebarModal } = appUiStore;
 
 const merchantName = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.NAME)?.getString() ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.NAME)?.getString() ?? '';
 });
 
 const merchantId = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.ID)?.getString() ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '';
 });
 
 const thumbnail = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT_SETTING_CODE.THUMBNAIL)?.getString() ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)?.getString() ?? '';
 });
 
 const logout = async () => {
