@@ -8,6 +8,8 @@ import { useAuthStore } from './Auth/Auth';
 import { useAppUiStore } from './AppUi/AppUi';
 import { useMerchantInfoStore } from './MerchantInfo/MerchantInfo';
 import { useOrderStore } from './Order/Order';
+import { useSummOrderStore } from './SummOrder/SummOrder';
+import { useProductTypesStore } from './ProductTypes/ProductTypes';
 
 export {
 	useAuthStore,
@@ -20,4 +22,6 @@ export {
 	useProductOptionsStore,
 	useProductStore,
 	useOrderStore,
+	useSummOrderStore,
+	useProductTypesStore,
 };

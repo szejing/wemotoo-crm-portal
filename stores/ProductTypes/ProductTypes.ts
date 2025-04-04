@@ -78,7 +78,7 @@ export const useProductTypesStore = defineStore('productTypesStore', {
 					value: productType.value,
 				});
 
-				if (data.product_type) {
+				if (data.productType) {
 					successNotification(`Product Type Updated !`);
 					this.getProductTypes();
 				}
@@ -96,12 +96,12 @@ export const useProductTypesStore = defineStore('productTypesStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productType.delete(id);
+				const data = await $api.productType.delete({ id });
 
-				if (data.id) {
+				if (data.productType) {
 					successNotification(`Product Type Deleted !`);
 
-					const index = this.productTypes.findIndex((t) => t.id === data.id);
+					const index = this.productTypes.findIndex((t) => t.id === data.productType.id);
 					this.productTypes.splice(index, 1);
 				}
 			} catch (err: any) {

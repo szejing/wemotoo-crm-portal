@@ -75,6 +75,22 @@ const MerchantRoutes = {
 		Remove: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},
+	Orders: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/many`,
+		Single: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}`,
+		Process: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
+	},
+	Sales: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SALES}/many`,
+		Single: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SALES}/${order_no}`,
+		Process: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SALES}/process`,
+	},
+	SummOrders: {
+		Dashboard: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/dashboard`,
+		Orders: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/orders`,
+		Items: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/items`,
+		Customers: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/customers`,
+	},
 };
 
 export default MerchantRoutes;

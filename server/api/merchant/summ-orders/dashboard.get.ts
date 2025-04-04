@@ -4,12 +4,13 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		const code = getRouterParams(event).code;
+		const query = getQuery(event);
 
-		const result = await $fetch(`${Routes.Categories.Single(code)}`, {
+		const result = await $fetch(`${Routes.SummOrders.Dashboard()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
-			headers: generateHeaders(event, true),
+			query,
+			headers: generateHeaders(event),
 		});
 		return result;
 	} catch (err) {
