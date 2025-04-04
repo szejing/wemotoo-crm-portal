@@ -80,6 +80,22 @@ export const Routes = {
 		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},
+	Orders: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}`,
+		Single: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}`,
+		Process: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
+	},
+	Sales: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/many`,
+		Single: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.SALES}/${order_no}`,
+		Process: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/process`,
+	},
+	SummOrders: {
+		Dashboard: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/dashboard`,
+		Orders: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}`,
+		Items: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/items`,
+		Customers: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/customers`,
+	},
 };
 
 // export const Routes = {
