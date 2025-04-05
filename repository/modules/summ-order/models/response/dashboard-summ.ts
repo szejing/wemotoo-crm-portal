@@ -1,11 +1,11 @@
-type SummOrderTxnDaily = {
+type SummOrderTxnDaily_ = {
 	biz_date: Date;
 	total_orders: number;
 	total_qty: number;
 	currency_code: string;
 };
 
-type SummOrderItemDaily = {
+type SummOrderItemDaily_ = {
 	prod_code: string;
 	prod_name: string;
 	prod_variant_id?: string;
@@ -15,19 +15,19 @@ type SummOrderItemDaily = {
 	currency_code: string;
 };
 
-type SummDaily = {
+type SummDaily_ = {
 	biz_date: Date;
-	summ_order: SummOrderTxnDaily;
-	summ_order_item: SummOrderItemDaily;
+	summ_order: SummOrderTxnDaily_;
+	summ_order_item: SummOrderItemDaily_;
 };
 
-type SummCustomer = {
+type SummCustomer_ = {
 	customer_no: Date;
 	total_orders: number;
 	total_spent: number;
 };
 
 export type GetDashboardSummResp = {
-	daily_summaries: SummDaily[];
-	top_purchased_customers: SummCustomer[];
+	daily_summaries: SummDaily_[];
+	top_purchased_customers: SummCustomer_[];
 };
