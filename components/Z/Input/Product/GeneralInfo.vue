@@ -171,7 +171,7 @@ const long_desc = computed({
 // +1 because the type is 1-indexed
 const product_type = computed({
 	get() {
-		return props.type - 1;
+		return (props.type ?? 0) - 1;
 	},
 	set(value) {
 		emit('update:type', value + 1);
