@@ -1,5 +1,5 @@
 type SummOrderTxnDaily_ = {
-	biz_date: Date;
+	biz_date: string;
 	total_orders: number;
 	total_qty: number;
 	currency_code: string;
@@ -16,13 +16,13 @@ type SummOrderItemDaily_ = {
 };
 
 type SummDaily_ = {
-	biz_date: Date;
+	biz_date: string;
 	summ_order: SummOrderTxnDaily_;
 	summ_order_item: SummOrderItemDaily_;
 };
 
 type SummCustomer_ = {
-	customer_no: Date;
+	customer_no: string;
 	total_orders: number;
 	total_spent: number;
 };
