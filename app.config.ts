@@ -117,30 +117,45 @@ export default defineAppConfig({
 			help: 'text-base text-neutral-500 ',
 		},
 
-		// * FormGroup *//
-		formGroup: {
-			wrapper: '',
-			inner: '',
-			label: {
-				wrapper: 'flex content-center items-center justify-between',
-				base: 'block font-normal text-secondary-700',
-				required: "after:content-['*'] after:ms-0.5 after:text-red-500",
+		// * FormField *//
+		formField: {
+			slots: {
+				root: '',
+				wrapper: '',
+				labelWrapper: 'flex content-center items-center justify-between',
+				label: 'block font-medium text-(--ui-text)',
+				container: 'mt-1 relative',
+				description: 'text-(--ui-text-muted)',
+				error: 'mt-2 text-(--ui-error)',
+				hint: 'text-(--ui-text-muted)',
+				help: 'mt-2 text-(--ui-text-muted)',
 			},
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
+			variants: {
+				size: {
+					xs: {
+						root: 'text-xs',
+					},
+					sm: {
+						root: 'text-xs',
+					},
+					md: {
+						root: 'text-sm',
+					},
+					lg: {
+						root: 'text-sm',
+					},
+					xl: {
+						root: 'text-base',
+					},
+				},
+				required: {
+					true: {
+						label: "after:content-['*'] after:ms-0.5 after:text-(--ui-error)",
+					},
+				},
 			},
-			container: 'mt-1 relative',
-			description: 'text-neutral-500',
-			hint: 'text-neutral-500',
-			help: 'mt-2 text-neutral-500',
-			error: 'mt-2 text-red-500',
-			default: {
-				size: 'sm',
+			defaultVariants: {
+				size: 'md',
 			},
 		},
 

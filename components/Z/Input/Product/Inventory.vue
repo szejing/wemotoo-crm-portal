@@ -10,13 +10,13 @@
 		</template>
 
 		<div v-if="variantDetail.manage_inventory" class="section-grid-basic-details">
-			<UFormGroup v-slot="{ error }" label="Sku" name="sku">
+			<UFormField v-slot="{ error }" label="Sku" name="sku">
 				<UInput v-model="variantDetail.sku" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Quantity" name="quantity">
+			<UFormField v-slot="{ error }" label="Quantity" name="quantity">
 				<UInput v-model="variantDetail.inventory_quantity" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" type="number" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 	</UCard>
 </template>

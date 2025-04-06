@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="status">
+	<UFormField name="status">
 		<USelectMenu v-model="status" :items="options_order_status" size="md">
 			<template #label>
 				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
@@ -10,7 +10,7 @@
 				<span class="truncate">{{ capitalizeFirstLetter(option) }}</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

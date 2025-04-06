@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="time" class="mt-2">
+	<UFormField name="time" class="mt-2">
 		<USelectMenu v-model="time" :options="time_options" size="md">
 			<template #label>
 				<span v-if="time" class="truncate">
@@ -9,7 +9,7 @@
 				<span v-else class="text-gray-400">{{ title }}</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

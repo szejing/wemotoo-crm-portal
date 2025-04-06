@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="tags" class="mt-2">
+	<UFormField name="tags" class="mt-2">
 		<USelectMenu v-model="tags" v-model:query="query" :items="tag_options" searchable size="md" option-attribute="value" multiple by="id">
 			<template #label>
 				<span v-if="tags.length" class="truncate">{{ tags.map((tag) => tag.value).join(', ') }}</span>
@@ -10,7 +10,7 @@
 				<UButton color="green" variant="ghost">Create "{{ query }}"</UButton>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

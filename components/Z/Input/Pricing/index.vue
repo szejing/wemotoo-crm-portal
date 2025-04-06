@@ -3,14 +3,14 @@
 		<template #header>
 			<h2>Pricing</h2>
 			<div class="section-grid-price-details mt-4">
-				<UFormGroup label="Currency" name="currency">
+				<UFormField label="Currency" name="currency">
 					<ZSelectMenuCurrency v-model:currency-code="currency_code" />
-				</UFormGroup>
+				</UFormField>
 			</div>
 		</template>
 
 		<div class="section-grid-price-details gap-4 mt-4">
-			<UFormGroup v-slot="{ error }" label="Selling Price" name="orig_sell_price" required>
+			<UFormField v-slot="{ error }" label="Selling Price" name="orig_sell_price" required>
 				<UInput
 					v-model="orig_sell_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
@@ -21,9 +21,9 @@
 						<h3>RM</h3>
 					</template>
 				</UInput>
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Cost Price" name="cost_price">
+			<UFormField v-slot="{ error }" label="Cost Price" name="cost_price">
 				<UInput
 					v-model="cost_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
@@ -34,9 +34,9 @@
 						<h3>RM</h3>
 					</template>
 				</UInput>
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Sale Price" name="sale_price">
+			<UFormField v-slot="{ error }" label="Sale Price" name="sale_price">
 				<UInput
 					v-model="sale_price"
 					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
@@ -47,7 +47,7 @@
 						<h3>RM</h3>
 					</template>
 				</UInput>
-			</UFormGroup>
+			</UFormField>
 		</div>
 	</UCard>
 </template>

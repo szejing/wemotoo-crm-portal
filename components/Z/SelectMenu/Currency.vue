@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="currencies" class="mt-2">
+	<UFormField name="currencies" class="mt-2">
 		<USelectMenu
 			v-model="currency_code"
 			v-model:query="query"
@@ -15,7 +15,7 @@
 				<span v-else class="text-neutral-400">Select Currency</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

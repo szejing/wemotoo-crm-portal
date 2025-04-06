@@ -3,14 +3,14 @@
 		<template #header>
 			<div class="w-full flex-between items-center">
 				<h2>General Info</h2>
-				<UTabs v-if="productTypes.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
+				<UTabs v-if="productTypes.length > 0" v-model="product_type" :items="items" :default-index="0">
 					<template #default="{ item }">
 						<span>{{ item.label.toUpperCase() }}</span>
 					</template>
 				</UTabs>
 
 				<div class="w-[50%] flex-jend items-center gap-4">
-					<UCheckbox v-model="is_active" name="isActive" label="Active" color="green" />
+					<UCheckbox v-model="is_active" name="isActive" label="Active" color="success" />
 
 					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="green" />
 					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="green" /> -->
@@ -19,26 +19,26 @@
 		</template>
 
 		<div class="section-grid-basic-details">
-			<UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
+			<UFormField v-slot="{ error }" label="Product Code" name="code" required>
 				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :disabled="disabledCode" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Name" name="name" required>
+			<UFormField v-slot="{ error }" label="Name" name="name" required>
 				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup label="Short Description" name="shortDesc">
+			<UFormField label="Short Description" name="shortDesc">
 				<UInput v-model="short_desc" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
-		<!-- <UFormGroup class="mt-4" label="Description" name="description">
+		<!-- <UFormField class="mt-4" label="Description" name="description">
 			<UInput v-model="description" />
-		</UFormGroup> -->
+		</UFormField> -->
 
-		<UFormGroup v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
+		<UFormField v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
 			<ZTextEditor v-model:value="long_desc" placeholder="Product Description" />
-		</UFormGroup>
+		</UFormField>
 	</UCard>
 </template>
 
@@ -46,17 +46,17 @@
 import { GROUP_CODE, PRODUCT } from 'wemotoo-common';
 import { useProductTypesStore } from '~/stores/ProductTypes/ProductTypes';
 
-const ui_tabs = {
-	list: {
-		base: 'relative',
-		background: 'bg-primary-500',
-		tab: {
-			active: 'text-primary-600',
-			inactive: 'text-primary-400',
-			font: 'font-bold',
-		},
-	},
-};
+// const ui_tabs = {
+// 	list: {
+// 		base: 'relative',
+// 		background: 'bg-primary-500',
+// 		tab: {
+// 			active: 'text-primary-600',
+// 			inactive: 'text-primary-400',
+// 			font: 'font-bold',
+// 		},
+// 	},
+// };
 
 const settingsStore = useSettingsStore();
 const productTypeStore = useProductTypesStore();

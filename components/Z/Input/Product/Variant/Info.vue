@@ -14,13 +14,13 @@
 		</template>
 
 		<div class="section-grid-basic-details">
-			<!-- <UFormGroup v-slot="{ error }" label="Short Description" name="short_desc">
+			<!-- <UFormField v-slot="{ error }" label="Short Description" name="short_desc">
 				<UInput v-model="variantDetail.barcode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup> -->
+			</UFormField> -->
 
-			<!-- <UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
+			<!-- <UFormField v-slot="{ error }" label="Subtitle" name="subtitle">
 				<UInput v-model="variantDetail.ean" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup> -->
+			</UFormField> -->
 		</div>
 	</UCard>
 </template>

@@ -1,11 +1,11 @@
 <template>
-	<UFormGroup name="days" class="mt-2">
+	<UFormField name="days" class="mt-2">
 		<USelectMenu v-model="days" :options="date_range" size="md" option-attribute="name">
 			<template #label>
 				<span class="truncate text-sm font-bold text-neutral">{{ days.name }}</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

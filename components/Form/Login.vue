@@ -12,17 +12,17 @@
 
 					<div class="flex flex-col gap-2">
 						<h1 class="text-center">Merchant Login</h1>
-						<UFormGroup v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
+						<UFormField v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
 							<UInput v-model="state.merchant_id" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormGroup>
+						</UFormField>
 
-						<UFormGroup v-slot="{ error }" label="Email" name="email_address" required>
+						<UFormField v-slot="{ error }" label="Email" name="email_address" required>
 							<UInput v-model="state.email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormGroup>
+						</UFormField>
 
-						<UFormGroup v-slot="{ error }" label="Password" name="password" required>
+						<UFormField v-slot="{ error }" label="Password" name="password" required>
 							<UInput v-model="state.password" type="password" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormGroup>
+						</UFormField>
 					</div>
 
 					<template #footer>
@@ -42,9 +42,9 @@ import type { z } from 'zod';
 type Schema = z.output<typeof LoginValidation>;
 
 const state = reactive({
-	merchant_id: undefined,
-	email_address: undefined,
-	password: undefined,
+	merchant_id: '',
+	email_address: '',
+	password: '',
 });
 
 const authStore = useAuthStore();
