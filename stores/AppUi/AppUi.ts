@@ -10,7 +10,7 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
-		title: 'Summ Order',
+		title: 'Order Summary',
 		icon: ICONS.ORDER_SUMMARY,
 		to: '/order-summary',
 		isCollapsed: false,
@@ -23,14 +23,14 @@ const merchantNavigation = [
 				title: 'Items',
 				to: '/order-summary/order-items',
 			},
-			{
-				title: 'Customers',
-				to: '/order-summary/order-customers',
-			},
+			// {
+			// 	title: 'Customers',
+			// 	to: '/order-summary/order-customers',
+			// },
 		],
 	},
 	{
-		title: 'Summ Sales',
+		title: 'Sales Summary',
 		icon: ICONS.SALES_SUMMARY,
 		to: '/sales-summary',
 		isCollapsed: false,
@@ -43,10 +43,10 @@ const merchantNavigation = [
 				title: 'Items',
 				to: '/sales-summary/sales-items',
 			},
-			{
-				title: 'Customers',
-				to: '/sales-summary/sales-customers',
-			},
+			// {
+			// 	title: 'Customers',
+			// 	to: '/sales-summary/sales-customers',
+			// },
 		],
 	},
 	{
