@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="base"></div>
+		<div class="container">
+			<ZSectionFilterOrderSumm />
+		</div>
 	</div>
 </template>
 
@@ -10,7 +12,7 @@ const links = [
 	{
 		label: 'Order Summary',
 		icon: ICONS.LIST,
-		to: '/summary/orders',
+		to: '/order-summary/orders',
 	},
 ];
 </script>
