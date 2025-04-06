@@ -1,5 +1,6 @@
 import type { SummDaily, SummCustomer } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
+import { extractDate } from 'wemotoo-common';
 
 export const useSummOrderStore = defineStore('summOrderStore', {
 	state: () => ({
@@ -9,20 +10,25 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		top_purchased_customers: [] as SummCustomer[],
 	}),
 	actions: {
-		async getDashboardSummary(start_date: string, end_date: string) {
+		async getDashboardSummary(start_date: Date, end_date: Date) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 
 			try {
 				const data = await $api.summOrder.getDashboardOrderSummary({
-					start_date,
-					end_date,
+					start_date: extractDate(start_date),
+					end_date: extractDate(end_date),
 				});
 
-				this.daily_summaries = data.daily_summaries;
-				this.top_purchased_customers = data.top_purchased_customers;
+				if (data.daily_summaries) {
+					this.daily_summaries = data.daily_summaries;
+				}
 
-				console.log(data);
+				if (data.top_purchased_customers) {
+					this.top_purchased_customers = data.top_purchased_customers;
+				}
+
+				console.log(this.daily_summaries);
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);

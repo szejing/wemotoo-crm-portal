@@ -4,16 +4,6 @@ export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
 	actions: {
 		async init() {
-			const today = new Date();
-			const startDate = new Date(today);
-			startDate.setDate(today.getDate() - 7);
-
-			const endDate = new Date(today);
-
-			// Format dates as YYYY-MM-DD
-			const formattedStartDate = startDate.toISOString().split('T')[0];
-			const formattedEndDate = endDate.toISOString().split('T')[0];
-
 			const productOptionsStore = useProductOptionsStore();
 			await productOptionsStore.getOptions();
 
@@ -37,9 +27,6 @@ export const useAppStore = defineStore('appStore', {
 
 			const orderStore = useOrderStore();
 			await orderStore.getOrders();
-
-			const summOrderStore = useSummOrderStore();
-			await summOrderStore.getDashboardSummary(formattedStartDate, formattedEndDate);
 		},
 	},
 });
