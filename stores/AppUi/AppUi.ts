@@ -10,6 +10,46 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
+		title: 'Summ Order',
+		icon: ICONS.ORDER_SUMMARY,
+		to: '/order-summary',
+		isCollapsed: false,
+		children: [
+			{
+				title: 'Orders',
+				to: '/order-summary/orders',
+			},
+			{
+				title: 'Items',
+				to: '/order-summary/order-items',
+			},
+			{
+				title: 'Customers',
+				to: '/order-summary/order-customers',
+			},
+		],
+	},
+	{
+		title: 'Summ Sales',
+		icon: ICONS.SALES_SUMMARY,
+		to: '/sales-summary',
+		isCollapsed: false,
+		children: [
+			{
+				title: 'Sales',
+				to: '/sales-summary/sales',
+			},
+			{
+				title: 'Items',
+				to: '/sales-summary/sales-items',
+			},
+			{
+				title: 'Customers',
+				to: '/sales-summary/sales-customers',
+			},
+		],
+	},
+	{
 		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
