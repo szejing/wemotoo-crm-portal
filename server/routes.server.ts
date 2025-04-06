@@ -1,77 +1,100 @@
-const merchant: string = 'merchant';
-const auth: string = 'auth';
-const image: string = 'image';
-const categories: string = 'categories';
-const tags: string = 'tags';
-const prodOption: string = 'product-options';
-const currency: string = 'currencies';
-const country: string = 'countries';
-const prod: string = 'products';
-const maintenances: string = 'maintenances';
-const setting: string = 'settings';
+import { API_PATH } from 'wemotoo-common';
+
 export const Routes = {
 	Image: {
-		Upload: () => `${merchant}/${image}/upload`,
-		UploadMultiple: () => `${merchant}/${image}/upload-multiple`,
+		Upload: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGE}/upload`,
+		UploadMultiple: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGE}/upload-multiple`,
 	},
 	Auth: {
-		Login: () => `${merchant}/${auth}/login`,
-		Verify: () => `${merchant}/${auth}/verify`,
-		Logout: () => `${merchant}/${auth}/logout`,
+		Login: () => `${API_PATH.MERCHANT}/${API_PATH.AUTH}/login`,
+		Verify: () => `${API_PATH.MERCHANT}/${API_PATH.AUTH}/verify`,
+		Logout: () => `${API_PATH.MERCHANT}/${API_PATH.AUTH}/logout`,
 	},
-	Country: {
-		Single: (id: number) => `${merchant}/${country}/${id}`,
-		Many: () => `${merchant}/${country}/`,
-		Update: () => `${merchant}/${country}/`,
+	Countries: {
+		Single: (iso2: string) => `${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/${iso2}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/`,
+		Update: (iso2: string) => `${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/${iso2}`,
 	},
-	Currency: {
-		Single: (id: number) => `${merchant}/${currency}/${id}`,
-		Many: () => `${merchant}/${currency}/`,
-		Update: () => `${merchant}/${currency}/`,
+	Currencies: {
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
 	},
-	Product: {
-		Create: () => `${merchant}/${prod}/`,
-		Single: (id: number) => `${merchant}/${prod}/${id}`,
-		Many: () => `${merchant}/${prod}/`,
-		Update: () => `${merchant}/${prod}/`,
-		Remove: () => `${merchant}/${prod}/`,
-		RevertRemove: () => `${merchant}/${prod}/`,
+	Products: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD}/`,
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
-	Maintenance: {
-		Create: () => `${merchant}/${maintenances}/`,
-		Single: (id: number) => `${merchant}/${maintenances}/${id}`,
-		Many: () => `${merchant}/${maintenances}/`,
-		Update: () => `${merchant}/${maintenances}/`,
-		Remove: () => `${merchant}/${maintenances}/`,
-		RevertRemove: () => `${merchant}/${maintenances}/`,
+	Tags: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/restore/${id}`,
 	},
-	ProductTag: {
-		Create: () => `${merchant}/${tags}/`,
-		Single: (id: number) => `${merchant}/${tags}/${id}`,
-		Many: () => `${merchant}/${tags}/`,
-		Update: () => `${merchant}/${tags}/`,
-		Remove: () => `${merchant}/${tags}/`,
-		RevertRemove: () => `${merchant}/${tags}/`,
+	ProdVariants: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/restore/${id}`,
 	},
-	ProdCategory: {
-		Create: () => `${merchant}/${categories}/`,
-		Single: (id: number) => `${merchant}/${categories}/${id}`,
-		Many: () => `${merchant}/${categories}/`,
-		Update: () => `${merchant}/${categories}/`,
-		Remove: () => `${merchant}/${categories}/`,
-		RevertRemove: () => `${merchant}/${categories}/`,
+	ProdTypes: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/restore/${id}`,
 	},
-	ProdOption: {
-		Create: () => `${merchant}/${prodOption}/`,
-		Single: (id: number) => `${merchant}/${prodOption}/${id}`,
-		Many: () => `${merchant}/${prodOption}/`,
-		Update: () => `${merchant}/${prodOption}/`,
-		Remove: () => `${merchant}/${prodOption}/`,
-		RevertRemove: () => `${merchant}/${prodOption}/`,
+	Categories: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/`,
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
+		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/restore/${code}`,
 	},
-	Setting: {
-		Many: () => `${merchant}/${setting}/`,
-		Update: () => `${merchant}/${setting}/`,
+	ProdOptions: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/restore/${id}`,
+	},
+	Settings: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/`,
+		Save: () => `${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/`,
+	},
+	CrmUsers: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
+	},
+	Orders: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}`,
+		Single: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}`,
+		Process: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
+	},
+	Sales: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/many`,
+		Single: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.SALES}/${order_no}`,
+		Process: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/process`,
+	},
+	SummOrders: {
+		Dashboard: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/dashboard`,
+		Orders: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}`,
+		Items: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/items`,
+		Customers: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/customers`,
 	},
 };
 

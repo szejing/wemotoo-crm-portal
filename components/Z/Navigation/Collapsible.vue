@@ -54,7 +54,7 @@ const toggleCollapse = () => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .rotate-90 {
 	transform: rotate(90deg);
 }

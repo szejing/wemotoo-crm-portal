@@ -3,40 +3,32 @@ import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { ProductOption } from '~/utils/types/product-option';
 
-export type ProductOptionsResp = {
+type BaseProductOptionReq = {
+	id: number;
+};
+
+type ProductOptionResp = {
+	productOption: ProductOption;
+};
+
+type ProductOptionsResp = {
 	count: number;
 	productOptions: ProductOption[];
 };
 
-export type CreateProductOptionReq = {
+type CreateProductOptionReq = {
 	name: string;
 	values: ProductOptionValue[];
 };
 
-export type CreateProductOptionResp = {
-	productOption: ProductOption;
-};
-
-export type DeleteProductOptionReq = {
-	id: number;
-};
-
-export type DeleteProductOptionResp = {
-	option_id: number;
-};
-
-export type UpdateProductOptionReq = {
+type UpdateProductOptionReq = {
 	name: string;
 	values: ProductOptionValue[];
-	metadata?: Record<string, any> | undefined;
-};
-
-export type UpdateProductOptionResp = {
-	productOption: ProductOption;
+	metadata?: Record<string, unknown> | undefined;
 };
 
 class ProductOptionModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.ProductOption;
+	private RESOURCE = MerchantRoutes.ProdOptions;
 
 	async fetchMany(): Promise<ProductOptionsResp> {
 		return await this.call<ProductOptionsResp>({
@@ -52,7 +44,7 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async create(option: CreateProductOptionReq): Promise<CreateProductOptionResp> {
+	async create(option: CreateProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -60,20 +52,25 @@ class ProductOptionModule extends HttpFactory {
 		});
 	}
 
-	async update(id: number, option: UpdateProductOptionReq): Promise<UpdateProductOptionResp> {
+	async update(id: number, option: UpdateProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(id)}`,
 			body: removeNullValues(option),
 		});
 	}
 
-	async delete(option: DeleteProductOptionReq): Promise<DeleteProductOptionResp> {
+	async delete(option: BaseProductOptionReq): Promise<ProductOptionResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: option,
+			url: `${this.RESOURCE.Delete(option.id)}`,
+		});
+	}
+
+	async restore(option: BaseProductOptionReq): Promise<ProductOptionResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(option.id)}`,
 		});
 	}
 }

@@ -69,7 +69,6 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalProductDetail } from '#components';
-import { ProductStatus } from '~/utils/enum/product-status';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
@@ -192,7 +191,8 @@ const editProduct = async (code: string) => {
 				const prodVariants: ProdVariantInput[] = [];
 				variants?.forEach((variant) => {
 					prodVariants.push({
-						id: variant.id!,
+						variant_code: variant.variant_code!,
+						product_code: variant.product_code!,
 						name: variant.name!,
 						price_types: variant.price_types?.map((price) => {
 							return {
@@ -203,7 +203,13 @@ const editProduct = async (code: string) => {
 								currency_code: price.currency_code,
 							};
 						}),
-						options: variant.options,
+						options: variant.options?.map((option) => {
+							return {
+								id: option.id!,
+								option_id: option.option_id!,
+								value: option.value!,
+							};
+						}),
 					});
 				});
 
@@ -215,6 +221,7 @@ const editProduct = async (code: string) => {
 					is_active,
 					is_discountable: true,
 					is_giftcard: false,
+					type: type,
 					price_types: prodPrice,
 					categories: prodCategories,
 					tags: prodTags,
@@ -235,4 +242,4 @@ const editProduct = async (code: string) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

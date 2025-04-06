@@ -1,4 +1,4 @@
-import { ProductStatus } from '~/utils/enum/product-status';
+import { ProductStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -13,6 +13,9 @@ const initialEmptyProduct: Product = {
 	is_giftcard: false,
 
 	status: ProductStatus.DRAFT,
+
+	// product types
+	type: 1,
 
 	// categories
 	categories: [],
@@ -40,6 +43,9 @@ const initialEmptyProduct: Product = {
 	// variants
 	options: [],
 	variants: [],
+
+	// metadata
+	metadata: null,
 };
 
 export const useProductStore = defineStore('productStore', {
@@ -78,20 +84,17 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async addProduct(input: Product): Promise<boolean> {
+		async addProduct(product: Product): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.product.create(input);
-
-				if (data.product) {
-					successNotification(`${data.product.code} - Product Created !`);
-				}
+				const data = await $api.product.create(product);
 
 				if (data.products) {
+					successNotification(`${product.code} - Product Created !`);
 					this.products = data.products;
 				}
 
@@ -107,13 +110,29 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async updateProduct(code: string, input: Product) {
+		async updateProduct(code: string, product: Product) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.product.update(code, input);
+				const data = await $api.product.update(code, {
+					name: product.name,
+					short_desc: product.short_desc ?? undefined,
+					long_desc: product.long_desc ?? undefined,
+					is_active: product.is_active,
+					is_discountable: product.is_discountable,
+					is_giftcard: product.is_giftcard,
+					price_types: product.price_types,
+					categories: product.categories,
+					type: product.type,
+					tags: product.tags,
+					status: product.status,
+					galleries: product.galleries ?? undefined,
+					thumbnail: product.thumbnail ?? undefined,
+					options: product.options,
+					variants: product.variants,
+				});
 
 				if (data.product) {
 					successNotification(`Product Updated !`);
@@ -135,10 +154,10 @@ export const useProductStore = defineStore('productStore', {
 			try {
 				const data = await $api.product.delete({ code });
 
-				if (data.code) {
-					successNotification(`Product Code #${data.code} Deleted !`);
+				if (data.product) {
+					successNotification(`Product #${data.product.code} Deleted !`);
 
-					const index = this.products.findIndex((t) => t.code === data.code);
+					const index = this.products.findIndex((t) => t.code === data.product.code);
 					this.products.splice(index, 1);
 				}
 			} catch (err: any) {

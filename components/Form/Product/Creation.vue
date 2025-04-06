@@ -9,6 +9,7 @@
 			v-model:name="newProduct.name"
 			v-model:short_desc="newProduct.short_desc"
 			v-model:long_desc="newProduct.long_desc"
+			v-model:type="newProduct.type"
 		/>
 		<!-- *********************** General Info *********************** -->
 
@@ -22,7 +23,12 @@
 		<!-- *********************** Pricing *********************** -->
 
 		<!-- *********************** Additional Info *********************** -->
-		<ZInputProductAdditionalInfo :product="newProduct" @update_options="updateProductOptions" @update_variants="updateProductVariants" />
+		<ZInputProductAdditionalInfo
+			:product="newProduct"
+			@update_options="updateProductOptions"
+			@update_variants="updateProductVariants"
+			@update_metadata="updateProductMetadata"
+		/>
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
@@ -35,7 +41,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { useProductStore } from '~/stores/Products/Products';
-import { ProductStatus } from '~/utils/enum/product-status';
+import { ProductStatus } from 'wemotoo-common';
 import { CreateProductValidation } from '~/utils/schema';
 import type { CategoryInput } from '~/utils/types/category';
 
@@ -58,6 +64,10 @@ const updateProductOptions = (value: any) => {
 
 const updateProductVariants = (value: any) => {
 	newProduct.value.variants = value;
+};
+
+const updateProductMetadata = (value: any) => {
+	newProduct.value.metadata = value;
 };
 
 const currency_code = computed({
@@ -121,8 +131,7 @@ const sale_price = computed({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	// eslint-disable-next-line @stylistic/operator-linebreak
-	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants } = event.data;
+	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = event.data;
 
 	// price_types
 	const prodPrice: PriceInput[] = [];
@@ -171,7 +180,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const prodVariants: ProdVariantInput[] = [];
 	variants?.forEach((variant) => {
 		prodVariants.push({
-			id: variant.id!,
+			variant_code: variant.variant_code!,
+			product_code: variant.product_code!,
 			name: variant.name!,
 			price_types: variant.price_types?.map((price) => {
 				return {
@@ -185,13 +195,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			options: variant.options?.map((option) => {
 				return {
 					id: option.id!,
-					name: option.name!,
-					values: option.values?.map((value) => {
-						return {
-							id: value.id!,
-							value: value.value!,
-						};
-					}),
+					option_id: option.option_id!,
+					value: option.value!,
 				};
 			}),
 		});
@@ -207,12 +212,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		is_giftcard: false,
 		price_types: prodPrice,
 		categories: prodCategories,
+		type: type,
 		tags: prodTags,
 		status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,
 		galleries,
 		thumbnail,
 		options: prodOptions,
 		variants: prodVariants,
+		metadata: JSON.parse(JSON.stringify(newProduct.value.metadata)),
 	});
 
 	if (result) {
@@ -221,4 +228,4 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

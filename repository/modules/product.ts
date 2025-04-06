@@ -1,18 +1,26 @@
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
-import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from '~/utils/types/price';
 import type { CategoryInput } from '~/utils/types/category';
 import type { TagInput } from '~/utils/types/tag';
 
-export type ProductsResp = {
+type BaseProductReq = {
+	code: string;
+};
+
+type ProductResp = {
+	product: Product;
+};
+
+type ProductsResp = {
 	count: number;
 	products: Product[];
 };
 
-export type CreateProductReq = {
-	code: string | undefined;
+type CreateProductReq = {
+	code?: string | undefined;
 	name: string | undefined;
 	short_desc: string | undefined;
 	long_desc: string | undefined;
@@ -40,30 +48,20 @@ export type CreateProductReq = {
 	// variants
 	options: ProdOptionInput[] | undefined;
 	variants: ProdVariantInput[] | undefined;
+
+	// type
+	type: number;
 };
 
-export type CreateProductResp = {
+type CreateProductResp = {
 	count: number;
 	products: Product[];
-	product: Product;
 };
 
-export type DeleteProductReq = {
-	code: string;
-};
-
-export type DeleteProductResp = {
-	code: string;
-};
-
-export type UpdateProductReq = CreateProductReq;
-
-export type UpdateProductResp = {
-	product: Product;
-};
+type UpdateProductReq = CreateProductReq;
 
 class ProductModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Product;
+	private RESOURCE = MerchantRoutes.Products;
 
 	async fetchMany(): Promise<ProductsResp> {
 		return await this.call<ProductsResp>({
@@ -87,20 +85,25 @@ class ProductModule extends HttpFactory {
 		});
 	}
 
-	async update(code: string, product: UpdateProductReq): Promise<UpdateProductResp> {
+	async update(code: string, product: UpdateProductReq): Promise<ProductResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { code },
+			url: `${this.RESOURCE.Update(code)}`,
 			body: product,
 		});
 	}
 
-	async delete(product: DeleteProductReq): Promise<DeleteProductResp> {
+	async delete(product: BaseProductReq): Promise<ProductResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: product,
+			url: `${this.RESOURCE.Delete(product.code)}`,
+		});
+	}
+
+	async restore(product: BaseProductReq): Promise<ProductResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(product.code)}`,
 		});
 	}
 }

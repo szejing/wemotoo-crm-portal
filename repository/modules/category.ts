@@ -2,12 +2,20 @@ import type { Category } from '~/utils/types/category';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-export type CategoriesResp = {
+type BaseCategoryReq = {
+	code: string;
+};
+
+type CategoryResp = {
+	category: Category;
+};
+
+type CategoriesResp = {
 	count: number;
 	categories: Category[];
 };
 
-export type CreateCategoryReq = {
+type CreateCategoryReq = {
 	code: string;
 	name: string;
 	description: string | null;
@@ -19,19 +27,7 @@ export type CreateCategoryReq = {
 	parent_category_code: string | null;
 };
 
-export type CreateCategoryResp = {
-	category: Category;
-};
-
-export type DeleteCategoryReq = {
-	code: string;
-};
-
-export type DeleteCategoryResp = {
-	category_code: string;
-};
-
-export type UpdateCategoryReq = {
+type UpdateCategoryReq = {
 	name: string | null;
 	description: string | null;
 	slug: string | null;
@@ -42,12 +38,8 @@ export type UpdateCategoryReq = {
 	parent_category_code: string | null;
 };
 
-export type UpdateCategoryResp = {
-	category: Category;
-};
-
 class CategoryModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Category;
+	private RESOURCE = MerchantRoutes.Categories;
 
 	async fetchMany(): Promise<CategoriesResp> {
 		return this.call<CategoriesResp>({
@@ -56,14 +48,14 @@ class CategoryModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(id: string) {
+	async fetchSingle(code: string) {
 		return this.call<any>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(id)}`,
+			url: `${this.RESOURCE.Single(code)}`,
 		});
 	}
 
-	async create(category: CreateCategoryReq): Promise<CreateCategoryResp> {
+	async create(category: CreateCategoryReq): Promise<CategoryResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -71,20 +63,25 @@ class CategoryModule extends HttpFactory {
 		});
 	}
 
-	async update(id: string, category: UpdateCategoryReq): Promise<UpdateCategoryResp> {
+	async update(code: string, category: UpdateCategoryReq): Promise<CategoryResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(code)}`,
 			body: removeNullValues(category),
 		});
 	}
 
-	async delete(category: DeleteCategoryReq): Promise<DeleteCategoryResp> {
+	async delete(category: BaseCategoryReq): Promise<CategoryResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: category,
+			url: `${this.RESOURCE.Delete(category.code)}`,
+		});
+	}
+
+	async restore(category: BaseCategoryReq): Promise<CategoryResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(category.code)}`,
 		});
 	}
 }

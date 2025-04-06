@@ -5,7 +5,6 @@
 		}"
 	>
 		<UCard>
-			<template #header><h3>Update Product</h3></template>
 			<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
@@ -16,6 +15,7 @@
 					v-model:name="current_product.name"
 					v-model:short-desc="current_product.short_desc"
 					v-model:long-desc="current_product.long_desc"
+					v-model:type="current_product.type"
 					disabled-code
 					:card-ui="borderless_card_ui"
 				/>
@@ -75,7 +75,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { UpdateProductValidation } from '~/utils/schema';
-import type { Product } from '~/utils/types/product';
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 
 type Schema = z.output<typeof UpdateProductValidation>;
 
@@ -91,13 +91,13 @@ const { updating } = storeToRefs(productStore);
 
 const emit = defineEmits(['update', 'cancel']);
 
-const { product: current_product } = toRefs(props);
+const current_product = ref(props.product);
 
-const updateProductOptions = (value: any) => {
+const updateProductOptions = (value: ProdOptionInput[]) => {
 	current_product.value.options = value;
 };
 
-const updateProductVariants = (value: any) => {
+const updateProductVariants = (value: ProdVariantInput[]) => {
 	current_product.value.variants = value;
 };
 
@@ -110,4 +110,4 @@ const onCancel = () => {
 };
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

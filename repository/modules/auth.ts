@@ -1,15 +1,15 @@
-import type { UserRoles } from '~/utils/enum/user-role';
+import type { UserRoles } from 'wemotoo-common';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { MerchantInfo } from '~/utils/types/merchant-info';
 
-export type LoginReq = {
+type LoginReq = {
 	merchant_id: string;
 	email_address: string;
 	password: string;
 };
 
-export type LoginResp = {
+type LoginResp = {
 	user: {
 		role: UserRoles;
 		email_address: string;
@@ -22,7 +22,7 @@ export type LoginResp = {
 	refresh_token: string;
 };
 
-export type VerifyResp = {
+type VerifyResp = {
 	user: {
 		role: UserRoles;
 		email_address: string;

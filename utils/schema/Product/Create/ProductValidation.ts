@@ -11,12 +11,13 @@ const Category = z.object({ code: z.string().optional(), name: z.string().option
 
 const Tag = z.object({ id: z.number().optional(), value: z.string().optional() });
 
-const OptionValues = z.object({ id: z.number().optional(), value: z.string().optional() });
+const OptionValues = z.object({ id: z.number().optional(), option_id: z.number().optional(), value: z.string().optional() });
 
 const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
 
 const Variant = z.object({
-	id: z.string().optional(),
+	variant_code: z.string().optional(),
+	product_code: z.string().optional(),
 	name: z.string().optional(),
 	sku: z.string().optional(),
 	ean: z.string().optional(),
@@ -34,7 +35,7 @@ const Variant = z.object({
 	mid_code: z.string().optional(),
 	material: z.string().optional(),
 	price_types: z.array(Price).optional(),
-	options: z.array(Option).optional(),
+	options: z.array(OptionValues).optional(),
 });
 
 export const CreateProductValidation = z.object({
@@ -56,4 +57,6 @@ export const CreateProductValidation = z.object({
 	options: z.array(Option).optional(),
 	// variants
 	variants: z.array(Variant).optional(),
+	// type
+	type: z.number().default(1),
 });

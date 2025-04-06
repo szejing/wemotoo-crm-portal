@@ -2,7 +2,7 @@ import type { ProductOption } from './product-option';
 import type { PriceInput } from './price';
 
 export type ProductVariant = {
-	id?: string;
+	variant_code?: string;
 	name?: string;
 	sku?: string;
 	ean?: string;

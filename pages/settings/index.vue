@@ -1,28 +1,38 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<h1>Settings</h1>
+		<div class="flex justify-between items-center my-4">
+			<div>
+				<h1>Settings</h1>
+				<p class="text-base text-gray-400">
+					These settings are used to configure the system. <br />
+					Please note that changes will take effect immediately.
+				</p>
+			</div>
+			<div class="w-[20%]">
+				<UButton size="md" color="green" variant="solid" block @click="settingsStore.updateSettings">Save</UButton>
+			</div>
+		</div>
 
-		<UTabs :items="items" class="w-full">
+		<UTabs
+			:items="items"
+			class="w-full"
+			:ui="{
+				list: {
+					height: 'h-12',
+					tab: {
+						height: 'h-10',
+					},
+				},
+			}"
+		>
+			<template #default="{ item }">
+				<h3 class="truncate py-4">{{ item.label }}</h3>
+			</template>
+
 			<template #item="{ item }">
 				<UCard>
-					<template #header>
-						<h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-							{{ item.label }}
-						</h2>
-					</template>
-
-					<div v-for="child in item.children" :key="child.key" class="space-y-3">
-						<h2>{{ child.segment_desc }}</h2>
-
-						<div v-for="template in child.setting_templs" :key="template.set_code">
-							<h3>{{ template.set_desc }}</h3>
-						</div>
-					</div>
-
-					<div v-for="child in item.children" :key="child.key" class="space-y-3">
-						<h2>{{ child.set_desc }}</h2>
-					</div>
+					<ZSettingSegment :segment="item.segment" />
 				</UCard>
 			</template>
 		</UTabs>
@@ -46,8 +56,8 @@ const items = segments.value.map((segment) => ({
 	key: segment.segment_code,
 	label: segment.segment_desc,
 	description: segment.segment_desc,
-	children: segment.segment_children.length > 0 ? segment.segment_children : segment.setting_templs,
+	segment: segment,
 }));
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

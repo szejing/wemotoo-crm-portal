@@ -97,10 +97,10 @@ export const useTagsStore = defineStore('tagsStore', {
 			try {
 				const data = await $api.tag.delete({ id });
 
-				if (data.tag_id) {
-					successNotification(`Tag Deleted !`);
+				if (data.tag.id) {
+					successNotification(`Tag #${data.tag.value} Deleted !`);
 
-					const index = this.tags.findIndex((t) => t.id === data.tag_id);
+					const index = this.tags.findIndex((t) => t.id === data.tag.id);
 					this.tags.splice(index, 1);
 				}
 			} catch (err: any) {

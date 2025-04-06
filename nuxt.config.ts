@@ -93,6 +93,16 @@ export default defineNuxtConfig({
 	},
 
 	compatibilityDate: '2024-04-03',
+	// For TypeScript support
+	typescript: {
+		tsConfig: {
+			compilerOptions: {
+				paths: {
+					'wemotoo-common': ['../wemotoo-common/dist'],
+				},
+			},
+		},
+	},
 
 	eslint: {
 		config: {

@@ -47,7 +47,7 @@ const toggleCollapse = (id: number) => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 /**************************** sidebar styling ****************************/
 
 .active-link {

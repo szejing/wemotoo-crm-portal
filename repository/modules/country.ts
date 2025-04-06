@@ -2,19 +2,13 @@ import type { Country } from '~/utils/types/country';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-// export type LoginReq = {
-// 	merchant_id: string;
-// 	email_address: string;
-// 	password: string;
-// };
-
-export type CountriesResp = {
+type CountriesResp = {
 	count: number;
 	countries: Country[];
 };
 
 class CountryModule extends HttpFactory {
-	private readonly RESOURCE = MerchantRoutes.Country;
+	private readonly RESOURCE = MerchantRoutes.Countries;
 
 	/**
 	 * Fetches all Countries

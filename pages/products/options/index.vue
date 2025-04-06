@@ -70,7 +70,7 @@ const options = (row: ProductOption) => [
 		{
 			label: 'Edit',
 			icon: ICONS.PENCIL,
-			click: async () => await editProductOption(row.id),
+			click: async () => await editProductOption(row.id!),
 		},
 	],
 	[
@@ -78,7 +78,7 @@ const options = (row: ProductOption) => [
 			label: 'Delete',
 			icon: ICONS.TRASH,
 			slot: 'danger',
-			click: async () => await deleteProductOption(row.id),
+			click: async () => await deleteProductOption(row.id!),
 		},
 	],
 ];
@@ -130,7 +130,7 @@ const editProductOption = async (optionId: number) => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .base {
 	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
 }

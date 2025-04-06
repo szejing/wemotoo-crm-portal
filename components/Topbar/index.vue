@@ -18,8 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE } from '~/utils/constants/group-code';
-import { SETTING_CODE } from '~/utils/constants/setting-code';
+import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();
@@ -27,15 +26,15 @@ const appUiStore = useAppUiStore();
 const { toggleSidebarModal } = appUiStore;
 
 const merchantName = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_NAME)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.NAME)?.getString() ?? '';
 });
 
 const merchantId = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_ID)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '';
 });
 
 const thumbnail = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_THUMBNAIL)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)?.getString() ?? '';
 });
 
 const logout = async () => {
@@ -46,7 +45,7 @@ const logout = async () => {
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .topbar-bg {
 	@apply w-full h-20 md:h-16 bg-neutral flex justify-between md:justify-end items-center px-4;
 }

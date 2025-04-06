@@ -7,36 +7,59 @@ const merchantNavigation = [
 		title: 'Overview',
 		icon: ICONS.DASHBOARD_ROUNDED,
 		to: '/',
-		isCollapsed: true,
+		isCollapsed: false,
+	},
+	{
+		title: 'Order Summary',
+		icon: ICONS.ORDER_SUMMARY,
+		to: '/order-summary',
+		isCollapsed: false,
+		children: [
+			{
+				title: 'Orders',
+				to: '/order-summary/orders',
+			},
+			{
+				title: 'Items',
+				to: '/order-summary/order-items',
+			},
+			// {
+			// 	title: 'Customers',
+			// 	to: '/order-summary/order-customers',
+			// },
+		],
+	},
+	{
+		title: 'Sales Summary',
+		icon: ICONS.SALES_SUMMARY,
+		to: '/sales-summary',
+		isCollapsed: false,
+		children: [
+			{
+				title: 'Sales',
+				to: '/sales-summary/sales',
+			},
+			{
+				title: 'Items',
+				to: '/sales-summary/sales-items',
+			},
+			// {
+			// 	title: 'Customers',
+			// 	to: '/sales-summary/sales-customers',
+			// },
+		],
 	},
 	{
 		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
-		isCollapsed: true,
-	},
-	{
-		title: 'Categories',
-		icon: ICONS.CATEGORY,
-		to: '/categories',
-		isCollapsed: true,
-	},
-	{
-		title: 'Tags',
-		icon: ICONS.TAG,
-		to: '/tags',
-		isCollapsed: true,
-	},
-	{
-		title: 'Maintenance',
-		icon: ICONS.MAINTENANCE_SERVICE,
-		to: '/maintenance-services',
+		isCollapsed: false,
 	},
 	{
 		title: 'Products',
 		icon: ICONS.PRODUCT,
 		to: '/products',
-		isCollapsed: true,
+		isCollapsed: false,
 		children: [
 			{
 				title: 'Products',
@@ -46,19 +69,27 @@ const merchantNavigation = [
 				title: 'Options',
 				to: '/products/options',
 			},
+			{
+				title: 'Categories',
+				to: '/products/categories',
+			},
+			{
+				title: 'Tags',
+				to: '/products/tags',
+			},
 		],
 	},
 	{
 		title: 'Customers',
 		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 		to: '/customers',
-		isCollapsed: true,
+		isCollapsed: false,
 	},
 	{
 		title: 'Settings',
 		icon: ICONS.SETTINGS_ROUNDED,
 		to: '/settings',
-		isCollapsed: true,
+		isCollapsed: false,
 	},
 ];
 

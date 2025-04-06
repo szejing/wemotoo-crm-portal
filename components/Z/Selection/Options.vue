@@ -55,4 +55,4 @@ const updateProductOptions = () => {
 };
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

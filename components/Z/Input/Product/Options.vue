@@ -65,4 +65,4 @@ const updateProductOptions = (options: ProdOptionInput[]) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductStatus } from 'wemotoo-common';
 import { options_product_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
@@ -31,4 +31,4 @@ const status = computed({
 });
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

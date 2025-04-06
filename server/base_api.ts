@@ -1,4 +1,4 @@
-import { KEY } from '~/utils/constants/key';
+import { KEY } from 'wemotoo-common';
 
 export const generateHeaders = (event: any, includeAccessToken: boolean = true, merchant_id: string = '') => {
 	const config = useRuntimeConfig(event);

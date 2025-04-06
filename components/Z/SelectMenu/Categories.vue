@@ -35,4 +35,4 @@ const categories = computed({
 });
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

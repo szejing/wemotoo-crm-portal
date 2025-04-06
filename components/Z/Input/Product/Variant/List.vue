@@ -70,7 +70,7 @@ const autoGenerate = () => {
 
 		const option = prodOptions.value[optionIndex];
 		for (const value of option.values!) {
-			combine([...currentOptions, { id: value.id, value: value.value }], optionIndex + 1);
+			combine([...currentOptions, { id: value.id, option_id: option.id, value: value.value }], optionIndex + 1);
 		}
 	};
 
@@ -80,7 +80,8 @@ const autoGenerate = () => {
 		if (variant.name) return;
 
 		variant.name = variant.options?.map((option) => option.value).join('_');
-		variant.id = props.product.code + '_' + variant.name;
+		variant.variant_code = props.product.code + '_' + variant.name;
+		variant.product_code = props.product.code;
 
 		if (variant.price_types) return;
 
@@ -88,6 +89,12 @@ const autoGenerate = () => {
 			variant.price_types = [JSON.parse(JSON.stringify(props.product.price_types[0]))];
 		} else {
 			variant.price_types = undefined;
+		}
+
+		for (const price of variant.price_types ?? []) {
+			if (price.id == props.product.price_types?.[0].id) {
+				price.id = undefined;
+			}
 		}
 	});
 
@@ -108,7 +115,7 @@ const viewVariant = (variant: ProdVariantInput) => {
 
 const updateVariantDetail = (variant: ProdVariantInput) => {
 	isVariantDetailsModalOpen.value = false;
-	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.name === variant.name); // Find variant by name
+	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.variant_code === variant.variant_code && v.product_code === variant.product_code); // Find variant by codes
 
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
@@ -117,4 +124,4 @@ const updateVariantDetail = (variant: ProdVariantInput) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

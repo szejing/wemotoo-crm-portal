@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import type { LoginResp, VerifyResp } from '~/repository/modules/auth';
-import { KEY } from '~/utils/constants/key';
+import { KEY } from 'wemotoo-common';
 
 export const useAuthStore = defineStore('authStore', {
 	state: () => ({

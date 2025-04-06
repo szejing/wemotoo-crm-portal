@@ -1,17 +1,20 @@
-import AuthModule from '~/repository/modules/auth';
-import CountryModule from '~/repository/modules/country';
-import CurrencyModule from '~/repository/modules/currency';
-import ImageModule from '~/repository/modules/image';
-import ProductModule from '~/repository/modules/product';
-import CategoryModule from '~/repository/modules/category';
-import ProductOptionModule from '~/repository/modules/product-option';
-import TagModule from '~/repository/modules/tag';
-import MaintenanceServiceModule from '~/repository/modules/maintenance-service';
-import SettingModule from '~/repository/modules/setting';
+import {
+	AuthModule,
+	CategoryModule,
+	CountryModule,
+	CurrencyModule,
+	ImageModule,
+	ProductModule,
+	ProductOptionModule,
+	ProductTypeModule,
+	SettingModule,
+	TagModule,
+	OrderModule,
+	SummOrderModule,
+} from '~/repository/modules';
 
 interface IApiInstance {
 	product: ProductModule;
-	maintenanceService: MaintenanceServiceModule;
 	tag: TagModule;
 	category: CategoryModule;
 	productOption: ProductOptionModule;
@@ -20,6 +23,9 @@ interface IApiInstance {
 	country: CountryModule;
 	image: ImageModule;
 	setting: SettingModule;
+	productType: ProductTypeModule;
+	summOrder: SummOrderModule;
+	order: OrderModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -42,8 +48,10 @@ export default defineNuxtPlugin((_) => {
 	const categoryModule = new CategoryModule(apiFetcher);
 	const productOptionModule = new ProductOptionModule(apiFetcher);
 	const imageModule = new ImageModule(apiFetcher);
-	const maintenanceServiceModule = new MaintenanceServiceModule(apiFetcher);
 	const settingModule = new SettingModule(apiFetcher);
+	const productTypeModule = new ProductTypeModule(apiFetcher);
+	const summOrderModule = new SummOrderModule(apiFetcher);
+	const orderModule = new OrderModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -54,8 +62,10 @@ export default defineNuxtPlugin((_) => {
 		category: categoryModule,
 		productOption: productOptionModule,
 		image: imageModule,
-		maintenanceService: maintenanceServiceModule,
 		setting: settingModule,
+		productType: productTypeModule,
+		summOrder: summOrderModule,
+		order: orderModule,
 	};
 
 	return {

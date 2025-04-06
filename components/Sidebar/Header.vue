@@ -17,27 +17,26 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE } from '~/utils/constants/group-code';
-import { SETTING_CODE } from '~/utils/constants/setting-code';
+import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 
 const isMerchantInfoModal = ref(false);
 
 const merchantName = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_NAME)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.NAME)?.getString() ?? '';
 });
 
 const merchantId = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_ID)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '';
 });
 
 const thumbnail = computed(() => {
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, SETTING_CODE.MERCHANT_THUMBNAIL)?.set_value ?? '';
+	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)?.getString() ?? '';
 });
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 .header-container {
 	@apply px-4 border-b-[1px] border-secondary-400;
 }

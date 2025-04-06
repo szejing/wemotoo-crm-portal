@@ -2,38 +2,30 @@ import type { Tag } from '~/utils/types/tag';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-export type TagsResp = {
+type BaseTagReq = {
+	id: number;
+};
+
+type TagResp = {
+	tag: Tag;
+};
+
+type TagsResp = {
 	count: number;
 	tags: Tag[];
 };
 
-export type CreateTagReq = {
+type CreateTagReq = {
 	value: string;
 };
 
-export type CreateTagResp = {
-	tag: Tag;
-};
-
-export type DeleteTagReq = {
-	id: number;
-};
-
-export type DeleteTagResp = {
-	tag_id: number;
-};
-
-export type UpdateTagReq = {
+type UpdateTagReq = {
 	value: string;
-	metadata?: Record<string, any> | undefined;
-};
-
-export type UpdateTagResp = {
-	tag: Tag;
+	metadata?: Record<string, unknown> | undefined;
 };
 
 class TagModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Tag;
+	private RESOURCE = MerchantRoutes.Tags;
 
 	async fetchMany(): Promise<TagsResp> {
 		return await this.call<TagsResp>({
@@ -49,7 +41,7 @@ class TagModule extends HttpFactory {
 		});
 	}
 
-	async create(tag: CreateTagReq): Promise<CreateTagResp> {
+	async create(tag: CreateTagReq): Promise<TagResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -57,20 +49,25 @@ class TagModule extends HttpFactory {
 		});
 	}
 
-	async update(id: number, tag: UpdateTagReq): Promise<UpdateTagResp> {
+	async update(id: number, tag: UpdateTagReq): Promise<TagResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update()}`,
-			query: { id },
+			url: `${this.RESOURCE.Update(id)}`,
 			body: tag,
 		});
 	}
 
-	async delete(tag: DeleteTagReq): Promise<DeleteTagResp> {
+	async delete(tag: BaseTagReq): Promise<TagResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete()}`,
-			query: tag,
+			url: `${this.RESOURCE.Delete(tag.id)}`,
+		});
+	}
+
+	async restore(tag: BaseTagReq): Promise<TagResp> {
+		return await this.call<any>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Restore(tag.id)}`,
 		});
 	}
 }

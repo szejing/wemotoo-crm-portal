@@ -1,6 +1,6 @@
 export type CategoryInput = {
 	code: string;
-	name: string;
+	name?: string;
 };
 
 export type Category = {
@@ -8,8 +8,6 @@ export type Category = {
 	name: string;
 	description?: string | undefined;
 	slug?: string | undefined;
-
-	total_items: number;
 
 	is_active: boolean;
 	is_internal: boolean;

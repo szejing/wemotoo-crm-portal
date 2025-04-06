@@ -61,16 +61,7 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 				this.loading = false;
 			}
 		},
-		async addCategory(
-			code: string,
-			name: string,
-			description: string | undefined,
-			is_internal: boolean,
-			is_active: boolean,
-			images: string[] | undefined,
-			thumbnail: string | undefined,
-			parent_category_code: string | undefined,
-		) {
+		async addCategory(category: Category) {
 			this.adding = true;
 			this.loading = true;
 
@@ -78,19 +69,19 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 
 			try {
 				const data = await $api.category.create({
-					code: code,
-					name: name,
-					description: description ?? null,
+					code: category.code,
+					name: category.name,
+					description: category.description ?? null,
 					slug: null,
-					is_internal: is_internal,
-					is_active: is_active,
-					images: images ?? null,
-					thumbnail: thumbnail ?? null,
-					parent_category_code: parent_category_code ?? null,
+					is_internal: category.is_internal,
+					is_active: category.is_active,
+					images: category.images ?? null,
+					thumbnail: category.thumbnail ?? null,
+					parent_category_code: category.parent_category?.code ?? null,
 				});
 
 				if (data.category) {
-					successNotification(`${name} - Category Created !`);
+					successNotification(`${category.name} - Category Created !`);
 					this.categories.push(data.category);
 				}
 				this.resetNewCategory();
@@ -138,10 +129,10 @@ export const useCategoriesStore = defineStore('categoriesStore', {
 			try {
 				const data = await $api.category.delete({ code });
 
-				if (data.category_code) {
-					successNotification(`Category Deleted !`);
+				if (data.category.code) {
+					successNotification(`Category #${data.category.code} Deleted !`);
 
-					const index = this.categories.findIndex((catg) => catg.code === data.category_code);
+					const index = this.categories.findIndex((catg) => catg.code === data.category.code);
 					this.categories.splice(index, 1);
 				}
 			} catch (err: any) {

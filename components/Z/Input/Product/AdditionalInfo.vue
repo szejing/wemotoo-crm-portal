@@ -11,6 +11,12 @@
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
 				</template>
 
+				<template #maintenance>
+					<h1>Maintenance</h1>
+					<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
+					<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+				</template>
+
 				<template #variants>
 					<div class="flex flex-col h-full">
 						<h1>Variants</h1>
@@ -46,6 +52,14 @@
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
 				</template>
 
+				<template #maintenance>
+					<div class="flex flex-col h-full">
+						<h1>Maintenance</h1>
+						<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
+						<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+					</div>
+				</template>
+
 				<template #variants>
 					<div class="flex flex-col h-full">
 						<h1>Variants</h1>
@@ -77,22 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '~/utils/types/product';
-
-const product_additional_info = [
-	{
-		label: 'Variants',
-		slot: 'variants',
-	},
-	{
-		label: 'Shipping',
-		slot: 'shipping',
-	},
-	{
-		label: 'Tax',
-		slot: 'tax',
-	},
-];
+import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
@@ -127,19 +126,38 @@ const props = defineProps({
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update_options', 'update_variants']);
-const product = computed(() => props.product);
+const emit = defineEmits(['update_options', 'update_variants', 'update_metadata']);
+const product = computed({
+	get() {
+		return props.product;
+	},
+	set(_) {},
+});
 
-const updateProductOptions = (value: any) => {
+const product_additional_info = computed(() => {
+	return [
+		// Conditionally add maintenance for type 2
+		...(product.value.type === 2 ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
+		// Always add these items
+		{ label: 'Variants', slot: 'variants' },
+		{ label: 'Shipping', slot: 'shipping' },
+		{ label: 'Tax', slot: 'tax' },
+	];
+});
+const updateProductOptions = (value: ProdOptionInput[]) => {
 	emit('update_options', value);
 };
 
-const updateProductVariants = (value: any) => {
+const updateProductVariants = (value: ProdVariantInput[]) => {
 	emit('update_variants', value);
+};
+
+const updateProductMetadata = (value: Record<string, unknown>) => {
+	emit('update_metadata', value);
 };
 </script>
 
-<style scoped lang="css">
+<style scoped lang="postcss">
 h2 {
 	@apply leading-tight;
 }

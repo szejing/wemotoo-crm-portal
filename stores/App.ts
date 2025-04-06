@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { useCategoriesStore, useMaintenanceServiceStore, useTagsStore } from '.';
 
 export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
@@ -17,14 +16,20 @@ export const useAppStore = defineStore('appStore', {
 			const productStore = useProductStore();
 			await productStore.getProducts();
 
-			const maintenanceServiceStore = useMaintenanceServiceStore();
-			await maintenanceServiceStore.getMaintenanceServices();
-
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();
 
 			const settingsStore = useSettingsStore();
 			await settingsStore.getSettings();
+
+			const productTypeStore = useProductTypesStore();
+			await productTypeStore.getProductTypes();
+
+			const orderStore = useOrderStore();
+			await orderStore.getOrders();
+
+			const summOrderStore = useSummOrderStore();
+			await summOrderStore.getDashboardSummary();
 		},
 	},
 });

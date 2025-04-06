@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import type { ProductStatus } from '~/utils/enum/product-status';
+import type { ProductStatus } from 'wemotoo-common';
 import { FilterProductValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof FilterProductValidation>;
@@ -36,4 +36,4 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="postcss"></style>

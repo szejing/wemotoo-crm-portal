@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { MerchantInfo } from '~/utils/types/merchant-info';
+import { MerchantInfo } from '~/utils/types/merchant-info';
 import { failedNotification } from '../AppUi/AppUi';
 import type { Currency } from '~/utils/types/currency';
 
@@ -15,7 +15,7 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 	}),
 	actions: {
 		async setMerchantInfo(merchantInfo: MerchantInfo[]) {
-			this.merchant = merchantInfo;
+			this.merchant = merchantInfo.map((info) => new MerchantInfo(info));
 		},
 
 		getMerchantInfo(group_code: string, set_code: string): MerchantInfo | null {
