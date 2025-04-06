@@ -1,14 +1,18 @@
 <template>
-	<UCard>
+	<UCard
+		:ui="{
+			base: 'flex flex-col h-full',
+			body: {
+				base: 'flex-1',
+			},
+			footer: {
+				base: 'items-end mt-auto mb-2',
+			},
+		}"
+	>
 		<template #header>
 			<div class="w-full flex justify-between items-center">
-				<h1>Order Summary</h1>
-				<ZSelectMenuDateRange
-					:start-date="filterRange.startDate"
-					:end-date="filterRange.endDate"
-					@update:start-date="updateStartDate"
-					@update:end-date="updateEndDate"
-				/>
+				<h2>Order</h2>
 			</div>
 		</template>
 		<Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
@@ -30,20 +34,12 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const summOrderStore = useSummOrderStore();
 const { daily_summaries } = storeToRefs(summOrderStore);
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const last7Days = new Date(today);
-last7Days.setDate(today.getDate() - 7);
-
-const filterRange = ref({
-	startDate: last7Days,
-	endDate: today,
-});
-
 const chartData = computed(() => {
 	return {
-		labels: daily_summaries.value.map((summary) => summary.summ_order.biz_date),
+		labels:
+			daily_summaries.value.length > 30
+				? daily_summaries.value.map((summary) => summary.summ_order.biz_date.substring(5, 10))
+				: daily_summaries.value.map((summary) => summary.summ_order.biz_date),
 		datasets: [
 			{
 				barThickness: 12,
@@ -70,19 +66,6 @@ const chartOptions = {
 		},
 	},
 };
-
-const updateStartDate = (startDate: Date) => {
-	filterRange.value.startDate = startDate;
-};
-
-const updateEndDate = async (endDate: Date) => {
-	filterRange.value.endDate = endDate;
-	await summOrderStore.getDashboardSummary(filterRange.value.startDate, filterRange.value.endDate);
-};
-
-onMounted(async () => {
-	await summOrderStore.getDashboardSummary(filterRange.value.startDate, filterRange.value.endDate);
-});
 </script>
 
 <style scoped lang="postcss"></style>

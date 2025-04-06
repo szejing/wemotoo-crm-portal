@@ -27,6 +27,9 @@ export const useAppStore = defineStore('appStore', {
 
 			const orderStore = useOrderStore();
 			await orderStore.getOrders();
+
+			const summOrderStore = useSummOrderStore();
+			await summOrderStore.getDashboardSummary();
 		},
 	},
 });
