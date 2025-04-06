@@ -10,14 +10,24 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		top_purchased_customers: [] as SummCustomer[],
 	}),
 	actions: {
-		async getDashboardSummary(start_date: Date, end_date: Date) {
+		async getDashboardSummary(start_date?: Date, end_date?: Date) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 
+			if (end_date == undefined) {
+				end_date = new Date();
+				end_date.setHours(0, 0, 0, 0);
+			}
+
+			if (start_date == undefined) {
+				start_date = new Date(end_date);
+				start_date.setDate(start_date.getDate() - 7);
+			}
+
 			try {
 				const data = await $api.summOrder.getDashboardOrderSummary({
-					start_date: extractDate(start_date),
-					end_date: extractDate(end_date),
+					start_date: extractDate(start_date!),
+					end_date: extractDate(end_date!),
 				});
 
 				if (data.daily_summaries) {
@@ -27,8 +37,6 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				if (data.top_purchased_customers) {
 					this.top_purchased_customers = data.top_purchased_customers;
 				}
-
-				console.log(this.daily_summaries);
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
