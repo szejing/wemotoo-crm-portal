@@ -1,4 +1,6 @@
 @import 'tailwindcss' theme(static);
+@tailwind utilities;
+
 @import '@nuxt/ui';
 
 html {
@@ -6,7 +8,7 @@ html {
 }
 
 body {
-	/* @apply bg-neutral; */
+	background-color: var(--color-neutral-0);
 }
 
 :target {
@@ -14,7 +16,8 @@ body {
 }
 
 /* ::selection {
-    @apply bg-primary text-neutral;
+    background-color: var(--color-primary);
+    color: var(--color-neutral);
 } */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
@@ -35,9 +38,10 @@ body {
 
 /* Placeholder colors */
 ::placeholder {
-	/* @apply text-neutral-400 opacity-100; */
+	color: var(--color-neutral-400);
+	opacity: 1;
 }
 
 ::-ms-input-placeholder {
-	/* @apply text-neutral-400; */
+	color: var(--color-neutral-400);
 }
