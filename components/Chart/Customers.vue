@@ -1,13 +1,9 @@
 <template>
 	<UCard
 		:ui="{
-			base: 'flex flex-col h-full',
-			body: {
-				base: 'flex-1',
-			},
-			footer: {
-				base: 'items-end mt-auto mb-2',
-			},
+			root: 'flex flex-col h-full',
+			body: 'flex-1',
+			footer: 'items-end mt-auto mb-2',
 		}"
 	>
 		<template #header>

@@ -15,10 +15,13 @@ export default defineAppConfig({
 
 		//* Modal *//
 		modal: {
-			width: 'w-full max-w-[90%] sm:max-w-[60%]',
+			slots: {
+				root: 'w-full max-w-[90%] sm:max-w-[60%]',
+			},
 		},
+
 		//* Notification *//
-		notifications: {
+		toast: {
 			position: 'bottom-0 right-0 top-auto left-auto',
 		},
 
@@ -36,71 +39,225 @@ export default defineAppConfig({
 
 		//* Card *//
 		card: {
-			base: 'transition duration-200 py-2',
+			root: 'transition duration-200 py-2',
 			background: 'bg-neutral',
 			shadow: 'shadow-md',
 			divide: 'divide-none',
-			rounded: `rounded`,
-			header: {
-				base: '',
-				background: '',
-				padding: 'px-4 py-2',
-			},
-			body: {
-				base: '',
-				background: '',
-				padding: 'px-4 py-3',
-			},
-			footer: {
-				base: '',
-				background: '',
-				padding: 'px-4 pt-2 pb-2',
-			},
+			rounded: 'rounded',
+			header: 'px-4 py-2',
+			body: 'px-4 py-3',
+			footer: 'px-4 pt-2 pb-2',
 		},
 
 		//* Button *//
 		button: {
-			base: 'transition duration-200',
-			font: 'font-bold',
-			rounded: 'rounded',
-			default: {
-				loadingIcon: 'i-material-symbols-sync-rounded',
+			slots: {
+				base: 'rounded-[calc(var(--ui-radius)*1.5)] font-medium inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75 transition-colors',
+				label: 'truncate',
+				leadingIcon: 'shrink-0',
+				leadingAvatar: 'shrink-0',
+				leadingAvatarSize: '',
+				trailingIcon: 'shrink-0',
 			},
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
+			variants: {
+				buttonGroup: {
+					horizontal: 'not-only:first:rounded-e-none not-only:last:rounded-s-none not-last:not-first:rounded-none',
+					vertical: 'not-only:first:rounded-b-none not-only:last:rounded-t-none not-last:not-first:rounded-none',
+				},
+				color: {
+					primary: '',
+					secondary: '',
+					success: '',
+					info: '',
+					warning: '',
+					error: '',
+					neutral: '',
+				},
+				variant: {
+					solid: '',
+					outline: '',
+					soft: '',
+					subtle: '',
+					ghost: '',
+					link: '',
+				},
+				size: {
+					xs: {
+						base: 'px-2 py-1 text-xs gap-1',
+						leadingIcon: 'size-4',
+						leadingAvatarSize: '3xs',
+						trailingIcon: 'size-4',
+					},
+					sm: {
+						base: 'px-2.5 py-1.5 text-xs gap-1.5',
+						leadingIcon: 'size-4',
+						leadingAvatarSize: '3xs',
+						trailingIcon: 'size-4',
+					},
+					md: {
+						base: 'px-2.5 py-1.5 text-sm gap-1.5',
+						leadingIcon: 'size-5',
+						leadingAvatarSize: '2xs',
+						trailingIcon: 'size-5',
+					},
+					lg: {
+						base: 'px-3 py-2 text-sm gap-2',
+						leadingIcon: 'size-5',
+						leadingAvatarSize: '2xs',
+						trailingIcon: 'size-5',
+					},
+					xl: {
+						base: 'px-3 py-2 text-base gap-2',
+						leadingIcon: 'size-6',
+						leadingAvatarSize: 'xs',
+						trailingIcon: 'size-6',
+					},
+				},
+				block: {
+					true: {
+						base: 'w-full justify-center',
+						trailingIcon: 'ms-auto',
+					},
+				},
+				square: {
+					true: '',
+				},
+				leading: {
+					true: '',
+				},
+				trailing: {
+					true: '',
+				},
+				loading: {
+					true: '',
+				},
+				active: {
+					true: {
+						base: '',
+					},
+					false: {
+						base: '',
+					},
+				},
 			},
-			color: {
-				primary: {
-					solid: 'button-primary-solid disabled:button-primary-solid-disabled',
-					outline: 'button-primary-outline disabled:button-primary-outline-disabled',
+			compoundVariants: [
+				{
+					color: 'primary',
+					variant: 'solid',
+					class:
+						'text-(--ui-bg) bg-(--ui-primary) hover:bg-(--ui-primary)/75 disabled:bg-(--ui-primary) aria-disabled:bg-(--ui-primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary)',
 				},
-				green: {
-					solid: 'button-green-solid',
-					outline: 'button-green-outline disabled:button-green-outline-disabled',
+				{
+					color: 'primary',
+					variant: 'outline',
+					class:
+						'ring ring-inset ring-(--ui-primary)/50 text-(--ui-primary) hover:bg-(--ui-primary)/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary)',
 				},
-				danger: {
-					solid: 'button-red-solid',
-					outline: 'button-red-outline disabled:button-red-outline-disabled',
+				{
+					color: 'primary',
+					variant: 'soft',
+					class:
+						'text-(--ui-primary) bg-(--ui-primary)/10 hover:bg-(--ui-primary)/15 focus:outline-none focus-visible:bg-(--ui-primary)/15 disabled:bg-(--ui-primary)/10 aria-disabled:bg-(--ui-primary)/10',
 				},
-				neutral: {
-					solid: 'button-neutral-solid',
-					ghost: 'button-neutral-ghost',
-					soft: 'button-neutral-soft',
-					link: 'button-neutral-link',
+				{
+					color: 'primary',
+					variant: 'subtle',
+					class:
+						'text-(--ui-primary) ring ring-inset ring-(--ui-primary)/25 bg-(--ui-primary)/10 hover:bg-(--ui-primary)/15 disabled:bg-(--ui-primary)/10 aria-disabled:bg-(--ui-primary)/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary)',
 				},
-			},
-			padding: {
-				'2xs': 'px-2 py-1',
-				'xs': 'px-2.5 py-1.5',
-				'sm': 'px-2.5 py-1.5',
-				'md': 'px-3 py-2',
-				'lg': 'px-5 py-3',
-				'xl': 'px-10 py-3',
+				{
+					color: 'primary',
+					variant: 'ghost',
+					class:
+						'text-(--ui-primary) hover:bg-(--ui-primary)/10 focus:outline-none focus-visible:bg-(--ui-primary)/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent',
+				},
+				{
+					color: 'primary',
+					variant: 'link',
+					class:
+						'text-(--ui-primary) hover:text-(--ui-primary)/75 disabled:text-(--ui-primary) aria-disabled:text-(--ui-primary) focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ui-primary)',
+				},
+				{
+					color: 'neutral',
+					variant: 'solid',
+					class:
+						'text-(--ui-bg) bg-(--ui-bg-inverted) hover:bg-(--ui-bg-inverted)/90 disabled:bg-(--ui-bg-inverted) aria-disabled:bg-(--ui-bg-inverted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-border-inverted)',
+				},
+				{
+					color: 'neutral',
+					variant: 'outline',
+					class:
+						'ring ring-inset ring-(--ui-border-accented) text-(--ui-text) bg-(--ui-bg) hover:bg-(--ui-bg-elevated) disabled:bg-(--ui-bg) aria-disabled:bg-(--ui-bg) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-border-inverted)',
+				},
+				{
+					color: 'neutral',
+					variant: 'soft',
+					class:
+						'text-(--ui-text) bg-(--ui-bg-elevated) hover:bg-(--ui-bg-accented)/75 focus:outline-none focus-visible:bg-(--ui-bg-accented)/75 disabled:bg-(--ui-bg-elevated) aria-disabled:bg-(--ui-bg-elevated)',
+				},
+				{
+					color: 'neutral',
+					variant: 'subtle',
+					class:
+						'ring ring-inset ring-(--ui-border-accented) text-(--ui-text) bg-(--ui-bg-elevated) hover:bg-(--ui-bg-accented)/75 disabled:bg-(--ui-bg-elevated) aria-disabled:bg-(--ui-bg-elevated) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-border-inverted)',
+				},
+				{
+					color: 'neutral',
+					variant: 'ghost',
+					class:
+						'text-(--ui-text) hover:bg-(--ui-bg-elevated) focus:outline-none focus-visible:bg-(--ui-bg-elevated) hover:disabled:bg-transparent dark:hover:disabled:bg-transparent hover:aria-disabled:bg-transparent dark:hover:aria-disabled:bg-transparent',
+				},
+				{
+					color: 'neutral',
+					variant: 'link',
+					class:
+						'text-(--ui-text-muted) hover:text-(--ui-text) disabled:text-(--ui-text-muted) aria-disabled:text-(--ui-text-muted) focus:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-(--ui-border-inverted)',
+				},
+				{
+					size: 'xs',
+					square: true,
+					class: 'p-1',
+				},
+				{
+					size: 'sm',
+					square: true,
+					class: 'p-1.5',
+				},
+				{
+					size: 'md',
+					square: true,
+					class: 'p-1.5',
+				},
+				{
+					size: 'lg',
+					square: true,
+					class: 'p-2',
+				},
+				{
+					size: 'xl',
+					square: true,
+					class: 'p-2',
+				},
+				{
+					loading: true,
+					leading: true,
+					class: {
+						leadingIcon: 'animate-spin',
+					},
+				},
+				{
+					loading: true,
+					leading: false,
+					trailing: true,
+					class: {
+						trailingIcon: 'animate-spin',
+					},
+				},
+			],
+			defaultVariants: {
+				color: 'primary',
+				variant: 'solid',
+				size: 'md',
 			},
 		},
 
@@ -111,7 +268,7 @@ export default defineAppConfig({
 
 		checkbox: {
 			container: 'flex items-center h-6',
-			base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
+			root: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
 			label: 'text-base font-medium text-neutral-700',
 			required: 'text-base text-red-500 ',
 			help: 'text-base text-neutral-500 ',
@@ -119,17 +276,15 @@ export default defineAppConfig({
 
 		// * FormField *//
 		formField: {
-			slots: {
-				root: '',
-				wrapper: '',
-				labelWrapper: 'flex content-center items-center justify-between',
-				label: 'block font-medium text-(--ui-text)',
-				container: 'mt-1 relative',
-				description: 'text-(--ui-text-muted)',
-				error: 'mt-2 text-(--ui-error)',
-				hint: 'text-(--ui-text-muted)',
-				help: 'mt-2 text-(--ui-text-muted)',
-			},
+			root: '',
+			wrapper: '',
+			labelWrapper: 'flex content-center items-center justify-between',
+			label: 'block font-medium text-(--ui-text)',
+			container: 'mt-1 relative',
+			description: 'text-(--ui-text-muted)',
+			error: 'mt-2 text-(--ui-error)',
+			hint: 'text-(--ui-text-muted)',
+			help: 'mt-2 text-(--ui-text-muted)',
 			variants: {
 				size: {
 					xs: {
@@ -161,47 +316,50 @@ export default defineAppConfig({
 
 		//* Input *//
 		input: {
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-md',
-				'lg': 'text-base md:text-xl',
-				'xl': 'text-base md:text-2xl',
-			},
-			padding: {
-				'2xs': 'px-2 py-1',
-				'xs': 'px-2 py-1',
-				'sm': 'px-2 py-1',
-				'md': 'px-4 py-2',
-				'lg': 'px-4 py-2',
-				'xl': 'px-4 py-3',
-			},
-			leading: {
-				padding: {
-					'2xs': 'ps-8',
-					'xs': 'ps-9',
-					'sm': 'ps-10',
-					'md': 'ps-11',
-					'lg': 'ps-12',
-					'xl': 'ps-13',
+			slots: {
+				root: 'w-full relative inline-flex items-center',
+				size: {
+					'2xs': 'text-xs md:text-xs',
+					'xs': 'text-xs md:text-xs',
+					'sm': 'text-sm md:text-sm',
+					'md': 'text-sm md:text-md',
+					'lg': 'text-base md:text-xl',
+					'xl': 'text-base md:text-2xl',
 				},
-			},
-			trailing: {
 				padding: {
-					'2xs': 'pe-8',
-					'xs': 'pe-9',
-					'sm': 'pe-10',
-					'md': 'pe-11',
-					'lg': 'pe-12',
-					'xl': 'pe-13',
+					'2xs': 'px-2 py-1',
+					'xs': 'px-2 py-1',
+					'sm': 'px-2 py-1',
+					'md': 'px-4 py-2',
+					'lg': 'px-4 py-2',
+					'xl': 'px-4 py-3',
 				},
+				// leading: {
+				// 	padding: {
+				// 		'2xs': 'ps-8',
+				// 		'xs': 'ps-9',
+				// 		'sm': 'ps-10',
+				// 		'md': 'ps-11',
+				// 		'lg': 'ps-12',
+				// 		'xl': 'ps-13',
+				// 	},
+				// },
+				// trailing: {
+				// 	padding: {
+				// 		'2xs': 'pe-8',
+				// 		'xs': 'pe-9',
+				// 		'sm': 'pe-10',
+				// 		'md': 'pe-11',
+				// 		'lg': 'pe-12',
+				// 		'xl': 'pe-13',
+				// 	},
+				// },
+				default: {
+					size: 'md',
+					loadingIcon: 'i-material-symbols-sync-rounded',
+				},
+				rounded: 'rounded',
 			},
-			default: {
-				size: 'md',
-				loadingIcon: 'i-material-symbols-sync-rounded',
-			},
-			rounded: `rounded`,
 		},
 
 		//* Textarea *//
@@ -286,7 +444,7 @@ export default defineAppConfig({
 		//* Breadcrumb *//
 		breadcrumb: {
 			li: 'flex items-center gap-x-1.5 text-secondary-200  text-sm leading-6 min-w-0',
-			base: 'flex items-center gap-x-1.5 group font-light min-w-0',
+			root: 'flex items-center gap-x-1.5 group font-light min-w-0',
 			active: 'text-secondary-800 font-medium',
 			inactive: 'hover:text-secondary-500',
 			default: {
@@ -311,9 +469,9 @@ export default defineAppConfig({
 		// tabs: {
 		// 	wrapper: 'relative space-y-2',
 		// 	container: 'relative w-full',
-		// 	base: 'focus:outline-none',
+		// 	root: 'focus:outline-none',
 		// 	list: {
-		// 		base: 'relative',
+		// 		root: 'relative',
 		// 		background: 'bg-neutral-100',
 		// 		rounded: 'rounded-lg',
 		// 		shadow: '',
@@ -322,13 +480,13 @@ export default defineAppConfig({
 		// 		width: 'w-full',
 		// 		marker: {
 		// 			wrapper: 'absolute top-[4px] left-[4px] duration-200 ease-out focus:outline-none',
-		// 			base: 'w-full h-full',
+		// 			root: 'w-full h-full',
 		// 			background: 'bg-neutral',
 		// 			rounded: 'rounded-md',
 		// 			shadow: 'shadow-xs',
 		// 		},
 		// 		tab: {
-		// 			base: 'relative inline-flex items-center justify-center flex-shrink/0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500  ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
+		// 			root: 'relative inline-flex items-center justify-center flex-shrink/0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500  ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
 		// 			background: '',
 		// 			active: 'text-neutral-900',
 		// 			inactive: 'text-neutral-500',
