@@ -1,9 +1,9 @@
-import type { SummDaily, SummCustomer, SummOrderBill } from '~/utils/types/summ-orders';
+import type { SummDaily, SummCustomer, SummOrderBill, SummOrderItem } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
-import type { FilterType, OrderStatus } from 'wemotoo-common';
-import { extractDate } from 'wemotoo-common';
+import { OrderStatus, type FilterType } from 'wemotoo-common';
+import { extractDate, OrderItemStatus } from 'wemotoo-common';
 
-export type OrderSumm = {
+type OrderSumm = {
 	filter: {
 		start_date: Date;
 		end_date: Date | undefined;
@@ -20,7 +20,33 @@ const initialEmptyOrderSumm: OrderSumm = {
 		start_date: new Date(),
 		end_date: undefined,
 		filter_type: '=',
-		status: 'completed',
+		status: OrderStatus.COMPLETED,
+		currency_code: 'MYR',
+	},
+	is_loading: false,
+	data: [],
+};
+
+type OrderSummItem = {
+	filter: {
+		start_date: Date;
+		end_date: Date | undefined;
+		filter_type: string;
+		status: string;
+		item_status: string;
+		currency_code: string;
+	};
+	is_loading: boolean;
+	data: SummOrderItem[];
+};
+
+const initialEmptyOrderSummItem: OrderSummItem = {
+	filter: {
+		start_date: new Date(),
+		end_date: undefined,
+		filter_type: '=',
+		status: OrderStatus.COMPLETED,
+		item_status: OrderItemStatus.ACTIVE,
 		currency_code: 'MYR',
 	},
 	is_loading: false,
@@ -34,6 +60,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		daily_summaries: [] as SummDaily[],
 		top_purchased_customers: [] as SummCustomer[],
 		order_summ: initialEmptyOrderSumm,
+		order_summ_item: initialEmptyOrderSummItem,
 	}),
 	actions: {
 		async getDashboardSummary(start_date?: Date, end_date?: Date) {
@@ -92,6 +119,29 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				failedNotification(err.message);
 			} finally {
 				this.order_summ.is_loading = false;
+			}
+		},
+
+		async getOrderItemSummary() {
+			this.order_summ_item.is_loading = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.summOrder.getSummOrderItems({
+					filter_type: this.order_summ_item.filter.filter_type as FilterType,
+					order_status: this.order_summ_item.filter.status as OrderStatus,
+					start_date: extractDate(this.order_summ_item.filter.start_date),
+					end_date: this.order_summ_item.filter.end_date ? extractDate(this.order_summ_item.filter.end_date) : undefined,
+					currency_code: 'MYR',
+				});
+				if (data.summ_order_items) {
+					this.order_summ_item.data = data.summ_order_items;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ_item.is_loading = false;
 			}
 		},
 	},
