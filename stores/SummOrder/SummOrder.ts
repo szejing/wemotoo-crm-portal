@@ -1,6 +1,31 @@
-import type { SummDaily, SummCustomer } from '~/utils/types/summ-orders';
+import type { SummDaily, SummCustomer, SummOrderBill } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
+import type { FilterType, OrderStatus } from 'wemotoo-common';
 import { extractDate } from 'wemotoo-common';
+
+export type OrderSumm = {
+	filter: {
+		start_date: Date;
+		end_date: Date | undefined;
+		filter_type: string;
+		status: string;
+		currency_code: string;
+	};
+	is_loading: boolean;
+	data: SummOrderBill[];
+};
+
+const initialEmptyOrderSumm: OrderSumm = {
+	filter: {
+		start_date: new Date(),
+		end_date: undefined,
+		filter_type: '=',
+		status: 'completed',
+		currency_code: 'MYR',
+	},
+	is_loading: false,
+	data: [],
+};
 
 export const useSummOrderStore = defineStore('summOrderStore', {
 	state: () => ({
@@ -8,6 +33,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		errors: [] as string[],
 		daily_summaries: [] as SummDaily[],
 		top_purchased_customers: [] as SummCustomer[],
+		order_summ: initialEmptyOrderSumm,
 	}),
 	actions: {
 		async getDashboardSummary(start_date?: Date, end_date?: Date) {
@@ -42,6 +68,30 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				failedNotification(err.message);
 			} finally {
 				this.loading = false;
+			}
+		},
+
+		async getOrderSummary() {
+			this.order_summ.is_loading = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.summOrder.getSummOrders({
+					filter_type: this.order_summ.filter.filter_type as FilterType,
+					order_status: this.order_summ.filter.status as OrderStatus,
+					start_date: extractDate(this.order_summ.filter.start_date),
+					end_date: this.order_summ.filter.end_date ? extractDate(this.order_summ.filter.end_date) : undefined,
+					currency_code: 'MYR',
+				});
+
+				if (data.summ_orders) {
+					this.order_summ.data = data.summ_orders;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ.is_loading = false;
 			}
 		},
 	},

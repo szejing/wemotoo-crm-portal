@@ -14,11 +14,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { OrderStatus } from 'wemotoo-common';
 import { options_order_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
-const props = defineProps<{ status: OrderStatus | undefined }>();
+const props = defineProps<{ status: string }>();
 const emit = defineEmits(['update:status']);
 
 const status = computed({

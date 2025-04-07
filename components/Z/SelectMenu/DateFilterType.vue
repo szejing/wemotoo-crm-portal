@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="filter_type" class="mt-2">
+	<UFormGroup name="filter_type">
 		<USelectMenu v-model="filter_type" :options="date_filter_type_options" size="md" option-attribute="name" value-attribute="value" />
 	</UFormGroup>
 </template>
