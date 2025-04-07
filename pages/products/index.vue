@@ -226,6 +226,7 @@ const editProduct = async (code: string) => {
 				thumbnail: thumbnail ?? undefined,
 				options: prodOptions,
 				variants: prodVariants,
+				metadata: null,
 			});
 
 			modal.close();

@@ -1,8 +1,8 @@
 <template>
-	<UFormGroup name="days" class="mt-2">
-		<USelectMenu v-model="days" :options="date_range" size="md" option-attribute="name">
+	<UFormGroup name="date" class="mt-2 w-[150px] max-w-[250px]">
+		<USelectMenu v-model="date" :options="date_range" size="md" option-attribute="name">
 			<template #label>
-				<span class="truncate text-sm font-bold text-neutral">{{ days.name }}</span>
+				<span class="truncate text-sm font-bold text-neutral">{{ date?.name }}</span>
 			</template>
 		</USelectMenu>
 	</UFormGroup>
@@ -40,15 +40,15 @@ const date_range = [
 const props = defineProps<{ startDate: Date; endDate: Date }>();
 const emit = defineEmits(['update:startDate', 'update:endDate']);
 
-const days = computed({
+const date = computed({
 	get() {
 		const value = date_range.find((d) => isSameDate(d.start_date, props.startDate) && isSameDate(d.end_date, props.endDate));
 
 		return value;
 	},
 	set(date_range) {
-		emit('update:startDate', date_range.start_date);
-		emit('update:endDate', date_range.end_date);
+		emit('update:startDate', date_range?.start_date);
+		emit('update:endDate', date_range?.end_date);
 	},
 });
 </script>
