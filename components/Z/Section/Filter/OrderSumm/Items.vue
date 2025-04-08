@@ -22,7 +22,7 @@
 				<ZSelectMenuOrderStatus v-model:status="order_summ_item.filter.status" />
 			</div>
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Order Item Status</h4>
+				<h4>Item Status</h4>
 				<ZSelectMenuOrderItemStatus v-model:status="order_summ_item.filter.item_status" />
 			</div>
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">

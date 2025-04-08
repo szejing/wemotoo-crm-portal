@@ -20,6 +20,25 @@ export const order_item_summ_columns = [
 		label: 'Net Amt',
 	},
 	{
+		key: 'total_qty',
+		label: 'Total Qty',
+	},
+];
+
+export const order_item_summ_header_columns = [
+	{
+		key: 'biz_date',
+		label: 'Biz Date',
+	},
+	{
+		key: 'gross_amt',
+		label: 'Gross Amt',
+	},
+	{
+		key: 'net_amt',
+		label: 'Net Amt',
+	},
+	{
 		key: 'total_orders',
 		label: 'Total Orders',
 	},
