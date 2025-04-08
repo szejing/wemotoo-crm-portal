@@ -5,9 +5,9 @@
 			<div class="flex items-center justify-between">
 				<h1 class="text-neutral-800 font-normal">
 					Summary
-					<span class="text-neutral-800 font-medium italic">{{ extractDate(filterRange.startDate) }}</span>
+					<span class="text-neutral-800 font-medium italic">{{ getFormattedDate(filterRange.startDate) }}</span>
 					<span class="text-neutral-400 italic"> to </span>
-					<span class="text-neutral-800 font-medium italic">{{ extractDate(filterRange.endDate) }}</span>
+					<span class="text-neutral-800 font-medium italic">{{ getFormattedDate(filterRange.endDate) }}</span>
 				</h1>
 				<ZSelectMenuDateRange
 					:start-date="filterRange.startDate"
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { extractDate } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 
 const links = [
 	{

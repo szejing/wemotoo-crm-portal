@@ -1,7 +1,7 @@
 import type { SummDaily, SummCustomer, SummOrderBill, SummOrderItem } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
 import { OrderStatus, type FilterType } from 'wemotoo-common';
-import { extractDate, OrderItemStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
 
 type OrderSumm = {
 	filter: {
@@ -79,8 +79,8 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 			try {
 				const data = await $api.summOrder.getDashboardOrderSummary({
-					start_date: extractDate(start_date!),
-					end_date: extractDate(end_date!),
+					start_date: getFormattedDate(start_date!),
+					end_date: getFormattedDate(end_date!),
 				});
 
 				if (data.daily_summaries) {
@@ -106,9 +106,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				const data = await $api.summOrder.getSummOrders({
 					filter_type: this.order_summ.filter.filter_type as FilterType,
 					order_status: this.order_summ.filter.status as OrderStatus,
-					start_date: extractDate(this.order_summ.filter.start_date),
-					end_date: this.order_summ.filter.end_date ? extractDate(this.order_summ.filter.end_date) : undefined,
-					currency_code: 'MYR',
+					start_date: getFormattedDate(this.order_summ.filter.start_date),
+					end_date: this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date) : undefined,
+					currency_code: this.order_summ.filter.currency_code,
 				});
 
 				if (data.summ_orders) {
@@ -130,9 +130,10 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				const data = await $api.summOrder.getSummOrderItems({
 					filter_type: this.order_summ_item.filter.filter_type as FilterType,
 					order_status: this.order_summ_item.filter.status as OrderStatus,
-					start_date: extractDate(this.order_summ_item.filter.start_date),
-					end_date: this.order_summ_item.filter.end_date ? extractDate(this.order_summ_item.filter.end_date) : undefined,
-					currency_code: 'MYR',
+					item_status: this.order_summ_item.filter.item_status as OrderItemStatus,
+					start_date: getFormattedDate(this.order_summ_item.filter.start_date),
+					end_date: this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date) : undefined,
+					currency_code: this.order_summ_item.filter.currency_code,
 				});
 				if (data.summ_order_items) {
 					this.order_summ_item.data = data.summ_order_items;

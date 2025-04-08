@@ -93,6 +93,18 @@ export default defineNuxtConfig({
 	},
 
 	compatibilityDate: '2024-04-03',
+
+	vite: {
+		server: {
+			fs: {
+				allow: [
+					'.', // project root
+					'/Users/szejinggo/Documents/Projects/wemotoo-common', // explicitly allow this path
+				],
+			},
+		},
+	},
+
 	// For TypeScript support
 	typescript: {
 		tsConfig: {

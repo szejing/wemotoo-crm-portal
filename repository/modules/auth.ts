@@ -3,13 +3,13 @@ import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 import type { MerchantInfo } from '~/utils/types/merchant-info';
 
-type LoginReq = {
+export type LoginReq = {
 	merchant_id: string;
 	email_address: string;
 	password: string;
 };
 
-type LoginResp = {
+export type LoginResp = {
 	user: {
 		role: UserRoles;
 		email_address: string;
@@ -22,7 +22,7 @@ type LoginResp = {
 	refresh_token: string;
 };
 
-type VerifyResp = {
+export type VerifyResp = {
 	user: {
 		role: UserRoles;
 		email_address: string;

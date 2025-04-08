@@ -1,6 +1,6 @@
 <template>
 	<UPopover :popper="{ placement: 'bottom-start' }">
-		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDate ? format(currentDate, 'dd/MM/yyyy') : placeholder" variant="outline" />
+		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDate ? getFormattedDate(currentDate, 'dd/MM/yyyy') : placeholder" variant="outline" />
 
 		<template #panel="{ close }">
 			<ZDatePicker v-model="currentDate" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { format } from 'date-fns';
+import { getFormattedDate } from 'wemotoo-common';
 
 const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date }>();
 

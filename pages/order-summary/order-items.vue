@@ -4,9 +4,15 @@
 		<div class="container">
 			<ZSectionFilterOrderSummItems />
 			<UCard class="mt-4">
-				<UTable :rows="tableData" :columns="dateColumns" :loading="is_loading" :expand="expandedRows" @update:expand="expandedRows = $event">
+				<template #header>
+					<div class="flex-jend">
+						<ZSelectMenuTableColumns :columns="order_item_summ_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+					</div>
+				</template>
+
+				<UTable :rows="tableData" :columns="order_item_summ_header_columns" :loading="is_loading" :expand="expandedRows" @update:expand="expandedRows = $event">
 					<template #biz_date-data="{ row }">
-						<p class="font-bold">{{ extractDate(new Date(row.biz_date)) }}</p>
+						<p class="font-bold">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
 					</template>
 
 					<template #total_orders-data="{ row }">
@@ -17,12 +23,24 @@
 						<p class="font-bold">{{ row.total_qty }}</p>
 					</template>
 
+					<template #gross_amt-header>
+						<p>
+							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+						</p>
+					</template>
+
 					<template #gross_amt-data="{ row }">
-						<p class="font-bold">{{ row.gross_amt }}</p>
+						<p class="font-bold">{{ row.gross_amt.toFixed(2) }}</p>
+					</template>
+
+					<template #net_amt-header>
+						<p>
+							Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+						</p>
 					</template>
 
 					<template #net_amt-data="{ row }">
-						<p class="font-bold">{{ row.net_amt }}</p>
+						<p class="font-bold">{{ row.net_amt.toFixed(2) }}</p>
 					</template>
 
 					<template #empty-state>
@@ -33,40 +51,46 @@
 
 					<template #expand="{ row }">
 						<div class="p-4 bg-gray-50">
-							<UTable :rows="row.items" :columns="order_item_summ_columns">
+							<UTable :rows="row.items" :columns="columnsTable">
 								<template #prod_code-data="{ row: item }">
-									<p class="font-bold">{{ item.prod_code }} - {{ item.prod_name }}</p>
+									<p>{{ item.prod_code }} - {{ item.prod_name }}</p>
 								</template>
 
 								<template #order_status-data="{ row: item }">
-									<p v-if="item.order_status == OrderStatus.COMPLETED" class="font-bold text-green-500">COMPLETED</p>
-									<p v-else-if="item.order_status == OrderStatus.PENDING_PAYMENT" class="font-bold text-main">PAYMENT REQUIRED</p>
-									<p v-else-if="item.order_status == OrderStatus.REFUNDED" class="font-bold text-red-500">REFUNDED</p>
-									<p v-else-if="item.order_status == OrderStatus.CANCELLED" class="font-bold text-red-500">CANCELLED</p>
-									<p v-else class="font-bold">-</p>
+									<UBadge v-if="item.order_status == OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
+									<UBadge v-else-if="item.order_status == OrderStatus.PENDING_PAYMENT" variant="outline" color="main">PAYMENT REQUIRED</UBadge>
+									<UBadge v-else-if="item.order_status == OrderStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
+									<UBadge v-else-if="item.order_status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 								</template>
 
 								<template #item_status-data="{ row: item }">
-									<p v-if="item.item_status == OrderItemStatus.ACTIVE" class="font-bold text-green-500">ACTIVE</p>
-									<p v-else-if="item.item_status == OrderItemStatus.REFUNDED" class="font-bold text-red-500">REFUNDED</p>
-									<p v-else-if="item.item_status == OrderItemStatus.VOIDED" class="font-bold text-red-500">VOIDED</p>
-									<p v-else class="font-bold">-</p>
+									<UBadge v-if="item.item_status == OrderItemStatus.ACTIVE" variant="outline" color="green">ACTIVE</UBadge>
+									<UBadge v-else-if="item.item_status == OrderItemStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
+									<UBadge v-else-if="item.item_status == OrderItemStatus.VOIDED" variant="outline" color="red">VOIDED</UBadge>
+								</template>
+
+								<template #gross_amt-header>
+									<p>
+										Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+									</p>
 								</template>
 
 								<template #gross_amt-data="{ row: item }">
-									<p class="font-bold">{{ item.gross_amt }}</p>
+									<p>{{ item.gross_amt.toFixed(2) }}</p>
+								</template>
+
+								<template #net_amt-header>
+									<p>
+										Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+									</p>
 								</template>
 
 								<template #net_amt-data="{ row: item }">
-									<p class="font-bold">{{ item.net_amt }}</p>
-								</template>
-
-								<template #total_orders-data="{ row: item }">
-									<p class="font-bold">{{ item.total_orders }}</p>
+									<p>{{ item.net_amt.toFixed(2) }}</p>
 								</template>
 
 								<template #total_qty-data="{ row: item }">
-									<p class="font-bold">{{ item.total_qty }}</p>
+									<p>{{ item.total_qty }}</p>
 								</template>
 							</UTable>
 						</div>
@@ -78,8 +102,8 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, OrderItemStatus, extractDate } from 'wemotoo-common';
-import { order_item_summ_columns } from '~/utils/table-columns';
+import { OrderStatus, OrderItemStatus, getFormattedDate } from 'wemotoo-common';
+import { order_item_summ_columns, order_item_summ_header_columns } from '~/utils/table-columns';
 
 const links = [
 	{
@@ -89,31 +113,9 @@ const links = [
 	},
 ];
 
-const dateColumns = [
-	{
-		key: 'biz_date',
-		label: 'Business Date',
-	},
-	{
-		key: 'total_orders',
-		label: 'Total Orders',
-	},
-	{
-		key: 'total_qty',
-		label: 'Total Quantity',
-	},
-	{
-		key: 'gross_amt',
-		label: 'Gross Amount',
-	},
-	{
-		key: 'net_amt',
-		label: 'Net Amount',
-	},
-];
-
 const orderSummStore = useSummOrderStore();
 const { order_summ_item } = storeToRefs(orderSummStore);
+const currency_code = ref(order_summ_item.value.filter.currency_code);
 
 const is_loading = computed(() => order_summ_item.value.is_loading);
 const data = computed(() => order_summ_item.value.data);
@@ -188,6 +190,13 @@ watch(
 	},
 	{ immediate: true },
 );
+
+const selectedColumns = ref(order_item_summ_columns);
+const columnsTable = computed(() => order_item_summ_columns.filter((column) => selectedColumns.value.includes(column)));
+
+const updateColumns = (columns: string[]) => {
+	selectedColumns.value = columns;
+};
 </script>
 
 <style scoped lang="postcss">
