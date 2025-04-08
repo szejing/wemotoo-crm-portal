@@ -1,10 +1,15 @@
 <template>
-	<VueDatePicker v-model="currentDate" :placeholder="placeholder" :enable-time-picker="false" :auto-apply="true" :max-date="maxDate" :min-date="minDate" />
+	<UPopover :popper="{ placement: 'bottom-start' }">
+		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDate ? format(currentDate, 'dd/MM/yyyy') : placeholder" variant="outline" />
+
+		<template #panel="{ close }">
+			<ZDatePicker v-model="currentDate" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
+		</template>
+	</UPopover>
 </template>
 
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
+import { format } from 'date-fns';
 
 const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date }>();
 

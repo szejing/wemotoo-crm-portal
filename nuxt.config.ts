@@ -76,10 +76,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	build: {
-		transpile: ['@vuepic/vue-datepicker'],
-	},
-
 	routeRules: {
 		'/api**': {
 			// enable CORS
