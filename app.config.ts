@@ -247,6 +247,7 @@ export default defineAppConfig({
 
 		//* Table *//
 		table: {
+			wrapper: 'relative overflow-x-auto',
 			default: {
 				sortAscIcon: 'octicon:sort-asc-24',
 				sortDescIcon: 'octicon:sort-desc-24',
