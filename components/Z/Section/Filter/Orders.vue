@@ -1,38 +1,45 @@
 <template>
 	<UCard>
-		<UForm :schema="FilterOrderValidation" :state="state" class="grid grid-cols-1 sm:grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup name="query" class="col-span-2">
-				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormGroup>
+		<div class="w-full flex flex-col gap-4">
+			<div class="gap-2 sm:flex-jbetween-icenter w-full sm:w-[60%]">
+				<h4>Date</h4>
 
-			<div class="sm:col-start-4">
-				<ZSelectMenuOrderStatus v-model:status="state.status" />
+				<ZSelectMenuDateFilterType v-model:filter-type="filter.filter_type" />
+
+				<div class="flex-col-start gap-2">
+					<ZSelectMenuDate :date="filter.start_date" placeholder="Start Date" @update:date="filter.start_date = $event" />
+					<ZSelectMenuDate
+						v-if="filter.filter_type === 'between'"
+						:date="filter.end_date"
+						placeholder="End Date"
+						:min-date="filter.start_date"
+						@update:date="filter.end_date = $event"
+					/>
+				</div>
 			</div>
-		</UForm>
+			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
+				<h4>Order Status</h4>
+				<ZSelectMenuOrderStatus v-model:status="filter.status" />
+			</div>
+			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
+				<h4>Currency</h4>
+				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" />
+			</div>
+		</div>
+		<template #footer>
+			<UButton color="green" :disabled="is_loading" :loading="is_loading" @click="search">Search</UButton>
+		</template>
 	</UCard>
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import type { z } from 'zod';
-import type { OrderStatus } from 'wemotoo-common';
-import { FilterOrderValidation } from '~/utils/schema';
+const orderStore = useOrderStore();
+const { filter } = storeToRefs(orderStore);
 
-type Schema = z.output<typeof FilterOrderValidation>;
+const is_loading = computed(() => orderStore.loading);
 
-const state = ref<{ query: string | undefined; status: OrderStatus | undefined }>({
-	query: undefined,
-	status: undefined,
-});
-
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { orderNo, customerName } = event.data;
-
-	console.log(orderNo, customerName);
-
-	// const authStore = useAuthStore();
-	// authStore.login(email, password);
-	// await navigateTo('/');
+const search = async () => {
+	await orderStore.getOrders();
 };
 </script>
 

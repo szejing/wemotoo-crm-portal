@@ -1,14 +1,16 @@
-import type { OrderStatus } from 'wemotoo-common';
+import type { FilterType, OrderStatus } from 'wemotoo-common';
 
 type FilterableOrderProps = {
 	order_no?: string;
 	customer_no?: string;
-	date_from?: string;
-	date_to?: string;
-	status?: OrderStatus;
+	start_date: string;
+	end_date?: string;
+	order_status?: OrderStatus;
+	filter_type: FilterType;
 };
 
 export type GetOrdersReq = FilterableOrderProps & {
 	limit?: number;
 	offset?: number;
+	q?: string;
 };
