@@ -18,14 +18,14 @@
 
 		<div>
 			<div class="flex items-center justify-between">
-				<p class="text-sm text-neutral-400">Customer No.</p>
-				<p class="text-sm text-neutral-400">Total Orders</p>
+				<p class="text-sm text-neutral-400">Prod Code</p>
+				<p class="text-sm text-neutral-400">Total Qty</p>
 			</div>
 
-			<div v-for="cust in top_purchased_customers" :key="cust.customer_no" class="mt-1">
+			<div v-for="product in top_purchased_products" :key="product.prod_code" class="mt-1">
 				<div class="flex items-center justify-between gap-2">
-					<p class="text-sm font-medium">{{ cust.customer_no }}</p>
-					<p class="text-sm font-medium">{{ cust.total_orders }}</p>
+					<p class="text-sm font-medium">{{ product.prod_code }}</p>
+					<p class="text-sm font-medium">{{ product.total_qty }}</p>
 				</div>
 			</div>
 		</div>
@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 const summOrderStore = useSummOrderStore();
-const { top_purchased_customers } = storeToRefs(summOrderStore);
+const { top_purchased_products } = storeToRefs(summOrderStore);
 </script>
 
 <style scoped lang="postcss"></style>

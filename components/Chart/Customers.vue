@@ -18,7 +18,7 @@
 
 		<div class="flex-1">
 			<div class="flex items-center justify-between">
-				<p class="text-sm text-neutral-400">Customer No.</p>
+				<p class="text-sm text-neutral-400">Cust No.</p>
 				<p class="text-sm text-neutral-400">Total Orders</p>
 			</div>
 

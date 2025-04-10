@@ -1,4 +1,4 @@
-import type { SummDaily, SummCustomer, SummOrderBill, SummOrderItem } from '~/utils/types/summ-orders';
+import type { SummDaily, SummCustomer, SummOrderBill, SummOrderItem, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
 import { OrderStatus, type FilterType } from 'wemotoo-common';
 import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
@@ -59,6 +59,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		errors: [] as string[],
 		daily_summaries: [] as SummDaily[],
 		top_purchased_customers: [] as SummCustomer[],
+		top_purchased_products: [] as SummProduct[],
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
 	}),
@@ -89,6 +90,10 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 				if (data.top_purchased_customers) {
 					this.top_purchased_customers = data.top_purchased_customers;
+				}
+
+				if (data.top_purchased_products) {
+					this.top_purchased_products = data.top_purchased_products;
 				}
 			} catch (err: any) {
 				console.error(err);
