@@ -27,7 +27,15 @@ type SummCustomer_ = {
 	total_spent: number;
 };
 
+type SummProduct_ = {
+	prod_code: string;
+	prod_name: string;
+	total_qty: number;
+	total_net_amt: number;
+};
+
 export type GetDashboardSummResp = {
 	daily_summaries: SummDaily_[];
 	top_purchased_customers: SummCustomer_[];
+	top_purchased_products: SummProduct_[];
 };

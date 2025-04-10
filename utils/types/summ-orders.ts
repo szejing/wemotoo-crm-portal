@@ -29,6 +29,13 @@ export type SummCustomer = {
 	total_spent: number;
 };
 
+export type SummProduct = {
+	prod_code: string;
+	prod_name: string;
+	total_qty: number;
+	total_net_amt: number;
+};
+
 export type SummOrderBill = {
 	biz_date: Date;
 	currency_code: string;
