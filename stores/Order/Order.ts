@@ -53,8 +53,22 @@ export const useOrderStore = defineStore('orderStore', {
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
+				throw err;
 			} finally {
 				this.loading = false;
+			}
+		},
+
+		async getOrderByOrderNo(order_no: string): Promise<Order> {
+			const { $api } = useNuxtApp();
+			try {
+				const data = await $api.order.getOrderByOrderNo(order_no);
+
+				return data.order;
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
 			}
 		},
 	},
