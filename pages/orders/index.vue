@@ -11,10 +11,10 @@
 							Export
 						</UButton> -->
 
-						<UButton color="green" @click="navigateTo('/orders/create')">
+						<!-- <UButton color="green" @click="navigateTo('/orders/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
-						</UButton>
+						</UButton> -->
 					</div>
 
 					<div class="flex gap-4">
@@ -26,7 +26,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="is_loading">
+				<UTable :rows="rows" :columns="columnsTable" :loading="is_loading" @select="selectOrder">
 					<template #biz_date-data="{ row }">
 						<p v-if="row.biz_date">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
 					</template>
@@ -36,10 +36,10 @@
 					</template>
 
 					<template #order_status-data="{ row }">
-						<UBadge v-if="row.order_status == OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.PENDING_PAYMENT" variant="outline" color="main">PAYMENT REQUIRED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.CANCELLED" variant="outline" color="gray">CANCELLED</UBadge>
+						<UBadge v-if="row.order_status === OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
+						<UBadge v-else-if="row.order_status === OrderStatus.PENDING_PAYMENT" variant="outline" color="main">PAYMENT REQUIRED</UBadge>
+						<UBadge v-else-if="row.order_status === OrderStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
+						<UBadge v-else-if="row.order_status === OrderStatus.CANCELLED" variant="outline" color="gray">CANCELLED</UBadge>
 					</template>
 
 					<template #gross_amt-header>
@@ -64,7 +64,7 @@
 
 					<template #disc_amt-header>
 						<p>
-							Discount Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Disc Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
 					</template>
 
@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, getFormattedDate } from 'wemotoo-common';
+import { OrderStatus, getFormattedDate, removeMerchantId } from 'wemotoo-common';
 import { useOrderStore } from '~/stores/Order/Order';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
@@ -124,24 +124,6 @@ const links = [
 		icon: ICONS.LIST,
 		to: '/products',
 	},
-];
-
-const options = (order: Order) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: () => console.log('Edit', order.order_no),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => console.log('Delete', order.order_no),
-		},
-	],
 ];
 
 const page = ref(1);
@@ -165,6 +147,10 @@ const rows = computed(() => {
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;
 	await orderStore.getOrders();
+};
+
+const selectOrder = (row: Order) => {
+	navigateTo(`/orders/detail/${removeMerchantId(row.order_no)}`);
 };
 </script>
 

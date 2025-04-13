@@ -6,6 +6,7 @@ import { tag_columns } from './tags';
 import { product_columns } from './product';
 import { order_summ_columns } from './order-summ';
 import { order_item_summ_columns, order_item_summ_header_columns } from './order-item-summ';
+import { order_item_columns } from './order-item';
 
 export {
 	customer_columns,
@@ -17,4 +18,5 @@ export {
 	order_summ_columns,
 	order_item_summ_columns,
 	order_item_summ_header_columns,
+	order_item_columns,
 };
