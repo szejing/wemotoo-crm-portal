@@ -3,7 +3,7 @@ import type { FilterType } from 'wemotoo-common';
 import { getFormattedDate, isEmptyOrNull, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 
 type OrderFilter = {
 	query: string;
@@ -60,12 +60,14 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async getOrderByOrderNo(order_no: string): Promise<Order> {
+		async getOrderByOrderNo(order_no: string) {
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.order.getOrderByOrderNo(order_no);
 
-				return data.order;
+				if (data.order) {
+					this.detail = data.order;
+				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
@@ -75,6 +77,23 @@ export const useOrderStore = defineStore('orderStore', {
 
 		setDetail(order: Order | undefined) {
 			this.detail = order;
+		},
+
+		async updateOrderStatus(order_no: string, customer_no: string, order_status: OrderStatus) {
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.order.updateOrderStatus(order_no, customer_no, order_status);
+
+				if (data.order) {
+					this.detail = data.order;
+					successNotification('Order status updated successfully');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
 		},
 	},
 });

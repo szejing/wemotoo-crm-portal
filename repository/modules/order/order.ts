@@ -1,7 +1,8 @@
+import type { OrderStatus } from 'wemotoo-common';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetOrdersReq } from './models/request/order';
-import type { GetOrderResp, GetOrdersResp } from './models/response/order';
+import type { GetOrderResp, GetOrdersResp, UpdateOrderStatusResp } from './models/response/order';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;
@@ -26,6 +27,18 @@ class OrderModule extends HttpFactory {
 		return await this.call<GetOrderResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(orderNo)}`,
+		});
+	}
+
+	/**
+	 * Updates order status
+	 * @returns
+	 */
+	async updateOrderStatus(orderNo: string, customerNo: string, orderStatus: OrderStatus): Promise<UpdateOrderStatusResp> {
+		return await this.call<UpdateOrderStatusResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			body: { order_no: orderNo, customer_no: customerNo, order_status: orderStatus },
 		});
 	}
 }

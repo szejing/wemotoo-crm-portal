@@ -17,15 +17,16 @@
 import { options_payment_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
-const props = defineProps<{ status: string }>();
-const emit = defineEmits(['update:status']);
+const props = defineProps<{ paymentStatus: string }>();
+const emit = defineEmits(['update:paymentStatus']);
 
 const status = computed({
 	get() {
-		return props.status;
+		console.log(props.paymentStatus);
+		return props.paymentStatus;
 	},
 	set(value) {
-		emit('update:status', value);
+		emit('update:paymentStatus', value);
 	},
 });
 </script>
