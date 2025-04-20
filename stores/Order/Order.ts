@@ -29,6 +29,7 @@ export const useOrderStore = defineStore('orderStore', {
 	state: () => ({
 		loading: false as boolean,
 		orders: [] as Order[],
+		detail: undefined as Order | undefined,
 		errors: [] as string[],
 		filter: initialEmptyOrderFilter,
 	}),
@@ -70,6 +71,10 @@ export const useOrderStore = defineStore('orderStore', {
 				failedNotification(err.message);
 				throw err;
 			}
+		},
+
+		setDetail(order: Order | undefined) {
+			this.detail = order;
 		},
 	},
 });

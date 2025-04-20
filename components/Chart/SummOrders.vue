@@ -38,7 +38,7 @@ const chartData = computed(() => {
 	return {
 		labels:
 			daily_summaries.value.length > 30
-				? daily_summaries.value.map((summary) => summary.summ_order.biz_date.substring(5, 10))
+				? daily_summaries.value.map((summary) => summary.summ_order.biz_date)
 				: daily_summaries.value.map((summary) => summary.summ_order.biz_date),
 		datasets: [
 			{
