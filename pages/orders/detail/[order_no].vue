@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<h1>Detail</h1>
-		<div class="wrapper-grid">
+		<ZLoading v-if="is_loading" />
+
+		<div v-else class="wrapper-grid">
 			<div class="main-wrapper">
 				<div class="flex-between w-full mt-4">
 					<div>
@@ -9,10 +11,10 @@
 						<h2 v-if="order?.biz_date">Date: {{ order?.biz_date }}</h2>
 					</div>
 					<div>
-						<UBadge v-if="order?.order_status == OrderStatus.NEW" color="green" size="lg">NEW</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.PENDING_PAYMENT" color="main" size="lg">PAYMENT REQUIRED</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="red" size="lg">REFUNDED</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="gray" size="lg">CANCELLED</UBadge>
+						<UBadge v-if="order?.order_status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
+						<UBadge v-else-if="order?.order_status == OrderStatus.PENDING_PAYMENT" color="main" variant="outline" size="lg">PAYMENT REQUIRED</UBadge>
+						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="red" variant="outline" size="lg">REFUNDED</UBadge>
+						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="gray" variant="outline" size="lg">CANCELLED</UBadge>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 w-full mt-4">
@@ -140,7 +142,7 @@
 				</div>
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
-				<ZInputOrderSidebar />
+				<ZInputOrderSidebar :order="order" :update-order-status="updateOrderStatus" />
 			</div>
 		</div>
 	</div>
@@ -150,28 +152,51 @@
 import { OrderStatus, OrderItemStatus } from 'wemotoo-common';
 
 const orderStore = useOrderStore();
-const is_loading = ref(false);
+const is_loading = ref(true);
+const { detail } = storeToRefs(orderStore);
 
-const order = ref();
+const order = computed(() => detail.value);
 
 onMounted(async () => {
 	const route = useRoute();
 	const order_no = route.params.order_no;
-	is_loading.value = true;
+	await getOrder(order_no as string);
+});
 
-	try {
-		order.value = await orderStore.getOrderByOrderNo(order_no as string);
-		orderStore.setDetail(order.value);
-	} catch {
-		return navigateTo('/orders');
-	} finally {
-		is_loading.value = false;
-	}
+onBeforeRouteLeave(() => {
+	orderStore.setDetail(undefined);
 });
 
 const customer = computed(() => order.value?.customer);
 const items = computed(() => order.value?.items);
 const currency_code = computed(() => order.value?.currency_code);
+
+const getOrder = async (order_no: string) => {
+	is_loading.value = true;
+
+	try {
+		orderStore.getOrderByOrderNo(order_no as string);
+	} catch {
+		return navigateTo('/orders');
+	} finally {
+		is_loading.value = false;
+	}
+};
+
+const updateOrderStatus = async (new_status: string) => {
+	is_loading.value = true;
+
+	const orderStore = useOrderStore();
+	try {
+		const { order_no, customer } = order.value;
+
+		await orderStore.updateOrderStatus(order_no, customer.customer_no, new_status);
+	} catch {
+		return navigateTo('/orders');
+	} finally {
+		is_loading.value = false;
+	}
+};
 </script>
 
 <style scoped lang="postcss">

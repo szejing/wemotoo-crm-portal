@@ -79,3 +79,7 @@ export type GetOrdersResp = {
 export type GetOrderResp = {
 	order: Order;
 };
+
+export type UpdateOrderStatusResp = {
+	order: Order;
+};

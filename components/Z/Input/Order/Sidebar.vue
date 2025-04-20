@@ -4,27 +4,38 @@
 		<UCard :ui="cardBg">
 			<template #header>
 				<h3>Status</h3>
-				<ZSelectMenuOrderStatus v-model:status="newOrder.status" class="mt-2" />
+			</template>
+
+			<ZSelectMenuOrderStatus v-model:status="order.order_status" />
+
+			<template #footer>
+				<UButton @click="save">Save</UButton>
 			</template>
 		</UCard>
 
 		<!-- ***** Payment Status ***** -->
-		<UCard :ui="cardBg">
+		<!-- <UCard :ui="cardBg">
 			<template #header>
 				<h3>Payment Status</h3>
-				<ZSelectMenuPaymentStatus v-model:payment-status="newOrder.payment_status" />
+				<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" class="mt-2" />
 			</template>
-		</UCard>
+		</UCard> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 
-const orderStore = useOrderStore();
-const { detail: newOrder } = storeToRefs(orderStore);
+const props = defineProps<{
+	order: Order;
+	updateOrderStatus: (status: string) => Promise<void>;
+}>();
 
-console.log(newOrder.value);
+const order = ref({ ...props.order });
+
+const save = async () => {
+	await props.updateOrderStatus(order.value.order_status);
+};
 </script>
 
 <style scoped lang="postcss"></style>

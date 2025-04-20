@@ -78,6 +78,7 @@ const MerchantRoutes = {
 	Orders: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/many`,
 		Single: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}`,
+		Update: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/update`,
 		Process: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
 	},
 	Sales: {
