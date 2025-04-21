@@ -17,7 +17,7 @@ type OrderFilter = {
 
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
-	status: OrderStatus.PENDING_PAYMENT,
+	status: OrderStatus.NEW,
 	filter_type: '=',
 	start_date: new Date(),
 	end_date: undefined,
@@ -79,7 +79,7 @@ export const useOrderStore = defineStore('orderStore', {
 			this.detail = order;
 		},
 
-		async updateOrderStatus(order_no: string, customer_no: string, order_status: OrderStatus) {
+		async updateOrderStatus(order_no: string, customer_no: string, order_status: string) {
 			const { $api } = useNuxtApp();
 
 			try {

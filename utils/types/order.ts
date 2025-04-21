@@ -1,4 +1,5 @@
 import type { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import type { AddressModel } from '~/utils/models/customer.model';
 
 type OrderCustomerDto_ = {
 	customer_no: string;
@@ -9,20 +10,8 @@ type OrderCustomerDto_ = {
 	date_of_birth: Date;
 	ref_no1: string;
 	ref_no2: string;
-	s_address1: string;
-	s_address2: string;
-	s_address3: string;
-	s_city: string;
-	s_country_code: string;
-	s_state: string;
-	s_postal_code: string;
-	b_address1: string;
-	b_address2: string;
-	b_address3: string;
-	b_city: string;
-	b_country_code: string;
-	b_state: string;
-	b_postal_code: string;
+	shipping_address: AddressModel;
+	billing_address: AddressModel;
 };
 
 type OrderItemDto_ = {

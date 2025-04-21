@@ -55,9 +55,10 @@
 
 <script lang="ts" setup>
 import { OrderItemStatus } from 'wemotoo-common';
+import type { OrderItemModel } from '~/utils/models/item.model';
 
 defineProps<{
-	items: OrderItem[];
+	items: OrderItemModel[];
 	currencyCode: string;
 	totalGrossAmt: number;
 	totalNetAmt: number;

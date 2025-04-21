@@ -26,33 +26,71 @@
 				<span>{{ customer?.ref_no2 }}</span>
 			</p>
 		</div>
-		<div class="grid sm:grid-cols-2 gap-4 mt-4">
+		<div class="grid sm:grid-cols-2 gap-4 mt-6">
 			<div class="flex flex-col gap-4">
 				<h3>Shipping Address :</h3>
-				<p v-if="customer?.s_address1">{{ customer?.s_address1 }}</p>
-				<p v-if="customer?.s_address2">{{ customer?.s_address2 }}</p>
-				<p v-if="customer?.s_address3">{{ customer?.s_address3 }}</p>
-				<p v-if="customer?.s_city">{{ customer?.s_city }}</p>
-				<p v-if="customer?.s_state">{{ customer?.s_state }}</p>
-				<p v-if="customer?.s_postal_code">{{ customer?.s_postal_code }}</p>
+				<div class="text-neutral-400">
+					<p v-if="customer?.shipping_address?.address1">{{ customer?.shipping_address?.address1 }}</p>
+					<p v-if="customer?.shipping_address?.address2">{{ customer?.shipping_address?.address2 }}</p>
+					<p v-if="customer?.shipping_address?.address3">{{ customer?.shipping_address?.address3 }}</p>
+					<p
+						v-if="
+							customer?.shipping_address?.city ||
+							customer?.shipping_address?.state ||
+							customer?.shipping_address?.postal_code ||
+							customer?.shipping_address?.country_code
+						"
+					>
+						{{
+							[
+								customer?.shipping_address?.city,
+								customer?.shipping_address?.state,
+								customer?.shipping_address?.postal_code,
+								customer?.shipping_address?.country_code,
+							]
+								.filter(Boolean)
+								.join(', ')
+						}}
+					</p>
+				</div>
 			</div>
 
 			<div class="flex flex-col gap-4">
 				<h3>Billing Address :</h3>
-				<p v-if="customer?.b_address1">{{ customer?.b_address1 }}</p>
-				<p v-if="customer?.b_address2">{{ customer?.b_address2 }}</p>
-				<p v-if="customer?.b_address3">{{ customer?.b_address3 }}</p>
-				<p v-if="customer?.b_city">{{ customer?.b_city }}</p>
-				<p v-if="customer?.b_state">{{ customer?.b_state }}</p>
-				<p v-if="customer?.b_postal_code">{{ customer?.b_postal_code }}</p>
+				<div class="text-neutral-400">
+					<p v-if="customer?.billing_address?.address1">{{ customer?.billing_address?.address1 }}</p>
+					<p v-if="customer?.billing_address?.address2">{{ customer?.billing_address?.address2 }}</p>
+					<p v-if="customer?.billing_address?.address3">{{ customer?.billing_address?.address3 }}</p>
+					<p
+						v-if="
+							customer?.billing_address?.city ||
+							customer?.billing_address?.state ||
+							customer?.billing_address?.postal_code ||
+							customer?.billing_address?.country_code
+						"
+					>
+						{{
+							[
+								customer?.billing_address?.city,
+								customer?.billing_address?.state,
+								customer?.billing_address?.postal_code,
+								customer?.billing_address?.country_code,
+							]
+								.filter(Boolean)
+								.join(', ')
+						}}
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import type { CustomerModel } from '~/utils/models/customer.model';
+
 defineProps<{
-	customer: Customer;
+	customer: CustomerModel;
 }>();
 </script>
 
