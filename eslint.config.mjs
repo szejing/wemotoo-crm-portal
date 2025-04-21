@@ -14,6 +14,7 @@ export default withNuxt({
 		'import/order': 'off',
 		'vue/html-indent': ['error', 'tab'], // enforce tabs in template
 		'indent': ['error', 'tab'], // enforce tabs in script and js files
+		'vue/operator-linebreak': 'off',
 	},
 }).override('nuxt/stylistic', {
 	rules: {

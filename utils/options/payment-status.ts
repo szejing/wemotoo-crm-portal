@@ -1,8 +1,8 @@
 import { PaymentStatus } from 'wemotoo-common';
 
 export const options_payment_status = [
-	PaymentStatus.PENDING,
 	PaymentStatus.SUCCESS,
+	PaymentStatus.PENDING,
 	PaymentStatus.FAILED,
 	PaymentStatus.REFUNDED,
 	PaymentStatus.PARTIALLY_REFUNDED,

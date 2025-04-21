@@ -21,7 +21,10 @@
 					<!-- Customer Detail -->
 					<UCard>
 						<template #header>
-							<h2>Customer Detail</h2>
+							<div class="flex-between">
+								<h2>Customer Detail</h2>
+								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" @click="editCustomerDetail" />
+							</div>
 						</template>
 						<ZSectionOrderDetailCustomer :customer="customer" />
 					</UCard>
@@ -29,7 +32,10 @@
 					<!-- Order Detail -->
 					<UCard>
 						<template #header>
-							<h2>Order Detail</h2>
+							<div class="flex-between">
+								<h2>Order Detail</h2>
+								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
+							</div>
 						</template>
 						<ZSectionOrderDetailItems :items="items" :currency-code="currency_code" :total-gross-amt="order.gross_amt" :total-net-amt="order.net_amt" />
 					</UCard>
@@ -37,7 +43,10 @@
 					<!-- Payment Items -->
 					<UCard>
 						<template #header>
-							<h2>Payment Detail</h2>
+							<div class="flex-between">
+								<h2>Payment Detail</h2>
+								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
+							</div>
 						</template>
 						<ZSectionOrderDetailPayment :payment="payment" />
 					</UCard>
@@ -51,12 +60,15 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalOrderDetailCustomer } from '#components';
 import { OrderStatus } from 'wemotoo-common';
+import type { CustomerModel } from '~/utils/models/customer.model';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
 const { detail } = storeToRefs(orderStore);
 
+const modal = useModal();
 const order = computed(() => detail.value);
 
 onMounted(async () => {
@@ -71,7 +83,7 @@ onBeforeRouteLeave(() => {
 
 const customer = computed(() => order.value?.customer);
 const items = computed(() => order.value?.items);
-const payment = computed(() => order.value?.payment);
+// const payment = computed(() => order.value?.payment);
 const currency_code = computed(() => order.value?.currency_code);
 
 const getOrder = async (order_no: string) => {
@@ -99,6 +111,22 @@ const updateOrderStatus = async (new_status: string) => {
 	} finally {
 		is_loading.value = false;
 	}
+};
+
+const editCustomerDetail = async () => {
+	if (!customer.value) return;
+
+	modal.open(ZModalOrderDetailCustomer, {
+		customer: JSON.parse(JSON.stringify(customer.value)),
+		onUpdate: async (cust: CustomerModel) => {
+			console.log(cust);
+			// await tagsStore.updateTag(id, tag);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 </script>
 
