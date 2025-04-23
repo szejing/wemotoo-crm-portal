@@ -18,13 +18,22 @@
 					v-model:address3="shipping_address.address3"
 					v-model:city="shipping_address.city"
 					v-model:postal-code="shipping_address.postal_code"
+					v-model:state-name="shipping_address.state"
 					v-model:country-code="shipping_address.country_code"
 					class="mt-4"
 				/>
 			</div>
 
 			<div class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
-				<h3>Billing Address</h3>
+				<div class="flex-between">
+					<h3>Billing Address</h3>
+					<UCheckbox
+						v-model="same_as_shipping_address"
+						:ui="{ label: 'text-xs font-normal text-neutral-500' }"
+						label="Same as Shipping Address"
+						@change="onChangeSameAsShippingAddress"
+					/>
+				</div>
 				<ZInputAddress
 					v-if="billing_address"
 					v-model:address1="billing_address.address1"
@@ -32,6 +41,7 @@
 					v-model:address3="billing_address.address3"
 					v-model:city="billing_address.city"
 					v-model:postal-code="billing_address.postal_code"
+					v-model:state-name="billing_address.state"
 					v-model:country-code="billing_address.country_code"
 					class="mt-4"
 				/>
@@ -43,6 +53,7 @@
 <script lang="ts" setup>
 import type { AddressModel } from '~/utils/models/customer.model';
 
+const same_as_shipping_address = ref(false);
 const props = defineProps({
 	emailAddress: String,
 	phoneNo: String,
@@ -87,6 +98,12 @@ const billing_address = computed({
 		emit('update:billingAddress', value);
 	},
 });
+
+const onChangeSameAsShippingAddress = () => {
+	if (same_as_shipping_address.value) {
+		billing_address.value = JSON.parse(JSON.stringify(shipping_address.value));
+	}
+};
 </script>
 
 <style scoped lang="postcss">

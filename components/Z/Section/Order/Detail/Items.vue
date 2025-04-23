@@ -42,12 +42,12 @@
 			<tr>
 				<td colspan="4"></td>
 				<td class="cell-header text-right border-b">Sub Total ({{ currencyCode }})</td>
-				<td class="cell font-bold text-lg italic border-b">{{ totalGrossAmt.toFixed(2) }}</td>
+				<td class="cell font-bold text-lg italic border-b">{{ totalGrossAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
 			<tr>
 				<td colspan="4"></td>
 				<td class="cell-header text-right border-b-4 border-double">Total ({{ currencyCode }})</td>
-				<td class="cell font-bold text-lg italic border-b-4 border-double">{{ totalNetAmt.toFixed(2) }}</td>
+				<td class="cell font-bold text-lg italic border-b-4 border-double">{{ totalNetAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
 		</tfoot>
 	</table>
@@ -59,9 +59,9 @@ import type { OrderItemModel } from '~/utils/models/item.model';
 
 defineProps<{
 	items: OrderItemModel[];
-	currencyCode: string;
-	totalGrossAmt: number;
-	totalNetAmt: number;
+	currencyCode: string | undefined;
+	totalGrossAmt: number | undefined;
+	totalNetAmt: number | undefined;
 }>();
 </script>
 

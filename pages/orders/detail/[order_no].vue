@@ -37,11 +37,11 @@
 								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
 							</div>
 						</template>
-						<ZSectionOrderDetailItems :items="items" :currency-code="currency_code" :total-gross-amt="order.gross_amt" :total-net-amt="order.net_amt" />
+						<ZSectionOrderDetailItems :items="items ?? []" :currency-code="currency_code" :total-gross-amt="order?.gross_amt" :total-net-amt="order?.net_amt" />
 					</UCard>
 
 					<!-- Payment Items -->
-					<UCard>
+					<!-- <UCard>
 						<template #header>
 							<div class="flex-between">
 								<h2>Payment Detail</h2>
@@ -49,11 +49,11 @@
 							</div>
 						</template>
 						<ZSectionOrderDetailPayment :payment="payment" />
-					</UCard>
+					</UCard> -->
 				</div>
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
-				<ZInputOrderSidebar :order="order" :update-order-status="updateOrderStatus" />
+				<ZInputOrderSidebar :order="order" :update-order-status="(status: string) => updateOrderStatus(status).then(() => {})" />
 			</div>
 		</div>
 	</div>
@@ -62,7 +62,6 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer } from '#components';
 import { OrderStatus } from 'wemotoo-common';
-import type { CustomerModel } from '~/utils/models/customer.model';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
@@ -83,7 +82,6 @@ onBeforeRouteLeave(() => {
 
 const customer = computed(() => order.value?.customer);
 const items = computed(() => order.value?.items);
-// const payment = computed(() => order.value?.payment);
 const currency_code = computed(() => order.value?.currency_code);
 
 const getOrder = async (order_no: string) => {
@@ -99,11 +97,17 @@ const getOrder = async (order_no: string) => {
 };
 
 const updateOrderStatus = async (new_status: string) => {
-	is_loading.value = true;
-
-	const orderStore = useOrderStore();
 	try {
+		if (!order.value) {
+			throw new Error('Order not found');
+		}
+
 		const { order_no, customer } = order.value;
+
+		if (!customer) {
+			throw new Error('Customer not found');
+		}
+		is_loading.value = true;
 
 		await orderStore.updateOrderStatus(order_no, customer.customer_no, new_status);
 	} catch {
@@ -118,9 +122,7 @@ const editCustomerDetail = async () => {
 
 	modal.open(ZModalOrderDetailCustomer, {
 		customer: JSON.parse(JSON.stringify(customer.value)),
-		onUpdate: async (cust: CustomerModel) => {
-			console.log(cust);
-			// await tagsStore.updateTag(id, tag);
+		onUpdate: () => {
 			modal.close();
 		},
 		onCancel: () => {

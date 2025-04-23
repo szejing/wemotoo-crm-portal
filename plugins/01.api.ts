@@ -1,7 +1,6 @@
 import {
 	AuthModule,
 	CategoryModule,
-	CountryModule,
 	CurrencyModule,
 	ImageModule,
 	ProductModule,
@@ -11,6 +10,7 @@ import {
 	TagModule,
 	OrderModule,
 	SummOrderModule,
+	DataModule,
 } from '~/repository/modules';
 
 interface IApiInstance {
@@ -20,7 +20,7 @@ interface IApiInstance {
 	productOption: ProductOptionModule;
 	auth: AuthModule;
 	currency: CurrencyModule;
-	country: CountryModule;
+	data: DataModule;
 	image: ImageModule;
 	setting: SettingModule;
 	productType: ProductTypeModule;
@@ -41,7 +41,7 @@ export default defineNuxtPlugin((_) => {
 	});
 
 	const authModule = new AuthModule(apiFetcher);
-	const countryModule = new CountryModule(apiFetcher);
+	const dataModule = new DataModule(apiFetcher);
 	const currencyModule = new CurrencyModule(apiFetcher);
 	const productModule = new ProductModule(apiFetcher);
 	const tagModule = new TagModule(apiFetcher);
@@ -55,7 +55,7 @@ export default defineNuxtPlugin((_) => {
 
 	const modules: IApiInstance = {
 		auth: authModule,
-		country: countryModule,
+		data: dataModule,
 		currency: currencyModule,
 		product: productModule,
 		tag: tagModule,

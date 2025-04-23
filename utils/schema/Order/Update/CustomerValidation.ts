@@ -1,22 +1,25 @@
 import { z } from 'zod';
 
-const AddressValidation = z.object({
-	address1: z.string().min(1),
-	address2: z.string().optional(),
-	address3: z.string().optional(),
-	city: z.string().min(1),
-	postal_code: z.string().min(1),
-	state: z.string().min(1),
-	country_code: z.string().min(1),
-});
+const AddressValidation = z
+	.object({
+		address1: z.string().min(1, 'Address 1 is required'),
+		address2: z.string().nullable(),
+		address3: z.string().nullable(),
+		city: z.string().min(1, 'City is required'),
+		postal_code: z.string().min(1, 'Postal code is required'),
+		state: z.string().min(1, 'State is required'),
+		country_code: z.string().min(1, 'Country code is required'),
+	})
+	.partial();
 
 export const UpdateCustomerValidation = z.object({
-	email_address: z.string(),
-	phone_no: z.string(),
-	ic_no: z.string().optional(),
-	date_of_birth: z.string().optional(),
-	ref_no1: z.string().optional(),
-	ref_no2: z.string().optional(),
+	customer_no: z.string(),
+	email_address: z.string().email('Invalid email address'),
+	phone_no: z.string().min(1, 'Phone number is required'),
+	ic_no: z.string().optional().nullable(),
+	date_of_birth: z.date().optional().nullable(),
+	ref_no1: z.string().optional().nullable(),
+	ref_no2: z.string().optional().nullable(),
 	shipping_address: AddressValidation,
 	billing_address: AddressValidation,
 });

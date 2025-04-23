@@ -7,8 +7,8 @@ type CountriesResp = {
 	countries: Country[];
 };
 
-class CountryModule extends HttpFactory {
-	private readonly RESOURCE = MerchantRoutes.Countries;
+class DataModule extends HttpFactory {
+	private readonly RESOURCE_COUNTRIES = MerchantRoutes.Countries;
 
 	/**
 	 * Fetches all Countries
@@ -17,9 +17,9 @@ class CountryModule extends HttpFactory {
 	async getCountries(): Promise<CountriesResp> {
 		return await this.call<CountriesResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Many()}`,
+			url: `${this.RESOURCE_COUNTRIES.Many()}`,
 		});
 	}
 }
 
-export default CountryModule;
+export default DataModule;

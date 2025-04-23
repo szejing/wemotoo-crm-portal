@@ -6,7 +6,7 @@ import ProductOptionModule from './product-option';
 import TagModule from './tag';
 import SettingModule from './setting';
 import ProductTypeModule from './product-type';
-import CountryModule from './country';
+import DataModule from './data';
 import CurrencyModule from './currency';
 import ImageModule from './image';
 import AuthModule from './auth';
@@ -20,7 +20,7 @@ export {
 	TagModule,
 	SettingModule,
 	ProductTypeModule,
-	CountryModule,
+	DataModule,
 	CurrencyModule,
 	ImageModule,
 	AuthModule,

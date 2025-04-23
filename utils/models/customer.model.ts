@@ -13,10 +13,10 @@ export type CustomerModel = {
 	user_id: string;
 	email_address: string;
 	phone_no: string;
-	ic_no: string;
-	date_of_birth: Date;
-	ref_no1: string;
-	ref_no2: string;
+	ic_no?: string;
+	date_of_birth?: Date;
+	ref_no1?: string;
+	ref_no2?: string;
 	shipping_address: AddressModel;
 	billing_address: AddressModel;
 };
