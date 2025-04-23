@@ -2,6 +2,7 @@ import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetOrdersReq } from './models/request/order';
 import type { GetOrderResp, GetOrdersResp, UpdateOrderStatusResp } from './models/response/order';
+import type { CustomerModel } from '~/utils/models/customer.model';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;
@@ -38,6 +39,18 @@ class OrderModule extends HttpFactory {
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
 			body: { order_no: orderNo, customer_no: customerNo, order_status: orderStatus },
+		});
+	}
+
+	/**
+	 * Updates customer
+	 * @returns
+	 */
+	async updateCustomer(orderNo: string, customer: CustomerModel): Promise<UpdateOrderStatusResp> {
+		return await this.call<UpdateOrderStatusResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			body: { order_no: orderNo, customer_no: customer.customer_no, customer },
 		});
 	}
 }

@@ -18,7 +18,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
 				</div>
 			</UForm>
 		</UCard>
@@ -31,8 +31,11 @@ import type { z } from 'zod';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import { UpdateCustomerValidation } from '~/utils/schema/Order/Update/CustomerValidation';
 
-const updating = ref(false);
 type Schema = z.output<typeof UpdateCustomerValidation>;
+
+const orderStore = useOrderStore();
+const is_loading = ref(false);
+const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
 	customer: {
@@ -46,14 +49,21 @@ const state = reactive({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	console.log(event.data);
-	// const { value } = event.data;
+	try {
+		if (!detail.value) {
+			throw new Error('Order not found');
+		}
+		is_loading.value = true;
 
-	// if (value === '' || value === undefined) {
-	// 	return;
-	// }
+		const { order_no } = detail.value;
 
-	// emit('update', state.tag);
+		await orderStore.updateCustomer(order_no, JSON.parse(JSON.stringify(event.data)));
+		emit('update');
+	} catch {
+		return navigateTo('/orders');
+	} finally {
+		is_loading.value = false;
+	}
 };
 
 const onCancel = () => {

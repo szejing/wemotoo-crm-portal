@@ -4,6 +4,7 @@ import { getFormattedDate, isEmptyOrNull, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { CustomerModel } from '~/utils/models/customer.model';
 
 type OrderFilter = {
 	query: string;
@@ -88,6 +89,23 @@ export const useOrderStore = defineStore('orderStore', {
 				if (data.order) {
 					this.detail = data.order;
 					successNotification('Order status updated successfully');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
+		},
+
+		async updateCustomer(order_no: string, customer: CustomerModel) {
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.order.updateCustomer(order_no, customer);
+
+				if (data.order) {
+					this.detail = data.order;
+					successNotification('Customer updated successfully');
 				}
 			} catch (err: any) {
 				console.error(err);

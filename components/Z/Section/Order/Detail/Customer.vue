@@ -33,25 +33,7 @@
 					<p v-if="customer?.shipping_address?.address1">{{ customer?.shipping_address?.address1 }}</p>
 					<p v-if="customer?.shipping_address?.address2">{{ customer?.shipping_address?.address2 }}</p>
 					<p v-if="customer?.shipping_address?.address3">{{ customer?.shipping_address?.address3 }}</p>
-					<p
-						v-if="
-							customer?.shipping_address?.city ||
-							customer?.shipping_address?.state ||
-							customer?.shipping_address?.postal_code ||
-							customer?.shipping_address?.country_code
-						"
-					>
-						{{
-							[
-								customer?.shipping_address?.city,
-								customer?.shipping_address?.state,
-								customer?.shipping_address?.postal_code,
-								customer?.shipping_address?.country_code,
-							]
-								.filter(Boolean)
-								.join(', ')
-						}}
-					</p>
+					<p v-if="joinAddress(customer?.shipping_address)">{{ joinAddress(customer?.shipping_address) }}</p>
 				</div>
 			</div>
 
@@ -61,25 +43,7 @@
 					<p v-if="customer?.billing_address?.address1">{{ customer?.billing_address?.address1 }}</p>
 					<p v-if="customer?.billing_address?.address2">{{ customer?.billing_address?.address2 }}</p>
 					<p v-if="customer?.billing_address?.address3">{{ customer?.billing_address?.address3 }}</p>
-					<p
-						v-if="
-							customer?.billing_address?.city ||
-							customer?.billing_address?.state ||
-							customer?.billing_address?.postal_code ||
-							customer?.billing_address?.country_code
-						"
-					>
-						{{
-							[
-								customer?.billing_address?.city,
-								customer?.billing_address?.state,
-								customer?.billing_address?.postal_code,
-								customer?.billing_address?.country_code,
-							]
-								.filter(Boolean)
-								.join(', ')
-						}}
-					</p>
+					<p v-if="joinAddress(customer?.billing_address)">{{ joinAddress(customer?.billing_address) }}</p>
 				</div>
 			</div>
 		</div>
@@ -87,11 +51,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { CustomerModel } from '~/utils/models/customer.model';
+import type { AddressModel, CustomerModel } from '~/utils/models/customer.model';
 
 defineProps<{
-	customer: CustomerModel;
+	customer: CustomerModel | undefined;
 }>();
+
+const joinAddress = (address: AddressModel | undefined) => {
+	return [address?.city, address?.state, address?.postal_code, address?.country_code].filter(Boolean).join(', ');
+};
 </script>
 
 <style scoped lang="postcss">

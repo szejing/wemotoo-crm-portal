@@ -24,6 +24,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { Order } from '~/utils/types/order';
+
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 
 const props = defineProps<{
