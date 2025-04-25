@@ -12,7 +12,7 @@ const AddressValidation = z
 	})
 	.partial();
 
-export const UpdateCustomerValidation = z.object({
+export const UpdateOrderCustomerValidation = z.object({
 	customer_no: z.string(),
 	email_address: z.string().email('Invalid email address'),
 	phone_no: z.string().min(1, 'Phone number is required'),

@@ -6,7 +6,7 @@
 	>
 		<UCard>
 			<template #header><h3>Update Customer</h3></template>
-			<UForm :schema="UpdateCustomerValidation" :state="state.customer" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="UpdateOrderCustomerValidation" :state="state.customer" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailCustomer
 					v-model:email-address="state.customer.email_address"
@@ -29,9 +29,9 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { CustomerModel } from '~/utils/models/customer.model';
-import { UpdateCustomerValidation } from '~/utils/schema/Order/Update/CustomerValidation';
+import { UpdateOrderCustomerValidation } from '~/utils/schema/index';
 
-type Schema = z.output<typeof UpdateCustomerValidation>;
+type Schema = z.output<typeof UpdateOrderCustomerValidation>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);
