@@ -13,6 +13,8 @@ import { UpdateTagValidation } from './Tag/Update/TagValidation';
 import { UpdateCategoryValidation } from './Category/Update/CategoryValidation';
 import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
 import { UpdateProductValidation } from './Product/Update/ProductValidation';
+import { UpdateOrderCustomerValidation } from './Order/Update/CustomerValidation';
+import { UpdateOrderItemValidation } from './Order/Update/ItemValidation';
 
 export {
 	LoginValidation,
@@ -30,4 +32,6 @@ export {
 	UpdateCategoryValidation,
 	UpdateProductOptionValidation,
 	UpdateProductValidation,
+	UpdateOrderCustomerValidation,
+	UpdateOrderItemValidation,
 };

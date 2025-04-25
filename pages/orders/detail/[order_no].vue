@@ -22,8 +22,8 @@
 					<UCard>
 						<template #header>
 							<div class="flex-between">
-								<h2>Customer Detail</h2>
-								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" @click="editCustomerDetail" />
+								<h2 class="text-main">Customer</h2>
+								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" @click="editCustomerDetail" />
 							</div>
 						</template>
 						<ZSectionOrderDetailCustomer :customer="customer" />
@@ -32,12 +32,15 @@
 					<!-- Order Detail -->
 					<UCard>
 						<template #header>
-							<div class="flex-between">
-								<h2>Order Detail</h2>
-								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
-							</div>
+							<h2 class="text-main">Order Items</h2>
 						</template>
-						<ZSectionOrderDetailItems :items="items ?? []" :currency-code="currency_code" :total-gross-amt="order?.gross_amt" :total-net-amt="order?.net_amt" />
+						<ZSectionOrderDetailItems
+							:items="items ?? []"
+							:currency-code="currency_code"
+							:total-gross-amt="order?.gross_amt"
+							:total-net-amt="order?.net_amt"
+							:editable="true"
+						/>
 					</UCard>
 
 					<!-- Payment Items -->

@@ -11,7 +11,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="item in items" :key="item.prod_code" class="border-b">
+			<tr v-for="item in items" :key="item.prod_code" class="border-b" :class="{ 'editable-cell': editable }" @click="editItem(item)">
 				<td class="cell">
 					<span class="font-medium" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.prod_code }}</span>
 					<br />
@@ -54,6 +54,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus } from 'wemotoo-common';
 import type { OrderItemModel } from '~/utils/models/item.model';
 
@@ -62,7 +63,15 @@ defineProps<{
 	currencyCode: string | undefined;
 	totalGrossAmt: number | undefined;
 	totalNetAmt: number | undefined;
+	editable: boolean;
 }>();
+
+const modal = useModal();
+const editItem = (item: OrderItemModel) => {
+	modal.open(ZModalOrderDetailItem, {
+		item: item,
+	});
+};
 </script>
 
 <style scoped lang="postcss">
@@ -84,5 +93,9 @@ defineProps<{
 
 .cell {
 	@apply p-4 text-center;
+}
+
+.editable-cell {
+	@apply cursor-pointer transition hover:bg-neutral-50;
 }
 </style>
