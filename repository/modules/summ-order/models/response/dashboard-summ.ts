@@ -8,7 +8,7 @@ type SummOrderTxnDaily_ = {
 type SummOrderItemDaily_ = {
 	prod_code: string;
 	prod_name: string;
-	prod_variant_id?: string;
+	prod_variant_code?: string;
 	prod_variant_name?: string;
 	total_qty: number;
 	total_net_amt: number;

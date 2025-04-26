@@ -10,19 +10,19 @@
 					<UBadge v-if="status == OrderItemStatus.ACTIVE" size="md" color="green">
 						ACTIVE
 						<template #trailing>
-							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
+							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
 						</template>
 					</UBadge>
 					<UBadge v-else-if="status == OrderItemStatus.VOIDED" size="md" color="main">
 						VOIDED
 						<template #trailing>
-							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
+							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
 						</template>
 					</UBadge>
 					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="red">
 						REFUNDED
 						<template #trailing>
-							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
+							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
 						</template>
 					</UBadge>
 				</div>
@@ -51,8 +51,8 @@
 			<ul>
 				<div v-for="variant in prodVariants" :key="variant!.variant_code">
 					<UButton
-						:color="selectedVariant?.variant_code == variant!.variant_code ? 'main' : 'gray'"
-						:variant="selectedVariant?.variant_code == variant!.variant_code ? 'solid' : 'outline'"
+						:color="selectedVariantCode == variant!.variant_code ? 'main' : 'gray'"
+						:variant="selectedVariantCode == variant!.variant_code ? 'solid' : 'outline'"
 						size="sm"
 						@click="updateVariant(variant)"
 					>
@@ -75,25 +75,7 @@ import type { ProductVariant } from '~/utils/types/product-variant';
 const { $api } = useNuxtApp();
 const isLoading = ref(false);
 const prodVariants = ref<ProductVariant[]>([]);
-const selectedVariant = ref<ProductVariant>();
-
-onMounted(async () => {
-	selectedVariant.value = props.prodVariantCode;
-
-	if (selectedVariant.value) {
-		isLoading.value = true;
-
-		try {
-			const { variants } = await $api.productVariant.getVariantsByProdCode('VARIANTPROD');
-
-			prodVariants.value = variants;
-		} catch (error) {
-			console.error(error);
-		} finally {
-			isLoading.value = false;
-		}
-	}
-});
+const selectedVariantCode = ref<ProductVariant>();
 
 const props = defineProps<{
 	status: OrderItemStatus;
@@ -106,6 +88,24 @@ const props = defineProps<{
 	orderQty: number;
 	unitSellPrice: number;
 }>();
+
+onMounted(async () => {
+	selectedVariantCode.value = props.prodVariantCode;
+
+	if (props.prodVariantCode) {
+		isLoading.value = true;
+
+		try {
+			const { variants } = await $api.productVariant.getVariantsByProdCode(props.prodCode);
+
+			prodVariants.value = variants;
+		} catch (error) {
+			console.error(error);
+		} finally {
+			isLoading.value = false;
+		}
+	}
+});
 
 const emit = defineEmits([
 	'update:status',
@@ -206,7 +206,7 @@ const updateStatus = (newStatus: OrderItemStatus) => {
 };
 
 const updateVariant = (variant: ProductVariant) => {
-	selectedVariant.value = variant;
+	selectedVariantCode.value = variant.variant_code;
 
 	emit('update:prodVariantCode', variant.variant_code);
 	emit('update:prodVariantName', variant.name);

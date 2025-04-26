@@ -41,6 +41,7 @@
 							>
 								{{ item.prod_name.substring(0, 10) }}
 							</div>
+							<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
 						</div>
 					</div>
 				</td>
