@@ -1,5 +1,6 @@
 export const ICONS = {
 	ERROR_OUTLINE: 'i-material-symbols-error-outline-rounded',
+	QUESTION_MARK: 'i-material-symbols-question-mark-rounded',
 	TRASH: 'i-heroicons-trash-20-solid',
 	PENCIL: 'i-heroicons-pencil-20-solid',
 	ORDER: 'i-material-symbols-light-order-approve-outline-rounded',
@@ -12,7 +13,8 @@ export const ICONS = {
 	ADD_OUTLINE: 'i-ic-round-add-circle-outline',
 	EXCEL: 'i-ri-file-excel-2-line',
 	UPLOAD: 'i-material-symbols-upload-rounded',
-	CHEVRON_RIGHT: 'i-material-symbols-light-chevron-right-rounded',
+	LIGHT_CHEVRON_RIGHT: 'i-material-symbols-light-chevron-right-rounded',
+	CHEVRON_RIGHT: 'i-material-symbols-chevron-right-rounded',
 	CHEVRON_DOUBLE_RIGHT: 'i-heroicons-chevron-double-right',
 	CLOSE_ROUNDED: 'i-material-symbols-close-small-rounded',
 	CHECK_ROUNDED: 'i-material-symbols-check-small-rounded',

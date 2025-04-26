@@ -16,11 +16,23 @@
 <script lang="ts" setup>
 const props = defineProps({
 	columns: {
-		type: Array as PropType<string[]>,
+		type: Array as PropType<
+			{
+				key: string;
+				label: string;
+				sortable?: boolean;
+			}[]
+		>,
 		required: true,
 	},
 	selectedColumns: {
-		type: Array as PropType<string[]>,
+		type: Array as PropType<
+			{
+				key: string;
+				label: string;
+				sortable?: boolean;
+			}[]
+		>,
 		required: true,
 	},
 });

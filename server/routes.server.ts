@@ -38,7 +38,7 @@ export const Routes = {
 	},
 	ProdVariants: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
-		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		SingleByProdCode: (prod_code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${prod_code}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
 		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
 		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,

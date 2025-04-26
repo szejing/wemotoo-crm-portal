@@ -1,3 +1,4 @@
+import type { OrderItemModel } from '~/utils/models/item.model';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetOrdersReq } from './models/request/order';
@@ -46,11 +47,23 @@ class OrderModule extends HttpFactory {
 	 * Updates customer
 	 * @returns
 	 */
-	async updateCustomer(orderNo: string, customer: CustomerModel): Promise<UpdateOrderStatusResp> {
+	async updateCustomer(order_no: string, customer: CustomerModel): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
-			body: { order_no: orderNo, customer_no: customer.customer_no, customer },
+			body: { order_no, customer_no: customer.customer_no, customer },
+		});
+	}
+
+	/**
+	 * Updates item
+	 * @returns
+	 */
+	async updateItem(order_no: string, customer_no: string, items: OrderItemModel[]): Promise<UpdateOrderStatusResp> {
+		return await this.call<UpdateOrderStatusResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			body: { order_no, customer_no, items },
 		});
 	}
 }

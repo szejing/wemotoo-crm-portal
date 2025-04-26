@@ -63,6 +63,14 @@ const MerchantRoutes = {
 		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
 		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/restore/${id}`,
 	},
+	ProdVariants: {
+		// Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/create`,
+		SingleByProdCode: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${code}`,
+		// Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/many`,
+		// Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		// Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		// Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/restore/${id}`,
+	},
 	Settings: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/many`,
 		SaveMany: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SETTINGS}/update`,

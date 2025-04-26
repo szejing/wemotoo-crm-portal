@@ -5,7 +5,7 @@ export type OrderItemModel = {
 	parent_order_line: number;
 	prod_code: string;
 	prod_name: string;
-	prod_variant_id: string;
+	prod_variant_code: string;
 	prod_variant_name: string;
 	prod_variant_sku: string;
 	currency_code: string;
