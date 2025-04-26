@@ -19,7 +19,7 @@ type OrderItemDto_ = {
 	parent_order_line: number;
 	prod_code: string;
 	prod_name: string;
-	prod_variant_id: string;
+	prod_variant_code: string;
 	prod_variant_name: string;
 	prod_variant_sku: string;
 	currency_code: string;
@@ -41,7 +41,7 @@ type OrderItemDto_ = {
 export type Order = {
 	biz_date: string;
 	order_no: string;
-	user_id: string;
+	customer_no: string;
 	order_status: OrderStatus;
 	gross_amt: number;
 	net_amt: number;

@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, getFormattedDate, removeMerchantId } from 'wemotoo-common';
+import { OrderStatus, getFormattedDate } from 'wemotoo-common';
 import { useOrderStore } from '~/stores/Order/Order';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
@@ -136,7 +136,7 @@ const is_loading = computed(() => orderStore.loading);
 const selectedColumns = ref(order_columns);
 const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
 
-const updateColumns = (columns: string[]) => {
+const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
 	selectedColumns.value = columns;
 };
 
@@ -150,7 +150,7 @@ const updatePageSize = async (size: number) => {
 };
 
 const selectOrder = (row: Order) => {
-	navigateTo(`/orders/detail/${removeMerchantId(row.order_no)}`);
+	navigateTo(`/orders/detail/${row.order_no}`);
 };
 </script>
 

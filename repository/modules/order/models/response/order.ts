@@ -5,7 +5,7 @@ import type { OrderItemModel } from '~/utils/models/item.model';
 type Order = {
 	biz_date: string;
 	order_no: string;
-	user_id: string;
+	customer_no: string;
 	order_status: OrderStatus;
 	gross_amt: number;
 	net_amt: number;

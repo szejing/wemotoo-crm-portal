@@ -11,6 +11,7 @@ import {
 	OrderModule,
 	SummOrderModule,
 	DataModule,
+	ProductVariantModule,
 } from '~/repository/modules';
 
 interface IApiInstance {
@@ -26,6 +27,7 @@ interface IApiInstance {
 	productType: ProductTypeModule;
 	summOrder: SummOrderModule;
 	order: OrderModule;
+	productVariant: ProductVariantModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -52,6 +54,7 @@ export default defineNuxtPlugin((_) => {
 	const productTypeModule = new ProductTypeModule(apiFetcher);
 	const summOrderModule = new SummOrderModule(apiFetcher);
 	const orderModule = new OrderModule(apiFetcher);
+	const productVariantModule = new ProductVariantModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -66,6 +69,7 @@ export default defineNuxtPlugin((_) => {
 		productType: productTypeModule,
 		summOrder: summOrderModule,
 		order: orderModule,
+		productVariant: productVariantModule,
 	};
 
 	return {

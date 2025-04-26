@@ -1,13 +1,12 @@
 <template>
 	<div>
-		<h1>Detail</h1>
 		<ZLoading v-if="is_loading" />
 
 		<div v-else class="wrapper-grid">
 			<div class="main-wrapper">
-				<div class="flex-between w-full mt-4">
+				<div class="flex-jbetween-icenter w-full mt-4">
 					<div>
-						<h2>#{{ order?.order_no }}</h2>
+						<h2 class="font-light">Order #{{ order?.order_no }}</h2>
 						<h2 v-if="order?.biz_date">Date: {{ order?.biz_date }}</h2>
 					</div>
 					<div>
@@ -32,14 +31,29 @@
 					<!-- Order Detail -->
 					<UCard>
 						<template #header>
-							<h2 class="text-main">Order Items</h2>
+							<div class="flex-between">
+								<h2 class="text-main">Items</h2>
+								<UPopover v-if="order?.order_status != OrderStatus.NEW && order?.order_status != OrderStatus.PENDING_PAYMENT" overlay>
+									<UButton color="gray" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
+
+									<template #panel>
+										<div class="p-4">
+											<p>
+												This order is no longer editable.<br />
+												Please switch <b class="text-main">Order Status</b> to <b class="text-main">Pending Payment</b> if you want to edit this order.
+											</p>
+										</div>
+									</template>
+								</UPopover>
+							</div>
 						</template>
 						<ZSectionOrderDetailItems
 							:items="items ?? []"
 							:currency-code="currency_code"
 							:total-gross-amt="order?.gross_amt"
 							:total-net-amt="order?.net_amt"
-							:editable="true"
+							:editable="order?.order_status == OrderStatus.NEW || order?.order_status == OrderStatus.PENDING_PAYMENT"
+							@refresh="getOrder(order?.order_no as string)"
 						/>
 					</UCard>
 

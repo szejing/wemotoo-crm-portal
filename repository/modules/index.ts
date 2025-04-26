@@ -10,6 +10,7 @@ import DataModule from './data';
 import CurrencyModule from './currency';
 import ImageModule from './image';
 import AuthModule from './auth';
+import ProductVariantModule from './product-variant';
 
 export {
 	OrderModule,
@@ -24,4 +25,5 @@ export {
 	CurrencyModule,
 	ImageModule,
 	AuthModule,
+	ProductVariantModule,
 };

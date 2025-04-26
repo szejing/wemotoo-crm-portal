@@ -5,6 +5,7 @@ import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
+import type { OrderItemModel } from '~/utils/models/item.model';
 
 type OrderFilter = {
 	query: string;
@@ -106,6 +107,32 @@ export const useOrderStore = defineStore('orderStore', {
 				if (data.order) {
 					this.detail = data.order;
 					successNotification('Customer updated successfully');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
+		},
+
+		async updateItem(order_no: string, item: OrderItemModel) {
+			const { $api } = useNuxtApp();
+
+			try {
+				const items = this.detail?.items.map((orderItem) => {
+					if (orderItem.order_line === item.order_line) {
+						return item;
+					}
+					return orderItem;
+				});
+
+				console.log(items);
+
+				const data = await $api.order.updateItem(order_no, this.detail!.customer.customer_no, items ?? []);
+
+				if (data.order) {
+					this.detail = data.order;
+					successNotification('Order item updated successfully');
 				}
 			} catch (err: any) {
 				console.error(err);

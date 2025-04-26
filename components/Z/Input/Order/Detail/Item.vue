@@ -1,150 +1,123 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Order Line" name="order_line" required>
-			<UInput v-model="orderLine" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Order Line" />
-		</UFormGroup>
+		<div class="flex-jbetween-icenter w-full mt-4">
+			<div class="flex-icenter gap-4">
+				<div>
+					<h2 class="font-light">#{{ prodCode }}</h2>
+					<p>{{ prodName }}</p>
+				</div>
+				<div>
+					<UBadge v-if="status == OrderItemStatus.ACTIVE" size="md" color="green">
+						ACTIVE
+						<template #trailing>
+							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
+						</template>
+					</UBadge>
+					<UBadge v-else-if="status == OrderItemStatus.VOIDED" size="md" color="main">
+						VOIDED
+						<template #trailing>
+							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
+						</template>
+					</UBadge>
+					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="red">
+						REFUNDED
+						<template #trailing>
+							<UIcon color="white" class="w-4 h-4" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
+						</template>
+					</UBadge>
+				</div>
+			</div>
 
-		<UFormGroup v-slot="{ error }" label="Status" name="status" required>
-			<UInput v-model="status" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Status" />
-		</UFormGroup>
+			<ZQuantity v-model:quantity="orderQty" />
+		</div>
 
-		<UFormGroup v-slot="{ error }" label="Parent Order Line" name="parent_order_line" required>
-			<UInput v-model="parentOrderLine" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Parent Order Line" />
-		</UFormGroup>
+		<div>
+			<h2 class="text-main">Pricing</h2>
 
-		<UFormGroup v-slot="{ error }" label="Product Code" name="prod_code" required>
-			<UInput v-model="prodCode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Product Code" />
-		</UFormGroup>
+			<div class="grid grid-cols-2 gap-4 mt-2">
+				<UFormGroup label="Currency" name="currency">
+					<ZSelectMenuCurrency v-model:currency-code="currencyCode" />
+				</UFormGroup>
 
-		<UFormGroup v-slot="{ error }" label="Product Name" name="prod_name" required>
-			<UInput v-model="prodName" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Product Name" />
-		</UFormGroup>
+				<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" required>
+					<UInput v-model="unitSellPrice" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Unit Sell Price" class="mt-2" />
+				</UFormGroup>
+			</div>
+		</div>
 
-		<UFormGroup v-slot="{ error }" label="Product Variant ID" name="prod_variant_id" required>
-			<UInput v-model="prodVariantId" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Product Variant ID" />
-		</UFormGroup>
+		<div v-if="prodVariants.length > 0">
+			<h2 class="text-main">Variants</h2>
 
-		<UFormGroup v-slot="{ error }" label="Product Variant Name" name="prod_variant_name" required>
-			<UInput v-model="prodVariantName" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Product Variant Name" />
-		</UFormGroup>
+			<ul>
+				<div v-for="variant in prodVariants" :key="variant!.variant_code">
+					<UButton
+						:color="selectedVariant?.variant_code == variant!.variant_code ? 'main' : 'gray'"
+						:variant="selectedVariant?.variant_code == variant!.variant_code ? 'solid' : 'outline'"
+						size="sm"
+						@click="updateVariant(variant)"
+					>
+						{{ variant!.variant_code }}
+					</UButton>
+				</div>
+			</ul>
+		</div>
 
-		<UFormGroup v-slot="{ error }" label="Product Variant SKU" name="prod_variant_sku" required>
-			<UInput v-model="prodVariantSku" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Product Variant SKU" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Currency Code" name="currency_code" required>
-			<UInput v-model="currencyCode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Currency Code" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Order Quantity" name="order_qty" required>
-			<UInput v-model="orderQty" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Order Quantity" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" required>
-			<UInput v-model="unitSellPrice" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Unit Sell Price" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Original Sell Price" name="orig_sell_price" required>
-			<UInput v-model="origSellPrice" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Original Sell Price" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Gross Amount" name="gross_amt" required>
-			<UInput v-model="grossAmt" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Gross Amount" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Discount Amount" name="disc_amt" required>
-			<UInput v-model="discAmt" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Discount Amount" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Net Amount" name="net_amt" required>
-			<UInput v-model="netAmt" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Net Amount" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Gross Amount Excluding Tax" name="gross_amt_exc" required>
-			<UInput v-model="grossAmtExc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Gross Amount Excluding Tax" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Discount Amount Excluding Tax" name="disc_amt_exc" required>
-			<UInput v-model="discAmtExc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Discount Amount Excluding Tax" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Net Amount Excluding Tax" name="net_amt_exc" required>
-			<UInput v-model="netAmtExc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Net Amount Excluding Tax" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Tax Amount Including Tax" name="tax_amt_inc" required>
-			<UInput v-model="taxAmtInc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Tax Amount Including Tax" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Tax Amount Excluding Tax" name="tax_amt_exc" required>
-			<UInput v-model="taxAmtExc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Tax Amount Excluding Tax" />
-		</UFormGroup>
-
-		<UFormGroup v-slot="{ error }" label="Adjustment Amount" name="adj_amt" required>
-			<UInput v-model="adjAmt" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Adjustment Amount" />
-		</UFormGroup>
+		<div class="mt-4 text-end">
+			<h3 class="text-main">Total Price : {{ currencyCode }} {{ total }}</h3>
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import type { OrderItemStatus } from 'wemotoo-common';
+import { OrderItemStatus } from 'wemotoo-common';
+import type { ProductVariant } from '~/utils/types/product-variant';
+
+const { $api } = useNuxtApp();
+const isLoading = ref(false);
+const prodVariants = ref<ProductVariant[]>([]);
+const selectedVariant = ref<ProductVariant>();
+
+onMounted(async () => {
+	selectedVariant.value = props.prodVariantCode;
+
+	if (selectedVariant.value) {
+		isLoading.value = true;
+
+		try {
+			const { variants } = await $api.productVariant.getVariantsByProdCode('VARIANTPROD');
+
+			prodVariants.value = variants;
+		} catch (error) {
+			console.error(error);
+		} finally {
+			isLoading.value = false;
+		}
+	}
+});
 
 const props = defineProps<{
-	orderLine: number;
 	status: OrderItemStatus;
-	parentOrderLine: number;
 	prodCode: string;
 	prodName: string;
-	prodVariantId?: string;
+	prodVariantCode?: string;
 	prodVariantName?: string;
 	prodVariantSku?: string;
 	currencyCode: string;
 	orderQty: number;
 	unitSellPrice: number;
-	origSellPrice: number;
-	grossAmt: number;
-	discAmt?: number;
-	netAmt: number;
-	grossAmtExc: number;
-	discAmtExc?: number;
-	netAmtExc: number;
-	taxAmtInc?: number;
-	taxAmtExc?: number;
-	adjAmt?: number;
 }>();
 
 const emit = defineEmits([
-	'update:orderLine',
 	'update:status',
-	'update:parentOrderLine',
 	'update:prodCode',
 	'update:prodName',
-	'update:prodVariantId',
+	'update:prodVariantCode',
 	'update:prodVariantName',
 	'update:prodVariantSku',
 	'update:currencyCode',
 	'update:orderQty',
 	'update:unitSellPrice',
-	'update:origSellPrice',
-	'update:grossAmt',
-	'update:discAmt',
-	'update:netAmt',
-	'update:grossAmtExc',
-	'update:discAmtExc',
-	'update:netAmtExc',
-	'update:taxAmtInc',
-	'update:taxAmtExc',
-	'update:adjAmt',
 ]);
-
-const orderLine = computed({
-	get() {
-		return props.orderLine;
-	},
-	set(value) {
-		emit('update:orderLine', value);
-	},
-});
 
 const status = computed({
 	get() {
@@ -152,15 +125,6 @@ const status = computed({
 	},
 	set(value) {
 		emit('update:status', value);
-	},
-});
-
-const parentOrderLine = computed({
-	get() {
-		return props.parentOrderLine;
-	},
-	set(value) {
-		emit('update:parentOrderLine', value);
 	},
 });
 
@@ -182,32 +146,32 @@ const prodName = computed({
 	},
 });
 
-const prodVariantId = computed({
-	get() {
-		return props.prodVariantId;
-	},
-	set(value) {
-		emit('update:prodVariantId', value);
-	},
-});
+// const prodVariantId = computed({
+// 	get() {
+// 		return props.prodVariantId;
+// 	},
+// 	set(value) {
+// 		emit('update:prodVariantId', value);
+// 	},
+// });
 
-const prodVariantName = computed({
-	get() {
-		return props.prodVariantName;
-	},
-	set(value) {
-		emit('update:prodVariantName', value);
-	},
-});
+// const prodVariantName = computed({
+// 	get() {
+// 		return props.prodVariantName;
+// 	},
+// 	set(value) {
+// 		emit('update:prodVariantName', value);
+// 	},
+// });
 
-const prodVariantSku = computed({
-	get() {
-		return props.prodVariantSku;
-	},
-	set(value) {
-		emit('update:prodVariantSku', value);
-	},
-});
+// const prodVariantSku = computed({
+// 	get() {
+// 		return props.prodVariantSku;
+// 	},
+// 	set(value) {
+// 		emit('update:prodVariantSku', value);
+// 	},
+// });
 
 const currencyCode = computed({
 	get() {
@@ -223,6 +187,7 @@ const orderQty = computed({
 		return props.orderQty;
 	},
 	set(value) {
+		console.log(value);
 		emit('update:orderQty', value);
 	},
 });
@@ -236,99 +201,31 @@ const unitSellPrice = computed({
 	},
 });
 
-const origSellPrice = computed({
-	get() {
-		return props.origSellPrice;
-	},
-	set(value) {
-		emit('update:origSellPrice', value);
-	},
-});
+const updateStatus = (newStatus: OrderItemStatus) => {
+	status.value = newStatus;
+};
 
-const grossAmt = computed({
-	get() {
-		return props.grossAmt;
-	},
-	set(value) {
-		emit('update:grossAmt', value);
-	},
-});
+const updateVariant = (variant: ProductVariant) => {
+	selectedVariant.value = variant;
 
-const discAmt = computed({
-	get() {
-		return props.discAmt;
-	},
-	set(value) {
-		emit('update:discAmt', value);
-	},
-});
+	emit('update:prodVariantCode', variant.variant_code);
+	emit('update:prodVariantName', variant.name);
+	emit('update:prodVariantSku', variant.sku);
 
-const netAmt = computed({
-	get() {
-		return props.netAmt;
-	},
-	set(value) {
-		emit('update:netAmt', value);
-	},
-});
+	unitSellPrice.value = variant!.price_types![0].sale_price ?? 0;
+};
 
-const grossAmtExc = computed({
-	get() {
-		return props.grossAmtExc;
-	},
-	set(value) {
-		emit('update:grossAmtExc', value);
-	},
-});
-
-const discAmtExc = computed({
-	get() {
-		return props.discAmtExc;
-	},
-	set(value) {
-		emit('update:discAmtExc', value);
-	},
-});
-
-const netAmtExc = computed({
-	get() {
-		return props.netAmtExc;
-	},
-	set(value) {
-		emit('update:netAmtExc', value);
-	},
-});
-
-const taxAmtInc = computed({
-	get() {
-		return props.taxAmtInc;
-	},
-	set(value) {
-		emit('update:taxAmtInc', value);
-	},
-});
-
-const taxAmtExc = computed({
-	get() {
-		return props.taxAmtExc;
-	},
-	set(value) {
-		emit('update:taxAmtExc', value);
-	},
-});
-
-const adjAmt = computed({
-	get() {
-		return props.adjAmt;
-	},
-	set(value) {
-		emit('update:adjAmt', value);
-	},
+const total = computed(() => {
+	return unitSellPrice.value * orderQty.value;
 });
 </script>
 
 <style scoped lang="postcss">
 .section-grid-basic-details {
-	@apply grid grid-cols-1 gap-3;
+	@apply grid gap-4;
+}
+
+ul {
+	@apply flex flex-wrap gap-4 mt-2;
 }
 </style>

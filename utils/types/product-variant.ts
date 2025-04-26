@@ -3,7 +3,9 @@ import type { PriceInput } from './price';
 
 export type ProductVariant = {
 	variant_code?: string;
+	product_code?: string;
 	name?: string;
+	short_desc?: string;
 	sku?: string;
 	ean?: string;
 	upc?: string;
@@ -19,7 +21,7 @@ export type ProductVariant = {
 	origin_country?: string;
 	mid_code?: string;
 	material?: string;
-	prices?: PriceInput[] | undefined;
+	price_types?: PriceInput[] | undefined;
 	options?: ProductOption[];
 	metadata?: Record<string, unknown>;
 };
