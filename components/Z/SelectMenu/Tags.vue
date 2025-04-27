@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useTagsStore } from '~/stores';
+import { useProductTagsStore } from '~/stores';
 import type { Tag, TagInput } from '~/utils/types/tag';
 
 const query = ref('');
-const tagStore = useTagsStore();
+const tagStore = useProductTagsStore();
 const { tags: tag_options } = storeToRefs(tagStore);
 
 const props = defineProps<{ tags: Tag[] | TagInput[] | undefined }>();

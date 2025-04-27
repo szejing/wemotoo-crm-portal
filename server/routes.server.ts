@@ -28,13 +28,13 @@ export const Routes = {
 		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
-	Tags: {
-		Create: () => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/`,
-		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Many: () => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/`,
-		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.TAGS}/restore/${id}`,
+	ProdTags: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/`,
+		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/`,
+		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/restore/${id}`,
 	},
 	ProdVariants: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
@@ -52,13 +52,13 @@ export const Routes = {
 		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/restore/${id}`,
 	},
-	Categories: {
-		Create: () => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/`,
-		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/`,
-		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/restore/${code}`,
+	ProdCategories: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/`,
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/restore/${code}`,
 	},
 	ProdOptions: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/`,

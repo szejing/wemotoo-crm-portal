@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
-		const query = getQuery(event);
 		const id = getRouterParams(event).id;
 
 		if (!id) {
@@ -15,10 +14,9 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.Tags.Update(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdTags.Restore(Number(id))}`, {
 			baseURL: config.public.baseUrl,
 			method: 'PATCH',
-			query: query,
 			body: data,
 			headers: generateHeaders(event),
 		});

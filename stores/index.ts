@@ -1,5 +1,5 @@
-import { useTagsStore } from './Tags/Tags';
-import { useCategoriesStore } from './Categories/Categories';
+import { useProductTagsStore } from './ProductTags/ProductTags';
+import { useProductCategoriesStore } from './ProductCategories/ProductCategories';
 import { useProductOptionsStore } from './ProductOptions/ProductOptions';
 import { useProductStore } from './Products/Products';
 import { useSettingsStore } from './Settings/Settings';
@@ -17,8 +17,8 @@ export {
 	useMerchantInfoStore,
 	useCustomersStore,
 	useSettingsStore,
-	useCategoriesStore,
-	useTagsStore,
+	useProductCategoriesStore,
+	useProductTagsStore,
 	useProductOptionsStore,
 	useProductStore,
 	useOrderStore,

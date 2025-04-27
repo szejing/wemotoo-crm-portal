@@ -11,7 +11,11 @@
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
 				</div>
 				<!-- *********************** General Info *********************** -->
-				<ZInputCategoryGeneralInfo v-model:code="state.category.code" v-model:name="state.category.name" v-model:description="state.category.description" />
+				<ZInputProductCategoryGeneralInfo
+					v-model:code="state.category.code"
+					v-model:name="state.category.name"
+					v-model:description="state.category.description"
+				/>
 				<!-- *********************** General Info *********************** -->
 
 				<div>
@@ -36,7 +40,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useCategoriesStore } from '~/stores';
 import { UpdateCategoryValidation } from '~/utils/schema';
 import type { Category } from '~/utils/types/category';
 
@@ -54,7 +57,7 @@ const state = reactive({
 	category: props.category,
 });
 
-const categoryStore = useCategoriesStore();
+const categoryStore = useProductCategoriesStore();
 const { updating } = storeToRefs(categoryStore);
 
 const updateThumbnail = (url: string) => {

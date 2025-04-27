@@ -5,7 +5,7 @@
 			<div class="sm:col-span-2">
 				<UCard>
 					<h2>Add New Category</h2>
-					<FormCategoryCreation class="mt-4" />
+					<FormProductCategoryCreation class="mt-4" />
 				</UCard>
 			</div>
 
@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
-import { useCategoriesStore } from '~/stores/Categories/Categories';
+import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 import { category_columns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 
@@ -73,7 +73,7 @@ const options = (row: Category) => [
 
 const modal = useModal();
 const page = ref(1);
-const categoryStore = useCategoriesStore();
+const categoryStore = useProductCategoriesStore();
 await categoryStore.getCategories();
 
 const { loading, categories, pageSize } = storeToRefs(categoryStore);
