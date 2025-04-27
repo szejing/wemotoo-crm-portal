@@ -2,33 +2,33 @@ import type { Tag } from '~/utils/types/tag';
 import HttpFactory from '../factory';
 import MerchantRoutes from '../routes.client';
 
-type BaseTagReq = {
+type BaseProductTagReq = {
 	id: number;
 };
 
-type TagResp = {
+type ProductTagResp = {
 	tag: Tag;
 };
 
-type TagsResp = {
+type ProductTagsResp = {
 	count: number;
 	tags: Tag[];
 };
 
-type CreateTagReq = {
+type CreateProductTagReq = {
 	value: string;
 };
 
-type UpdateTagReq = {
+type UpdateProductTagReq = {
 	value: string;
 	metadata?: Record<string, unknown> | undefined;
 };
 
-class TagModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.Tags;
+class ProductTagModule extends HttpFactory {
+	private RESOURCE = MerchantRoutes.ProductTags;
 
-	async fetchMany(): Promise<TagsResp> {
-		return await this.call<TagsResp>({
+	async fetchMany(): Promise<ProductTagsResp> {
+		return await this.call<ProductTagsResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 		});
@@ -41,7 +41,7 @@ class TagModule extends HttpFactory {
 		});
 	}
 
-	async create(tag: CreateTagReq): Promise<TagResp> {
+	async create(tag: CreateProductTagReq): Promise<ProductTagResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
@@ -49,7 +49,7 @@ class TagModule extends HttpFactory {
 		});
 	}
 
-	async update(id: number, tag: UpdateTagReq): Promise<TagResp> {
+	async update(id: number, tag: UpdateProductTagReq): Promise<ProductTagResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(id)}`,
@@ -57,14 +57,14 @@ class TagModule extends HttpFactory {
 		});
 	}
 
-	async delete(tag: BaseTagReq): Promise<TagResp> {
+	async delete(tag: BaseProductTagReq): Promise<ProductTagResp> {
 		return await this.call<any>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(tag.id)}`,
 		});
 	}
 
-	async restore(tag: BaseTagReq): Promise<TagResp> {
+	async restore(tag: BaseProductTagReq): Promise<ProductTagResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Restore(tag.id)}`,
@@ -72,4 +72,4 @@ class TagModule extends HttpFactory {
 	}
 }
 
-export default TagModule;
+export default ProductTagModule;

@@ -31,13 +31,13 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
-	Tags: {
-		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/create`,
-		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/many`,
-		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/${id}`,
-		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAGS}/restore/${id}`,
+	ProductTags: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/create`,
+		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/many`,
+		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/restore/${id}`,
 	},
 	ProductTypes: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/create`,
@@ -47,13 +47,13 @@ const MerchantRoutes = {
 		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/${id}`,
 		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_TYPES}/restore/${id}`,
 	},
-	Categories: {
-		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/create`,
-		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/many`,
-		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/${code}`,
-		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CATEGORIES}/restore/${code}`,
+	ProductCategories: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/create`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/restore/${code}`,
 	},
 	ProdOptions: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/create`,

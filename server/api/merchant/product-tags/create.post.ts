@@ -5,18 +5,10 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
-		const id = getRouterParams(event).id;
 
-		if (!id) {
-			throw createError({
-				statusCode: 400,
-				statusMessage: 'Tag Id is required',
-			});
-		}
-
-		const result = await $fetch(`${Routes.Tags.Restore(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdTags.Create()}`, {
 			baseURL: config.public.baseUrl,
-			method: 'PATCH',
+			method: 'POST',
 			body: data,
 			headers: generateHeaders(event),
 		});

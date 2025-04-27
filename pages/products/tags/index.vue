@@ -5,7 +5,7 @@
 			<div class="sm:col-span-2">
 				<UCard>
 					<h2>Add New Tag</h2>
-					<FormTagCreation class="mt-4" />
+					<FormProductTagCreation class="mt-4" />
 				</UCard>
 			</div>
 
@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
-import { useTagsStore } from '~/stores/Tags/Tags';
+import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { tag_columns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
 
@@ -72,7 +72,7 @@ const options = (row: Tag) => [
 
 const modal = useModal();
 const page = ref(1);
-const tagsStore = useTagsStore();
+const tagsStore = useProductTagsStore();
 await tagsStore.getTags();
 
 const { loading, tags, pageSize } = storeToRefs(tagsStore);

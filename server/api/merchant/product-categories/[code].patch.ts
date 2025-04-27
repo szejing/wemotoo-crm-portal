@@ -5,20 +5,20 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
-		const id = getRouterParams(event).id;
+		const code = getRouterParams(event).code;
 
-		if (!id) {
+		if (!code) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Tag Id is required',
+				statusMessage: 'Category Code is required',
 			});
 		}
 
-		const result = await $fetch(`${Routes.Tags.Single(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdCategories.Update(code)}`, {
 			baseURL: config.public.baseUrl,
-			method: 'GET',
+			method: 'PATCH',
 			body: data,
-			headers: generateHeaders(event, true),
+			headers: generateHeaders(event),
 		});
 		return result;
 	} catch (err) {

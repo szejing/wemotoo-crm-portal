@@ -2,7 +2,7 @@
 	<div>
 		<UForm :schema="CreateCategoryValidation" :state="newCategory" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />
+			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />
 			<!-- *********************** General Info *********************** -->
 
 			<div>
@@ -25,13 +25,13 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useCategoriesStore } from '~/stores/Categories/Categories';
+import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 
 import { CreateCategoryValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateCategoryValidation>;
 
-const categoryStore = useCategoriesStore();
+const categoryStore = useProductCategoriesStore();
 const { adding, newCategory } = storeToRefs(categoryStore);
 
 onMounted(() => {

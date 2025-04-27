@@ -23,7 +23,7 @@ const initialEmptyCategory: CategoryCreate = {
 	parent_category: undefined,
 };
 
-export const useCategoriesStore = defineStore('categoriesStore', {
+export const useProductCategoriesStore = defineStore('productCategoriesStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,

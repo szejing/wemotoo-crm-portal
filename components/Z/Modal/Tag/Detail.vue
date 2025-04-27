@@ -8,7 +8,7 @@
 			<template #header><h3>Update Tag</h3></template>
 			<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
-				<ZInputTagGeneralInfo v-model:value="state.tag.value" />
+				<ZInputProductTagGeneralInfo v-model:value="state.tag.value" />
 				<!-- *********************** General Info *********************** -->
 
 				<div class="flex-jend gap-4">
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useTagsStore } from '~/stores/Tags/Tags';
+import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { UpdateTagValidation } from '~/utils/schema';
 import type { Tag } from '~/utils/types/tag';
 
@@ -41,7 +41,7 @@ const state = reactive({
 	tag: props.tag,
 });
 
-const tagStore = useTagsStore();
+const tagStore = useProductTagsStore();
 const { updating } = storeToRefs(tagStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

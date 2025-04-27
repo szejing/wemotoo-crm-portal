@@ -1,9 +1,9 @@
 import OrderModule from './order/order';
 import SummOrderModule from './summ-order/summ-order';
 import ProductModule from './product';
-import CategoryModule from './category';
+import ProductCategoryModule from './product-category';
 import ProductOptionModule from './product-option';
-import TagModule from './tag';
+import ProductTagModule from './product-tag';
 import SettingModule from './setting';
 import ProductTypeModule from './product-type';
 import DataModule from './data';
@@ -16,9 +16,9 @@ export {
 	OrderModule,
 	SummOrderModule,
 	ProductModule,
-	CategoryModule,
+	ProductCategoryModule,
 	ProductOptionModule,
-	TagModule,
+	ProductTagModule,
 	SettingModule,
 	ProductTypeModule,
 	DataModule,

@@ -4,13 +4,21 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		// const data = await readBody(event);
+		const code = getRouterParam(event, 'code');
 
-		const result = await $fetch(`${Routes.Categories.Many()}`, {
+		if (!code) {
+			throw createError({
+				statusCode: 400,
+				statusMessage: 'Category Code is required',
+			});
+		}
+
+		const result = await $fetch(`${Routes.ProdCategories.Remove(code)}`, {
 			baseURL: config.public.baseUrl,
-			method: 'GET',
-			headers: generateHeaders(event, true),
+			method: 'DELETE',
+			headers: generateHeaders(event),
 		});
+
 		return result;
 	} catch (err) {
 		return err;

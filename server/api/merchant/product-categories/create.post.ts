@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 
-		const result = await $fetch(`${Routes.Categories.Create()}`, {
+		const result = await $fetch(`${Routes.ProdCategories.Create()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'POST',
 			body: data,

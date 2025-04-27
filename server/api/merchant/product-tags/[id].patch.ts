@@ -4,21 +4,24 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		const code = getRouterParam(event, 'code');
+		const data = await readBody(event);
+		const query = getQuery(event);
+		const id = getRouterParams(event).id;
 
-		if (!code) {
+		if (!id) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Category Code is required',
+				statusMessage: 'Tag Id is required',
 			});
 		}
 
-		const result = await $fetch(`${Routes.Categories.Remove(code)}`, {
+		const result = await $fetch(`${Routes.ProdTags.Update(Number(id))}`, {
 			baseURL: config.public.baseUrl,
-			method: 'DELETE',
+			method: 'PATCH',
+			query: query,
+			body: data,
 			headers: generateHeaders(event),
 		});
-
 		return result;
 	} catch (err) {
 		return err;

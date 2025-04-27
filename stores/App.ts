@@ -7,10 +7,10 @@ export const useAppStore = defineStore('appStore', {
 			const productOptionsStore = useProductOptionsStore();
 			await productOptionsStore.getOptions();
 
-			const productTagsStore = useTagsStore();
+			const productTagsStore = useProductTagsStore();
 			await productTagsStore.getTags();
 
-			const categoryStore = useCategoriesStore();
+			const categoryStore = useProductCategoriesStore();
 			await categoryStore.getCategories();
 
 			const productStore = useProductStore();

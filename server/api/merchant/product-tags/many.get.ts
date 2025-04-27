@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		// const data = await readBody(event);
 
-		const result = await $fetch(`${Routes.Tags.Many()}`, {
+		const result = await $fetch(`${Routes.ProdTags.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			headers: generateHeaders(event, true),
