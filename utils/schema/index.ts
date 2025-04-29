@@ -1,5 +1,5 @@
 import { FilterProductValidation } from './Product/Filter/ProductValidation';
-import { FilterCustomerValidation } from './Customer/FilterCustomerValidation';
+import { FilterCustomerValidation } from './Customer/FilterValidation';
 import { LoginValidation } from './Auth/LoginValidation';
 import { FilterTagValidation } from './Tag/Filter/TagValidation';
 import { FilterCategoryValidation } from './Category/Filter/CategoryValidation';
@@ -15,6 +15,7 @@ import { UpdateProductOptionValidation } from './Product/Update/ProductOptionVal
 import { UpdateProductValidation } from './Product/Update/ProductValidation';
 import { UpdateOrderCustomerValidation } from './Order/Update/CustomerValidation';
 import { UpdateOrderItemValidation } from './Order/Update/ItemValidation';
+import { FilterPaymentTypeValidation } from './PaymentType/FIlterValidation';
 
 export {
 	LoginValidation,
@@ -34,4 +35,5 @@ export {
 	UpdateProductValidation,
 	UpdateOrderCustomerValidation,
 	UpdateOrderItemValidation,
+	FilterPaymentTypeValidation,
 };

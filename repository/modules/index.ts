@@ -11,6 +11,7 @@ import CurrencyModule from './currency';
 import ImageModule from './image';
 import AuthModule from './auth';
 import ProductVariantModule from './product-variant';
+import PaymentTypeModule from './payment-type/payment-type';
 
 export {
 	OrderModule,
@@ -26,4 +27,5 @@ export {
 	ImageModule,
 	AuthModule,
 	ProductVariantModule,
+	PaymentTypeModule,
 };

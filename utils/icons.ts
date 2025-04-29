@@ -32,4 +32,5 @@ export const ICONS = {
 	MENU_OPEN_ROUNDED: 'i-material-symbols-arrow-forward-rounded',
 	ORDER_SUMMARY: 'i-material-symbols-bar-chart-4-bars-rounded',
 	SALES_SUMMARY: 'i-material-symbols-auto-graph-rounded',
+	PAYMENT_METHODS: 'i-material-symbols-payments-outline-rounded',
 };

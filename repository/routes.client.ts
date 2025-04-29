@@ -100,6 +100,13 @@ const MerchantRoutes = {
 		Items: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/items`,
 		Customers: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/customers`,
 	},
+	PaymentTypes: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPES}/many`,
+	},
+
+	PaymentTypeGroups: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPE_GROUPS}/many`,
+	},
 };
 
 export default MerchantRoutes;

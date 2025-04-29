@@ -10,7 +10,7 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
-		title: 'Order Summary',
+		title: 'Summary',
 		icon: ICONS.ORDER_SUMMARY,
 		to: '/order-summary',
 		isCollapsed: false,
@@ -29,26 +29,26 @@ const merchantNavigation = [
 			// },
 		],
 	},
-	{
-		title: 'Sales Summary',
-		icon: ICONS.SALES_SUMMARY,
-		to: '/sales-summary',
-		isCollapsed: false,
-		children: [
-			{
-				title: 'Sales',
-				to: '/sales-summary/sales',
-			},
-			{
-				title: 'Items',
-				to: '/sales-summary/sales-items',
-			},
-			// {
-			// 	title: 'Customers',
-			// 	to: '/sales-summary/sales-customers',
-			// },
-		],
-	},
+	// {
+	// 	title: 'Sales Summary',
+	// 	icon: ICONS.SALES_SUMMARY,
+	// 	to: '/sales-summary',
+	// 	isCollapsed: false,
+	// 	children: [
+	// 		{
+	// 			title: 'Sales',
+	// 			to: '/sales-summary/sales',
+	// 		},
+	// 		{
+	// 			title: 'Items',
+	// 			to: '/sales-summary/sales-items',
+	// 		},
+	// 		// {
+	// 		// 	title: 'Customers',
+	// 		// 	to: '/sales-summary/sales-customers',
+	// 		// },
+	// 	],
+	// },
 	{
 		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
@@ -84,6 +84,22 @@ const merchantNavigation = [
 		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 		to: '/customers',
 		isCollapsed: false,
+	},
+	{
+		title: 'Payment',
+		icon: ICONS.PAYMENT_METHODS,
+		to: '/payment',
+		isCollapsed: false,
+		children: [
+			{
+				title: 'Payment Methods',
+				to: '/payment/methods',
+			},
+			{
+				title: 'Payment Type',
+				to: '/payment/types',
+			},
+		],
 	},
 	{
 		title: 'Settings',

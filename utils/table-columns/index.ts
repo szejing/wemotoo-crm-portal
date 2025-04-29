@@ -7,6 +7,8 @@ import { product_columns } from './product';
 import { order_summ_columns } from './order-summ';
 import { order_item_summ_columns, order_item_summ_header_columns } from './order-item-summ';
 import { order_item_columns } from './order-item';
+import { payment_type_group_columns } from './payment-type-group';
+import { payment_type_columns } from './payment-type';
 
 export {
 	customer_columns,
@@ -19,4 +21,6 @@ export {
 	order_item_summ_columns,
 	order_item_summ_header_columns,
 	order_item_columns,
+	payment_type_group_columns,
+	payment_type_columns,
 };

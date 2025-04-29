@@ -30,6 +30,9 @@ export const useAppStore = defineStore('appStore', {
 
 			const summOrderStore = useSummOrderStore();
 			await summOrderStore.getDashboardSummary();
+
+			const paymentTypeStore = usePaymentTypeStore();
+			await paymentTypeStore.getPaymentTypeGroups();
 		},
 	},
 });
