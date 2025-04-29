@@ -2,7 +2,7 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="container">
-			<ZSectionFilterCustomers />
+			<ZSectionFilterPaymentTypes />
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
@@ -21,11 +21,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="customer_columns">
-					<template #actions-data="{ row }">
-						<ZActionDropdown :items="options(row)" />
-					</template>
-
+				<UTable :rows="rows" :columns="payment_type_columns">
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No one here!</span>
@@ -37,8 +33,8 @@
 					</template>
 				</UTable>
 
-				<div v-if="customers.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="customers.length" />
+				<div v-if="paymentTypeGroups.length > 0" class="section-pagination">
+					<UPagination v-model="page" :page-count="pageSize" :total="paymentTypeGroups.length" />
 				</div>
 			</UCard>
 		</div>
@@ -47,42 +43,22 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { customer_columns } from '~/utils/table-columns';
-import type { Customer } from '~/utils/types/customer';
+import { payment_type_columns } from '~/utils/table-columns';
 
 const links = [
 	{
-		label: 'Customers',
-		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
+		label: 'Payment Types',
+		icon: ICONS.PAYMENT_METHODS,
 		to: '/',
 	},
 ];
 
-const options = (row: Customer) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: () => console.log('Edit', row.customer_no),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => console.log('Delete', row.customer_no),
-		},
-	],
-];
-
 const page = ref(1);
-const customerStore = useCustomersStore();
-
-const { customers, pageSize } = storeToRefs(customerStore);
+const paymentTypeStore = usePaymentTypeStore();
+const { paymentTypeGroups, pageSize } = storeToRefs(paymentTypeStore);
 
 const rows = computed(() => {
-	return customers.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return paymentTypeGroups.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 </script>
 
