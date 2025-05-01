@@ -74,10 +74,10 @@ const rows = computed(() => {
 	return paymentMethods.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const updateStatus = async (code: string, status: boolean) => {
+const updateStatus = async (code: string, is_active: boolean) => {
 	try {
 		isUpdating.value = true;
-		await paymentMethodStore.updateStatus(code, status);
+		await paymentMethodStore.updateStatus({ code, is_active });
 	} catch (error) {
 		console.error(error);
 	} finally {

@@ -1,6 +1,7 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
+import type { GetPaymentMethodsReq, UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/payment-method';
 
 export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 	state: () => ({
@@ -14,11 +15,11 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 			this.pageSize = size;
 		},
 
-		async getPaymentMethods() {
+		async getPaymentMethods(request?: GetPaymentMethodsReq) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.paymentMethod.fetchMany();
+				const data = await $api.paymentMethod.fetchMany(request);
 
 				if (data.methods) {
 					this.paymentMethods = data.methods;
@@ -31,10 +32,10 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 			}
 		},
 
-		async updateStatus(code: string, is_active: boolean) {
+		async updateStatus(request: UpdatePaymentMethodReq) {
 			const { $api } = useNuxtApp();
 			try {
-				await $api.paymentMethod.updateStatus(code, is_active);
+				await $api.paymentMethod.updateStatus(request);
 
 				await this.getPaymentMethods();
 			} catch (err: any) {

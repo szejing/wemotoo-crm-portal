@@ -1,23 +1,25 @@
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
+import type { GetPaymentMethodsReq, UpdatePaymentMethodReq } from './models/request/payment-method';
 import type { GetPaymentMethodsResp } from './models/response/payment-method';
 
 class PaymentMethodModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.PaymentMethods;
 
-	async fetchMany(): Promise<GetPaymentMethodsResp> {
+	async fetchMany(request?: GetPaymentMethodsReq): Promise<GetPaymentMethodsResp> {
 		return await this.call<GetPaymentMethodsResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query: request,
 		});
 	}
 
-	async updateStatus(code: string, is_active: boolean) {
+	async updateStatus(request: UpdatePaymentMethodReq) {
 		return await this.call<GetPaymentMethodsResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update(code)}`,
+			url: `${this.RESOURCE.Update(request.code)}`,
 			body: {
-				is_active,
+				is_active: request.is_active,
 			},
 		});
 	}

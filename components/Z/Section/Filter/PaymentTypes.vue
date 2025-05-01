@@ -14,6 +14,7 @@
 
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
+import { isEmptyOrNull } from 'wemotoo-common';
 import type { z } from 'zod';
 import { FilterPaymentTypeValidation } from '~/utils/schema';
 
@@ -24,10 +25,11 @@ const state = reactive({
 	currency_code: 'MYR',
 });
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, desc, short_desc } = event.data;
-
-	console.log(code, desc, short_desc);
+const onSubmit = async (_: FormSubmitEvent<Schema>) => {
+	const paymentMethodStore = usePaymentMethodStore();
+	await paymentMethodStore.getPaymentMethods({
+		q: isEmptyOrNull(state.query ?? '') ? undefined : state.query,
+	});
 };
 </script>
 
