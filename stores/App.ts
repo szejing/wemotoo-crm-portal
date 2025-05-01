@@ -33,6 +33,9 @@ export const useAppStore = defineStore('appStore', {
 
 			const paymentTypeStore = usePaymentTypeStore();
 			await paymentTypeStore.getPaymentTypeGroups();
+
+			const paymentMethodStore = usePaymentMethodStore();
+			await paymentMethodStore.getPaymentMethods();
 		},
 	},
 });

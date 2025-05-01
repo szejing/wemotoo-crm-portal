@@ -103,9 +103,12 @@ const MerchantRoutes = {
 	PaymentTypes: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPES}/many`,
 	},
-
 	PaymentTypeGroups: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPE_GROUPS}/many`,
+	},
+	PaymentMethods: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/${code}`,
 	},
 };
 

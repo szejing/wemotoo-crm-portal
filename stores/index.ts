@@ -11,6 +11,7 @@ import { useOrderStore } from './Order/Order';
 import { useSummOrderStore } from './SummOrder/SummOrder';
 import { useProductTypesStore } from './ProductTypes/ProductTypes';
 import { usePaymentTypeStore } from './PaymentType/PaymentType';
+import { usePaymentMethodStore } from './PaymentMethod/PaymentMethod';
 
 export {
 	useAuthStore,
@@ -26,4 +27,5 @@ export {
 	useSummOrderStore,
 	useProductTypesStore,
 	usePaymentTypeStore,
+	usePaymentMethodStore,
 };
