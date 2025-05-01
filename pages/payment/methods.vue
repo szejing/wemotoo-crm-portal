@@ -2,7 +2,7 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="container">
-			<ZSectionFilterPaymentTypes />
+			<ZSectionFilterPaymentMethods />
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
