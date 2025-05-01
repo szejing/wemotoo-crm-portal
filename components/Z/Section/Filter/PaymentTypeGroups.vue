@@ -1,6 +1,6 @@
 <template>
 	<UCard>
-		<UForm :schema="FilterPaymentTypeValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
+		<UForm :schema="FilterPaymentTypeGroupValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
 			<UFormGroup name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Code or Description..." :icon="ICONS.SEARCH_ROUNDED" />
 			</UFormGroup>
@@ -16,9 +16,9 @@
 import type { FormSubmitEvent } from '#ui/types';
 import { isEmptyOrNull } from 'wemotoo-common';
 import type { z } from 'zod';
-import { FilterPaymentTypeValidation } from '~/utils/schema';
+import { FilterPaymentTypeGroupValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof FilterPaymentTypeValidation>;
+type Schema = z.output<typeof FilterPaymentTypeGroupValidation>;
 
 const state = reactive({
 	query: undefined,
@@ -26,8 +26,8 @@ const state = reactive({
 });
 
 const onSubmit = async (_: FormSubmitEvent<Schema>) => {
-	const paymentMethodStore = usePaymentMethodStore();
-	await paymentMethodStore.getPaymentMethods({
+	const paymentTypeGroupStore = usePaymentTypeStore();
+	await paymentTypeGroupStore.getPaymentTypeGroups({
 		q: isEmptyOrNull(state.query ?? '') ? undefined : state.query,
 	});
 };

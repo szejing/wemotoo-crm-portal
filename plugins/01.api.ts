@@ -12,7 +12,7 @@ import {
 	SummOrderModule,
 	DataModule,
 	ProductVariantModule,
-	PaymentTypeModule,
+	PaymentTypeGroupModule,
 	PaymentMethodModule,
 } from '~/repository/modules';
 
@@ -30,7 +30,7 @@ interface IApiInstance {
 	summOrder: SummOrderModule;
 	order: OrderModule;
 	productVariant: ProductVariantModule;
-	paymentType: PaymentTypeModule;
+	paymentTypeGroup: PaymentTypeGroupModule;
 	paymentMethod: PaymentMethodModule;
 }
 
@@ -59,7 +59,7 @@ export default defineNuxtPlugin((_) => {
 	const summOrderModule = new SummOrderModule(apiFetcher);
 	const orderModule = new OrderModule(apiFetcher);
 	const productVariantModule = new ProductVariantModule(apiFetcher);
-	const paymentTypeModule = new PaymentTypeModule(apiFetcher);
+	const paymentTypeGroupModule = new PaymentTypeGroupModule(apiFetcher);
 	const paymentMethodModule = new PaymentMethodModule(apiFetcher);
 
 	const modules: IApiInstance = {
@@ -76,7 +76,7 @@ export default defineNuxtPlugin((_) => {
 		summOrder: summOrderModule,
 		order: orderModule,
 		productVariant: productVariantModule,
-		paymentType: paymentTypeModule,
+		paymentTypeGroup: paymentTypeGroupModule,
 		paymentMethod: paymentMethodModule,
 	};
 
