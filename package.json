@@ -33,7 +33,7 @@
 		"vue": "latest",
 		"vue-chartjs": "^5.3.2",
 		"vue-router": "latest",
-		"wemotoo-common": "file:../wemotoo-common",
+		"wemotoo-common": "git+https://github.com/szejing/wemotoo-common.git",
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {

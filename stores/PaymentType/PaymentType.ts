@@ -4,7 +4,6 @@ import { options_page_size } from '~/utils/options';
 
 export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 	state: () => ({
-		paymentMethods: [],
 		paymentTypeGroups: [] as PaymentTypeGroup[],
 		pageSize: options_page_size[0],
 		loading: false as boolean,

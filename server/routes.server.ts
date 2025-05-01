@@ -100,9 +100,12 @@ export const Routes = {
 	PaymentTypes: {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPES}/`,
 	},
-
 	PaymentTypeGroups: {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPE_GROUPS}/`,
+	},
+	PaymentMethods: {
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/${code}`,
 	},
 };
 
