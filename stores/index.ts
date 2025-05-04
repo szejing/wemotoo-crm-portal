@@ -8,7 +8,8 @@ import { useAuthStore } from './Auth/Auth';
 import { useAppUiStore } from './AppUi/AppUi';
 import { useMerchantInfoStore } from './MerchantInfo/MerchantInfo';
 import { useOrderStore } from './Order/Order';
-import { useSummOrderStore } from './SummOrder/SummOrder';
+import { useSummSalesStore } from './SummSales/SummSales';
+import { useSummOrdersStore } from './SummOrders/SummOrders';
 import { useProductTypesStore } from './ProductTypes/ProductTypes';
 import { usePaymentTypeStore } from './PaymentType/PaymentType';
 import { usePaymentMethodStore } from './PaymentMethod/PaymentMethod';
@@ -24,7 +25,8 @@ export {
 	useProductOptionsStore,
 	useProductStore,
 	useOrderStore,
-	useSummOrderStore,
+	useSummSalesStore,
+	useSummOrdersStore,
 	useProductTypesStore,
 	usePaymentTypeStore,
 	usePaymentMethodStore,

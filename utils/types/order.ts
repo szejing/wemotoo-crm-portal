@@ -15,8 +15,8 @@ type OrderCustomerDto_ = {
 };
 
 type OrderItemDto_ = {
-	order_line: number;
-	parent_order_line: number;
+	item_line: number;
+	parent_item_line: number;
 	prod_code: string;
 	prod_name: string;
 	prod_variant_code: string;

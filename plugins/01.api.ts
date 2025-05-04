@@ -15,6 +15,7 @@ import {
 	PaymentTypeGroupModule,
 	PaymentMethodModule,
 } from '~/repository/modules';
+import SalesSummaryModule from '~/repository/modules/summ-sales/summ-sale';
 
 interface IApiInstance {
 	product: ProductModule;
@@ -28,6 +29,7 @@ interface IApiInstance {
 	setting: SettingModule;
 	productType: ProductTypeModule;
 	summOrder: SummOrderModule;
+	summSales: SalesSummaryModule;
 	order: OrderModule;
 	productVariant: ProductVariantModule;
 	paymentTypeGroup: PaymentTypeGroupModule;
@@ -57,6 +59,7 @@ export default defineNuxtPlugin((_) => {
 	const settingModule = new SettingModule(apiFetcher);
 	const productTypeModule = new ProductTypeModule(apiFetcher);
 	const summOrderModule = new SummOrderModule(apiFetcher);
+	const summSalesModule = new SalesSummaryModule(apiFetcher);
 	const orderModule = new OrderModule(apiFetcher);
 	const productVariantModule = new ProductVariantModule(apiFetcher);
 	const paymentTypeGroupModule = new PaymentTypeGroupModule(apiFetcher);
@@ -74,6 +77,7 @@ export default defineNuxtPlugin((_) => {
 		setting: settingModule,
 		productType: productTypeModule,
 		summOrder: summOrderModule,
+		summSales: summSalesModule,
 		order: orderModule,
 		productVariant: productVariantModule,
 		paymentTypeGroup: paymentTypeGroupModule,

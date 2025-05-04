@@ -54,7 +54,7 @@ const updateStartDate = (startDate: Date) => {
 const updateEndDate = async (endDate: Date) => {
 	filterRange.value.endDate = endDate;
 
-	const summOrderStore = useSummOrderStore();
+	const summOrderStore = useSummOrdersStore();
 	await summOrderStore.getDashboardSummary(filterRange.value.startDate, filterRange.value.endDate);
 };
 </script>

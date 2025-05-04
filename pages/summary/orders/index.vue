@@ -81,13 +81,13 @@ const links = [
 	{
 		label: 'Order Summary',
 		icon: ICONS.LIST,
-		to: '/order-summary/orders',
+		to: '/summary/orders',
 	},
 ];
 
 const page = ref(1);
 const pageSize = ref(10);
-const orderSummStore = useSummOrderStore();
+const orderSummStore = useSummOrdersStore();
 const { order_summ } = storeToRefs(orderSummStore);
 
 const currency_code = ref(order_summ.value.filter.currency_code);
