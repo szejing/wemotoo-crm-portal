@@ -13,8 +13,8 @@ export const useAppStore = defineStore('appStore', {
 			const categoryStore = useProductCategoriesStore();
 			await categoryStore.getCategories();
 
-			const productStore = useProductStore();
-			await productStore.getProducts();
+			// const productStore = useProductStore();
+			// await productStore.getProducts();
 
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();
@@ -28,14 +28,17 @@ export const useAppStore = defineStore('appStore', {
 			const orderStore = useOrderStore();
 			await orderStore.getOrders();
 
-			const summOrderStore = useSummOrderStore();
-			await summOrderStore.getDashboardSummary();
-
 			const paymentTypeStore = usePaymentTypeStore();
 			await paymentTypeStore.getPaymentTypeGroups();
 
 			const paymentMethodStore = usePaymentMethodStore();
 			await paymentMethodStore.getPaymentMethods();
+
+			const summOrderStore = useSummOrdersStore();
+			await summOrderStore.getDashboardSummary();
+
+			const summSalesStore = useSummSalesStore();
+			await summSalesStore.getDashboardSummary();
 		},
 	},
 });

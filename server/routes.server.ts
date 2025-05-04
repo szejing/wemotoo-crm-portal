@@ -97,6 +97,12 @@ export const Routes = {
 		Items: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/items`,
 		Customers: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_ORDERS}/customers`,
 	},
+	SummSales: {
+		Dashboard: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/dashboard`,
+		Orders: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}`,
+		Items: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/items`,
+		Customers: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/customers`,
+	},
 	PaymentTypes: {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPES}/`,
 	},

@@ -53,7 +53,7 @@ const initialEmptyOrderSummItem: OrderSummItem = {
 	data: [],
 };
 
-export const useSummOrderStore = defineStore('summOrderStore', {
+export const useSummOrdersStore = defineStore('summOrdersStore', {
 	state: () => ({
 		loading: false as boolean,
 		errors: [] as string[],

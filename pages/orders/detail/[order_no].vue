@@ -13,7 +13,7 @@
 						<UBadge v-if="order?.order_status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
 						<UBadge v-else-if="order?.order_status == OrderStatus.PENDING_PAYMENT" color="main" variant="outline" size="lg">PAYMENT REQUIRED</UBadge>
 						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="red" variant="outline" size="lg">REFUNDED</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="gray" variant="outline" size="lg">CANCELLED</UBadge>
+						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 w-full mt-4">

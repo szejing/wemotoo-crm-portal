@@ -120,13 +120,11 @@ export const useOrderStore = defineStore('orderStore', {
 
 			try {
 				const items = this.detail?.items.map((orderItem) => {
-					if (orderItem.order_line === item.order_line) {
+					if (orderItem.item_line === item.item_line) {
 						return item;
 					}
 					return orderItem;
 				});
-
-				console.log(items);
 
 				const data = await $api.order.updateItem(order_no, this.detail!.customer.customer_no, items ?? []);
 

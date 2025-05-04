@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const UpdateOrderItemValidation = z.object({
-	order_line: z.number(),
+	item_line: z.number(),
 	status: z.string(),
-	parent_order_line: z.number(),
+	parent_item_line: z.number(),
 	prod_code: z.string(),
 	prod_name: z.string(),
 	prod_variant_code: z.string().optional().nullable(),

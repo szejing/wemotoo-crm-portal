@@ -12,21 +12,17 @@ const merchantNavigation = [
 	{
 		title: 'Summary',
 		icon: ICONS.ORDER_SUMMARY,
-		to: '/order-summary',
+		to: '/summary',
 		isCollapsed: false,
 		children: [
 			{
 				title: 'Orders',
-				to: '/order-summary/orders',
+				to: '/summary/orders',
 			},
 			{
-				title: 'Items',
-				to: '/order-summary/order-items',
+				title: 'Sales',
+				to: '/summary/sales',
 			},
-			// {
-			// 	title: 'Customers',
-			// 	to: '/order-summary/order-customers',
-			// },
 		],
 	},
 	// {

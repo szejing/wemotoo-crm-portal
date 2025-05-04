@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-const summOrderStore = useSummOrderStore();
+const summOrderStore = useSummOrdersStore();
 const { top_purchased_customers } = storeToRefs(summOrderStore);
 </script>
 
