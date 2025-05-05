@@ -15,6 +15,7 @@ import { UpdateProductOptionValidation } from './Product/Update/ProductOptionVal
 import { UpdateProductValidation } from './Product/Update/ProductValidation';
 import { UpdateOrderCustomerValidation } from './Order/Update/CustomerValidation';
 import { UpdateOrderItemValidation } from './Order/Update/ItemValidation';
+import { UpdateOrderPaymentValidation } from './Order/Update/PaymentValidation';
 import { FilterPaymentMethodValidation } from './PaymentMethod/FilterValidation';
 import { FilterPaymentTypeGroupValidation } from './PaymentTypeGroup/FilterValidation';
 
@@ -38,4 +39,5 @@ export {
 	UpdateOrderItemValidation,
 	FilterPaymentTypeGroupValidation,
 	FilterPaymentMethodValidation,
+	UpdateOrderPaymentValidation,
 };

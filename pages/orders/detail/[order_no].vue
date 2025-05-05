@@ -55,30 +55,24 @@
 							@refresh="getOrder(order?.order_no as string)"
 						/>
 					</UCard>
-
-					<!-- Payment Items -->
-					<!-- <UCard>
-						<template #header>
-							<div class="flex-between">
-								<h2>Payment Detail</h2>
-								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
-							</div>
-						</template>
-						<ZSectionOrderDetailPayment :payment="payment" />
-					</UCard> -->
 				</div>
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
-				<ZInputOrderSidebar :order="order" :update-order-status="async (status: OrderStatus) => { await updateOrderStatus(status); }" />
+				<ZInputOrderSidebar
+					:order="order"
+					:update-order-status="async (status: OrderStatus) => { await updateOrderStatus(status); }"
+					:update-payment-status="async (status: PaymentStatus) => { await updatePaymentStatus(status); }"
+					:add-payment-info="addPaymentInfo"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ZModalOrderDetailCustomer } from '#components';
+import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus } from 'wemotoo-common';
-import { failedModal, failedNotification } from '~/stores/AppUi/AppUi';
+import { failedModal } from '~/stores/AppUi/AppUi';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
@@ -98,6 +92,7 @@ onBeforeRouteLeave(() => {
 });
 
 const customer = computed(() => order.value?.customer);
+const payments = computed(() => order.value?.payments);
 const items = computed(() => order.value?.items);
 const currency_code = computed(() => order.value?.currency_code);
 
@@ -113,6 +108,7 @@ const getOrder = async (order_no: string) => {
 	}
 };
 
+/* Update Order Status		*/
 const updateOrderStatus = async (new_status: OrderStatus) => {
 	try {
 		if (!order.value) {
@@ -139,11 +135,54 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	}
 };
 
+/* Update Payment Status */
+const updatePaymentStatus = async (new_status: PaymentStatus) => {
+	try {
+		if (!order.value) {
+			throw new Error('Order not found');
+		}
+
+		const { order_no, customer } = order.value;
+
+		if (!customer) {
+			throw new Error('Customer not found');
+		}
+
+		if (new_status == PaymentStatus.SUCCESS && order.value.payments?.length == 0) {
+			failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
+			return;
+		}
+
+		is_loading.value = true;
+		await orderStore.updatePaymentStatus(order_no, customer.customer_no, new_status);
+	} catch {
+		return navigateTo('/orders');
+	} finally {
+		is_loading.value = false;
+	}
+};
+
+/* Edit Customer Detail */
 const editCustomerDetail = async () => {
 	if (!customer.value) return;
 
 	modal.open(ZModalOrderDetailCustomer, {
 		customer: JSON.parse(JSON.stringify(customer.value)),
+		onUpdate: () => {
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+
+/* Add Payment Info */
+const addPaymentInfo = () => {
+	const payment = payments.value != undefined && payments.value?.length > 0 ? JSON.parse(JSON.stringify(payments.value?.[0])) : undefined;
+
+	modal.open(ZModalOrderDetailPayment, {
+		payment: payment,
 		onUpdate: () => {
 			modal.close();
 		},
@@ -165,5 +204,21 @@ const editCustomerDetail = async () => {
 
 .side-wrapper {
 	@apply hidden sm:block col-span-1;
+}
+
+.section-empty {
+	@apply h-52;
+}
+
+.section-empty div {
+	@apply text-center;
+}
+
+.section-empty h2 {
+	@apply text-2xl font-semibold;
+}
+
+.section-empty p {
+	@apply text-gray-400;
 }
 </style>

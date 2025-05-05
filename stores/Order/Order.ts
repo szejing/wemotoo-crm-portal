@@ -98,6 +98,23 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
+		async updatePaymentStatus(order_no: string, customer_no: string, payment_status: string) {
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.order.updatePaymentStatus(order_no, customer_no, payment_status);
+
+				if (data.order) {
+					this.detail = data.order;
+					successNotification('Payment status updated successfully');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
+		},
+
 		async updateCustomer(order_no: string, customer: CustomerModel) {
 			const { $api } = useNuxtApp();
 
