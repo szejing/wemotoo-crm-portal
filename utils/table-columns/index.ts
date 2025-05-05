@@ -1,4 +1,4 @@
-import { order_columns } from './order';
+import { order_columns } from './order/order';
 import { customer_columns } from './customer';
 import { category_columns } from './categories';
 import { product_option_columns } from './product-option';
@@ -6,10 +6,10 @@ import { tag_columns } from './tags';
 import { product_columns } from './product';
 import { order_summ_columns } from './order-summ/order-summ';
 import { order_item_summ_columns, order_item_summ_header_columns } from './order-summ/order-item-summ';
-import { order_item_columns } from './order-item';
-import { payment_type_group_columns } from './payment-type-group';
-import { payment_type_columns } from './payment-type';
-import { payment_method_columns } from './payment-method';
+import { order_item_columns } from './order/order-item';
+import { payment_type_group_columns } from './payment/payment-type-group';
+import { payment_type_columns } from './payment/payment-type';
+import { payment_method_columns } from './payment/payment-method';
 import { sale_summ_columns } from './sale-summ/sale-summ';
 
 export {
