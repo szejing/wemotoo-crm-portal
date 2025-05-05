@@ -16,7 +16,7 @@
 					v-model:prod-variant-name="state.item.prod_variant_name"
 					v-model:prod-variant-sku="state.item.prod_variant_sku"
 					v-model:currency-code="state.item.currency_code"
-					v-model:order-qty="state.item.order_qty"
+					v-model:order-qty="state.item.qty"
 					v-model:unit-sell-price="state.item.unit_sell_price"
 				/>
 				<!-- *********************** General Info *********************** -->

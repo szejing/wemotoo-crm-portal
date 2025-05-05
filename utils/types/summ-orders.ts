@@ -63,7 +63,7 @@ export type SummOrderItem = {
 	prod_name: string;
 	prod_variant_code?: string;
 	prod_variant_name?: string;
-	parent_prod_code?: string;
+	// parent_prod_code?: string;
 	gross_amt: number;
 	disc_amt?: number;
 	net_amt: number;

@@ -1,12 +1,14 @@
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { OrderItemModel } from '~/utils/models/item.model';
 
 type Order = {
 	biz_date: string;
 	order_no: string;
+	doc_no: string;
 	customer_no: string;
 	order_status: OrderStatus;
+	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;
 	disc_amt: number;

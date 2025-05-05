@@ -1,4 +1,4 @@
-import type { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import type { OrderItemStatus, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { AddressModel } from '~/utils/models/customer.model';
 
 type OrderCustomerDto_ = {
@@ -19,11 +19,11 @@ type OrderItemDto_ = {
 	parent_item_line: number;
 	prod_code: string;
 	prod_name: string;
-	prod_variant_code: string;
-	prod_variant_name: string;
-	prod_variant_sku: string;
+	prod_variant_code?: string;
+	prod_variant_name?: string;
+	prod_variant_sku?: string;
 	currency_code: string;
-	order_qty: number;
+	qty: number;
 	unit_sell_price: number;
 	orig_sell_price: number;
 	gross_amt: number;
@@ -41,8 +41,10 @@ type OrderItemDto_ = {
 export type Order = {
 	biz_date: string;
 	order_no: string;
+	doc_no: string;
 	customer_no: string;
 	order_status: OrderStatus;
+	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;
 	disc_amt: number;

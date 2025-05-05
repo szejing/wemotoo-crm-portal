@@ -112,6 +112,7 @@ export const useAppUiStore = defineStore('appUiStore', {
 		showSidebarModal: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
 		notification: undefined as EventNotification | undefined,
+		modal: undefined as EventNotification | undefined,
 	}),
 	actions: {
 		toggleSidebar() {
@@ -145,6 +146,30 @@ export const useAppUiStore = defineStore('appUiStore', {
 		clearNotification() {
 			this.notification = undefined;
 		},
+
+		addModal(notification: EventNotification) {
+			this.modal = notification;
+
+			if (this.modal.id === undefined) {
+				this.modal.id = Date.now().toString();
+			}
+
+			if (this.modal.timeout === undefined) {
+				this.modal.timeout = 3000;
+			}
+
+			if (this.modal.closeButton === undefined) {
+				this.modal.closeButton = {
+					icon: ICONS.CLOSE_ROUNDED,
+					color: 'white',
+					variant: 'link',
+				};
+			}
+		},
+
+		clearModal() {
+			this.modal = undefined;
+		},
 	},
 });
 
@@ -163,5 +188,15 @@ export const failedNotification = (description: string) => {
 		color: 'red',
 		icon: ICONS.ERROR_OUTLINE,
 		description,
+	});
+};
+
+export const failedModal = (description: string, title?: string) => {
+	const appUiStore = useAppUiStore();
+	appUiStore.addModal({
+		color: 'red',
+		icon: ICONS.ERROR_OUTLINE,
+		description,
+		title,
 	});
 };

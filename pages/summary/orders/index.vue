@@ -21,9 +21,8 @@
 
 					<template #order_status-data="{ row }">
 						<UBadge v-if="row.order_status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.PENDING_PAYMENT" variant="outline" color="main">PAYMENT REQUIRED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.CANCELLED" variant="outline" color="gray">CANCELLED</UBadge>
+						<UBadge v-else-if="row.order_status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
+						<UBadge v-else-if="row.order_status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
 
 					<template #gross_amt-header>
