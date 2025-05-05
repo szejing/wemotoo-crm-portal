@@ -44,6 +44,18 @@ class OrderModule extends HttpFactory {
 	}
 
 	/**
+	 * Updates Payment status
+	 * @returns
+	 */
+	async updatePaymentStatus(orderNo: string, customerNo: string, paymentStatus: string): Promise<UpdateOrderStatusResp> {
+		return await this.call<UpdateOrderStatusResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			body: { order_no: orderNo, customer_no: customerNo, payment_status: paymentStatus },
+		});
+	}
+
+	/**
 	 * Updates customer
 	 * @returns
 	 */

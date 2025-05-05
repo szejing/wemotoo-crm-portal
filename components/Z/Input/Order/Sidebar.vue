@@ -9,17 +9,30 @@
 			<ZSelectMenuOrderStatus v-model:status="order.order_status" />
 
 			<template #footer>
-				<UButton @click="save">Save</UButton>
+				<UButton @click="saveOrderStatus">Save</UButton>
 			</template>
 		</UCard>
 
 		<!-- ***** Payment Status ***** -->
-		<!-- <UCard :ui="cardBg">
+		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Payment Status</h3>
-				<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" class="mt-2" />
+				<div class="flex-jbetween-icenter">
+					<h3>Payment</h3>
+					<UButton variant="ghost" @click="addPaymentInfo">Add Info</UButton>
+				</div>
 			</template>
-		</UCard> -->
+
+			<div>
+				<div class="flex-jbetween-icenter">
+					<p>Status</p>
+					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
+				</div>
+			</div>
+
+			<template #footer>
+				<UButton @click="savePaymentStatus">Save</UButton>
+			</template>
+		</UCard>
 	</div>
 </template>
 
@@ -32,12 +45,18 @@ const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 const props = defineProps<{
 	order: Order;
 	updateOrderStatus: (status: OrderStatus) => Promise<void>;
+	updatePaymentStatus: (status: PaymentStatus) => Promise<void>;
+	addPaymentInfo: () => void;
 }>();
 
 const order = ref({ ...props.order });
 
-const save = async () => {
+const saveOrderStatus = async () => {
 	await props.updateOrderStatus(order.value.order_status);
+};
+
+const savePaymentStatus = async () => {
+	await props.updatePaymentStatus(order.value.payment_status);
 };
 </script>
 

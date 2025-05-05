@@ -22,7 +22,6 @@ const emit = defineEmits(['update:paymentStatus']);
 
 const status = computed({
 	get() {
-		console.log(props.paymentStatus);
 		return props.paymentStatus;
 	},
 	set(value) {
