@@ -24,13 +24,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { OrderStatus } from 'wemotoo-common';
 import type { Order } from '~/utils/types/order';
 
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 
 const props = defineProps<{
 	order: Order;
-	updateOrderStatus: (status: string) => Promise<void>;
+	updateOrderStatus: (status: OrderStatus) => Promise<void>;
 }>();
 
 const order = ref({ ...props.order });

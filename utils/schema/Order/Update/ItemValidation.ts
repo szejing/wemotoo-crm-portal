@@ -10,7 +10,7 @@ export const UpdateOrderItemValidation = z.object({
 	prod_variant_name: z.string().optional().nullable(),
 	prod_variant_sku: z.string().optional().nullable(),
 	currency_code: z.string(),
-	order_qty: z.number(),
+	qty: z.number(),
 	unit_sell_price: z.number(),
 	orig_sell_price: z.number().optional().nullable(),
 	gross_amt: z.number().optional().nullable(),

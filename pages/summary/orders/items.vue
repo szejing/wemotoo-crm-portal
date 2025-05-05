@@ -58,14 +58,13 @@
 
 								<template #order_status-data="{ row: item }">
 									<UBadge v-if="item.order_status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
-									<UBadge v-else-if="item.order_status == OrderStatus.PENDING_PAYMENT" variant="outline" color="main">PAYMENT REQUIRED</UBadge>
-									<UBadge v-else-if="item.order_status == OrderStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
+									<UBadge v-else-if="item.order_status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
 									<UBadge v-else-if="item.order_status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 								</template>
 
 								<template #item_status-data="{ row: item }">
 									<UBadge v-if="item.item_status == OrderItemStatus.ACTIVE" variant="outline" color="green">ACTIVE</UBadge>
-									<UBadge v-else-if="item.item_status == OrderItemStatus.REFUNDED" variant="outline" color="red">REFUNDED</UBadge>
+									<UBadge v-else-if="item.item_status == OrderItemStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
 									<UBadge v-else-if="item.item_status == OrderItemStatus.VOIDED" variant="outline" color="red">VOIDED</UBadge>
 								</template>
 
@@ -194,7 +193,7 @@ watch(
 const selectedColumns = ref(order_item_summ_columns);
 const columnsTable = computed(() => order_item_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
-const updateColumns = (columns: string[]) => {
+const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;
 };
 </script>

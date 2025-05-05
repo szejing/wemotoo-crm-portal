@@ -49,7 +49,7 @@
 				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
 					{{ item.unit_sell_price.toFixed(2) }}
 				</td>
-				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.order_qty }}</td>
+				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.qty }}</td>
 				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
 					{{ item.status == OrderItemStatus.ACTIVE ? item.net_amt.toFixed(2) : 0 }}
 				</td>

@@ -19,10 +19,12 @@
 
 //
 <script lang="ts" setup>
+import { ZModalMessage } from '#components';
+
 const toast = useToast();
 
 const appUiStore = useAppUiStore();
-const { notification } = storeToRefs(appUiStore);
+const { notification, modal } = storeToRefs(appUiStore);
 
 watch(notification, () => {
 	if (notification.value) {
@@ -35,6 +37,21 @@ watch(notification, () => {
 			timeout: notification.value?.timeout,
 			closeButton: notification.value?.closeButton,
 		});
+	}
+});
+
+watch(modal, () => {
+	const m = useModal();
+	if (modal.value) {
+		m.open(ZModalMessage, {
+			notification: modal.value,
+			action: 'Ok',
+			onConfirm: () => {
+				appUiStore.clearModal();
+			},
+		});
+	} else {
+		m.close();
 	}
 });
 </script>

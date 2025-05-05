@@ -11,8 +11,7 @@
 					</div>
 					<div>
 						<UBadge v-if="order?.order_status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.PENDING_PAYMENT" color="main" variant="outline" size="lg">PAYMENT REQUIRED</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="red" variant="outline" size="lg">REFUNDED</UBadge>
+						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="main" variant="outline" size="lg">REFUNDED</UBadge>
 						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
 					</div>
 				</div>
@@ -33,7 +32,7 @@
 						<template #header>
 							<div class="flex-between">
 								<h2 class="text-main">Items</h2>
-								<UPopover v-if="order?.order_status != OrderStatus.NEW && order?.order_status != OrderStatus.PENDING_PAYMENT" overlay>
+								<UPopover v-if="order?.order_status != OrderStatus.NEW" overlay>
 									<UButton color="gray" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
 
 									<template #panel>
@@ -52,7 +51,7 @@
 							:currency-code="currency_code"
 							:total-gross-amt="order?.gross_amt"
 							:total-net-amt="order?.net_amt"
-							:editable="order?.order_status == OrderStatus.NEW || order?.order_status == OrderStatus.PENDING_PAYMENT"
+							:editable="order?.order_status == OrderStatus.NEW"
 							@refresh="getOrder(order?.order_no as string)"
 						/>
 					</UCard>
@@ -70,7 +69,7 @@
 				</div>
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
-				<ZInputOrderSidebar :order="order" :update-order-status="(status: string) => updateOrderStatus(status).then(() => {})" />
+				<ZInputOrderSidebar :order="order" :update-order-status="async (status: OrderStatus) => { await updateOrderStatus(status); }" />
 			</div>
 		</div>
 	</div>
@@ -78,7 +77,8 @@
 
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer } from '#components';
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { failedModal, failedNotification } from '~/stores/AppUi/AppUi';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
@@ -113,7 +113,7 @@ const getOrder = async (order_no: string) => {
 	}
 };
 
-const updateOrderStatus = async (new_status: string) => {
+const updateOrderStatus = async (new_status: OrderStatus) => {
 	try {
 		if (!order.value) {
 			throw new Error('Order not found');
@@ -124,8 +124,13 @@ const updateOrderStatus = async (new_status: string) => {
 		if (!customer) {
 			throw new Error('Customer not found');
 		}
-		is_loading.value = true;
 
+		if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
+			failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
+			return;
+		}
+
+		is_loading.value = true;
 		await orderStore.updateOrderStatus(order_no, customer.customer_no, new_status);
 	} catch {
 		return navigateTo('/orders');

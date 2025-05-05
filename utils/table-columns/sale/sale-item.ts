@@ -1,4 +1,4 @@
-export const order_item_columns = [
+export const sale_item_columns = [
 	{
 		key: 'prod_code',
 		label: 'Prod Code',
@@ -12,7 +12,7 @@ export const order_item_columns = [
 		label: 'Item Status',
 	},
 	{
-		key: 'order_qty',
+		key: 'qty',
 		label: 'Qty',
 	},
 	{

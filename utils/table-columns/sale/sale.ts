@@ -1,4 +1,4 @@
-export const order_columns = [
+export const sale_columns = [
 	{
 		key: 'biz_date',
 		label: 'Date',
