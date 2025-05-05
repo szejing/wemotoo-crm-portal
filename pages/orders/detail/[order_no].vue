@@ -57,15 +57,30 @@
 					</UCard>
 
 					<!-- Payment Items -->
-					<!-- <UCard>
+					<UCard>
 						<template #header>
 							<div class="flex-between">
-								<h2>Payment Detail</h2>
-								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" />
+								<h2 class="text-main">Payment Detail</h2>
+								<UButton
+									v-if="order?.payments && order?.payments.length > 0"
+									variant="ghost"
+									class="flex-none"
+									square
+									:icon="ICONS.VERTICAL_ELLIPSIS"
+									size="sm"
+									color="danger"
+								/>
 							</div>
 						</template>
-						<ZSectionOrderDetailPayment :payment="payment" />
-					</UCard> -->
+
+						<div>
+							<ZSectionOrderDetailPayment v-if="order?.payments && order?.payments.length > 0" :payments="order?.payments" />
+							<div v-else class="text-center text-gray-500 flex-col-center section-empty gap-4">
+								<h2>No Payment Information Found</h2>
+								<UButton color="green" variant="soft" size="sm" @click="addPayment">Add Payment</UButton>
+							</div>
+						</div>
+					</UCard>
 				</div>
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
@@ -78,7 +93,7 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer } from '#components';
 import { OrderStatus, PaymentStatus } from 'wemotoo-common';
-import { failedModal, failedNotification } from '~/stores/AppUi/AppUi';
+import { failedModal } from '~/stores/AppUi/AppUi';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
@@ -152,6 +167,12 @@ const editCustomerDetail = async () => {
 		},
 	});
 };
+
+const addPayment = () => {
+	// modal.open(ZModalOrderDetailPayment, {
+	// 	order: JSON.parse(JSON.stringify(order.value)),
+	// });
+};
 </script>
 
 <style scoped lang="postcss">
@@ -165,5 +186,21 @@ const editCustomerDetail = async () => {
 
 .side-wrapper {
 	@apply hidden sm:block col-span-1;
+}
+
+.section-empty {
+	@apply h-52;
+}
+
+.section-empty div {
+	@apply text-center;
+}
+
+.section-empty h2 {
+	@apply text-2xl font-semibold;
+}
+
+.section-empty p {
+	@apply text-gray-400;
 }
 </style>

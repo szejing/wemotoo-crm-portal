@@ -1,6 +1,5 @@
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
-import type { CustomerModel } from '~/utils/models/customer.model';
-import type { OrderItemModel } from '~/utils/models/item.model';
+import type { OrderItemModel, OrderPaymentModel, CustomerModel } from '~/utils/models';
 
 type Order = {
 	biz_date: string;
@@ -24,6 +23,7 @@ type Order = {
 	remarks: string;
 	currency_code: string;
 	items: OrderItemModel[];
+	payments: OrderPaymentModel[];
 	customer: CustomerModel;
 };
 
