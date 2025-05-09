@@ -180,7 +180,6 @@ const editCustomerDetail = async () => {
 /* Add Payment Info */
 const addPaymentInfo = () => {
 	const payment = payments.value != undefined && payments.value?.length > 0 ? JSON.parse(JSON.stringify(payments.value?.[0])) : undefined;
-
 	modal.open(ZModalOrderDetailPayment, {
 		payment: payment,
 		onUpdate: () => {

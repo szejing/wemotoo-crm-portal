@@ -15,10 +15,9 @@
 
 <script lang="ts" setup>
 import type { Category, CategoryInput } from '~/utils/types/category';
-import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 
 const query = ref('');
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useProductCategoryStore();
 const { categories: category_options } = storeToRefs(categoryStore);
 
 const props = defineProps<{ categories: Category[] | CategoryInput[] | undefined }>();

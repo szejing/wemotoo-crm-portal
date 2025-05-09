@@ -23,7 +23,6 @@
 
 <script lang="ts" setup>
 import { product_option_columns } from '~/utils/table-columns';
-import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import type { ProdOptionInput, ProdOptionValuesInput } from '~/utils/types/product';
 
 const props = defineProps({
@@ -33,7 +32,7 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(['update:productOptions']);
-const productOptionsStore = useProductOptionsStore();
+const productOptionsStore = useProductOptionStore();
 const productOptions = productOptionsStore.currentProductOptions();
 
 const selectedOptions = ref<ProdOptionInput[]>([]);

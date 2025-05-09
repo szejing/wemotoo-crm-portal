@@ -1,7 +1,7 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
-import type { GetPaymentMethodsReq, UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/payment-method';
+import type { GetPaymentMethodsReq, UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/update-payment-method.req';
 
 export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 	state: () => ({

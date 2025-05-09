@@ -7,7 +7,7 @@
 		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lockb",
 		"rebuild": "bun run clean && bun install",
 		"start:dev": "nuxt dev --dotenv .env.dev",
-		"start:prod": "nuxt dev --dotenv .env.production",
+		"start:prod": "nuxt dev --dotenv .env.prod",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare",

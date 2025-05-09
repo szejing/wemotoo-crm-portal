@@ -106,12 +106,15 @@ const options = (product: Product) => [
 		},
 	],
 ];
-
 const modal = useModal();
 const page = ref(1);
 const productStore = useProductStore();
 
 const { products, pageSize } = storeToRefs(productStore);
+
+onMounted(async () => {
+	await productStore.getProducts();
+});
 
 const rows = computed(() => {
 	return products.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);

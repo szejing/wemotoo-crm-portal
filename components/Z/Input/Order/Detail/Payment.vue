@@ -1,17 +1,16 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Payment Type Code" name="paymentTypeCode" required>
-			<UInput v-model="paymentTypeCode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Type Code" />
-		</UFormGroup>
-
-		<!-- <UFormGroup v-slot="{ error }" label="Payment Type Description" name="paymentTypeDesc" required>
-			<UInput v-model="paymentTypeDesc" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Type Description" />
-		</UFormGroup> -->
-
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup label="Currency" name="currency">
-				<ZSelectMenuCurrency v-model:currency-code="currencyCode" />
+			<UFormGroup label="Payment Type" name="paymentType">
+				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" />
 			</UFormGroup>
+
+			<ZSelectMenuDate :date="paymentDate" placeholder="Payment Date" @update:date="paymentDate = $event" />
+		</div>
+
+		<!-- // Date selection -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
+			<h1>{{ currencyCode }}</h1>
 
 			<UFormGroup v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
 				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" />
@@ -28,22 +27,19 @@
 			</UFormGroup>
 		</div>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup v-slot="{ error }" label="External Integration Type" name="externalIntgType" required>
-				<UInput v-model="externalIntgType" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="External Integration Type" />
-			</UFormGroup>
-		</div>
+		<!-- // add table to allow meta data (key, value) -->
 	</div>
 </template>
 
 <script lang="ts" setup>
+const paymentDate = ref(new Date());
+
 const props = defineProps({
 	paymentTypeCode: String,
 	refNo1: String,
 	refNo2: String,
 	paymentAmount: Number,
 	currencyCode: String,
-	externalIntgType: Number,
 	// metadata: Object as PropType<Record<string, unknown>>,
 });
 
@@ -99,15 +95,6 @@ const currencyCode = computed({
 	},
 	set(value) {
 		emit('update:currencyCode', value);
-	},
-});
-
-const externalIntgType = computed({
-	get() {
-		return props.externalIntgType;
-	},
-	set(value) {
-		emit('update:externalIntgType', value);
 	},
 });
 

@@ -25,13 +25,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 
 import { CreateCategoryValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateCategoryValidation>;
 
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useProductCategoryStore();
 const { adding, newCategory } = storeToRefs(categoryStore);
 
 onMounted(() => {

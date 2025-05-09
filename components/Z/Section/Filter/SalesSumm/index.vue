@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-const orderSummStore = useSummOrdersStore();
+const orderSummStore = useSummOrderStore();
 const { order_summ } = storeToRefs(orderSummStore);
 
 const is_loading = computed(() => orderSummStore.order_summ.is_loading);

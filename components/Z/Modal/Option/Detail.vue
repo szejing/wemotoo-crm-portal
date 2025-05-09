@@ -42,7 +42,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductTagsStore } from '~/stores';
 import { UpdateProductOptionValidation } from '~/utils/schema';
 import type { ProductOption } from '~/utils/types/product-option';
 
@@ -60,7 +59,7 @@ const state = reactive({
 	option: { name: props.productOption.name, values: props.productOption.values },
 });
 
-const tagStore = useProductTagsStore();
+const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
 const onAddNew = () => {

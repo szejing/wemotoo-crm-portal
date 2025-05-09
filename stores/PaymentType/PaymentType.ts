@@ -1,7 +1,7 @@
 import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
-import type { GetPaymentTypeGroupsReq } from '~/repository/modules/payment-type-group/models/request/payment-type-group';
+import type { GetPaymentTypeGroupsReq } from '~/repository/modules/payment-type-group/models/request/get-payment-type-group.req';
 
 export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 	state: () => ({

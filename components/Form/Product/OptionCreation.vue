@@ -15,13 +15,11 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
-
 import { CreateProductOptionValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateProductOptionValidation>;
 
-const optionStore = useProductOptionsStore();
+const optionStore = useProductOptionStore();
 const { adding, newProductOption } = storeToRefs(optionStore);
 
 onMounted(() => {

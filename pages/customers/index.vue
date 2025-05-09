@@ -77,7 +77,7 @@ const options = (row: Customer) => [
 ];
 
 const page = ref(1);
-const customerStore = useCustomersStore();
+const customerStore = useCustomerStore();
 
 const { customers, pageSize } = storeToRefs(customerStore);
 

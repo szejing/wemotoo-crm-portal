@@ -1,9 +1,11 @@
 import type { OrderItemModel } from '~/utils/models/item.model';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetOrdersReq } from './models/request/order';
-import type { GetOrderResp, GetOrdersResp, UpdateOrderStatusResp } from './models/response/order';
-import type { CustomerModel } from '~/utils/models/customer.model';
+import type { CustomerModel } from '~/utils/models';
+import type { GetOrdersReq } from './models/request/get-order.req';
+import type { GetOrderResp } from './models/response/get-order.resp';
+import type { GetOrdersResp } from './models/response/get-orders.resp';
+import type { UpdateOrderStatusResp } from './models/response/update-order.resp';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;

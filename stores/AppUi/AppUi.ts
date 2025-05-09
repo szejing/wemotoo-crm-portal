@@ -10,18 +10,30 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
-		title: 'Summary',
+		title: 'Reports',
 		icon: ICONS.ORDER_SUMMARY,
-		to: '/summary',
+		to: '/reports',
 		isCollapsed: false,
 		children: [
 			{
 				title: 'Orders',
-				to: '/summary/orders',
+				to: '/reports/orders',
 			},
 			{
 				title: 'Sales',
-				to: '/summary/sales',
+				to: '/reports/sales',
+			},
+			{
+				title: 'Payments',
+				to: '/reports/payments',
+			},
+			{
+				title: 'Customers',
+				to: '/reports/customers',
+			},
+			{
+				title: 'Products',
+				to: '/reports/products',
 			},
 		],
 	},

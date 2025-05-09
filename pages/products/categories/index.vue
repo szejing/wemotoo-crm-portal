@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
-import { useProductCategoriesStore } from '~/stores/ProductCategories/ProductCategories';
 import { category_columns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 
@@ -73,7 +72,7 @@ const options = (row: Category) => [
 
 const modal = useModal();
 const page = ref(1);
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useProductCategoryStore();
 await categoryStore.getCategories();
 
 const { loading, categories, pageSize } = storeToRefs(categoryStore);

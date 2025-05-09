@@ -47,7 +47,6 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOptionDetail } from '#components';
-import { useProductOptionsStore } from '~/stores/ProductOptions/ProductOptions';
 import { product_option_columns } from '~/utils/table-columns';
 import type { ProductOption } from '~/utils/types/product-option';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
@@ -85,7 +84,7 @@ const options = (row: ProductOption) => [
 
 const modal = useModal();
 const page = ref(1);
-const productOptionsStore = useProductOptionsStore();
+const productOptionsStore = useProductOptionStore();
 await productOptionsStore.getOptions();
 
 const { loading, productOptions, pageSize } = storeToRefs(productOptionsStore);

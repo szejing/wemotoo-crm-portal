@@ -40,7 +40,6 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
-import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { tag_columns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
 
@@ -72,7 +71,7 @@ const options = (row: Tag) => [
 
 const modal = useModal();
 const page = ref(1);
-const tagsStore = useProductTagsStore();
+const tagsStore = useProductTagStore();
 await tagsStore.getTags();
 
 const { loading, tags, pageSize } = storeToRefs(tagsStore);
