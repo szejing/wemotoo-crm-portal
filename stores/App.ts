@@ -4,13 +4,13 @@ export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
 	actions: {
 		async init() {
-			const productOptionsStore = useProductOptionsStore();
+			const productOptionsStore = useProductOptionStore();
 			await productOptionsStore.getOptions();
 
-			const productTagsStore = useProductTagsStore();
+			const productTagsStore = useProductTagStore();
 			await productTagsStore.getTags();
 
-			const categoryStore = useProductCategoriesStore();
+			const categoryStore = useProductCategoryStore();
 			await categoryStore.getCategories();
 
 			// const productStore = useProductStore();
@@ -19,10 +19,10 @@ export const useAppStore = defineStore('appStore', {
 			const merchantInfo = useMerchantInfoStore();
 			await merchantInfo.getCurrencies();
 
-			const settingsStore = useSettingsStore();
+			const settingsStore = useSettingStore();
 			await settingsStore.getSettings();
 
-			const productTypeStore = useProductTypesStore();
+			const productTypeStore = useProductTypeStore();
 			await productTypeStore.getProductTypes();
 
 			const orderStore = useOrderStore();
@@ -34,10 +34,10 @@ export const useAppStore = defineStore('appStore', {
 			const paymentMethodStore = usePaymentMethodStore();
 			await paymentMethodStore.getPaymentMethods();
 
-			const summOrderStore = useSummOrdersStore();
+			const summOrderStore = useSummOrderStore();
 			await summOrderStore.getDashboardSummary();
 
-			const summSalesStore = useSummSalesStore();
+			const summSalesStore = useSummSaleStore();
 			await summSalesStore.getDashboardSummary();
 		},
 	},

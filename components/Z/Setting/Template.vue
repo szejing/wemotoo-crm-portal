@@ -43,7 +43,7 @@ const props = defineProps({
 
 const { templates } = toRefs(props);
 
-const settingsStore = useSettingsStore();
+const settingsStore = useSettingStore();
 const { settings } = storeToRefs(settingsStore);
 
 const getSettingValue = (template: SettingTempl): string | number | boolean | any => {

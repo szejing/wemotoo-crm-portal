@@ -48,7 +48,7 @@ const links = [
 	},
 ];
 
-const settingsStore = useSettingsStore();
+const settingsStore = useSettingStore();
 
 const { segments } = storeToRefs(settingsStore);
 

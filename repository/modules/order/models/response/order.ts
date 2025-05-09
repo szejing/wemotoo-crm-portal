@@ -1,7 +1,7 @@
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { OrderItemModel, OrderPaymentModel, CustomerModel } from '~/utils/models';
 
-type Order = {
+export type Order = {
 	biz_date: string;
 	order_no: string;
 	doc_no: string;
@@ -25,17 +25,4 @@ type Order = {
 	items: OrderItemModel[];
 	payments: OrderPaymentModel[];
 	customer: CustomerModel;
-};
-
-export type GetOrdersResp = {
-	orders: Order[];
-	total: number;
-};
-
-export type GetOrderResp = {
-	order: Order;
-};
-
-export type UpdateOrderStatusResp = {
-	order: Order;
 };

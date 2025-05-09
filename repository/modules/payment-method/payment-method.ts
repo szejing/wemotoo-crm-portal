@@ -1,7 +1,8 @@
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetPaymentMethodsReq, UpdatePaymentMethodReq } from './models/request/payment-method';
-import type { GetPaymentMethodsResp } from './models/response/payment-method';
+import type { GetPaymentMethodsReq } from './models/request/get-payment-methods.req';
+import type { UpdatePaymentMethodReq } from './models/request/update-payment-method.req';
+import type { GetPaymentMethodsResp } from './models/response/get-payment-methods.resp';
 
 class PaymentMethodModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.PaymentMethods;

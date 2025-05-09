@@ -10,9 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useProductTypesStore } from '~/stores/ProductTypes/ProductTypes';
-
-const productTypeStore = useProductTypesStore();
+const productTypeStore = useProductTypeStore();
 const { productTypes } = storeToRefs(productTypeStore);
 
 const props = defineProps<{ typeId: number }>();

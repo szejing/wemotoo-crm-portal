@@ -1,7 +1,7 @@
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetPaymentTypeGroupsReq } from './models/request/payment-type-group';
-import type { GetPaymentTypeGroupsResp } from './models/response/payment-type-group';
+import type { GetPaymentTypeGroupsReq } from './models/request/get-payment-type-group.req';
+import type { GetPaymentTypeGroupsResp } from './models/response/get-payment-type-group.resp';
 
 class PaymentTypeGroupModule extends HttpFactory {
 	private GROUP_RESOURCE = MerchantRoutes.PaymentTypeGroups;

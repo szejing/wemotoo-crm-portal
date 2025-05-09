@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import { GROUP_CODE, PRODUCT } from 'wemotoo-common';
-import { useProductTypesStore } from '~/stores/ProductTypes/ProductTypes';
 
 const ui_tabs = {
 	list: {
@@ -58,8 +57,8 @@ const ui_tabs = {
 	},
 };
 
-const settingsStore = useSettingsStore();
-const productTypeStore = useProductTypesStore();
+const settingsStore = useSettingStore();
+const productTypeStore = useProductTypeStore();
 const { productTypes } = storeToRefs(productTypeStore);
 
 const hideLongDesc = computed(() => {

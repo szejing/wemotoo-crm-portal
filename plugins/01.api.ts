@@ -10,12 +10,12 @@ import {
 	SettingModule,
 	OrderModule,
 	SummOrderModule,
-	DataModule,
 	ProductVariantModule,
 	PaymentTypeGroupModule,
 	PaymentMethodModule,
+	CountryModule,
+	SaleSummaryModule,
 } from '~/repository/modules';
-import SalesSummaryModule from '~/repository/modules/summ-sales/summ-sale';
 
 interface IApiInstance {
 	product: ProductModule;
@@ -24,16 +24,16 @@ interface IApiInstance {
 	productOption: ProductOptionModule;
 	auth: AuthModule;
 	currency: CurrencyModule;
-	data: DataModule;
 	image: ImageModule;
 	setting: SettingModule;
 	productType: ProductTypeModule;
 	summOrder: SummOrderModule;
-	summSales: SalesSummaryModule;
+	summSales: SaleSummaryModule;
 	order: OrderModule;
 	productVariant: ProductVariantModule;
 	paymentTypeGroup: PaymentTypeGroupModule;
 	paymentMethod: PaymentMethodModule;
+	country: CountryModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -49,7 +49,7 @@ export default defineNuxtPlugin((_) => {
 	});
 
 	const authModule = new AuthModule(apiFetcher);
-	const dataModule = new DataModule(apiFetcher);
+
 	const currencyModule = new CurrencyModule(apiFetcher);
 	const productModule = new ProductModule(apiFetcher);
 	const tagModule = new ProductTagModule(apiFetcher);
@@ -59,15 +59,15 @@ export default defineNuxtPlugin((_) => {
 	const settingModule = new SettingModule(apiFetcher);
 	const productTypeModule = new ProductTypeModule(apiFetcher);
 	const summOrderModule = new SummOrderModule(apiFetcher);
-	const summSalesModule = new SalesSummaryModule(apiFetcher);
+	const summSalesModule = new SaleSummaryModule(apiFetcher);
 	const orderModule = new OrderModule(apiFetcher);
 	const productVariantModule = new ProductVariantModule(apiFetcher);
 	const paymentTypeGroupModule = new PaymentTypeGroupModule(apiFetcher);
 	const paymentMethodModule = new PaymentMethodModule(apiFetcher);
+	const countryModule = new CountryModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
-		data: dataModule,
 		currency: currencyModule,
 		product: productModule,
 		tag: tagModule,
@@ -82,6 +82,7 @@ export default defineNuxtPlugin((_) => {
 		productVariant: productVariantModule,
 		paymentTypeGroup: paymentTypeGroupModule,
 		paymentMethod: paymentMethodModule,
+		country: countryModule,
 	};
 
 	return {

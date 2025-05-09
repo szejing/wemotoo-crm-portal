@@ -42,8 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useProductStore } from '~/stores/Products/Products';
-
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 
 const productStore = useProductStore();

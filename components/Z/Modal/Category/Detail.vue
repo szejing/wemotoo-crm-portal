@@ -10,6 +10,7 @@
 					<h3>Update Category</h3>
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
 				</div>
+
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductCategoryGeneralInfo
 					v-model:code="state.category.code"
@@ -57,7 +58,7 @@ const state = reactive({
 	category: props.category,
 });
 
-const categoryStore = useProductCategoriesStore();
+const categoryStore = useProductCategoryStore();
 const { updating } = storeToRefs(categoryStore);
 
 const updateThumbnail = (url: string) => {

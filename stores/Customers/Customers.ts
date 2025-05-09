@@ -34,7 +34,7 @@ import type { Customer } from '~/utils/types/customer';
 // 		phone_number: '623423',
 // 	},
 // ];
-export const useCustomersStore = defineStore('customersStore', {
+export const useCustomerStore = defineStore('customerStore', {
 	state: () => ({
 		loading: false as boolean,
 		customers: [] as Customer[],

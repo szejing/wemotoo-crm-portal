@@ -31,7 +31,7 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-const summOrderStore = useSummOrdersStore();
+const summOrderStore = useSummOrderStore();
 const { daily_summaries } = storeToRefs(summOrderStore);
 
 const chartData = computed(() => {

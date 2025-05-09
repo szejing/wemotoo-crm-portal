@@ -23,7 +23,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
 import { UpdateTagValidation } from '~/utils/schema';
 import type { Tag } from '~/utils/types/tag';
 
@@ -41,7 +40,7 @@ const state = reactive({
 	tag: props.tag,
 });
 
-const tagStore = useProductTagsStore();
+const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

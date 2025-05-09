@@ -40,7 +40,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductStore } from '~/stores/Products/Products';
 import { ProductStatus } from 'wemotoo-common';
 import { CreateProductValidation } from '~/utils/schema';
 import type { CategoryInput } from '~/utils/types/category';

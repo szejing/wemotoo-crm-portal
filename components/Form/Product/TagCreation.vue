@@ -14,13 +14,11 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { useProductTagsStore } from '~/stores/ProductTags/ProductTags';
-
 import { CreateTagValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateTagValidation>;
 
-const tagStore = useProductTagsStore();
+const tagStore = useProductTagStore();
 const { adding, newTag } = storeToRefs(tagStore);
 
 onMounted(() => {

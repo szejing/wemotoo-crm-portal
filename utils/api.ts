@@ -1,6 +1,3 @@
-import type { LoginRequest } from '~/stores/Auth/model/request/login-request';
-import type { LoginResponse } from '~/stores/Auth/model/response/login-response';
-
 export abstract class BaseApiService {
 	async call<T>(job: () => Promise<AsyncData<T>>, errorHandler?: (error: any) => Promise<void>) {
 		try {
@@ -23,22 +20,6 @@ export abstract class BaseApiService {
 				await errorHandler(error);
 			}
 		}
-	}
-}
-
-export class ApiService extends BaseApiService {
-	async performLogin(data: LoginRequest): Promise<LoginResponse | undefined> {
-		return super.call<LoginResponse>(
-			() =>
-				$fetch('/api/auth/login', {
-					method: 'POST',
-					body: data,
-				}),
-			(error) => {
-				console.error(error);
-				throw error;
-			},
-		);
 	}
 }
 

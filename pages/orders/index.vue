@@ -107,7 +107,6 @@
 
 <script lang="ts" setup>
 import { OrderStatus, getFormattedDate } from 'wemotoo-common';
-import { useOrderStore } from '~/stores/Order/Order';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
 import type { Order } from '~/utils/types/order';
