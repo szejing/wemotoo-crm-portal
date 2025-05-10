@@ -201,7 +201,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		});
 	});
 
-	const result = await productStore.addProduct({
+	const result = await productStore.createProduct({
 		code,
 		name,
 		short_desc,
@@ -218,7 +218,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		thumbnail,
 		options: prodOptions,
 		variants: prodVariants,
-		metadata: JSON.parse(JSON.stringify(newProduct.value.metadata)),
+		metadata: newProduct.value.metadata ? JSON.parse(JSON.stringify(newProduct.value.metadata)) : undefined,
 	});
 
 	if (result) {

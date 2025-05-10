@@ -19,7 +19,4 @@ export const product_columns = [
 		label: 'Sale Price',
 		sortable: true,
 	},
-	{
-		key: 'actions',
-	},
 ];

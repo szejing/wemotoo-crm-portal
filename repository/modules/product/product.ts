@@ -16,8 +16,8 @@ class ProductModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(code: string) {
-		return await this.call<any>({
+	async fetchSingle(code: string): Promise<ProductResp> {
+		return await this.call<ProductResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,
 		});
