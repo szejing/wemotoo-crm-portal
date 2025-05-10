@@ -1,16 +1,14 @@
 <template>
 	<div class="section-grid-basic-details">
+		<UFormGroup label="Payment Date" name="paymentDate">
+			<ZSelectMenuDate :date="paymentDate" placeholder="Payment Date" @update:date="paymentDate = $event" />
+		</UFormGroup>
+
+		<!-- // Date selection -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
 			<UFormGroup label="Payment Type" name="paymentType">
 				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" />
 			</UFormGroup>
-
-			<ZSelectMenuDate :date="paymentDate" placeholder="Payment Date" @update:date="paymentDate = $event" />
-		</div>
-
-		<!-- // Date selection -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<h1>{{ currencyCode }}</h1>
 
 			<UFormGroup v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
 				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" />
@@ -18,11 +16,11 @@
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup v-slot="{ error }" label="Ref No. 1" name="refNo1" required>
+			<UFormGroup v-slot="{ error }" label="Ref No. 1" name="refNo1">
 				<UInput v-model="refNo1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 1" />
 			</UFormGroup>
 
-			<UFormGroup v-slot="{ error }" label="Ref No. 2" name="refNo2" required>
+			<UFormGroup v-slot="{ error }" label="Ref No. 2" name="refNo2">
 				<UInput v-model="refNo2" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 2" />
 			</UFormGroup>
 		</div>
@@ -32,9 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-const paymentDate = ref(new Date());
-
 const props = defineProps({
+	paymentDate: Date,
 	paymentTypeCode: String,
 	refNo1: String,
 	refNo2: String,
@@ -44,6 +41,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
+	'update:paymentDate',
 	'update:paymentTypeCode',
 	'update:refNo1',
 	'update:refNo2',
@@ -52,6 +50,15 @@ const emit = defineEmits([
 	'update:externalIntgType',
 	// 'update:metadata',
 ]);
+
+const paymentDate = computed({
+	get() {
+		return props.paymentDate;
+	},
+	set(value) {
+		emit('update:paymentDate', value);
+	},
+});
 
 const paymentTypeCode = computed({
 	get() {

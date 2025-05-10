@@ -6,6 +6,7 @@ import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { OrderItemModel } from '~/utils/models/item.model';
+import type { OrderPaymentModel } from '~/utils/models/payment.model';
 
 type OrderFilter = {
 	query: string;
@@ -107,6 +108,32 @@ export const useOrderStore = defineStore('orderStore', {
 				if (data.order) {
 					this.detail = data.order;
 					successNotification('Payment status updated successfully');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
+		},
+
+		async updatePayment(order_no: string, payment: OrderPaymentModel) {
+			const { $api } = useNuxtApp();
+
+			let payments: OrderPaymentModel[] = [];
+
+			if (this.detail?.payments.length === 0) {
+				payment.payment_line = 1;
+				payments = [payment];
+			} else {
+				payments = this.detail?.payments ?? [];
+			}
+
+			try {
+				const data = await $api.order.updatePayment(order_no, this.detail!.customer.customer_no, payments);
+
+				if (data.order) {
+					this.detail = data.order;
+					successNotification('Payment Info updated successfully');
 				}
 			} catch (err: any) {
 				console.error(err);

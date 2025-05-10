@@ -1,7 +1,7 @@
 import type { OrderItemModel } from '~/utils/models/item.model';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { CustomerModel } from '~/utils/models';
+import type { CustomerModel, OrderPaymentModel } from '~/utils/models';
 import type { GetOrdersReq } from './models/request/get-order.req';
 import type { GetOrderResp } from './models/response/get-order.resp';
 import type { GetOrdersResp } from './models/response/get-orders.resp';
@@ -66,6 +66,18 @@ class OrderModule extends HttpFactory {
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update()}`,
 			body: { order_no, customer_no: customer.customer_no, customer },
+		});
+	}
+
+	/**
+	 * Updates payment
+	 * @returns
+	 */
+	async updatePayment(order_no: string, customer_no: string, payments: OrderPaymentModel[]): Promise<UpdateOrderStatusResp> {
+		return await this.call<UpdateOrderStatusResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.Update()}`,
+			body: { order_no, customer_no, payments },
 		});
 	}
 
