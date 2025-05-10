@@ -67,6 +67,21 @@ export const useProductStore = defineStore('productStore', {
 			this.pageSize = size;
 		},
 
+		async getProduct(code: string): Promise<Product | undefined> {
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.product.fetchSingle(code);
+
+				if (data.product) {
+					return data.product;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			}
+		},
+
 		async getProducts() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -84,7 +99,7 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async addProduct(product: Product): Promise<boolean> {
+		async createProduct(product: Product): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 

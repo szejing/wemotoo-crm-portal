@@ -80,5 +80,5 @@ export type Product = {
 	variants: ProdVariantInput[] | undefined;
 
 	// metadata
-	metadata: Record<string, unknown> | null;
+	metadata: Record<string, unknown> | undefined;
 };

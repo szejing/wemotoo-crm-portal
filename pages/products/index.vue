@@ -19,7 +19,8 @@
 						</UButton>
 					</div>
 				</div>
-				<UTable :rows="rows" :columns="product_columns">
+
+				<UTable :rows="rows" :columns="product_columns" @select="selectProduct">
 					<template #orig_sell_price-data="{ row }">
 						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price.toFixed(2) }}</p>
 					</template>
@@ -43,10 +44,6 @@
 						</p>
 					</template>
 
-					<template #actions-data="{ row }">
-						<ZActionDropdown :items="options(row)" />
-					</template>
-
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No Products !</span>
@@ -68,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation, ZModalProductDetail } from '#components';
+import { ZModalConfirmation, ZModalLoading, ZModalProductDetail } from '#components';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
@@ -89,40 +86,39 @@ const links = [
 	},
 ];
 
-const options = (product: Product) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: () => editProduct(product.code!),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => deleteProduct(product.code!),
-		},
-	],
-];
 const modal = useModal();
 const page = ref(1);
 const productStore = useProductStore();
 
-const { products, pageSize } = storeToRefs(productStore);
-
-onMounted(async () => {
-	await productStore.getProducts();
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
 });
+
+const { products, pageSize } = storeToRefs(productStore);
 
 const rows = computed(() => {
 	return products.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
+const selectProduct = async (product: Product) => {
+	modal.open(ZModalLoading, {
+		key: 'loading',
+	});
+
+	const prod = await productStore.getProduct(product.code!);
+	await modal.close();
+
+	if (prod) {
+		editProduct(prod);
+	}
+};
+
 const deleteProduct = async (code: string) => {
 	modal.open(ZModalConfirmation, {
 		message: 'Are you sure you want to delete this product ?',
+		key: 'delete-product',
 		action: 'delete',
 		onConfirm: async () => {
 			await productStore.deleteProduct(code);
@@ -134,12 +130,17 @@ const deleteProduct = async (code: string) => {
 	});
 };
 
-const editProduct = async (code: string) => {
-	const product: Product | undefined = products.value.find((prod) => prod.code === code);
-	if (!product) return;
+const editProduct = async (product: Product) => {
+	const { code } = product;
 
 	modal.open(ZModalProductDetail, {
 		product: JSON.parse(JSON.stringify(product)),
+		key: 'product-detail',
+		onDelete: async () => {
+			await modal.close();
+
+			deleteProduct(code!);
+		},
 		onUpdate: async (prod: Product) => {
 			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = prod;
 
@@ -229,7 +230,7 @@ const editProduct = async (code: string) => {
 				thumbnail: thumbnail ?? undefined,
 				options: prodOptions,
 				variants: prodVariants,
-				metadata: null,
+				metadata: undefined,
 			});
 
 			modal.close();

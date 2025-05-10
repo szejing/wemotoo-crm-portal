@@ -4,8 +4,8 @@
 			width: 'w-full sm:w-[80%]',
 		}"
 	>
-		<UCard>
-			<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
+			<UCard>
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
 					v-model:is-active="current_product.is_active"
@@ -62,12 +62,18 @@
 				/>
 				<!-- *********************** Additional Info *********************** -->
 
-				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-				</div>
-			</UForm>
-		</UCard>
+				<template #footer>
+					<div class="flex-jbetween-icenter">
+						<UButton color="red" variant="soft" @click="onDelete">Delete</UButton>
+
+						<div class="flex-jend gap-4">
+							<UButton color="neutral" variant="link" @click="onCancel">Cancel</UButton>
+							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+						</div>
+					</div>
+				</template>
+			</UCard>
+		</UForm>
 	</UModal>
 </template>
 
@@ -89,7 +95,7 @@ const props = defineProps({
 const productStore = useProductStore();
 const { updating } = storeToRefs(productStore);
 
-const emit = defineEmits(['update', 'cancel']);
+const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const current_product = ref(props.product);
 
@@ -107,6 +113,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 const onCancel = () => {
 	emit('cancel');
+};
+
+const onDelete = () => {
+	emit('delete');
 };
 </script>
 
