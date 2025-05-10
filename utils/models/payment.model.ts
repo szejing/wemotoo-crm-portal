@@ -1,5 +1,6 @@
 export type OrderPaymentModel = {
 	payment_line: number;
+	payment_date: Date;
 	payment_type_code: string;
 	payment_type_desc: string;
 	ref_no1: string;

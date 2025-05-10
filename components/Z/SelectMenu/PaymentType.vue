@@ -15,7 +15,7 @@
 const paymentTypeStore = usePaymentTypeStore();
 const { paymentTypeGroups } = storeToRefs(paymentTypeStore);
 
-const props = defineProps<{ paymentTypeCode: string; currencyCode: string }>();
+const props = defineProps<{ paymentTypeCode: string | undefined; currencyCode: string | undefined }>();
 
 const emit = defineEmits(['update:paymentTypeCode', 'update:currencyCode']);
 

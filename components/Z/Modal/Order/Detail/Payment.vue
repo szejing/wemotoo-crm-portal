@@ -9,6 +9,7 @@
 			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
+					v-model:payment-date="state.payment.payment_date"
 					v-model:payment-type-code="state.payment.payment_type_code"
 					v-model:ref-no1="state.payment.ref_no1"
 					v-model:ref-no2="state.payment.ref_no2"
@@ -48,14 +49,13 @@ const props = defineProps({
 const emit = defineEmits(['update', 'cancel']);
 const state = reactive({
 	payment: props.payment || {
-		payment_type_code: '',
-		payment_type_desc: '',
-		ref_no1: '',
-		ref_no2: '',
-		payment_amount: detail.value?.net_amt.toFixed(2),
+		payment_date: new Date(),
+		payment_type_code: undefined,
+		ref_no1: undefined,
+		ref_no2: undefined,
+		payment_amount: detail.value?.net_amt,
 		currency_code: detail.value?.currency_code,
-		external_intg_type: 0,
-		metadata: {},
+		metadata: undefined,
 	},
 });
 
@@ -68,9 +68,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 		const { order_no } = detail.value;
 
-		console.log(order_no);
-		console.log(event.data);
-		// await orderStore.updateCustomer(order_no, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updatePayment(order_no, JSON.parse(JSON.stringify(event.data)));
 		emit('update');
 	} catch {
 		return navigateTo('/orders');
