@@ -8,7 +8,7 @@ export const order_summ_columns = [
 		label: 'Currency',
 	},
 	{
-		key: 'order_status',
+		key: 'status',
 		label: 'Order Status',
 	},
 	{

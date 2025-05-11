@@ -3,7 +3,7 @@ import type { OrderStatus } from 'wemotoo-common';
 type SummSaleCustomer = {
 	customer_no: string;
 	currency_code: string;
-	order_status: OrderStatus;
+	status: OrderStatus;
 	email_address: string;
 	gross_amt: number;
 	net_amt: number;

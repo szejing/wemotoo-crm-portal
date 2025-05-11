@@ -4,7 +4,7 @@ export const order_item_summ_columns = [
 		label: 'Code',
 	},
 	{
-		key: 'order_status',
+		key: 'status',
 		label: 'Order Status',
 	},
 	{

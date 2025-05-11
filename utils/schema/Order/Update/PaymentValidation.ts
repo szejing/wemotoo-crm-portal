@@ -7,6 +7,6 @@ export const UpdateOrderPaymentValidation = z.object({
 	currency_code: z.string(),
 	ref_no1: z.string().optional().nullable(),
 	ref_no2: z.string().optional().nullable(),
-	payment_amount: z.number(),
+	payment_amt: z.number(),
 	metadata: z.record(z.string(), z.unknown()).optional().nullable(),
 });

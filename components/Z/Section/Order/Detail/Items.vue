@@ -14,7 +14,7 @@
 				:key="item.prod_code"
 				class="border-b"
 				:class="{ 'editable-cell': editable && item.status == OrderItemStatus.ACTIVE }"
-				@click="editItem(item)"
+				@click="editable && item.status == OrderItemStatus.ACTIVE && editItem(item)"
 			>
 				<td class="cell-item">
 					<div class="flex items-center gap-2">

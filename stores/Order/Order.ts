@@ -47,7 +47,7 @@ export const useOrderStore = defineStore('orderStore', {
 					filter_type: this.filter.filter_type as FilterType,
 					start_date: getFormattedDate(this.filter.start_date),
 					end_date: this.filter.end_date ? getFormattedDate(this.filter.end_date) : undefined,
-					order_status: this.filter.status,
+					status: this.filter.status,
 					q: isEmptyOrNull(this.filter.query) ? undefined : this.filter.query,
 				});
 
@@ -82,11 +82,11 @@ export const useOrderStore = defineStore('orderStore', {
 			this.detail = order;
 		},
 
-		async updateOrderStatus(order_no: string, customer_no: string, order_status: string) {
+		async updateOrderStatus(order_no: string, customer_no: string, status: string) {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.order.updateOrderStatus(order_no, customer_no, order_status);
+				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
 
 				if (data.order) {
 					this.detail = data.order;
@@ -99,11 +99,11 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updatePaymentStatus(order_no: string, customer_no: string, payment_status: string) {
+		async updateOrder(order_no: string, customer_no: string, payment_status: string) {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.order.updatePaymentStatus(order_no, customer_no, payment_status);
+				const data = await $api.order.updateOrder(order_no, customer_no, payment_status);
 
 				if (data.order) {
 					this.detail = data.order;
@@ -116,7 +116,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updatePayment(order_no: string, payment: OrderPaymentModel) {
+		async updatePayments(order_no: string, payment: OrderPaymentModel) {
 			const { $api } = useNuxtApp();
 
 			let payments: OrderPaymentModel[] = [];
@@ -129,7 +129,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 
 			try {
-				const data = await $api.order.updatePayment(order_no, this.detail!.customer.customer_no, payments);
+				const data = await $api.order.updatePayments(order_no, this.detail!.customer.customer_no, payments);
 
 				if (data.order) {
 					this.detail = data.order;
@@ -159,7 +159,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateItem(order_no: string, item: OrderItemModel) {
+		async updateItems(order_no: string, item: OrderItemModel) {
 			const { $api } = useNuxtApp();
 
 			try {
@@ -170,7 +170,7 @@ export const useOrderStore = defineStore('orderStore', {
 					return orderItem;
 				});
 
-				const data = await $api.order.updateItem(order_no, this.detail!.customer.customer_no, items ?? []);
+				const data = await $api.order.updateItems(order_no, this.detail!.customer.customer_no, items ?? []);
 
 				if (data.order) {
 					this.detail = data.order;

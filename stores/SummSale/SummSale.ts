@@ -133,7 +133,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			// try {
 			// 	const data = await $api.summOrder.getSummOrderItems({
 			// 		filter_type: this.order_summ_item.filter.filter_type as FilterType,
-			// 		order_status: this.order_summ_item.filter.status as OrderStatus,
+			// 		status: this.order_summ_item.filter.status as OrderStatus,
 			// 		item_status: this.order_summ_item.filter.item_status as OrderItemStatus,
 			// 		start_date: getFormattedDate(this.order_summ_item.filter.start_date),
 			// 		end_date: this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date) : undefined,

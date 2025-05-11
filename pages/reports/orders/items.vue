@@ -56,10 +56,10 @@
 									<p>{{ item.prod_code }} - {{ item.prod_name }}</p>
 								</template>
 
-								<template #order_status-data="{ row: item }">
-									<UBadge v-if="item.order_status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
-									<UBadge v-else-if="item.order_status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
-									<UBadge v-else-if="item.order_status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
+								<template #status-data="{ row: item }">
+									<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
+									<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
+									<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 								</template>
 
 								<template #item_status-data="{ row: item }">

@@ -4,7 +4,7 @@ export type GetSummSaleItemsReq = {
 	start_date: string;
 	end_date?: string;
 	filter_type: FilterType;
-	order_status?: OrderStatus;
+	status?: OrderStatus;
 	item_status?: OrderItemStatus;
 	currency_code?: string;
 };
