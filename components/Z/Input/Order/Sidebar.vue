@@ -6,31 +6,46 @@
 				<h3>Status</h3>
 			</template>
 
-			<ZSelectMenuOrderStatus v-model:status="order.status" />
-
-			<template #footer>
+			<div class="flex-jbetween-icenter">
+				<ZSelectMenuOrderStatus v-model:status="order.status" />
 				<UButton @click="saveOrderStatus">Save</UButton>
-			</template>
+			</div>
 		</UCard>
 
 		<!-- ***** Payment Status ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
 				<div class="flex-jbetween-icenter">
-					<h3>Payment</h3>
-					<UButton variant="ghost" @click="addPaymentInfo">Add Info</UButton>
+					<h3>Payment Info</h3>
+					<UButton v-if="order.payments?.length == 0" variant="ghost" @click="addPaymentInfo">Add</UButton>
 				</div>
 			</template>
 
 			<div>
-				<div class="flex-jbetween-icenter">
-					<p>Status</p>
-					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
-				</div>
+				<table class="w-full">
+					<thead>
+						<tr class="border-b text-xs text-neutral-400">
+							<th class="text-left py-2">Type</th>
+							<th class="text-right py-2">Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="payment in order.payments" :key="payment.payment_type_code" class="border-b text-xs">
+							<td class="py-2 text-left font-bold">{{ payment.payment_type_code }}</td>
+							<td class="py-2 text-right">
+								<span class="font-bold"> {{ payment.currency_code }} {{ payment.payment_amt }} </span> <br />
+								<span class="text-[10px] text-neutral-400">{{ payment.ref_no1 }} </span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 			<template #footer>
-				<UButton @click="savePaymentStatus">Save</UButton>
+				<div class="flex-jbetween-icenter">
+					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
+					<UButton @click="savePaymentStatus">Save</UButton>
+				</div>
 			</template>
 		</UCard>
 	</div>
