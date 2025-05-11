@@ -14,6 +14,7 @@ import ProductVariantModule from './product-variant/product-variant';
 import ProductModule from './product/product';
 import CountryModule from './country/country';
 import SaleSummaryModule from './summ-sale/summ-sale';
+import SaleModule from './sale/sale';
 
 export {
 	OrderModule,
@@ -32,4 +33,5 @@ export {
 	PaymentMethodModule,
 	CountryModule,
 	SaleSummaryModule,
+	SaleModule,
 };
