@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import type { FilterType } from 'wemotoo-common';
-import { getFormattedDate, isEmptyOrNull, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -86,11 +86,20 @@ export const useOrderStore = defineStore('orderStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
+				if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
+					const data = await $api.sale.updateOrderToSale(order_no, customer_no);
 
-				if (data.order) {
-					this.detail = data.order;
-					successNotification('Order status updated successfully');
+					if (data.sale) {
+						// this.detail = data.sale;
+						successNotification('Order status updated successfully');
+					}
+				} else {
+					const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
+
+					if (data.order) {
+						this.detail = data.order;
+						successNotification('Order status updated successfully');
+					}
 				}
 			} catch (err: any) {
 				console.error(err);

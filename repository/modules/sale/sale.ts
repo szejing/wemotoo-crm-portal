@@ -1,0 +1,46 @@
+import HttpFactory from '../../factory';
+import MerchantRoutes from '../../routes.client';
+import type { GetSalesReq } from './models/request/get-sale.req';
+import type { GetSaleResp } from './models/response/get-sale.resp';
+import type { GetOrdersResp } from './models/response/get-sales.resp';
+
+class SaleModule extends HttpFactory {
+	private readonly RESOURCE = MerchantRoutes.Sales;
+
+	/**
+	 * Fetches all sales
+	 * @returns
+	 */
+	async getSales(query: GetSalesReq): Promise<GetOrdersResp> {
+		return await this.call<GetOrdersResp>({
+			method: 'GET',
+			url: `${this.RESOURCE.Many()}`,
+			query,
+		});
+	}
+
+	/**
+	 * Fetches sale by bill no
+	 * @returns
+	 */
+	async getSaleByOrderNo(bill_no: string): Promise<GetSaleResp> {
+		return await this.call<GetSaleResp>({
+			method: 'GET',
+			url: `${this.RESOURCE.Single(bill_no)}`,
+		});
+	}
+
+	/**
+	 * Updates order to sale
+	 * @returns
+	 */
+	async updateOrderToSale(order_no: string, customer_no: string): Promise<GetSaleResp> {
+		return await this.call<GetSaleResp>({
+			method: 'POST',
+			url: `${this.RESOURCE.Process()}`,
+			body: { order_no, customer_no },
+		});
+	}
+}
+
+export default SaleModule;
