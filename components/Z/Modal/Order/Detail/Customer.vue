@@ -58,9 +58,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		const { order_no } = detail.value;
 
 		await orderStore.updateCustomer(order_no, JSON.parse(JSON.stringify(event.data)));
-		emit('update');
+		emit('update', true);
 	} catch {
-		return navigateTo('/orders');
+		emit('update', false);
 	} finally {
 		is_loading.value = false;
 	}

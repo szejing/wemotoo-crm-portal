@@ -6,7 +6,7 @@ export type Order = {
 	order_no: string;
 	doc_no: string;
 	customer_no: string;
-	order_status: OrderStatus;
+	status: OrderStatus;
 	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;

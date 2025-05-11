@@ -39,7 +39,7 @@ export type SummProduct = {
 export type SummSaleBill = {
 	biz_date: Date;
 	currency_code: string;
-	order_status: OrderStatus;
+	status: OrderStatus;
 	gross_amt: number;
 	net_amt: number;
 	disc_amt?: number;
@@ -57,7 +57,7 @@ export type SummSaleBill = {
 export type SummSaleItem = {
 	biz_date: Date;
 	currency_code: string;
-	order_status: OrderStatus;
+	status: OrderStatus;
 	item_status: OrderItemStatus;
 	prod_code: string;
 	prod_name: string;

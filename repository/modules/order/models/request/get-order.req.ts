@@ -5,7 +5,7 @@ type FilterableOrderProps = {
 	customer_no?: string;
 	start_date: string;
 	end_date?: string;
-	order_status?: OrderStatus;
+	status?: OrderStatus;
 	filter_type: FilterType;
 };
 

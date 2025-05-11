@@ -19,10 +19,10 @@
 						<p>{{ row.currency_code }}</p>
 					</template>
 
-					<template #order_status-data="{ row }">
-						<UBadge v-if="row.order_status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
-						<UBadge v-else-if="row.order_status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
+					<template #status-data="{ row }">
+						<UBadge v-if="row.status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
+						<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
+						<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
 
 					<template #gross_amt-header>

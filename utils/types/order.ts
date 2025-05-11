@@ -45,8 +45,8 @@ type OrderPaymentDto_ = {
 	payment_type_desc: string;
 	ref_no1: string;
 	ref_no2: string;
-	payment_amount: number;
-	local_amount: number;
+	payment_amt: number;
+	local_amt: number;
 	currency_code: string;
 	external_intg_type: number;
 	metadata: Record<string, unknown>;
@@ -57,7 +57,7 @@ export type Order = {
 	order_no: string;
 	doc_no: string;
 	customer_no: string;
-	order_status: OrderStatus;
+	status: OrderStatus;
 	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;

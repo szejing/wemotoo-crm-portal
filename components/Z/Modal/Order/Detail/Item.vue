@@ -62,7 +62,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 		const { order_no } = detail.value;
 
-		await orderStore.updateItem(order_no, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updateItems(order_no, JSON.parse(JSON.stringify(event.data)));
 		emit('update', true);
 	} catch {
 		emit('update', false);

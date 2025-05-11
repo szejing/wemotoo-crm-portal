@@ -6,7 +6,7 @@
 				<h3>Status</h3>
 			</template>
 
-			<ZSelectMenuOrderStatus v-model:status="order.order_status" />
+			<ZSelectMenuOrderStatus v-model:status="order.status" />
 
 			<template #footer>
 				<UButton @click="saveOrderStatus">Save</UButton>
@@ -52,7 +52,7 @@ const props = defineProps<{
 const order = ref({ ...props.order });
 
 const saveOrderStatus = async () => {
-	await props.updateOrderStatus(order.value.order_status);
+	await props.updateOrderStatus(order.value.status);
 };
 
 const savePaymentStatus = async () => {

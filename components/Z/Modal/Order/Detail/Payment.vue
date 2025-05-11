@@ -13,7 +13,7 @@
 					v-model:payment-type-code="state.payment.payment_type_code"
 					v-model:ref-no1="state.payment.ref_no1"
 					v-model:ref-no2="state.payment.ref_no2"
-					v-model:payment-amount="state.payment.payment_amount"
+					v-model:payment-amount="state.payment.payment_amt"
 					v-model:currency-code="state.payment.currency_code"
 					v-model:external-intg-type="state.payment.external_intg_type"
 				/>
@@ -53,7 +53,7 @@ const state = reactive({
 		payment_type_code: undefined,
 		ref_no1: undefined,
 		ref_no2: undefined,
-		payment_amount: detail.value?.net_amt,
+		payment_amt: detail.value?.net_amt,
 		currency_code: detail.value?.currency_code,
 		metadata: undefined,
 	},
@@ -68,10 +68,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 
 		const { order_no } = detail.value;
 
-		await orderStore.updatePayment(order_no, JSON.parse(JSON.stringify(event.data)));
-		emit('update');
+		await orderStore.updatePayments(order_no, JSON.parse(JSON.stringify(event.data)));
+		emit('update', true);
 	} catch {
-		return navigateTo('/orders');
+		emit('update', false);
 	} finally {
 		is_loading.value = false;
 	}

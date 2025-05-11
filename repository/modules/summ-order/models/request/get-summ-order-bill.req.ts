@@ -4,6 +4,6 @@ export type GetSummOrderBillsReq = {
 	start_date: string;
 	end_date?: string;
 	filter_type: FilterType;
-	order_status?: OrderStatus;
+	status?: OrderStatus;
 	currency_code?: string;
 };

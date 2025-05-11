@@ -10,7 +10,7 @@ export const order_columns = [
 		sortable: true,
 	},
 	{
-		key: 'order_status',
+		key: 'status',
 		label: 'Order Status',
 	},
 	// {

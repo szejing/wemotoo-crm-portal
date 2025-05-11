@@ -10,9 +10,9 @@
 						<h2 v-if="order?.biz_date">Date: {{ order?.biz_date }}</h2>
 					</div>
 					<div>
-						<UBadge v-if="order?.order_status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.REFUNDED" color="main" variant="outline" size="lg">REFUNDED</UBadge>
-						<UBadge v-else-if="order?.order_status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
+						<UBadge v-if="order?.status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
+						<UBadge v-else-if="order?.status == OrderStatus.REFUNDED" color="main" variant="outline" size="lg">REFUNDED</UBadge>
+						<UBadge v-else-if="order?.status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 w-full mt-4">
@@ -32,7 +32,7 @@
 						<template #header>
 							<div class="flex-between">
 								<h2 class="text-main">Items</h2>
-								<UPopover v-if="order?.order_status != OrderStatus.NEW" overlay>
+								<UPopover v-if="order?.status != OrderStatus.NEW" overlay>
 									<UButton color="gray" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
 
 									<template #panel>
@@ -51,7 +51,7 @@
 							:currency-code="currency_code"
 							:total-gross-amt="order?.gross_amt"
 							:total-net-amt="order?.net_amt"
-							:editable="order?.order_status == OrderStatus.NEW"
+							:editable="order?.status == OrderStatus.NEW"
 							@refresh="getOrder(order?.order_no as string)"
 						/>
 					</UCard>
@@ -110,56 +110,46 @@ const getOrder = async (order_no: string) => {
 
 /* Update Order Status		*/
 const updateOrderStatus = async (new_status: OrderStatus) => {
-	try {
-		if (!order.value) {
-			throw new Error('Order not found');
-		}
-
-		const { order_no, customer } = order.value;
-
-		if (!customer) {
-			throw new Error('Customer not found');
-		}
-
-		if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
-			failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
-			return;
-		}
-
-		is_loading.value = true;
-		await orderStore.updateOrderStatus(order_no, customer.customer_no, new_status);
-	} catch {
-		return navigateTo('/orders');
-	} finally {
-		is_loading.value = false;
+	if (!order.value) {
+		throw new Error('Order not found');
 	}
+
+	const { order_no, customer } = order.value;
+
+	if (!customer) {
+		throw new Error('Customer not found');
+	}
+
+	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
+		failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
+		return;
+	}
+
+	is_loading.value = true;
+	await orderStore.updateOrderStatus(order_no, customer.customer_no, new_status);
+	is_loading.value = false;
 };
 
 /* Update Payment Status */
 const updatePaymentStatus = async (new_status: PaymentStatus) => {
-	try {
-		if (!order.value) {
-			throw new Error('Order not found');
-		}
-
-		const { order_no, customer } = order.value;
-
-		if (!customer) {
-			throw new Error('Customer not found');
-		}
-
-		if (new_status == PaymentStatus.SUCCESS && order.value.payments?.length == 0) {
-			failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
-			return;
-		}
-
-		is_loading.value = true;
-		await orderStore.updatePaymentStatus(order_no, customer.customer_no, new_status);
-	} catch {
-		return navigateTo('/orders');
-	} finally {
-		is_loading.value = false;
+	if (!order.value) {
+		throw new Error('Order not found');
 	}
+
+	const { order_no, customer } = order.value;
+
+	if (!customer) {
+		throw new Error('Customer not found');
+	}
+
+	if (new_status == PaymentStatus.SUCCESS && order.value.payments?.length == 0) {
+		failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
+		return;
+	}
+
+	is_loading.value = true;
+	await orderStore.updateOrder(order_no, customer.customer_no, new_status);
+	is_loading.value = false;
 };
 
 /* Edit Customer Detail */
