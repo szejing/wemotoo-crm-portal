@@ -3,7 +3,7 @@ import { failedNotification } from '../AppUi/AppUi';
 import { SaleStatus, type FilterType } from 'wemotoo-common';
 import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
 
-type SalesSumm = {
+type SaleSumm = {
 	filter: {
 		start_date: Date;
 		end_date: Date | undefined;
@@ -15,7 +15,7 @@ type SalesSumm = {
 	data: SummOrderBill[];
 };
 
-const initialEmptySalesSumm: SalesSumm = {
+const initialEmptySaleSumm: SaleSumm = {
 	filter: {
 		start_date: new Date(),
 		end_date: undefined,
@@ -27,7 +27,7 @@ const initialEmptySalesSumm: SalesSumm = {
 	data: [],
 };
 
-type SalesSummItem = {
+type SaleSummItem = {
 	filter: {
 		start_date: Date;
 		end_date: Date | undefined;
@@ -40,7 +40,7 @@ type SalesSummItem = {
 	data: SummOrderItem[];
 };
 
-const initialEmptySalesSummItem: SalesSummItem = {
+const initialEmptySaleSummItem: SaleSummItem = {
 	filter: {
 		start_date: new Date(),
 		end_date: undefined,
@@ -60,8 +60,8 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 		daily_summaries: [] as SummDaily[],
 		top_purchased_customers: [] as SummCustomer[],
 		top_purchased_products: [] as SummProduct[],
-		sales_summ: initialEmptySalesSumm,
-		sales_summ_item: initialEmptySalesSummItem,
+		sale_summ: initialEmptySaleSumm,
+		sale_summ_items: initialEmptySaleSummItem,
 	}),
 	actions: {
 		async getDashboardSummary(start_date?: Date, end_date?: Date) {
@@ -103,27 +103,27 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			}
 		},
 
-		async getOrderSummary() {
-			this.sales_summ.is_loading = true;
+		async getSaleSummary() {
+			this.sale_summ.is_loading = true;
 			const { $api } = useNuxtApp();
 
 			try {
 				const data = await $api.summSales.getSummSales({
-					filter_type: this.sales_summ.filter.filter_type as FilterType,
-					status: this.sales_summ.filter.status as SaleStatus,
-					start_date: getFormattedDate(this.sales_summ.filter.start_date),
-					end_date: this.sales_summ.filter.end_date ? getFormattedDate(this.sales_summ.filter.end_date) : undefined,
-					currency_code: this.sales_summ.filter.currency_code,
+					filter_type: this.sale_summ.filter.filter_type as FilterType,
+					status: this.sale_summ.filter.status as SaleStatus,
+					start_date: getFormattedDate(this.sale_summ.filter.start_date),
+					end_date: this.sale_summ.filter.end_date ? getFormattedDate(this.sale_summ.filter.end_date) : undefined,
+					currency_code: this.sale_summ.filter.currency_code,
 				});
 
 				if (data.summ_sales) {
-					this.sales_summ.data = data.summ_sales;
+					this.sale_summ.data = data.summ_sales;
 				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.sales_summ.is_loading = false;
+				this.sale_summ.is_loading = false;
 			}
 		},
 

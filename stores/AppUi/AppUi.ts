@@ -23,18 +23,18 @@ const merchantNavigation = [
 				title: 'Sales',
 				to: '/reports/sales',
 			},
-			{
-				title: 'Payments',
-				to: '/reports/payments',
-			},
-			{
-				title: 'Customers',
-				to: '/reports/customers',
-			},
-			{
-				title: 'Products',
-				to: '/reports/products',
-			},
+			// {
+			// 	title: 'Payments',
+			// 	to: '/reports/payments',
+			// },
+			// {
+			// 	title: 'Customers',
+			// 	to: '/reports/customers',
+			// },
+			// {
+			// 	title: 'Products',
+			// 	to: '/reports/products',
+			// },
 		],
 	},
 	// {
