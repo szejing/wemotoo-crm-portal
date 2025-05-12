@@ -103,7 +103,7 @@ export const Routes = {
 	},
 	SummSales: {
 		Dashboard: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/dashboard`,
-		Orders: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}`,
+		Sales: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}`,
 		Items: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/items`,
 		Customers: () => `${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/customers`,
 	},

@@ -2,7 +2,7 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="container">
-			<ZSectionFilterOrderSumm />
+			<ZSectionFilterSaleSumm />
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">
@@ -85,16 +85,16 @@ const links = [
 const page = ref(1);
 const pageSize = ref(10);
 const salesSummStore = useSummSaleStore();
-const { sales_summ } = storeToRefs(salesSummStore);
+const { sale_summ } = storeToRefs(salesSummStore);
 
-const currency_code = ref(sales_summ.value.filter.currency_code);
+const currency_code = ref(sale_summ.value.filter.currency_code);
 
-const is_loading = computed(() => sales_summ.value.is_loading);
-const data = computed(() => sales_summ.value.data);
+const is_loading = computed(() => sale_summ.value.is_loading);
+const data = computed(() => sale_summ.value.data);
 const selectedColumns = ref(sale_summ_columns);
 const columnsTable = computed(() => sale_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
-const updateColumns = (columns: string[]) => {
+const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;
 };
 

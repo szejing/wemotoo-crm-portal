@@ -25,7 +25,7 @@ class SaleSummaryModule extends HttpFactory {
 	async getSummSales(query: GetSummSaleReq): Promise<GetSummSalesResp> {
 		return await this.call<GetSummSalesResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Orders()}`,
+			url: `${this.RESOURCE.Sales()}`,
 			query,
 		});
 	}

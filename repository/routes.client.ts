@@ -106,7 +106,7 @@ const MerchantRoutes = {
 	},
 	SummSales: {
 		Dashboard: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/dashboard`,
-		Orders: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/orders`,
+		Sales: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/sales`,
 		Items: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/items`,
 		Customers: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/customers`,
 	},

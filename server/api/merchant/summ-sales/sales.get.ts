@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const query = getQuery(event);
 
-		const result = await $fetch(`${Routes.SummSales.Orders()}`, {
+		const result = await $fetch(`${Routes.SummSales.Sales()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			query,
