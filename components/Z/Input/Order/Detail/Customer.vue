@@ -1,12 +1,22 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Email Address" name="email_address" required>
-			<UInput v-model="email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Email Address" />
-		</UFormGroup>
+		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
+			<UFormGroup v-slot="{ error }" label="Customer Name" name="customer_name" required>
+				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Customer Name" />
+			</UFormGroup>
 
-		<UFormGroup v-slot="{ error }" label="Phone Number" name="phone_no" required>
-			<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Phone Number" />
-		</UFormGroup>
+			<UFormGroup v-slot="{ error }" label="Email Address" name="email_address" required>
+				<UInput v-model="email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Email Address" />
+			</UFormGroup>
+		</div>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
+			<ZSelectMenuCountry v-model:country-code="dial_code" />
+
+			<UFormGroup v-slot="{ error }" label="Phone Number" name="phone_no" required>
+				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Phone Number" />
+			</UFormGroup>
+		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
 			<div class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
@@ -55,13 +65,23 @@ import type { AddressModel } from '~/utils/models/customer.model';
 
 const same_as_shipping_address = ref(false);
 const props = defineProps({
+	name: String,
 	emailAddress: String,
 	phoneNo: String,
 	shippingAddress: Object as PropType<AddressModel>,
 	billingAddress: Object as PropType<AddressModel>,
 });
 
-const emit = defineEmits(['update:emailAddress', 'update:phoneNo', 'update:shippingAddress', 'update:billingAddress']);
+const emit = defineEmits(['update:name', 'update:emailAddress', 'update:phoneNo', 'update:shippingAddress', 'update:billingAddress']);
+
+const name = computed({
+	get() {
+		return props.name;
+	},
+	set(value) {
+		emit('update:name', value);
+	},
+});
 
 const email_address = computed({
 	get() {

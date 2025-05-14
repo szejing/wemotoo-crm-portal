@@ -14,6 +14,7 @@ const AddressValidation = z
 
 export const UpdateOrderCustomerValidation = z.object({
 	customer_no: z.string(),
+	name: z.string().min(1, 'Customer name is required'),
 	email_address: z.string().email('Invalid email address'),
 	phone_no: z.string().min(1, 'Phone number is required'),
 	ic_no: z.string().optional().nullable(),

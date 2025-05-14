@@ -20,8 +20,8 @@ export const sale_summ_columns = [
 		label: 'Net Amount',
 	},
 	{
-		key: 'total_orders',
-		label: 'Total Orders',
+		key: 'total_txns',
+		label: 'Total Txns',
 	},
 	{
 		key: 'total_qty',
