@@ -37,6 +37,7 @@
 
 					<template #status-data="{ row }">
 						<UBadge v-if="row.status === OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
+						<UBadge v-if="row.status === OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
 						<UBadge v-else-if="row.status === OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
 						<UBadge v-else-if="row.status === OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>

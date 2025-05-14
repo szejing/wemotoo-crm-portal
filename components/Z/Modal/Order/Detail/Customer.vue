@@ -9,6 +9,7 @@
 			<UForm :schema="UpdateOrderCustomerValidation" :state="state.customer" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailCustomer
+					v-model:name="state.customer.name"
 					v-model:email-address="state.customer.email_address"
 					v-model:phone-no="state.customer.phone_no"
 					v-model:shipping-address="state.customer.shipping_address"

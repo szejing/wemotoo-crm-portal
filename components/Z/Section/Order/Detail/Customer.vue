@@ -2,12 +2,12 @@
 	<div class="w-full">
 		<div class="flex flex-col gap-1">
 			<p v-if="customer?.customer_no" class="customer-detail-item">
-				<span>Cust No :</span>
+				<span>Customer No :</span>
 				<span>{{ customer?.customer_no }}</span>
 			</p>
-			<p v-if="customer?.user_id" class="customer-detail-item">
-				<span>User Id :</span>
-				<span>{{ customer?.user_id }}</span>
+			<p v-if="customer?.name" class="customer-detail-item">
+				<span>Name :</span>
+				<span>{{ customer?.name }}</span>
 			</p>
 			<p v-if="customer?.email_address" class="customer-detail-item">
 				<span>Email Address :</span>

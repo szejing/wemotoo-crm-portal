@@ -3,11 +3,10 @@ import type { AddressModel } from '~/utils/models/customer.model';
 
 type OrderCustomerDto_ = {
 	customer_no: string;
-	user_id: string;
+	name: string;
 	email_address: string;
 	phone_no: string;
-	ic_no?: string;
-	date_of_birth?: Date;
+	dial_code: string;
 	ref_no1?: string;
 	ref_no2?: string;
 	shipping_address: AddressModel;

@@ -9,9 +9,10 @@ export type AddressModel = {
 };
 
 export type CustomerModel = {
+	name: string;
 	customer_no: string;
-	user_id: string;
 	email_address: string;
+	dial_code: string;
 	phone_no: string;
 	ic_no?: string;
 	date_of_birth?: Date;

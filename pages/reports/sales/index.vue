@@ -43,8 +43,8 @@
 						<p>{{ row.net_amt.toFixed(2) }}</p>
 					</template>
 
-					<template #total_orders-data="{ row }">
-						<p>{{ row.total_orders }}</p>
+					<template #total_txns-data="{ row }">
+						<p>{{ row.total_txns }}</p>
 					</template>
 
 					<template #total_qty-data="{ row }">
