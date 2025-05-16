@@ -1,6 +1,13 @@
 <template>
 	<UFormGroup name="filter_type">
-		<USelectMenu v-model="filter_type" :options="date_filter_type_options" size="md" option-attribute="name" value-attribute="value" />
+		<USelectMenu
+			v-model="filter_type"
+			:options="date_filter_type_options"
+			size="md"
+			option-attribute="name"
+			value-attribute="value"
+			:ui="{ base: 'min-w-[200px]' }"
+		/>
 	</UFormGroup>
 </template>
 

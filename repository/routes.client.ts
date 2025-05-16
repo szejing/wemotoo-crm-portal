@@ -109,6 +109,7 @@ const MerchantRoutes = {
 		Sales: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/sales`,
 		Items: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/items`,
 		Customers: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/customers`,
+		Payments: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SUMM_SALES}/payments`,
 	},
 	PaymentTypes: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_TYPES}/many`,

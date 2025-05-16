@@ -76,3 +76,17 @@ export type SummSaleItem = {
 	total_orders: number;
 	total_qty: number;
 };
+
+export type SummSalePayment = {
+	biz_date: Date;
+	currency_code: string;
+	status: OrderStatus;
+	payment_type_code: string;
+	payment_type_desc: string;
+	payment_amt: number;
+	local_amt: number;
+	void_amt?: number;
+	adj_amt?: number;
+	redeem_point?: number;
+	total_txns: number;
+};

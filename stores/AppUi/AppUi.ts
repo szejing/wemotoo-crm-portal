@@ -15,26 +15,30 @@ const merchantNavigation = [
 		to: '/reports',
 		isCollapsed: false,
 		children: [
-			{
-				title: 'Orders',
-				to: '/reports/orders',
-			},
+			// {
+			// 	title: 'Orders',
+			// 	to: '/reports/orders',
+			// },
 			{
 				title: 'Sales',
 				to: '/reports/sales',
 			},
 			// {
-			// 	title: 'Payments',
-			// 	to: '/reports/payments',
+			// 	title: 'Items',
+			// 	to: '/reports/items',
 			// },
-			// {
-			// 	title: 'Customers',
-			// 	to: '/reports/customers',
-			// },
-			// {
-			// 	title: 'Products',
-			// 	to: '/reports/products',
-			// },
+			{
+				title: 'Payments',
+				to: '/reports/sales/payments',
+			},
+			{
+				title: 'Customers',
+				to: '/reports/sales/customers',
+			},
+			{
+				title: 'Items',
+				to: '/reports/sales/items',
+			},
 		],
 	},
 	// {

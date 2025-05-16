@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 const links = [
 	{
-		label: 'Sales Customer Summary',
+		label: 'Customer Reports',
 		icon: ICONS.LIST,
 		to: '/summary/sales/customers',
 	},

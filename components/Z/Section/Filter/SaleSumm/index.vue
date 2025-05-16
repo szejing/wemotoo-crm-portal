@@ -18,8 +18,8 @@
 				</div>
 			</div>
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Order Status</h4>
-				<ZSelectMenuOrderStatus v-model:status="sale_summ.filter.status" />
+				<h4>Status</h4>
+				<ZSelectMenuSaleStatus v-model:status="sale_summ.filter.status" />
 			</div>
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Currency</h4>
