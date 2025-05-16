@@ -2,11 +2,11 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="container">
-			<ZSectionFilterSaleSummItem />
+			<ZSectionFilterSaleSummPayment />
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">
-						<ZSelectMenuTableColumns :columns="sale_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<ZSelectMenuTableColumns :columns="sale_summ_payment_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
 					</div>
 				</template>
 
@@ -19,16 +19,8 @@
 						<p>{{ row.currency_code }}</p>
 					</template>
 
-					<template #item_status-data="{ row }">
-						<UBadge v-if="row.item_status == OrderItemStatus.ACTIVE" variant="outline" color="green">ACTIVE</UBadge>
-						<UBadge v-if="row.item_status == OrderItemStatus.VOIDED" variant="outline" color="red">VOIDED</UBadge>
-					</template>
-
-					<template #prod-data="{ row }">
-						<p>{{ row.prod_code }}</p>
-						<p>{{ row.prod_name }}</p>
-						<p>{{ row.prod_variant_code }}</p>
-						<p>{{ row.prod_variant_name }}</p>
+					<template #status-data="{ row }">
+						<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
 					</template>
 
 					<template #gross_amt-header>
@@ -51,6 +43,18 @@
 						<p>{{ row.net_amt.toFixed(2) }}</p>
 					</template>
 
+					<template #total_txns-data="{ row }">
+						<p>{{ row.total_txns }}</p>
+					</template>
+
+					<template #total_qty-data="{ row }">
+						<p>{{ row.total_qty }}</p>
+					</template>
+
+					<template #total_voided_qty-data="{ row }">
+						<p>{{ row.total_voided_qty }}</p>
+					</template>
+
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No Data !</span>
@@ -67,28 +71,28 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
-import { sale_summ_item_columns } from '~/utils/table-columns';
+import { SaleStatus, getFormattedDate } from 'wemotoo-common';
+import { sale_summ_payment_columns } from '~/utils/table-columns';
 
 const links = [
 	{
-		label: 'Item Reports',
+		label: 'Payment Reports',
 		icon: ICONS.LIST,
-		to: '/summary/sales/items',
+		to: '/summary/sales/payments',
 	},
 ];
 
 const page = ref(1);
 const pageSize = ref(10);
 const salesSummStore = useSummSaleStore();
-const { sale_summ_items } = storeToRefs(salesSummStore);
+const { sale_summ_payments } = storeToRefs(salesSummStore);
 
-const currency_code = ref(sale_summ_items.value.filter.currency_code);
+const currency_code = ref(sale_summ_payments.value.filter.currency_code);
 
-const is_loading = computed(() => sale_summ_items.value.is_loading);
-const data = computed(() => sale_summ_items.value.data);
-const selectedColumns = ref(sale_summ_item_columns);
-const columnsTable = computed(() => sale_summ_item_columns.filter((column) => selectedColumns.value.includes(column)));
+const is_loading = computed(() => sale_summ_payments.value.is_loading);
+const data = computed(() => sale_summ_payments.value.data);
+const selectedColumns = ref(sale_summ_payment_columns);
+const columnsTable = computed(() => sale_summ_payment_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;

@@ -11,8 +11,11 @@
 		<!-- ***** Categories ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Categories</h3>
-				<ZSelectMenuCategories v-model:categories="newProduct.categories" />
+				<h3>Main Category</h3>
+				<ZSelectMenuCategory v-model:category="newProduct.category" />
+
+				<h3>Sub Categories</h3>
+				<ZSelectMenuCategories v-model:categories="newProduct.subCategories" />
 			</template>
 		</UCard>
 
