@@ -3,9 +3,9 @@ import { API_PATH } from 'wemotoo-common';
 const prefix: string = '/api';
 
 const MerchantRoutes = {
-	Image: {
-		Upload: () => `${prefix}/${API_PATH.IMAGE}/upload`,
-		UploadMultiple: () => `${prefix}/${API_PATH.IMAGE}/upload-multiple`,
+	Images: {
+		Upload: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload`,
+		UploadMultiple: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload-multiple`,
 	},
 	Auth: {
 		Login: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/login`,

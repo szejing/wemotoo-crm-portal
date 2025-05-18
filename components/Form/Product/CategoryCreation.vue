@@ -12,7 +12,8 @@
 
 			<div>
 				<h4>Thumbnail</h4>
-				<ZDropzoneSingle :url-single="newCategory.thumbnail" @update:url-single="updateThumbnail" />
+				<ZDropzoneSingle :url-single="newCategory.thumbnail" type="category" @update:url-single="updateThumbnail" />
+				<NuxtImg :src="newCategory.thumbnail" class="w-full h-full object-cover" />
 			</div>
 
 			<div class="flex-center text-center mt-3">
@@ -23,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+import { NuxtImg } from '#components';
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 
@@ -40,6 +42,7 @@ onMounted(() => {
 const updateThumbnail = (url: string) => {
 	newCategory.value.thumbnail = url;
 };
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
 	await categoryStore.addCategory({ code, name, description, is_internal, is_active, images, thumbnail, parent_category });
