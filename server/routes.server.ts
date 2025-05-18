@@ -1,9 +1,9 @@
 import { API_PATH } from 'wemotoo-common';
 
 export const Routes = {
-	Image: {
-		Upload: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGE}/upload`,
-		UploadMultiple: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGE}/upload-multiple`,
+	Images: {
+		Upload: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload`,
+		UploadMultiple: () => `${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload-multiple`,
 	},
 	Auth: {
 		Login: () => `${API_PATH.MERCHANT}/${API_PATH.AUTH}/login`,

@@ -10,9 +10,10 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
 	urlSingle: String,
 	path: String,
+	type: String,
 });
 
 const emit = defineEmits(['update:urlSingle']);
@@ -25,8 +26,7 @@ const uploadImage = async (e: any) => {
 	try {
 		const { $api } = useNuxtApp();
 
-		const res = await $api.image.upload(e, 'new', 'category');
-		// photoFile.value = res;
+		const res = await $api.image.upload(e, 'new', props.type ?? 'default');
 		emit('update:urlSingle', res.image.url);
 	} catch (err: any) {
 		console.log(err);
