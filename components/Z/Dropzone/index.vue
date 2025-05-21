@@ -32,9 +32,9 @@
 			</div>
 		</div>
 
-		<div v-if="existingImages != null && existingImages.length > 0" class="preview-section">
+		<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
 			<div class="preview-grid">
-				<div v-for="(preview, index) in existingImages" :key="index" class="preview-item">
+				<div v-for="(preview, index) in currentImages" :key="index" class="preview-item">
 					<div class="preview-item-container group">
 						<img v-if="preview != null" :src="preview.url" alt="Preview image" />
 						<UButton class="delete-button" @click="removeExistingImage(index)">
@@ -67,6 +67,7 @@ const fileInput = ref(null);
 const isDragging = ref(false);
 const previews = ref([]);
 const files = ref([]);
+const currentImages = ref(props.existingImages);
 
 const handleDragOver = () => {
 	isDragging.value = true;
@@ -123,7 +124,9 @@ const removePreview = (index) => {
 	emit('files-selected', files.value);
 };
 
-const removeExistingImage = (index) => {};
+const removeExistingImage = (index) => {
+	currentImages.value.splice(index, 1);
+};
 
 const previewFiles = (files) => {
 	// Revoke previous previews

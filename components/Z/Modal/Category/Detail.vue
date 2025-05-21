@@ -4,8 +4,8 @@
 			width: 'w-full sm:w-[30%]',
 		}"
 	>
-		<UCard>
-			<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
+			<UCard>
 				<div class="flex-jbetween-icenter gap-4">
 					<h3>Update Category</h3>
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
@@ -13,6 +13,10 @@
 
 				<div class="w-[100%]">
 					<ZDropzone type="category" class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
+				</div>
+
+				<div class="w-[100%] hidden">
+					<ZDropzone type="category" class="mt-2" multiple :existing-images="state.category.images" @files-selected="updateImages" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
@@ -28,12 +32,18 @@
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
 				</div> -->
 
-				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-				</div>
-			</UForm>
-		</UCard>
+				<template #footer>
+					<div class="flex-jbetween-icenter">
+						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+
+						<div class="flex-jend gap-4">
+							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+						</div>
+					</div>
+				</template>
+			</UCard>
+		</UForm>
 	</UModal>
 </template>
 
@@ -51,7 +61,7 @@ const props = defineProps({
 		required: true,
 	},
 });
-const emit = defineEmits(['update', 'cancel']);
+const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const state = reactive({
 	category: props.category,
@@ -59,19 +69,28 @@ const state = reactive({
 
 const categoryStore = useProductCategoryStore();
 const { updating } = storeToRefs(categoryStore);
-const newThumbnail = ref<File | null>(null);
+const newThumbnail = ref<File>();
+const newImages = ref<File[]>();
 
 const updateThumbnail = (files: File[]) => {
 	newThumbnail.value = files[0];
 };
 
+const updateImages = (files: File[]) => {
+	newImages.value = files;
+};
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description, is_active, is_internal, thumbnail, parent_category } = event.data;
-	emit('update', { code, name, description, is_active, is_internal, images: null, thumbnail, parent_category });
+	const { code, name, description, is_active, is_internal, parent_category } = event.data;
+	emit('update', { code, name, description, is_active, is_internal, parent_category, thumbnail: newThumbnail.value, images: newImages.value });
 };
 
 const onCancel = () => {
 	emit('cancel');
+};
+
+const onDelete = () => {
+	emit('delete');
 };
 </script>
 

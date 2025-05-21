@@ -18,7 +18,7 @@
 						<UTable :rows="rows" :columns="category_columns" :loading="loading" @select="selectCategory">
 							<template #code-data="{ row }">
 								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
-									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
+									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-15 h-15 rounded-sm" />
 									<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
 								</div>
 							</template>
@@ -55,24 +55,6 @@ const links = [
 	},
 ];
 
-// const options = (row: Category) => [
-// 	[
-// 		{
-// 			label: 'Edit',
-// 			icon: ICONS.PENCIL,
-// 			click: async () => await editCategory(row.code),
-// 		},
-// 	],
-// 	[
-// 		{
-// 			label: 'Delete',
-// 			icon: ICONS.TRASH,
-// 			slot: 'danger',
-// 			click: () => deleteCategory(row.code),
-// 		},
-// 	],
-// ];
-
 const modal = useModal();
 const page = ref(1);
 const categoryStore = useProductCategoryStore();
@@ -107,12 +89,15 @@ const editCategory = async (code: string) => {
 	if (!category) return;
 	modal.open(ZModalCategoryDetail, {
 		category: JSON.parse(JSON.stringify(category)),
-		onUpdate: async (category: Category) => {
-			await categoryStore.updateCategory(category);
+		onUpdate: async ({ code, name, description, is_active, is_internal, parent_category, thumbnail, images }) => {
+			await categoryStore.updateCategory(code, name, description, is_active, is_internal, parent_category, thumbnail, images);
 			modal.close();
 		},
 		onCancel: () => {
 			modal.close();
+		},
+		onDelete: async () => {
+			deleteCategory(code);
 		},
 	});
 };

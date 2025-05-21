@@ -8,7 +8,5 @@ export const UpdateCategoryValidation = z.object({
 	description: z.string().optional().nullable(),
 	is_active: z.boolean().default(true),
 	is_internal: z.boolean().default(false).nullable(),
-	images: z.array(z.string()).optional().nullable(),
-	thumbnail: z.string().optional().nullable(),
 	parent_category: Category.optional().nullable(),
 });
