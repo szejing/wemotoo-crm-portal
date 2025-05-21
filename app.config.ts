@@ -83,6 +83,8 @@ export default defineAppConfig({
 				},
 				danger: {
 					solid: 'button-red-solid',
+					soft: 'button-red-soft',
+					ghost: 'button-red-ghost',
 					outline: 'button-red-outline disabled:button-red-outline-disabled',
 				},
 				neutral: {

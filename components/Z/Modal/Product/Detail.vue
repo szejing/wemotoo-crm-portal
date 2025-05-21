@@ -64,10 +64,10 @@
 
 				<template #footer>
 					<div class="flex-jbetween-icenter">
-						<UButton color="red" variant="soft" @click="onDelete">Delete</UButton>
+						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
 
 						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="link" @click="onCancel">Cancel</UButton>
+							<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
 							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
 						</div>
 					</div>

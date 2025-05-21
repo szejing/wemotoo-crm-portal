@@ -165,6 +165,10 @@
 		@apply ring-1 ring-inset ring-red-600 hover:ring-red-700 text-white disabled:bg-white bg-red-600 focus-visible:ring-2 focus-visible:ring-red-500 hover:bg-red-700;
 	}
 
+	.button-red-ghost {
+		@apply text-red-500/50 disabled:bg-red-50 hover:text-red-500;
+	}
+
 	.button-red-solid-disabled {
 		@apply ring-1 ring-inset ring-red-100 text-red-100 disabled:bg-red-50;
 	}

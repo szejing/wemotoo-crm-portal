@@ -4,7 +4,6 @@ import type { CategoryCreate } from '~/utils/types/form/category-creation';
 import type { Category } from '~/utils/types/category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { dir } from '~/utils/constants/dir';
-import { filename } from '~/utils/constants/filename';
 import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 
 const initialEmptyCategory: CategoryCreate = {
@@ -113,26 +112,53 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				this.loading = false;
 			}
 		},
-		async updateCategory(category: Category) {
+		async updateCategory(
+			code: string,
+			name: string,
+			description: string,
+			is_active: boolean,
+			is_internal: boolean,
+			parent_category: Category,
+			new_thumbnail?: File,
+			new_images?: File[],
+		) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				// const data = await $api.category.update(category.code, {
-				// 	name: category.name,
-				// 	description: category.description ?? null,
-				// 	slug: category.slug ?? null,
-				// 	is_internal: category.is_internal,
-				// 	is_active: category.is_active,
-				// 	images: category.images ?? null,
-				// 	thumbnail: category.thumbnail ?? null,
-				// 	parent_category_code: category.parent_category?.code ?? null,
-				// });
-				// if (data.category) {
-				// 	successNotification(`Category Updated !`);
-				// 	this.getCategories();
-				// }
+				let images: ImageReq[] = [];
+				if (new_images) {
+					const resp = await $api.image.uploadMultiple(new_images, `${dir.categories}/${code}`);
+					images = resp.images.map((image) => ({
+						id: image.id,
+						url: image.url,
+					}));
+				}
+
+				let thumbnail: ImageReq | undefined;
+				if (new_thumbnail) {
+					const resp = await $api.image.upload(new_thumbnail, `${dir.categories}/${code}`);
+					thumbnail = {
+						id: resp.image.id,
+						url: resp.image.url,
+					};
+				}
+
+				const data = await $api.category.update(code, {
+					name: name,
+					description: description,
+					is_internal: is_internal,
+					is_active: is_active,
+					images: images,
+					thumbnail: thumbnail,
+					parent_category_code: parent_category?.code,
+				});
+
+				if (data.category) {
+					successNotification(`Category Updated !`);
+					this.getCategories();
+				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
