@@ -27,8 +27,6 @@ export const ICONS = {
 	CUSTOMER_GROUP_ROUNDED: 'i-material-symbols-light-groups-outline-rounded',
 	SETTINGS_ROUNDED: 'i-material-symbols-light-settings-outline-rounded',
 	DATABASE_OUTLINE: 'i-material-symbols-database-outline',
-	ARROW_LEFT: 'i-material-symbols-arrow-back-rounded',
-	ARROW_RIGHT: 'i-material-symbols-arrow-forward-rounded',
 	MENU_OPEN_ROUNDED: 'i-material-symbols-arrow-forward-rounded',
 	ORDER_SUMMARY: 'i-material-symbols-bar-chart-4-bars-rounded',
 	SALES_SUMMARY: 'i-material-symbols-auto-graph-rounded',

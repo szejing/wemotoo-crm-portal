@@ -15,9 +15,12 @@
 
 					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="category_columns" :loading="loading">
-							<template #actions-data="{ row }">
-								<ZActionDropdown :items="options(row)" />
+						<UTable :rows="rows" :columns="category_columns" :loading="loading" @select="selectCategory">
+							<template #code-data="{ row }">
+								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
+									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
+									<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
+								</div>
 							</template>
 
 							<template #empty-state>
@@ -52,23 +55,23 @@ const links = [
 	},
 ];
 
-const options = (row: Category) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: async () => await editCategory(row.code),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => deleteCategory(row.code),
-		},
-	],
-];
+// const options = (row: Category) => [
+// 	[
+// 		{
+// 			label: 'Edit',
+// 			icon: ICONS.PENCIL,
+// 			click: async () => await editCategory(row.code),
+// 		},
+// 	],
+// 	[
+// 		{
+// 			label: 'Delete',
+// 			icon: ICONS.TRASH,
+// 			slot: 'danger',
+// 			click: () => deleteCategory(row.code),
+// 		},
+// 	],
+// ];
 
 const modal = useModal();
 const page = ref(1);
@@ -80,6 +83,10 @@ const { loading, categories, pageSize } = storeToRefs(categoryStore);
 const rows = computed(() => {
 	return categories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
+
+const selectCategory = async (category: Category) => {
+	editCategory(category.code!);
+};
 
 const deleteCategory = async (code: string) => {
 	modal.open(ZModalConfirmation, {

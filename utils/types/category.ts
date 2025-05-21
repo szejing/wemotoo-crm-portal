@@ -1,3 +1,5 @@
+import type { Image } from './image';
+
 export type CategoryInput = {
 	code: string;
 	name?: string;
@@ -12,8 +14,8 @@ export type Category = {
 	is_active: boolean;
 	is_internal: boolean;
 
-	images?: string[] | undefined;
-	thumbnail?: string | undefined;
+	images?: Image[] | undefined;
+	thumbnail?: Image | undefined;
 
 	parent_category_code?: string | undefined;
 	parent_category?: Category | undefined;

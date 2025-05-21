@@ -31,6 +31,19 @@
 				</div>
 			</div>
 		</div>
+
+		<div v-if="existingImages != null && existingImages.length > 0" class="preview-section">
+			<div class="preview-grid">
+				<div v-for="(preview, index) in existingImages" :key="index" class="preview-item">
+					<div class="preview-item-container group">
+						<img v-if="preview != null" :src="preview.url" alt="Preview image" />
+						<UButton class="delete-button" @click="removeExistingImage(index)">
+							<UIcon name="i-heroicons-trash" class="w-5 h-5" />
+						</UButton>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -41,6 +54,10 @@ const props = defineProps({
 	multiple: {
 		type: Boolean,
 		default: false,
+	},
+	existingImages: {
+		type: Array,
+		default: () => [],
 	},
 });
 
@@ -105,6 +122,8 @@ const removePreview = (index) => {
 	// Emit the updated files array
 	emit('files-selected', files.value);
 };
+
+const removeExistingImage = (index) => {};
 
 const previewFiles = (files) => {
 	// Revoke previous previews

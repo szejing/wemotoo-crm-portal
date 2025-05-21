@@ -82,6 +82,10 @@
 		@apply flex justify-between items-center;
 	}
 
+	.flex-start {
+		@apply flex flex-row justify-start items-start;
+	}
+
 	/**************************** word styling ****************************/
 	h1 {
 		@apply font-lato font-semibold text-2xl text-secondary-600;

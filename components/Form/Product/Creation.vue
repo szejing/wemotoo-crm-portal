@@ -130,7 +130,7 @@ const sale_price = computed({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = event.data;
+	const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, options, variants, type } = event.data;
 
 	// price_types
 	const prodPrice: PriceInput[] = [];
@@ -201,25 +201,23 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		});
 	});
 
-	const result = await productStore.createProduct({
-		code,
-		name,
-		short_desc,
-		long_desc,
-		is_active,
-		is_discountable: true,
-		is_giftcard: false,
-		price_types: prodPrice,
-		categories: prodCategories,
-		type: type,
-		tags: prodTags,
-		status: status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT,
-		galleries,
-		thumbnail,
-		options: prodOptions,
-		variants: prodVariants,
-		metadata: newProduct.value.metadata ? JSON.parse(JSON.stringify(newProduct.value.metadata)) : undefined,
-	});
+	newProduct.value.code = code;
+	newProduct.value.name = name;
+	newProduct.value.short_desc = short_desc;
+	newProduct.value.long_desc = long_desc;
+	newProduct.value.is_active = is_active;
+	newProduct.value.is_discountable = true;
+	newProduct.value.is_giftcard = false;
+	newProduct.value.price_types = prodPrice;
+	newProduct.value.categories = prodCategories;
+	newProduct.value.type = type;
+	newProduct.value.tags = prodTags;
+	newProduct.value.status = status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT;
+	newProduct.value.options = prodOptions;
+	newProduct.value.variants = prodVariants;
+	newProduct.value.metadata = newProduct.value.metadata ? JSON.parse(JSON.stringify(newProduct.value.metadata)) : undefined;
+
+	const result = await productStore.createProduct();
 
 	if (result) {
 		navigateTo('/products');

@@ -1,20 +1,16 @@
 <template>
 	<div>
 		<UForm :schema="CreateCategoryValidation" :state="newCategory" class="space-y-4" @submit="onSubmit">
+			<ZDropzone type="category" @files-selected="updateThumbnail" />
+
 			<!-- *********************** General Info *********************** -->
 			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />
 			<!-- *********************** General Info *********************** -->
 
-			<div>
+			<!-- <div>
 				<h4>Parent Category</h4>
 				<ZSelectMenuCategory v-model:category="newCategory.parent_category" />
-			</div>
-
-			<div>
-				<h4>Thumbnail</h4>
-				<ZDropzoneSingle :url-single="newCategory.thumbnail" type="category" @update:url-single="updateThumbnail" />
-				<NuxtImg :src="newCategory.thumbnail" class="w-full h-full object-cover" />
-			</div>
+			</div> -->
 
 			<div class="flex-center text-center mt-3">
 				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
@@ -24,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import { NuxtImg } from '#components';
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 
@@ -39,13 +34,25 @@ onMounted(() => {
 	categoryStore.resetNewCategory();
 });
 
-const updateThumbnail = (url: string) => {
-	newCategory.value.thumbnail = url;
+// const parent_category_code = computed(() => {
+// 	return newCategory.value.parent_category_code;
+// });
+
+const updateThumbnail = (files: File[]) => {
+	newCategory.value.thumbnail = files[0];
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description, is_internal, is_active, images, thumbnail, parent_category } = event.data;
-	await categoryStore.addCategory({ code, name, description, is_internal, is_active, images, thumbnail, parent_category });
+	const { code, name, description, is_internal, is_active, parent_category } = event.data;
+
+	newCategory.value.code = code;
+	newCategory.value.name = name;
+	newCategory.value.description = description;
+	newCategory.value.is_internal = is_internal;
+	newCategory.value.is_active = is_active;
+	newCategory.value.parent_category_code = parent_category?.code ?? undefined;
+
+	await categoryStore.createCategory();
 };
 </script>
 

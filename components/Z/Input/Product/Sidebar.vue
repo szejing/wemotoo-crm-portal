@@ -11,11 +11,8 @@
 		<!-- ***** Categories ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Main Category</h3>
-				<ZSelectMenuCategory v-model:category="newProduct.category" />
-
-				<h3>Sub Categories</h3>
-				<ZSelectMenuCategories v-model:categories="newProduct.subCategories" />
+				<h3>Category</h3>
+				<ZSelectMenuCategories v-model:categories="newProduct.categories" />
 			</template>
 		</UCard>
 
@@ -32,14 +29,16 @@
 			<template #header>
 				<h3>Image</h3>
 			</template>
-			<ZDropzoneSingle :url-single="newProduct.thumbnail" @update:url-single="updateThumbnail" />
+
+			<ZDropzone type="product" @files-selected="updateThumbnail" />
 		</UCard>
-		<!-- ***** Galleries ***** -->
+		<!-- ***** Images ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Galleries</h3>
+				<h3>Images</h3>
 			</template>
-			<ZDropzoneMultiple :urls-multiple="newProduct.galleries" @update:urls-multiple="updateGalleries" />
+
+			<ZDropzone type="product" multiple @files-selected="updateImages" />
 		</UCard>
 	</div>
 </template>
@@ -50,13 +49,12 @@ const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 const productStore = useProductStore();
 const { newProduct } = storeToRefs(productStore);
 
-const updateThumbnail = (url: string) => {
-	newProduct.value.thumbnail = url;
+const updateThumbnail = (files: File[]) => {
+	newProduct.value.thumbnail = files[0];
 };
 
-const updateGalleries = (urls: string[]) => {
-	console.log(urls);
-	// newProduct.value.thumbnail = url;
+const updateImages = (files: File[]) => {
+	newProduct.value.images = files;
 };
 </script>
 

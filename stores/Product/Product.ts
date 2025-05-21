@@ -2,8 +2,11 @@ import { ProductStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ProductCreate } from '~/utils/types/form/product-creation';
+import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
+import { dir } from '~/utils/constants/dir';
 
-const initialEmptyProduct: Product = {
+const initialEmptyProduct: ProductCreate = {
 	code: undefined,
 	name: undefined,
 	short_desc: undefined,
@@ -26,8 +29,8 @@ const initialEmptyProduct: Product = {
 	// thumbnail
 	thumbnail: undefined,
 
-	// galleries
-	galleries: undefined,
+	// images
+	images: undefined,
 
 	// price
 	price_types: [
@@ -45,7 +48,7 @@ const initialEmptyProduct: Product = {
 	variants: [],
 
 	// metadata
-	metadata: null,
+	metadata: undefined,
 };
 
 export const useProductStore = defineStore('productStore', {
@@ -99,17 +102,39 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async createProduct(product: Product): Promise<boolean> {
+		async createProduct(): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.product.create(product);
+				let images: ImageReq[] = [];
+				if (this.newProduct.images) {
+					const resp = await $api.image.uploadMultiple(this.newProduct.images, `${dir.products}/${this.newProduct.code}`);
+					images = resp.images.map((image) => ({
+						id: image.id,
+						url: image.url,
+					}));
+				}
+
+				let thumbnail: ImageReq | undefined;
+				if (this.newProduct.thumbnail) {
+					const resp = await $api.image.upload(this.newProduct.thumbnail, `${dir.products}/${this.newProduct.code}`);
+					thumbnail = {
+						id: resp.image.id,
+						url: resp.image.url,
+					};
+				}
+
+				const data = await $api.product.create({
+					...this.newProduct,
+					images: images,
+					thumbnail: thumbnail,
+				});
 
 				if (data.products) {
-					successNotification(`${product.code} - Product Created !`);
+					successNotification(`${this.newProduct.code} - Product Created !`);
 					this.products = data.products;
 				}
 
@@ -130,35 +155,35 @@ export const useProductStore = defineStore('productStore', {
 
 			const { $api } = useNuxtApp();
 
-			try {
-				const data = await $api.product.update(code, {
-					name: product.name,
-					short_desc: product.short_desc ?? undefined,
-					long_desc: product.long_desc ?? undefined,
-					is_active: product.is_active,
-					is_discountable: product.is_discountable,
-					is_giftcard: product.is_giftcard,
-					price_types: product.price_types,
-					categories: product.categories,
-					type: product.type,
-					tags: product.tags,
-					status: product.status,
-					galleries: product.galleries ?? undefined,
-					thumbnail: product.thumbnail ?? undefined,
-					options: product.options,
-					variants: product.variants,
-				});
+			// try {
+			// 	const data = await $api.product.update(code, {
+			// 		name: product.name,
+			// 		short_desc: product.short_desc ?? undefined,
+			// 		long_desc: product.long_desc ?? undefined,
+			// 		is_active: product.is_active,
+			// 		is_discountable: product.is_discountable,
+			// 		is_giftcard: product.is_giftcard,
+			// 		price_types: product.price_types,
+			// 		categories: product.categories,
+			// 		type: product.type,
+			// 		tags: product.tags,
+			// 		status: product.status,
+			// 		images: product.images ?? undefined,
+			// 		thumbnail: product.thumbnail ?? undefined,
+			// 		options: product.options,
+			// 		variants: product.variants,
+			// 	});
 
-				if (data.product) {
-					successNotification(`Product Updated !`);
-					this.getProducts();
-				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
-			} finally {
-				this.updating = false;
-			}
+			// 	if (data.product) {
+			// 		successNotification(`Product Updated !`);
+			// 		this.getProducts();
+			// 	}
+			// } catch (err: any) {
+			// 	console.error(err);
+			// 	failedNotification(err.message);
+			// } finally {
+			// 	this.updating = false;
+			// }
 		},
 
 		async deleteProduct(code: string) {

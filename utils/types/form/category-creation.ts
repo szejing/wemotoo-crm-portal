@@ -1,25 +1,23 @@
-import type { Category } from '../category';
-
 export type CategoryCreate = {
 	// name
-	name: string | undefined;
+	name: string;
 
-	// id
-	code: string | undefined;
+	// code
+	code: string;
 
 	// description
 	description?: string | undefined;
 
-	is_active?: true;
+	is_active: boolean;
 
-	is_internal?: false;
+	is_internal: boolean;
 
 	// images
-	images?: string[] | undefined;
+	images?: File[] | undefined;
 
 	// thumbnail
-	thumbnail?: string | undefined;
+	thumbnail?: File | undefined;
 
 	// parent_category
-	parent_category?: Category | undefined;
+	parent_category_code?: string | undefined;
 };

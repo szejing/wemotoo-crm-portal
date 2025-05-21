@@ -105,7 +105,7 @@ import type { MaintenanceMetadata } from 'wemotoo-common';
 
 const props = defineProps({
 	metadata: {
-		type: Object as PropType<Record<string, unknown> | null>,
+		type: Object as PropType<Record<string, unknown> | undefined>,
 		required: true,
 	},
 });
