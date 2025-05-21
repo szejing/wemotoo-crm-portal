@@ -6,10 +6,9 @@ import type { UploadImagesResp } from './models/response/upload-images.resp';
 class ImageModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Images;
 
-	async upload(file: File, fileName: string, dir: string): Promise<UploadImageResp> {
+	async upload(file: File, dir: string): Promise<UploadImageResp> {
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('fileName', fileName);
 		formData.append('dir', dir);
 
 		return await this.call<UploadImageResp>({
@@ -19,11 +18,10 @@ class ImageModule extends HttpFactory {
 		});
 	}
 
-	async uploadMultiple(files: File[], fileName: string, dir: string): Promise<UploadImagesResp> {
+	async uploadMultiple(files: File[], dir: string): Promise<UploadImagesResp> {
 		const formData = new FormData();
-		files.forEach((file, index) => {
+		files.forEach((file) => {
 			formData.append('files', file);
-			formData.append('fileNames', fileName + index);
 		});
 		formData.append('dir', dir);
 

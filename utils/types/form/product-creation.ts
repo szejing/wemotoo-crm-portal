@@ -1,12 +1,11 @@
 import type { ProductStatus } from 'wemotoo-common';
-import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
-import type { CategoryInput } from '~/utils/types/category';
-import type { PriceInput } from '~/utils/types/price';
-import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
-import type { TagInput } from '~/utils/types/tag';
+import type { TagInput } from '../tag';
+import type { CategoryInput } from '../category';
+import type { PriceInput } from '../price';
+import type { ProdOptionInput, ProdVariantInput } from '../product';
 
-export type CreateProductReq = {
-	code?: string | undefined;
+export type ProductCreate = {
+	code: string | undefined;
 	name: string | undefined;
 	short_desc: string | undefined;
 	long_desc: string | undefined;
@@ -23,10 +22,10 @@ export type CreateProductReq = {
 	tags: TagInput[] | undefined;
 
 	// thumbnail
-	thumbnail: ImageReq | undefined;
+	thumbnail: File | undefined;
 
 	// images
-	images: ImageReq[] | undefined;
+	images: File[] | undefined;
 
 	// price
 	price_types: PriceInput[] | undefined;
@@ -37,4 +36,7 @@ export type CreateProductReq = {
 
 	// type
 	type: number;
+
+	// metadata
+	metadata: Record<string, any> | undefined;
 };

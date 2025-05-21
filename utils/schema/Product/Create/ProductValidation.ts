@@ -45,8 +45,6 @@ export const CreateProductValidation = z.object({
 	long_desc: z.string().optional(),
 	is_active: z.boolean().default(true),
 	status: z.string(),
-	thumbnail: z.string().optional(),
-	galleries: z.array(z.string()).optional(),
 	// categories
 	categories: z.array(Category).optional(),
 	// tags

@@ -21,6 +21,13 @@
 				</div>
 
 				<UTable :rows="rows" :columns="product_columns" @select="selectProduct">
+					<template #code-data="{ row }">
+						<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
+							<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
+							<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
+						</div>
+					</template>
+
 					<template #orig_sell_price-data="{ row }">
 						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price.toFixed(2) }}</p>
 					</template>
@@ -29,12 +36,6 @@
 						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
 							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
 							<span v-else> - </span>
-						</p>
-					</template>
-
-					<template #code-data="{ row }">
-						<p class="font-bold">
-							{{ row.code }}
 						</p>
 					</template>
 
@@ -142,7 +143,7 @@ const editProduct = async (product: Product) => {
 			deleteProduct(code!);
 		},
 		onUpdate: async (prod: Product) => {
-			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, galleries, thumbnail, options, variants, type } = prod;
+			const { code, name, short_desc, long_desc, is_active, price_types, categories, tags, status, images, thumbnail, options, variants, type } = prod;
 
 			// price_types
 			const prodPrice: PriceInput[] = [];
@@ -226,7 +227,7 @@ const editProduct = async (product: Product) => {
 				categories: prodCategories,
 				tags: prodTags,
 				status: status,
-				galleries: galleries ?? undefined,
+				images: images ?? undefined,
 				thumbnail: thumbnail ?? undefined,
 				options: prodOptions,
 				variants: prodVariants,

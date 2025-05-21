@@ -11,6 +11,10 @@
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
 				</div>
 
+				<div class="w-[100%]">
+					<ZDropzone type="category" class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
+				</div>
+
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductCategoryGeneralInfo
 					v-model:code="state.category.code"
@@ -19,15 +23,10 @@
 				/>
 				<!-- *********************** General Info *********************** -->
 
-				<div>
+				<!-- <div>
 					<h4>Parent Category</h4>
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
-				</div>
-
-				<div class="w-[100%]">
-					<h4>Thumbnail</h4>
-					<ZDropzoneSingle :url-single="state.category.thumbnail" @update:url-single="updateThumbnail" />
-				</div>
+				</div> -->
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
@@ -60,9 +59,10 @@ const state = reactive({
 
 const categoryStore = useProductCategoryStore();
 const { updating } = storeToRefs(categoryStore);
+const newThumbnail = ref<File | null>(null);
 
-const updateThumbnail = (url: string) => {
-	state.category.thumbnail = url;
+const updateThumbnail = (files: File[]) => {
+	newThumbnail.value = files[0];
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

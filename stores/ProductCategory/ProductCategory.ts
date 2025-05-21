@@ -3,10 +3,13 @@ import { options_page_size } from '~/utils/options';
 import type { CategoryCreate } from '~/utils/types/form/category-creation';
 import type { Category } from '~/utils/types/category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import { dir } from '~/utils/constants/dir';
+import { filename } from '~/utils/constants/filename';
+import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 
 const initialEmptyCategory: CategoryCreate = {
-	code: undefined,
-	name: undefined,
+	code: '',
+	name: '',
 	description: undefined,
 
 	is_active: true,
@@ -16,11 +19,11 @@ const initialEmptyCategory: CategoryCreate = {
 	// thumbnail
 	thumbnail: undefined,
 
-	// galleries
+	// images
 	images: undefined,
 
 	// parent category
-	parent_category: undefined,
+	parent_category_code: undefined,
 };
 
 export const useProductCategoryStore = defineStore('productCategoryStore', {
@@ -61,27 +64,44 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				this.loading = false;
 			}
 		},
-		async addCategory(category: Category) {
+		async createCategory() {
 			this.adding = true;
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
+				let images: ImageReq[] = [];
+				if (this.newCategory.images) {
+					const resp = await $api.image.uploadMultiple(this.newCategory.images, `${dir.categories}/${this.newCategory.code}`);
+					images = resp.images.map((image) => ({
+						id: image.id,
+						url: image.url,
+					}));
+				}
+
+				let thumbnail: ImageReq | undefined;
+				if (this.newCategory.thumbnail) {
+					const resp = await $api.image.upload(this.newCategory.thumbnail, `${dir.categories}/${this.newCategory.code}`);
+					thumbnail = {
+						id: resp.image.id,
+						url: resp.image.url,
+					};
+				}
+
 				const data = await $api.category.create({
-					code: category.code,
-					name: category.name,
-					description: category.description ?? null,
-					slug: null,
-					is_internal: category.is_internal,
-					is_active: category.is_active,
-					images: category.images ?? null,
-					thumbnail: category.thumbnail ?? null,
-					parent_category_code: category.parent_category?.code ?? null,
+					code: this.newCategory.code,
+					name: this.newCategory.name,
+					description: this.newCategory.description,
+					is_internal: this.newCategory.is_internal,
+					is_active: this.newCategory.is_active,
+					images: images,
+					thumbnail: thumbnail,
+					parent_category_code: this.newCategory.parent_category_code,
 				});
 
 				if (data.category) {
-					successNotification(`${category.name} - Category Created !`);
+					successNotification(`${data.category.name} - Category Created !`);
 					this.categories.push(data.category);
 				}
 				this.resetNewCategory();
@@ -99,21 +119,20 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.category.update(category.code, {
-					name: category.name,
-					description: category.description ?? null,
-					slug: category.slug ?? null,
-					is_internal: category.is_internal,
-					is_active: category.is_active,
-					images: category.images ?? null,
-					thumbnail: category.thumbnail ?? null,
-					parent_category_code: category.parent_category?.code ?? null,
-				});
-
-				if (data.category) {
-					successNotification(`Category Updated !`);
-					this.getCategories();
-				}
+				// const data = await $api.category.update(category.code, {
+				// 	name: category.name,
+				// 	description: category.description ?? null,
+				// 	slug: category.slug ?? null,
+				// 	is_internal: category.is_internal,
+				// 	is_active: category.is_active,
+				// 	images: category.images ?? null,
+				// 	thumbnail: category.thumbnail ?? null,
+				// 	parent_category_code: category.parent_category?.code ?? null,
+				// });
+				// if (data.category) {
+				// 	successNotification(`Category Updated !`);
+				// 	this.getCategories();
+				// }
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);

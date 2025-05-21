@@ -6,8 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const formData = await readFormData(event);
 		const files = formData.getAll('files');
-		const name = formData.get('name');
-		const type = formData.get('type');
+		const dir = formData.get('dir');
 
 		if (!files || !(files instanceof Array)) {
 			throw createError({
@@ -17,9 +16,7 @@ export default defineEventHandler(async (event) => {
 		}
 		// Start of Selection
 		const newFormData = new FormData();
-
-		newFormData.append('name', name as string);
-		newFormData.append('type', type as string);
+		newFormData.append('dir', dir as string);
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
@@ -34,7 +31,7 @@ export default defineEventHandler(async (event) => {
 			newFormData.append('files', blob, file.name);
 		}
 
-		const result = await $fetch(`${Routes.Image.UploadMultiple()}`, {
+		const result = await $fetch(`${Routes.Images.UploadMultiple()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'POST',
 			body: newFormData,

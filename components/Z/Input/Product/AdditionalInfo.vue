@@ -91,7 +91,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProductCreate } from '~/utils/types/form/product-creation';
+import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
@@ -120,7 +121,7 @@ const normal_ui_tabs = {
 
 const props = defineProps({
 	product: {
-		type: Object as PropType<Product>,
+		type: Object as PropType<ProductCreate>,
 		required: true,
 	},
 	cardUi: Object,
