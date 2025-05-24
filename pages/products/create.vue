@@ -14,7 +14,14 @@
 			<FormProductCreation class="col-span-3" />
 
 			<div class="side-wrapper">
-				<ZInputProductSidebar />
+				<ZInputProductSidebar
+					:product="newProduct"
+					@update_status="updateStatus"
+					@update_categories="updateCategories"
+					@update_tags="updateTags"
+					@update_thumbnail="updateThumbnail"
+					@update_images="updateImages"
+				/>
 			</div>
 
 			<UModal v-model="isOpen">
@@ -34,7 +41,14 @@
 						</div>
 					</template>
 
-					<ZInputProductSidebar />
+					<ZInputProductSidebar
+						:product="newProduct"
+						@update_status="updateStatus"
+						@update_categories="updateCategories"
+						@update_tags="updateTags"
+						@update_thumbnail="updateThumbnail"
+						@update_images="updateImages"
+					/>
 				</UCard>
 			</UModal>
 		</div>
@@ -42,6 +56,10 @@
 </template>
 
 <script lang="ts" setup>
+import type { ProductStatus } from 'wemotoo-common';
+import type { Category } from '~/utils/types/category';
+import type { Tag } from '~/utils/types/tag';
+
 const links = [
 	{
 		label: 'Products',
@@ -55,6 +73,33 @@ const links = [
 ];
 
 const isOpen = ref(false);
+
+const productStore = useProductStore();
+const { newProduct } = storeToRefs(productStore);
+
+onBeforeRouteLeave(() => {
+	productStore.resetNewProduct();
+});
+
+const updateStatus = (value: ProductStatus) => {
+	newProduct.value.status = value;
+};
+
+const updateCategories = (value: Category[]) => {
+	newProduct.value.categories = value;
+};
+
+const updateTags = (value: Tag[]) => {
+	newProduct.value.tags = value;
+};
+
+const updateThumbnail = (value: File) => {
+	newProduct.value.thumbnail = value;
+};
+
+const updateImages = (value: File[]) => {
+	newProduct.value.images = value;
+};
 </script>
 
 <style scoped lang="postcss">

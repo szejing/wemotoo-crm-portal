@@ -58,6 +58,7 @@ export const useProductStore = defineStore('productStore', {
 		updating: false as boolean,
 		newProduct: structuredClone(initialEmptyProduct),
 		products: [] as Product[],
+		current_product: undefined as Product | undefined,
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
@@ -150,40 +151,69 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async updateProduct(code: string, product: Product) {
+		async updateProduct(new_thumbnail?: File, new_images?: File[]) {
+			if (!this.current_product) {
+				return;
+			}
+			const code = this.current_product.code!;
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
-			// try {
-			// 	const data = await $api.product.update(code, {
-			// 		name: product.name,
-			// 		short_desc: product.short_desc ?? undefined,
-			// 		long_desc: product.long_desc ?? undefined,
-			// 		is_active: product.is_active,
-			// 		is_discountable: product.is_discountable,
-			// 		is_giftcard: product.is_giftcard,
-			// 		price_types: product.price_types,
-			// 		categories: product.categories,
-			// 		type: product.type,
-			// 		tags: product.tags,
-			// 		status: product.status,
-			// 		images: product.images ?? undefined,
-			// 		thumbnail: product.thumbnail ?? undefined,
-			// 		options: product.options,
-			// 		variants: product.variants,
-			// 	});
+			try {
+				let images: ImageReq[] = [];
+				if (new_images && new_images.length > 0) {
+					const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
+					images = resp.images.map((image) => ({
+						id: image.id,
+						url: image.url,
+					}));
+				}
 
-			// 	if (data.product) {
-			// 		successNotification(`Product Updated !`);
-			// 		this.getProducts();
-			// 	}
-			// } catch (err: any) {
-			// 	console.error(err);
-			// 	failedNotification(err.message);
-			// } finally {
-			// 	this.updating = false;
-			// }
+				let thumbnail: ImageReq | undefined;
+				if (new_thumbnail) {
+					const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
+					thumbnail = {
+						id: resp.image.id,
+						url: resp.image.url,
+					};
+				}
+
+				const data = await $api.product.update(code, {
+					name: this.current_product.name,
+					short_desc: this.current_product.short_desc ?? undefined,
+					long_desc: this.current_product.long_desc ?? undefined,
+					is_active: this.current_product.is_active,
+					is_discountable: this.current_product.is_discountable,
+					is_giftcard: this.current_product.is_giftcard,
+					price_types: this.current_product.price_types,
+					categories: this.current_product.categories,
+					type: this.current_product.type,
+					tags: this.current_product.tags,
+					status: this.current_product.status,
+					images: images,
+					thumbnail: thumbnail,
+					options: this.current_product.options,
+					variants: this.current_product.variants,
+				});
+
+				if (data.product) {
+					successNotification(`Product ${code} Updated !`);
+					this.products = this.products.map((product) => {
+						if (product.code === code) {
+							return data.product;
+						}
+						return product;
+					});
+
+					// await this.getProducts();
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.updating = false;
+			}
 		},
 
 		async deleteProduct(code: string) {

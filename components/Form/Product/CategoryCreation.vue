@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UForm :schema="CreateCategoryValidation" :state="newCategory" class="space-y-4" @submit="onSubmit">
-			<ZDropzone type="category" @files-selected="updateThumbnail" />
+			<ZDropzone @files-selected="updateThumbnail" />
 
 			<!-- *********************** General Info *********************** -->
 			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />

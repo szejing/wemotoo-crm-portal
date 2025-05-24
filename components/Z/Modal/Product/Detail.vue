@@ -6,6 +6,15 @@
 	>
 		<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
 			<UCard>
+				<template #header>
+					<div class="flex-jbetween-icenter">
+						<NuxtImg :src="current_product.thumbnail.url" class="w-52 h-52 rounded-md" />
+					</div>
+					<div v-if="current_product.images.length > 0">
+						<NuxtImg v-for="image in current_product.images" :key="image.id" :src="image.url" class="w-24 rounded-sm" />
+					</div>
+				</template>
+
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
 					v-model:is-active="current_product.is_active"
