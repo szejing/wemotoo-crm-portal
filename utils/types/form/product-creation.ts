@@ -18,6 +18,9 @@ export type ProductCreate = {
 	// categories
 	categories: CategoryInput[] | undefined;
 
+	// type
+	type: number;
+
 	// tags
 	tags: TagInput[] | undefined;
 
@@ -33,9 +36,6 @@ export type ProductCreate = {
 	// variants
 	options: ProdOptionInput[] | undefined;
 	variants: ProdVariantInput[] | undefined;
-
-	// type
-	type: number;
 
 	// metadata
 	metadata: Record<string, any> | undefined;

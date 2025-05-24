@@ -1,15 +1,15 @@
 <template>
-	<UForm :schema="CreateProductValidation" :state="newProduct" class="space-y-4" @submit="onSubmit">
+	<UForm :schema="UpdateProductValidation" :state="current_product!" class="space-y-4" @submit="onSubmit">
 		<!-- *********************** General Info *********************** -->
 		<ZInputProductGeneralInfo
-			v-model:is-active="newProduct.is_active"
-			v-model:is-giftcard="newProduct.is_giftcard"
-			v-model:is-discountable="newProduct.is_discountable"
-			v-model:code="newProduct.code"
-			v-model:name="newProduct.name"
-			v-model:short_desc="newProduct.short_desc"
-			v-model:long_desc="newProduct.long_desc"
-			v-model:type="newProduct.type"
+			v-model:is-active="current_product!.is_active"
+			v-model:is-giftcard="current_product!.is_giftcard"
+			v-model:is-discountable="current_product!.is_discountable"
+			v-model:code="current_product!.code"
+			v-model:name="current_product!.name"
+			v-model:short_desc="current_product!.short_desc"
+			v-model:long_desc="current_product!.long_desc"
+			v-model:type="current_product!.type"
 		/>
 		<!-- *********************** General Info *********************** -->
 
@@ -24,7 +24,7 @@
 
 		<!-- *********************** Additional Info *********************** -->
 		<ZInputProductAdditionalInfo
-			:product="newProduct"
+			:product="current_product!"
 			@update_options="updateProductOptions"
 			@update_variants="updateProductVariants"
 			@update_metadata="updateProductMetadata"
@@ -32,7 +32,7 @@
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
-			<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block :loading="adding">Submit</UButton>
+			<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block>Submit</UButton>
 		</div>
 	</UForm>
 </template>
@@ -41,40 +41,41 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { ProductStatus } from 'wemotoo-common';
-import { CreateProductValidation } from '~/utils/schema';
+import { UpdateProductValidation } from '~/utils/schema';
 import type { CategoryInput } from '~/utils/types/category';
 
 import type { PriceInput } from '~/utils/types/price';
 import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
 import type { TagInput } from '~/utils/types/tag';
-import { ZModalLoading } from '#components';
 
-type Schema = z.output<typeof CreateProductValidation>;
+type Schema = z.output<typeof UpdateProductValidation>;
 
 const productStore = useProductStore();
-const { newProduct, adding } = storeToRefs(productStore);
+const { current_product } = storeToRefs(productStore);
+
+const emit = defineEmits(['update_product']);
 
 const updateProductOptions = (value: any) => {
-	newProduct.value.options = value;
+	current_product.value!.options = value;
 };
 
 const updateProductVariants = (value: any) => {
-	newProduct.value.variants = value;
+	current_product.value!.variants = value;
 };
 
 const updateProductMetadata = (value: any) => {
-	newProduct.value.metadata = value;
+	current_product.value!.metadata = value;
 };
 
 const currency_code = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.currency_code ?? undefined;
+		return current_product.value!.price_types?.[0]?.currency_code ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].currency_code = value;
+		if (current_product.value!.price_types && current_product.value!.price_types.length > 0) {
+			current_product.value!.price_types[0].currency_code = value;
 		} else {
-			newProduct.value.price_types = [
+			current_product.value!.price_types = [
 				{ id: undefined, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: value },
 			];
 		}
@@ -83,13 +84,13 @@ const currency_code = computed({
 
 const orig_sell_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.orig_sell_price ?? undefined;
+		return current_product.value!.price_types?.[0]?.orig_sell_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].orig_sell_price = value;
+		if (current_product.value!.price_types && current_product.value!.price_types.length > 0) {
+			current_product.value!.price_types[0].orig_sell_price = value;
 		} else {
-			newProduct.value.price_types = [
+			current_product.value!.price_types = [
 				{ id: undefined, orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -98,13 +99,13 @@ const orig_sell_price = computed({
 
 const cost_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.cost_price ?? undefined;
+		return current_product.value!.price_types?.[0]?.cost_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].cost_price = value;
+		if (current_product.value!.price_types && current_product.value!.price_types.length > 0) {
+			current_product.value!.price_types[0].cost_price = value;
 		} else {
-			newProduct.value.price_types = [
+			current_product.value!.price_types = [
 				{ id: undefined, cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -113,13 +114,13 @@ const cost_price = computed({
 
 const sale_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.sale_price ?? undefined;
+		return current_product.value!.price_types?.[0]?.sale_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].sale_price = value;
+		if (current_product.value!.price_types && current_product.value!.price_types.length > 0) {
+			current_product.value!.price_types[0].sale_price = value;
 		} else {
-			newProduct.value.price_types = [
+			current_product.value!.price_types = [
 				{ id: undefined, sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -133,7 +134,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const prodPrice: PriceInput[] = [];
 	price_types?.forEach((price) => {
 		prodPrice.push({
-			id: undefined,
+			id: price.id ?? undefined,
 			orig_sell_price: price.orig_sell_price,
 			cost_price: price.cost_price,
 			sale_price: price.sale_price,
@@ -198,38 +199,23 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		});
 	});
 
-	newProduct.value.code = code;
-	newProduct.value.name = name;
-	newProduct.value.short_desc = short_desc;
-	newProduct.value.long_desc = long_desc;
-	newProduct.value.is_active = is_active;
-	newProduct.value.is_discountable = true;
-	newProduct.value.is_giftcard = false;
-	newProduct.value.price_types = prodPrice;
-	newProduct.value.categories = prodCategories;
-	newProduct.value.type = type;
-	newProduct.value.tags = prodTags;
-	newProduct.value.status = status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT;
-	newProduct.value.options = prodOptions;
-	newProduct.value.variants = prodVariants;
-	newProduct.value.metadata = newProduct.value.metadata ? JSON.parse(JSON.stringify(newProduct.value.metadata)) : undefined;
+	current_product.value!.code = code;
+	current_product.value!.name = name;
+	current_product.value!.short_desc = short_desc ?? undefined;
+	current_product.value!.long_desc = long_desc ?? undefined;
+	current_product.value!.is_active = is_active;
+	current_product.value!.is_discountable = true;
+	current_product.value!.is_giftcard = false;
+	current_product.value!.price_types = prodPrice;
+	current_product.value!.categories = prodCategories;
+	current_product.value!.type = type;
+	current_product.value!.tags = prodTags;
+	current_product.value!.status = status == ProductStatus.PUBLISHED ? ProductStatus.PUBLISHED : ProductStatus.DRAFT;
+	current_product.value!.options = prodOptions;
+	current_product.value!.variants = prodVariants;
+	current_product.value!.metadata = current_product.value!.metadata ? JSON.parse(JSON.stringify(current_product.value!.metadata)) : undefined;
 
-	const modal = useModal();
-	modal.open(ZModalLoading, {
-		key: 'loading',
-	});
-
-	try {
-		const result = await productStore.createProduct();
-
-		if (result) {
-			navigateTo('/products');
-		}
-	} catch (error) {
-		console.error(error);
-	} finally {
-		modal.close();
-	}
+	emit('update_product');
 };
 </script>
 

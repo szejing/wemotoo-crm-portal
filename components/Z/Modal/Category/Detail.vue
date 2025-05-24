@@ -12,11 +12,11 @@
 				</div>
 
 				<div class="w-[100%]">
-					<ZDropzone type="category" class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
+					<ZDropzone class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
 				</div>
 
 				<div class="w-[100%] hidden">
-					<ZDropzone type="category" class="mt-2" multiple :existing-images="state.category.images" @files-selected="updateImages" />
+					<ZDropzone class="mt-2" multiple :existing-images="state.category.images" @files-selected="updateImages" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
