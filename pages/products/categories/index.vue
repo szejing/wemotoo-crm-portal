@@ -23,6 +23,20 @@
 								</div>
 							</template>
 
+							<template #name-data="{ row }">
+								<div>
+									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
+								</div>
+							</template>
+
+							<template #total_items-header>
+								<h5 class="text-center">No of Items</h5>
+							</template>
+
+							<template #total_items-data="{ row }">
+								<h5 class="text-neutral-500 text-center">{{ row.total_items }}</h5>
+							</template>
+
 							<template #empty-state>
 								<div class="flex-col-center section-empty">
 									<h2>No Categories Found</h2>
@@ -66,9 +80,11 @@ const rows = computed(() => {
 	return categories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const selectCategory = async (category: Category) => {
-	editCategory(category.code!);
-};
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
+});
 
 const deleteCategory = async (code: string) => {
 	modal.open(ZModalConfirmation, {
@@ -84,8 +100,7 @@ const deleteCategory = async (code: string) => {
 	});
 };
 
-const editCategory = async (code: string) => {
-	const category: Category | undefined = categories.value.find((category) => category.code === code);
+const selectCategory = async (category: Category) => {
 	if (!category) return;
 	modal.open(ZModalCategoryDetail, {
 		category: JSON.parse(JSON.stringify(category)),
@@ -93,11 +108,12 @@ const editCategory = async (code: string) => {
 			await categoryStore.updateCategory(code, name, description, is_active, is_internal, parent_category, thumbnail, images);
 			modal.close();
 		},
+		onDelete: async () => {
+			await modal.close();
+			await deleteCategory(category.code);
+		},
 		onCancel: () => {
 			modal.close();
-		},
-		onDelete: async () => {
-			deleteCategory(code);
 		},
 	});
 };

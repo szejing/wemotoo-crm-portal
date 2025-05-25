@@ -1,9 +1,9 @@
 export const tag_columns = [
-	{
-		key: 'id',
-		label: 'Id',
-		sortable: true,
-	},
+	// {
+	// 	key: 'id',
+	// 	label: 'Id',
+	// 	sortable: true,
+	// },
 	{
 		key: 'value',
 		label: 'Name',
@@ -13,8 +13,5 @@ export const tag_columns = [
 		key: 'total_items',
 		label: 'No of Items',
 		sortable: true,
-	},
-	{
-		key: 'actions',
 	},
 ];

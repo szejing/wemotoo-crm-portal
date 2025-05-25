@@ -14,9 +14,19 @@
 					<ZSectionFilterTags />
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="tag_columns" :loading="loading">
-							<template #actions-data="{ row }">
-								<ZActionDropdown :items="options(row)" />
+						<UTable :rows="rows" :columns="tag_columns" :loading="loading" @select="selectTag">
+							<template #name-data="{ row }">
+								<div>
+									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
+								</div>
+							</template>
+
+							<template #total_items-header>
+								<h5 class="text-center">No of Items</h5>
+							</template>
+
+							<template #total_items-data="{ row }">
+								<h5 class="text-neutral-500 text-center">{{ row.total_items }}</h5>
 							</template>
 
 							<template #empty-state>
@@ -51,28 +61,16 @@ const links = [
 	},
 ];
 
-const options = (row: Tag) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: async () => await editProductTag(row.id),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => deleteProductTag(row.id),
-		},
-	],
-];
-
 const modal = useModal();
 const page = ref(1);
 const tagsStore = useProductTagStore();
 await tagsStore.getTags();
+
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
+});
 
 const { loading, tags, pageSize } = storeToRefs(tagsStore);
 
@@ -80,7 +78,7 @@ const rows = computed(() => {
 	return tags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
 
-const deleteProductTag = async (id: number) => {
+const deleteTag = async (id: number) => {
 	modal.open(ZModalConfirmation, {
 		message: 'Are you sure you want to delete this tag?',
 		action: 'delete',
@@ -94,16 +92,18 @@ const deleteProductTag = async (id: number) => {
 	});
 };
 
-const editProductTag = async (id: number) => {
-	const tag: Tag | undefined = tags.value.find((tag) => tag.id === id);
-
+const selectTag = async (tag: Tag) => {
 	if (!tag) return;
 
 	modal.open(ZModalTagDetail, {
 		tag: JSON.parse(JSON.stringify(tag)),
 		onUpdate: async (tag: Tag) => {
-			await tagsStore.updateTag(id, tag);
+			await tagsStore.updateTag(tag.id, tag);
 			modal.close();
+		},
+		onDelete: async () => {
+			await modal.close();
+			await deleteTag(tag.id);
 		},
 		onCancel: () => {
 			modal.close();

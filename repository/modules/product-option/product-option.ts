@@ -35,7 +35,7 @@ class ProductOptionModule extends HttpFactory {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(id)}`,
-			body: removeNullValues(option),
+			body: option,
 		});
 	}
 

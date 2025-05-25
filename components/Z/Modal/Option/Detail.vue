@@ -4,9 +4,9 @@
 			width: 'w-full sm:w-[30%]',
 		}"
 	>
-		<UCard>
-			<template #header><h3>Update Product Option</h3></template>
-			<UForm :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
+			<UCard>
+				<template #header><h3>Update Product Option</h3></template>
 				<!-- *********************** General Info *********************** -->
 
 				<UFormGroup v-slot="{ error }" label="Name" name="name" required>
@@ -30,12 +30,18 @@
 
 				<!-- *********************** General Info *********************** -->
 
-				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-				</div>
-			</UForm>
-		</UCard>
+				<template #footer>
+					<div class="flex-jbetween-icenter">
+						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+
+						<div class="flex-jend gap-4">
+							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+						</div>
+					</div>
+				</template>
+			</UCard>
+		</UForm>
 	</UModal>
 </template>
 
@@ -53,7 +59,7 @@ const props = defineProps({
 		required: true,
 	},
 });
-const emit = defineEmits(['update', 'cancel']);
+const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const state = reactive({
 	option: { name: props.productOption.name, values: props.productOption.values },
@@ -77,11 +83,18 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		return;
 	}
 
-	values.forEach((value) => {
-		value.option_id = props.productOption.id;
+	const newValues = values?.map((v) => {
+		return {
+			...v,
+			option_id: props.productOption.id!,
+		};
 	});
 
-	emit('update', name, values ?? []);
+	emit('update', name, newValues ?? []);
+};
+
+const onDelete = () => {
+	emit('delete');
 };
 
 const onCancel = () => {

@@ -14,7 +14,4 @@ export const category_columns = [
 		label: 'No of Items',
 		sortable: true,
 	},
-	{
-		key: 'actions',
-	},
 ];
