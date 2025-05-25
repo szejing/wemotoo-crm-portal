@@ -15,14 +15,14 @@
 
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_option_columns" :loading="loading">
+						<UTable :rows="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
 							<template #values-data="{ row }">
 								<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
 							</template>
 
-							<template #actions-data="{ row }">
+							<!-- <template #actions-data="{ row }">
 								<ZActionDropdown :items="options(row)" />
-							</template>
+							</template> -->
 
 							<template #empty-state>
 								<div class="flex-center section-empty">
@@ -64,24 +64,6 @@ const links = [
 	},
 ];
 
-const options = (row: ProductOption) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: async () => await editProductOption(row.id!),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: async () => await deleteProductOption(row.id!),
-		},
-	],
-];
-
 const modal = useModal();
 const page = ref(1);
 const productOptionsStore = useProductOptionStore();
@@ -91,6 +73,12 @@ const { loading, productOptions, pageSize } = storeToRefs(productOptionsStore);
 
 const rows = computed(() => {
 	return productOptions.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+});
+
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
 });
 
 const deleteProductOption = async (id: number) => {
@@ -107,16 +95,18 @@ const deleteProductOption = async (id: number) => {
 	});
 };
 
-const editProductOption = async (optionId: number) => {
-	const option: ProductOption | undefined = productOptions.value.find((option) => option.id === optionId);
-
+const selectProductOption = async (option: ProductOption) => {
 	if (!option) return;
 
 	modal.open(ZModalOptionDetail, {
 		productOption: JSON.parse(JSON.stringify(option)),
 		onUpdate: async (name: string, values: ProductOptionValue[]) => {
-			await productOptionsStore.updateProductOption(optionId, name, values);
+			await productOptionsStore.updateProductOption(option.id!, name, values);
 			modal.close();
+		},
+		onDelete: async () => {
+			await modal.close();
+			await deleteProductOption(option.id!);
 		},
 		onCancel: () => {
 			modal.close();

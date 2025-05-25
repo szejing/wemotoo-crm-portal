@@ -4,19 +4,25 @@
 			width: 'w-full sm:w-[30%]',
 		}"
 	>
-		<UCard>
-			<template #header><h3>Update Tag</h3></template>
-			<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
+			<UCard>
+				<template #header><h3>Update Tag</h3></template>
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductTagGeneralInfo v-model:value="state.tag.value" />
 				<!-- *********************** General Info *********************** -->
 
-				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-				</div>
-			</UForm>
-		</UCard>
+				<template #footer>
+					<div class="flex-jbetween-icenter">
+						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+
+						<div class="flex-jend gap-4">
+							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+						</div>
+					</div>
+				</template>
+			</UCard>
+		</UForm>
 	</UModal>
 </template>
 
@@ -34,7 +40,7 @@ const props = defineProps({
 		required: true,
 	},
 });
-const emit = defineEmits(['update', 'cancel']);
+const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const state = reactive({
 	tag: props.tag,
@@ -51,6 +57,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	}
 
 	emit('update', state.tag);
+};
+
+const onDelete = () => {
+	emit('delete');
 };
 
 const onCancel = () => {

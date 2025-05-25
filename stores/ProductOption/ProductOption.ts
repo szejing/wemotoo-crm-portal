@@ -73,6 +73,10 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 
 			const { $api } = useNuxtApp();
 
+			values.forEach((v) => {
+				v.metadata = undefined;
+			});
+
 			try {
 				const data = await $api.productOption.update(optionId, {
 					name,
