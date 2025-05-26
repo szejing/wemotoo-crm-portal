@@ -25,7 +25,8 @@ export const Routes = {
 		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD}/`,
 		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
-		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		Delete: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
+		DeleteVariant: (code: string, variant_code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}/variants/${variant_code}`,
 		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
 	ProdTags: {
@@ -33,7 +34,7 @@ export const Routes = {
 		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/`,
 		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
-		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
+		Delete: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/restore/${id}`,
 	},
 	ProdVariants: {
@@ -41,7 +42,7 @@ export const Routes = {
 		SingleByProdCode: (prod_code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${prod_code}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/`,
 		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
-		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
+		Delete: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/restore/${id}`,
 	},
 	ProdTypes: {
@@ -57,7 +58,7 @@ export const Routes = {
 		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/`,
 		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
-		Remove: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
+		Delete: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
 		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/restore/${code}`,
 	},
 	ProdOptions: {
@@ -65,7 +66,7 @@ export const Routes = {
 		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/`,
 		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
-		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
+		Delete: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/restore/${id}`,
 	},
 	Settings: {
@@ -77,7 +78,7 @@ export const Routes = {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/`,
 		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Update: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
-		Remove: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
+		Delete: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Restore: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},
 	Orders: {

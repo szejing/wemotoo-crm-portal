@@ -25,7 +25,13 @@
 		</UButton>
 
 		<UModal v-if="variantDetail" v-model="isVariantDetailsModalOpen">
-			<ZInputProductVariantDetails :product="props.product" :details="variantDetail" @update:variant-detail="updateVariantDetail" />
+			<ZInputProductVariantDetail
+				:product="props.product"
+				:details="variantDetail"
+				@update:variant-detail="updateVariantDetail"
+				@cancel:variant-detail="cancelVariantDetail"
+				@delete:variant-detail="deleteVariantDetail"
+			/>
 		</UModal>
 	</div>
 </template>
@@ -36,7 +42,7 @@ import type { ProdOptionInput, ProdOptionValuesInput, Product, ProdVariantInput 
 const isVariantDetailsModalOpen = ref(false);
 const variantDetail = ref<ProdVariantInput>();
 const props = defineProps<{ product: Product; options: ProdOptionInput[] | undefined; variants: ProdVariantInput[] | undefined }>();
-const emit = defineEmits(['update:productVariants']);
+const emit = defineEmits(['update:variants', 'delete:variant']);
 
 const prodOptions = computed({
 	get() {
@@ -50,7 +56,7 @@ const prodVariants = computed({
 		return props.variants ?? [];
 	},
 	set(value) {
-		emit('update:productVariants', value);
+		emit('update:variants', value);
 	},
 });
 
@@ -120,7 +126,16 @@ const updateVariantDetail = (variant: ProdVariantInput) => {
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
 	}
-	emit('update:productVariants', prodVariants.value);
+	emit('update:variants', prodVariants.value);
+};
+
+const cancelVariantDetail = () => {
+	isVariantDetailsModalOpen.value = false;
+};
+
+const deleteVariantDetail = () => {
+	isVariantDetailsModalOpen.value = false;
+	emit('delete:variant', variantDetail.value);
 };
 </script>
 

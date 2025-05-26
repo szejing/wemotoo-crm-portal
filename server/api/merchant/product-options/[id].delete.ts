@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdOptions.Remove(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdOptions.Delete(Number(id))}`, {
 			baseURL: config.public.baseUrl,
 			method: 'DELETE',
 			query: query,

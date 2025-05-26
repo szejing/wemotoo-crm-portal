@@ -25,9 +25,10 @@
 		<!-- *********************** Additional Info *********************** -->
 		<ZInputProductAdditionalInfo
 			:product="current_product!"
-			@update_options="updateProductOptions"
-			@update_variants="updateProductVariants"
-			@update_metadata="updateProductMetadata"
+			@update:options="updateProductOptions"
+			@update:variants="updateProductVariants"
+			@delete:variant="deleteProductVariant"
+			@update:metadata="updateProductMetadata"
 		/>
 		<!-- *********************** Additional Info *********************** -->
 
@@ -53,7 +54,7 @@ type Schema = z.output<typeof UpdateProductValidation>;
 const productStore = useProductStore();
 const { current_product } = storeToRefs(productStore);
 
-const emit = defineEmits(['update_product']);
+const emit = defineEmits(['update:product', 'delete:variant']);
 
 const updateProductOptions = (value: any) => {
 	current_product.value!.options = value;
@@ -61,6 +62,10 @@ const updateProductOptions = (value: any) => {
 
 const updateProductVariants = (value: any) => {
 	current_product.value!.variants = value;
+};
+
+const deleteProductVariant = (value: ProdVariantInput) => {
+	emit('delete:variant', value);
 };
 
 const updateProductMetadata = (value: any) => {
@@ -215,7 +220,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	current_product.value!.variants = prodVariants;
 	current_product.value!.metadata = current_product.value!.metadata ? JSON.parse(JSON.stringify(current_product.value!.metadata)) : undefined;
 
-	emit('update_product');
+	emit('update:product');
 };
 </script>
 

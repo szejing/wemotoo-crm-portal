@@ -4,16 +4,17 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		const id = getRouterParams(event).id;
+		const code = getRouterParams(event).code;
+		const variant_code = getRouterParams(event).variant_code;
 
-		if (!id) {
+		if (!code || !variant_code) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Tag Id is required',
+				statusMessage: 'Product Code is required',
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdTags.Delete(Number(id))}`, {
+		const result = await $fetch(`${Routes.Products.DeleteVariant(code, variant_code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'DELETE',
 			headers: generateHeaders(event),

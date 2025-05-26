@@ -46,6 +46,13 @@ class ProductModule extends HttpFactory {
 		});
 	}
 
+	async deleteVariant(code: string, variant_code: string): Promise<ProductResp> {
+		return await this.call<any>({
+			method: 'DELETE',
+			url: `${this.RESOURCE.DeleteVariant(code, variant_code)}`,
+		});
+	}
+
 	async restore(product: ProductReq): Promise<ProductResp> {
 		return await this.call<any>({
 			method: 'PATCH',

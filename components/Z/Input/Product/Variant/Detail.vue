@@ -38,7 +38,14 @@
 		</div>
 
 		<template #footer>
-			<UButton size="md" color="primary" variant="outline" block @click="updateProductVariant">Confirm</UButton>
+			<div class="flex-jbetween-icenter">
+				<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" @click="updateProductVariant">Confirm</UButton>
+				</div>
+			</div>
 		</template>
 	</UCard>
 </template>
@@ -66,7 +73,7 @@ const price = ref<PriceInput>({
 	id: undefined,
 });
 
-const emit = defineEmits(['update:variantDetail']);
+const emit = defineEmits(['update:variantDetail', 'cancel:variantDetail', 'delete:variantDetail']);
 
 const variantDetail = computed({
 	get() {
@@ -81,6 +88,14 @@ const updateProductVariant = () => {
 	}
 
 	emit('update:variantDetail', variantDetail.value);
+};
+
+const onDelete = () => {
+	emit('delete:variantDetail', variantDetail.value);
+};
+
+const onCancel = () => {
+	emit('cancel:variantDetail');
 };
 </script>
 

@@ -237,5 +237,31 @@ export const useProductStore = defineStore('productStore', {
 				this.loading = false;
 			}
 		},
+
+		async deleteVariant(code: string, variant_code: string) {
+			this.loading = true;
+
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.product.deleteVariant(code, variant_code);
+
+				if (data.product) {
+					successNotification(`Variant #${variant_code} Deleted !`);
+
+					this.products = this.products.map((product) => {
+						if (product.code === code) {
+							return data.product;
+						}
+						return product;
+					});
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.loading = false;
+			}
+		},
 	},
 });

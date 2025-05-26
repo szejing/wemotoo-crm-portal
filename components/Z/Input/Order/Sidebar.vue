@@ -21,7 +21,7 @@
 				</div>
 			</template>
 
-			<div>
+			<div v-if="order.payments?.length > 0">
 				<table class="w-full">
 					<thead>
 						<tr class="border-b text-xs text-neutral-400">
@@ -41,6 +41,10 @@
 				</table>
 			</div>
 
+			<div v-else>
+				<p class="text-center text-neutral-400">Not yet paid</p>
+			</div>
+
 			<template #footer>
 				<div class="flex-jbetween-icenter">
 					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
@@ -52,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { Order } from '~/utils/types/order';
 
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };

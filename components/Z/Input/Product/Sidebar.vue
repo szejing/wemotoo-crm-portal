@@ -55,14 +55,14 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['update_status', 'update_categories', 'update_tags', 'update_thumbnail', 'update_images']);
+const emit = defineEmits(['update:status', 'update:categories', 'update:tags', 'update:thumbnail', 'update:images']);
 
 const status = computed({
 	get() {
 		return props.product.status;
 	},
 	set(value) {
-		emit('update_status', value);
+		emit('update:status', value);
 	},
 });
 
@@ -71,7 +71,7 @@ const categories = computed({
 		return props.product.categories;
 	},
 	set(value) {
-		emit('update_categories', value);
+		emit('update:categories', value);
 	},
 });
 
@@ -80,18 +80,18 @@ const tags = computed({
 		return props.product.tags;
 	},
 	set(value) {
-		emit('update_tags', value);
+		emit('update:tags', value);
 	},
 });
 
 const updateThumbnail = (files: File[]) => {
 	// newProduct.value.thumbnail = files[0];
-	emit('update_thumbnail', files[0]);
+	emit('update:thumbnail', files[0]);
 };
 
 const updateImages = (files: File[]) => {
 	// newProduct.value.images = files;
-	emit('update_images', files);
+	emit('update:images', files);
 };
 </script>
 

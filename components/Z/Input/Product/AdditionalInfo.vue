@@ -28,7 +28,8 @@
 								:options="product.options"
 								:variants="product.variants"
 								:product="product"
-								@update:product-variants="updateProductVariants"
+								@delete:variant="deleteProductVariant"
+								@update:variants="updateProductVariants"
 							/>
 						</div>
 					</div>
@@ -71,7 +72,8 @@
 								:options="product.options"
 								:variants="product.variants"
 								:product="product"
-								@update:product-variants="updateProductVariants"
+								@delete:variant="deleteProductVariant"
+								@update:variants="updateProductVariants"
 							/>
 						</div>
 					</div>
@@ -127,7 +129,7 @@ const props = defineProps({
 	cardUi: Object,
 });
 
-const emit = defineEmits(['update_options', 'update_variants', 'update_metadata']);
+const emit = defineEmits(['update:options', 'update:variants', 'delete:variant', 'update:metadata']);
 const product = computed({
 	get() {
 		return props.product;
@@ -146,15 +148,19 @@ const product_additional_info = computed(() => {
 	];
 });
 const updateProductOptions = (value: ProdOptionInput[]) => {
-	emit('update_options', value);
+	emit('update:options', value);
 };
 
 const updateProductVariants = (value: ProdVariantInput[]) => {
-	emit('update_variants', value);
+	emit('update:variants', value);
+};
+
+const deleteProductVariant = (value: ProdVariantInput) => {
+	emit('delete:variant', value);
 };
 
 const updateProductMetadata = (value: Record<string, unknown>) => {
-	emit('update_metadata', value);
+	emit('update:metadata', value);
 };
 </script>
 
