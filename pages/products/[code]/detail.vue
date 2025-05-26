@@ -11,16 +11,16 @@
 		</div>
 		<div class="wrapper-grid">
 			<!-- ***** Form ***** -->
-			<FormProductUpdate class="col-span-3" @update_product="updateProduct" />
+			<FormProductUpdate class="col-span-3" @update:product="updateProduct" @delete:variant="deleteVariant" />
 
 			<div class="side-wrapper">
 				<ZInputProductSidebar
 					:product="current_product!"
-					@update_status="updateStatus"
-					@update_categories="updateCategories"
-					@update_tags="updateTags"
-					@update_thumbnail="updateThumbnail"
-					@update_images="updateImages"
+					@update:status="updateStatus"
+					@update:categories="updateCategories"
+					@update:tags="updateTags"
+					@update:thumbnail="updateThumbnail"
+					@update:images="updateImages"
 				/>
 			</div>
 
@@ -43,11 +43,11 @@
 
 					<ZInputProductSidebar
 						:product="current_product!"
-						@update_status="updateStatus"
-						@update_categories="updateCategories"
-						@update_tags="updateTags"
-						@update_thumbnail="updateThumbnail"
-						@update_images="updateImages"
+						@update:status="updateStatus"
+						@update:categories="updateCategories"
+						@update:tags="updateTags"
+						@update:thumbnail="updateThumbnail"
+						@update:images="updateImages"
 					/>
 				</UCard>
 			</UModal>
@@ -58,7 +58,9 @@
 <script lang="ts" setup>
 import { ZModalLoading } from '#components';
 import type { ProductStatus } from 'wemotoo-common';
+import { failedNotification } from '~/stores/AppUi/AppUi';
 import type { Category } from '~/utils/types/category';
+import type { ProdVariantInput } from '~/utils/types/product';
 import type { Tag } from '~/utils/types/tag';
 
 definePageMeta({
@@ -138,6 +140,28 @@ const updateProduct = async () => {
 	try {
 		await productStore.updateProduct(new_thumbnail.value, new_images.value);
 
+		navigateTo(`/products`);
+	} catch (error) {
+		console.error(error);
+	} finally {
+		modal.close();
+	}
+};
+
+const deleteVariant = async (variant: ProdVariantInput) => {
+	const { product_code, variant_code } = variant;
+
+	if (!product_code || !variant_code) {
+		failedNotification('Something went wrong');
+		return;
+	}
+
+	modal.open(ZModalLoading, {
+		key: 'loading',
+	});
+
+	try {
+		await productStore.deleteVariant(product_code, variant_code);
 		navigateTo(`/products`);
 	} catch (error) {
 		console.error(error);

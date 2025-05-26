@@ -13,14 +13,16 @@
 					<UInput v-model="state.option.name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
 				</UFormGroup>
 
-				<div v-if="state.option.values.length > 0">
-					<h6>Values</h6>
-					<div v-for="(value, index) in state.option.values" :key="index" class="w-full flex-jbetween-icenter space-y-2">
-						<h5 class="text-neutral-300">#{{ value.id }}</h5>
+				<div class="mt-4">
+					<h6 class="text-secondary-700 text-sm font-bold">Values</h6>
+					<div v-if="state.option.values.length > 0">
+						<div v-for="(value, index) in state.option.values" :key="index" class="w-full flex-jbetween-icenter space-y-2">
+							<h5 class="text-neutral-300">#{{ value.id }}</h5>
 
-						<UFormGroup v-slot="{ error }" name="value" required>
-							<UInput v-model="state.option.values[index].value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
-						</UFormGroup>
+							<UFormGroup v-slot="{ error }" name="value" required>
+								<UInput v-model="state.option.values[index].value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
+							</UFormGroup>
+						</div>
 					</div>
 				</div>
 
