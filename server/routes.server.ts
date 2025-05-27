@@ -20,6 +20,10 @@ export const Routes = {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/`,
 		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
 	},
+	Customers: {
+		Single: (cust_no: string) => `${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/${cust_no}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/`,
+	},
 	Products: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD}/`,
 		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,
