@@ -39,6 +39,9 @@ export const useAppStore = defineStore('appStore', {
 
 			const summSalesStore = useSummSaleStore();
 			await summSalesStore.getDashboardSummary();
+
+			const customerStore = useCustomerStore();
+			await customerStore.getCustomers();
 		},
 	},
 });

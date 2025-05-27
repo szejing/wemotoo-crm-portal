@@ -23,6 +23,10 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/many`,
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CURRENCIES}/${code}`,
 	},
+	Customers: {
+		Single: (cust_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/${cust_no}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/many`,
+	},
 	Products: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/create`,
 		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}`,

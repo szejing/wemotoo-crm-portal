@@ -1,7 +1,7 @@
 export const customer_columns = [
 	{
 		key: 'customer_no',
-		label: 'Id',
+		label: 'No',
 		sortable: true,
 	},
 	{
@@ -17,8 +17,5 @@ export const customer_columns = [
 	{
 		key: 'phone_number',
 		label: 'Phone',
-	},
-	{
-		key: 'actions',
 	},
 ];

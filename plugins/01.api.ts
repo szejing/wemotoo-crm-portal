@@ -16,6 +16,7 @@ import {
 	CountryModule,
 	SaleSummaryModule,
 	SaleModule,
+	CustomerModule,
 } from '~/repository/modules';
 
 interface IApiInstance {
@@ -36,6 +37,7 @@ interface IApiInstance {
 	paymentMethod: PaymentMethodModule;
 	country: CountryModule;
 	sale: SaleModule;
+	customer: CustomerModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -68,6 +70,7 @@ export default defineNuxtPlugin((_) => {
 	const paymentMethodModule = new PaymentMethodModule(apiFetcher);
 	const countryModule = new CountryModule(apiFetcher);
 	const saleModule = new SaleModule(apiFetcher);
+	const customerModule = new CustomerModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -87,6 +90,7 @@ export default defineNuxtPlugin((_) => {
 		paymentMethod: paymentMethodModule,
 		country: countryModule,
 		sale: saleModule,
+		customer: customerModule,
 	};
 
 	return {

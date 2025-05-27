@@ -1,39 +1,8 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { Customer } from '~/utils/types/customer';
+import { failedNotification } from '../AppUi/AppUi';
 
-// const initial: Customer[] = [
-// 	{
-// 		customer_no: '1',
-// 		name: 'John JohnJohnJohn',
-// 		email_address: 'johnDoe@gmail.com',
-// 		phone_number: '1234567890',
-// 	},
-// 	{
-// 		customer_no: '2',
-// 		name: 'Jane Jane',
-// 		email_address: 'janeDoe@gmail.com',
-// 		phone_number: '72616287',
-// 	},
-// 	{
-// 		customer_no: '3',
-// 		name: 'Lee Lee',
-// 		email_address: 'leeDoe@gmail.com',
-// 		phone_number: '623423',
-// 	},
-// 	{
-// 		customer_no: '4',
-// 		name: 'John Wick',
-// 		email_address: 'johnWIck@gmail.com',
-// 		phone_number: '623423',
-// 	},
-// 	{
-// 		customer_no: '5',
-// 		name: 'John cena',
-// 		email_address: 'johncena@gmail.com',
-// 		phone_number: '623423',
-// 	},
-// ];
 export const useCustomerStore = defineStore('customerStore', {
 	state: () => ({
 		loading: false as boolean,
@@ -47,30 +16,19 @@ export const useCustomerStore = defineStore('customerStore', {
 		},
 		async getCustomers() {
 			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			// this.customers = structuredClone(initial);
-			this.loading = false;
-		},
-		async addCustomer(customer: Customer) {
-			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			this.customers.push(customer);
-			this.loading = false;
-		},
-		async updateCustomer(customer: Customer) {
-			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			const index = this.customers.findIndex((c) => c.customer_no === customer.customer_no);
-			if (index > -1) {
-				this.customers[index] = customer;
+			const { $api } = useNuxtApp();
+			try {
+				const data = await $api.customer.getMany();
+
+				if (data.customers) {
+					this.customers = data.customers;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.loading = false;
 			}
-			this.loading = false;
-		},
-		async deleteCustomer(customer_no: string) {
-			this.loading = true;
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			this.customers = this.customers.filter((c) => c.customer_no !== customer_no);
-			this.loading = false;
 		},
 	},
 });

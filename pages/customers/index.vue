@@ -21,9 +21,9 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="customer_columns">
-					<template #actions-data="{ row }">
-						<ZActionDropdown :items="options(row)" />
+				<UTable :rows="rows" :columns="customer_columns" :loading="loading" @select="selectCustomer">
+					<template #phone_number-data="{ row }">
+						<h5 class="text-neutral-500">(+{{ row.dial_code }}) {{ row.phone_no }}</h5>
 					</template>
 
 					<template #empty-state>
@@ -58,32 +58,25 @@ const links = [
 	},
 ];
 
-const options = (row: Customer) => [
-	[
-		{
-			label: 'Edit',
-			icon: ICONS.PENCIL,
-			click: () => console.log('Edit', row.customer_no),
-		},
-	],
-	[
-		{
-			label: 'Delete',
-			icon: ICONS.TRASH,
-			slot: 'danger',
-			click: () => console.log('Delete', row.customer_no),
-		},
-	],
-];
-
+const modal = useModal();
 const page = ref(1);
 const customerStore = useCustomerStore();
 
-const { customers, pageSize } = storeToRefs(customerStore);
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
+});
+
+const { loading, customers, pageSize } = storeToRefs(customerStore);
 
 const rows = computed(() => {
 	return customers.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 });
+
+const selectCustomer = async (customer: Customer) => {
+	if (!customer) return;
+};
 </script>
 
 <style scoped lang="postcss"></style>
