@@ -31,10 +31,10 @@ const merchantNavigation = [
 				title: 'Payments',
 				to: '/reports/sales/payments',
 			},
-			{
-				title: 'Customers',
-				to: '/reports/sales/customers',
-			},
+			// {
+			// 	title: 'Customers',
+			// 	to: '/reports/sales/customers',
+			// },
 			{
 				title: 'Items',
 				to: '/reports/sales/items',
@@ -65,6 +65,12 @@ const merchantNavigation = [
 		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
+		isCollapsed: false,
+	},
+	{
+		title: 'Transactions',
+		icon: ICONS.TRANSACTION,
+		to: '/transactions',
 		isCollapsed: false,
 	},
 	{

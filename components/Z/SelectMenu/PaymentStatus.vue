@@ -1,6 +1,6 @@
 <template>
 	<UFormGroup name="status">
-		<USelectMenu v-model="status" :options="options_payment_status" size="md">
+		<USelectMenu v-model="status" :options="options_payment_status" size="md" :ui="{ base: 'min-w-[200px]' }">
 			<template #label>
 				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
 				<span v-else class="text-gray-400">Select Payment Status</span>

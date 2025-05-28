@@ -1,11 +1,11 @@
-import type { FilterType, OrderStatus } from 'wemotoo-common';
+import type { FilterType, SaleStatus } from 'wemotoo-common';
 
 type FilterableSaleProps = {
 	order_no?: string;
 	customer_no?: string;
 	start_date: string;
 	end_date?: string;
-	status?: OrderStatus;
+	status?: SaleStatus;
 	filter_type: FilterType;
 };
 
