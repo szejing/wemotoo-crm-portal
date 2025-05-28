@@ -3,7 +3,7 @@ import { PaymentStatus, type FilterType } from 'wemotoo-common';
 import { getFormattedDate, isEmptyOrNull, SaleStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification } from '../AppUi/AppUi';
-import type { Sale } from '~/repository/modules/sale/models/response/sale';
+import type { Transaction } from '~/repository/modules/sale/models/response/transaction';
 
 type SaleFilter = {
 	query: string;
@@ -30,8 +30,8 @@ const initialEmptySaleFilter: SaleFilter = {
 export const useSaleStore = defineStore('saleStore', {
 	state: () => ({
 		loading: false as boolean,
-		transactions: [] as Sale[],
-		detail: undefined as Sale | undefined,
+		transactions: [] as Transaction[],
+		detail: undefined as Transaction | undefined,
 		errors: [] as string[],
 		filter: initialEmptySaleFilter,
 	}),
@@ -40,7 +40,7 @@ export const useSaleStore = defineStore('saleStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.sale.getSales({
+				const data = await $api.sale.getTransactions({
 					limit: this.filter.page_size,
 					offset: 0,
 					filter_type: this.filter.filter_type as FilterType,
@@ -51,7 +51,7 @@ export const useSaleStore = defineStore('saleStore', {
 				});
 
 				if (data) {
-					this.transactions = data.sales;
+					this.transactions = data.transactions;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -64,17 +64,17 @@ export const useSaleStore = defineStore('saleStore', {
 
 		async getTransactionByBillNo(bill_no: string) {
 			const { $api } = useNuxtApp();
-			// try {
-			// 	const data = await $api.sale.getSaleBySaleNo(sale_no);
+			try {
+				const data = await $api.sale.getTransactionByBillNo(bill_no);
 
-			// 	if (data.sale) {
-			// 		this.detail = data.sale;
-			// 	}
-			// } catch (err: any) {
-			// 	console.error(err);
-			// 	failedNotification(err.message);
-			// 	throw err;
-			// }
+				if (data.transaction) {
+					this.detail = data.transaction;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			}
 		},
 	},
 });

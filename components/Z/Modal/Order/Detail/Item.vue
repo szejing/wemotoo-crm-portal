@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import type { OrderItemModel } from '~/utils/models/item.model';
+import type { ItemModel } from '~/utils/models/item.model';
 import { UpdateOrderItemValidation } from '~/utils/schema/index';
 
 type Schema = z.output<typeof UpdateOrderItemValidation>;
@@ -43,7 +43,7 @@ const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
 	item: {
-		type: Object as PropType<OrderItemModel>,
+		type: Object as PropType<ItemModel>,
 		required: true,
 	},
 });

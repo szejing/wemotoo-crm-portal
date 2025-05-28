@@ -34,7 +34,7 @@ export const sale_columns = [
 		label: 'Void Amt',
 	},
 	{
-		key: 'total_qty',
+		key: 'total_item_qty',
 		label: 'Total Qty',
 	},
 ];

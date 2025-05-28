@@ -1,4 +1,4 @@
-export type OrderPaymentModel = {
+export type PaymentModel = {
 	payment_line: number;
 	payment_date: Date;
 	payment_type_code: string;

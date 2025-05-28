@@ -5,8 +5,8 @@ import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
-import type { OrderItemModel } from '~/utils/models/item.model';
-import type { OrderPaymentModel } from '~/utils/models/payment.model';
+import type { ItemModel } from '~/utils/models/item.model';
+import type { PaymentModel } from '~/utils/models/payment.model';
 
 type OrderFilter = {
 	query: string;
@@ -125,10 +125,10 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updatePayments(order_no: string, payment: OrderPaymentModel) {
+		async updatePayments(order_no: string, payment: PaymentModel) {
 			const { $api } = useNuxtApp();
 
-			let payments: OrderPaymentModel[] = [];
+			let payments: PaymentModel[] = [];
 
 			if (this.detail?.payments.length === 0) {
 				payment.payment_line = 1;
@@ -168,7 +168,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateItems(order_no: string, item: OrderItemModel) {
+		async updateItems(order_no: string, item: ItemModel) {
 			const { $api } = useNuxtApp();
 
 			try {

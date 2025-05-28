@@ -109,7 +109,7 @@
 import { SaleStatus, getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { sale_columns } from '~/utils/table-columns';
-import type { Sale } from '~/repository/modules/sale/models/response/sale';
+import type { Transaction } from '~/repository/modules/sale/models/response/transaction';
 
 const links = [
 	{
@@ -147,7 +147,7 @@ const updatePageSize = async (size: number) => {
 	await saleStore.getTransactions();
 };
 
-const selectSale = (row: Sale) => {
+const selectSale = (row: Transaction) => {
 	navigateTo(`/transactions/detail/${row.bill_no}`);
 };
 </script>
