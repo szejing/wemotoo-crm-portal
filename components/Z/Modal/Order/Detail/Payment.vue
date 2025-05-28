@@ -31,7 +31,7 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import type { OrderPaymentModel } from '~/utils/models/index';
+import type { PaymentModel } from '~/utils/models/index';
 import { UpdateOrderPaymentValidation } from '~/utils/schema/index';
 
 type Schema = z.output<typeof UpdateOrderPaymentValidation>;
@@ -42,7 +42,7 @@ const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
 	payment: {
-		type: Object as PropType<OrderPaymentModel> | undefined,
+		type: Object as PropType<PaymentModel> | undefined,
 		required: true,
 	},
 });

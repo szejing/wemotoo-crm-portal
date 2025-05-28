@@ -73,10 +73,10 @@
 <script lang="ts" setup>
 import { ZModalInformation, ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus } from 'wemotoo-common';
-import type { OrderItemModel } from '~/utils/models/item.model';
+import type { ItemModel } from '~/utils/models/item.model';
 
 defineProps<{
-	items: OrderItemModel[];
+	items: ItemModel[];
 	currencyCode: string | undefined;
 	totalGrossAmt: number | undefined;
 	totalNetAmt: number | undefined;
@@ -86,7 +86,7 @@ defineProps<{
 const emit = defineEmits(['refresh']);
 
 const modal = useModal();
-const editItem = (item: OrderItemModel) => {
+const editItem = (item: ItemModel) => {
 	if (item.status == OrderItemStatus.ACTIVE) {
 		modal.open(ZModalOrderDetailItem, {
 			item: JSON.parse(JSON.stringify(item)),

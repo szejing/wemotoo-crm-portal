@@ -2,7 +2,7 @@ import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetSalesReq } from './models/request/get-sale.req';
 import type { GetSaleResp } from './models/response/get-sale.resp';
-import type { GetOrdersResp } from './models/response/get-sales.resp';
+import type { GetSalesResp } from './models/response/get-sales.resp';
 
 class SaleModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Sales;
@@ -11,8 +11,8 @@ class SaleModule extends HttpFactory {
 	 * Fetches all sales
 	 * @returns
 	 */
-	async getSales(query: GetSalesReq): Promise<GetOrdersResp> {
-		return await this.call<GetOrdersResp>({
+	async getTransactions(query: GetSalesReq): Promise<GetSalesResp> {
+		return await this.call<GetSalesResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 			query,
@@ -23,7 +23,7 @@ class SaleModule extends HttpFactory {
 	 * Fetches sale by bill no
 	 * @returns
 	 */
-	async getSaleByOrderNo(bill_no: string): Promise<GetSaleResp> {
+	async getTransactionByBillNo(bill_no: string): Promise<GetSaleResp> {
 		return await this.call<GetSaleResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(bill_no)}`,

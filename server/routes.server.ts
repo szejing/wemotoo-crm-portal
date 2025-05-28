@@ -96,7 +96,7 @@ export const Routes = {
 		Process: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
 	},
 	Sales: {
-		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/many`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}`,
 		Single: (bill_no: string) => `${API_PATH.MERCHANT}/${API_PATH.SALES}/${bill_no}`,
 		Process: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}/process`,
 	},

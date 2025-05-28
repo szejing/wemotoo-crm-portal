@@ -1,6 +1,6 @@
 import type { OrderItemStatus } from 'wemotoo-common';
 
-export type OrderItemModel = {
+export type ItemModel = {
 	item_line: number;
 	parent_item_line: number;
 	prod_code: string;
