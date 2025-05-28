@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="header-container cursor-pointer pb-8" @click="isMerchantInfoModal = true">
+		<div class="cursor-pointer px-4" @click="isMerchantInfoModal = true">
 			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
@@ -38,7 +38,7 @@ const thumbnail = computed(() => {
 
 <style scoped lang="postcss">
 .header-container {
-	@apply px-4 border-b-[1px] border-secondary-400;
+	@apply px-4;
 }
 
 .merchant-info-modal :deep(h2) {

@@ -13,6 +13,7 @@ import { payment_method_columns } from './payment/payment-method';
 import { sale_summ_columns } from './sale-summ/sale-summ';
 import { sale_summ_payment_columns } from './sale-summ/sale-summ-payment';
 import { sale_summ_item_columns } from './sale-summ/sale-summ-item';
+import { sale_columns } from './sale/sale';
 
 export {
 	customer_columns,
@@ -31,4 +32,5 @@ export {
 	sale_summ_columns,
 	sale_summ_payment_columns,
 	sale_summ_item_columns,
+	sale_columns,
 };

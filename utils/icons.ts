@@ -4,6 +4,7 @@ export const ICONS = {
 	TRASH: 'i-heroicons-trash-20-solid',
 	PENCIL: 'i-heroicons-pencil-20-solid',
 	ORDER: 'i-material-symbols-light-order-approve-outline-rounded',
+	TRANSACTION: 'i-material-symbols-checklist-rounded',
 	PRODUCT: 'i-material-symbols-light-box-add-outline-rounded',
 	TAG: 'i-mdi-tag-plus-outline',
 	CATEGORY: 'i-mdi-archive-cog-outline',

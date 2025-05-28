@@ -4,7 +4,7 @@
 			<UIcon :name="showSidebar ? ICONS.CLOSE_ROUNDED : ICONS.CHEVRON_DOUBLE_RIGHT" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
 		<div class="space-y-2 px-2">
-			<SidebarHeader class="py-10" />
+			<SidebarHeader class="border-b-[1px] border-secondary-400 py-6" />
 			<SidebarNavigation />
 		</div>
 	</div>
