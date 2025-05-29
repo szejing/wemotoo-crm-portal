@@ -72,9 +72,14 @@ import { sale_summ_item_columns } from '~/utils/table-columns';
 
 const links = [
 	{
+		label: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+	},
+	{
 		label: 'Item Reports',
-		icon: ICONS.LIST,
-		to: '/summary/sales/items',
+		icon: ICONS.REPORT_SALES,
+		to: '/analytics/sales/items',
 	},
 ];
 

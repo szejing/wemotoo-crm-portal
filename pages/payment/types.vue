@@ -28,9 +28,14 @@ import { payment_type_group_columns } from '~/utils/table-columns';
 
 const links = [
 	{
+		label: 'Payment',
+		icon: ICONS.LIST,
+		to: '/payment',
+	},
+	{
 		label: 'Payment Types',
 		icon: ICONS.PAYMENT_METHODS,
-		to: '/',
+		to: '/payment/types',
 	},
 ];
 

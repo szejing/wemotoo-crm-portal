@@ -106,9 +106,14 @@ import { order_item_summ_columns, order_item_summ_header_columns } from '~/utils
 
 const links = [
 	{
+		label: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+	},
+	{
 		label: 'Order Item Summary',
-		icon: ICONS.LIST,
-		to: '/summary/orders/items',
+		icon: ICONS.REPORT_ORDER,
+		to: '/analytics/orders/items',
 	},
 ];
 

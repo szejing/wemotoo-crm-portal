@@ -80,7 +80,7 @@ const links = [
 	{
 		label: 'All Products',
 		icon: ICONS.LIST,
-		to: '/products',
+		to: '/products/listing',
 	},
 ];
 

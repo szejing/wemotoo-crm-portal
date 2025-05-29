@@ -76,9 +76,14 @@ import { sale_summ_payment_columns } from '~/utils/table-columns';
 
 const links = [
 	{
+		label: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+	},
+	{
 		label: 'Payment Reports',
-		icon: ICONS.LIST,
-		to: '/summary/sales/payments',
+		icon: ICONS.REPORT_SALES,
+		to: '/analytics/sales/payments',
 	},
 ];
 

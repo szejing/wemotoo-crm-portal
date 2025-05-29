@@ -18,6 +18,9 @@ import { UpdateOrderItemValidation } from './Order/Update/ItemValidation';
 import { UpdateOrderPaymentValidation } from './Order/Update/PaymentValidation';
 import { FilterPaymentMethodValidation } from './PaymentMethod/FilterValidation';
 import { FilterPaymentTypeGroupValidation } from './PaymentTypeGroup/FilterValidation';
+import { CreateBrandValidation } from './Brand/Create/BrandValidation';
+import { FilterBrandValidation } from './Brand/Filter/BrandValidation';
+import { UpdateBrandValidation } from './Brand/Update/BrandValidation';
 
 export {
 	LoginValidation,
@@ -40,4 +43,7 @@ export {
 	FilterPaymentTypeGroupValidation,
 	FilterPaymentMethodValidation,
 	UpdateOrderPaymentValidation,
+	CreateBrandValidation,
+	FilterBrandValidation,
+	UpdateBrandValidation,
 };
