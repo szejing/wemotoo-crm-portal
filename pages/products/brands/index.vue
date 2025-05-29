@@ -1,0 +1,143 @@
+<template>
+	<div>
+		<UBreadcrumb :links="links" />
+		<div class="base">
+			<div class="sm:col-span-2">
+				<UCard>
+					<h2>Add New Brand</h2>
+					<FormProductBrandCreation class="mt-4" />
+				</UCard>
+			</div>
+
+			<div class="sm:col-span-4">
+				<UCard>
+					<ZSectionFilterBrands />
+
+					<div class="mt-4">
+						<!-- Table  -->
+						<UTable :rows="rows" :columns="brand_columns" :loading="loading" @select="selectBrand">
+							<template #code-data="{ row }">
+								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
+									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-15 h-15 rounded-sm" />
+									<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
+								</div>
+							</template>
+
+							<template #name-data="{ row }">
+								<div>
+									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
+								</div>
+							</template>
+
+							<template #total_items-header>
+								<h5 class="text-center">No of Items</h5>
+							</template>
+
+							<template #total_items-data="{ row }">
+								<h5 class="text-neutral-500 text-center">{{ row.total_items }}</h5>
+							</template>
+
+							<template #empty-state>
+								<div class="flex-col-center section-empty">
+									<h2>No Brands Found</h2>
+									<p>Create a new brand to get started</p>
+								</div>
+							</template>
+						</UTable>
+
+						<!-- Pagination  -->
+						<div v-if="categories.length > 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="categories.length" />
+						</div>
+					</div>
+				</UCard>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script lang="ts" setup>
+import { ZModalConfirmation } from '#components';
+import { brand_columns } from '~/utils/table-columns';
+import type { Brand } from '~/utils/types/brand';
+import { ZModalBrandDetail } from '~/components/modals/brand/brand-detail.vue';
+
+const links = [
+	{
+		label: 'All Brands',
+		icon: ICONS.LIST,
+		to: '/brands',
+	},
+];
+
+const modal = useModal();
+const page = ref(1);
+const brandStore = useProductBrandStore();
+await brandStore.getBrands();
+
+const { loading, brands, pageSize } = storeToRefs(brandStore);
+
+const rows = computed(() => {
+	return brands.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+});
+
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
+});
+
+const deleteBrand = async (code: string) => {
+	modal.open(ZModalConfirmation, {
+		message: 'Are you sure you want to delete this brand?',
+		action: 'delete',
+		onConfirm: async () => {
+			await brandStore.deleteBrand(code);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+
+const selectBrand = async (brand: Brand) => {
+	if (!brand) return;
+	modal.open(ZModalBrandDetail, {
+		brand: JSON.parse(JSON.stringify(brand)),
+		onUpdate: async ({ code, name, description, is_active }) => {
+			await brandStore.updateBrand(code, name, description, is_active);
+			modal.close();
+		},
+		onDelete: async () => {
+			await modal.close();
+			await deleteBrand(brand.code);
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+</script>
+
+<style scoped lang="postcss">
+.base {
+	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+}
+
+.section-empty {
+	@apply h-52;
+}
+
+.section-empty div {
+	@apply text-center;
+}
+
+.section-empty h2 {
+	@apply text-2xl font-semibold;
+}
+
+.section-empty p {
+	@apply text-gray-400;
+}
+</style>

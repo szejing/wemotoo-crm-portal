@@ -6,7 +6,7 @@ export const tag_columns = [
 	// },
 	{
 		key: 'value',
-		label: 'Name',
+		label: 'Description',
 		sortable: true,
 	},
 	{

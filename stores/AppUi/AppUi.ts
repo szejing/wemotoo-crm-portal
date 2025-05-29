@@ -10,36 +10,36 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
-		title: 'Reports',
-		icon: ICONS.ORDER_SUMMARY,
-		to: '/reports',
-		isCollapsed: false,
-		children: [
-			// {
-			// 	title: 'Orders',
-			// 	to: '/reports/orders',
-			// },
-			{
-				title: 'Sales',
-				to: '/reports/sales',
-			},
-			// {
-			// 	title: 'Items',
-			// 	to: '/reports/items',
-			// },
-			{
-				title: 'Payments',
-				to: '/reports/sales/payments',
-			},
-			// {
-			// 	title: 'Customers',
-			// 	to: '/reports/sales/customers',
-			// },
-			{
-				title: 'Items',
-				to: '/reports/sales/items',
-			},
-		],
+		title: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+		// isCollapsed: false,
+		// children: [
+		// 	// {
+		// 	// 	title: 'Orders',
+		// 	// 	to: '/analytics/orders',
+		// 	// },
+		// 	{
+		// 		title: 'Sales',
+		// 		to: '/analytics/sales',
+		// 	},
+		// 	// {
+		// 	// 	title: 'Items',
+		// 	// 	to: '/analytics/items',
+		// 	// },
+		// 	{
+		// 		title: 'Payments',
+		// 		to: '/analytics/sales/payments',
+		// 	},
+		// 	// {
+		// 	// 	title: 'Customers',
+		// 	// 	to: '/analytics/sales/customers',
+		// 	// },
+		// 	{
+		// 		title: 'Items',
+		// 		to: '/analytics/sales/items',
+		// 	},
+		// ],
 	},
 	// {
 	// 	title: 'Sales Summary',
@@ -78,24 +78,9 @@ const merchantNavigation = [
 		icon: ICONS.PRODUCT,
 		to: '/products',
 		isCollapsed: false,
-		children: [
-			{
-				title: 'Products',
-				to: '/products',
-			},
-			{
-				title: 'Options',
-				to: '/products/options',
-			},
-			{
-				title: 'Categories',
-				to: '/products/categories',
-			},
-			{
-				title: 'Tags',
-				to: '/products/tags',
-			},
-		],
+		// children: [
+
+		// ],
 	},
 	{
 		title: 'Customers',
@@ -108,16 +93,16 @@ const merchantNavigation = [
 		icon: ICONS.PAYMENT_METHODS,
 		to: '/payment',
 		isCollapsed: false,
-		children: [
-			{
-				title: 'Payment Methods',
-				to: '/payment/methods',
-			},
-			{
-				title: 'Payment Type',
-				to: '/payment/types',
-			},
-		],
+		// children: [
+		// 	{
+		// 		title: 'Payment Methods',
+		// 		to: '/payment/methods',
+		// 	},
+		// 	{
+		// 		title: 'Payment Type',
+		// 		to: '/payment/types',
+		// 	},
+		// ],
 	},
 	{
 		title: 'Settings',
