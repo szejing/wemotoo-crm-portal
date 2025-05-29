@@ -1,119 +1,49 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="container">
-			<ZSectionFilterProducts />
-			<UCard class="mt-4">
-				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
-
-					<div class="flex gap-4">
-						<!-- <UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton> -->
-
-						<UButton color="green" @click="navigateTo('/products/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
-						</UButton>
-					</div>
+	<UContainer class="space-y-4 mt-8">
+		<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+			<UButton v-for="(navigate, index) in product_navigations" :key="index" variant="ghost" color="gray" :to="navigate.to">
+				<div class="flex flex-col items-center gap-2 mx-auto text-center">
+					<UIcon size="24" :name="navigate.icon" />
+					<span>{{ navigate.title }}</span>
 				</div>
-
-				<UTable :rows="rows" :columns="product_columns" @select="selectProduct">
-					<template #code-data="{ row }">
-						<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
-							<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
-							<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
-						</div>
-					</template>
-
-					<template #orig_sell_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price.toFixed(2) }}</p>
-					</template>
-
-					<template #sale_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
-							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
-							<span v-else> - </span>
-						</p>
-					</template>
-
-					<template #name-data="{ row }">
-						<p class="font-bold">
-							{{ row.name }}
-						</p>
-					</template>
-
-					<template #empty-state>
-						<div class="flex flex-col items-center justify-center py-6 gap-3">
-							<span class="italic text-sm">No Products !</span>
-
-							<UButton color="green" @click="navigateTo('/products/create')">
-								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-								Create
-							</UButton>
-						</div>
-					</template>
-				</UTable>
-
-				<div v-if="products.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="products.length" />
-				</div>
-			</UCard>
+			</UButton>
 		</div>
-	</div>
+	</UContainer>
 </template>
 
 <script lang="ts" setup>
-import { ZModalLoading } from '#components';
-import { options_page_size } from '~/utils/options';
-import { product_columns } from '~/utils/table-columns';
-import type { Product } from '~/utils/types/product';
-
-const links = [
+const product_navigations = [
 	{
-		label: 'Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-	},
-	{
-		label: 'All Products',
+		title: 'Products',
 		icon: ICONS.LIST,
-		to: '/products',
+		to: '/products/listing',
 	},
+	{
+		title: 'Categories',
+		icon: ICONS.CATEGORY,
+		to: '/products/categories',
+	},
+	{
+		title: 'Tags',
+		icon: ICONS.ADDITIONAL,
+		to: '/products/tags',
+	},
+	{
+		title: 'Brands',
+		icon: ICONS.ADDITIONAL,
+		to: '/products/brands',
+	},
+	{
+		title: 'Options',
+		icon: ICONS.ADDITIONAL,
+		to: '/products/options',
+	},
+	// {
+	// 	title: 'Types',
+	// 	icon: ICONS.ADDITIONAL,
+	// 	to: '/products/types',
+	// },
 ];
-
-const modal = useModal();
-const page = ref(1);
-const productStore = useProductStore();
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
-
-const { products, pageSize } = storeToRefs(productStore);
-
-const rows = computed(() => {
-	return products.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
-});
-
-const selectProduct = async (product: Product) => {
-	modal.open(ZModalLoading, {
-		key: 'loading',
-	});
-
-	const prod = await productStore.getProduct(product.code!);
-	await modal.close();
-
-	if (prod) {
-		productStore.current_product = prod;
-
-		navigateTo(`/products/${product.code}/detail`);
-	}
-};
 </script>
 
 <style scoped lang="postcss"></style>
