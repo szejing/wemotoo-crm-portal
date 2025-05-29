@@ -1,5 +1,10 @@
 export const order_columns = [
 	{
+		key: 'index',
+		label: 'No.',
+		sortable: true,
+	},
+	{
 		key: 'biz_date',
 		label: 'Date',
 		sortable: true,

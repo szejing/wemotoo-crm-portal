@@ -27,6 +27,10 @@
 				</div>
 
 				<UTable :rows="rows" :columns="columnsTable" :loading="is_loading" @select="selectSale">
+					<template #index-data="{ index }">
+						<p>{{ index + 1 }}.</p>
+					</template>
+
 					<template #biz_date-data="{ row }">
 						<p v-if="row.biz_date">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
 					</template>
