@@ -8,9 +8,14 @@
 <script lang="ts" setup>
 const links = [
 	{
+		label: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+	},
+	{
 		label: 'Customer Reports',
-		icon: ICONS.LIST,
-		to: '/summary/sales/customers',
+		icon: ICONS.REPORT_SALES,
+		to: '/analytics/sales/customers',
 	},
 ];
 </script>

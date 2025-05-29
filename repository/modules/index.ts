@@ -16,6 +16,7 @@ import CountryModule from './country/country';
 import SaleSummaryModule from './summ-sale/summ-sale';
 import SaleModule from './sale/sale';
 import CustomerModule from './customer/customer';
+import ProductBrandModule from './product-brand/product-brand';
 
 export {
 	OrderModule,
@@ -36,4 +37,5 @@ export {
 	SaleSummaryModule,
 	SaleModule,
 	CustomerModule,
+	ProductBrandModule,
 };

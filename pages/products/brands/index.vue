@@ -46,8 +46,8 @@
 						</UTable>
 
 						<!-- Pagination  -->
-						<div v-if="categories.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="categories.length" />
+						<div v-if="brands.length > 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="pageSize" :total="brands.length" />
 						</div>
 					</div>
 				</UCard>
@@ -57,22 +57,26 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation } from '#components';
+import { ZModalBrandDetail, ZModalConfirmation } from '#components';
 import { brand_columns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
-import { ZModalBrandDetail } from '~/components/modals/brand/brand-detail.vue';
 
 const links = [
 	{
-		label: 'All Brands',
+		label: 'Products',
 		icon: ICONS.LIST,
-		to: '/brands',
+		to: '/products',
+	},
+	{
+		label: 'All Brands',
+		icon: ICONS.ADDITIONAL,
+		to: '/products/brands',
 	},
 ];
 
 const modal = useModal();
 const page = ref(1);
-const brandStore = useProductBrandStore();
+const brandStore = useBrandStore();
 await brandStore.getBrands();
 
 const { loading, brands, pageSize } = storeToRefs(brandStore);

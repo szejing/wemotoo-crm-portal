@@ -78,9 +78,14 @@ import { order_summ_columns } from '~/utils/table-columns';
 
 const links = [
 	{
+		label: 'Analytics',
+		icon: ICONS.ANALYTICS,
+		to: '/analytics',
+	},
+	{
 		label: 'Order Summary',
-		icon: ICONS.LIST,
-		to: '/summary/orders',
+		icon: ICONS.REPORT_ORDER,
+		to: '/analytics/orders/summary',
 	},
 ];
 
@@ -96,7 +101,7 @@ const data = computed(() => order_summ.value.data);
 const selectedColumns = ref(order_summ_columns);
 const columnsTable = computed(() => order_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
-const updateColumns = (columns: string[]) => {
+const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;
 };
 
