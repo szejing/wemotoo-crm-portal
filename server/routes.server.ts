@@ -33,6 +33,14 @@ export const Routes = {
 		DeleteVariant: (code: string, variant_code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/${code}/variants/${variant_code}`,
 		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD}/restore/${code}`,
 	},
+	ProductBrands: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/`,
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/${code}`,
+		Delete: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/${code}`,
+		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PROD_BRANDS}/restore/${code}`,
+	},
 	ProdTags: {
 		Create: () => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/`,
 		Single: (id: number) => `${API_PATH.MERCHANT}/${API_PATH.PROD_TAGS}/${id}`,

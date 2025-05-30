@@ -4,7 +4,7 @@
 			<ZDropzone @files-selected="updateThumbnail" />
 
 			<!-- *********************** General Info *********************** -->
-			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:name="newCategory.name" v-model:description="newCategory.description" />
+			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:description="newCategory.description" />
 			<!-- *********************** General Info *********************** -->
 
 			<!-- <div>
@@ -43,10 +43,9 @@ const updateThumbnail = (files: File[]) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description, is_internal, is_active, parent_category } = event.data;
+	const { code, description, is_internal, is_active, parent_category } = event.data;
 
 	newCategory.value.code = code;
-	newCategory.value.name = name;
 	newCategory.value.description = description;
 	newCategory.value.is_internal = is_internal;
 	newCategory.value.is_active = is_active;

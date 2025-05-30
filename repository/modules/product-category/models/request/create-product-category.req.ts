@@ -2,7 +2,6 @@ import type { ImageReq } from '~/repository/modules/image/models/request/image.r
 
 export type CreateProductCategoryReq = {
 	code: string;
-	name: string;
 	description: string | undefined;
 	is_internal: boolean | undefined;
 	is_active: boolean | undefined;

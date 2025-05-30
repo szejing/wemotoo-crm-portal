@@ -1,7 +1,4 @@
 export type CategoryCreate = {
-	// name
-	name: string;
-
 	// code
 	code: string;
 

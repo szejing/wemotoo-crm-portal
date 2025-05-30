@@ -1,7 +1,6 @@
 import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 
 export type UpdateProductCategoryReq = {
-	name: string;
 	description: string;
 	is_internal: boolean | undefined;
 	is_active: boolean | undefined;

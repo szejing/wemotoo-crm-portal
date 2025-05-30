@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const code = getRouterParams(event).code;
 
-		const result = await $fetch(`${Routes.ProdBrands.Single(code)}`, {
+		const result = await $fetch(`${Routes.ProductBrands.Single(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			headers: generateHeaders(event, true),
