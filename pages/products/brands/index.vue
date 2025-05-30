@@ -77,7 +77,10 @@ const links = [
 const modal = useModal();
 const page = ref(1);
 const brandStore = useBrandStore();
-await brandStore.getBrands();
+
+onMounted(async () => {
+	await brandStore.getBrands();
+});
 
 const { loading, brands, pageSize } = storeToRefs(brandStore);
 
@@ -109,8 +112,8 @@ const selectBrand = async (brand: Brand) => {
 	if (!brand) return;
 	modal.open(ZModalBrandDetail, {
 		brand: JSON.parse(JSON.stringify(brand)),
-		onUpdate: async ({ code, name, description, is_active }) => {
-			await brandStore.updateBrand(code, name, description, is_active);
+		onUpdate: async ({ code, description, is_active }) => {
+			await brandStore.updateBrand(description, is_active);
 			modal.close();
 		},
 		onDelete: async () => {

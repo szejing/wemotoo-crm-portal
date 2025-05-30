@@ -8,7 +8,6 @@ import type { ImageReq } from '~/repository/modules/image/models/request/image.r
 
 const initialEmptyCategory: CategoryCreate = {
 	code: '',
-	name: '',
 	description: undefined,
 
 	is_active: true,
@@ -90,7 +89,6 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 
 				const data = await $api.category.create({
 					code: this.newCategory.code,
-					name: this.newCategory.name,
 					description: this.newCategory.description,
 					is_internal: this.newCategory.is_internal,
 					is_active: this.newCategory.is_active,
@@ -100,7 +98,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				});
 
 				if (data.category) {
-					successNotification(`${data.category.name} - Category Created !`);
+					successNotification(`${data.category.code} - Category Created !`);
 					this.categories.push(data.category);
 				}
 				this.resetNewCategory();
@@ -114,7 +112,6 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		},
 		async updateCategory(
 			code: string,
-			name: string,
 			description: string,
 			is_active: boolean,
 			is_internal: boolean,
@@ -146,7 +143,6 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				}
 
 				const data = await $api.category.update(code, {
-					name: name,
 					description: description,
 					is_internal: is_internal,
 					is_active: is_active,

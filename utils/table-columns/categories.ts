@@ -5,8 +5,8 @@ export const category_columns = [
 		sortable: true,
 	},
 	{
-		key: 'name',
-		label: 'Name',
+		key: 'description',
+		label: 'Description',
 		sortable: true,
 	},
 	{

@@ -4,12 +4,8 @@
 			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" />
 		</UFormGroup>
 
-		<UFormGroup v-slot="{ error }" label="Name" name="name" required>
-			<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
-		</UFormGroup>
-
-		<UFormGroup label="Description" name="description">
-			<UInput v-model="description" placeholder="Description" />
+		<UFormGroup v-slot="{ error }" label="Description" name="description" required>
+			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
 		</UFormGroup>
 	</div>
 </template>
@@ -17,11 +13,10 @@
 <script lang="ts" setup>
 const props = defineProps({
 	code: String,
-	name: String,
 	description: String,
 });
 
-const emit = defineEmits(['update:code', 'update:name', 'update:description', 'update:parents']);
+const emit = defineEmits(['update:code', 'update:description']);
 
 const code = computed({
 	get() {
@@ -29,15 +24,6 @@ const code = computed({
 	},
 	set(value) {
 		emit('update:code', value?.toUpperCase());
-	},
-});
-
-const name = computed({
-	get() {
-		return props.name;
-	},
-	set(value) {
-		emit('update:name', value);
 	},
 });
 

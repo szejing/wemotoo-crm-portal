@@ -2,7 +2,7 @@
 	<div>
 		<UForm :schema="CreateBrandValidation" :state="newBrand" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputProductBrandGeneralInfo v-model:value="newBrand.value" />
+			<ZInputProductBrandGeneralInfo v-model:code="newBrand.code" v-model:description="newBrand.description" />
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
 				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>

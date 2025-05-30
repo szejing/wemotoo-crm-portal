@@ -2,12 +2,10 @@ import type { Image } from './image';
 
 export type CategoryInput = {
 	code: string;
-	name?: string;
 };
 
 export type Category = {
 	code: string;
-	name: string;
 	description?: string | undefined;
 	slug?: string | undefined;
 

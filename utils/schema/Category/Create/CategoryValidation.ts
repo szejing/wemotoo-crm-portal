@@ -4,8 +4,7 @@ const Category = z.object({ code: z.string().optional(), name: z.string().option
 
 export const CreateCategoryValidation = z.object({
 	code: z.string().max(16),
-	name: z.string(),
-	description: z.string().optional(),
+	description: z.string(),
 	is_active: z.boolean().default(true),
 	is_internal: z.boolean().default(false),
 	parent_category: Category.optional().nullable(),

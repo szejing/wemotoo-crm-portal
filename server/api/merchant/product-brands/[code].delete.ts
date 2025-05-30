@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdBrands.Delete(code)}`, {
+		const result = await $fetch(`${Routes.ProductBrands.Delete(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'DELETE',
 			headers: generateHeaders(event),

@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdBrands.Update(code)}`, {
+		const result = await $fetch(`${Routes.ProductBrands.Update(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'PATCH',
 			body: data,
