@@ -2,7 +2,7 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="container">
-			<ZSectionFilterSaleSummItem />
+			<ZSectionFilterSaleSummItems />
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">

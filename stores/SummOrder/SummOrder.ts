@@ -1,57 +1,9 @@
-import type { SummDaily, SummCustomer, SummOrderBill, SummOrderItem, SummProduct } from '~/utils/types/summ-orders';
+import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
-import { OrderStatus, type FilterType } from 'wemotoo-common';
-import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
-
-type OrderSumm = {
-	filter: {
-		start_date: Date;
-		end_date: Date | undefined;
-		filter_type: string;
-		status: string;
-		currency_code: string;
-	};
-	is_loading: boolean;
-	data: SummOrderBill[];
-};
-
-const initialEmptyOrderSumm: OrderSumm = {
-	filter: {
-		start_date: new Date(),
-		end_date: undefined,
-		filter_type: '=',
-		status: OrderStatus.NEW,
-		currency_code: 'MYR',
-	},
-	is_loading: false,
-	data: [],
-};
-
-type OrderSummItem = {
-	filter: {
-		start_date: Date;
-		end_date: Date | undefined;
-		filter_type: string;
-		status: string;
-		item_status: string;
-		currency_code: string;
-	};
-	is_loading: boolean;
-	data: SummOrderItem[];
-};
-
-const initialEmptyOrderSummItem: OrderSummItem = {
-	filter: {
-		start_date: new Date(),
-		end_date: undefined,
-		filter_type: '=',
-		status: OrderStatus.NEW,
-		item_status: OrderItemStatus.ACTIVE,
-		currency_code: 'MYR',
-	},
-	is_loading: false,
-	data: [],
-};
+import { initialEmptyOrderSumm } from './model/order-summ.model';
+import { initialEmptyOrderSummItem } from './model/order-summ-item.model';
+import { type FilterType, getFormattedDate, type OrderItemStatus, type OrderStatus } from 'wemotoo-common';
+import { initialEmptyOrderSummCustomer } from './model/order-summ-customer.model';
 
 export const useSummOrderStore = defineStore('summOrderStore', {
 	state: () => ({
@@ -62,6 +14,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		top_purchased_products: [] as SummProduct[],
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
+		order_summ_customer: initialEmptyOrderSummCustomer,
 	}),
 	actions: {
 		async getDashboardSummary(start_date?: Date, end_date?: Date) {
@@ -148,6 +101,29 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				failedNotification(err.message);
 			} finally {
 				this.order_summ_item.is_loading = false;
+			}
+		},
+
+		async getOrderCustomerSummary() {
+			this.order_summ_customer.is_loading = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.summOrder.getSummOrderCustomers({
+					filter_type: this.order_summ_customer.filter.filter_type as FilterType,
+					status: this.order_summ_customer.filter.status as OrderStatus,
+					start_date: getFormattedDate(this.order_summ_customer.filter.start_date),
+					end_date: this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date) : undefined,
+					currency_code: this.order_summ_customer.filter.currency_code,
+				});
+				if (data.summ_order_customers) {
+					this.order_summ_customer.data = data.summ_order_customers;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ_customer.is_loading = false;
 			}
 		},
 	},

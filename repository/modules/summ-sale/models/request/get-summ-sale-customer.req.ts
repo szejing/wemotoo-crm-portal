@@ -1,9 +1,9 @@
-import type { FilterType, OrderStatus } from 'wemotoo-common';
+import type { FilterType, SaleStatus } from 'wemotoo-common';
 
 export type GetSummSaleCustomersReq = {
-	start_date: Date;
-	end_date?: Date;
+	start_date: string;
+	end_date?: string;
 	filter_type: FilterType;
-	status?: OrderStatus;
+	status?: SaleStatus;
 	currency_code?: string;
 };
