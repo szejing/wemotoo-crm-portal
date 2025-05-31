@@ -5,6 +5,7 @@ import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptySaleSumm } from './models/sale-summ.model';
 import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
 import { initialEmptySaleSummPayment } from './models/sale-summ-payments.model';
+import { initialEmptySaleSummCustomer } from './models/sale-summ-customer.model';
 
 export const useSummSaleStore = defineStore('summSaleStore', {
 	state: () => ({
@@ -16,6 +17,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 		sale_summ: initialEmptySaleSumm,
 		sale_summ_items: initialEmptySaleSummItem,
 		sale_summ_payments: initialEmptySaleSummPayment,
+		sale_summ_customer: initialEmptySaleSummCustomer,
 	}),
 	actions: {
 		async getDashboardSummary(start_date?: Date, end_date?: Date) {
@@ -125,6 +127,29 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				failedNotification(err.message);
 			} finally {
 				this.sale_summ_payments.is_loading = false;
+			}
+		},
+
+		async getSaleCustomerSummary() {
+			this.sale_summ_customer.is_loading = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				const data = await $api.summSales.getSummSalesCustomers({
+					filter_type: this.sale_summ_customer.filter.filter_type as FilterType,
+					status: this.sale_summ_customer.filter.status as SaleStatus,
+					start_date: getFormattedDate(this.sale_summ_customer.filter.start_date),
+					end_date: this.sale_summ_customer.filter.end_date ? getFormattedDate(this.sale_summ_customer.filter.end_date) : undefined,
+					currency_code: this.sale_summ_customer.filter.currency_code,
+				});
+				if (data.summ_sale_customers) {
+					this.sale_summ_customer.data = data.summ_sale_customers;
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.sale_summ_customer.is_loading = false;
 			}
 		},
 	},

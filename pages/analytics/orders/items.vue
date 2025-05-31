@@ -6,11 +6,11 @@
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">
-						<ZSelectMenuTableColumns :columns="order_item_summ_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<ZSelectMenuTableColumns :columns="order_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
 					</div>
 				</template>
 
-				<UTable :rows="tableData" :columns="order_item_summ_header_columns" :loading="is_loading" :expand="expandedRows" @update:expand="expandedRows = $event">
+				<UTable :rows="tableData" :columns="order_summ_item_header_columns" :loading="is_loading" :expand="expandedRows" @update:expand="expandedRows = $event">
 					<template #biz_date-data="{ row }">
 						<p class="font-bold">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
 					</template>
@@ -102,7 +102,7 @@
 
 <script lang="ts" setup>
 import { OrderStatus, OrderItemStatus, getFormattedDate } from 'wemotoo-common';
-import { order_item_summ_columns, order_item_summ_header_columns } from '~/utils/table-columns';
+import { order_summ_item_columns, order_summ_item_header_columns } from '~/utils/table-columns';
 
 const links = [
 	{
@@ -195,8 +195,8 @@ watch(
 	{ immediate: true },
 );
 
-const selectedColumns = ref(order_item_summ_columns);
-const columnsTable = computed(() => order_item_summ_columns.filter((column) => selectedColumns.value.includes(column)));
+const selectedColumns = ref(order_summ_item_columns);
+const columnsTable = computed(() => order_summ_item_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;

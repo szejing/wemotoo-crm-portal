@@ -1,4 +1,4 @@
-export const order_item_summ_columns = [
+export const order_summ_item_columns = [
 	{
 		key: 'prod_code',
 		label: 'Code',
@@ -25,7 +25,7 @@ export const order_item_summ_columns = [
 	},
 ];
 
-export const order_item_summ_header_columns = [
+export const order_summ_item_header_columns = [
 	{
 		key: 'biz_date',
 		label: 'Biz Date',
