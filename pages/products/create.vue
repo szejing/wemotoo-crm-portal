@@ -16,11 +16,12 @@
 			<div class="side-wrapper">
 				<ZInputProductSidebar
 					:product="newProduct"
-					@update_status="updateStatus"
-					@update_categories="updateCategories"
-					@update_tags="updateTags"
-					@update_thumbnail="updateThumbnail"
-					@update_images="updateImages"
+					@update:status="updateStatus"
+					@update:brands="updateBrands"
+					@update:categories="updateCategories"
+					@update:tags="updateTags"
+					@update:thumbnail="updateThumbnail"
+					@update:images="updateImages"
 				/>
 			</div>
 
@@ -43,11 +44,12 @@
 
 					<ZInputProductSidebar
 						:product="newProduct"
-						@update_status="updateStatus"
-						@update_categories="updateCategories"
-						@update_tags="updateTags"
-						@update_thumbnail="updateThumbnail"
-						@update_images="updateImages"
+						@update:status="updateStatus"
+						@update:brands="updateBrands"
+						@update:categories="updateCategories"
+						@update:tags="updateTags"
+						@update:thumbnail="updateThumbnail"
+						@update:images="updateImages"
 					/>
 				</UCard>
 			</UModal>
@@ -59,6 +61,7 @@
 import type { ProductStatus } from 'wemotoo-common';
 import type { Category } from '~/utils/types/category';
 import type { Tag } from '~/utils/types/tag';
+import type { Brand } from '~/utils/types/brand';
 
 const links = [
 	{
@@ -83,6 +86,10 @@ onBeforeRouteLeave(() => {
 
 const updateStatus = (value: ProductStatus) => {
 	newProduct.value.status = value;
+};
+
+const updateBrands = (value: Brand[]) => {
+	newProduct.value.brands = value;
 };
 
 const updateCategories = (value: Category[]) => {

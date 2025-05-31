@@ -7,6 +7,7 @@ export const useAppStore = defineStore('appStore', {
 			const productOptionsStore = useProductOptionStore();
 			const productTagsStore = useProductTagStore();
 			const categoryStore = useProductCategoryStore();
+			const brandStore = useBrandStore();
 			// const productStore = useProductStore();
 			const merchantInfo = useMerchantInfoStore();
 			const settingsStore = useSettingStore();
@@ -22,6 +23,7 @@ export const useAppStore = defineStore('appStore', {
 				productOptionsStore.getOptions(),
 				productTagsStore.getTags(),
 				categoryStore.getCategories(),
+				brandStore.getBrands(),
 				// productStore.getProducts(),
 				merchantInfo.getCurrencies(),
 				settingsStore.getSettings(),

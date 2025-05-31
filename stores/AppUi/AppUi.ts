@@ -67,12 +67,12 @@ const merchantNavigation = [
 		to: '/orders',
 		isCollapsed: false,
 	},
-	{
-		title: 'Transactions',
-		icon: ICONS.TRANSACTION,
-		to: '/transactions',
-		isCollapsed: false,
-	},
+	// {
+	// 	title: 'Transactions',
+	// 	icon: ICONS.TRANSACTION,
+	// 	to: '/transactions',
+	// 	isCollapsed: false,
+	// },
 	{
 		title: 'Products',
 		icon: ICONS.PRODUCT,

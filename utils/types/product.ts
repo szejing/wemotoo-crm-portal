@@ -2,6 +2,7 @@ import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from './price';
 import type { CategoryInput } from './category';
 import type { TagInput } from './tag';
+import type { BrandInput } from './brand';
 
 export type ProdVariantOptionValuesInput = {
 	id: number;
@@ -56,6 +57,9 @@ export type Product = {
 	is_active: boolean;
 
 	status: ProductStatus;
+
+	// brands
+	brands: BrandInput[] | undefined;
 
 	// categories
 	categories: CategoryInput[] | undefined;
