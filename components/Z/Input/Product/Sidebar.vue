@@ -8,6 +8,14 @@
 			</template>
 		</UCard>
 
+		<!-- ***** Brands ***** -->
+		<UCard :ui="cardBg">
+			<template #header>
+				<h3>Brands</h3>
+				<ZSelectMenuBrands v-model:brands="brands" />
+			</template>
+		</UCard>
+
 		<!-- ***** Categories ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
@@ -55,7 +63,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['update:status', 'update:categories', 'update:tags', 'update:thumbnail', 'update:images']);
+const emit = defineEmits(['update:status', 'update:brands', 'update:categories', 'update:tags', 'update:thumbnail', 'update:images']);
 
 const status = computed({
 	get() {
@@ -63,6 +71,15 @@ const status = computed({
 	},
 	set(value) {
 		emit('update:status', value);
+	},
+});
+
+const brands = computed({
+	get() {
+		return props.product.brands;
+	},
+	set(value) {
+		emit('update:brands', value);
 	},
 });
 

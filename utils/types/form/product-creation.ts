@@ -3,6 +3,7 @@ import type { TagInput } from '../tag';
 import type { CategoryInput } from '../category';
 import type { PriceInput } from '../price';
 import type { ProdOptionInput, ProdVariantInput } from '../product';
+import type { BrandInput } from '../brand';
 
 export type ProductCreate = {
 	code: string | undefined;
@@ -14,6 +15,9 @@ export type ProductCreate = {
 	is_active: boolean;
 
 	status: ProductStatus;
+
+	// brands
+	brands: BrandInput[] | undefined;
 
 	// categories
 	categories: CategoryInput[] | undefined;

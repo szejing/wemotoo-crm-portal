@@ -1,28 +1,14 @@
 <template>
 	<div class="space-y-8">
-		<UContainer class="space-y-4">
-			<h6 class="font-bold">Order Report</h6>
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-8 space-y-4">
-				<UButton v-for="(navigate, index) in order_navigations" :key="index" variant="ghost" color="gray" :to="navigate.to">
-					<div class="flex flex-col items-center gap-2 mx-auto text-center">
-						<UIcon size="24" :name="navigate.icon" />
-						<span>{{ navigate.title }}</span>
-					</div>
-				</UButton>
-			</div>
-		</UContainer>
+		<div>
+			<h2 class="font-bold">Order Report</h2>
+			<ZMenu :navigations="order_navigations" />
+		</div>
 
-		<UContainer class="space-y-4 mt-8">
-			<h6 class="font-bold">Sales Report</h6>
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-8 space-y-4">
-				<UButton v-for="(navigate, index) in sales_navigations" :key="index" variant="ghost" color="gray" :to="navigate.to">
-					<div class="flex flex-col items-center gap-2 mx-auto text-center">
-						<UIcon size="24" :name="navigate.icon" />
-						<span>{{ navigate.title }}</span>
-					</div>
-				</UButton>
-			</div>
-		</UContainer>
+		<div class="mt-8">
+			<h2 class="font-bold">Sales Report</h2>
+			<ZMenu :navigations="sales_navigations" />
+		</div>
 	</div>
 </template>
 
@@ -33,6 +19,11 @@ const order_navigations = [
 		icon: ICONS.REPORT_ORDER,
 		to: '/analytics/orders/summary',
 	},
+	// {
+	// 	title: 'Order Detail Listing',
+	// 	icon: ICONS.REPORT_ORDER,
+	// 	to: '/analytics/orders/detail-listing',
+	// },
 	{
 		title: 'Order Item',
 		icon: ICONS.REPORT_ORDER,
@@ -50,6 +41,11 @@ const sales_navigations = [
 		title: 'Sales Summary',
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/summary',
+	},
+	{
+		title: 'Sales Detail Listing',
+		icon: ICONS.REPORT_SALES,
+		to: '/analytics/sales/detail-listing',
 	},
 	{
 		title: 'Sales Items',

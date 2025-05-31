@@ -1,14 +1,8 @@
 <template>
-	<UContainer class="space-y-4 mt-8">
-		<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-			<UButton v-for="(navigate, index) in product_navigations" :key="index" variant="ghost" color="gray" :to="navigate.to">
-				<div class="flex flex-col items-center gap-2 mx-auto text-center">
-					<UIcon size="24" :name="navigate.icon" />
-					<span>{{ navigate.title }}</span>
-				</div>
-			</UButton>
-		</div>
-	</UContainer>
+	<div>
+		<h2 class="font-bold">Product Management</h2>
+		<ZMenu :navigations="product_navigations" />
+	</div>
 </template>
 
 <script lang="ts" setup>
