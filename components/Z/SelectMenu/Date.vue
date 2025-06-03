@@ -11,9 +11,15 @@
 <script lang="ts" setup>
 import { getFormattedDate } from 'wemotoo-common';
 
-const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date }>();
+const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date; maxDate?: Date }>();
 
-const maxDate = new Date();
+const maxDate = computed(() => {
+	if (props.maxDate) {
+		return props.maxDate;
+	}
+
+	return new Date();
+});
 
 const emit = defineEmits(['update:date']);
 

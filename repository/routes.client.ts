@@ -134,6 +134,14 @@ const MerchantRoutes = {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/many`,
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/${code}`,
 	},
+	Appointments: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/create`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/many`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/restore/${code}`,
+	},
 };
 
 export default MerchantRoutes;

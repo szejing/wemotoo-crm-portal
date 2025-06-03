@@ -1,4 +1,5 @@
 import type { OrderItemStatus } from 'wemotoo-common';
+import type { AppointmentModel } from './appointment.model';
 
 export type ItemModel = {
 	item_line: number;
@@ -22,4 +23,5 @@ export type ItemModel = {
 	tax_amt_exc?: number;
 	adj_amt?: number;
 	status: OrderItemStatus;
+	appointment?: AppointmentModel;
 };

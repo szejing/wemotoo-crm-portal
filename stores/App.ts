@@ -11,7 +11,7 @@ export const useAppStore = defineStore('appStore', {
 			// const productStore = useProductStore();
 			const merchantInfo = useMerchantInfoStore();
 			const settingsStore = useSettingStore();
-			// const productTypeStore = useProductTypeStore();
+			const productTypeStore = useProductTypeStore();
 			const orderStore = useOrderStore();
 			const paymentTypeStore = usePaymentTypeStore();
 			const paymentMethodStore = usePaymentMethodStore();
@@ -27,7 +27,7 @@ export const useAppStore = defineStore('appStore', {
 				// productStore.getProducts(),
 				merchantInfo.getCurrencies(),
 				settingsStore.getSettings(),
-				// productTypeStore.getProductTypes(),
+				productTypeStore.getProductTypes(),
 				orderStore.getOrders(),
 				paymentTypeStore.getPaymentTypeGroups(),
 				paymentMethodStore.getPaymentMethods(),

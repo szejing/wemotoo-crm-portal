@@ -31,12 +31,38 @@
 			<ZQuantity v-model:quantity="orderQty" />
 		</div>
 
+		<hr class="my-2" />
+
+		<div v-if="appointment">
+			<h2 class="text-main">Appointment</h2>
+			<h4 class="text-neutral-700">#{{ appointment!.code }}</h4>
+
+			<div class="grid grid-cols-2 gap-4 mt-2">
+				<div class="flex-jbetween-icenter">
+					<h4 class="text-neutral-400">Date</h4>
+					<ZSelectMenuDate
+						v-model:date="appointmentDate"
+						placeholder="Appointment Date"
+						:min-date="new Date()"
+						:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
+					/>
+				</div>
+
+				<div class="flex-jbetween-icenter">
+					<h4 class="text-neutral-400">Status</h4>
+					<ZSelectMenuAppointmentStatus v-model:status="appointmentStatus" />
+				</div>
+			</div>
+		</div>
+
+		<hr v-if="appointment" class="my-2" />
+
 		<div>
 			<h2 class="text-main">Pricing</h2>
 
 			<div class="grid grid-cols-2 gap-4 mt-2">
 				<UFormGroup label="Currency" name="currency">
-					<ZSelectMenuCurrency v-model:currency-code="currencyCode" />
+					<ZSelectMenuCurrency v-model:currency-code="currencyCode" class="mt-2" />
 				</UFormGroup>
 
 				<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" required>
@@ -70,6 +96,7 @@
 
 <script lang="ts" setup>
 import { OrderItemStatus } from 'wemotoo-common';
+import type { AppointmentModel } from '~/utils/models';
 import type { ProductVariant } from '~/utils/types/product-variant';
 
 const { $api } = useNuxtApp();
@@ -87,6 +114,7 @@ const props = defineProps<{
 	currencyCode: string;
 	orderQty: number;
 	unitSellPrice: number;
+	appointment?: AppointmentModel;
 }>();
 
 onMounted(async () => {
@@ -117,6 +145,7 @@ const emit = defineEmits([
 	'update:currencyCode',
 	'update:orderQty',
 	'update:unitSellPrice',
+	'update:appointment',
 ]);
 
 const status = computed({
@@ -198,6 +227,24 @@ const unitSellPrice = computed({
 	},
 	set(value) {
 		emit('update:unitSellPrice', value);
+	},
+});
+
+const appointmentStatus = computed({
+	get() {
+		return props.appointment?.status;
+	},
+	set(value) {
+		emit('update:appointment', { ...props.appointment, status: value } as AppointmentModel);
+	},
+});
+
+const appointmentDate = computed({
+	get() {
+		return props.appointment?.date;
+	},
+	set(value) {
+		emit('update:appointment', { ...props.appointment, date: value } as AppointmentModel);
 	},
 });
 

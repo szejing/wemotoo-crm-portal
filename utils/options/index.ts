@@ -5,6 +5,7 @@ import { options_order_item_status } from './order-item-status';
 import { options_payment_status } from './payment-status';
 import { options_page_size } from './page-size';
 import { options_sale_status } from './sale-status';
+import { options_appointment_status } from './appointment-status';
 
 export {
 	options_page_size,
@@ -14,4 +15,5 @@ export {
 	options_order_item_status,
 	options_payment_status,
 	options_sale_status,
+	options_appointment_status,
 };

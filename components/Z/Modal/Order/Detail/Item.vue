@@ -1,7 +1,7 @@
 <template>
 	<UModal
 		:ui="{
-			width: 'w-full sm:w-[70%]',
+			width: 'w-full sm:w-[40%]',
 		}"
 	>
 		<UCard>
@@ -18,6 +18,7 @@
 					v-model:currency-code="state.item.currency_code"
 					v-model:order-qty="state.item.qty"
 					v-model:unit-sell-price="state.item.unit_sell_price"
+					v-model:appointment="state.item.appointment"
 				/>
 				<!-- *********************** General Info *********************** -->
 

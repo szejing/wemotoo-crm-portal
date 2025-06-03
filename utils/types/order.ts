@@ -1,5 +1,6 @@
 import type { OrderItemStatus, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { AddressModel } from '~/utils/models/customer.model';
+import type { Appointment } from './appointment';
 
 type OrderCustomerDto_ = {
 	customer_no: string;
@@ -35,6 +36,7 @@ type OrderItemDto_ = {
 	tax_amt_exc?: number;
 	adj_amt?: number;
 	status: OrderItemStatus;
+	appointment?: Appointment;
 };
 
 type OrderPaymentDto_ = {
