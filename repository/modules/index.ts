@@ -17,6 +17,7 @@ import SaleSummaryModule from './summ-sale/summ-sale';
 import SaleModule from './sale/sale';
 import CustomerModule from './customer/customer';
 import ProductBrandModule from './product-brand/product-brand';
+import AppointmentModule from './appointment/appointment';
 
 export {
 	OrderModule,
@@ -38,4 +39,5 @@ export {
 	SaleModule,
 	CustomerModule,
 	ProductBrandModule,
+	AppointmentModule,
 };

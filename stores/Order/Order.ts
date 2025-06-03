@@ -89,8 +89,8 @@ export const useOrderStore = defineStore('orderStore', {
 				if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
 					const data = await $api.sale.updateOrderToSale(order_no, customer_no);
 
-					if (data.sale) {
-						// this.detail = data.sale;
+					if (data.transaction) {
+						this.detail = undefined;
 						successNotification('Order status updated successfully');
 					}
 				} else {

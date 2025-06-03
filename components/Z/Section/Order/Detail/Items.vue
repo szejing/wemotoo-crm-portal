@@ -20,17 +20,17 @@
 					<div class="flex items-center gap-2">
 						<div>
 							<div v-if="item.status == OrderItemStatus.ACTIVE">
-								<UIcon :name="ICONS.CHECK_OUTLINE_ROUNDED" class="text-green-500" />
+								<UIcon :name="ICONS.CHECK_OUTLINE_ROUNDED" class="text-green-500 w-5 h-5" />
 							</div>
 							<div v-else-if="item.status == OrderItemStatus.REFUNDED">
-								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500" />
+								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
 							</div>
 							<div v-else-if="item.status == OrderItemStatus.VOIDED">
-								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500" />
+								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
 							</div>
 						</div>
 
-						<div>
+						<div class="ml-2">
 							<div class="font-medium" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.prod_code }}</div>
 							<div
 								class="text-xs"
@@ -42,6 +42,13 @@
 								{{ item.prod_name.substring(0, 10) }}
 							</div>
 							<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
+							<div v-if="item.appointment" class="flex items-center gap-2 mt-2">
+								<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
+								<div class="flex flex-col">
+									<span class="text-xs font-bold italic text-neutral-700">{{ item.appointment.code }}</span>
+									<span class="text-xs font-bold italic text-neutral-400">{{ item.appointment.date }}</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</td>

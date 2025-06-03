@@ -131,15 +131,12 @@ export const Routes = {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/`,
 		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.PAYMENT_METHODS}/${code}`,
 	},
+	Appoinments: {
+		Create: () => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/`,
+		Single: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Many: () => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/`,
+		Update: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Delete: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
+		Restore: (code: string) => `${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/restore/${code}`,
+	},
 };
-
-// export const Routes = {
-// 	external: {
-// 		name: '/api/another',
-// 		regex: /^\/api\/another$/,
-// 	},
-// 	core: {
-// 		name: '/api',
-// 		regex: /^\/api\//,
-// 	},
-// };
