@@ -3,14 +3,23 @@
 		<UBreadcrumb :links="links" />
 		<div class="flex-jbetween-icenter">
 			<h2 class="my-6">Add Product</h2>
-			<div class="block sm:hidden">
-				<div class="section-menu" @click="isOpen = !isOpen">
-					<UIcon :name="ICONS.MENU_OPEN_ROUNDED" class="size-7 block sm:hidden" />
+			<!-- <div class="flex items-center gap-4">
+				<div class="block sm:hidden">
+					<div class="section-menu" @click="isOpen = !isOpen">
+						<UIcon :name="ICONS.MENU_OPEN_ROUNDED" class="size-7 block sm:hidden" />
+					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
-		<div class="wrapper-grid">
-			<!-- ***** Form ***** -->
+
+		<!-- Stepper Mode -->
+		<div class="wrapper-stepper">
+			<FormProductStepperCreation />
+		</div>
+
+		<!-- Original Form Mode -->
+		<!-- ***** Form ***** -->
+		<!-- <div v-else class="wrapper-grid">
 			<FormProductCreation class="col-span-3" />
 
 			<div class="side-wrapper">
@@ -53,15 +62,15 @@
 					/>
 				</UCard>
 			</UModal>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
-import type { ProductStatus } from 'wemotoo-common';
-import type { Category } from '~/utils/types/category';
-import type { Tag } from '~/utils/types/tag';
-import type { Brand } from '~/utils/types/brand';
+// import type { ProductStatus } from 'wemotoo-common';
+// import type { Category } from '~/utils/types/category';
+// import type { Tag } from '~/utils/types/tag';
+// import type { Brand } from '~/utils/types/brand';
 
 const links = [
 	{
@@ -75,43 +84,47 @@ const links = [
 	},
 ];
 
-const isOpen = ref(false);
+// const isOpen = ref(false);
 
 const productStore = useProductStore();
-const { newProduct } = storeToRefs(productStore);
+// const { newProduct } = storeToRefs(productStore);
 
 onBeforeRouteLeave(() => {
 	productStore.resetNewProduct();
 });
 
-const updateStatus = (value: ProductStatus) => {
-	newProduct.value.status = value;
-};
+// const updateStatus = (value: ProductStatus) => {
+// 	newProduct.value.status = value;
+// };
 
-const updateBrands = (value: Brand[]) => {
-	newProduct.value.brands = value;
-};
+// const updateBrands = (value: Brand[]) => {
+// 	newProduct.value.brands = value;
+// };
 
-const updateCategories = (value: Category[]) => {
-	newProduct.value.categories = value;
-};
+// const updateCategories = (value: Category[]) => {
+// 	newProduct.value.categories = value;
+// };
 
-const updateTags = (value: Tag[]) => {
-	newProduct.value.tags = value;
-};
+// const updateTags = (value: Tag[]) => {
+// 	newProduct.value.tags = value;
+// };
 
-const updateThumbnail = (value: File) => {
-	newProduct.value.thumbnail = value;
-};
+// const updateThumbnail = (value: File) => {
+// 	newProduct.value.thumbnail = value;
+// };
 
-const updateImages = (value: File[]) => {
-	newProduct.value.images = value;
-};
+// const updateImages = (value: File[]) => {
+// 	newProduct.value.images = value;
+// };
 </script>
 
 <style scoped lang="postcss">
 .wrapper-grid {
 	@apply grid grid-cols-1 sm:grid-cols-4 gap-4;
+}
+
+.wrapper-stepper {
+	@apply w-full;
 }
 
 .side-wrapper {

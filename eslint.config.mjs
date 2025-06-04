@@ -12,7 +12,14 @@ export default withNuxt({
 		'vue/no-multiple-template-root': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
 		'import/order': 'off',
-		'vue/html-indent': ['error', 'tab'], // enforce tabs in template
+		'vue/html-indent': [
+			'error',
+			'tab',
+			{
+				switchCase: 1,
+			},
+		],
+		// enforce tabs in template
 		'indent': ['error', 'tab'], // enforce tabs in script and js files
 		'vue/operator-linebreak': 'off',
 	},

@@ -1,12 +1,7 @@
 export const product_columns = [
 	{
-		key: 'code',
-		label: 'Code',
-		sortable: true,
-	},
-	{
 		key: 'name',
-		label: 'Name',
+		label: 'Code & Name',
 		sortable: true,
 	},
 	{
