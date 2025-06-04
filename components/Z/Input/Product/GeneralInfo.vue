@@ -2,13 +2,15 @@
 	<UCard :ui="cardUi">
 		<template #header>
 			<div class="w-full flex-between items-center">
-				<h2>General Info</h2>
+				<div v-if="!hideHeader">
+					<h2 class="text-xl font-semibold">Basic Info</h2>
+					<p class="text-sm text-gray-500 mt-1">Product basic information</p>
+				</div>
 				<UTabs v-if="productTypes.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
 					<template #default="{ item }">
 						<span>{{ item.label.toUpperCase() }}</span>
 					</template>
 				</UTabs>
-
 				<div class="w-[50%] flex-jend items-center gap-4">
 					<UCheckbox v-model="is_active" name="isActive" label="Active" color="green" />
 
@@ -88,6 +90,10 @@ const props = defineProps({
 	disabledCode: Boolean,
 	type: Number,
 	cardUi: Object,
+	hideHeader: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits([

@@ -213,7 +213,7 @@ const previewFiles = (files) => {
 }
 
 .dropzone {
-	@apply border-2 border-dashed border-gray-300 rounded-xl p-4 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
+	@apply border-2 border-dashed border-gray-300 rounded-xl p-1 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
 	flex: 1;
 }
 

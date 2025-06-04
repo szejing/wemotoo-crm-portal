@@ -21,10 +21,13 @@
 				</div>
 
 				<UTable :rows="rows" :columns="product_columns" :loading="loading" @select="selectProduct">
-					<template #code-data="{ row }">
+					<template #name-data="{ row }">
 						<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
 							<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
-							<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
+							<div class="flex flex-col">
+								<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
+								<p class="font-light text-neutral-400 text-sm">{{ row.name }}</p>
+							</div>
 						</div>
 					</template>
 
@@ -36,12 +39,6 @@
 						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
 							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
 							<span v-else> - </span>
-						</p>
-					</template>
-
-					<template #name-data="{ row }">
-						<p class="font-bold">
-							{{ row.name }}
 						</p>
 					</template>
 

@@ -1,7 +1,10 @@
 <template>
 	<UCard :ui="cardUi">
 		<template #header>
-			<h2>Pricing</h2>
+			<div v-if="!hideHeader">
+				<h2 class="text-xl font-semibold">Pricing</h2>
+				<p class="text-sm text-gray-500 mt-1">Product pricing</p>
+			</div>
 			<div class="section-grid-price-details mt-4">
 				<UFormGroup label="Currency" name="currency">
 					<ZSelectMenuCurrency v-model:currency-code="currency_code" />
@@ -61,6 +64,10 @@ const props = defineProps({
 	costPrice: Number,
 	salePrice: Number,
 	cardUi: Object,
+	hideHeader: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits(['update:currencyCode', 'update:origSellPrice', 'update:costPrice', 'update:salePrice']);
