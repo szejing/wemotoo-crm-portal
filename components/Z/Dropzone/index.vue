@@ -38,9 +38,6 @@
 			</div>
 
 			<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
-				<div class="preview-header">
-					<span class="preview-count">{{ currentImages.length }} existing image{{ currentImages.length > 1 ? 's' : '' }}</span>
-				</div>
 				<div class="preview-grid">
 					<div v-for="(preview, index) in currentImages" :key="index" class="preview-item">
 						<div class="preview-item-container group">
@@ -85,6 +82,38 @@ const isDragging = ref(false);
 const previews = ref([]);
 const files = ref([]);
 const currentImages = ref(props.existingImages);
+
+onMounted(() => {
+	// Check if existingImages contains File objects or URL strings
+	if (props.existingImages && props.existingImages.length > 0) {
+		const fileObjects = [];
+		const urlStrings = [];
+
+		props.existingImages.forEach((image) => {
+			if (image instanceof File) {
+				// If it's a File object, add to files and create preview
+				fileObjects.push(image);
+			} else if (typeof image === 'string' || (image && image.url)) {
+				// If it's a URL string or object with url property, add to currentImages
+				urlStrings.push(image);
+			}
+		});
+
+		// Set File objects to files and previews
+		if (fileObjects.length > 0) {
+			files.value = fileObjects;
+			previewFiles(fileObjects);
+		}
+
+		// Set URL strings/objects to currentImages
+		if (urlStrings.length > 0) {
+			currentImages.value = urlStrings;
+		} else {
+			// Clear currentImages if no URLs found
+			currentImages.value = [];
+		}
+	}
+});
 
 // Computed property to track total image count
 const totalImageCount = computed(() => {
