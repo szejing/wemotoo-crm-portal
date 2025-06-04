@@ -9,47 +9,60 @@
 			@click="openFileDialog"
 		>
 			<!-- Only show the message when no previews exist -->
-			<p class="dropzone-message text-neutral-600" :class="{ 'text-main font-bold': isDragging }">
+			<p
+				v-if="previews.length === 0 && (currentImages == null || currentImages.length === 0)"
+				class="dropzone-message text-neutral-600"
+				:class="{ 'text-main font-bold': isDragging }"
+			>
 				<UIcon :name="ICONS.UPLOAD" class="w-6 h-6" />
 				{{ multiple ? 'Drop files here or click to upload' : 'Drop a file here or click to upload' }}
 				<span class="text-xs text-neutral-400" :class="{ 'text-main font-bold': isDragging }">Square images are recommended</span>
 			</p>
 
+			<!-- Previews section -->
+			<div v-if="previews.length > 0" class="preview-section">
+				<div class="preview-header">
+					<span class="preview-count">{{ previews.length }} new image{{ previews.length > 1 ? 's' : '' }}</span>
+					<UIcon v-if="previews.length > 1" :name="ICONS.TRASH" class="w-4 h-4 text-red-500 cursor-pointer" @click.stop="clearAllPreviews" />
+				</div>
+				<div class="preview-grid">
+					<div v-for="(preview, index) in previews" :key="index" class="preview-item">
+						<div class="preview-item-container group">
+							<img :src="preview" alt="Preview image" />
+							<UButton class="delete-button" @click.stop="removePreview(index)">
+								<UIcon :name="ICONS.TRASH" class="w-4 h-4 text-red-500" />
+							</UButton>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
+				<div class="preview-header">
+					<span class="preview-count">{{ currentImages.length }} existing image{{ currentImages.length > 1 ? 's' : '' }}</span>
+				</div>
+				<div class="preview-grid">
+					<div v-for="(preview, index) in currentImages" :key="index" class="preview-item">
+						<div class="preview-item-container group">
+							<img v-if="preview != null" :src="preview.url" alt="Preview image" />
+							<UButton class="delete-button" @click.stop="removeExistingImage(index)">
+								<UIcon :name="ICONS.TRASH" class="w-4 h-4 text-red-500" />
+							</UButton>
+						</div>
+					</div>
+				</div>
+			</div>
 			<input ref="fileInput" type="file" class="hidden" :multiple="multiple" accept="image/*" @change="handleFileChange" />
 		</div>
-
-		<!-- Previews section -->
-		<div v-if="previews.length > 0" class="preview-section">
-			<div class="preview-grid">
-				<div v-for="(preview, index) in previews" :key="index" class="preview-item">
-					<div class="preview-item-container group">
-						<img :src="preview" alt="Preview image" />
-						<UButton class="delete-button" @click="removePreview(index)">
-							<UIcon name="i-heroicons-trash" class="w-5 h-5" />
-						</UButton>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
-			<div class="preview-grid">
-				<div v-for="(preview, index) in currentImages" :key="index" class="preview-item">
-					<div class="preview-item-container group">
-						<img v-if="preview != null" :src="preview.url" alt="Preview image" />
-						<UButton class="delete-button" @click="removeExistingImage(index)">
-							<UIcon name="i-heroicons-trash" class="w-5 h-5" />
-						</UButton>
-					</div>
-				</div>
-			</div>
+		<!-- Upload limit warning -->
+		<div v-if="multiple && totalImageCount >= maxImages" class="upload-limit-warning">
+			<UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5" />
+			<span>Maximum {{ maxImages }} images allowed</span>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-
 const props = defineProps({
 	multiple: {
 		type: Boolean,
@@ -58,6 +71,10 @@ const props = defineProps({
 	existingImages: {
 		type: Array,
 		default: () => [],
+	},
+	maxImages: {
+		type: Number,
+		default: 10, // Default maximum of 10 images
 	},
 });
 
@@ -69,6 +86,11 @@ const previews = ref([]);
 const files = ref([]);
 const currentImages = ref(props.existingImages);
 
+// Computed property to track total image count
+const totalImageCount = computed(() => {
+	return previews.value.length + (currentImages.value?.length || 0);
+});
+
 const handleDragOver = () => {
 	isDragging.value = true;
 };
@@ -79,25 +101,33 @@ const handleDragLeave = () => {
 
 const handleDrop = (event) => {
 	isDragging.value = false;
-	const droppedFiles = Array.from(event.dataTransfer.files);
+	const droppedFiles = Array.from(event.dataTransfer.files).filter((file) => file.type.startsWith('image/'));
+
 	if (!props.multiple && droppedFiles.length > 1) {
 		// If multiple is false, only take the first file
 		files.value = [droppedFiles[0]];
 		previewFiles([droppedFiles[0]]);
 		emit('files-selected', [droppedFiles[0]]);
 	} else {
-		files.value = droppedFiles;
-		previewFiles(droppedFiles);
-		emit('files-selected', droppedFiles);
+		// Limit the number of files based on current count and max limit
+		const availableSlots = props.maxImages - totalImageCount.value;
+		const filesToAdd = droppedFiles.slice(0, availableSlots);
+
+		files.value = [...files.value, ...filesToAdd];
+		previewFiles(files.value);
+		emit('files-selected', files.value);
 	}
 };
 
 const openFileDialog = () => {
+	if (props.multiple && totalImageCount.value >= props.maxImages) {
+		return; // Don't open dialog if limit reached
+	}
 	fileInput.value.click();
 };
 
 const handleFileChange = (event) => {
-	const selectedFiles = Array.from(event.target.files);
+	const selectedFiles = Array.from(event.target.files).filter((file) => file.type.startsWith('image/'));
 	if (selectedFiles.length > 0) {
 		if (!props.multiple && selectedFiles.length > 1) {
 			// If multiple is false, only take the first file
@@ -105,9 +135,13 @@ const handleFileChange = (event) => {
 			previewFiles([selectedFiles[0]]);
 			emit('files-selected', [selectedFiles[0]]);
 		} else {
-			files.value = selectedFiles;
-			previewFiles(selectedFiles);
-			emit('files-selected', selectedFiles);
+			// Limit the number of files based on current count and max limit
+			const availableSlots = props.maxImages - totalImageCount.value;
+			const filesToAdd = selectedFiles.slice(0, availableSlots);
+
+			files.value = [...files.value, ...filesToAdd];
+			previewFiles(files.value);
+			emit('files-selected', files.value);
 		}
 	}
 	// Reset the input value so the same file can be selected again
@@ -124,6 +158,14 @@ const removePreview = (index) => {
 	emit('files-selected', files.value);
 };
 
+const clearAllPreviews = () => {
+	// Revoke all object URLs to prevent memory leaks
+	previews.value.forEach((url) => URL.revokeObjectURL(url));
+	previews.value = [];
+	files.value = [];
+	emit('files-selected', []);
+};
+
 const removeExistingImage = (index) => {
 	currentImages.value.splice(index, 1);
 };
@@ -138,11 +180,11 @@ const previewFiles = (files) => {
 
 <style scoped lang="postcss">
 .dropzone-container {
-	@apply flex flex-col mx-auto;
+	@apply flex flex-col;
 }
 
 .dropzone {
-	@apply border-2 border-dashed border-gray-300 rounded-xl p-4 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col;
+	@apply border-2 border-dashed border-gray-300 rounded-xl p-4 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
 	flex: 1;
 }
 
@@ -159,12 +201,24 @@ const previewFiles = (files) => {
 	@apply bg-main-100 border-main-500 transition-all duration-200 text-main font-bold;
 }
 
+.upload-limit-warning {
+	@apply flex items-center gap-2 text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200 text-sm mt-2;
+}
+
 .preview-section {
-	@apply flex-1 min-w-0;
+	@apply w-full;
+}
+
+.preview-header {
+	@apply flex justify-between items-center text-sm text-gray-600;
+}
+
+.preview-count {
+	@apply font-medium;
 }
 
 .preview-grid {
-	@apply flex gap-4 overflow-x-auto w-full snap-x snap-mandatory mt-2 py-2;
+	@apply flex gap-4 overflow-x-auto overflow-y-hidden py-2 px-1;
 	scrollbar-width: thin;
 	scrollbar-color: theme('colors.gray.300') transparent;
 }
@@ -182,22 +236,22 @@ const previewFiles = (files) => {
 }
 
 .preview-item {
-	@apply flex-none snap-center;
+	@apply relative min-w-[120px] flex-shrink-0;
 }
 
 .preview-item-container {
-	@apply relative;
-}
-
-.delete-button {
-	@apply absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600;
+	@apply relative w-[120px] h-[120px] flex items-center justify-center;
 }
 
 .preview-item img {
-	@apply max-w-[150px] max-h-[150px] border-2 border-main-500/50 rounded-lg;
+	@apply w-[120px] h-[120px] object-cover border-2 border-main-500/50 rounded-lg;
+}
+
+.delete-button {
+	@apply absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 z-10;
 }
 
 .dropzone-message {
-	@apply flex flex-col items-center;
+	@apply flex flex-col items-center gap-2;
 }
 </style>
