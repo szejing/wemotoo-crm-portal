@@ -2,10 +2,10 @@
 	<div class="default-bg">
 		<ClientOnly>
 			<Topbar />
-			<div class="flex w-s=creen h-full">
+			<div class="flex w-screen h-full">
 				<Sidebar />
 
-				<div class="main-content" :class="['ml-0', showSidebar ? 'md:ml-60' : 'md:ml-12']">
+				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-60 md:w-[calc(100vw-15rem)]' : 'md:ml-12 md:w-[calc(100vw-3rem)]']">
 					<slot />
 				</div>
 			</div>
@@ -33,6 +33,6 @@ const { showSidebar } = storeToRefs(appUiStore);
 }
 
 .main-content {
-	@apply w-full px-8 py-4 transform duration-500;
+	@apply px-8 py-4 transform duration-500;
 }
 </style>

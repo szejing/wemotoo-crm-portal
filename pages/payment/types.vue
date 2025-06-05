@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="container">
+		<div class="py-4">
 			<ZSectionFilterPaymentTypeGroups />
 
 			<UCard class="mt-4">
