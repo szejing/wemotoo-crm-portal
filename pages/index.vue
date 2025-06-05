@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="container">
+		<div class="py-4">
 			<div class="grid grid-cols-2 md:grid-cols-4 gap-8 space-y-4">
 				<div class="flex overflow-hidden bg-white rounded-lg shadow-md">
 					<div class="bg-yellow-400 flex items-center justify-center p-6">
