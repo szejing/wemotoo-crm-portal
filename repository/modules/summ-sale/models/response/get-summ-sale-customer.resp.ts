@@ -14,7 +14,7 @@ type SummSaleCustomer = {
 	tax_amt_exc?: number;
 	void_amt?: number;
 	adj_amt?: number;
-	total_orders: number;
+	total_txns: number;
 	total_qty: number;
 	total_voided_qty: number;
 };

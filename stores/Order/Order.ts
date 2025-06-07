@@ -142,7 +142,7 @@ export const useOrderStore = defineStore('orderStore', {
 
 				if (data.order) {
 					this.detail = data.order;
-					successNotification('Payment Info updated successfully');
+					successNotification('Payment Info Added successfully');
 				}
 			} catch (err: any) {
 				console.error(err);

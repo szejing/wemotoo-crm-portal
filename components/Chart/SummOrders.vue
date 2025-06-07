@@ -42,8 +42,8 @@ const chartData = computed(() => {
 				: daily_summaries.value.map((summary) => summary.summ_order.biz_date),
 		datasets: [
 			{
-				barThickness: 12,
-				maxBarThickness: 14,
+				barThickness: 18,
+				maxBarThickness: 20,
 				minBarLength: 2,
 				label: 'Total Orders',
 				data: daily_summaries.value.map((summary) => summary.summ_order.total_orders),
