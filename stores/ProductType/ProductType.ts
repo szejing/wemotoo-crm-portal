@@ -34,7 +34,6 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 			try {
 				const data = await $api.productType.fetchMany();
 
-				console.log(data.productTypes);
 				if (data.productTypes) {
 					this.productTypes = data.productTypes;
 				}

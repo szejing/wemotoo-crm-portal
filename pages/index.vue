@@ -2,17 +2,7 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="py-4">
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-8 space-y-4">
-				<div class="flex overflow-hidden bg-white rounded-lg shadow-md">
-					<div class="bg-yellow-400 flex items-center justify-center p-6">
-						<UIcon name="i-heroicons-bell" class="text-white" size="24" />
-					</div>
-					<div class="flex flex-col justify-center px-6">
-						<div class="font-bold text-gray-800">Dec 31, 2025</div>
-						<div class="text-gray-500">EXPIRY DATE</div>
-					</div>
-				</div>
-			</div>
+			<DashboardMetricsOverview />
 
 			<div class="flex items-center justify-between mt-2">
 				<h1 class="text-neutral-800 font-normal">
