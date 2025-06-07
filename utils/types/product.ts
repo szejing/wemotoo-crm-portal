@@ -40,7 +40,6 @@ export type ProdVariantInput = {
 	height?: number;
 	width?: number;
 	origin_country?: string;
-	mid_code?: string;
 	material?: string;
 	price_types?: PriceInput[] | undefined;
 	options?: ProdOptionValuesInput[];

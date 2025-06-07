@@ -17,7 +17,7 @@
 			<template #header>
 				<div class="flex-jbetween-icenter">
 					<h3>Payment Info</h3>
-					<UButton v-if="order.payments?.length == 0" variant="ghost" @click="addPaymentInfo">Add</UButton>
+					<UButton v-if="order.payments?.length > 0" variant="ghost" @click="addPaymentInfo">Add</UButton>
 				</div>
 			</template>
 
@@ -46,10 +46,10 @@
 			</div>
 
 			<template #footer>
-				<div class="flex-jbetween-icenter">
+				<!-- <div class="flex-jbetween-icenter">
 					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
 					<UButton @click="savePaymentStatus">Save</UButton>
-				</div>
+				</div> -->
 			</template>
 		</UCard>
 	</div>
@@ -68,15 +68,15 @@ const props = defineProps<{
 	addPaymentInfo: () => void;
 }>();
 
-const order = ref({ ...props.order });
+const order = computed(() => props.order);
 
 const saveOrderStatus = async () => {
 	await props.updateOrderStatus(order.value.status);
 };
 
-const savePaymentStatus = async () => {
-	await props.updatePaymentStatus(order.value.payment_status);
-};
+// const savePaymentStatus = async () => {
+// 	await props.updatePaymentStatus(order.value.payment_status);
+// };
 </script>
 
 <style scoped lang="postcss"></style>

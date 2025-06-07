@@ -74,7 +74,7 @@ const merchantNavigation = [
 	// 	isCollapsed: false,
 	// },
 	{
-		title: 'Products',
+		title: 'Services/Products',
 		icon: ICONS.PRODUCT,
 		to: '/products',
 		isCollapsed: false,

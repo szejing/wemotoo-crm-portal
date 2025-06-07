@@ -11,7 +11,7 @@
 			@click="onClickThumbnail"
 		/>
 		<div class="inner-tile-container">
-			<h2 class="font-medium text-secondary-100" :class="[onClickTitle ? 'cursor-pointer' : '']" :onclick="onClickTitle">{{ title }}</h2>
+			<h3 class="font-medium text-secondary-100" :class="[onClickTitle ? 'cursor-pointer' : '']" :onclick="onClickTitle">{{ title }}</h3>
 			<p class="text-sm text-secondary-400" :class="[onClickSubtitle ? 'cursor-pointer' : '']" :onclick="onClickSubtitle">{{ subtitle }}</p>
 		</div>
 	</div>

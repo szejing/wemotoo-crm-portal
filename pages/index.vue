@@ -8,7 +8,7 @@
 						<UIcon name="i-heroicons-bell" class="text-white" size="24" />
 					</div>
 					<div class="flex flex-col justify-center px-6">
-						<div class="font-bold text-gray-800">May 31, 2025</div>
+						<div class="font-bold text-gray-800">Dec 31, 2025</div>
 						<div class="text-gray-500">EXPIRY DATE</div>
 					</div>
 				</div>

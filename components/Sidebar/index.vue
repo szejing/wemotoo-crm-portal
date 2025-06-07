@@ -23,6 +23,6 @@ const { toggleSidebar } = appUiStore;
 }
 
 .sidebar {
-	@apply fixed z-50 left-0 inset-y-0 w-60 bg-secondary-600 border-r overflow-y-auto transform duration-200 hidden md:block;
+	@apply fixed z-50 left-0 inset-y-0 w-60 border-r overflow-y-auto transform duration-200 hidden md:block bg-gradient-to-b from-secondary-600 to-main-600;
 }
 </style>

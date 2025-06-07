@@ -32,7 +32,6 @@ const Variant = z.object({
 	height: z.number().optional(),
 	width: z.number().optional(),
 	origin_country: z.string().optional(),
-	mid_code: z.string().optional(),
 	material: z.string().optional(),
 	price_types: z.array(Price).optional(),
 	options: z.array(OptionValues).optional(),

@@ -1,21 +1,11 @@
 export const sale_summ_item_columns = [
 	{
-		key: 'biz_date',
-		label: 'Date',
+		key: 'prod_code',
+		label: 'Code',
 	},
-	{
-		key: 'currency_code',
-		label: 'Currency',
-	},
-
 	{
 		key: 'item_status',
 		label: 'Item Status',
-	},
-
-	{
-		key: 'prod',
-		label: 'Product',
 	},
 
 	{
@@ -66,5 +56,24 @@ export const sale_summ_item_columns = [
 	{
 		key: 'total_qty',
 		label: 'Total Quantity',
+	},
+];
+
+export const sale_summ_item_header_columns = [
+	{
+		key: 'biz_date',
+		label: 'Biz Date',
+	},
+	{
+		key: 'gross_amt',
+		label: 'Gross Amt',
+	},
+	{
+		key: 'net_amt',
+		label: 'Net Amt',
+	},
+	{
+		key: 'total_qty',
+		label: 'Total Qty',
 	},
 ];

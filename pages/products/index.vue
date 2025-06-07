@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h2 class="font-bold">Product Management</h2>
+		<h2 class="font-bold">Services/Products Management</h2>
 		<ZMenu :navigations="product_navigations" />
 	</div>
 </template>
@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 const product_navigations = [
 	{
-		title: 'Products',
+		title: 'Services/Products',
 		icon: ICONS.LIST,
 		to: '/products/listing',
 	},

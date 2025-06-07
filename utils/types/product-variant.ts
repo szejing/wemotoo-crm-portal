@@ -19,7 +19,6 @@ export type ProductVariant = {
 	height?: number;
 	width?: number;
 	origin_country?: string;
-	mid_code?: string;
 	material?: string;
 	price_types?: PriceInput[] | undefined;
 	options?: ProductOption[];
