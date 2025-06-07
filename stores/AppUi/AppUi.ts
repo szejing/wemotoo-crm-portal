@@ -13,74 +13,24 @@ const merchantNavigation = [
 		title: 'Analytics',
 		icon: ICONS.ANALYTICS,
 		to: '/analytics',
-		// isCollapsed: false,
-		// children: [
-		// 	// {
-		// 	// 	title: 'Orders',
-		// 	// 	to: '/analytics/orders',
-		// 	// },
-		// 	{
-		// 		title: 'Sales',
-		// 		to: '/analytics/sales',
-		// 	},
-		// 	// {
-		// 	// 	title: 'Items',
-		// 	// 	to: '/analytics/items',
-		// 	// },
-		// 	{
-		// 		title: 'Payments',
-		// 		to: '/analytics/sales/payments',
-		// 	},
-		// 	// {
-		// 	// 	title: 'Customers',
-		// 	// 	to: '/analytics/sales/customers',
-		// 	// },
-		// 	{
-		// 		title: 'Items',
-		// 		to: '/analytics/sales/items',
-		// 	},
-		// ],
 	},
-	// {
-	// 	title: 'Sales Summary',
-	// 	icon: ICONS.SALES_SUMMARY,
-	// 	to: '/sales-summary',
-	// 	isCollapsed: false,
-	// 	children: [
-	// 		{
-	// 			title: 'Sales',
-	// 			to: '/sales-summary/sales',
-	// 		},
-	// 		{
-	// 			title: 'Items',
-	// 			to: '/sales-summary/sales-items',
-	// 		},
-	// 		// {
-	// 		// 	title: 'Customers',
-	// 		// 	to: '/sales-summary/sales-customers',
-	// 		// },
-	// 	],
-	// },
+	{
+		title: 'Appointments',
+		icon: ICONS.CALENDAR,
+		to: '/appointments',
+		isCollapsed: false,
+	},
 	{
 		title: 'Booking / Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
 		isCollapsed: false,
 	},
-	// {
-	// 	title: 'Transactions',
-	// 	icon: ICONS.TRANSACTION,
-	// 	to: '/transactions',
-	// 	isCollapsed: false,
-	// },
 	{
 		title: 'Services/Products',
 		icon: ICONS.PRODUCT,
 		to: '/products',
 		isCollapsed: false,
-		// children: [
-
-		// ],
 	},
 	{
 		title: 'Customers',
@@ -93,16 +43,6 @@ const merchantNavigation = [
 		icon: ICONS.PAYMENT_METHODS,
 		to: '/payment',
 		isCollapsed: false,
-		// children: [
-		// 	{
-		// 		title: 'Payment Methods',
-		// 		to: '/payment/methods',
-		// 	},
-		// 	{
-		// 		title: 'Payment Type',
-		// 		to: '/payment/types',
-		// 	},
-		// ],
 	},
 	{
 		title: 'Settings',

@@ -15,7 +15,6 @@ export default defineNuxtConfig({
 		'@nuxt/eslint',
 		'@nuxt/ui',
 		'@vueuse/nuxt',
-		'six-dropzone',
 		[
 			'@nuxtjs/google-fonts',
 			{
@@ -28,6 +27,7 @@ export default defineNuxtConfig({
 				preload: true,
 			},
 		],
+		'@samk-dev/nuxt-vcalendar',
 	],
 
 	devtools: { enabled: true },

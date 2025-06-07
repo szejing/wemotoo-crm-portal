@@ -15,6 +15,7 @@ import { usePaymentTypeStore } from './PaymentType/PaymentType';
 import { usePaymentMethodStore } from './PaymentMethod/PaymentMethod';
 import { useSaleStore } from './Sale/Sale';
 import { useBrandStore } from './Brand/Brand';
+import { useAppointmentStore } from './Appointment/Appointment';
 
 export {
 	useAuthStore,
@@ -34,4 +35,5 @@ export {
 	usePaymentMethodStore,
 	useSaleStore,
 	useBrandStore,
+	useAppointmentStore,
 };

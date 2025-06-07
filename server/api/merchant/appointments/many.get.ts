@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 
+		console.log(config.public.baseUrl);
 		const result = await $fetch(`${Routes.Appoinments.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
