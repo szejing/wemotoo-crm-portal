@@ -1,5 +1,5 @@
-import type { Transaction } from './transaction';
+import type { Bill } from './bill';
 
 export type GetSaleResp = {
-	transaction: Transaction;
+	bill: Bill;
 };

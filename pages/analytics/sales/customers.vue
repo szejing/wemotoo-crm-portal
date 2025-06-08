@@ -11,8 +11,10 @@
 				</template>
 
 				<UTable :rows="tableData" :columns="columnsTable" :loading="is_loading">
-					<template #prod_code-data="{ row: item }">
-						<p>{{ item.prod_code }} - {{ item.prod_name }}</p>
+					<template #customer-data="{ row: item }">
+						<p>
+							{{ item.customer_name }} <span class="text-gray-500">#{{ item.customer_no }}</span>
+						</p>
 					</template>
 
 					<template #status-data="{ row: item }">

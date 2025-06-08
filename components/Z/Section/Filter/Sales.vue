@@ -46,7 +46,7 @@ const { filter } = storeToRefs(saleStore);
 const is_loading = computed(() => saleStore.loading);
 
 const search = async () => {
-	await saleStore.getTransactions();
+	await saleStore.getBills();
 };
 </script>
 

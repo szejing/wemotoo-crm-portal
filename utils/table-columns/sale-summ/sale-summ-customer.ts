@@ -1,12 +1,8 @@
 export const sale_summ_customer_columns = [
 	{
-		key: 'customer_no',
-		label: 'Customer No',
+		key: 'customer',
+		label: 'Customer',
 	},
-	// {
-	// 	key: 'customer_name',
-	// 	label: 'Customer Name',
-	// },
 	{
 		key: 'status',
 		label: 'Status',

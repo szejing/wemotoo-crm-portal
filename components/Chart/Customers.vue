@@ -18,13 +18,15 @@
 
 		<div class="flex-1">
 			<div class="flex items-center justify-between">
-				<p class="text-sm text-neutral-400">Cust No.</p>
+				<p class="text-sm text-neutral-400">Customer</p>
 				<p class="text-sm text-neutral-400">Total Orders</p>
 			</div>
 
 			<div v-for="cust in top_purchased_customers" :key="cust.customer_no" class="mt-1">
 				<div class="flex items-center justify-between gap-2">
-					<p class="text-sm font-medium">{{ cust.customer_no }}</p>
+					<p class="text-sm font-medium">
+						{{ cust.customer_name }} <span class="text-gray-500">#{{ cust.customer_no }}</span>
+					</p>
 					<p class="text-sm font-medium">{{ cust.total_orders }}</p>
 				</div>
 			</div>

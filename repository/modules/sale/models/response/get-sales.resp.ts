@@ -1,6 +1,6 @@
-import type { Transaction } from './transaction';
+import type { Bill } from './bill';
 
 export type GetSalesResp = {
-	transactions: Transaction[];
+	bills: Bill[];
 	total: number;
 };

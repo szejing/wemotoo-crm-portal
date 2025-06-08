@@ -1,7 +1,7 @@
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
 
-export type Transaction = {
+export type Bill = {
 	biz_date: string;
 	bill_no: string;
 	doc_no: string;

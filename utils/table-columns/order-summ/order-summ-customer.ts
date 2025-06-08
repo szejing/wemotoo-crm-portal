@@ -1,7 +1,7 @@
 export const order_summ_customer_columns = [
 	{
-		key: 'customer_no',
-		label: 'Customer No',
+		key: 'customer',
+		label: 'Customer',
 	},
 	{
 		key: 'status',

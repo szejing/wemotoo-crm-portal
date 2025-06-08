@@ -6,5 +6,5 @@ export type Customer = {
 	phone_no: string;
 	last_transaction: Date;
 	total_spent: number;
-	total_transactions: number;
+	total_biils: number;
 };

@@ -101,8 +101,8 @@
 					</template>
 				</UTable>
 
-				<div v-if="transactions.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="filter.page_size" :total="transactions.length" />
+				<div v-if="bills.length > 0" class="section-pagination">
+					<UPagination v-model="page" :page-count="filter.page_size" :total="bills.length" />
 				</div>
 			</UCard>
 		</div>
@@ -113,7 +113,7 @@
 import { SaleStatus, getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { sale_columns } from '~/utils/table-columns';
-import type { Transaction } from '~/repository/modules/sale/models/response/transaction';
+import type { Bill } from '~/repository/modules/sale/models/response/bill';
 
 const links = [
 	{
@@ -130,7 +130,7 @@ const links = [
 
 const page = ref(1);
 const saleStore = useSaleStore();
-const { transactions, filter } = storeToRefs(saleStore);
+const { bills, filter } = storeToRefs(saleStore);
 
 const currency_code = ref(filter.value.currency_code);
 const is_loading = computed(() => saleStore.loading);
@@ -143,16 +143,16 @@ const updateColumns = (columns: { key: string; label: string; sortable?: boolean
 };
 
 const rows = computed(() => {
-	return transactions.value.slice((page.value - 1) * filter.value.page_size, page.value * filter.value.page_size);
+	return bills.value.slice((page.value - 1) * filter.value.page_size, page.value * filter.value.page_size);
 });
 
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;
-	await saleStore.getTransactions();
+	await saleStore.getBills();
 };
 
-const selectSale = (row: Transaction) => {
-	navigateTo(`/transactions/detail/${row.bill_no}`);
+const selectSale = (row: Bill) => {
+	navigateTo(`/bills/detail/${row.bill_no}`);
 };
 </script>
 

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const UpdateOrderPaymentValidation = z.object({
 	payment_line: z.number().optional().nullable(),
-	payment_date: z.date(),
+	payment_date_time: z.date(),
 	payment_type_code: z.string(),
 	currency_code: z.string(),
 	ref_no1: z.string().optional().nullable(),

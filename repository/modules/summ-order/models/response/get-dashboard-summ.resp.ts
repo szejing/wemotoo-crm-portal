@@ -23,6 +23,7 @@ type SummDaily_ = {
 
 type SummCustomer_ = {
 	customer_no: string;
+	customer_name: string;
 	total_orders: number;
 	total_spent: number;
 };
