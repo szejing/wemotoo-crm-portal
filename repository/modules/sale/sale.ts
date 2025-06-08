@@ -11,7 +11,7 @@ class SaleModule extends HttpFactory {
 	 * Fetches all sales
 	 * @returns
 	 */
-	async getTransactions(query: GetSalesReq): Promise<GetSalesResp> {
+	async getBills(query: GetSalesReq): Promise<GetSalesResp> {
 		return await this.call<GetSalesResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
@@ -23,7 +23,7 @@ class SaleModule extends HttpFactory {
 	 * Fetches sale by bill no
 	 * @returns
 	 */
-	async getTransactionByBillNo(bill_no: string): Promise<GetSaleResp> {
+	async getBillDetailsByBillNo(bill_no: string): Promise<GetSaleResp> {
 		return await this.call<GetSaleResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(bill_no)}`,

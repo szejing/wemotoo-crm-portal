@@ -34,4 +34,5 @@ export const ICONS = {
 	PAYMENT_METHODS: 'i-material-symbols-payments-outline-rounded',
 	ANALYTICS: 'i-material-symbols-auto-graph-rounded',
 	CALENDAR: 'i-material-symbols-calendar-month-outline-rounded',
+	RESET: 'i-material-symbols-refresh-rounded',
 };

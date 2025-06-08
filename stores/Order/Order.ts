@@ -66,7 +66,7 @@ export const useOrderStore = defineStore('orderStore', {
 		async getOrderByOrderNo(order_no: string) {
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.order.getOrderByOrderNo(order_no);
+				const data = await $api.order.getOrderByOrderNo(encodeURIComponent(order_no));
 
 				if (data.order) {
 					this.detail = data.order;
@@ -89,7 +89,7 @@ export const useOrderStore = defineStore('orderStore', {
 				if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
 					const data = await $api.sale.updateOrderToSale(order_no, customer_no);
 
-					if (data.transaction) {
+					if (data.bill) {
 						this.detail = undefined;
 						successNotification('Order status updated successfully');
 					}

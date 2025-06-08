@@ -46,7 +46,7 @@
 								<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
 								<div class="flex flex-col">
 									<span class="text-xs font-bold italic text-neutral-700">{{ item.appointment.code }}</span>
-									<span class="text-xs font-bold italic text-neutral-400">{{ item.appointment.date }}</span>
+									<span class="text-xs font-bold italic text-neutral-400">{{ getFormattedDate(item.appointment.date_time, 'dd MMM yyyy HH:mm') }}</span>
 								</div>
 							</div>
 						</div>
@@ -79,7 +79,7 @@
 
 <script lang="ts" setup>
 import { ZModalInformation, ZModalOrderDetailItem } from '#components';
-import { OrderItemStatus } from 'wemotoo-common';
+import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
 
 defineProps<{

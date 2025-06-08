@@ -93,6 +93,7 @@ export type SummSalePayment = {
 
 export type SummSaleCustomer = {
 	customer_no: string;
+	customer_name: string;
 	currency_code: string;
 	status: OrderStatus;
 	email_address: string;

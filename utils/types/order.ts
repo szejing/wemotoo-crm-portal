@@ -41,7 +41,7 @@ type OrderItemDto_ = {
 
 type OrderPaymentDto_ = {
 	payment_line: number;
-	payment_date: Date;
+	payment_date_time: Date;
 	payment_type_code: string;
 	payment_type_desc: string;
 	ref_no1: string;
@@ -55,6 +55,7 @@ type OrderPaymentDto_ = {
 
 export type Order = {
 	biz_date: string;
+	order_date_time: Date;
 	order_no: string;
 	doc_no: string;
 	customer_no: string;

@@ -49,7 +49,7 @@ const props = defineProps({
 const emit = defineEmits(['update', 'cancel']);
 const state = reactive({
 	payment: props.payment || {
-		payment_date: new Date(),
+		payment_date_time: new Date(),
 		payment_type_code: undefined,
 		ref_no1: undefined,
 		ref_no2: undefined,

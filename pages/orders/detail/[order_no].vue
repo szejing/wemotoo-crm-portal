@@ -7,7 +7,7 @@
 				<div class="flex-jbetween-icenter w-full mt-4">
 					<div>
 						<h2 class="font-light">Order #{{ order?.order_no }}</h2>
-						<h2 v-if="order?.biz_date">Date: {{ order?.biz_date }}</h2>
+						<h2 v-if="order?.order_date_time">Date Time: {{ getFormattedDate(order?.order_date_time, 'dd MMM yyyy HH:mm') }}</h2>
 					</div>
 					<div>
 						<UBadge v-if="order?.status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
-import { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
 import { failedModal } from '~/stores/AppUi/AppUi';
 
 const orderStore = useOrderStore();

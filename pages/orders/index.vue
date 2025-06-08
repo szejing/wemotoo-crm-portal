@@ -153,7 +153,7 @@ const updatePageSize = async (size: number) => {
 };
 
 const selectOrder = (row: Order) => {
-	navigateTo(`/orders/detail/${row.order_no}`);
+	navigateTo(`/orders/detail/${encodeURIComponent(row.order_no)}`);
 };
 </script>
 

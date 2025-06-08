@@ -3,6 +3,7 @@ import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
 
 export type Order = {
 	biz_date: string;
+	order_date_time: Date;
 	order_no: string;
 	doc_no: string;
 	customer_no: string;
