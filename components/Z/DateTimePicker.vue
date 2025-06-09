@@ -1,11 +1,10 @@
 <template>
-	<VCalendarDatePicker v-model="date" v-bind="{ ...attrs, ...$attrs }" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
+	<VCalendarDatePicker v-model="date" mode="dateTime" v-bind="{ ...attrs, ...$attrs }" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
 </template>
 
 <script setup lang="ts">
 import { DatePicker as VCalendarDatePicker } from 'v-calendar';
 import 'v-calendar/dist/style.css';
-import type { DatePickerDate } from 'v-calendar/dist/types/src/use/datePicker.js';
 
 defineOptions({
 	inheritAttrs: false,
@@ -13,7 +12,7 @@ defineOptions({
 
 const props = defineProps({
 	modelValue: {
-		type: Date as PropType<DatePickerDate | null>,
+		type: Date as PropType<Date | null>,
 		default: null,
 	},
 	minDate: {

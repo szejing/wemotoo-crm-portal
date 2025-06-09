@@ -2,7 +2,7 @@ import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-or
 import { failedNotification } from '../AppUi/AppUi';
 import { initialEmptyOrderSumm } from './model/order-summ.model';
 import { initialEmptyOrderSummItem } from './model/order-summ-item.model';
-import { type FilterType, getFormattedDate, type OrderItemStatus, type OrderStatus } from 'wemotoo-common';
+import { FilterType, getFormattedDate, type OrderItemStatus, type OrderStatus } from 'wemotoo-common';
 import { initialEmptyOrderSummCustomer } from './model/order-summ-customer.model';
 
 export const useSummOrderStore = defineStore('summOrderStore', {
@@ -62,7 +62,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 			try {
 				const data = await $api.summOrder.getSummOrders({
-					filter_type: this.order_summ.filter.filter_type as FilterType,
+					filter_type: this.order_summ.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.order_summ.filter.status as OrderStatus,
 					start_date: getFormattedDate(this.order_summ.filter.start_date),
 					end_date: this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date) : undefined,
@@ -86,7 +86,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 			try {
 				const data = await $api.summOrder.getSummOrderItems({
-					filter_type: this.order_summ_item.filter.filter_type as FilterType,
+					filter_type: this.order_summ_item.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.order_summ_item.filter.status as OrderStatus,
 					item_status: this.order_summ_item.filter.item_status as OrderItemStatus,
 					start_date: getFormattedDate(this.order_summ_item.filter.start_date),
@@ -110,7 +110,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 			try {
 				const data = await $api.summOrder.getSummOrderCustomers({
-					filter_type: this.order_summ_customer.filter.filter_type as FilterType,
+					filter_type: this.order_summ_customer.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.order_summ_customer.filter.status as OrderStatus,
 					start_date: getFormattedDate(this.order_summ_customer.filter.start_date),
 					end_date: this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date) : undefined,

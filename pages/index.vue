@@ -11,7 +11,7 @@
 					<span class="text-neutral-400 italic"> - </span>
 					<span class="text-neutral-800 font-medium italic underline">{{ getFormattedDate(filterRange.endDate) }}</span>
 				</h1>
-				<ZSelectMenuDateRange
+				<ZSelectMenuDatePreset
 					:start-date="filterRange.startDate"
 					:end-date="filterRange.endDate"
 					@update:start-date="updateStartDate"

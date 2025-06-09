@@ -4,16 +4,13 @@
 			<div class="gap-2 sm:flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Date</h4>
 
-				<ZSelectMenuDateFilterType v-model:filter-type="filter.filter_type" />
-
 				<div class="flex-col-start gap-2">
-					<ZSelectMenuDate :date="filter.start_date" placeholder="Start Date" @update:date="filter.start_date = $event" />
-					<ZSelectMenuDate
-						v-if="filter.filter_type === 'between'"
-						:date="filter.end_date"
-						placeholder="End Date"
-						:min-date="filter.start_date"
-						@update:date="filter.end_date = $event"
+					<ZSelectMenuDateRange
+						:start-date="filter.start_date"
+						:end-date="filter.end_date"
+						placeholder="Date"
+						@update:start-date="filter.start_date = $event"
+						@update:end-date="filter.end_date = $event"
 					/>
 				</div>
 			</div>

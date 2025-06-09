@@ -1,6 +1,6 @@
 import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification } from '../AppUi/AppUi';
-import type { SaleStatus, FilterType, OrderItemStatus } from 'wemotoo-common';
+import { type SaleStatus, FilterType, type OrderItemStatus } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptySaleSumm } from './models/sale-summ.model';
 import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
@@ -65,7 +65,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 
 			try {
 				const data = await $api.summSales.getSummSales({
-					filter_type: this.sale_summ.filter.filter_type as FilterType,
+					filter_type: this.sale_summ.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.sale_summ.filter.status as SaleStatus,
 					start_date: getFormattedDate(this.sale_summ.filter.start_date),
 					end_date: this.sale_summ.filter.end_date ? getFormattedDate(this.sale_summ.filter.end_date) : undefined,
@@ -88,7 +88,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.summSales.getSummSalesItems({
-					filter_type: this.sale_summ_items.filter.filter_type as FilterType,
+					filter_type: this.sale_summ_items.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.sale_summ_items.filter.status as SaleStatus,
 					item_status: this.sale_summ_items.filter.item_status as OrderItemStatus,
 					start_date: getFormattedDate(this.sale_summ_items.filter.start_date),
@@ -111,7 +111,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.summSales.getSummSalesPayments({
-					filter_type: this.sale_summ_payments.filter.filter_type as FilterType,
+					filter_type: this.sale_summ_payments.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.sale_summ_payments.filter.status as SaleStatus,
 					// payment_status: this.sale_summ_payments.filter.payment_status as PaymentStatus,
 					start_date: getFormattedDate(this.sale_summ_payments.filter.start_date),
@@ -136,7 +136,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 
 			try {
 				const data = await $api.summSales.getSummSalesCustomers({
-					filter_type: this.sale_summ_customer.filter.filter_type as FilterType,
+					filter_type: this.sale_summ_customer.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					status: this.sale_summ_customer.filter.status as SaleStatus,
 					start_date: getFormattedDate(this.sale_summ_customer.filter.start_date),
 					end_date: this.sale_summ_customer.filter.end_date ? getFormattedDate(this.sale_summ_customer.filter.end_date) : undefined,
