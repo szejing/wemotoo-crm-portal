@@ -16,18 +16,8 @@
 			</div>
 		</template>
 
-		<div>
-			<div class="flex items-center justify-between">
-				<p class="text-sm text-neutral-400">Prod Code</p>
-				<p class="text-sm text-neutral-400">Total Qty</p>
-			</div>
-
-			<div v-for="product in top_purchased_products" :key="product.prod_code" class="mt-1">
-				<div class="flex items-center justify-between gap-2">
-					<p class="text-sm font-medium">{{ product.prod_code }}</p>
-					<p class="text-sm font-medium">{{ product.total_qty }}</p>
-				</div>
-			</div>
+		<div class="flex-1 flex items-center justify-center">
+			<Doughnut :data="chartData" :options="chartOptions" />
 		</div>
 
 		<template #footer>
@@ -40,8 +30,50 @@
 </template>
 
 <script lang="ts" setup>
+import { Doughnut } from 'vue-chartjs';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const summOrderStore = useSummOrderStore();
 const { top_purchased_products } = storeToRefs(summOrderStore);
+
+// Chart data configuration
+const chartData = computed(() => ({
+	labels: top_purchased_products.value.map((product) => product.prod_code),
+	datasets: [
+		{
+			data: top_purchased_products.value.map((product) => product.total_qty),
+			backgroundColor: ['#00356780', '#FAC7A780', '#00122280', '#F3732380', '#BFCEDC80'],
+			borderColor: ['#001222', '#F37323', '#BFCEDC', '#FAC7A7', '#003567'],
+			borderWidth: 1,
+		},
+	],
+}));
+
+// Chart options configuration
+const chartOptions = computed(() => ({
+	responsive: true,
+	maintainAspectRatio: false,
+	plugins: {
+		legend: {
+			position: 'bottom' as const,
+			labels: {
+				padding: 20,
+				usePointStyle: true,
+			},
+		},
+		tooltip: {
+			callbacks: {
+				label: (context: any) => {
+					const label = context.label || '';
+					const value = context.parsed || 0;
+					return `${label}: ${value} qty`;
+				},
+			},
+		},
+	},
+}));
 </script>
 
 <style scoped lang="postcss"></style>

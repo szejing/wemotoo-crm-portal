@@ -40,8 +40,8 @@
 			<div class="grid grid-cols-2 gap-4 mt-2">
 				<div class="flex-jbetween-icenter">
 					<h4 class="text-neutral-400">Date</h4>
-					<ZSelectMenuDate
-						v-model:date="appointmentDate"
+					<ZSelectMenuDateTime
+						v-model:date-time="appointmentDate"
 						placeholder="Appointment Date"
 						:min-date="new Date()"
 						:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
@@ -95,6 +95,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ZSelectMenuDateTime } from '#components';
 import { OrderItemStatus } from 'wemotoo-common';
 import type { AppointmentModel } from '~/utils/models';
 import type { ProductVariant } from '~/utils/types/product-variant';
@@ -241,7 +242,7 @@ const appointmentStatus = computed({
 
 const appointmentDate = computed({
 	get() {
-		return props.appointment?.date;
+		return props.appointment?.date_time;
 	},
 	set(value) {
 		emit('update:appointment', { ...props.appointment, date: value } as AppointmentModel);

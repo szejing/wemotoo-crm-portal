@@ -4,16 +4,13 @@
 			<div class="gap-2 sm:flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Date</h4>
 
-				<ZSelectMenuDateFilterType v-model:filter-type="order_summ.filter.filter_type" />
-
 				<div class="flex-col-start gap-2">
-					<ZSelectMenuDate :date="order_summ.filter.start_date" placeholder="Start Date" @update:date="order_summ.filter.start_date = $event" />
-					<ZSelectMenuDate
-						v-if="order_summ.filter.filter_type === 'between'"
-						:date="order_summ.filter.end_date"
-						placeholder="End Date"
-						:min-date="order_summ.filter.start_date"
-						@update:date="order_summ.filter.end_date = $event"
+					<ZSelectMenuDateRange
+						:start-date="order_summ.filter.start_date"
+						:end-date="order_summ.filter.end_date"
+						placeholder="Date"
+						@update:start-date="order_summ.filter.start_date = $event"
+						@update:end-date="order_summ.filter.end_date = $event"
 					/>
 				</div>
 			</div>
@@ -39,8 +36,8 @@ const { order_summ } = storeToRefs(orderSummStore);
 
 const is_loading = computed(() => orderSummStore.order_summ.is_loading);
 
-const generate = () => {
-	orderSummStore.getOrderSummary();
+const generate = async () => {
+	await orderSummStore.getOrderSummary();
 };
 </script>
 

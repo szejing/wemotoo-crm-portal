@@ -29,7 +29,7 @@ class OrderModule extends HttpFactory {
 	async getOrderByOrderNo(order_no: string): Promise<GetOrderResp> {
 		return await this.call<GetOrderResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(order_no)}`,
+			url: `${this.RESOURCE.Single(encodeURIComponent(order_no))}`,
 		});
 	}
 
@@ -40,7 +40,7 @@ class OrderModule extends HttpFactory {
 	async updateOrderStatus(orderNo: string, customerNo: string, orderStatus: string): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.UpdateOrderStatus(orderNo)}`,
+			url: `${this.RESOURCE.UpdateOrderStatus(encodeURIComponent(orderNo))}`,
 			body: { order_no: orderNo, customer_no: customerNo, status: orderStatus },
 		});
 	}
@@ -52,7 +52,7 @@ class OrderModule extends HttpFactory {
 	async updateOrder(order_no: string, customer_no: string, payment_status: string): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Update(order_no)}`,
+			url: `${this.RESOURCE.Update(encodeURIComponent(order_no))}`,
 			body: { order_no, customer_no, payment_status },
 		});
 	}
@@ -64,7 +64,7 @@ class OrderModule extends HttpFactory {
 	async updateCustomer(order_no: string, customer: CustomerModel): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.UpdateOrderCustomer(order_no)}`,
+			url: `${this.RESOURCE.UpdateOrderCustomer(encodeURIComponent(order_no))}`,
 			body: { order_no, customer_no: customer.customer_no, customer },
 		});
 	}
@@ -76,7 +76,7 @@ class OrderModule extends HttpFactory {
 	async updatePayments(order_no: string, customer_no: string, payments: PaymentModel[]): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.UpdateOrderPayments(order_no)}`,
+			url: `${this.RESOURCE.UpdateOrderPayments(encodeURIComponent(order_no))}`,
 			body: { order_no, customer_no, payments },
 		});
 	}
@@ -88,7 +88,7 @@ class OrderModule extends HttpFactory {
 	async updateItems(order_no: string, customer_no: string, items: ItemModel[]): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.UpdateOrderItems(order_no)}`,
+			url: `${this.RESOURCE.UpdateOrderItems(encodeURIComponent(order_no))}`,
 			body: { order_no, customer_no, items },
 		});
 	}

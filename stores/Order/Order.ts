@@ -66,7 +66,7 @@ export const useOrderStore = defineStore('orderStore', {
 		async getOrderByOrderNo(order_no: string) {
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.order.getOrderByOrderNo(encodeURIComponent(order_no));
+				const data = await $api.order.getOrderByOrderNo(order_no);
 
 				if (data.order) {
 					this.detail = data.order;

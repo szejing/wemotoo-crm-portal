@@ -33,7 +33,7 @@
 					</div>
 
 					<!-- Appointments list -->
-					<div v-else class="space-y-3 max-h-96 overflow-y-auto">
+					<div v-else class="space-y-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
 						<div v-for="appointment in displayedAppointments" :key="appointment.code" :class="['border rounded-lg p-4 transition-colors cursor-pointer']">
 							<div class="flex items-start justify-between">
 								<div class="flex-1">

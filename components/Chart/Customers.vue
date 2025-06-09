@@ -16,20 +16,8 @@
 			</div>
 		</template>
 
-		<div class="flex-1">
-			<div class="flex items-center justify-between">
-				<p class="text-sm text-neutral-400">Customer</p>
-				<p class="text-sm text-neutral-400">Total Orders</p>
-			</div>
-
-			<div v-for="cust in top_purchased_customers" :key="cust.customer_no" class="mt-1">
-				<div class="flex items-center justify-between gap-2">
-					<p class="text-sm font-medium">
-						{{ cust.customer_name }} <span class="text-gray-500">#{{ cust.customer_no }}</span>
-					</p>
-					<p class="text-sm font-medium">{{ cust.total_orders }}</p>
-				</div>
-			</div>
+		<div class="flex-1 flex items-center justify-center">
+			<Pie :data="chartData" :options="chartOptions" />
 		</div>
 
 		<template #footer>
@@ -42,8 +30,50 @@
 </template>
 
 <script lang="ts" setup>
+import { Pie } from 'vue-chartjs';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const summOrderStore = useSummOrderStore();
 const { top_purchased_customers } = storeToRefs(summOrderStore);
+
+// Chart data configuration
+const chartData = computed(() => ({
+	labels: top_purchased_customers.value.map((cust) => cust.customer_name),
+	datasets: [
+		{
+			data: top_purchased_customers.value.map((cust) => cust.total_orders),
+			backgroundColor: ['#00356780', '#FAC7A780', '#00122280', '#F3732380', '#BFCEDC80'],
+			borderColor: ['#001222', '#F37323', '#BFCEDC', '#FAC7A7', '#003567'],
+			borderWidth: 1,
+		},
+	],
+}));
+
+// Chart options configuration
+const chartOptions = computed(() => ({
+	responsive: true,
+	maintainAspectRatio: false,
+	plugins: {
+		legend: {
+			position: 'bottom' as const,
+			labels: {
+				padding: 20,
+				usePointStyle: true,
+			},
+		},
+		tooltip: {
+			callbacks: {
+				label: (context: any) => {
+					const label = context.label || '';
+					const value = context.parsed || 0;
+					return `${label}: ${value} orders`;
+				},
+			},
+		},
+	},
+}));
 </script>
 
 <style scoped lang="postcss"></style>

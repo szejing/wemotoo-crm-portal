@@ -1,11 +1,11 @@
 <template>
-	<VCalendarDatePicker v-model="date" v-bind="{ ...attrs, ...$attrs }" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
+	<VCalendarDatePicker v-model.range="date" :columns="2" v-bind="{ ...attrs, ...$attrs }" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
 </template>
 
 <script setup lang="ts">
 import { DatePicker as VCalendarDatePicker } from 'v-calendar';
 import 'v-calendar/dist/style.css';
-import type { DatePickerDate } from 'v-calendar/dist/types/src/use/datePicker.js';
+import type { DatePickerRangeObject } from 'v-calendar/dist/types/src/use/datePicker.js';
 
 defineOptions({
 	inheritAttrs: false,
@@ -13,7 +13,7 @@ defineOptions({
 
 const props = defineProps({
 	modelValue: {
-		type: Date as PropType<DatePickerDate | null>,
+		type: Object as PropType<DatePickerRangeObject | null>,
 		default: null,
 	},
 	minDate: {
@@ -30,9 +30,12 @@ const emit = defineEmits(['update:model-value', 'close']);
 
 const date = computed({
 	get: () => props.modelValue,
-	set: (value) => {
+	set: (value: DatePickerRangeObject | null) => {
 		emit('update:model-value', value);
-		emit('close');
+		// Only emit close when both start and end dates are selected
+		if (value?.start && value?.end) {
+			emit('close');
+		}
 	},
 });
 
