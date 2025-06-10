@@ -17,7 +17,7 @@
 import { options_appointment_status } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
-const props = defineProps<{ status: string }>();
+const props = defineProps<{ status: string | undefined }>();
 const emit = defineEmits(['update:status']);
 
 const status = computed({

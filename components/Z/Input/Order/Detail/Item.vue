@@ -245,7 +245,7 @@ const appointmentDate = computed({
 		return props.appointment?.date_time;
 	},
 	set(value) {
-		emit('update:appointment', { ...props.appointment, date: value } as AppointmentModel);
+		emit('update:appointment', { ...props.appointment, date_time: value } as AppointmentModel);
 	},
 });
 

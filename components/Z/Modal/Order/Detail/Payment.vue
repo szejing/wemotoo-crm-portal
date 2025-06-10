@@ -9,7 +9,7 @@
 			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
-					v-model:payment-date="state.payment.payment_date"
+					v-model:payment-date-time="state.payment.payment_date_time"
 					v-model:payment-type-code="state.payment.payment_type_code"
 					v-model:ref-no1="state.payment.ref_no1"
 					v-model:ref-no2="state.payment.ref_no2"
@@ -43,7 +43,7 @@ const { detail } = storeToRefs(orderStore);
 const props = defineProps({
 	payment: {
 		type: Object as PropType<PaymentModel> | undefined,
-		required: true,
+		required: false,
 	},
 });
 const emit = defineEmits(['update', 'cancel']);
@@ -55,6 +55,7 @@ const state = reactive({
 		ref_no2: undefined,
 		payment_amt: detail.value?.net_amt,
 		currency_code: detail.value?.currency_code,
+		external_intg_type: undefined,
 		metadata: undefined,
 	},
 });

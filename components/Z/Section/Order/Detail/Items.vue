@@ -44,9 +44,9 @@
 							<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
 							<div v-if="item.appointment" class="flex items-center gap-2 mt-2">
 								<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
-								<div class="flex flex-col">
-									<span class="text-xs font-bold italic text-neutral-700">{{ item.appointment.code }}</span>
-									<span class="text-xs font-bold italic text-neutral-400">{{ getFormattedDate(item.appointment.date_time, 'dd MMM yyyy HH:mm') }}</span>
+								<div class="flex flex-col text-xs font-bold italic">
+									<span class="text-neutral-400">{{ item.appointment.code }}</span>
+									<span class="text-main">{{ getFormattedDate(item.appointment.date_time, 'dd MMM yyyy hh:mm a') }}</span>
 								</div>
 							</div>
 						</div>

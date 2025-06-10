@@ -63,6 +63,7 @@
 					:update-order-status="async (status: OrderStatus) => { await updateOrderStatus(status); }"
 					:update-payment-status="async (status: PaymentStatus) => { await updatePaymentStatus(status); }"
 					:add-payment-info="addPaymentInfo"
+					:view-payment-info="viewPaymentInfo"
 				/>
 			</div>
 		</div>
@@ -73,6 +74,7 @@
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
 import { failedModal } from '~/stores/AppUi/AppUi';
+import type { PaymentModel } from '~/utils/models';
 
 const orderStore = useOrderStore();
 const is_loading = ref(true);
@@ -92,7 +94,6 @@ onBeforeRouteLeave(() => {
 });
 
 const customer = computed(() => order.value?.customer);
-const payments = computed(() => order.value?.payments);
 const items = computed(() => order.value?.items);
 const currency_code = computed(() => order.value?.currency_code);
 
@@ -169,7 +170,17 @@ const editCustomerDetail = async () => {
 
 /* Add Payment Info */
 const addPaymentInfo = () => {
-	const payment = payments.value != undefined && payments.value?.length > 0 ? JSON.parse(JSON.stringify(payments.value?.[0])) : undefined;
+	modal.open(ZModalOrderDetailPayment, {
+		onUpdate: () => {
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+
+const viewPaymentInfo = (payment: PaymentModel) => {
 	modal.open(ZModalOrderDetailPayment, {
 		payment: payment,
 		onUpdate: () => {

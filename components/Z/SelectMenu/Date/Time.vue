@@ -1,9 +1,9 @@
 <template>
 	<UPopover :popper="{ placement: 'bottom-start' }">
-		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDate ? getFormattedDate(currentDate, 'dd/MM/yyyy') : placeholder" variant="outline" />
+		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDateTime ? getFormattedDate(currentDateTime, format) : placeholder" variant="outline" />
 
 		<template #panel="{ close }">
-			<ZDatePicker v-model="currentDate" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
+			<ZDateTimePicker v-model="currentDateTime" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
 		</template>
 	</UPopover>
 </template>
@@ -11,7 +11,15 @@
 <script lang="ts" setup>
 import { getFormattedDate } from 'wemotoo-common';
 
-const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date; maxDate?: Date }>();
+const props = defineProps<{ dateTime: Date | undefined; placeholder: string; minDate?: Date; maxDate?: Date; format?: string }>();
+
+const format = computed(() => {
+	if (props.format) {
+		return props.format;
+	}
+
+	return 'dd/MM/yyyy hh:mm a';
+});
 
 const maxDate = computed(() => {
 	if (props.maxDate) {
@@ -21,14 +29,14 @@ const maxDate = computed(() => {
 	return new Date();
 });
 
-const emit = defineEmits(['update:date']);
+const emit = defineEmits(['update:dateTime']);
 
-const currentDate = computed({
+const currentDateTime = computed({
 	get() {
-		return props.date;
+		return props.dateTime;
 	},
-	set(date) {
-		emit('update:date', date);
+	set(dateTime) {
+		emit('update:dateTime', dateTime);
 	},
 });
 </script>
