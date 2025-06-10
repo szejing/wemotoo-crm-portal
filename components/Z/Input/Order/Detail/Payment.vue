@@ -1,7 +1,7 @@
 <template>
 	<div class="section-grid-basic-details">
 		<UFormGroup label="Payment Date" name="paymentDate">
-			<ZSelectMenuDate :date="paymentDate" placeholder="Payment Date" @update:date="paymentDate = $event" />
+			<ZSelectMenuDateTime :date-time="paymentDateTime" placeholder="Payment Date" @update:date-time="paymentDateTime = $event" />
 		</UFormGroup>
 
 		<!-- // Date selection -->
@@ -11,7 +11,7 @@
 			</UFormGroup>
 
 			<UFormGroup v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
-				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" />
+				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" disabled />
 			</UFormGroup>
 		</div>
 
@@ -30,33 +30,35 @@
 </template>
 
 <script lang="ts" setup>
+import { ZSelectMenuDateTime } from '#components';
+
 const props = defineProps({
-	paymentDate: Date,
+	paymentDateTime: Date,
 	paymentTypeCode: String,
 	refNo1: String,
 	refNo2: String,
 	paymentAmount: Number,
 	currencyCode: String,
+	externalIntgType: Number,
 	// metadata: Object as PropType<Record<string, unknown>>,
 });
 
 const emit = defineEmits([
-	'update:paymentDate',
+	'update:paymentDateTime',
 	'update:paymentTypeCode',
 	'update:refNo1',
 	'update:refNo2',
 	'update:paymentAmount',
 	'update:currencyCode',
 	'update:externalIntgType',
-	// 'update:metadata',
 ]);
 
-const paymentDate = computed({
+const paymentDateTime = computed({
 	get() {
-		return props.paymentDate;
+		return props.paymentDateTime;
 	},
 	set(value) {
-		emit('update:paymentDate', value);
+		emit('update:paymentDateTime', value);
 	},
 });
 

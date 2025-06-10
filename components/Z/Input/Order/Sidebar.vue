@@ -17,28 +17,28 @@
 			<template #header>
 				<div class="flex-jbetween-icenter">
 					<h3>Payment Info</h3>
-					<UButton v-if="order.payments?.length >= 0" variant="ghost" @click="addPaymentInfo">Add</UButton>
+					<UButton v-if="order.payments?.length == 0" variant="ghost" @click="addPaymentInfo">Add</UButton>
 				</div>
 			</template>
 
 			<div v-if="order.payments?.length > 0">
-				<table class="w-full">
-					<thead>
-						<tr class="border-b text-xs text-neutral-400">
-							<th class="text-left py-2">Type</th>
-							<th class="text-right py-2">Amount</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="payment in order.payments" :key="payment.payment_type_code" class="border-b text-xs">
-							<td class="py-2 text-left font-bold">{{ payment.payment_type_code }}</td>
-							<td class="py-2 text-right">
-								<span class="font-bold"> {{ payment.currency_code }} {{ payment.payment_amt }} </span> <br />
-								<span class="text-[10px] text-neutral-400">{{ payment.ref_no1 }} </span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<UTable
+					:rows="order.payments"
+					:columns="paymentColumns"
+					:ui="{
+						thead: 'border-b text-xs text-neutral-400',
+						tbody: 'text-xs',
+						tr: { base: 'cursor-pointer hover:bg-gray-50' },
+					}"
+					@select="viewPaymentInfo"
+				>
+					<template #amount-data="{ row }">
+						<div class="text-right">
+							<span class="font-bold">{{ row.currency_code }} {{ row.payment_amt }} </span><br />
+							<span class="text-[10px] text-neutral-400">{{ row.ref_no1 }}</span>
+						</div>
+					</template>
+				</UTable>
 			</div>
 
 			<div v-else>
@@ -57,6 +57,7 @@
 
 <script lang="ts" setup>
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { PaymentModel } from '~/utils/models';
 import type { Order } from '~/utils/types/order';
 
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
@@ -65,15 +66,36 @@ const props = defineProps<{
 	order: Order;
 	updateOrderStatus: (status: OrderStatus) => Promise<void>;
 	updatePaymentStatus: (status: PaymentStatus) => Promise<void>;
+	viewPaymentInfo: (payment: PaymentModel) => void;
 	addPaymentInfo: () => void;
 }>();
 
 const order = computed(() => props.order);
 
+const paymentColumns = [
+	{
+		key: 'payment_type_code',
+		label: 'Type',
+		class: 'text-left py-2 font-bold',
+	},
+	{
+		key: 'amount',
+		label: 'Amount',
+		class: 'text-right py-2',
+	},
+];
+
 const saveOrderStatus = async () => {
 	await props.updateOrderStatus(order.value.status);
 };
 
+const addPaymentInfo = () => {
+	props.addPaymentInfo();
+};
+
+const viewPaymentInfo = (payment: PaymentModel) => {
+	props.viewPaymentInfo(payment);
+};
 // const savePaymentStatus = async () => {
 // 	await props.updatePaymentStatus(order.value.payment_status);
 // };

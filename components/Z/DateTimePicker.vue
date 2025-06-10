@@ -31,7 +31,6 @@ const date = computed({
 	get: () => props.modelValue,
 	set: (value) => {
 		emit('update:model-value', value);
-		emit('close');
 	},
 });
 

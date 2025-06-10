@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import type { FilterType } from 'wemotoo-common';
-import { getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { FilterType, getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -44,7 +43,7 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.getOrders({
 					limit: this.filter.page_size,
 					offset: 0,
-					filter_type: this.filter.filter_type as FilterType,
+					filter_type: this.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
 					start_date: getFormattedDate(this.filter.start_date),
 					end_date: this.filter.end_date ? getFormattedDate(this.filter.end_date) : undefined,
 					status: this.filter.status,
