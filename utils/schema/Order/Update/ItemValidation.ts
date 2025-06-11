@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AppointmentValidation } from '../../Appointment/AppointmentValidation';
+import { UpdateAppointmentValidation } from '../../Appointment/Update/AppointmentValidation';
 
 export const UpdateOrderItemValidation = z.object({
 	item_line: z.number(),
@@ -23,5 +23,5 @@ export const UpdateOrderItemValidation = z.object({
 	tax_amt_inc: z.number().optional().nullable(),
 	tax_amt_exc: z.number().optional().nullable(),
 	adj_amt: z.number().optional().nullable(),
-	appointment: AppointmentValidation.optional().nullable(),
+	appointment: UpdateAppointmentValidation.optional().nullable(),
 });

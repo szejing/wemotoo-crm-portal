@@ -109,8 +109,8 @@ const selectCategory = async (category: Category) => {
 	if (!category) return;
 	modal.open(ZModalCategoryDetail, {
 		category: JSON.parse(JSON.stringify(category)),
-		onUpdate: async ({ code, name, description, is_active, is_internal, parent_category, thumbnail, images }) => {
-			await categoryStore.updateCategory(code, name, description, is_active, is_internal, parent_category, thumbnail, images);
+		onUpdate: async ({ code, description, is_active, is_internal, parent_category, thumbnail, images }) => {
+			await categoryStore.updateCategory(code, description, is_active, is_internal, parent_category, thumbnail, images);
 			modal.close();
 		},
 		onDelete: async () => {

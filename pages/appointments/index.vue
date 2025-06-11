@@ -34,7 +34,12 @@
 
 					<!-- Appointments list -->
 					<div v-else class="space-y-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
-						<div v-for="appointment in displayedAppointments" :key="appointment.code" :class="['border rounded-lg p-4 transition-colors cursor-pointer']">
+						<div
+							v-for="appointment in displayedAppointments"
+							:key="appointment.code"
+							:class="['border rounded-lg p-4 transition-colors cursor-pointer']"
+							@click="selectAppointment(appointment)"
+						>
 							<div class="flex items-start justify-between">
 								<div class="flex-1">
 									<h3 class="text-lg font-semibold text-secondary-900">
@@ -92,6 +97,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { AppointmentStatus, getFormattedDate, isSameDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 
@@ -103,21 +109,33 @@ const links = [
 	},
 ];
 
+const modal = useModal();
 const appointmentStore = useAppointmentStore();
 const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 
+watch(modal.isOpen, (value) => {
+	if (!value) {
+		modal.reset();
+	}
+});
+
 // Responsive calendar columns
 const calendarColumns = ref(1);
+const today = new Date();
 
 // Update columns based on screen size
-onMounted(() => {
+onMounted(async () => {
 	const updateColumns = () => {
 		calendarColumns.value = window.innerWidth >= 1024 ? 2 : 1;
 	};
 
 	updateColumns(); // Initial check
 	window.addEventListener('resize', updateColumns);
+
+	const months = calendarColumns.value > 2 ? [today.getMonth(), today.getMonth() + 1] : today.getMonth();
+
+	await appointmentStore.getAppointments(AppointmentStatus.PENDING, months);
 
 	onUnmounted(() => {
 		window.removeEventListener('resize', updateColumns);
@@ -126,7 +144,6 @@ onMounted(() => {
 
 // Filter and sort upcoming appointments
 const upcomingAppointments = computed(() => {
-	const today = new Date();
 	const apts = appointments.value
 		.filter((appointment) => new Date(appointment.date_time) >= today)
 		.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime())
@@ -154,10 +171,6 @@ const dates = computed(() => {
 	}));
 });
 
-onMounted(async () => {
-	await appointmentStore.getAppointments();
-});
-
 // Handle calendar date selection
 const onDateSelect = (selectedDate: any) => {
 	filteredAppointments.value = appointments.value.filter((appointment) => isSameDate(new Date(appointment.date_time), selectedDate.date));
@@ -166,6 +179,39 @@ const onDateSelect = (selectedDate: any) => {
 // Reset filter to show all upcoming appointments
 const resetFilter = () => {
 	filteredAppointments.value = [];
+};
+
+const deleteAppointment = async (code: string) => {
+	modal.open(ZModalConfirmation, {
+		message: 'Are you sure you want to delete this appointment?',
+		action: 'delete',
+		onConfirm: async () => {
+			await appointmentStore.deleteAppointment(code);
+			modal.close();
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
+};
+
+const selectAppointment = async (appointment: Appointment) => {
+	if (!appointment) return;
+
+	modal.open(ZModalAppointmentDetail, {
+		appointment: JSON.parse(JSON.stringify(appointment)),
+		onUpdate: async ({ date_time, ref_no, status }) => {
+			await appointmentStore.updateAppointment(appointment.code, date_time, ref_no, status);
+			modal.close();
+		},
+		onDelete: async () => {
+			await modal.close();
+			await deleteAppointment(appointment.code);
+		},
+		onCancel: () => {
+			modal.close();
+		},
+	});
 };
 </script>
 
