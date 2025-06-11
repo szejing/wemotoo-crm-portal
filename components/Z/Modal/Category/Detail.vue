@@ -1,7 +1,7 @@
 <template>
 	<UModal
 		:ui="{
-			width: 'w-full sm:w-[30%]',
+			width: 'w-full sm:w-[60%]',
 		}"
 	>
 		<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
@@ -20,11 +20,7 @@
 				</div>
 
 				<!-- *********************** General Info *********************** -->
-				<ZInputProductCategoryGeneralInfo
-					v-model:code="state.category.code"
-					v-model:name="state.category.name"
-					v-model:description="state.category.description"
-				/>
+				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" />
 				<!-- *********************** General Info *********************** -->
 
 				<!-- <div>
@@ -81,8 +77,8 @@ const updateImages = (files: File[]) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description, is_active, is_internal, parent_category } = event.data;
-	emit('update', { code, name, description, is_active, is_internal, parent_category, thumbnail: newThumbnail.value, images: newImages.value });
+	const { code, description, is_active, is_internal, parent_category } = event.data;
+	emit('update', { code, description, is_active, is_internal, parent_category, thumbnail: newThumbnail.value, images: newImages.value });
 };
 
 const onCancel = () => {

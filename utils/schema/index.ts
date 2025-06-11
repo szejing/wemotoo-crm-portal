@@ -21,6 +21,7 @@ import { FilterPaymentTypeGroupValidation } from './PaymentTypeGroup/FilterValid
 import { CreateBrandValidation } from './Brand/Create/BrandValidation';
 import { FilterBrandValidation } from './Brand/Filter/BrandValidation';
 import { UpdateBrandValidation } from './Brand/Update/BrandValidation';
+import { UpdateAppointmentValidation } from './Appointment/Update/AppointmentValidation';
 
 export {
 	LoginValidation,
@@ -46,4 +47,5 @@ export {
 	CreateBrandValidation,
 	FilterBrandValidation,
 	UpdateBrandValidation,
+	UpdateAppointmentValidation,
 };

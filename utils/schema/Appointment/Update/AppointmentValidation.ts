@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-export const AppointmentValidation = z.object({
+export const UpdateAppointmentValidation = z.object({
 	code: z.string(),
-	date_time: z.date(),
+	date_time: z.union([z.string().datetime(), z.date()]),
 	item_line: z.number(),
 	cart_no: z.string().optional().nullable(),
 	order_no: z.string().optional().nullable(),

@@ -12,7 +12,7 @@ defineOptions({
 
 const props = defineProps({
 	modelValue: {
-		type: Date as PropType<Date | null>,
+		type: [Date, String] as PropType<Date | string | null>,
 		default: null,
 	},
 	minDate: {
@@ -28,7 +28,9 @@ const props = defineProps({
 const emit = defineEmits(['update:model-value', 'close']);
 
 const date = computed({
-	get: () => props.modelValue,
+	get: () => {
+		return props.modelValue;
+	},
 	set: (value) => {
 		emit('update:model-value', value);
 	},
