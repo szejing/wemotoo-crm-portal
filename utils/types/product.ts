@@ -70,10 +70,10 @@ export type Product = {
 	tags: TagInput[] | undefined;
 
 	// thumbnail
-	thumbnail: File | undefined;
+	thumbnail: File | ImageModel | undefined;
 
 	// images
-	images: File[] | undefined;
+	images: File[] | ImageModel[] | undefined;
 
 	// price
 	price_types: PriceInput[] | undefined;

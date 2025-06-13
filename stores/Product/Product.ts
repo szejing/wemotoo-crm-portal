@@ -15,13 +15,16 @@ const initialEmptyProduct: ProductCreate = {
 	is_discountable: true,
 	is_giftcard: false,
 
-	status: ProductStatus.DRAFT,
+	status: ProductStatus.PUBLISHED,
 
 	// product types
 	type: 1,
 
 	// categories
 	categories: [],
+
+	// brands
+	brands: [],
 
 	// tags
 	tags: [],
@@ -62,6 +65,7 @@ export const useProductStore = defineStore('productStore', {
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
+
 	actions: {
 		resetNewProduct() {
 			this.newProduct = structuredClone(initialEmptyProduct);

@@ -1,5 +1,5 @@
 <template>
-	<div class="sidebar" :class="showSidebar ? 'translate-x-0 ease-out' : '-translate-x-[12rem] ease-in'">
+	<div class="sidebar" :class="showSidebar ? 'translate-x-0 ease-out' : '-translate-x-[10rem] ease-in'">
 		<div v-if="!forcedShow" class="flex items-center justify-end pt-4 px-4">
 			<UIcon :name="showSidebar ? ICONS.CLOSE_ROUNDED : ICONS.CHEVRON_DOUBLE_RIGHT" class="w-5 h-5 text-secondary-100" @click="toggleSidebar" />
 		</div>
@@ -23,6 +23,6 @@ const { toggleSidebar } = appUiStore;
 }
 
 .sidebar {
-	@apply fixed z-50 left-0 inset-y-0 w-60 border-r overflow-y-auto transform duration-200 hidden md:block bg-gradient-to-b from-secondary-600 to-main-600;
+	@apply fixed z-50 left-0 inset-y-0 w-[15rem] border-r overflow-y-auto transform duration-200 hidden md:block bg-gradient-to-b from-secondary-600 to-main-600;
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
 	<UCard :ui="cardUi">
-		<template #header>
+		<template v-if="!hideHeader" #header>
 			<h2>Additional Info</h2>
 		</template>
 
 		<!-- DESKTOP -->
-		<div class="hidden sm:block">
+		<div class="hidden sm:block" :class="[!hideHeader ? 'mt-4' : '']">
 			<UTabs :items="product_additional_info" orientation="vertical" :ui="vertical_ui_tabs">
 				<template #default="{ item, selected }">
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
@@ -47,7 +47,7 @@
 		<!-- DESKTOP -->
 
 		<!-- MOBILE -->
-		<div class="sm:hidden">
+		<div class="sm:hidden" :class="[!hideHeader ? 'mt-4' : '']">
 			<UTabs :items="product_additional_info" :ui="normal_ui_tabs">
 				<template #default="{ item, selected }">
 					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
@@ -125,6 +125,10 @@ const props = defineProps({
 	product: {
 		type: Object as PropType<ProductCreate>,
 		required: true,
+	},
+	hideHeader: {
+		type: Boolean,
+		default: false,
 	},
 	cardUi: Object,
 });

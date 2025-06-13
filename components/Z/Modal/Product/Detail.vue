@@ -8,10 +8,10 @@
 			<UCard>
 				<template #header>
 					<div class="flex-jbetween-icenter">
-						<NuxtImg :src="current_product.thumbnail.url" class="w-52 h-52 rounded-md" />
+						<NuxtImg v-if="current_product.thumbnail" :src="current_product.thumbnail.url" class="w-52 h-52 rounded-md" />
 					</div>
-					<div v-if="current_product.images.length > 0">
-						<NuxtImg v-for="image in current_product.images" :key="image.id" :src="image.url" class="w-24 rounded-sm" />
+					<div v-if="current_product.images && current_product.images.length > 0">
+						<NuxtImg v-for="image in current_product.images" :key="image.id" :src="image.url" class="w-24 rounded-sm" :alt="image.name" />
 					</div>
 				</template>
 
@@ -66,8 +66,8 @@
 				<ZInputProductAdditionalInfo
 					:product="current_product"
 					:card-ui="borderless_card_ui"
-					@update_options="updateProductOptions"
-					@update_variants="updateProductVariants"
+					@update:options="updateProductOptions"
+					@update:variants="updateProductVariants"
 				/>
 				<!-- *********************** Additional Info *********************** -->
 

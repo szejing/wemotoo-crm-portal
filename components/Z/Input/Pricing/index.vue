@@ -5,7 +5,7 @@
 				<h2 class="text-xl font-semibold">Pricing</h2>
 				<p class="text-sm text-gray-500 mt-1">Product pricing</p>
 			</div>
-			<div class="section-grid-price-details mt-4">
+			<div class="section-grid-price-details" :class="[!hideHeader ? 'mt-4' : '']">
 				<UFormGroup label="Currency" name="currency">
 					<ZSelectMenuCurrency v-model:currency-code="currency_code" />
 				</UFormGroup>

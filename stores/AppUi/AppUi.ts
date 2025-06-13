@@ -21,7 +21,7 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
-		title: 'Booking / Orders',
+		title: 'Booking/Orders',
 		icon: ICONS.ORDER,
 		to: '/orders',
 		isCollapsed: false,

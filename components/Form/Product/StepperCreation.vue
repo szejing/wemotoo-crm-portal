@@ -49,17 +49,17 @@
 
 		<!-- Step Content -->
 		<UCard
-			class="min-h-[500px] max-w-[100%] md:max-w-[60%] sm:max-w-[75%] mx-auto flex flex-col"
+			class="min-h-[500px] max-w-[100%] sm:max-w-[100%] md:max-w-[80%] lg:max-w-[80%] mx-auto flex flex-col"
 			:ui="{
 				base: 'flex flex-col h-full',
-				body: { base: 'flex-1', padding: 'px-4 py-2' },
-				header: { padding: 'px-4 py-2' },
-				footer: { padding: 'px-4 py-2' },
+				body: { base: 'flex-1', padding: 'px-4' },
+				header: { padding: 'px-4 py-4' },
+				footer: { padding: 'px-4 py-4' },
 				ring: 'ring-0',
 				shadow: 'shadow-lg',
 			}"
 		>
-			<template v-if="currentStep !== 4" #header>
+			<template #header>
 				<h2 class="text-xl font-semibold">{{ getCurrentStep()?.name }}</h2>
 				<p class="text-sm text-gray-500 mt-1">{{ getCurrentStep()?.description }}</p>
 			</template>
@@ -121,10 +121,10 @@
 					</div>
 				</div>
 
-				<div>
+				<!-- <div>
 					<h3 class="text-lg font-medium mb-4">Product Status</h3>
 					<ZSelectMenuProductStatus v-model:status="newProduct.status" />
-				</div>
+				</div> -->
 			</div>
 
 			<!-- Step 3: Pricing -->
@@ -141,32 +141,14 @@
 
 			<!-- Step 4: Product Variants (Optional) -->
 			<div v-if="currentStep === 4" class="space-y-6">
-				<div class="flex items-center justify-between">
-					<div>
-						<h2 class="text-xl font-semibold">Variants</h2>
-						<p class="text-sm text-gray-500 mt-1">Create variations of this product with different options (optional)</p>
-					</div>
-
-					<UToggle v-model="hasVariants" />
-				</div>
-
-				<div v-if="hasVariants" class="space-y-8">
-					<ZInputProductOptions v-model:options="newProduct.options" @update:product-options="updateProductOptions" />
-					<ZInputProductVariantList
-						:options="newProduct.options"
-						:variants="newProduct.variants"
-						:product="newProduct"
-						@update:variants="updateProductVariants"
-					/>
-				</div>
-
-				<div v-else class="text-center py-12">
-					<div class="text-gray-400">
-						<UIcon :name="ICONS.PRODUCT" class="w-16 h-16 mx-auto mb-4" />
-						<p class="text-lg">No variants needed</p>
-						<p class="text-sm">Product can be created without variants</p>
-					</div>
-				</div>
+				<ZInputProductAdditionalInfo
+					:product="newProduct"
+					:card-ui="borderlessCardUi"
+					hide-header
+					@update:options="updateProductOptions"
+					@update:variants="updateProductVariants"
+					@update:metadata="updateProductMetadata"
+				/>
 			</div>
 
 			<template #footer>
@@ -200,11 +182,10 @@ const productStore = useProductStore();
 const { newProduct, adding } = storeToRefs(productStore);
 
 const currentStep = ref(1);
-const hasVariants = ref(false);
 const saving = ref(false);
 
 const borderlessCardUi = {
-	body: { padding: 'py-0 pt-4' },
+	body: { padding: 'py-0' },
 	header: { padding: 'py-0' },
 	ring: 'ring-0',
 	shadow: 'shadow-none',
@@ -231,8 +212,8 @@ const steps = [
 	},
 	{
 		id: 4,
-		name: 'Variants',
-		description: 'Product variations (size, color)',
+		name: 'Additional Info',
+		description: 'Product additional information',
 		required: false,
 	},
 ];
@@ -337,6 +318,9 @@ const updateProductVariants = (value: ProdVariantInput[]) => {
 	newProduct.value.variants = value;
 };
 
+const updateProductMetadata = (value: any) => {
+	newProduct.value.metadata = value;
+};
 const saveDraft = async () => {
 	saving.value = true;
 	try {
@@ -350,10 +334,8 @@ const saveDraft = async () => {
 
 const createProduct = async () => {
 	// Clear variants if not needed
-	if (!hasVariants.value) {
-		newProduct.value.options = [];
-		newProduct.value.variants = [];
-	}
+	newProduct.value.options = [];
+	newProduct.value.variants = [];
 
 	// Process the data same as original form
 	const prodPrice: PriceInput[] = [];
@@ -382,47 +364,43 @@ const createProduct = async () => {
 	});
 
 	const prodOptions: ProdOptionInput[] = [];
-	if (hasVariants.value) {
-		newProduct.value.options?.forEach((option) => {
-			prodOptions.push({
-				id: option.id!,
-				name: option.name!,
-				values: option.values?.map((value) => {
-					return {
-						id: value.id!,
-						value: value.value!,
-					};
-				}),
-			});
+	newProduct.value.options?.forEach((option) => {
+		prodOptions.push({
+			id: option.id!,
+			name: option.name!,
+			values: option.values?.map((value) => {
+				return {
+					id: value.id!,
+					value: value.value!,
+				};
+			}),
 		});
-	}
+	});
 
 	const prodVariants: ProdVariantInput[] = [];
-	if (hasVariants.value) {
-		newProduct.value.variants?.forEach((variant) => {
-			prodVariants.push({
-				variant_code: variant.variant_code!,
-				product_code: variant.product_code!,
-				name: variant.name!,
-				price_types: variant.price_types?.map((price) => {
-					return {
-						id: undefined,
-						orig_sell_price: price.orig_sell_price,
-						cost_price: price.cost_price,
-						sale_price: price.sale_price,
-						currency_code: price.currency_code,
-					};
-				}),
-				options: variant.options?.map((option) => {
-					return {
-						id: option.id!,
-						option_id: option.option_id!,
-						value: option.value!,
-					};
-				}),
-			});
+	newProduct.value.variants?.forEach((variant) => {
+		prodVariants.push({
+			variant_code: variant.variant_code!,
+			product_code: variant.product_code!,
+			name: variant.name!,
+			price_types: variant.price_types?.map((price) => {
+				return {
+					id: undefined,
+					orig_sell_price: price.orig_sell_price,
+					cost_price: price.cost_price,
+					sale_price: price.sale_price,
+					currency_code: price.currency_code,
+				};
+			}),
+			options: variant.options?.map((option) => {
+				return {
+					id: option.id!,
+					option_id: option.option_id!,
+					value: option.value!,
+				};
+			}),
 		});
-	}
+	});
 
 	const brands: BrandInput[] = [];
 	newProduct.value.brands?.forEach((brand) => {
