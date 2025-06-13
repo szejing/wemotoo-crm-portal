@@ -67,11 +67,6 @@
 </template>
 
 <script lang="ts" setup>
-// import type { ProductStatus } from 'wemotoo-common';
-// import type { Category } from '~/utils/types/category';
-// import type { Tag } from '~/utils/types/tag';
-// import type { Brand } from '~/utils/types/brand';
-
 const links = [
 	{
 		label: 'Products',

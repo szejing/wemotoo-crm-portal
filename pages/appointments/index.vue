@@ -4,7 +4,7 @@
 		<UBreadcrumb :links="links" />
 		<div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
 			<!-- Calendar Section -->
-			<div class="order-1">
+			<div class="order-1 shadow-md">
 				<div class="bg-white rounded-lg border border-gray-200 p-4">
 					<h2 class="text-lg font-semibold mb-4 text-gray-900">Calendar</h2>
 					<VCalendar :attributes="dates" :columns="calendarColumns" @dayclick="onDateSelect" />
@@ -13,10 +13,10 @@
 
 			<!-- Appointments List Section -->
 			<div class="order-2">
-				<div class="bg-white rounded-lg border border-gray-200 p-4">
+				<div class="bg-white rounded-lg border border-gray-200 p-4 shadow-md">
 					<div class="flex items-center justify-between mb-4">
 						<h2 class="text-lg font-semibold text-gray-900">Upcoming Appointments</h2>
-						<UIcon v-if="filteredAppointments.length > 0" :name="ICONS.RESET" size="24" @click="resetFilter" />
+						<UIcon v-if="filteredAppointments.length > 0" :name="ICONS.RESET" size="24" class="cursor-pointer" @click="resetFilter" />
 					</div>
 
 					<!-- Loading state -->

@@ -5,7 +5,7 @@
 			<div class="flex h-full">
 				<Sidebar />
 
-				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-60 md:w-[calc(100vw-16rem)]' : 'md:ml-12 md:w-[calc(100vw-3rem)]']">
+				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-[15rem] md:w-[calc(100vw-15rem)]' : 'md:ml-[3rem] md:w-[calc(100vw-3rem)]']">
 					<slot />
 				</div>
 			</div>

@@ -106,7 +106,7 @@ import type { MaintenanceMetadata } from 'wemotoo-common';
 const props = defineProps({
 	metadata: {
 		type: Object as PropType<Record<string, unknown> | undefined>,
-		required: true,
+		required: false,
 	},
 });
 
@@ -114,15 +114,17 @@ const emit = defineEmits(['update:productMetadata']);
 
 const prodMetadata = computed({
 	get() {
-		return (
-			(props.metadata as MaintenanceMetadata) ?? {
+		if (props.metadata) {
+			return props.metadata as MaintenanceMetadata;
+		} else {
+			return {
 				requires_booking: false,
-				duration: null,
-				start_time: null,
-				end_time: null,
-				off_day: null,
-			}
-		);
+				duration: '',
+				start_time: '',
+				end_time: '',
+				off_day: [],
+			} as MaintenanceMetadata;
+		}
 	},
 	set(value) {
 		emit('update:productMetadata', value);

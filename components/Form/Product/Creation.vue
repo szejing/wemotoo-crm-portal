@@ -25,9 +25,9 @@
 		<!-- *********************** Additional Info *********************** -->
 		<ZInputProductAdditionalInfo
 			:product="newProduct"
-			@update_options="updateProductOptions"
-			@update_variants="updateProductVariants"
-			@update_metadata="updateProductMetadata"
+			@update:options="updateProductOptions"
+			@update:variants="updateProductVariants"
+			@update:metadata="updateProductMetadata"
 		/>
 		<!-- *********************** Additional Info *********************** -->
 

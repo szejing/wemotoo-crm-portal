@@ -20,7 +20,7 @@
 			</div>
 		</template>
 
-		<div class="section-grid-basic-details">
+		<div class="section-grid-basic-details mt-4">
 			<UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
 				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :disabled="disabledCode" />
 			</UFormGroup>
