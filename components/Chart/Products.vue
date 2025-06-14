@@ -2,6 +2,9 @@
 	<UCard
 		:ui="{
 			base: 'flex flex-col h-full',
+			header: {
+				base: 'pt-4',
+			},
 			body: {
 				base: 'flex-1',
 			},

@@ -211,5 +211,13 @@
 		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
 	}
 
+	.button-neutral-outline {
+		@apply ring-1 ring-inset ring-neutral-300 text-neutral-800 focus-visible:ring-2 focus-visible:ring-neutral-300 hover:bg-neutral-100;
+	}
+
+	.button-neutral-outline-disabled {
+		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;
+	}
+
 	/**************************** button styling ****************************/
 }

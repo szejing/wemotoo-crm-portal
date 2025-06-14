@@ -1,6 +1,11 @@
 <template>
 	<UPopover :popper="{ placement: 'bottom-start' }">
-		<UButton icon="i-heroicons-calendar-days-20-solid" :label="currentDate ? getFormattedDate(currentDate, 'dd/MM/yyyy') : placeholder" variant="outline" />
+		<UButton
+			icon="i-heroicons-calendar-days-20-solid"
+			:label="currentDate ? getFormattedDate(currentDate, 'dd/MM/yyyy') : placeholder"
+			variant="outline"
+			color="neutral"
+		/>
 
 		<template #panel="{ close }">
 			<ZDatePicker v-model="currentDate" is-required :min-date="minDate" :max-date="maxDate" @close="close" />

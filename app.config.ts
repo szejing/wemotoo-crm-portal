@@ -91,6 +91,7 @@ export default defineAppConfig({
 					solid: 'button-neutral-solid',
 					ghost: 'button-neutral-ghost',
 					soft: 'button-neutral-soft',
+					outline: 'button-neutral-outline disabled:button-neutral-outline-disabled',
 				},
 				white: {
 					link: 'button-white-link',
