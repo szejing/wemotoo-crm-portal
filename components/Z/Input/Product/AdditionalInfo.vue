@@ -35,9 +35,9 @@
 					</div>
 				</template>
 
-				<template #shipping>
+				<!-- <template #shipping>
 					<h1>Shipping</h1>
-				</template>
+				</template> -->
 
 				<template #tax>
 					<h1>Tax</h1>
@@ -79,9 +79,9 @@
 					</div>
 				</template>
 
-				<template #shipping>
+				<!-- <template #shipping>
 					<h1>Shipping</h1>
-				</template>
+				</template> -->
 
 				<template #tax>
 					<h1>Tax</h1>
@@ -147,7 +147,7 @@ const product_additional_info = computed(() => {
 		...(product.value.type === 2 ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
 		// Always add these items
 		{ label: 'Variants', slot: 'variants' },
-		{ label: 'Shipping', slot: 'shipping' },
+		// { label: 'Shipping', slot: 'shipping' },
 		{ label: 'Tax', slot: 'tax' },
 	];
 });

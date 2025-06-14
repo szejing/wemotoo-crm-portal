@@ -1,6 +1,6 @@
 <template>
 	<UPopover :popper="{ placement: 'bottom-start' }">
-		<UButton icon="i-heroicons-calendar-days-20-solid" :label="dateRangeLabel" variant="outline" />
+		<UButton icon="i-heroicons-calendar-days-20-solid" :label="dateRangeLabel" variant="outline" color="neutral" />
 
 		<template #panel="{ close }">
 			<ZDateRangePicker v-model="dateRange" :min-date="minDate" :max-date="maxDate" @close="close" />

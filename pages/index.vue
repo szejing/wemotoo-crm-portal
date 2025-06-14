@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="py-4">
+		<div class="pb-4">
 			<DashboardMetricsOverview />
 
-			<div class="flex items-center justify-between mt-2">
+			<div class="flex items-center justify-between">
 				<h1 class="text-neutral-800 font-normal">
 					Summary
 					<span class="text-neutral-800 font-medium italic underline">{{ getFormattedDate(filterRange.startDate) }}</span>
