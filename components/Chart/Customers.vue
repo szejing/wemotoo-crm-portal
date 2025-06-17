@@ -19,8 +19,11 @@
 			</div>
 		</template>
 
-		<div class="flex-1 flex items-center justify-center">
-			<Pie :data="chartData" :options="chartOptions" />
+		<div class="flex-1 flex items-center justify-center min-h-[150px]">
+			<Pie v-if="top_purchased_customers.length > 0" :data="chartData" :options="chartOptions" />
+			<div v-else class="flex items-center justify-center h-full">
+				<p class="text-neutral-400">No data</p>
+			</div>
 		</div>
 
 		<template #footer>
