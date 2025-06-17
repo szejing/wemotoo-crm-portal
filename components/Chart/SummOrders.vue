@@ -18,7 +18,10 @@
 				<h2>Order</h2>
 			</div>
 		</template>
-		<Bar id="my-chart-id" :options="chartOptions" :data="chartData" />
+		<Bar v-if="daily_summaries.length > 0" id="my-chart-id" :options="chartOptions" :data="chartData" />
+		<div v-else class="flex items-center justify-center h-full">
+			<p class="text-neutral-400">No data</p>
+		</div>
 		<template #footer>
 			<div class="w-full flex justify-end items-center text-secondary-400 gap-2">
 				<p class="text-sm text-end">Details</p>

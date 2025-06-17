@@ -39,9 +39,21 @@ const merchantNavigation = [
 		isCollapsed: false,
 	},
 	{
+		title: 'Outlets',
+		icon: ICONS.OUTLET,
+		to: '/outlets',
+		isCollapsed: false,
+	},
+	{
 		title: 'Payment',
 		icon: ICONS.PAYMENT_METHODS,
 		to: '/payment',
+		isCollapsed: false,
+	},
+	{
+		title: 'Tax',
+		icon: ICONS.TAX,
+		to: '/taxes',
 		isCollapsed: false,
 	},
 	{

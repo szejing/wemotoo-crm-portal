@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<h1>Store</h1>
+		<h1>Outlets</h1>
 	</div>
 </template>
 

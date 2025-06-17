@@ -19,8 +19,11 @@
 			</div>
 		</template>
 
-		<div class="flex-1 flex items-center justify-center">
-			<Doughnut :data="chartData" :options="chartOptions" />
+		<div class="flex-1 flex items-center justify-center min-h-[150px]">
+			<Doughnut v-if="top_purchased_products.length > 0" :data="chartData" :options="chartOptions" />
+			<div v-else class="flex items-center justify-center h-full">
+				<p class="text-neutral-400">No data</p>
+			</div>
 		</div>
 
 		<template #footer>
