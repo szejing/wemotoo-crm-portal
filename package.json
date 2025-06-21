@@ -3,7 +3,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "nuxt build",
+		"build:dev": "nuxt build --dotenv .env.local",
+		"build:prod": "nuxt build --dotenv .env.prod",
 		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lockb",
 		"rebuild": "bun run clean && bun install",
 		"start:local": "nuxt dev --dotenv .env.local",

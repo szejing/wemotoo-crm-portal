@@ -99,8 +99,8 @@ export default defineAppConfig({
 			},
 			padding: {
 				'2xs': 'px-2 py-1',
-				'xs': 'px-2.5 py-1.5',
-				'sm': 'px-2.5 py-1.5',
+				'xs': 'px-2.5 py-1',
+				'sm': 'px-2.5 py-1',
 				'md': 'px-3 py-2',
 				'lg': 'px-5 py-3',
 				'xl': 'px-10 py-3',
@@ -228,7 +228,7 @@ export default defineAppConfig({
 			rounded: 'rounded',
 			padding: 'px-2 py-2',
 			option: {
-				padding: 'px-4 py-1.5',
+				padding: 'px-4 py-1',
 			},
 			placeholder: 'text-gray-400',
 			default: {

@@ -219,7 +219,7 @@ useDetectClickOutside(elementInputTags, () => {
 });
 </script>
 
-<style lang="css" scoped>
+<style scoped lang="postcss">
 .tag-icon {
 	@apply size-5 ml-1 hover:bg-black hover:bg-opacity-10 rounded-sm transition duration-100;
 }
@@ -238,6 +238,6 @@ useDetectClickOutside(elementInputTags, () => {
 }
 
 .wrapper-available-tag li {
-	@apply px-2 py-1.5 hover:bg-gray-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
+	@apply px-2 py-1 hover:bg-gray-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
 }
 </style>
