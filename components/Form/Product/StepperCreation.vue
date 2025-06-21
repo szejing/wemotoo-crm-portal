@@ -462,7 +462,7 @@ const goToStep = (id: number) => {
 }
 
 .mobile-step-connector {
-	@apply w-4 h-0.5 mt-4 mx-1 flex-shrink-0 transition-colors;
+	@apply w-4 h-[0.125rem] mt-4 mx-1 flex-shrink-0 transition-colors;
 }
 
 /* Desktop Stepper Styles */
@@ -483,7 +483,7 @@ const goToStep = (id: number) => {
 }
 
 .desktop-step-connector {
-	@apply flex-1 h-0.5 mx-4 transition-colors;
+	@apply flex-1 h-[0.125rem] mx-4 transition-colors;
 }
 
 /* Common Step Styles */
@@ -537,7 +537,7 @@ const goToStep = (id: number) => {
 }
 
 .step-line {
-	@apply flex-1 h-0.5 bg-gray-300;
+	@apply flex-1 h-[0.125rem] bg-gray-300;
 }
 
 .step-line.completed {

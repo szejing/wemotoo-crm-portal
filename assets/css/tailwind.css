@@ -12,7 +12,7 @@
 	}
 
 	.section-pagination {
-		@apply flex justify-end px-3 py-3.5 border-t border-gray-200;
+		@apply flex justify-end px-3 py-3 border-t border-gray-200;
 	}
 }
 

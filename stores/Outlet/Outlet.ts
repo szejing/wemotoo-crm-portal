@@ -75,9 +75,7 @@ export const useOutletStore = defineStore('outletStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.outlet.create({
-					...this.newOutlet,
-				});
+				const data = await $api.outlet.create(this.newOutlet);
 
 				if (data.outlet) {
 					successNotification(`${this.newOutlet.code} - Outlet Created !`);
@@ -102,14 +100,14 @@ export const useOutletStore = defineStore('outletStore', {
 				const data = await $api.outlet.update(code, {
 					description: outlet.description,
 					address1: outlet.address1,
-					address2: outlet.address2,
-					address3: outlet.address3,
+					address2: outlet.address2 || undefined,
+					address3: outlet.address3 || undefined,
 					city: outlet.city,
 					country_code: outlet.country_code,
 					state: outlet.state,
 					postal_code: outlet.postal_code,
-					longitude: outlet.longitude,
-					latitude: outlet.latitude,
+					longitude: outlet.longitude || undefined,
+					latitude: outlet.latitude || undefined,
 				});
 
 				if (data.outlet) {

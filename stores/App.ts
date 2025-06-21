@@ -19,10 +19,10 @@ export const useAppStore = defineStore('appStore', {
 			const summSalesStore = useSummSaleStore();
 			const customerStore = useCustomerStore();
 
-			const outletStore = useOutletStore();
-			const taxStore = useTaxStore();
-			const taxGroupStore = useTaxGroupStore();
-			const taxRuleStore = useTaxRuleStore();
+			// const outletStore = useOutletStore();
+			// const taxStore = useTaxStore();
+			// const taxGroupStore = useTaxGroupStore();
+			// const taxRuleStore = useTaxRuleStore();
 
 			Promise.all([
 				productOptionsStore.getOptions(),

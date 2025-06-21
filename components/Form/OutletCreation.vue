@@ -40,7 +40,7 @@ onMounted(() => {
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude } = event.data;
 	console.log(code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude);
-	// await outletStore.createOutlet({ code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude });
+	await outletStore.createOutlet({ code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude });
 };
 </script>
 
