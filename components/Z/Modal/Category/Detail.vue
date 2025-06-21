@@ -20,7 +20,7 @@
 				</div>
 
 				<!-- *********************** General Info *********************** -->
-				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" />
+				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" is-update />
 				<!-- *********************** General Info *********************** -->
 
 				<!-- <div>

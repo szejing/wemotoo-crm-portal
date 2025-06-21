@@ -1,7 +1,7 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
-			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" />
+		<UFormGroup v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
+			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
 		</UFormGroup>
 
 		<UFormGroup v-slot="{ error }" label="Description" name="description" required>
@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 const props = defineProps({
+	isUpdate: Boolean,
 	code: String,
 	description: String,
 });

@@ -18,6 +18,10 @@ import SaleModule from './sale/sale';
 import CustomerModule from './customer/customer';
 import ProductBrandModule from './product-brand/product-brand';
 import AppointmentModule from './appointment/appointment';
+import TaxRuleModule from './tax-rules/tax-rule';
+import TaxModule from './taxes/tax';
+import TaxGroupModule from './tax-groups/tax-group';
+import OutletModule from './outlets/outlet';
 
 export {
 	OrderModule,
@@ -40,4 +44,8 @@ export {
 	CustomerModule,
 	ProductBrandModule,
 	AppointmentModule,
+	TaxRuleModule,
+	TaxModule,
+	TaxGroupModule,
+	OutletModule,
 };

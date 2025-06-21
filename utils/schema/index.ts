@@ -22,6 +22,9 @@ import { CreateBrandValidation } from './Brand/Create/BrandValidation';
 import { FilterBrandValidation } from './Brand/Filter/BrandValidation';
 import { UpdateBrandValidation } from './Brand/Update/BrandValidation';
 import { UpdateAppointmentValidation } from './Appointment/Update/AppointmentValidation';
+import { CreateOutletValidation } from './Outlet/Create/OutletValidation';
+import { FilterOutletValidation } from './Outlet/Filter/OutletValidation';
+import { UpdateOutletValidation } from './Outlet/Update/OutletValidation';
 
 export {
 	LoginValidation,
@@ -48,4 +51,7 @@ export {
 	FilterBrandValidation,
 	UpdateBrandValidation,
 	UpdateAppointmentValidation,
+	CreateOutletValidation,
+	FilterOutletValidation,
+	UpdateOutletValidation,
 };

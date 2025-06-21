@@ -16,6 +16,10 @@ import { usePaymentMethodStore } from './PaymentMethod/PaymentMethod';
 import { useSaleStore } from './Sale/Sale';
 import { useBrandStore } from './Brand/Brand';
 import { useAppointmentStore } from './Appointment/Appointment';
+import { useOutletStore } from './Outlet/Outlet';
+import { useTaxStore } from './Tax/Tax';
+import { useTaxGroupStore } from './TaxGroup/TaxGroup';
+import { useTaxRuleStore } from './TaxRule/TaxRule';
 
 export {
 	useAuthStore,
@@ -36,4 +40,8 @@ export {
 	useSaleStore,
 	useBrandStore,
 	useAppointmentStore,
+	useOutletStore,
+	useTaxStore,
+	useTaxGroupStore,
+	useTaxRuleStore,
 };

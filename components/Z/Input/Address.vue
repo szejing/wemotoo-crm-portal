@@ -31,6 +31,16 @@
 				<UInput v-model="country_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Country Code" />
 			</UFormGroup>
 		</div>
+
+		<div v-if="requiredLatLng" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<UFormGroup v-slot="{ error }" label="Longitude" name="longitude">
+				<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Longitude" />
+			</UFormGroup>
+
+			<UFormGroup v-slot="{ error }" label="Latitude" name="latitude">
+				<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Latitude" />
+			</UFormGroup>
+		</div>
 	</div>
 </template>
 
@@ -43,6 +53,9 @@ const props = defineProps<{
 	postalCode?: string;
 	countryCode?: string;
 	stateName?: string;
+	requiredLatLng?: boolean;
+	longitude?: number;
+	latitude?: number;
 }>();
 
 const emit = defineEmits([
@@ -53,6 +66,8 @@ const emit = defineEmits([
 	'update:postalCode',
 	'update:countryCode',
 	'update:stateName',
+	'update:longitude',
+	'update:latitude',
 ]);
 
 const address1 = computed({
@@ -115,6 +130,28 @@ const country_code = computed({
 	},
 	set(value) {
 		emit('update:countryCode', value);
+	},
+});
+
+const longitude = computed({
+	get() {
+		return props.longitude;
+	},
+	set(value) {
+		if (value != null || value != undefined) {
+			emit('update:longitude', value);
+		}
+	},
+});
+
+const latitude = computed({
+	get() {
+		return props.latitude;
+	},
+	set(value) {
+		if (value != null || value != undefined) {
+			emit('update:latitude', value);
+		}
 	},
 });
 </script>

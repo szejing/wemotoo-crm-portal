@@ -19,6 +19,11 @@ export const useAppStore = defineStore('appStore', {
 			const summSalesStore = useSummSaleStore();
 			const customerStore = useCustomerStore();
 
+			const outletStore = useOutletStore();
+			const taxStore = useTaxStore();
+			const taxGroupStore = useTaxGroupStore();
+			const taxRuleStore = useTaxRuleStore();
+
 			Promise.all([
 				productOptionsStore.getOptions(),
 				productTagsStore.getTags(),
@@ -34,6 +39,10 @@ export const useAppStore = defineStore('appStore', {
 				summOrderStore.getDashboardSummary(),
 				summSalesStore.getDashboardSummary(),
 				customerStore.getCustomers(),
+				// outletStore.getOutlets(),
+				// taxStore.getTaxes(),
+				// taxGroupStore.getTaxGroups(),
+				// taxRuleStore.getTaxRules(),
 			]);
 		},
 	},
