@@ -19,6 +19,10 @@ import {
 	CustomerModule,
 	ProductBrandModule,
 	AppointmentModule,
+	OutletModule,
+	TaxGroupModule,
+	TaxModule,
+	TaxRuleModule,
 } from '~/repository/modules';
 
 interface IApiInstance {
@@ -42,6 +46,10 @@ interface IApiInstance {
 	customer: CustomerModule;
 	brand: ProductBrandModule;
 	appointment: AppointmentModule;
+	taxRule: TaxRuleModule;
+	tax: TaxModule;
+	taxGroup: TaxGroupModule;
+	outlet: OutletModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -77,6 +85,10 @@ export default defineNuxtPlugin((_) => {
 	const customerModule = new CustomerModule(apiFetcher);
 	const brandModule = new ProductBrandModule(apiFetcher);
 	const appointmentModule = new AppointmentModule(apiFetcher);
+	const taxRuleModule = new TaxRuleModule(apiFetcher);
+	const taxModule = new TaxModule(apiFetcher);
+	const taxGroupModule = new TaxGroupModule(apiFetcher);
+	const outletModule = new OutletModule(apiFetcher);
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -99,6 +111,10 @@ export default defineNuxtPlugin((_) => {
 		customer: customerModule,
 		brand: brandModule,
 		appointment: appointmentModule,
+		taxRule: taxRuleModule,
+		tax: taxModule,
+		taxGroup: taxGroupModule,
+		outlet: outletModule,
 	};
 
 	return {

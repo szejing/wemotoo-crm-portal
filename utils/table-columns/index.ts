@@ -17,6 +17,7 @@ import { sale_columns } from './sale/sale';
 import { brand_columns } from './brand';
 import { order_summ_customer_columns } from './order-summ/order-summ-customer';
 import { sale_summ_customer_columns } from './sale-summ/sale-summ-customer';
+import { outlet_columns } from './outlet';
 
 export {
 	customer_columns,
@@ -40,4 +41,5 @@ export {
 	sale_summ_customer_columns,
 	sale_columns,
 	brand_columns,
+	outlet_columns,
 };

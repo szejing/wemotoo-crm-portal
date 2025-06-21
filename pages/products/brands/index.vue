@@ -112,7 +112,7 @@ const selectBrand = async (brand: Brand) => {
 	if (!brand) return;
 	modal.open(ZModalBrandDetail, {
 		brand: JSON.parse(JSON.stringify(brand)),
-		onUpdate: async ({ code, description, is_active }) => {
+		onUpdate: async ({ description, is_active }) => {
 			await brandStore.updateBrand(description, is_active);
 			modal.close();
 		},

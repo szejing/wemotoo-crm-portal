@@ -142,6 +142,38 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/restore/${code}`,
 	},
+	Outlets: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/restore/${code}`,
+	},
+	Taxes: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAXES}/restore/${code}`,
+	},
+	TaxGroups: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_GROUPS}/restore/${code}`,
+	},
+	TaxRules: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/restore/${code}`,
+	},
 };
 
 export default MerchantRoutes;
