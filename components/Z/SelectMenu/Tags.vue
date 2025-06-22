@@ -2,7 +2,7 @@
 	<UFormGroup name="tags" class="mt-2">
 		<USelectMenu v-model="tags" v-model:query="query" :options="tag_options" searchable size="md" option-attribute="value" multiple by="id">
 			<template #label>
-				<span v-if="tags.length" class="truncate">{{ tags.map((tag) => tag.value).join(', ') }}</span>
+				<span v-if="tags.length" class="truncate">{{ tags.map((tag: Tag) => tag.value).join(', ') }}</span>
 				<span v-else class="text-gray-400">Select Tags</span>
 			</template>
 

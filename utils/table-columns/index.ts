@@ -18,6 +18,9 @@ import { brand_columns } from './brand';
 import { order_summ_customer_columns } from './order-summ/order-summ-customer';
 import { sale_summ_customer_columns } from './sale-summ/sale-summ-customer';
 import { outlet_columns } from './outlet';
+import { tax_code_columns } from './tax/tax-code';
+import { tax_group_columns } from './tax/tax-group';
+import { tax_rule_columns } from './tax/tax-rule';
 
 export {
 	customer_columns,
@@ -42,4 +45,7 @@ export {
 	sale_columns,
 	brand_columns,
 	outlet_columns,
+	tax_code_columns,
+	tax_group_columns,
+	tax_rule_columns,
 };

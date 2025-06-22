@@ -23,33 +23,33 @@ class TaxGroupModule extends HttpFactory {
 		});
 	}
 
-	async create(tag: CreateTaxGroupReq): Promise<TaxGroupResp> {
+	async create(taxGroup: CreateTaxGroupReq): Promise<TaxGroupResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
-			body: tag,
+			body: taxGroup,
 		});
 	}
 
-	async update(code: string, tag: UpdateTaxGroupReq): Promise<TaxGroupResp> {
+	async update(code: string, taxGroup: UpdateTaxGroupReq): Promise<TaxGroupResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: tag,
+			body: taxGroup,
 		});
 	}
 
-	async delete(tag: TaxGroupReq): Promise<TaxGroupResp> {
+	async delete(taxGroup: TaxGroupReq): Promise<TaxGroupResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete(tag.code)}`,
+			url: `${this.RESOURCE.Delete(taxGroup.code)}`,
 		});
 	}
 
-	async restore(tag: TaxGroupReq): Promise<TaxGroupResp> {
+	async restore(taxGroup: TaxGroupReq): Promise<TaxGroupResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Restore(tag.code)}`,
+			url: `${this.RESOURCE.Restore(taxGroup.code)}`,
 		});
 	}
 }

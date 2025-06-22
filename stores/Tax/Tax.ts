@@ -1,6 +1,15 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { Tax } from '~/utils/types/tax';
+import type { TaxCreate } from '~/utils/types/form/tax/tax-creation';
+
+const initialEmptyTax: TaxCreate = {
+	code: undefined,
+	description: undefined,
+	is_inclusive: false,
+	is_active: true,
+	metadata: undefined,
+};
 
 export const useTaxStore = defineStore('taxStore', {
 	state: () => ({
@@ -8,13 +17,13 @@ export const useTaxStore = defineStore('taxStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		taxes: [] as Tax[],
-		// newOutlet: structuredClone(initialEmptyOutlet),
+		newTax: structuredClone(initialEmptyTax),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
 	actions: {
-		resetNewOutlet() {
-			// this.newOutlet = structuredClone(initialEmptyOutlet);
+		resetNewTax() {
+			this.newTax = structuredClone(initialEmptyTax);
 		},
 
 		updatePageSize(size: number) {
@@ -53,57 +62,53 @@ export const useTaxStore = defineStore('taxStore', {
 			}
 		},
 
-		// async addOutlet(outlet: Outlet) {
-		// 	this.adding = true;
-		// 	this.loading = true;
+		async createTax() {
+			this.adding = true;
+			this.loading = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.create(outlet);
+			try {
+				const data = await $api.tax.create(this.newTax);
 
-		// 		if (data.outlet) {
-		// 			successNotification(`${outlet.code} - Outlet Created !`);
-		// 			this.outlets.push(data.outlet);
-		// 		}
-		// 		this.resetNewOutlet();
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.adding = false;
-		// 		this.loading = false;
-		// 	}
-		// },
+				if (data.tax) {
+					successNotification(`${this.newTax.code} - Tax Created !`);
+					this.taxes.push(data.tax);
+				}
+				this.resetNewTax();
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.adding = false;
+				this.loading = false;
+			}
+		},
 
-		// async updateOutlet(code: string, outlet: Outlet) {
-		// 	this.updating = true;
+		async updateTax(code: string, tax: Tax) {
+			this.updating = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.update(code, {
-		// 			description: outlet.description,
-		// 			address1: outlet.address1,
-		// 			address2: outlet.address2,
-		// 			address3: outlet.address3,
-		// 			city: outlet.city,
-		// 			country_code: outlet.country_code,
-		// 			state: outlet.state,
-		// 			postal_code: outlet.postal_code,
-		// 		});
+			try {
+				const data = await $api.tax.update(code, {
+					description: tax.description,
+					is_inclusive: tax.is_inclusive,
+					is_active: tax.is_active,
+					metadata: tax.metadata,
+				});
 
-		// 		if (data.outlet) {
-		// 			successNotification(`Outlet Updated !`);
-		// 			this.getOutlets();
-		// 		}
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.updating = false;
-		// 	}
-		// },
+				if (data.tax) {
+					successNotification(`${data.tax.code} - Tax Updated !`);
+					this.getTaxes();
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.updating = false;
+			}
+		},
 
 		async deleteTax(code: string) {
 			this.loading = true;

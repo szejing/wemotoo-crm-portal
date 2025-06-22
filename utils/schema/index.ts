@@ -25,6 +25,12 @@ import { UpdateAppointmentValidation } from './Appointment/Update/AppointmentVal
 import { CreateOutletValidation } from './Outlet/Create/OutletValidation';
 import { FilterOutletValidation } from './Outlet/Filter/OutletValidation';
 import { UpdateOutletValidation } from './Outlet/Update/OutletValidation';
+import { CreateTaxValidation } from './Tax/Create/TaxValidation';
+import { UpdateTaxValidation } from './Tax/Update/TaxValidation';
+import { CreateTaxGroupValidation } from './TaxGroup/Create/TaxGroupValidation';
+import { UpdateTaxGroupValidation } from './TaxGroup/Update/TaxGroupValidation';
+import { CreateTaxRuleValidation } from './TaxRule/Create/TaxRuleValidation';
+import { UpdateTaxRuleValidation } from './TaxRule/Update/TaxRuleValidation';
 
 export {
 	LoginValidation,
@@ -54,4 +60,10 @@ export {
 	CreateOutletValidation,
 	FilterOutletValidation,
 	UpdateOutletValidation,
+	CreateTaxValidation,
+	UpdateTaxValidation,
+	CreateTaxGroupValidation,
+	UpdateTaxGroupValidation,
+	CreateTaxRuleValidation,
+	UpdateTaxRuleValidation,
 };

@@ -1,7 +1,7 @@
 <template>
 	<UModal
 		:ui="{
-			width: 'w-full sm:w-[30%]',
+			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
 		}"
 	>
 		<UCard>
@@ -13,12 +13,12 @@
 			<template #footer>
 				<div v-if="action == 'delete'" class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="red" variant="soft" @click="onConfirm">Confirm</UButton>
+					<UButton color="red" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
 				</div>
 
 				<div v-else class="flex-jend gap-4">
 					<UButton @click="onCancel">Cancel</UButton>
-					<UButton @click="onConfirm">Confirm</UButton>
+					<UButton :loading="loading" @click="onConfirm">Confirm</UButton>
 				</div>
 			</template>
 		</UCard>
@@ -41,9 +41,11 @@ defineProps({
 	},
 });
 
+const loading = ref(false);
 const emit = defineEmits(['confirm', 'cancel']);
 
-const onConfirm = () => {
+const onConfirm = async () => {
+	loading.value = true;
 	emit('confirm');
 };
 
