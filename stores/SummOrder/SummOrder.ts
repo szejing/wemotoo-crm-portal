@@ -12,6 +12,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		daily_summaries: [] as SummDaily[],
 		top_purchased_customers: [] as SummCustomer[],
 		top_purchased_products: [] as SummProduct[],
+		new_orders: 0 as number,
+		new_customers: 0 as number,
+		total_sales_amt: 0 as number,
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
 		order_summ_customer: initialEmptyOrderSummCustomer,
@@ -47,6 +50,18 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 				if (data.top_purchased_products) {
 					this.top_purchased_products = data.top_purchased_products;
+				}
+
+				if (data.new_orders) {
+					this.new_orders = data.new_orders;
+				}
+
+				if (data.new_customers) {
+					this.new_customers = data.new_customers;
+				}
+
+				if (data.total_sales_amt) {
+					this.total_sales_amt = data.total_sales_amt;
 				}
 			} catch (err: any) {
 				console.error(err);

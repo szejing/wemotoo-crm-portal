@@ -11,8 +11,9 @@
 					</div>
 					<div>
 						<UBadge v-if="order?.status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
-						<UBadge v-else-if="order?.status == OrderStatus.REFUNDED" color="main" variant="outline" size="lg">REFUNDED</UBadge>
 						<UBadge v-else-if="order?.status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
+						<UBadge v-else-if="order?.status == OrderStatus.COMPLETED" color="main" variant="outline" size="lg">COMPLETED</UBadge>
+						<UBadge v-else-if="order?.status == OrderStatus.REFUNDED" color="gray" variant="outline" size="lg">REFUNDED</UBadge>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 w-full mt-4">
@@ -119,6 +120,11 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 
 	if (!customer) {
 		throw new Error('Customer not found');
+	}
+
+	if (new_status == OrderStatus.CANCELLED) {
+		failedModal('Are you sure you want to cancel this order?');
+		return;
 	}
 
 	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {

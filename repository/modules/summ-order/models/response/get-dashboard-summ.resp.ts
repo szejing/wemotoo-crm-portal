@@ -39,4 +39,7 @@ export type GetDashboardSummResp = {
 	daily_summaries: SummDaily_[];
 	top_purchased_customers: SummCustomer_[];
 	top_purchased_products: SummProduct_[];
+	new_orders: number;
+	new_customers: number;
+	total_sales_amt: number;
 };
