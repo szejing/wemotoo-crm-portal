@@ -3,6 +3,7 @@ import type { PriceInput } from './price';
 import type { CategoryInput } from './category';
 import type { TagInput } from './tag';
 import type { BrandInput } from './brand';
+import type { Image } from './image';
 
 export type ProdVariantOptionValuesInput = {
 	id: number;
@@ -70,10 +71,10 @@ export type Product = {
 	tags: TagInput[] | undefined;
 
 	// thumbnail
-	thumbnail: File | ImageModel | undefined;
+	thumbnail: File | Image | undefined;
 
 	// images
-	images: File[] | ImageModel[] | undefined;
+	images: File[] | Image[] | undefined;
 
 	// price
 	price_types: PriceInput[] | undefined;

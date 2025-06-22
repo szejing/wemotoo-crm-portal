@@ -1,7 +1,7 @@
 <template>
 	<UModal
 		:ui="{
-			width: 'w-full sm:w-[60%]',
+			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
 		}"
 	>
 		<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">

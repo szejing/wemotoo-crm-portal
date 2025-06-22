@@ -1,7 +1,13 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import type { Tax } from '~/utils/types/tax';
 import type { TaxGroup } from '~/utils/types/tax-group';
+import type { TaxGroupCreate } from '~/utils/types/form/tax/tax-group-creation';
+
+const initialEmptyTaxGroup: TaxGroupCreate = {
+	code: undefined,
+	description: undefined,
+	taxes: [],
+};
 
 export const useTaxGroupStore = defineStore('taxGroupStore', {
 	state: () => ({
@@ -9,11 +15,15 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tax_groups: [] as TaxGroup[],
-		// newOutlet: structuredClone(initialEmptyOutlet),
+		newTaxGroup: structuredClone(initialEmptyTaxGroup),
 		pageSize: options_page_size[0],
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewTaxGroup() {
+			this.newTaxGroup = structuredClone(initialEmptyTaxGroup);
+		},
+
 		updatePageSize(size: number) {
 			this.pageSize = size;
 		},
@@ -50,57 +60,51 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			}
 		},
 
-		// async addOutlet(outlet: Outlet) {
-		// 	this.adding = true;
-		// 	this.loading = true;
+		async createTaxGroup() {
+			this.adding = true;
+			this.loading = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.create(outlet);
+			try {
+				const data = await $api.taxGroup.create(this.newTaxGroup);
 
-		// 		if (data.outlet) {
-		// 			successNotification(`${outlet.code} - Outlet Created !`);
-		// 			this.outlets.push(data.outlet);
-		// 		}
-		// 		this.resetNewOutlet();
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.adding = false;
-		// 		this.loading = false;
-		// 	}
-		// },
+				if (data.tax_group) {
+					successNotification(`${this.newTaxGroup.code} - Tax Group Created !`);
+					this.getTaxGroups();
+				}
+				this.resetNewTaxGroup();
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.adding = false;
+				this.loading = false;
+			}
+		},
 
-		// async updateOutlet(code: string, outlet: Outlet) {
-		// 	this.updating = true;
+		async updateTaxGroup(code: string, taxGroup: TaxGroup) {
+			this.updating = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.update(code, {
-		// 			description: outlet.description,
-		// 			address1: outlet.address1,
-		// 			address2: outlet.address2,
-		// 			address3: outlet.address3,
-		// 			city: outlet.city,
-		// 			country_code: outlet.country_code,
-		// 			state: outlet.state,
-		// 			postal_code: outlet.postal_code,
-		// 		});
+			try {
+				const data = await $api.taxGroup.update(code, {
+					description: taxGroup.description,
+					taxes: taxGroup.taxes.map((t) => ({ code: t.code })),
+				});
 
-		// 		if (data.outlet) {
-		// 			successNotification(`Outlet Updated !`);
-		// 			this.getOutlets();
-		// 		}
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.updating = false;
-		// 	}
-		// },
+				if (data.tax_group) {
+					successNotification(`Tax Group Updated !`);
+					this.getTaxGroups();
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.updating = false;
+			}
+		},
 
 		async deleteTaxGroup(code: string) {
 			this.loading = true;
@@ -110,11 +114,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			try {
 				const data = await $api.taxGroup.delete({ code });
 
-				if (data.tax_group.code) {
-					successNotification(`Tax Group #${data.tax_group.code} Deleted !`);
-
-					const index = this.tax_groups.findIndex((t) => t.code === data.tax_group.code);
-					this.tax_groups.splice(index, 1);
+				if (data.tax_group && data.tax_group.code == null) {
+					successNotification(`Tax Group Deleted !`);
+					this.tax_groups = this.tax_groups.filter((t) => t.code !== code);
 				}
 			} catch (err: any) {
 				console.error(err);

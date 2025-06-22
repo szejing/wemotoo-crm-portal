@@ -23,33 +23,33 @@ class TaxModule extends HttpFactory {
 		});
 	}
 
-	async create(tag: CreateTaxReq): Promise<TaxResp> {
+	async create(tax: CreateTaxReq): Promise<TaxResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
-			body: tag,
+			body: tax,
 		});
 	}
 
-	async update(code: string, tag: UpdateTaxReq): Promise<TaxResp> {
+	async update(code: string, tax: UpdateTaxReq): Promise<TaxResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: tag,
+			body: tax,
 		});
 	}
 
-	async delete(tag: TaxReq): Promise<TaxResp> {
+	async delete(tax: TaxReq): Promise<TaxResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete(tag.code)}`,
+			url: `${this.RESOURCE.Delete(tax.code)}`,
 		});
 	}
 
-	async restore(tag: TaxReq): Promise<TaxResp> {
+	async restore(tax: TaxReq): Promise<TaxResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Restore(tag.code)}`,
+			url: `${this.RESOURCE.Restore(tax.code)}`,
 		});
 	}
 }

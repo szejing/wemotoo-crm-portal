@@ -1,3 +1,7 @@
+export type TaxInput = {
+	code: string;
+};
+
 export type Tax = {
 	code: string;
 	description: string;

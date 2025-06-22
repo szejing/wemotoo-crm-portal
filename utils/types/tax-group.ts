@@ -1,7 +1,7 @@
-import type { TaxRule } from './tax-rule';
+import type { Tax } from './tax';
 
 export type TaxGroup = {
 	code: string;
 	description: string;
-	tax_rules: TaxRule[];
+	taxes: Tax[];
 };
