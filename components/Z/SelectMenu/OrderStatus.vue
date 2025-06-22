@@ -22,7 +22,7 @@ const props = defineProps<{ status: string }>();
 const emit = defineEmits(['update:status']);
 
 const statuses = computed(() => {
-	return options_order_status.filter((status) => status !== OrderStatus.COMPLETED);
+	return options_order_status.filter((status) => status !== OrderStatus.REQUIRES_ACTION && status !== OrderStatus.REFUNDED);
 });
 
 const status = computed({

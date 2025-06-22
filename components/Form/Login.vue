@@ -1,17 +1,19 @@
 <template>
 	<div class="h-screen flex justify-center items-center">
-		<div class="w-[80%] xs:w-[400px] sm:w-[420px]">
+		<div class="hidden sm:flex w-full h-full bg-main flex-col items-center justify-center">
+			<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
+		</div>
+		<div class="w-full sm:w-[60%] px-10">
 			<UForm :schema="LoginValidation" :state="state" class="space-y-4" @submit="onSubmit">
 				<UCard>
 					<template #header>
-						<div class="w-full">
-							<h1 class="text-center">Wemotoo CRM</h1>
+						<div class="flex sm:hidden w-full">
 							<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
 						</div>
 					</template>
 
 					<div class="flex flex-col gap-2">
-						<h1 class="text-center">Merchant Login</h1>
+						<h1 class="text-center">CRM Merchant Login</h1>
 						<UFormGroup v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
 							<UInput v-model="state.merchant_id" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 						</UFormGroup>

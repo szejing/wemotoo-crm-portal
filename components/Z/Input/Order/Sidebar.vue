@@ -7,7 +7,7 @@
 			</template>
 
 			<div class="flex-jbetween-icenter">
-				<ZSelectMenuOrderStatus v-model:status="order.status" />
+				<ZSelectMenuOrderStatus v-model:status="new_status" />
 				<UButton @click="saveOrderStatus">Save</UButton>
 			</div>
 		</UCard>
@@ -45,12 +45,7 @@
 				<p class="text-center text-neutral-400">Not yet paid</p>
 			</div>
 
-			<template #footer>
-				<!-- <div class="flex-jbetween-icenter">
-					<ZSelectMenuPaymentStatus v-model:payment-status="order.payment_status" />
-					<UButton @click="savePaymentStatus">Save</UButton>
-				</div> -->
-			</template>
+			<template #footer> </template>
 		</UCard>
 	</div>
 </template>
@@ -72,6 +67,8 @@ const props = defineProps<{
 
 const order = computed(() => props.order);
 
+const new_status = ref<OrderStatus>(order.value.status);
+
 const paymentColumns = [
 	{
 		key: 'payment_type_code',
@@ -86,7 +83,7 @@ const paymentColumns = [
 ];
 
 const saveOrderStatus = async () => {
-	await props.updateOrderStatus(order.value.status);
+	await props.updateOrderStatus(new_status.value);
 };
 
 const addPaymentInfo = () => {
@@ -96,9 +93,6 @@ const addPaymentInfo = () => {
 const viewPaymentInfo = (payment: PaymentModel) => {
 	props.viewPaymentInfo(payment);
 };
-// const savePaymentStatus = async () => {
-// 	await props.updatePaymentStatus(order.value.payment_status);
-// };
 </script>
 
 <style scoped lang="postcss"></style>
