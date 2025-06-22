@@ -1,0 +1,44 @@
+# Build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Dependencies
+node_modules
+
+# Development files
+.vscode
+.fleet
+.idea
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Environment files (keep only what you need)
+.env
+.env.*
+!.env.prod
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Development and testing
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp 
