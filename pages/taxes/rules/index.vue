@@ -14,7 +14,7 @@
 					</div>
 				</div>
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTax">
+				<UTable :rows="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 					<template #code-data="{ row }">
 						<div class="flex-col-start">
 							<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
@@ -57,7 +57,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalLoading } from '#components';
 import { options_page_size } from '~/utils/options';
 import { tax_rule_columns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
@@ -103,21 +102,10 @@ const getAmountTypeLabel = (amountType: string) => {
 	return labels[amountType] || amountType;
 };
 
-const selectTax = async (taxRule: TaxRule) => {
+const selectTaxRule = async (taxRule: TaxRule) => {
 	if (!taxRule) return;
 
-	modal.open(ZModalLoading, {
-		key: 'loading',
-	});
-
-	const tr = await taxRuleStore.getTaxRuleByCode(taxRule.code!);
-	await modal.close();
-
-	if (tr) {
-		taxRuleStore.current_tax_rule = taxRule;
-
-		navigateTo(`/taxes/rules/${tr.code}`);
-	}
+	navigateTo(`/taxes/rules/${taxRule.code}`);
 };
 </script>
 

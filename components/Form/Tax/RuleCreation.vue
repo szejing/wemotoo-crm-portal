@@ -8,7 +8,7 @@
 
 			<div class="flex items-center justify-between mt-6">
 				<h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Tax Rule Details</h3>
-				<UButton size="sm" color="green" variant="ghost" @click="addDetail">Add rule detail +</UButton>
+				<UButton size="sm" color="green" variant="ghost" @click="emits('select-detail', undefined)">Add rule detail +</UButton>
 			</div>
 
 			<div v-if="new_tax_rule.details && new_tax_rule.details.length > 0" class="space-y-3 mt-4">
@@ -16,7 +16,8 @@
 					<div
 						v-for="(detail, index) in new_tax_rule.details"
 						:key="index"
-						class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+						class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+						@click="emits('select-detail', detail)"
 					>
 						<div class="flex-1 min-w-0">
 							<div class="flex items-center space-x-4">
@@ -40,7 +41,7 @@
 								</p>
 							</div>
 						</div>
-						<UButton icon="i-heroicons-trash" size="xs" color="red" variant="ghost" @click="deleteDetail(index)" />
+						<UButton icon="i-heroicons-trash" size="xs" color="red" variant="ghost" @click="emits('delete-detail', index)" />
 					</div>
 				</div>
 			</div>
@@ -67,83 +68,34 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { CreateTaxRuleValidation } from '~/utils/schema';
-import { getFormattedDate, type AmountType, type FilterCondition, type FilterOperator } from 'wemotoo-common';
-import { ZModalTaxRuleDetail } from '#components';
-import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
+import { getFormattedDate } from 'wemotoo-common';
+import type { TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 
 type Schema = z.output<typeof CreateTaxRuleValidation>;
 
-const modal = useModal();
-const taxRuleStore = useTaxRuleStore();
-const { adding, new_tax_rule } = storeToRefs(taxRuleStore);
+const props = defineProps<{
+	adding: boolean;
+	newTaxRule: TaxRuleCreate;
+}>();
 
-onMounted(() => {
-	taxRuleStore.resetNewTaxRule();
+const emits = defineEmits(['create-tax-rule', 'select-detail', 'delete-detail']);
+const new_tax_rule = computed(() => {
+	return {
+		...props.newTaxRule,
+		details: props.newTaxRule.details.map((detail) => ({
+			...detail,
+		})),
+	};
 });
-
-const addDetail = () => {
-	modal.open(ZModalTaxRuleDetail, {
-		detail: undefined,
-		onUpdate: async (detail: TaxRuleDetail) => {
-			new_tax_rule.value.details.push({
-				description: detail.description,
-				tax_code: detail.tax_code,
-				tax_condition: {
-					tax_code: detail.tax_condition?.tax_code ?? detail.tax_code ?? '',
-					starts_at: detail.tax_condition?.starts_at ? new Date(detail.tax_condition.starts_at) : undefined,
-					ends_at: detail.tax_condition?.ends_at ? new Date(detail.tax_condition.ends_at) : undefined,
-					amount_type: detail.tax_condition?.amount_type as AmountType,
-					rate: detail.tax_condition?.rate ?? 0,
-					min_amount: detail.tax_condition?.min_amount ?? 0,
-					max_amount: detail.tax_condition?.max_amount ?? 0,
-					filters: [],
-				},
-			});
-
-			modal.close();
-		},
-		onDelete: async (detail: TaxRuleDetail) => {
-			// await taxRuleStore.deleteTaxRuleDetail(detail.tax_code);
-		},
-		onCancel: () => {
-			modal.close();
-		},
-	});
-};
-
-const deleteDetail = (index: number) => {
-	new_tax_rule.value.details.splice(index, 1);
-};
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, details } = event.data;
 
-	new_tax_rule.value = {
+	emits('create-tax-rule', {
 		code,
 		description,
-		details: details.map((detail) => ({
-			description: detail.description,
-			tax_code: detail.tax_code ?? undefined,
-			tax_condition: {
-				tax_code: detail.tax_condition?.tax_code ?? '',
-				starts_at: detail.tax_condition?.starts_at ?? undefined,
-				ends_at: detail.tax_condition?.ends_at ?? undefined,
-				amount_type: detail.tax_condition?.amount_type as AmountType,
-				rate: detail.tax_condition?.rate ?? 0,
-				min_amount: detail.tax_condition?.min_amount ?? 0,
-				max_amount: detail.tax_condition?.max_amount ?? 0,
-				filters:
-					detail.tax_condition?.filters?.map((filter) => ({
-						filter_operator: filter.filter_operator as FilterOperator,
-						filter_condition: filter.filter_condition as FilterCondition,
-						filter_value: filter.filter_value,
-					})) ?? [],
-			},
-		})),
-	};
-
-	await taxRuleStore.createTaxRule();
-	navigateTo('/taxes/rules');
+		details,
+	});
 };
 </script>
 

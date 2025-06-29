@@ -64,8 +64,9 @@ const deleteTaxRule = async () => {
 		message: 'Are you sure you want to delete this tax rule?',
 		action: 'delete',
 		onConfirm: async () => {
-			// await taxRuleStore.deleteTaxRule(code);
+			await taxRuleStore.deleteTaxRule(current_tax_rule.value!.code);
 			modal.close();
+			navigateTo('/taxes/rules');
 		},
 		onCancel: () => {
 			modal.close();
@@ -82,6 +83,8 @@ const selectDetail = (detail: TaxRuleDetail | undefined) => {
 			modal.close();
 		},
 		onDelete: async (detail: TaxRuleDetail) => {
+			await deleteDetail(detail);
+			modal.close();
 			// await taxRuleStore.deleteTaxRuleDetail(detail.tax_code);
 		},
 		onCancel: () => {
@@ -90,7 +93,7 @@ const selectDetail = (detail: TaxRuleDetail | undefined) => {
 	});
 };
 
-const deleteDetail = (index: number) => {
+const deleteDetail = async (detail: TaxRuleDetail) => {
 	// current_tax_rule.value.details.splice(index, 1);
 };
 
