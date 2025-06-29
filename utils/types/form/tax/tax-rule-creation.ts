@@ -1,13 +1,30 @@
+import type { AmountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+
+export type TaxFilterCreate = {
+	filter_operator: FilterOperator;
+	filter_condition: FilterCondition;
+	filter_value: string;
+};
+
+export type TaxConditionCreate = {
+	tax_code: string;
+	starts_at?: Date;
+	ends_at?: Date;
+	amount_type: AmountType;
+	rate: number;
+	min_amount?: number;
+	max_amount?: number;
+	filters: TaxFilterCreate[];
+};
+
+export type TaxDetailCreate = {
+	description: string;
+	tax_code: string | undefined;
+	tax_condition: TaxConditionCreate;
+};
+
 export type TaxRuleCreate = {
 	code: string | undefined;
 	description: string | undefined;
-	address1: string | undefined;
-	address2: string | undefined;
-	address3: string | undefined;
-	city: string | undefined;
-	country_code: string | undefined;
-	state: string | undefined;
-	postal_code: string | undefined;
-	longitude: number | undefined;
-	latitude: number | undefined;
+	details: TaxDetailCreate[];
 };

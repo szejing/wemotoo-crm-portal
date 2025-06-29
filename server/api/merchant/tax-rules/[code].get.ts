@@ -4,7 +4,6 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		const data = await readBody(event);
 		const code = getRouterParams(event).code;
 
 		if (!code) {
@@ -17,7 +16,6 @@ export default defineEventHandler(async (event) => {
 		const result = await $fetch(`${Routes.TaxRules.Single(code)}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
-			body: data,
 			headers: generateHeaders(event, true),
 		});
 		return result;

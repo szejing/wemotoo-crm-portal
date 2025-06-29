@@ -1,9 +1,9 @@
 <template>
 	<UFormGroup name="tags" class="mt-2">
-		<USelectMenu v-model="taxes" v-model:query="query" :options="tax_options" searchable size="md" option-attribute="code" multiple by="code">
+		<USelectMenu v-model="tax" v-model:query="query" :options="tax_options" searchable size="md" option-attribute="code" by="code">
 			<template #label>
-				<span v-if="taxes.length" class="truncate">{{ taxes.map((tax: Tax) => tax.code).join(', ') }}</span>
-				<span v-else class="text-gray-400">Select Taxes</span>
+				<span v-if="tax" class="truncate">{{ tax.code }}</span>
+				<span v-else class="text-gray-400">Select Tax Code</span>
 			</template>
 		</USelectMenu>
 	</UFormGroup>
@@ -16,9 +16,9 @@ const query = ref('');
 const taxStore = useTaxStore();
 const { taxes: tax_options } = storeToRefs(taxStore);
 
-const props = defineProps<{ taxes: Tax[] | undefined }>();
+const props = defineProps<{ tax: Tax | string | undefined }>();
 
-const emit = defineEmits(['update:taxes']);
+const emit = defineEmits(['update:tax']);
 
 onMounted(async () => {
 	if (tax_options.value.length === 0) {
@@ -26,12 +26,16 @@ onMounted(async () => {
 	}
 });
 
-const taxes = computed({
+const tax = computed({
 	get() {
-		return props.taxes ?? [];
+		if (typeof props.tax === 'string') {
+			return tax_options.value.find((tax) => tax.code === props.tax);
+		}
+
+		return props.tax ?? undefined;
 	},
 	set(value) {
-		emit('update:taxes', value);
+		emit('update:tax', value);
 	},
 });
 </script>

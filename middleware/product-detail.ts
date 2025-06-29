@@ -1,12 +1,16 @@
-import { failedNotification } from '~/stores/AppUi/AppUi';
-
-export default defineNuxtRouteMiddleware(async (_, _from) => {
+export default defineNuxtRouteMiddleware(async (to, _from) => {
+	const code = to.params.code;
 	const productStore = useProductStore();
 	const { current_product } = storeToRefs(productStore);
 
 	if (!current_product.value) {
-		failedNotification('Product not found');
-		return navigateTo('/products');
+		const product = await productStore.getProduct(code as string);
+
+		if (product) {
+			productStore.current_product = product;
+		} else {
+			return navigateTo('/products');
+		}
 	}
 
 	return;

@@ -16,40 +16,40 @@ class TaxRuleModule extends HttpFactory {
 		});
 	}
 
-	async fetchSingle(code: string) {
-		return await this.call<any>({
+	async fetchSingle(code: string): Promise<TaxRuleResp> {
+		return await this.call<TaxRuleResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,
 		});
 	}
 
-	async create(tag: CreateTaxRuleReq): Promise<TaxRuleResp> {
+	async create(taxRule: CreateTaxRuleReq): Promise<TaxRuleResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
-			body: tag,
+			body: taxRule,
 		});
 	}
 
-	async update(code: string, tag: UpdateTaxRuleReq): Promise<TaxRuleResp> {
+	async update(code: string, taxRule: UpdateTaxRuleReq): Promise<TaxRuleResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: tag,
+			body: taxRule,
 		});
 	}
 
-	async delete(tag: TaxRuleReq): Promise<TaxRuleResp> {
+	async delete(taxRule: TaxRuleReq): Promise<TaxRuleResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete(tag.code)}`,
+			url: `${this.RESOURCE.Delete(taxRule.code)}`,
 		});
 	}
 
-	async restore(tag: TaxRuleReq): Promise<TaxRuleResp> {
+	async restore(taxRule: TaxRuleReq): Promise<TaxRuleResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Restore(tag.code)}`,
+			url: `${this.RESOURCE.Restore(taxRule.code)}`,
 		});
 	}
 }

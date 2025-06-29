@@ -1,6 +1,14 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { TaxRule } from '~/utils/types/tax-rule';
+import type { TaxDetailCreate, TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
+import type { AmountType } from 'wemotoo-common';
+
+const initialEmptyTaxRule: TaxRuleCreate = {
+	code: undefined,
+	description: undefined,
+	details: [] as TaxDetailCreate[],
+};
 
 export const useTaxRuleStore = defineStore('taxRuleStore', {
 	state: () => ({
@@ -8,17 +16,17 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tax_rules: [] as TaxRule[],
-		// newOutlet: structuredClone(initialEmptyOutlet),
-		pageSize: options_page_size[0],
+		new_tax_rule: structuredClone(initialEmptyTaxRule),
+		page_size: options_page_size[0],
 		errors: [] as string[],
 	}),
 	actions: {
-		resetNewOutlet() {
-			// this.newOutlet = structuredClone(initialEmptyOutlet);
+		resetNewTaxRule() {
+			this.new_tax_rule = structuredClone(initialEmptyTaxRule);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getTaxRules() {
@@ -53,57 +61,70 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 			}
 		},
 
-		// async addOutlet(outlet: Outlet) {
-		// 	this.adding = true;
-		// 	this.loading = true;
+		async createTaxRule() {
+			this.adding = true;
+			this.loading = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.create(outlet);
+			try {
+				const data = await $api.taxRule.create(this.new_tax_rule);
 
-		// 		if (data.outlet) {
-		// 			successNotification(`${outlet.code} - Outlet Created !`);
-		// 			this.outlets.push(data.outlet);
-		// 		}
-		// 		this.resetNewOutlet();
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.adding = false;
-		// 		this.loading = false;
-		// 	}
-		// },
+				if (data.tax_rule) {
+					successNotification(`${this.new_tax_rule.code} - Tax Rule Created !`);
+					this.tax_rules.push(data.tax_rule);
+				}
+				this.resetNewTaxRule();
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.adding = false;
+				this.loading = false;
+			}
+		},
 
-		// async updateOutlet(code: string, outlet: Outlet) {
-		// 	this.updating = true;
+		async updateTaxRule(code: string, taxRule: TaxRule) {
+			this.updating = true;
+			this.loading = true;
 
-		// 	const { $api } = useNuxtApp();
+			const { $api } = useNuxtApp();
 
-		// 	try {
-		// 		const data = await $api.outlet.update(code, {
-		// 			description: outlet.description,
-		// 			address1: outlet.address1,
-		// 			address2: outlet.address2,
-		// 			address3: outlet.address3,
-		// 			city: outlet.city,
-		// 			country_code: outlet.country_code,
-		// 			state: outlet.state,
-		// 			postal_code: outlet.postal_code,
-		// 		});
+			try {
+				const data = await $api.taxRule.update(code, {
+					code: taxRule.code,
+					description: taxRule.description,
+					details: taxRule.details.map((detail) => ({
+						id: detail.id,
+						description: detail.description,
+						tax_code: detail.tax_code ?? '',
+						tax_condition: {
+							id: detail.tax_condition?.id ?? 0,
+							tax_code: detail.tax_condition?.tax_code ?? detail.tax_code ?? '',
+							starts_at: detail.tax_condition?.starts_at ? new Date(detail.tax_condition.starts_at) : undefined,
+							ends_at: detail.tax_condition?.ends_at ? new Date(detail.tax_condition.ends_at) : undefined,
+							amount_type: detail.tax_condition?.amount_type as AmountType,
+							rate: detail.tax_condition?.rate ?? 0,
+							min_amount: detail.tax_condition?.min_amount ?? 0,
+							max_amount: detail.tax_condition?.max_amount ?? 0,
+							filters: [],
+						},
+					})),
+				});
 
-		// 		if (data.outlet) {
-		// 			successNotification(`Outlet Updated !`);
-		// 			this.getOutlets();
-		// 		}
-		// 	} catch (err: any) {
-		// 		console.error(err);
-		// 		failedNotification(err.message);
-		// 	} finally {
-		// 		this.updating = false;
-		// 	}
-		// },
+				if (data.tax_rule) {
+					successNotification(`${this.new_tax_rule.code} - Tax Rule Created !`);
+					this.tax_rules.push(data.tax_rule);
+				}
+				this.resetNewTaxRule();
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.adding = false;
+				this.loading = false;
+			}
+		},
 
 		async deleteTaxRule(code: string) {
 			this.loading = true;
@@ -126,5 +147,25 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 				this.loading = false;
 			}
 		},
+
+		// async deleteTaxRuleDetail(code: string) {
+		// 	this.loading = true;
+
+		// 	const { $api } = useNuxtApp();
+
+		// 	try {
+		// 		const data = await $api.taxRule.delete({ code });
+		// 		if (data.tax_rule.code) {
+		// 			successNotification(`Tax Rule #${data.tax_rule.code} Deleted !`);
+		// 			const index = this.tax_rules.findIndex((t) => t.code === data.tax_rule.code);
+		// 			this.tax_rules.splice(index, 1);
+		// 		}
+		// 	} catch (err: any) {
+		// 		console.error(err);
+		// 		failedNotification(err.message);
+		// 	} finally {
+		// 		this.loading = false;
+		// 	}
+		// },
 	},
 });

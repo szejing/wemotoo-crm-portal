@@ -12,11 +12,11 @@ const tax_navigations = [
 		icon: ICONS.TAX,
 		to: '/taxes/codes',
 	},
-	{
-		title: 'Tax Groups',
-		icon: ICONS.TAX,
-		to: '/taxes/groups',
-	},
+	// {
+	// 	title: 'Tax Groups',
+	// 	icon: ICONS.TAX,
+	// 	to: '/taxes/groups',
+	// },
 	{
 		title: 'Tax Rules',
 		icon: ICONS.TAX,

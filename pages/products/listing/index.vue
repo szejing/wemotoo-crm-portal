@@ -5,7 +5,7 @@
 			<ZSectionFilterProducts />
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
 
 					<div class="flex gap-4">
 						<!-- <UButton>
@@ -55,7 +55,7 @@
 				</UTable>
 
 				<div v-if="products.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="products.length" />
+					<UPagination v-model="page" :page-count="page_size" :total="products.length" />
 				</div>
 			</UCard>
 		</div>
@@ -95,10 +95,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { products, loading, pageSize } = storeToRefs(productStore);
+const { products, loading, page_size } = storeToRefs(productStore);
 
 const rows = computed(() => {
-	return products.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return products.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const selectProduct = async (product: Product) => {

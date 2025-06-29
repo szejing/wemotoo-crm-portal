@@ -67,14 +67,14 @@
 			<!-- Step 1: Images & Basic Info -->
 			<div v-if="currentStep === 1" class="space-y-6">
 				<ZInputProductGeneralInfo
-					v-model:is-active="newProduct.is_active"
-					v-model:is-giftcard="newProduct.is_giftcard"
-					v-model:is-discountable="newProduct.is_discountable"
-					v-model:code="newProduct.code"
-					v-model:name="newProduct.name"
-					v-model:short-desc="newProduct.short_desc"
-					v-model:long-desc="newProduct.long_desc"
-					v-model:type="newProduct.type"
+					v-model:is-active="new_product.is_active"
+					v-model:is-giftcard="new_product.is_giftcard"
+					v-model:is-discountable="new_product.is_discountable"
+					v-model:code="new_product.code"
+					v-model:name="new_product.name"
+					v-model:short-desc="new_product.short_desc"
+					v-model:long-desc="new_product.long_desc"
+					v-model:type="new_product.type"
 					:card-ui="borderlessCardUi"
 					hide-header
 				/>
@@ -88,7 +88,7 @@
 							Recommended size: 1:1 <br />
 							Image will be used as thumbnail
 						</p>
-						<ZDropzone class="mt-4 max-w-[250px]" :existing-images="newProduct.thumbnail ? [newProduct.thumbnail] : []" @files-selected="updateThumbnail" />
+						<ZDropzone class="mt-4 max-w-[250px]" :existing-images="new_product.thumbnail ? [new_product.thumbnail] : []" @files-selected="updateThumbnail" />
 					</div>
 
 					<div class="flex flex-col w-full">
@@ -97,7 +97,7 @@
 							Recommended size: 1:1 <br />
 							Max 3 images, images will be used as product images
 						</p>
-						<ZDropzone multiple :max-images="3" class="mt-4 max-w-[250px]" :existing-images="newProduct.images" @files-selected="updateImages" />
+						<ZDropzone multiple :max-images="3" class="mt-4 max-w-[250px]" :existing-images="new_product.images" @files-selected="updateImages" />
 					</div>
 				</div>
 			</div>
@@ -107,23 +107,23 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div>
 						<h3 class="text-lg font-medium mb-4">Categories</h3>
-						<ZSelectMenuCategories v-model:categories="newProduct.categories" />
+						<ZSelectMenuCategories v-model:categories="new_product.categories" />
 					</div>
 
 					<div>
 						<h3 class="text-lg font-medium mb-4">Tags</h3>
-						<ZSelectMenuTags v-model:tags="newProduct.tags" />
+						<ZSelectMenuTags v-model:tags="new_product.tags" />
 					</div>
 
 					<div>
 						<h3 class="text-lg font-medium mb-4">Brands</h3>
-						<ZSelectMenuBrands v-model:brands="newProduct.brands" />
+						<ZSelectMenuBrands v-model:brands="new_product.brands" />
 					</div>
 				</div>
 
 				<!-- <div>
 					<h3 class="text-lg font-medium mb-4">Product Status</h3>
-					<ZSelectMenuProductStatus v-model:status="newProduct.status" />
+					<ZSelectMenuProductStatus v-model:status="new_product.status" />
 				</div> -->
 			</div>
 
@@ -142,7 +142,7 @@
 			<!-- Step 4: Product Variants (Optional) -->
 			<div v-if="currentStep === 4" class="space-y-6">
 				<ZInputProductAdditionalInfo
-					:product="newProduct"
+					:product="new_product"
 					:card-ui="borderlessCardUi"
 					hide-header
 					@update:options="updateProductOptions"
@@ -179,7 +179,7 @@ import { ZModalLoading } from '#components';
 import type { BrandInput } from '~/utils/types/brand';
 
 const productStore = useProductStore();
-const { newProduct, adding } = storeToRefs(productStore);
+const { new_product, adding } = storeToRefs(productStore);
 
 const currentStep = ref(1);
 const saving = ref(false);
@@ -221,13 +221,13 @@ const steps = [
 // Computed properties for pricing
 const currency_code = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.currency_code ?? 'MYR';
+		return new_product.value.price_types?.[0]?.currency_code ?? 'MYR';
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].currency_code = value;
+		if (new_product.value.price_types && new_product.value.price_types.length > 0) {
+			new_product.value.price_types[0].currency_code = value;
 		} else {
-			newProduct.value.price_types = [
+			new_product.value.price_types = [
 				{ id: undefined, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: value },
 			];
 		}
@@ -236,13 +236,13 @@ const currency_code = computed({
 
 const orig_sell_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.orig_sell_price ?? undefined;
+		return new_product.value.price_types?.[0]?.orig_sell_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].orig_sell_price = value;
+		if (new_product.value.price_types && new_product.value.price_types.length > 0) {
+			new_product.value.price_types[0].orig_sell_price = value;
 		} else {
-			newProduct.value.price_types = [
+			new_product.value.price_types = [
 				{ id: undefined, orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -251,13 +251,13 @@ const orig_sell_price = computed({
 
 const cost_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.cost_price ?? undefined;
+		return new_product.value.price_types?.[0]?.cost_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].cost_price = value;
+		if (new_product.value.price_types && new_product.value.price_types.length > 0) {
+			new_product.value.price_types[0].cost_price = value;
 		} else {
-			newProduct.value.price_types = [
+			new_product.value.price_types = [
 				{ id: undefined, cost_price: value, orig_sell_price: orig_sell_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -266,13 +266,13 @@ const cost_price = computed({
 
 const sale_price = computed({
 	get() {
-		return newProduct.value.price_types?.[0]?.sale_price ?? undefined;
+		return new_product.value.price_types?.[0]?.sale_price ?? undefined;
 	},
 	set(value) {
-		if (newProduct.value.price_types && newProduct.value.price_types.length > 0) {
-			newProduct.value.price_types[0].sale_price = value;
+		if (new_product.value.price_types && new_product.value.price_types.length > 0) {
+			new_product.value.price_types[0].sale_price = value;
 		} else {
-			newProduct.value.price_types = [
+			new_product.value.price_types = [
 				{ id: undefined, sale_price: value, orig_sell_price: orig_sell_price.value, cost_price: cost_price.value, currency_code: currency_code.value },
 			];
 		}
@@ -303,28 +303,28 @@ const previousStep = () => {
 };
 
 const updateImages = (files: File[]) => {
-	newProduct.value.images = files;
+	new_product.value.images = files;
 };
 
 const updateThumbnail = (files: File[]) => {
-	newProduct.value.thumbnail = files[0];
+	new_product.value.thumbnail = files[0];
 };
 
 const updateProductOptions = (value: ProdOptionInput[]) => {
-	newProduct.value.options = value;
+	new_product.value.options = value;
 };
 
 const updateProductVariants = (value: ProdVariantInput[]) => {
-	newProduct.value.variants = value;
+	new_product.value.variants = value;
 };
 
 const updateProductMetadata = (value: any) => {
-	newProduct.value.metadata = value;
+	new_product.value.metadata = value;
 };
 const saveDraft = async () => {
 	saving.value = true;
 	try {
-		newProduct.value.status = ProductStatus.DRAFT;
+		new_product.value.status = ProductStatus.DRAFT;
 		// Could implement a separate draft save API call here
 		await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 	} finally {
@@ -334,12 +334,12 @@ const saveDraft = async () => {
 
 const createProduct = async () => {
 	// Clear variants if not needed
-	newProduct.value.options = [];
-	newProduct.value.variants = [];
+	new_product.value.options = [];
+	new_product.value.variants = [];
 
 	// Process the data same as original form
 	const prodPrice: PriceInput[] = [];
-	newProduct.value.price_types?.forEach((price) => {
+	new_product.value.price_types?.forEach((price) => {
 		prodPrice.push({
 			id: undefined,
 			orig_sell_price: price.orig_sell_price,
@@ -350,21 +350,21 @@ const createProduct = async () => {
 	});
 
 	const prodCategories: CategoryInput[] = [];
-	newProduct.value.categories?.forEach((category) => {
+	new_product.value.categories?.forEach((category) => {
 		prodCategories.push({
 			code: category.code!,
 		});
 	});
 
 	const prodTags: TagInput[] = [];
-	newProduct.value.tags?.forEach((tag) => {
+	new_product.value.tags?.forEach((tag) => {
 		prodTags.push({
 			id: tag.id!,
 		});
 	});
 
 	const prodOptions: ProdOptionInput[] = [];
-	newProduct.value.options?.forEach((option) => {
+	new_product.value.options?.forEach((option) => {
 		prodOptions.push({
 			id: option.id!,
 			name: option.name!,
@@ -378,7 +378,7 @@ const createProduct = async () => {
 	});
 
 	const prodVariants: ProdVariantInput[] = [];
-	newProduct.value.variants?.forEach((variant) => {
+	new_product.value.variants?.forEach((variant) => {
 		prodVariants.push({
 			variant_code: variant.variant_code!,
 			product_code: variant.product_code!,
@@ -403,22 +403,22 @@ const createProduct = async () => {
 	});
 
 	const brands: BrandInput[] = [];
-	newProduct.value.brands?.forEach((brand) => {
+	new_product.value.brands?.forEach((brand) => {
 		brands.push({
 			code: brand.code!,
 		});
 	});
 
-	newProduct.value.is_discountable = true;
-	newProduct.value.is_giftcard = false;
-	newProduct.value.price_types = prodPrice;
-	newProduct.value.categories = prodCategories;
-	newProduct.value.tags = prodTags;
-	newProduct.value.brands = brands;
-	newProduct.value.status = newProduct.value.status || ProductStatus.DRAFT;
-	newProduct.value.options = prodOptions;
-	newProduct.value.variants = prodVariants;
-	newProduct.value.metadata = newProduct.value.metadata ? JSON.parse(JSON.stringify(newProduct.value.metadata)) : undefined;
+	new_product.value.is_discountable = true;
+	new_product.value.is_giftcard = false;
+	new_product.value.price_types = prodPrice;
+	new_product.value.categories = prodCategories;
+	new_product.value.tags = prodTags;
+	new_product.value.brands = brands;
+	new_product.value.status = new_product.value.status || ProductStatus.DRAFT;
+	new_product.value.options = prodOptions;
+	new_product.value.variants = prodVariants;
+	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
 	const modal = useModal();
 	modal.open(ZModalLoading, {
