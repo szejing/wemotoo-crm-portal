@@ -4,6 +4,7 @@ import type { TaxCondition } from './tax-condition';
 export type TaxRuleDetail = {
 	id: number;
 	description: string;
-	tax: Tax;
-	tax_condition: TaxCondition;
+	tax: Tax | undefined;
+	tax_code: string | undefined;
+	tax_condition: TaxCondition | undefined;
 };

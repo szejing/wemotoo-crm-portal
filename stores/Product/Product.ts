@@ -59,20 +59,20 @@ export const useProductStore = defineStore('productStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
-		newProduct: structuredClone(initialEmptyProduct),
+		new_product: structuredClone(initialEmptyProduct),
 		products: [] as Product[],
 		current_product: undefined as Product | undefined,
-		pageSize: options_page_size[0],
+		page_size: options_page_size[0],
 		errors: [] as string[],
 	}),
 
 	actions: {
 		resetNewProduct() {
-			this.newProduct = structuredClone(initialEmptyProduct);
+			this.new_product = structuredClone(initialEmptyProduct);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getProduct(code: string): Promise<Product | undefined> {
@@ -115,8 +115,8 @@ export const useProductStore = defineStore('productStore', {
 
 			try {
 				let images: ImageReq[] = [];
-				if (this.newProduct.images) {
-					const resp = await $api.image.uploadMultiple(this.newProduct.images, `${dir.products}/${this.newProduct.code}`);
+				if (this.new_product.images) {
+					const resp = await $api.image.uploadMultiple(this.new_product.images, `${dir.products}/${this.new_product.code}`);
 					images = resp.images.map((image) => ({
 						id: image.id,
 						url: image.url,
@@ -124,8 +124,8 @@ export const useProductStore = defineStore('productStore', {
 				}
 
 				let thumbnail: ImageReq | undefined;
-				if (this.newProduct.thumbnail) {
-					const resp = await $api.image.upload(this.newProduct.thumbnail, `${dir.products}/${this.newProduct.code}`);
+				if (this.new_product.thumbnail) {
+					const resp = await $api.image.upload(this.new_product.thumbnail, `${dir.products}/${this.new_product.code}`);
 					thumbnail = {
 						id: resp.image.id,
 						url: resp.image.url,
@@ -133,13 +133,13 @@ export const useProductStore = defineStore('productStore', {
 				}
 
 				const data = await $api.product.create({
-					...this.newProduct,
+					...this.new_product,
 					images: images,
 					thumbnail: thumbnail,
 				});
 
 				if (data.products) {
-					successNotification(`${this.newProduct.code} - Product Created !`);
+					successNotification(`${this.new_product.code} - Product Created !`);
 					this.products = data.products;
 				}
 

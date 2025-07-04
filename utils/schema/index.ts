@@ -29,7 +29,7 @@ import { CreateTaxValidation } from './Tax/Create/TaxValidation';
 import { UpdateTaxValidation } from './Tax/Update/TaxValidation';
 import { CreateTaxGroupValidation } from './TaxGroup/Create/TaxGroupValidation';
 import { UpdateTaxGroupValidation } from './TaxGroup/Update/TaxGroupValidation';
-import { CreateTaxRuleValidation } from './TaxRule/Create/TaxRuleValidation';
+import { CreateTaxRuleValidation, TaxFilterValidation, TaxConditionValidation, TaxDetailValidation } from './TaxRule/Create/TaxRuleValidation';
 import { UpdateTaxRuleValidation } from './TaxRule/Update/TaxRuleValidation';
 
 export {
@@ -66,4 +66,7 @@ export {
 	UpdateTaxGroupValidation,
 	CreateTaxRuleValidation,
 	UpdateTaxRuleValidation,
+	TaxFilterValidation,
+	TaxConditionValidation,
+	TaxDetailValidation,
 };
