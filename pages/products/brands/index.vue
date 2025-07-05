@@ -47,7 +47,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="brands.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="brands.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="brands.length" />
 						</div>
 					</div>
 				</UCard>
@@ -82,10 +82,10 @@ onMounted(async () => {
 	await brandStore.getBrands();
 });
 
-const { loading, brands, pageSize } = storeToRefs(brandStore);
+const { loading, brands, page_size } = storeToRefs(brandStore);
 
 const rows = computed(() => {
-	return brands.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return brands.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 watch(modal.isOpen, (value) => {

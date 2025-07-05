@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 		const result = await $fetch(`${Routes.Currencies.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
-			query: query,
+			query,
 			headers: generateHeaders(event),
 		});
 		return result;

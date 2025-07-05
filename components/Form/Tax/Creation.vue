@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<UForm :schema="CreateTaxValidation" :state="newTax" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateTaxValidation" :state="new_tax" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
 			<ZInputTaxGeneralInfo
-				v-model:code="newTax.code"
-				v-model:description="newTax.description"
-				v-model:is-inclusive="newTax.is_inclusive"
-				v-model:is-active="newTax.is_active"
+				v-model:code="new_tax.code"
+				v-model:description="new_tax.description"
+				v-model:is-inclusive="new_tax.is_inclusive"
+				v-model:is-active="new_tax.is_active"
 			/>
 
 			<!-- *********************** General Info *********************** -->
@@ -25,7 +25,7 @@ import { CreateTaxValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateTaxValidation>;
 
 const taxStore = useTaxStore();
-const { adding, newTax } = storeToRefs(taxStore);
+const { adding, new_tax } = storeToRefs(taxStore);
 
 onMounted(() => {
 	taxStore.resetNewTax();
@@ -34,7 +34,7 @@ onMounted(() => {
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, is_inclusive, is_active } = event.data;
 
-	newTax.value = {
+	new_tax.value = {
 		code,
 		description,
 		is_inclusive,

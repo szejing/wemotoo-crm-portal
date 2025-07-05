@@ -44,7 +44,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="taxes.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="taxes.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="taxes.length" />
 						</div>
 					</div>
 				</UCard>
@@ -85,10 +85,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, taxes, pageSize } = storeToRefs(taxStore);
+const { loading, taxes, page_size } = storeToRefs(taxStore);
 
 const rows = computed(() => {
-	return taxes.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return taxes.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const deleteTax = async (code: string) => {

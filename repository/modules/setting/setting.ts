@@ -12,7 +12,7 @@ type SettingsResp = {
 class SettingModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Settings;
 
-	async fetchMany(): Promise<SettingsResp> {
+	async getMany(): Promise<SettingsResp> {
 		return await this.call<SettingsResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,

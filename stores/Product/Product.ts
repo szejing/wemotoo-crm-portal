@@ -1,4 +1,4 @@
-import { ProductStatus } from 'wemotoo-common';
+import { defaultSimpleProductRelations, ProductStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -63,6 +63,7 @@ export const useProductStore = defineStore('productStore', {
 		products: [] as Product[],
 		current_product: undefined as Product | undefined,
 		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 
@@ -79,7 +80,7 @@ export const useProductStore = defineStore('productStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.product.fetchSingle(code);
+				const data = await $api.product.getSingle(code);
 
 				if (data.product) {
 					return data.product;
@@ -94,10 +95,14 @@ export const useProductStore = defineStore('productStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.product.fetchMany();
+				const { data } = await $api.product.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+					$expand: defaultSimpleProductRelations.join(','),
+				});
 
-				if (data.products) {
-					this.products = data.products;
+				if (data) {
+					this.products = data;
 				}
 			} catch (err: any) {
 				console.error(err);

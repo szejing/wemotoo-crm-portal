@@ -39,7 +39,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="outlets.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="outlets.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="outlets.length" />
 						</div>
 					</div>
 				</UCard>
@@ -75,10 +75,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, outlets, pageSize } = storeToRefs(outletStore);
+const { loading, outlets, page_size } = storeToRefs(outletStore);
 
 const rows = computed(() => {
-	return outlets.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return outlets.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const deleteOutlet = async (code: string) => {

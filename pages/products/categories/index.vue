@@ -47,7 +47,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="categories.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="categories.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="categories.length" />
 						</div>
 					</div>
 				</UCard>
@@ -79,10 +79,10 @@ const page = ref(1);
 const categoryStore = useProductCategoryStore();
 await categoryStore.getCategories();
 
-const { loading, categories, pageSize } = storeToRefs(categoryStore);
+const { loading, categories, page_size } = storeToRefs(categoryStore);
 
 const rows = computed(() => {
-	return categories.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return categories.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 watch(modal.isOpen, (value) => {

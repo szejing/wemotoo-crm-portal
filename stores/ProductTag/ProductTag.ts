@@ -14,27 +14,31 @@ export const useProductTagStore = defineStore('productTagStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tags: [] as Tag[],
-		newTag: structuredClone(initialEmptyTag),
-		pageSize: options_page_size[0],
+		new_tag: structuredClone(initialEmptyTag),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewTag() {
-			this.newTag = structuredClone(initialEmptyTag);
+			this.new_tag = structuredClone(initialEmptyTag);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getTags() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.tag.fetchMany();
+				const { data } = await $api.tag.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.tags) {
-					this.tags = data.tags;
+				if (data) {
+					this.tags = data;
 				}
 			} catch (err: any) {
 				console.error(err);

@@ -4,19 +4,22 @@ import type { CreateTaxRuleReq } from './models/request/create-tax-rule.req';
 import type { TaxRuleReq } from './models/request/tax-rule.req';
 import type { UpdateTaxRuleReq } from './models/request/update-tax-rule.req';
 import type { TaxRuleResp } from './models/response/tax-rule.resp';
-import type { TaxRulesResp } from './models/response/tax-rules.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { TaxRule } from '~/utils/types/tax-rule';
 
 class TaxRuleModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.TaxRules;
 
-	async fetchMany(): Promise<TaxRulesResp> {
-		return await this.call<TaxRulesResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<TaxRule>> {
+		return await this.call<BaseODataResp<TaxRule>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string): Promise<TaxRuleResp> {
+	async getSingle(code: string): Promise<TaxRuleResp> {
 		return await this.call<TaxRuleResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

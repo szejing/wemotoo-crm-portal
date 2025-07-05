@@ -15,7 +15,7 @@ export const useSettingStore = defineStore('settingStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.setting.fetchMany();
+				const data = await $api.setting.getMany();
 				if (data.segments) {
 					this.segments = data.segments;
 				}

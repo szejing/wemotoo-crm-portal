@@ -6,7 +6,7 @@
 					<h2 class="text-xl font-semibold">Basic Info</h2>
 					<p class="text-sm text-gray-500 mt-1">Product basic information</p>
 				</div>
-				<UTabs v-if="productTypes.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
+				<UTabs v-if="prod_types.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
 					<template #default="{ item }">
 						<span>{{ item.label.toUpperCase() }}</span>
 					</template>
@@ -61,16 +61,16 @@ const ui_tabs = {
 
 const settingsStore = useSettingStore();
 const productTypeStore = useProductTypeStore();
-const { productTypes } = storeToRefs(productTypeStore);
+const { prod_types } = storeToRefs(productTypeStore);
 
 const hideLongDesc = computed(() => {
 	return settingsStore.getSetting(GROUP_CODE.PRODUCT, PRODUCT.HIDE_LONG_DESC)?.getBoolean() ?? true;
 });
 
 const items = computed(() => {
-	if (productTypes.value.length > 0) {
+	if (prod_types.value.length > 0) {
 		const list = [];
-		for (const type of productTypes.value) {
+		for (const type of prod_types.value) {
 			list.push({ label: type.value, slot: type.value });
 		}
 		return list;

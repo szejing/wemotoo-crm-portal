@@ -3,20 +3,23 @@ import MerchantRoutes from '~/repository/routes.client';
 import type { CreateProductCategoryReq } from './models/request/create-product-category.req';
 import type { ProductCategoryReq } from './models/request/product-category.req';
 import type { UpdateProductCategoryReq } from './models/request/update-product-category.req';
-import type { ProductCategoriesResp } from './models/response/product-categories.resp';
 import type { ProductCategoryResp } from './models/response/product-category.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Category } from '~/utils/types/category';
 
 class ProductCategoryModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.ProductCategories;
 
-	async fetchMany(): Promise<ProductCategoriesResp> {
-		return this.call<ProductCategoriesResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Category>> {
+		return this.call<BaseODataResp<Category>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

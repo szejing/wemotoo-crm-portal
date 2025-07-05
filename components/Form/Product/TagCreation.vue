@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<UForm :schema="CreateTagValidation" :state="newTag" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateTagValidation" :state="new_tag" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputProductTagGeneralInfo v-model:value="newTag.value" />
+			<ZInputProductTagGeneralInfo v-model:value="new_tag.value" />
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
 				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
@@ -19,7 +19,7 @@ import { CreateTagValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateTagValidation>;
 
 const tagStore = useProductTagStore();
-const { adding, newTag } = storeToRefs(tagStore);
+const { adding, new_tag } = storeToRefs(tagStore);
 
 onMounted(() => {
 	tagStore.resetNewTag();

@@ -133,7 +133,7 @@ onMounted(async () => {
 	updateColumns(); // Initial check
 	window.addEventListener('resize', updateColumns);
 
-	const months = calendarColumns.value > 2 ? [today.getMonth(), today.getMonth() + 1] : today.getMonth();
+	const months = calendarColumns.value > 2 ? [today.getMonth() + 1, today.getMonth() + 2] : today.getMonth() + 1;
 
 	await appointmentStore.getAppointments(AppointmentStatus.CONFIRMED, months);
 

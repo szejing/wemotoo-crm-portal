@@ -30,17 +30,18 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		categories: [] as Category[],
-		newCategory: structuredClone(initialEmptyCategory),
-		pageSize: options_page_size[0],
+		new_category: structuredClone(initialEmptyCategory),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewCategory() {
-			this.newCategory = structuredClone(initialEmptyCategory);
+			this.new_category = structuredClone(initialEmptyCategory);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getCategories() {
@@ -48,14 +49,14 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				await $api.category
-					.fetchMany()
-					.then((data) => {
-						this.categories = data.categories;
-					})
-					.catch((error) => {
-						console.error(error);
-					});
+				const { data } = await $api.category.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
+
+				if (data) {
+					this.categories = data;
+				}
 			} catch (err: any) {
 				console.error(err);
 			} finally {
@@ -70,8 +71,8 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 
 			try {
 				let images: ImageReq[] = [];
-				if (this.newCategory.images) {
-					const resp = await $api.image.uploadMultiple(this.newCategory.images, `${dir.categories}/${this.newCategory.code}`);
+				if (this.new_category.images) {
+					const resp = await $api.image.uploadMultiple(this.new_category.images, `${dir.categories}/${this.new_category.code}`);
 					images = resp.images.map((image) => ({
 						id: image.id,
 						url: image.url,
@@ -79,8 +80,8 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				}
 
 				let thumbnail: ImageReq | undefined;
-				if (this.newCategory.thumbnail) {
-					const resp = await $api.image.upload(this.newCategory.thumbnail, `${dir.categories}/${this.newCategory.code}`);
+				if (this.new_category.thumbnail) {
+					const resp = await $api.image.upload(this.new_category.thumbnail, `${dir.categories}/${this.new_category.code}`);
 					thumbnail = {
 						id: resp.image.id,
 						url: resp.image.url,
@@ -88,13 +89,13 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				}
 
 				const data = await $api.category.create({
-					code: this.newCategory.code,
-					description: this.newCategory.description,
-					is_internal: this.newCategory.is_internal,
-					is_active: this.newCategory.is_active,
+					code: this.new_category.code,
+					description: this.new_category.description,
+					is_internal: this.new_category.is_internal,
+					is_active: this.new_category.is_active,
 					images: images,
 					thumbnail: thumbnail,
-					parent_category_code: this.newCategory.parent_category_code,
+					parent_category_code: this.new_category.parent_category_code,
 				});
 
 				if (data.category) {

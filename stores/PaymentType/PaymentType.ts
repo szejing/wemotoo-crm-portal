@@ -1,28 +1,31 @@
 import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
-import type { GetPaymentTypeGroupsReq } from '~/repository/modules/payment-type-group/models/request/get-payment-type-group.req';
 
 export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 	state: () => ({
 		paymentTypeGroups: [] as PaymentTypeGroup[],
-		pageSize: options_page_size[0],
+		page_size: options_page_size[0],
+		current_page: 1,
 		loading: false as boolean,
 	}),
 
 	actions: {
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
-		async getPaymentTypeGroups(request?: GetPaymentTypeGroupsReq) {
+		async getPaymentTypeGroups() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.paymentTypeGroup.fetchMany(request);
+				const { data } = await $api.paymentTypeGroup.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.groups) {
-					this.paymentTypeGroups = data.groups;
+				if (data) {
+					this.paymentTypeGroups = data;
 				}
 			} catch (err: any) {
 				console.error(err);

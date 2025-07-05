@@ -6,7 +6,7 @@
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
 					<!-- <div class="flex gap-4">
 						<UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />
@@ -46,7 +46,7 @@
 				</UTable>
 
 				<div v-if="paymentMethods.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="paymentMethods.length" />
+					<UPagination v-model="page" :page-count="page_size" :total="paymentMethods.length" />
 				</div>
 			</UCard>
 		</div>
@@ -73,10 +73,10 @@ const links = [
 const isUpdating = ref(false);
 const page = ref(1);
 const paymentMethodStore = usePaymentMethodStore();
-const { paymentMethods, pageSize } = storeToRefs(paymentMethodStore);
+const { paymentMethods, page_size } = storeToRefs(paymentMethodStore);
 
 const rows = computed(() => {
-	return paymentMethods.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return paymentMethods.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const updateStatus = async (code: string, is_active: boolean) => {

@@ -14,28 +14,34 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
-		productTypes: [] as ProductType[],
-		newProductType: structuredClone(initialEmptyProductType),
-		pageSize: options_page_size[0],
+		prod_types: [] as ProductType[],
+		new_prod_type: structuredClone(initialEmptyProductType),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewProductType() {
-			this.newProductType = structuredClone(initialEmptyProductType);
+			this.new_prod_type = structuredClone(initialEmptyProductType);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getProductTypes() {
 			this.loading = true;
-			const { $api } = useNuxtApp();
-			try {
-				const data = await $api.productType.fetchMany();
 
-				if (data.productTypes) {
-					this.productTypes = data.productTypes;
+			const { $api } = useNuxtApp();
+
+			try {
+				const { data } = await $api.productType.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
+
+				if (data) {
+					this.prod_types = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -56,7 +62,7 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 
 				if (data.productType) {
 					successNotification(`${value} - Product Type Created !`);
-					this.productTypes.push(data.productType);
+					this.prod_types.push(data.productType);
 				}
 				this.resetNewProductType();
 			} catch (err: any) {
@@ -101,8 +107,8 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 				if (data.productType) {
 					successNotification(`Product Type Deleted !`);
 
-					const index = this.productTypes.findIndex((t) => t.id === data.productType.id);
-					this.productTypes.splice(index, 1);
+					const index = this.prod_types.findIndex((t) => t.id === data.productType.id);
+					this.prod_types.splice(index, 1);
 				}
 			} catch (err: any) {
 				console.error(err);

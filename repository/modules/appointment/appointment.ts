@@ -3,21 +3,22 @@ import MerchantRoutes from '../../routes.client';
 import type { CreateAppointmentReq } from './models/request/create-appointment.req';
 import type { UpdateAppointmentReq } from './models/request/update-appointment.req';
 import type { AppointmentResp } from './models/response/appointment.resp';
-import type { AppointmentsResp } from './models/response/appointments.resp';
-import type { GetAppointmentsReq } from './models/request/get-appointments.req';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Appointment } from '~/utils/types/appointment';
 
 class AppointmentModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Appointments;
 
-	async fetchMany(query: GetAppointmentsReq): Promise<AppointmentsResp> {
-		return await this.call<AppointmentsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Appointment>> {
+		return await this.call<BaseODataResp<Appointment>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 			query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

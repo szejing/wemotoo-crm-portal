@@ -4,19 +4,22 @@ import type { CreateProductOptionReq } from './models/request/create-product-opt
 import type { ProductOptionReq } from './models/request/product-option.req';
 import type { UpdateProductOptionReq } from './models/request/update-product-option.req';
 import type { ProductOptionResp } from './models/response/product-option.resp';
-import type { ProductOptionsResp } from './models/response/product-options.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { ProductOption } from '~/utils/types/product-option';
 
 class ProductOptionModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.ProdOptions;
 
-	async fetchMany(): Promise<ProductOptionsResp> {
-		return await this.call<ProductOptionsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<ProductOption>> {
+		return await this.call<BaseODataResp<ProductOption>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(id: number) {
+	async getSingle(id: number) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(id)}`,

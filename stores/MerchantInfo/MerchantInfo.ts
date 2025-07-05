@@ -28,10 +28,13 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.currency.getCurrencies();
+				const { data } = await $api.currency.getCurrencies({
+					$top: 1,
+					$skip: 0,
+				});
 
-				if (data.currencies) {
-					this.currencies = data.currencies;
+				if (data) {
+					this.currencies = data;
 				}
 			} catch (err: any) {
 				console.error(err);
