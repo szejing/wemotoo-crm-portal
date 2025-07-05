@@ -4,19 +4,22 @@ import type { CreateTaxGroupReq } from './models/request/create-tax-group.req';
 import type { TaxGroupReq } from './models/request/tax-group.req';
 import type { UpdateTaxGroupReq } from './models/request/update-tax-group.req';
 import type { TaxGroupResp } from './models/response/tax-group.resp';
-import type { TaxGroupsResp } from './models/response/tax-groups.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { TaxGroup } from '~/utils/types/tax-group';
 
 class TaxGroupModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.TaxGroups;
 
-	async fetchMany(): Promise<TaxGroupsResp> {
-		return await this.call<TaxGroupsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<TaxGroup>> {
+		return await this.call<BaseODataResp<TaxGroup>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

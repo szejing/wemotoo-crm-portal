@@ -1,18 +1,18 @@
 <template>
 	<div>
-		<UForm :schema="CreateOutletValidation" :state="newOutlet" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateOutletValidation" :state="new_outlet" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputOutletGeneralInfo v-model:code="newOutlet.code" v-model:description="newOutlet.description" />
+			<ZInputOutletGeneralInfo v-model:code="new_outlet.code" v-model:description="new_outlet.description" />
 			<ZInputAddress
-				v-model:address1="newOutlet.address1"
-				v-model:address2="newOutlet.address2"
-				v-model:address3="newOutlet.address3"
-				v-model:city="newOutlet.city"
-				v-model:postal-code="newOutlet.postal_code"
-				v-model:state-name="newOutlet.state"
-				v-model:country-code="newOutlet.country_code"
-				v-model:longitude="newOutlet.longitude"
-				v-model:latitude="newOutlet.latitude"
+				v-model:address1="new_outlet.address1"
+				v-model:address2="new_outlet.address2"
+				v-model:address3="new_outlet.address3"
+				v-model:city="new_outlet.city"
+				v-model:postal-code="new_outlet.postal_code"
+				v-model:state-name="new_outlet.state"
+				v-model:country-code="new_outlet.country_code"
+				v-model:longitude="new_outlet.longitude"
+				v-model:latitude="new_outlet.latitude"
 				required-lat-lng
 			/>
 			<!-- *********************** General Info *********************** -->
@@ -31,7 +31,7 @@ import { CreateOutletValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateOutletValidation>;
 
 const outletStore = useOutletStore();
-const { adding, newOutlet } = storeToRefs(outletStore);
+const { adding, new_outlet } = storeToRefs(outletStore);
 
 onMounted(() => {
 	outletStore.resetNewOutlet();
@@ -40,7 +40,7 @@ onMounted(() => {
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude } = event.data;
 
-	newOutlet.value = {
+	new_outlet.value = {
 		code,
 		description,
 		address1,

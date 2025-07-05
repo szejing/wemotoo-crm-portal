@@ -7,21 +7,25 @@ export const useCustomerStore = defineStore('customerStore', {
 	state: () => ({
 		loading: false as boolean,
 		customers: [] as Customer[],
-		pageSize: options_page_size[0],
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 		async getCustomers() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.customer.getMany();
+				const { data } = await $api.customer.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.customers) {
-					this.customers = data.customers;
+				if (data) {
+					this.customers = data;
 				}
 			} catch (err: any) {
 				console.error(err);

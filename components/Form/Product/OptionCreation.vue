@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<UForm :schema="CreateProductOptionValidation" :state="newProductOption" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateProductOptionValidation" :state="new_prod_option" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputOptionGeneralInfo v-model:name="newProductOption.name" v-model:values="newProductOption.values" />
+			<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
 			<!-- *********************** General Info *********************** -->
 
 			<div class="flex-center text-center mt-3">
@@ -20,7 +20,7 @@ import { CreateProductOptionValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateProductOptionValidation>;
 
 const optionStore = useProductOptionStore();
-const { adding, newProductOption } = storeToRefs(optionStore);
+const { adding, new_prod_option } = storeToRefs(optionStore);
 
 onMounted(() => {
 	optionStore.resetNewProductOption();

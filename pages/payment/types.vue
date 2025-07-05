@@ -6,7 +6,7 @@
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
 				</div>
 
 				<!-- Table  -->
@@ -15,7 +15,7 @@
 				</UTable>
 
 				<div v-if="paymentTypeGroups.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="paymentTypeGroups.length" />
+					<UPagination v-model="page" :page-count="page_size" :total="paymentTypeGroups.length" />
 				</div>
 			</UCard>
 		</div>
@@ -41,10 +41,10 @@ const links = [
 
 const page = ref(1);
 const paymentTypeStore = usePaymentTypeStore();
-const { paymentTypeGroups, pageSize } = storeToRefs(paymentTypeStore);
+const { paymentTypeGroups, page_size } = storeToRefs(paymentTypeStore);
 
 const rows = computed(() => {
-	return paymentTypeGroups.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return paymentTypeGroups.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 </script>
 

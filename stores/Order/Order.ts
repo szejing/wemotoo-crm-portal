@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { FilterType, getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -14,6 +14,7 @@ type OrderFilter = {
 	start_date: Date;
 	end_date: Date | undefined;
 	page_size: number;
+	current_page: number;
 	currency_code: string;
 };
 
@@ -24,6 +25,7 @@ const initialEmptyOrderFilter: OrderFilter = {
 	start_date: new Date(),
 	end_date: undefined,
 	page_size: options_page_size[0],
+	current_page: 1,
 	currency_code: 'MYR',
 };
 
@@ -40,18 +42,24 @@ export const useOrderStore = defineStore('orderStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.order.getOrders({
-					limit: this.filter.page_size,
-					offset: 0,
-					filter_type: this.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
-					start_date: getFormattedDate(this.filter.start_date),
-					end_date: this.filter.end_date ? getFormattedDate(this.filter.end_date) : undefined,
-					status: this.filter.status,
-					q: isEmptyOrNull(this.filter.query) ? undefined : this.filter.query,
+				let filter = `status eq '${this.filter.status}'`;
+				if (this.filter.end_date) {
+					filter += ` and (biz_date ge '${getFormattedDate(this.filter.start_date)}' and biz_date le '${
+						this.filter.end_date ? getFormattedDate(this.filter.end_date) : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date eq '${getFormattedDate(this.filter.start_date)}'`;
+				}
+
+				const { data } = await $api.order.getOrders({
+					$top: this.filter.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$filter: filter,
+					$search: isEmptyOrNull(this.filter.query) ? undefined : this.filter.query,
 				});
 
 				if (data) {
-					this.orders = data.orders;
+					this.orders = data;
 				}
 			} catch (err: any) {
 				console.error(err);

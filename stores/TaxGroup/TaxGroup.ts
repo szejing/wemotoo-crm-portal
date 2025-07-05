@@ -15,27 +15,31 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tax_groups: [] as TaxGroup[],
-		newTaxGroup: structuredClone(initialEmptyTaxGroup),
-		pageSize: options_page_size[0],
+		new_tax_group: structuredClone(initialEmptyTaxGroup),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewTaxGroup() {
-			this.newTaxGroup = structuredClone(initialEmptyTaxGroup);
+			this.new_tax_group = structuredClone(initialEmptyTaxGroup);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getTaxGroups() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.taxGroup.fetchMany();
+				const { data } = await $api.taxGroup.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.tax_groups) {
-					this.tax_groups = data.tax_groups;
+				if (data) {
+					this.tax_groups = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -49,7 +53,7 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.taxGroup.fetchSingle(code);
+				const data = await $api.taxGroup.getSingle(code);
 
 				return data.tax_group;
 			} catch (err: any) {
@@ -67,10 +71,10 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.taxGroup.create(this.newTaxGroup);
+				const data = await $api.taxGroup.create(this.new_tax_group);
 
 				if (data.tax_group) {
-					successNotification(`${this.newTaxGroup.code} - Tax Group Created !`);
+					successNotification(`${this.new_tax_group.code} - Tax Group Created !`);
 					this.getTaxGroups();
 				}
 				this.resetNewTaxGroup();

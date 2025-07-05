@@ -4,19 +4,23 @@ import type { CreateProductReq } from './models/request/create-product.req';
 import type { ProductReq } from './models/request/product.req';
 import type { UpdateProductReq } from './models/request/update-product.req';
 import type { CreateProductResp } from './models/response/create-product.resp';
-import type { ProductsResp, ProductResp } from './models/response/product.resp';
+import type { ProductResp } from './models/response/product.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Product } from '~/utils/types/product';
 
 class ProductModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Products;
 
-	async fetchMany(): Promise<ProductsResp> {
-		return await this.call<ProductsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Product>> {
+		return await this.call<BaseODataResp<Product>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string): Promise<ProductResp> {
+	async getSingle(code: string): Promise<ProductResp> {
 		return await this.call<ProductResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

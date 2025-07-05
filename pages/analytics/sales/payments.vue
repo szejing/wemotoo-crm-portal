@@ -63,7 +63,7 @@
 				</UTable>
 
 				<div v-if="data.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="data.length" />
+					<UPagination v-model="page" :page-count="page_size" :total="data.length" />
 				</div>
 			</UCard>
 		</div>
@@ -88,7 +88,7 @@ const links = [
 ];
 
 const page = ref(1);
-const pageSize = ref(10);
+const page_size = ref(10);
 const salesSummStore = useSummSaleStore();
 const { sale_summ_payments } = storeToRefs(salesSummStore);
 
@@ -104,7 +104,7 @@ const updateColumns = (columns: { key: string; label: string }[]) => {
 };
 
 const rows = computed(() => {
-	return data.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return data.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 </script>
 

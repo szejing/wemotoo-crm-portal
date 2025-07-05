@@ -2,21 +2,24 @@ import HttpFactory from '~/repository/factory';
 import MerchantRoutes from '~/repository/routes.client';
 import type { CreateProductBrandReq } from './models/request/create-product-brand.req';
 import type { UpdateProductBrandReq } from './models/request/update-product-brand.req';
-import type { ProductBrandsResp } from './models/response/product-brands.resp';
 import type { ProductBrandResp } from './models/response/product-brand.resp';
 import type { ProductBrandReq } from './models/request/product-brand.req';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { Brand } from '~/utils/types/brand';
+import type { BaseODataResp } from '~/repository/base/base.resp';
 
 class ProductBrandModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.ProductBrands;
 
-	async fetchMany(): Promise<ProductBrandsResp> {
-		return this.call<ProductBrandsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Brand>> {
+		return this.call<BaseODataResp<Brand>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query: query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

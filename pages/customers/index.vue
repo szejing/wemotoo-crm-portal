@@ -6,7 +6,7 @@
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="pageSize" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
 					<div class="flex gap-4">
 						<UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />
@@ -38,7 +38,7 @@
 				</UTable>
 
 				<div v-if="customers.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="pageSize" :total="customers.length" />
+					<UPagination v-model="page" :page-count="page_size" :total="customers.length" />
 				</div>
 			</UCard>
 		</div>
@@ -68,10 +68,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, customers, pageSize } = storeToRefs(customerStore);
+const { loading, customers, page_size } = storeToRefs(customerStore);
 
 const rows = computed(() => {
-	return customers.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return customers.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const selectCustomer = async (customer: Customer) => {

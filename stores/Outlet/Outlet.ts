@@ -23,27 +23,31 @@ export const useOutletStore = defineStore('outletStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		outlets: [] as Outlet[],
-		newOutlet: structuredClone(initialEmptyOutlet),
-		pageSize: options_page_size[0],
+		new_outlet: structuredClone(initialEmptyOutlet),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewOutlet() {
-			this.newOutlet = structuredClone(initialEmptyOutlet);
+			this.new_outlet = structuredClone(initialEmptyOutlet);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getOutlets() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.outlet.fetchMany();
+				const { data } = await $api.outlet.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.outlets) {
-					this.outlets = data.outlets;
+				if (data) {
+					this.outlets = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -57,7 +61,7 @@ export const useOutletStore = defineStore('outletStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.outlet.fetchSingle(code);
+				const data = await $api.outlet.getSingle(code);
 
 				return data.outlet;
 			} catch (err: any) {
@@ -75,10 +79,10 @@ export const useOutletStore = defineStore('outletStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.outlet.create(this.newOutlet);
+				const data = await $api.outlet.create(this.new_outlet);
 
 				if (data.outlet) {
-					successNotification(`${this.newOutlet.code} - Outlet Created !`);
+					successNotification(`${this.new_outlet.code} - Outlet Created !`);
 					this.outlets.push(data.outlet);
 				}
 				this.resetNewOutlet();

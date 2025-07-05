@@ -16,10 +16,44 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.appointment.fetchMany({ status, months });
+				let filter = '';
 
-				if (data.appointments) {
-					this.appointments = data.appointments;
+				// Add status filter if provided
+				if (status) {
+					filter = `status eq '${status}'`;
+				}
+
+				// Handle months filter
+				if (months !== undefined) {
+					const monthsArray = Array.isArray(months) ? months : [months];
+					const currentYear = new Date().getFullYear();
+
+					// Create date range filters for each month
+					const dateFilters = monthsArray.map((month) => {
+						const startDate = new Date(currentYear, month - 1, 1); // month - 1 because months are 0-indexed
+						const endDate = new Date(currentYear, month, 0, 23, 59, 59, 999); // Last day of the month
+
+						const startDateStr = startDate.toISOString();
+						const endDateStr = endDate.toISOString();
+
+						return `(date_time ge '${startDateStr}' and date_time le '${endDateStr}')`;
+					});
+
+					const monthFilter = dateFilters.join(' or ');
+
+					if (filter) {
+						filter += ` and (${monthFilter})`;
+					} else {
+						filter = monthFilter;
+					}
+				}
+
+				const { data } = await $api.appointment.getMany({
+					$filter: filter,
+				});
+
+				if (data) {
+					this.appointments = data;
 				}
 			} catch (err: any) {
 				console.error(err);

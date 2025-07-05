@@ -4,19 +4,22 @@ import type { CreateTaxReq } from './models/request/create-tax.req';
 import type { TaxReq } from './models/request/tax.req';
 import type { UpdateTaxReq } from './models/request/update-tax.req';
 import type { TaxResp } from './models/response/tax.resp';
-import type { TaxesResp } from './models/response/taxes.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Tax } from '~/utils/types/tax';
 
 class TaxModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Taxes;
 
-	async fetchMany(): Promise<TaxesResp> {
-		return await this.call<TaxesResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Tax>> {
+		return await this.call<BaseODataResp<Tax>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

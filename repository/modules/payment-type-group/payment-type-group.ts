@@ -1,16 +1,17 @@
+import type { BaseODataReq } from '~/repository/base/base.req';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetPaymentTypeGroupsReq } from './models/request/get-payment-type-group.req';
-import type { GetPaymentTypeGroupsResp } from './models/response/get-payment-type-group.resp';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 
 class PaymentTypeGroupModule extends HttpFactory {
 	private GROUP_RESOURCE = MerchantRoutes.PaymentTypeGroups;
 
-	async fetchMany(request?: GetPaymentTypeGroupsReq): Promise<GetPaymentTypeGroupsResp> {
-		return await this.call<GetPaymentTypeGroupsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<PaymentTypeGroup>> {
+		return await this.call<BaseODataResp<PaymentTypeGroup>>({
 			method: 'GET',
 			url: `${this.GROUP_RESOURCE.Many()}`,
-			query: request,
+			query,
 		});
 	}
 }

@@ -4,19 +4,22 @@ import type { CreateOutletReq } from './models/request/create-outlet.req';
 import type { OutletReq } from './models/request/outlet.req';
 import type { UpdateOutletReq } from './models/request/update-outlet.req';
 import type { OutletResp } from './models/response/outlet.resp';
-import type { OutletsResp } from './models/response/outlets.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Outlet } from '~/utils/types/outlet';
 
 class OutletModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Outlets;
 
-	async fetchMany(): Promise<OutletsResp> {
-		return await this.call<OutletsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Outlet>> {
+		return await this.call<BaseODataResp<Outlet>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 
-	async fetchSingle(code: string) {
+	async getSingle(code: string) {
 		return await this.call<any>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,

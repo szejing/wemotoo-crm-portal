@@ -1,6 +1,8 @@
 import HttpFactory from '~/repository/factory';
-import type { GetCountriesResp } from './models/response/get-countries.resp';
 import MerchantRoutes from '~/repository/routes.client';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Country } from '~/utils/types/country';
 
 class CountryModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Countries;
@@ -9,10 +11,10 @@ class CountryModule extends HttpFactory {
 	 * Fetches all countries
 	 * @returns
 	 */
-	async getCountries(): Promise<GetCountriesResp> {
-		return await this.call<GetCountriesResp>({
+	async getCountries(query: BaseODataReq): Promise<BaseODataResp<Country>> {
+		return await this.call<BaseODataResp<Country>>({
 			method: 'GET',
-			query: { is_active: true },
+			query,
 			url: `${this.RESOURCE.Many()}`,
 		});
 	}

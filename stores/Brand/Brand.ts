@@ -17,7 +17,8 @@ export const useBrandStore = defineStore('brandStore', {
 		newBrand: structuredClone(initialEmptyBrand),
 		brands: [] as Brand[],
 		current_brand: undefined as Brand | undefined,
-		pageSize: options_page_size[0],
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -26,14 +27,14 @@ export const useBrandStore = defineStore('brandStore', {
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getBrand(code: string): Promise<Brand | undefined> {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.brand.fetchSingle(code);
+				const data = await $api.brand.getSingle(code);
 
 				if (data.brand) {
 					return data.brand;
@@ -48,10 +49,14 @@ export const useBrandStore = defineStore('brandStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.brand.fetchMany();
+				const { data } = await $api.brand.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+					$count: true,
+				});
 
-				if (data.brands) {
-					this.brands = data.brands;
+				if (data) {
+					this.brands = data;
 				}
 			} catch (err: any) {
 				console.error(err);

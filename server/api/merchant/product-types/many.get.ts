@@ -4,12 +4,13 @@ import { Routes } from '~/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		// const data = await readBody(event);
+		const query = getQuery(event);
 
 		const result = await $fetch(`${Routes.ProdTypes.Many()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			headers: generateHeaders(event, true),
+			query,
 		});
 		return result;
 	} catch (err) {

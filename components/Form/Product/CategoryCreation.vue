@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<UForm :schema="CreateCategoryValidation" :state="newCategory" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateCategoryValidation" :state="new_category" class="space-y-4" @submit="onSubmit">
 			<ZDropzone @files-selected="updateThumbnail" />
 
 			<!-- *********************** General Info *********************** -->
-			<ZInputProductCategoryGeneralInfo v-model:code="newCategory.code" v-model:description="newCategory.description" />
+			<ZInputProductCategoryGeneralInfo v-model:code="new_category.code" v-model:description="new_category.description" />
 			<!-- *********************** General Info *********************** -->
 
 			<!-- <div>
 				<h4>Parent Category</h4>
-				<ZSelectMenuCategory v-model:category="newCategory.parent_category" />
+				<ZSelectMenuCategory v-model:category="new_category.parent_category" />
 			</div> -->
 
 			<div class="flex-center text-center mt-3">
@@ -28,28 +28,28 @@ import { CreateCategoryValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateCategoryValidation>;
 
 const categoryStore = useProductCategoryStore();
-const { adding, newCategory } = storeToRefs(categoryStore);
+const { adding, new_category } = storeToRefs(categoryStore);
 
 onMounted(() => {
 	categoryStore.resetNewCategory();
 });
 
 // const parent_category_code = computed(() => {
-// 	return newCategory.value.parent_category_code;
+// 	return new_category.value.parent_category_code;
 // });
 
 const updateThumbnail = (files: File[]) => {
-	newCategory.value.thumbnail = files[0];
+	new_category.value.thumbnail = files[0];
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, is_internal, is_active, parent_category } = event.data;
 
-	newCategory.value.code = code;
-	newCategory.value.description = description;
-	newCategory.value.is_internal = is_internal;
-	newCategory.value.is_active = is_active;
-	newCategory.value.parent_category_code = parent_category?.code ?? undefined;
+	new_category.value.code = code;
+	new_category.value.description = description;
+	new_category.value.is_internal = is_internal;
+	new_category.value.is_active = is_active;
+	new_category.value.parent_category_code = parent_category?.code ?? undefined;
 
 	await categoryStore.createCategory();
 };

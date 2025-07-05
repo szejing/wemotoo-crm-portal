@@ -2,7 +2,9 @@ import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TaxDetailCreate, TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
+import { defaultTaxRulesRelations } from 'wemotoo-common';
 import type { AmountType } from 'wemotoo-common';
+import { filterRelations } from '~/utils/filter-relations';
 
 const initialEmptyTaxRule: TaxRuleCreate = {
 	code: undefined,
@@ -18,6 +20,7 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 		tax_rules: [] as TaxRule[],
 		new_tax_rule: structuredClone(initialEmptyTaxRule),
 		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -33,10 +36,14 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.taxRule.fetchMany();
+				const { data } = await $api.taxRule.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+					$expand: filterRelations(defaultTaxRulesRelations).join(','),
+				});
 
-				if (data.tax_rules) {
-					this.tax_rules = data.tax_rules;
+				if (data) {
+					this.tax_rules = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -50,7 +57,7 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.taxRule.fetchSingle(code);
+				const data = await $api.taxRule.getSingle(code);
 
 				return data.tax_rule;
 			} catch (err: any) {

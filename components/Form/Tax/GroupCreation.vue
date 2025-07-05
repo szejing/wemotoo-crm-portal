@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<UForm :schema="CreateTaxGroupValidation" :state="newTaxGroup" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="CreateTaxGroupValidation" :state="new_tax_group" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputTaxGroupGeneralInfo v-model:code="newTaxGroup.code" v-model:description="newTaxGroup.description" v-model:taxes="newTaxGroup.taxes" />
+			<ZInputTaxGroupGeneralInfo v-model:code="new_tax_group.code" v-model:description="new_tax_group.description" v-model:taxes="new_tax_group.taxes" />
 
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
@@ -20,7 +20,7 @@ import { CreateTaxGroupValidation } from '~/utils/schema';
 type Schema = z.output<typeof CreateTaxGroupValidation>;
 
 const taxGroupStore = useTaxGroupStore();
-const { adding, newTaxGroup } = storeToRefs(taxGroupStore);
+const { adding, new_tax_group } = storeToRefs(taxGroupStore);
 
 onMounted(() => {
 	taxGroupStore.resetNewTaxGroup();
@@ -29,7 +29,7 @@ onMounted(() => {
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, taxes } = event.data;
 
-	newTaxGroup.value = {
+	new_tax_group.value = {
 		code,
 		description,
 		taxes: taxes ?? [],

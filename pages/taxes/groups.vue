@@ -43,7 +43,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="tax_groups.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="tax_groups.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="tax_groups.length" />
 						</div>
 					</div>
 				</UCard>
@@ -73,7 +73,7 @@ const links = [
 const modal = useModal();
 const page = ref(1);
 const taxGroupStore = useTaxGroupStore();
-const { loading, tax_groups, pageSize } = storeToRefs(taxGroupStore);
+const { loading, tax_groups, page_size } = storeToRefs(taxGroupStore);
 
 onMounted(async () => {
 	await taxGroupStore.getTaxGroups();
@@ -86,7 +86,7 @@ watch(modal.isOpen, (value) => {
 });
 
 const rows = computed(() => {
-	return tax_groups.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return tax_groups.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const deleteTaxGroup = async (code: string) => {

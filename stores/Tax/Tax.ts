@@ -17,27 +17,31 @@ export const useTaxStore = defineStore('taxStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		taxes: [] as Tax[],
-		newTax: structuredClone(initialEmptyTax),
-		pageSize: options_page_size[0],
+		new_tax: structuredClone(initialEmptyTax),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewTax() {
-			this.newTax = structuredClone(initialEmptyTax);
+			this.new_tax = structuredClone(initialEmptyTax);
 		},
 
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 
 		async getTaxes() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.tax.fetchMany();
+				const { data } = await $api.tax.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+				});
 
-				if (data.taxes) {
-					this.taxes = data.taxes;
+				if (data) {
+					this.taxes = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -51,7 +55,7 @@ export const useTaxStore = defineStore('taxStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.tax.fetchSingle(code);
+				const data = await $api.tax.getSingle(code);
 
 				return data.tax;
 			} catch (err: any) {
@@ -69,10 +73,10 @@ export const useTaxStore = defineStore('taxStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.tax.create(this.newTax);
+				const data = await $api.tax.create(this.new_tax);
 
 				if (data.tax) {
-					successNotification(`${this.newTax.code} - Tax Created !`);
+					successNotification(`${this.new_tax.code} - Tax Created !`);
 					this.taxes.push(data.tax);
 				}
 				this.resetNewTax();

@@ -2,10 +2,11 @@ import type { ItemModel } from '~/utils/models/item.model';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { CustomerModel, PaymentModel } from '~/utils/models';
-import type { GetOrdersReq } from './models/request/get-order.req';
 import type { GetOrderResp } from './models/response/get-order.resp';
-import type { GetOrdersResp } from './models/response/get-orders.resp';
 import type { UpdateOrderStatusResp } from './models/response/update-order.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Order } from '~/utils/types/order';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;
@@ -14,8 +15,8 @@ class OrderModule extends HttpFactory {
 	 * Fetches all orders
 	 * @returns
 	 */
-	async getOrders(query: GetOrdersReq): Promise<GetOrdersResp> {
-		return await this.call<GetOrdersResp>({
+	async getOrders(query: BaseODataReq): Promise<BaseODataResp<Order>> {
+		return await this.call<BaseODataResp<Order>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 			query,

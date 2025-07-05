@@ -35,8 +35,8 @@
 						</UTable>
 
 						<!-- Pagination  -->
-						<div v-if="productOptions.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="productOptions.length" />
+						<div v-if="prod_option.length > 0" class="section-pagination">
+							<UPagination v-model="page" :page-count="page_size" :total="prod_option.length" />
 						</div>
 					</div>
 				</UCard>
@@ -69,10 +69,10 @@ const page = ref(1);
 const productOptionsStore = useProductOptionStore();
 await productOptionsStore.getOptions();
 
-const { loading, productOptions, pageSize } = storeToRefs(productOptionsStore);
+const { loading, prod_option, page_size } = storeToRefs(productOptionsStore);
 
 const rows = computed(() => {
-	return productOptions.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return prod_option.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 watch(modal.isOpen, (value) => {

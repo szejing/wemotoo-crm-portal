@@ -4,6 +4,7 @@ import type { ProductOptionCreate } from '~/utils/types/form/product-option-crea
 import type { ProductOption } from '~/utils/types/product-option';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import { defaultProductOptionRelations } from 'wemotoo-common';
 
 const initialEmptyOption: ProductOptionCreate = {
 	name: undefined,
@@ -15,29 +16,34 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
-		productOptions: [] as ProductOption[],
-		newProductOption: structuredClone(initialEmptyOption),
-		pageSize: options_page_size[0],
+		prod_option: [] as ProductOption[],
+		new_prod_option: structuredClone(initialEmptyOption),
+		page_size: options_page_size[0],
+		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
 		resetNewProductOption() {
-			this.newProductOption = structuredClone(initialEmptyOption);
+			this.new_prod_option = structuredClone(initialEmptyOption);
 		},
 		updatePageSize(size: number) {
-			this.pageSize = size;
+			this.page_size = size;
 		},
 		currentProductOptions() {
-			return JSON.parse(JSON.stringify(this.productOptions));
+			return JSON.parse(JSON.stringify(this.prod_option));
 		},
 		async getOptions() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.productOption.fetchMany();
+				const { data } = await $api.productOption.getMany({
+					$top: this.page_size,
+					$skip: (this.current_page - 1) * this.page_size,
+					$expand: filterRelations(defaultProductOptionRelations).join(','),
+				});
 
-				if (data.productOptions) {
-					this.productOptions = data.productOptions;
+				if (data) {
+					this.prod_option = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -57,7 +63,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 
 				if (data.productOption) {
 					successNotification(`${name} - Product Option Created !`);
-					this.productOptions.push(data.productOption);
+					this.prod_option.push(data.productOption);
 				}
 				this.resetNewProductOption();
 			} catch (err: any) {
@@ -105,8 +111,8 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 				if (data.productOption) {
 					successNotification(`Option #${data.productOption.name} Deleted !`);
 
-					const index = this.productOptions.findIndex((t) => t.id === data.productOption.id);
-					this.productOptions.splice(index, 1);
+					const index = this.prod_option.findIndex((t) => t.id === data.productOption.id);
+					this.prod_option.splice(index, 1);
 				}
 			} catch (err: any) {
 				console.error(err);

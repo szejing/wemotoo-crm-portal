@@ -39,7 +39,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="tags.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="pageSize" :total="tags.length" />
+							<UPagination v-model="page" :page-count="page_size" :total="tags.length" />
 						</div>
 					</div>
 				</UCard>
@@ -77,10 +77,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, tags, pageSize } = storeToRefs(tagsStore);
+const { loading, tags, page_size } = storeToRefs(tagsStore);
 
 const rows = computed(() => {
-	return tags.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+	return tags.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
 });
 
 const deleteTag = async (id: number) => {

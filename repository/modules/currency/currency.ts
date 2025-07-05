@@ -1,6 +1,8 @@
 import HttpFactory from '~/repository/factory';
 import MerchantRoutes from '~/repository/routes.client';
-import type { GetCurrenciesResp } from './models/response/get-currencies.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Currency } from '~/utils/types/currency';
 
 class CurrencyModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Currencies;
@@ -9,10 +11,10 @@ class CurrencyModule extends HttpFactory {
 	 * Fetches all currencies
 	 * @returns
 	 */
-	async getCurrencies(): Promise<GetCurrenciesResp> {
-		return await this.call<GetCurrenciesResp>({
+	async getCurrencies(query: BaseODataReq): Promise<BaseODataResp<Currency>> {
+		return await this.call<BaseODataResp<Currency>>({
 			method: 'GET',
-			query: { is_active: true },
+			query,
 			url: `${this.RESOURCE.Many()}`,
 		});
 	}
