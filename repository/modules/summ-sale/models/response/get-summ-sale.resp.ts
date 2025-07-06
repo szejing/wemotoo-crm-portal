@@ -1,6 +1,6 @@
-import type { SummOrderBill } from '~/utils/types/summ-orders';
+import type { SummSaleBill } from '~/utils/types/summ-sales';
 
 export type GetSummSalesResp = {
-	summ_sales: SummOrderBill[];
+	summ_sales: SummSaleBill[];
 	total: number;
 };

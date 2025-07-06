@@ -44,11 +44,11 @@ export const useOrderStore = defineStore('orderStore', {
 			try {
 				let filter = `status eq '${this.filter.status}'`;
 				if (this.filter.end_date) {
-					filter += ` and (biz_date ge '${getFormattedDate(this.filter.start_date)}' and biz_date le '${
-						this.filter.end_date ? getFormattedDate(this.filter.end_date) : undefined
+					filter += ` and (biz_date ge '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+						this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.filter.start_date)}'`;
+					filter += ` and biz_date eq '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data } = await $api.order.getOrders({

@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 const paymentTypeStore = usePaymentTypeStore();
-const { paymentTypeGroups } = storeToRefs(paymentTypeStore);
+const { payment_type_groups } = storeToRefs(paymentTypeStore);
 
 const props = defineProps<{ paymentTypeCode: string | undefined; currencyCode: string | undefined }>();
 
@@ -30,7 +30,7 @@ const paymentTypeCode = computed({
 });
 
 const paymentTypes = computed(() => {
-	return paymentTypeGroups.value.map((group) => group.payment_types).flat();
+	return payment_type_groups.value.map((group) => group.payment_types).flat();
 });
 </script>
 

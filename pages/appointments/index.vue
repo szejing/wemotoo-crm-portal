@@ -23,7 +23,7 @@
 					<ZLoading v-if="appointmentStore.loading" />
 
 					<!-- Empty state -->
-					<div v-else-if="displayedAppointments.length === 0" class="text-center py-8">
+					<div v-else-if="displayedAppointments.length == 0" class="text-center py-8">
 						<div class="text-gray-500">
 							<h2 class="text-lg font-medium">No appointments found</h2>
 							<p class="text-sm">
@@ -98,7 +98,7 @@
 
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { AppointmentStatus, getFormattedDate, isSameDate } from 'wemotoo-common';
+import { AppointmentStatus, getFormattedDate, isFuture, isSameDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 
 const links = [
@@ -136,25 +136,18 @@ onMounted(async () => {
 	const months = calendarColumns.value > 2 ? [today.getMonth() + 1, today.getMonth() + 2] : today.getMonth() + 1;
 
 	await appointmentStore.getAppointments(AppointmentStatus.CONFIRMED, months);
-
-	onUnmounted(() => {
-		window.removeEventListener('resize', updateColumns);
-	});
-});
-
-// Filter and sort upcoming appointments
-const upcomingAppointments = computed(() => {
-	const apts = appointments.value
-		.filter((appointment) => new Date(appointment.date_time) >= today)
-		.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime())
-		.slice(0, 10); // Show max 10 upcoming appointments
-
-	return apts;
 });
 
 // Display appointments based on filter state
 const displayedAppointments = computed(() => {
-	return filteredAppointments.value.length > 0 ? filteredAppointments.value : upcomingAppointments.value;
+	if (filteredAppointments.value.length > 0) {
+		return filteredAppointments.value;
+	}
+
+	return appointments.value
+		.filter((appointment) => isFuture(new Date(appointment.date_time)))
+		.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime())
+		.slice(0, 10);
 });
 
 const dates = computed(() => {

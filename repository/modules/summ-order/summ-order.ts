@@ -1,7 +1,10 @@
+import type { BaseODataReq } from '~/repository/base/base.req';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetDashboardSummReq, GetSummOrderBillsReq, GetSummOrderCustomersReq, GetSummOrderItemsReq } from './models/request';
-import type { GetDashboardSummResp, GetSummOrderBillsResp, GetSummOrderItemsResp, GetSummOrderCustomersResp } from './models/response';
+import type { GetDashboardSummResp } from './models/response';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { GetDashboardSummReq } from './models/request';
+import type { SummOrderBill, SummOrderCustomer, SummOrderItem } from '~/utils/types/summ-orders';
 
 class OrderSummaryModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.SummOrders;
@@ -22,8 +25,8 @@ class OrderSummaryModule extends HttpFactory {
 	 * Fetches summ orders
 	 * @returns
 	 */
-	async getSummOrders(query: GetSummOrderBillsReq): Promise<GetSummOrderBillsResp> {
-		return await this.call<GetSummOrderBillsResp>({
+	async getSummOrders(query: BaseODataReq): Promise<BaseODataResp<SummOrderBill>> {
+		return await this.call<BaseODataResp<SummOrderBill>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Orders()}`,
 			query,
@@ -34,8 +37,8 @@ class OrderSummaryModule extends HttpFactory {
 	 * Fetches summ order items
 	 * @returns
 	 */
-	async getSummOrderItems(query: GetSummOrderItemsReq): Promise<GetSummOrderItemsResp> {
-		return await this.call<GetSummOrderItemsResp>({
+	async getSummOrderItems(query: BaseODataReq): Promise<BaseODataResp<SummOrderItem>> {
+		return await this.call<BaseODataResp<SummOrderItem>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Items()}`,
 			query,
@@ -46,8 +49,8 @@ class OrderSummaryModule extends HttpFactory {
 	 * Fetches summ order customers
 	 * @returns
 	 */
-	async getSummOrderCustomers(query: GetSummOrderCustomersReq): Promise<GetSummOrderCustomersResp> {
-		return await this.call<GetSummOrderCustomersResp>({
+	async getSummOrderCustomers(query: BaseODataReq): Promise<BaseODataResp<SummOrderCustomer>> {
+		return await this.call<BaseODataResp<SummOrderCustomer>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Customers()}`,
 			query,
