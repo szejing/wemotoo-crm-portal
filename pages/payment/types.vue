@@ -14,8 +14,8 @@
 					<template #index-data="{ index }"> {{ index + 1 }}. </template>
 				</UTable>
 
-				<div v-if="paymentTypeGroups.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="paymentTypeGroups.length" />
+				<div v-if="payment_type_groups.length > 0" class="section-pagination">
+					<UPagination v-model="current_page" :page-count="page_size" :total="total_payment_type_groups" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -39,13 +39,16 @@ const links = [
 	},
 ];
 
-const page = ref(1);
 const paymentTypeStore = usePaymentTypeStore();
-const { paymentTypeGroups, page_size } = storeToRefs(paymentTypeStore);
+const { payment_type_groups, page_size, current_page, total_payment_type_groups } = storeToRefs(paymentTypeStore);
 
 const rows = computed(() => {
-	return paymentTypeGroups.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return payment_type_groups.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
+
+const updatePage = async (page: number) => {
+	await paymentTypeStore.updatePage(page);
+};
 </script>
 
 <style scoped lang="postcss"></style>

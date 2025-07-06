@@ -26,7 +26,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="is_loading" @select="selectSale">
+				<UTable :rows="rows" :columns="columnsTable" :loading="loading" @select="selectSale">
 					<template #index-data="{ index }">
 						<p>{{ index + 1 }}.</p>
 					</template>
@@ -102,7 +102,7 @@
 				</UTable>
 
 				<div v-if="bills.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="filter.page_size" :total="bills.length" />
+					<UPagination v-model="page" :page-count="filter.page_size" :total="total_bills" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -130,10 +130,9 @@ const links = [
 
 const page = ref(1);
 const saleStore = useSaleStore();
-const { bills, filter } = storeToRefs(saleStore);
+const { bills, filter, total_bills, loading } = storeToRefs(saleStore);
 
 const currency_code = ref(filter.value.currency_code);
-const is_loading = computed(() => saleStore.loading);
 
 const selectedColumns = ref(sale_columns);
 const columnsTable = computed(() => sale_columns.filter((column) => selectedColumns.value.includes(column)));
@@ -148,6 +147,11 @@ const rows = computed(() => {
 
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;
+	await saleStore.getBills();
+};
+
+const updatePage = async (page: number) => {
+	filter.value.current_page = page;
 	await saleStore.getBills();
 };
 

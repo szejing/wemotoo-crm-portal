@@ -63,7 +63,12 @@
 				</UTable>
 
 				<div v-if="data.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="data.length" />
+					<UPagination
+						v-model="current_page"
+						:page-count="sale_summ_payments.page_size"
+						:total="sale_summ_payments.total_data"
+						@update:model-value="updatePage"
+					/>
 				</div>
 			</UCard>
 		</div>
@@ -87,10 +92,13 @@ const links = [
 	},
 ];
 
-const page = ref(1);
-const page_size = ref(10);
+onMounted(async () => {
+	await salesSummStore.getSalePaymentSummary();
+});
+
 const salesSummStore = useSummSaleStore();
 const { sale_summ_payments } = storeToRefs(salesSummStore);
+const current_page = computed(() => sale_summ_payments.value.current_page);
 
 const currency_code = ref(sale_summ_payments.value.filter.currency_code);
 
@@ -104,8 +112,13 @@ const updateColumns = (columns: { key: string; label: string }[]) => {
 };
 
 const rows = computed(() => {
-	return data.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return data.value.slice((current_page.value - 1) * sale_summ_payments.value.page_size, current_page.value * sale_summ_payments.value.page_size);
 });
+
+const updatePage = async (page: number) => {
+	sale_summ_payments.value.current_page = page;
+	await salesSummStore.getSalePaymentSummary();
+};
 </script>
 
 <style scoped lang="postcss"></style>

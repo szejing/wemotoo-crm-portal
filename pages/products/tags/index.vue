@@ -39,7 +39,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="tags.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="page_size" :total="tags.length" />
+							<UPagination v-model="current_page" :page-count="page_size" :total="total_tags" @update:model-value="updatePage" />
 						</div>
 					</div>
 				</UCard>
@@ -67,7 +67,6 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const tagsStore = useProductTagStore();
 await tagsStore.getTags();
 
@@ -77,10 +76,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, tags, page_size } = storeToRefs(tagsStore);
+const { loading, tags, total_tags, page_size, current_page } = storeToRefs(tagsStore);
 
 const rows = computed(() => {
-	return tags.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return tags.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const deleteTag = async (id: number) => {
@@ -114,6 +113,10 @@ const selectTag = async (tag: Tag) => {
 			modal.close();
 		},
 	});
+};
+
+const updatePage = async (page: number) => {
+	await tagsStore.updatePage(page);
 };
 </script>
 

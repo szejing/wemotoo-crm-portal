@@ -63,7 +63,7 @@
 				</UTable>
 
 				<div v-if="data.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="data.length" />
+					<UPagination v-model="current_page" :page-count="sale_summ.page_size" :total="sale_summ.total_data" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -87,8 +87,10 @@ const links = [
 	},
 ];
 
-const page = ref(1);
-const page_size = ref(10);
+onMounted(async () => {
+	await salesSummStore.getSaleSummary();
+});
+
 const salesSummStore = useSummSaleStore();
 const { sale_summ } = storeToRefs(salesSummStore);
 
@@ -99,13 +101,20 @@ const data = computed(() => sale_summ.value.data);
 const selectedColumns = ref(sale_summ_columns);
 const columnsTable = computed(() => sale_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
+const current_page = computed(() => sale_summ.value.current_page);
+
 const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;
 };
 
 const rows = computed(() => {
-	return data.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return data.value.slice((current_page.value - 1) * sale_summ.value.page_size, current_page.value * sale_summ.value.page_size);
 });
+
+const updatePage = async (page: number) => {
+	sale_summ.value.current_page = page;
+	await salesSummStore.getSaleSummary();
+};
 </script>
 
 <style scoped lang="postcss"></style>

@@ -30,6 +30,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		categories: [] as Category[],
+		total_categories: 0 as number,
 		new_category: structuredClone(initialEmptyCategory),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -40,8 +41,25 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			this.new_category = structuredClone(initialEmptyCategory);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.categories.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getCategories();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.categories.length === this.total_categories) {
+				return;
+			}
+
+			this.getCategories();
 		},
 
 		async getCategories() {
@@ -49,13 +67,20 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const { data } = await $api.category.getMany({
+				const { data, '@odata.count': total } = await $api.category.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.categories = data;
+					if (this.current_page > 1 && this.total_categories > this.categories.length) {
+						this.categories = [...this.categories, ...data];
+					} else {
+						this.categories = data;
+					}
+
+					this.total_categories = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

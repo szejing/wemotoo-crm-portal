@@ -14,6 +14,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tags: [] as Tag[],
+		total_tags: 0 as number,
 		new_tag: structuredClone(initialEmptyTag),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -24,21 +25,45 @@ export const useProductTagStore = defineStore('productTagStore', {
 			this.new_tag = structuredClone(initialEmptyTag);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.tags.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getTags();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.tags.length === this.total_tags) {
+				return;
+			}
+
+			this.getTags();
 		},
 
 		async getTags() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.tag.getMany({
+				const { data, '@odata.count': total } = await $api.tag.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.tags = data;
+					if (this.current_page > 1 && this.total_tags > this.tags.length) {
+						this.tags = [...this.tags, ...data];
+					} else {
+						this.tags = data;
+					}
+
+					this.total_tags = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

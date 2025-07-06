@@ -23,6 +23,7 @@ export const useOutletStore = defineStore('outletStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		outlets: [] as Outlet[],
+		total_outlets: 0 as number,
 		new_outlet: structuredClone(initialEmptyOutlet),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -33,21 +34,45 @@ export const useOutletStore = defineStore('outletStore', {
 			this.new_outlet = structuredClone(initialEmptyOutlet);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.outlets.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getOutlets();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.outlets.length === this.total_outlets) {
+				return;
+			}
+
+			this.getOutlets();
 		},
 
 		async getOutlets() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.outlet.getMany({
+				const { data, '@odata.count': total } = await $api.outlet.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.outlets = data;
+					if (this.current_page > 1 && this.total_outlets > this.outlets.length) {
+						this.outlets = [...this.outlets, ...data];
+					} else {
+						this.outlets = data;
+					}
+
+					this.total_outlets = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

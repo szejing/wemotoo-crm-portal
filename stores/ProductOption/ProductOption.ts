@@ -17,6 +17,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		prod_option: [] as ProductOption[],
+		total_options: 0 as number,
 		new_prod_option: structuredClone(initialEmptyOption),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -26,24 +27,51 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		resetNewProductOption() {
 			this.new_prod_option = structuredClone(initialEmptyOption);
 		},
-		updatePageSize(size: number) {
+
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.prod_option.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getOptions();
 		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.prod_option.length === this.total_options) {
+				return;
+			}
+
+			this.getOptions();
+		},
+
 		currentProductOptions() {
 			return JSON.parse(JSON.stringify(this.prod_option));
 		},
+
 		async getOptions() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.productOption.getMany({
+				const { data, '@odata.count': total } = await $api.productOption.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 					$expand: filterRelations(defaultProductOptionRelations).join(','),
 				});
 
 				if (data) {
-					this.prod_option = data;
+					if (this.current_page > 1 && this.total_options > this.prod_option.length) {
+						this.prod_option = [...this.prod_option, ...data];
+					} else {
+						this.prod_option = data;
+					}
+
+					this.total_options = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

@@ -26,7 +26,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="is_loading" @select="selectOrder">
+				<UTable :rows="rows" :columns="columnsTable" :loading="loading" @select="selectOrder">
 					<template #index-data="{ index }">
 						<p>{{ index + 1 }}.</p>
 					</template>
@@ -103,7 +103,7 @@
 				</UTable>
 
 				<div v-if="orders.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="filter.page_size" :total="orders.length" />
+					<UPagination v-model="current_page" :page-count="filter.page_size" :total="total_orders" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -129,12 +129,11 @@ const links = [
 	},
 ];
 
-const page = ref(1);
 const orderStore = useOrderStore();
-const { orders, filter } = storeToRefs(orderStore);
+const { orders, filter, total_orders, loading } = storeToRefs(orderStore);
 
+const current_page = computed(() => filter.value.current_page);
 const currency_code = ref(filter.value.currency_code);
-const is_loading = computed(() => orderStore.loading);
 
 const selectedColumns = ref(order_columns);
 const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
@@ -144,11 +143,16 @@ const updateColumns = (columns: { key: string; label: string; sortable?: boolean
 };
 
 const rows = computed(() => {
-	return orders.value.slice((page.value - 1) * filter.value.page_size, page.value * filter.value.page_size);
+	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
 });
 
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;
+	await orderStore.getOrders();
+};
+
+const updatePage = async (page: number) => {
+	filter.value.current_page = page;
 	await orderStore.getOrders();
 };
 

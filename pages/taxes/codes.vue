@@ -44,7 +44,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="taxes.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="page_size" :total="taxes.length" />
+							<UPagination v-model="current_page" :page-count="page_size" :total="total_taxes" @update:model-value="updatePage" />
 						</div>
 					</div>
 				</UCard>
@@ -72,7 +72,6 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const taxStore = useTaxStore();
 
 onMounted(async () => {
@@ -85,10 +84,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, taxes, page_size } = storeToRefs(taxStore);
+const { loading, taxes, page_size, current_page, total_taxes } = storeToRefs(taxStore);
 
 const rows = computed(() => {
-	return taxes.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return taxes.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const deleteTax = async (code: string) => {
@@ -143,6 +142,10 @@ const onUpdateActive = async (tax: Tax) => {
 	} finally {
 		modal.close();
 	}
+};
+
+const updatePage = async (page: number) => {
+	await taxStore.updatePage(page);
 };
 </script>
 

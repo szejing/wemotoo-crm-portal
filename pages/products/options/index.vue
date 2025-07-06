@@ -36,7 +36,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="prod_option.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="page_size" :total="prod_option.length" />
+							<UPagination v-model="current_page" :page-count="page_size" :total="total_options" @update:model-value="updatePage" />
 						</div>
 					</div>
 				</UCard>
@@ -65,14 +65,14 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const productOptionsStore = useProductOptionStore();
 await productOptionsStore.getOptions();
 
-const { loading, prod_option, page_size } = storeToRefs(productOptionsStore);
+const { loading, prod_option, page_size, current_page } = storeToRefs(productOptionsStore);
+const { total_options } = storeToRefs(productOptionsStore);
 
 const rows = computed(() => {
-	return prod_option.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return prod_option.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 watch(modal.isOpen, (value) => {
@@ -112,6 +112,10 @@ const selectProductOption = async (option: ProductOption) => {
 			modal.close();
 		},
 	});
+};
+
+const updatePage = async (page: number) => {
+	await productOptionsStore.updatePage(page);
 };
 </script>
 

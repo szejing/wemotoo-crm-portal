@@ -38,7 +38,7 @@
 				</UTable>
 
 				<div v-if="customers.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="customers.length" />
+					<UPagination v-model="current_page" :page-count="page_size" :total="total_customers" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -59,7 +59,6 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const customerStore = useCustomerStore();
 
 watch(modal.isOpen, (value) => {
@@ -68,14 +67,18 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, customers, page_size } = storeToRefs(customerStore);
+const { loading, customers, page_size, current_page, total_customers } = storeToRefs(customerStore);
 
 const rows = computed(() => {
-	return customers.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return customers.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const selectCustomer = async (customer: Customer) => {
 	if (!customer) return;
+};
+
+const updatePage = async (page: number) => {
+	await customerStore.updatePage(page);
 };
 </script>
 

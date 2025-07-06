@@ -14,8 +14,9 @@ export const useBrandStore = defineStore('brandStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
-		newBrand: structuredClone(initialEmptyBrand),
+		new_brand: structuredClone(initialEmptyBrand),
 		brands: [] as Brand[],
+		total_brands: 0 as number,
 		current_brand: undefined as Brand | undefined,
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -23,11 +24,28 @@ export const useBrandStore = defineStore('brandStore', {
 	}),
 	actions: {
 		resetNewBrand() {
-			this.newBrand = structuredClone(initialEmptyBrand);
+			this.new_brand = structuredClone(initialEmptyBrand);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.brands.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getBrands();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.brands.length === this.total_brands) {
+				return;
+			}
+
+			this.getBrands();
 		},
 
 		async getBrand(code: string): Promise<Brand | undefined> {
@@ -49,14 +67,20 @@ export const useBrandStore = defineStore('brandStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.brand.getMany({
+				const { data, '@odata.count': total } = await $api.brand.getMany({
 					$top: this.page_size,
-					$skip: (this.current_page - 1) * this.page_size,
 					$count: true,
+					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.brands = data;
+					if (this.current_page > 1 && this.total_brands > this.brands.length) {
+						this.brands = [...this.brands, ...data];
+					} else {
+						this.brands = data;
+					}
+
+					this.total_brands = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -74,11 +98,11 @@ export const useBrandStore = defineStore('brandStore', {
 
 			try {
 				const data = await $api.brand.create({
-					...this.newBrand,
+					...this.new_brand,
 				});
 
 				if (data.brand) {
-					successNotification(`${this.newBrand.code} - Brand Created !`);
+					successNotification(`${this.new_brand.code} - Brand Created !`);
 					this.brands.push(data.brand);
 				}
 
