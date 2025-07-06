@@ -1,9 +1,10 @@
+import type { SummSaleBill, SummSaleCustomer, SummSaleItem, SummSalePayment } from '~/utils/types/summ-sales';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type { GetDashboardSummReq, GetSummSaleReq, GetSummSaleCustomersReq, GetSummSaleItemsReq } from './models/request';
-import type { GetSummSalePaymentsReq } from './models/request/get-summ-sale-payment.req';
-import type { GetDashboardSummResp, GetSummSaleCustomersResp, GetSummSalesResp, GetSummSalesItemsResp } from './models/response';
-import type { GetSummSalePaymentsResp } from './models/response/get-summ-sale-payment.resp';
+import type { GetDashboardSummReq } from './models/request';
+import type { GetDashboardSummResp } from './models/response';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
 
 class SaleSummaryModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.SummSales;
@@ -24,8 +25,8 @@ class SaleSummaryModule extends HttpFactory {
 	 * Fetches summ sales
 	 * @returns
 	 */
-	async getSummSales(query: GetSummSaleReq): Promise<GetSummSalesResp> {
-		return await this.call<GetSummSalesResp>({
+	async getSummSales(query: BaseODataReq): Promise<BaseODataResp<SummSaleBill>> {
+		return await this.call<BaseODataResp<SummSaleBill>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Sales()}`,
 			query,
@@ -36,8 +37,8 @@ class SaleSummaryModule extends HttpFactory {
 	 * Fetches summ sales items
 	 * @returns
 	 */
-	async getSummSalesItems(query: GetSummSaleItemsReq): Promise<GetSummSalesItemsResp> {
-		return await this.call<GetSummSalesItemsResp>({
+	async getSummSalesItems(query: BaseODataReq): Promise<BaseODataResp<SummSaleItem>> {
+		return await this.call<BaseODataResp<SummSaleItem>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Items()}`,
 			query,
@@ -48,8 +49,8 @@ class SaleSummaryModule extends HttpFactory {
 	 * Fetches summ sales customers
 	 * @returns
 	 */
-	async getSummSalesCustomers(query: GetSummSaleCustomersReq): Promise<GetSummSaleCustomersResp> {
-		return await this.call<GetSummSaleCustomersResp>({
+	async getSummSalesCustomers(query: BaseODataReq): Promise<BaseODataResp<SummSaleCustomer>> {
+		return await this.call<BaseODataResp<SummSaleCustomer>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Customers()}`,
 			query,
@@ -60,9 +61,8 @@ class SaleSummaryModule extends HttpFactory {
 	 * Fetches summ sales payments
 	 * @returns
 	 */
-	async getSummSalesPayments(query: GetSummSalePaymentsReq): Promise<GetSummSalePaymentsResp> {
-		console.log('query', query);
-		return await this.call<GetSummSalePaymentsResp>({
+	async getSummSalesPayments(query: BaseODataReq): Promise<BaseODataResp<SummSalePayment>> {
+		return await this.call<BaseODataResp<SummSalePayment>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Payments()}`,
 			query,

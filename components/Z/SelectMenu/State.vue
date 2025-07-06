@@ -13,7 +13,7 @@
 			<template #label>
 				<span v-if="category" class="truncate">
 					<div class="flex items-center gap-2">
-						<p class="text-neutral-700 font-semibold">[{{ category.code }}] - {{ category.name }}</p>
+						<p class="text-neutral-700 font-semibold">[{{ category.code }}] - {{ category.description }}</p>
 					</div>
 				</span>
 				<span v-else>Select Category</span>

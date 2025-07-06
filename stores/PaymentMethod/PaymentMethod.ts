@@ -5,7 +5,7 @@ import type { UpdatePaymentMethodReq } from '~/repository/modules/payment-method
 
 export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 	state: () => ({
-		paymentMethods: [] as PaymentMethod[],
+		payment_methods: [] as PaymentMethod[],
 		page_size: options_page_size[0],
 		current_page: 1,
 		loading: false as boolean,
@@ -26,7 +26,7 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 				});
 
 				if (data) {
-					this.paymentMethods = data;
+					this.payment_methods = data;
 				}
 			} catch (err: any) {
 				console.error(err);

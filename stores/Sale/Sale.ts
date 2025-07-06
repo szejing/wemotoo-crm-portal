@@ -43,9 +43,12 @@ export const useSaleStore = defineStore('saleStore', {
 			try {
 				let filter = `status eq '${this.filter.status}' and payment_status eq '${this.filter.payment_status}'`;
 				if (this.filter.end_date) {
-					filter += ` and created_at ge ${getFormattedDate(this.filter.start_date)} and created_at le ${getFormattedDate(this.filter.end_date)}`;
+					filter += ` and created_at ge ${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')} and created_at le ${getFormattedDate(
+						this.filter.end_date,
+						'yyyy-MM-dd',
+					)}`;
 				} else {
-					filter += ` and created_at eq ${getFormattedDate(this.filter.start_date)}`;
+					filter += ` and created_at eq ${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}`;
 				}
 
 				const { data } = await $api.sale.getBills({

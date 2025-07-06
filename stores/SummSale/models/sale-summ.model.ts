@@ -9,6 +9,8 @@ type SaleSumm = {
 		status: string;
 		currency_code: string;
 	};
+	current_page: number;
+	page_size: number;
 	is_loading: boolean;
 	data: SummSaleBill[];
 };
@@ -21,6 +23,8 @@ export const initialEmptySaleSumm: SaleSumm = {
 		status: SaleStatus.COMPLETED,
 		currency_code: 'MYR',
 	},
+	current_page: 1,
+	page_size: 10,
 	is_loading: false,
 	data: [],
 };

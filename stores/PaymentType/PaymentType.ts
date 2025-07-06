@@ -1,10 +1,11 @@
 import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
+import { defaultPaymentTypeGroupRelations } from 'wemotoo-common';
 
 export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 	state: () => ({
-		paymentTypeGroups: [] as PaymentTypeGroup[],
+		payment_type_groups: [] as PaymentTypeGroup[],
 		page_size: options_page_size[0],
 		current_page: 1,
 		loading: false as boolean,
@@ -22,10 +23,11 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 				const { data } = await $api.paymentTypeGroup.getMany({
 					$top: this.page_size,
 					$skip: (this.current_page - 1) * this.page_size,
+					$expand: filterRelations(defaultPaymentTypeGroupRelations).join(','),
 				});
 
 				if (data) {
-					this.paymentTypeGroups = data;
+					this.payment_type_groups = data;
 				}
 			} catch (err: any) {
 				console.error(err);

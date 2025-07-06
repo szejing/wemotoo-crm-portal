@@ -2,7 +2,7 @@ import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-or
 import { failedNotification } from '../AppUi/AppUi';
 import { initialEmptyOrderSumm } from './model/order-summ.model';
 import { initialEmptyOrderSummItem } from './model/order-summ-item.model';
-import { FilterType, getFormattedDate, type OrderItemStatus, type OrderStatus } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptyOrderSummCustomer } from './model/order-summ-customer.model';
 
 export const useSummOrderStore = defineStore('summOrderStore', {
@@ -76,16 +76,29 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.summOrder.getSummOrders({
-					filter_type: this.order_summ.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
-					status: this.order_summ.filter.status as OrderStatus,
-					start_date: getFormattedDate(this.order_summ.filter.start_date),
-					end_date: this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date) : undefined,
-					currency_code: this.order_summ.filter.currency_code,
+				let filter = `status eq '${this.order_summ.filter.status}'`;
+
+				if (this.order_summ.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ.filter.currency_code}'`;
+				}
+
+				if (this.order_summ.filter.end_date) {
+					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date eq '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const { data } = await $api.summOrder.getSummOrders({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$top: this.order_summ.page_size,
+					$skip: (this.order_summ.current_page - 1) * this.order_summ.page_size,
 				});
 
-				if (data.summ_orders) {
-					this.order_summ.data = data.summ_orders;
+				if (data) {
+					this.order_summ.data = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -100,16 +113,29 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.summOrder.getSummOrderItems({
-					filter_type: this.order_summ_item.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
-					status: this.order_summ_item.filter.status as OrderStatus,
-					item_status: this.order_summ_item.filter.item_status as OrderItemStatus,
-					start_date: getFormattedDate(this.order_summ_item.filter.start_date),
-					end_date: this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date) : undefined,
-					currency_code: this.order_summ_item.filter.currency_code,
+				let filter = `status eq '${this.order_summ_item.filter.status}'`;
+
+				if (this.order_summ_item.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ_item.filter.currency_code}'`;
+				}
+
+				if (this.order_summ_item.filter.end_date) {
+					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const { data } = await $api.summOrder.getSummOrderItems({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$top: this.order_summ_item.page_size,
+					$skip: (this.order_summ_item.current_page - 1) * this.order_summ_item.page_size,
 				});
-				if (data.summ_order_items) {
-					this.order_summ_item.data = data.summ_order_items;
+
+				if (data) {
+					this.order_summ_item.data = data;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -124,15 +150,29 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.summOrder.getSummOrderCustomers({
-					filter_type: this.order_summ_customer.filter.end_date ? FilterType.BETWEEN : FilterType.EQUAL,
-					status: this.order_summ_customer.filter.status as OrderStatus,
-					start_date: getFormattedDate(this.order_summ_customer.filter.start_date),
-					end_date: this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date) : undefined,
-					currency_code: this.order_summ_customer.filter.currency_code,
+				let filter = `status eq '${this.order_summ_customer.filter.status}'`;
+
+				if (this.order_summ_customer.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ_customer.filter.currency_code}'`;
+				}
+
+				if (this.order_summ_customer.filter.end_date) {
+					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const { data } = await $api.summOrder.getSummOrderCustomers({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$top: this.order_summ_customer.page_size,
+					$skip: (this.order_summ_customer.current_page - 1) * this.order_summ_customer.page_size,
 				});
-				if (data.summ_order_customers) {
-					this.order_summ_customer.data = data.summ_order_customers;
+
+				if (data) {
+					this.order_summ_customer.data = data;
 				}
 			} catch (err: any) {
 				console.error(err);

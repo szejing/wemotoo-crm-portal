@@ -11,6 +11,8 @@ type SaleSummPayment = {
 		currency_code: string;
 	};
 	is_loading: boolean;
+	page_size: number;
+	current_page: number;
 	data: SummSalePayment[];
 };
 
@@ -24,5 +26,7 @@ export const initialEmptySaleSummPayment: SaleSummPayment = {
 		currency_code: 'MYR',
 	},
 	is_loading: false,
+	page_size: 10,
+	current_page: 1,
 	data: [],
 };
