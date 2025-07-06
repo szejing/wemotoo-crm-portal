@@ -45,8 +45,8 @@
 					</template>
 				</UTable>
 
-				<div v-if="paymentMethods.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="paymentMethods.length" />
+				<div v-if="payment_methods.length > 0" class="section-pagination">
+					<UPagination v-model="current_page" :page-count="page_size" :total="total_payment_methods" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -71,12 +71,11 @@ const links = [
 ];
 
 const isUpdating = ref(false);
-const page = ref(1);
 const paymentMethodStore = usePaymentMethodStore();
-const { paymentMethods, page_size } = storeToRefs(paymentMethodStore);
+const { payment_methods, page_size, current_page, total_payment_methods } = storeToRefs(paymentMethodStore);
 
 const rows = computed(() => {
-	return paymentMethods.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return payment_methods.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const updateStatus = async (code: string, is_active: boolean) => {
@@ -88,6 +87,10 @@ const updateStatus = async (code: string, is_active: boolean) => {
 	} finally {
 		isUpdating.value = false;
 	}
+};
+
+const updatePage = async (page: number) => {
+	await paymentMethodStore.updatePage(page);
 };
 </script>
 

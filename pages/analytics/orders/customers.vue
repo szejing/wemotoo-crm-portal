@@ -47,6 +47,15 @@
 						<p>{{ item.total_qty }}</p>
 					</template>
 				</UTable>
+
+				<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
+					<UPagination
+						v-model="current_page"
+						:page-count="order_summ_customer.page_size"
+						:total="order_summ_customer.total_data"
+						@update:model-value="updatePage"
+					/>
+				</div>
 			</UCard>
 		</div>
 	</div>
@@ -69,6 +78,10 @@ const links = [
 	},
 ];
 
+onMounted(async () => {
+	await orderSummStore.getOrderCustomerSummary();
+});
+
 const orderSummStore = useSummOrderStore();
 const { order_summ_customer } = storeToRefs(orderSummStore);
 const currency_code = ref(order_summ_customer.value.filter.currency_code);
@@ -79,8 +92,15 @@ const tableData = computed(() => order_summ_customer.value.data);
 const selectedColumns = ref(order_summ_customer_columns);
 const columnsTable = computed(() => order_summ_customer_columns.filter((column) => selectedColumns.value.includes(column)));
 
+const current_page = computed(() => order_summ_customer.value.current_page);
+
 const updateColumns = (columns: { key: string; label: string }[]) => {
 	selectedColumns.value = columns;
+};
+
+const updatePage = async (page: number) => {
+	order_summ_customer.value.current_page = page;
+	await orderSummStore.getOrderCustomerSummary();
 };
 </script>
 

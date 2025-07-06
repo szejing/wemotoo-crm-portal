@@ -1,4 +1,5 @@
 import { PaymentStatus, SaleStatus } from 'wemotoo-common';
+import { options_page_size } from '~/utils/options';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
 
 type SaleSummPayment = {
@@ -13,6 +14,7 @@ type SaleSummPayment = {
 	is_loading: boolean;
 	page_size: number;
 	current_page: number;
+	total_data: number;
 	data: SummSalePayment[];
 };
 
@@ -26,7 +28,8 @@ export const initialEmptySaleSummPayment: SaleSummPayment = {
 		currency_code: 'MYR',
 	},
 	is_loading: false,
-	page_size: 10,
+	page_size: options_page_size[0],
 	current_page: 1,
+	total_data: 0,
 	data: [],
 };

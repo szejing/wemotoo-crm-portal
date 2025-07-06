@@ -1,4 +1,5 @@
 import { OrderStatus } from 'wemotoo-common';
+import { options_page_size } from '~/utils/options';
 import type { SummOrderBill } from '~/utils/types/summ-orders';
 
 type OrderSumm = {
@@ -12,6 +13,7 @@ type OrderSumm = {
 	is_loading: boolean;
 	page_size: number;
 	current_page: number;
+	total_data: number;
 	data: SummOrderBill[];
 };
 
@@ -24,7 +26,8 @@ export const initialEmptyOrderSumm: OrderSumm = {
 		currency_code: 'MYR',
 	},
 	is_loading: false,
-	page_size: 10,
+	page_size: options_page_size[0],
 	current_page: 1,
+	total_data: 0,
 	data: [],
 };

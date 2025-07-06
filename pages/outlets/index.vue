@@ -39,7 +39,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="outlets.length > 0" class="section-pagination">
-							<UPagination v-model="page" :page-count="page_size" :total="outlets.length" />
+							<UPagination v-model="current_page" :page-count="page_size" :total="total_outlets" @update:model-value="updatePage" />
 						</div>
 					</div>
 				</UCard>
@@ -62,7 +62,6 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const outletStore = useOutletStore();
 
 onMounted(async () => {
@@ -75,10 +74,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, outlets, page_size } = storeToRefs(outletStore);
+const { loading, outlets, page_size, current_page, total_outlets } = storeToRefs(outletStore);
 
 const rows = computed(() => {
-	return outlets.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return outlets.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const deleteOutlet = async (code: string) => {
@@ -113,6 +112,10 @@ const selectOutlet = async (outlet: Outlet) => {
 			modal.close();
 		},
 	});
+};
+
+const updatePage = async (page: number) => {
+	await outletStore.updatePage(page);
 };
 </script>
 

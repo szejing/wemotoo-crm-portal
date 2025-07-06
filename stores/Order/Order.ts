@@ -10,7 +10,6 @@ import type { PaymentModel } from '~/utils/models/payment.model';
 type OrderFilter = {
 	query: string;
 	status: OrderStatus;
-	filter_type: 'between' | '=';
 	start_date: Date;
 	end_date: Date | undefined;
 	page_size: number;
@@ -21,7 +20,6 @@ type OrderFilter = {
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
 	status: OrderStatus.NEW,
-	filter_type: '=',
 	start_date: new Date(),
 	end_date: undefined,
 	page_size: options_page_size[0],
@@ -33,11 +31,32 @@ export const useOrderStore = defineStore('orderStore', {
 	state: () => ({
 		loading: false as boolean,
 		orders: [] as Order[],
+		total_orders: 0 as number,
 		detail: undefined as Order | undefined,
 		errors: [] as string[],
 		filter: initialEmptyOrderFilter,
 	}),
 	actions: {
+		async updateOrderPageSize(size: number) {
+			this.filter.page_size = size;
+
+			if (this.filter.page_size > this.total_orders) {
+				this.filter.current_page = 1;
+				return;
+			}
+
+			this.getOrders();
+		},
+
+		async updateOrderPage(page: number) {
+			this.filter.current_page = page;
+
+			if (this.filter.current_page < 0 || this.total_orders === this.orders.length) {
+				return;
+			}
+
+			this.getOrders();
+		},
 		async getOrders() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -51,15 +70,22 @@ export const useOrderStore = defineStore('orderStore', {
 					filter += ` and biz_date eq '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				const { data } = await $api.order.getOrders({
+				const { data, '@odata.count': total } = await $api.order.getOrders({
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$count: true,
 					$filter: filter,
 					$search: isEmptyOrNull(this.filter.query) ? undefined : this.filter.query,
 				});
 
 				if (data) {
-					this.orders = data;
+					if (this.filter.current_page > 1 && this.total_orders > this.orders.length) {
+						this.orders = [...this.orders, ...data];
+					} else {
+						this.orders = data;
+					}
+
+					this.total_orders = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

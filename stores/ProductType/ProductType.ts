@@ -15,6 +15,7 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		prod_types: [] as ProductType[],
+		total_prod_types: 0 as number,
 		new_prod_type: structuredClone(initialEmptyProductType),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -25,8 +26,25 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 			this.new_prod_type = structuredClone(initialEmptyProductType);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.prod_types.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getProductTypes();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.prod_types.length === this.total_prod_types) {
+				return;
+			}
+
+			this.getProductTypes();
 		},
 
 		async getProductTypes() {
@@ -35,13 +53,20 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const { data } = await $api.productType.getMany({
+				const { data, '@odata.count': total } = await $api.productType.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.prod_types = data;
+					if (this.current_page > 1 && this.total_prod_types > this.prod_types.length) {
+						this.prod_types = [...this.prod_types, ...data];
+					} else {
+						this.prod_types = data;
+					}
+
+					this.total_prod_types = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

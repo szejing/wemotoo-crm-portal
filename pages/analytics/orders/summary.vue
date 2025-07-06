@@ -65,7 +65,7 @@
 				</UTable>
 
 				<div v-if="data.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="data.length" />
+					<UPagination v-model="current_page" :page-count="order_summ.page_size" :total="order_summ.total_data" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -89,10 +89,13 @@ const links = [
 	},
 ];
 
-const page = ref(1);
-const page_size = ref(10);
+onMounted(async () => {
+	await orderSummStore.getOrderSummary();
+});
+
 const orderSummStore = useSummOrderStore();
 const { order_summ } = storeToRefs(orderSummStore);
+const current_page = computed(() => order_summ.value.current_page);
 
 const currency_code = ref(order_summ.value.filter.currency_code);
 
@@ -106,8 +109,13 @@ const updateColumns = (columns: { key: string; label: string }[]) => {
 };
 
 const rows = computed(() => {
-	return data.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return data.value.slice((current_page.value - 1) * order_summ.value.page_size, current_page.value * order_summ.value.page_size);
 });
+
+const updatePage = async (page: number) => {
+	order_summ.value.current_page = page;
+	await orderSummStore.getOrderSummary();
+};
 </script>
 
 <style scoped lang="postcss"></style>

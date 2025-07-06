@@ -18,6 +18,7 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tax_rules: [] as TaxRule[],
+		total_tax_rules: 0 as number,
 		new_tax_rule: structuredClone(initialEmptyTaxRule),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -28,22 +29,46 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 			this.new_tax_rule = structuredClone(initialEmptyTaxRule);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.tax_rules.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getTaxRules();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.tax_rules.length === this.total_tax_rules) {
+				return;
+			}
+
+			this.getTaxRules();
 		},
 
 		async getTaxRules() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.taxRule.getMany({
+				const { data, '@odata.count': total } = await $api.taxRule.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 					$expand: filterRelations(defaultTaxRulesRelations).join(','),
 				});
 
 				if (data) {
-					this.tax_rules = data;
+					if (this.current_page > 1 && this.total_tax_rules > this.tax_rules.length) {
+						this.tax_rules = [...this.tax_rules, ...data];
+					} else {
+						this.tax_rules = data;
+					}
+
+					this.total_tax_rules = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

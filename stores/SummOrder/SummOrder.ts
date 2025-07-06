@@ -71,6 +71,27 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			}
 		},
 
+		async updateOrderSummPageSize(size: number) {
+			this.order_summ.page_size = size;
+
+			if (this.order_summ.page_size > this.order_summ.total_data) {
+				this.order_summ.current_page = 1;
+				return;
+			}
+
+			this.getOrderSummary();
+		},
+
+		async updateOrderSummPage(page: number) {
+			this.order_summ.current_page = page;
+
+			if (this.order_summ.current_page < 0 || this.order_summ.total_data === this.order_summ.data.length) {
+				return;
+			}
+
+			this.getOrderSummary();
+		},
+
 		async getOrderSummary() {
 			this.order_summ.is_loading = true;
 			const { $api } = useNuxtApp();
@@ -90,15 +111,22 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and biz_date eq '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				const { data } = await $api.summOrder.getSummOrders({
+				const { data, '@odata.count': total } = await $api.summOrder.getSummOrders({
 					$filter: filter,
 					$orderby: 'biz_date desc',
+					$count: true,
 					$top: this.order_summ.page_size,
 					$skip: (this.order_summ.current_page - 1) * this.order_summ.page_size,
 				});
 
 				if (data) {
-					this.order_summ.data = data;
+					if (this.order_summ.current_page > 1 && this.order_summ.total_data > this.order_summ.data.length) {
+						this.order_summ.data = [...this.order_summ.data, ...data];
+					} else {
+						this.order_summ.data = data;
+					}
+
+					this.order_summ.total_data = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -106,6 +134,26 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			} finally {
 				this.order_summ.is_loading = false;
 			}
+		},
+
+		async updateOrderItemSummPageSize(size: number) {
+			this.order_summ_item.page_size = size;
+			this.getOrderItemSummary();
+
+			if (this.order_summ_item.page_size > this.order_summ_item.total_data) {
+				this.order_summ_item.current_page = 1;
+				return;
+			}
+		},
+
+		async updateOrderItemSummPage(page: number) {
+			this.order_summ_item.current_page = page;
+
+			if (this.order_summ_item.current_page < 0 || this.order_summ_item.total_data === this.order_summ_item.data.length) {
+				return;
+			}
+
+			this.getOrderItemSummary();
 		},
 
 		async getOrderItemSummary() {
@@ -127,15 +175,22 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				const { data } = await $api.summOrder.getSummOrderItems({
+				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderItems({
 					$filter: filter,
 					$orderby: 'biz_date desc',
+					$count: true,
 					$top: this.order_summ_item.page_size,
 					$skip: (this.order_summ_item.current_page - 1) * this.order_summ_item.page_size,
 				});
 
 				if (data) {
-					this.order_summ_item.data = data;
+					if (this.order_summ_item.current_page > 1 && this.order_summ_item.total_data > this.order_summ_item.data.length) {
+						this.order_summ_item.data = [...this.order_summ_item.data, ...data];
+					} else {
+						this.order_summ_item.data = data;
+					}
+
+					this.order_summ_item.total_data = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -143,6 +198,26 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			} finally {
 				this.order_summ_item.is_loading = false;
 			}
+		},
+
+		async updateOrderCustomerSummPageSize(size: number) {
+			this.order_summ_customer.page_size = size;
+			this.getOrderCustomerSummary();
+
+			if (this.order_summ_customer.page_size > this.order_summ_customer.total_data) {
+				this.order_summ_customer.current_page = 1;
+				return;
+			}
+		},
+
+		async updateOrderCustomerSummPage(page: number) {
+			this.order_summ_customer.current_page = page;
+
+			if (this.order_summ_customer.current_page < 0 || this.order_summ_customer.total_data === this.order_summ_customer.data.length) {
+				return;
+			}
+
+			this.getOrderCustomerSummary();
 		},
 
 		async getOrderCustomerSummary() {
@@ -164,15 +239,22 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				const { data } = await $api.summOrder.getSummOrderCustomers({
+				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderCustomers({
 					$filter: filter,
 					$orderby: 'biz_date desc',
+					$count: true,
 					$top: this.order_summ_customer.page_size,
 					$skip: (this.order_summ_customer.current_page - 1) * this.order_summ_customer.page_size,
 				});
 
 				if (data) {
-					this.order_summ_customer.data = data;
+					if (this.order_summ_customer.current_page > 1 && this.order_summ_customer.total_data > this.order_summ_customer.data.length) {
+						this.order_summ_customer.data = [...this.order_summ_customer.data, ...data];
+					} else {
+						this.order_summ_customer.data = data;
+					}
+
+					this.order_summ_customer.total_data = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

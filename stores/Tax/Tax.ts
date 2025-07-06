@@ -17,6 +17,7 @@ export const useTaxStore = defineStore('taxStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		taxes: [] as Tax[],
+		total_taxes: 0 as number,
 		new_tax: structuredClone(initialEmptyTax),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -27,21 +28,45 @@ export const useTaxStore = defineStore('taxStore', {
 			this.new_tax = structuredClone(initialEmptyTax);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.taxes.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getTaxes();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.taxes.length === this.total_taxes) {
+				return;
+			}
+
+			this.getTaxes();
 		},
 
 		async getTaxes() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.tax.getMany({
+				const { data, '@odata.count': total } = await $api.tax.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
-					this.taxes = data;
+					if (this.current_page > 1 && this.total_taxes > this.taxes.length) {
+						this.taxes = [...this.taxes, ...data];
+					} else {
+						this.taxes = data;
+					}
+
+					this.total_taxes = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);

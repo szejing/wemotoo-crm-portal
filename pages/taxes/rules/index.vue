@@ -49,7 +49,7 @@
 
 				<!-- Pagination  -->
 				<div v-if="tax_rules.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="page_size" :total="tax_rules.length" />
+					<UPagination v-model="current_page" :page-count="page_size" :total="total_tax_rules" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -75,7 +75,6 @@ const links = [
 ];
 
 const modal = useModal();
-const page = ref(1);
 const taxRuleStore = useTaxRuleStore();
 
 onMounted(async () => {
@@ -88,10 +87,10 @@ watch(modal.isOpen, (value) => {
 	}
 });
 
-const { loading, tax_rules, page_size } = storeToRefs(taxRuleStore);
+const { loading, tax_rules, page_size, current_page, total_tax_rules } = storeToRefs(taxRuleStore);
 
 const rows = computed(() => {
-	return tax_rules.value.slice((page.value - 1) * page_size.value, page.value * page_size.value);
+	return tax_rules.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const getAmountTypeLabel = (amountType: string) => {
@@ -106,6 +105,10 @@ const selectTaxRule = async (taxRule: TaxRule) => {
 	if (!taxRule) return;
 
 	navigateTo(`/taxes/rules/${taxRule.code}`);
+};
+
+const updatePage = async (page: number) => {
+	await taxRuleStore.updatePage(page);
 };
 </script>
 

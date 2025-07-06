@@ -15,6 +15,7 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		tax_groups: [] as TaxGroup[],
+		total_tax_groups: 0 as number,
 		new_tax_group: structuredClone(initialEmptyTaxGroup),
 		page_size: options_page_size[0],
 		current_page: 1,
@@ -25,21 +26,40 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			this.new_tax_group = structuredClone(initialEmptyTaxGroup);
 		},
 
-		updatePageSize(size: number) {
+		async updatePageSize(size: number) {
 			this.page_size = size;
+
+			if (this.page_size > this.tax_groups.length) {
+				this.current_page = 1;
+				return;
+			}
+
+			this.getTaxGroups();
+		},
+
+		async updatePage(page: number) {
+			this.current_page = page;
+
+			if (this.current_page < 0 || this.tax_groups.length === this.total_tax_groups) {
+				return;
+			}
+
+			this.getTaxGroups();
 		},
 
 		async getTaxGroups() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data } = await $api.taxGroup.getMany({
+				const { data, '@odata.count': total } = await $api.taxGroup.getMany({
 					$top: this.page_size,
+					$count: true,
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
 				if (data) {
 					this.tax_groups = data;
+					this.total_tax_groups = total ?? 0;
 				}
 			} catch (err: any) {
 				console.error(err);
