@@ -100,7 +100,6 @@ const selectOutlet = async (outlet: Outlet) => {
 	modal.open(ZModalOutletDetail, {
 		outlet: JSON.parse(JSON.stringify(outlet)),
 		onUpdate: async (_outlet: Outlet) => {
-			console.log(_outlet);
 			await outletStore.updateOutlet(outlet.code, _outlet);
 			modal.close();
 		},

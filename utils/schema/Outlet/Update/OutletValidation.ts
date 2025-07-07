@@ -11,4 +11,5 @@ export const UpdateOutletValidation = z.object({
 	postal_code: z.string(),
 	longitude: z.number().optional().nullable(),
 	latitude: z.number().optional().nullable(),
+	tax_rule: z.string().optional().nullable(),
 });

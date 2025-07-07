@@ -1,4 +1,5 @@
 import type { Image } from './image';
+import type { Product } from './product';
 
 export type CategoryInput = {
 	code: string;
@@ -18,4 +19,8 @@ export type Category = {
 	parent_category_code?: string | undefined;
 	parent_category?: Category | undefined;
 	category_children?: Category[] | undefined;
+
+	products?: Product[] | undefined;
+
+	total_products?: number;
 };
