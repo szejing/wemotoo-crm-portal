@@ -26,16 +26,8 @@
 				/>
 				<!-- *********************** General Info *********************** -->
 				<div class="mt-4">
-					<!-- <h6 class="text-secondary-700 text-sm font-bold">Values</h6>
-					<div v-if="state.option.values.length > 0">
-						<div v-for="(value, index) in state.option.values" :key="index" class="w-full flex-jbetween-icenter space-y-2">
-							<h5 class="text-neutral-300">#{{ value.id }}</h5>
-
-							<UFormGroup v-slot="{ error }" name="value" required>
-								<UInput v-model="state.option.values[index].value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
-							</UFormGroup>
-						</div>
-					</div> -->
+					<h6 class="text-secondary-700 text-sm font-bold">Tax Rule</h6>
+					<ZSelectMenuTaxRule v-model:tax-rule="state.outlet.tax_rule" @update:tax-rule="updateTaxRule" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
@@ -84,16 +76,21 @@ const state = reactive({
 		postal_code: props.outlet.postal_code,
 		longitude: props.outlet.longitude,
 		latitude: props.outlet.latitude,
+		tax_rule: props.outlet.tax_rule,
 	},
 });
 
 const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude } = event.data;
+const updateTaxRule = (tax_rule: any) => {
+	state.outlet.tax_rule = tax_rule.code;
+};
 
-	emit('update', { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude });
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+	const { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } = event.data;
+
+	emit('update', { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule });
 };
 
 const onDelete = () => {

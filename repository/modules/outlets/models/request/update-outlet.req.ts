@@ -9,4 +9,5 @@ export type UpdateOutletReq = {
 	postal_code: string | undefined;
 	longitude: number | undefined;
 	latitude: number | undefined;
+	tax_rule: string | undefined;
 };

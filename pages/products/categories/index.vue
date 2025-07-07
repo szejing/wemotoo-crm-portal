@@ -34,7 +34,7 @@
 							</template>
 
 							<template #total_items-data="{ row }">
-								<h5 class="text-neutral-500 text-center">{{ row.total_items }}</h5>
+								<h5 class="text-neutral-500 text-center">{{ row.total_products ?? 0 }}</h5>
 							</template>
 
 							<template #empty-state>

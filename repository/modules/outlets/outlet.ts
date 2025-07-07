@@ -26,33 +26,33 @@ class OutletModule extends HttpFactory {
 		});
 	}
 
-	async create(tag: CreateOutletReq): Promise<OutletResp> {
+	async create(outlet: CreateOutletReq): Promise<OutletResp> {
 		return await this.call<any>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
-			body: tag,
+			body: outlet,
 		});
 	}
 
-	async update(code: string, tag: UpdateOutletReq): Promise<OutletResp> {
+	async update(code: string, outlet: UpdateOutletReq): Promise<OutletResp> {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: tag,
+			body: outlet,
 		});
 	}
 
-	async delete(tag: OutletReq): Promise<OutletResp> {
+	async delete(outlet: OutletReq): Promise<OutletResp> {
 		return await this.call<any>({
 			method: 'DELETE',
-			url: `${this.RESOURCE.Delete(tag.code)}`,
+			url: `${this.RESOURCE.Delete(outlet.code)}`,
 		});
 	}
 
-	async restore(tag: OutletReq): Promise<OutletResp> {
+	async restore(outlet: OutletReq): Promise<OutletResp> {
 		return await this.call<any>({
 			method: 'PATCH',
-			url: `${this.RESOURCE.Restore(tag.code)}`,
+			url: `${this.RESOURCE.Restore(outlet.code)}`,
 		});
 	}
 }

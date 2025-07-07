@@ -53,6 +53,8 @@ export const useProductTagStore = defineStore('productTagStore', {
 				const { data, '@odata.count': total } = await $api.tag.getMany({
 					$top: this.page_size,
 					$count: true,
+					$expand: 'products',
+					$orderby: 'value asc',
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 

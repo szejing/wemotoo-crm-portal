@@ -15,6 +15,7 @@ const initialEmptyOutlet: OutletCreate = {
 	postal_code: undefined,
 	longitude: undefined,
 	latitude: undefined,
+	tax_rule: undefined,
 };
 
 export const useOutletStore = defineStore('outletStore', {
@@ -62,8 +63,11 @@ export const useOutletStore = defineStore('outletStore', {
 				const { data, '@odata.count': total } = await $api.outlet.getMany({
 					$top: this.page_size,
 					$count: true,
+					$expand: 'tax_rule',
 					$skip: (this.current_page - 1) * this.page_size,
 				});
+
+				console.log(data);
 
 				if (data) {
 					if (this.current_page > 1 && this.total_outlets > this.outlets.length) {
@@ -137,6 +141,7 @@ export const useOutletStore = defineStore('outletStore', {
 					postal_code: outlet.postal_code,
 					longitude: outlet.longitude || undefined,
 					latitude: outlet.latitude || undefined,
+					tax_rule: outlet.tax_rule as string | undefined,
 				});
 
 				if (data.outlet) {

@@ -70,6 +70,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				const { data, '@odata.count': total } = await $api.category.getMany({
 					$top: this.page_size,
 					$count: true,
+					$expand: 'products',
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
