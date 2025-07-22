@@ -3,6 +3,8 @@ import type { SettingSegment } from '~/utils/types/setting-segment';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { UpdateSettingReq } from './models/request/update-setting.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { BaseODataReq } from '~/repository/base/base.req';
 
 type SettingsResp = {
 	segments: SettingSegment[];
@@ -12,10 +14,11 @@ type SettingsResp = {
 class SettingModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Settings;
 
-	async getMany(): Promise<SettingsResp> {
-		return await this.call<SettingsResp>({
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<SettingsResp>> {
+		return await this.call<BaseODataResp<SettingsResp>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query,
 		});
 	}
 

@@ -9,18 +9,26 @@ export const useSettingStore = defineStore('settingStore', {
 		segments: [] as SettingSegment[],
 		settings: [] as Setting[],
 		updatedSettings: [] as Setting[],
+		page_size: 10,
+		current_page: 1,
+		total_settings: 0,
 	}),
 	actions: {
 		async getSettings() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.setting.getMany();
-				if (data.segments) {
-					this.segments = data.segments;
-				}
-				if (data.settings) {
-					this.settings = data.settings.map((setting) => new Setting(setting));
+				const { data } = await $api.setting.getMany({
+					$top: this.page_size,
+					$count: true,
+					$expand: 'setting_templs,segment_children.setting_templs',
+					$skip: (this.current_page - 1) * this.page_size,
+				});
+
+				if (data) {
+					this.segments = data[0].segments;
+					this.settings = data[0].settings.map((setting) => new Setting(setting));
+					// this.total_settings = data[0]['@odata.count'] ?? 0;
 				}
 			} catch (error) {
 				console.error(error);
