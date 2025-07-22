@@ -50,6 +50,10 @@ const links = [
 
 const settingsStore = useSettingStore();
 
+onMounted(async () => {
+	await settingsStore.getSettings();
+});
+
 const { segments } = storeToRefs(settingsStore);
 
 const items = segments.value.map((segment) => ({

@@ -1,30 +1,36 @@
 <template>
-	<div v-for="template in templates" :key="template.set_code">
-		<div class="flex-jbetween-icenter">
+	<div v-for="template in templates" :key="template.set_code" class="space-y-2">
+		<div class="flex justify-between items-center space-y-2">
 			<h6 class="setting-templs-title">{{ template.set_desc }}</h6>
 
-			<UInput
-				v-if="template.input_type === InputTypeEnum.TEXT"
-				type="text"
-				:model-value="getSettingValue(template)"
-				@update:model-value="(value) => updateSettingValue(template, value)"
-			/>
-			<UInput
-				v-if="template.input_type === InputTypeEnum.NUMBER"
-				type="number"
-				:model-value="getSettingValue(template)"
-				@update:model-value="(value) => updateSettingValue(template, value)"
-			/>
-			<UCheckbox
-				v-if="template.input_type === InputTypeEnum.BOOLEAN"
-				:model-value="getSettingValue(template)"
-				@update:model-value="(value) => updateSettingValue(template, value)"
-			/>
-			<UTextarea
-				v-if="template.input_type === InputTypeEnum.TEXTAREA"
-				:model-value="getSettingValue(template)"
-				@update:model-value="(value) => updateSettingValue(template, value)"
-			/>
+			<div class="min-w-[50%] text-end">
+				<UInput
+					v-if="template.input_type === InputTypeEnum.TEXT"
+					type="text"
+					:model-value="getSettingValue(template)"
+					:disabled="template.is_disabled"
+					@update:model-value="(value) => updateSettingValue(template, value)"
+				/>
+				<UInput
+					v-if="template.input_type === InputTypeEnum.NUMBER"
+					type="number"
+					:model-value="getSettingValue(template)"
+					:disabled="template.is_disabled"
+					@update:model-value="(value) => updateSettingValue(template, value)"
+				/>
+				<UCheckbox
+					v-if="template.input_type === InputTypeEnum.BOOLEAN"
+					:model-value="getSettingValue(template)"
+					:disabled="template.is_disabled"
+					@update:model-value="(value) => updateSettingValue(template, value)"
+				/>
+				<UTextarea
+					v-if="template.input_type === InputTypeEnum.TEXTAREA"
+					:model-value="getSettingValue(template)"
+					:disabled="template.is_disabled"
+					@update:model-value="(value) => updateSettingValue(template, value)"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -67,7 +73,7 @@ const updateSettingValue = (template: SettingTempl, value: string | number | boo
 		set_value: value,
 		value_type: template.input_type,
 	};
-	const updatedSetting = new Setting(settingData as Setting);
+	const updatedSetting = new Setting(settingData as unknown as Setting);
 	settingsStore.addToUpdatedSettings(updatedSetting);
 };
 </script>

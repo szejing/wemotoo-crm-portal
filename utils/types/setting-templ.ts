@@ -1,4 +1,4 @@
-import type { InputType } from '../enum/input-type';
+import type { InputType } from 'wemotoo-common';
 
 export type SettingTempl = {
 	group_code: string;
@@ -9,4 +9,5 @@ export type SettingTempl = {
 	default_val: string;
 	data_source: string;
 	is_disabled: boolean;
+	is_internal: boolean;
 };
