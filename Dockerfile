@@ -3,8 +3,13 @@ FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
+# Install git for git dependencies
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 # Copy package files and install dependencies
 COPY package.json bun.lockb ./
+
+# Install dependencies with proper Git handling
 RUN bun install --frozen-lockfile
 
 # Copy source code and configuration
@@ -27,6 +32,7 @@ COPY --from=builder /app/node_modules/ofetch ./node_modules/ofetch
 COPY --from=builder /app/node_modules/ufo ./node_modules/ufo
 COPY --from=builder /app/node_modules/defu ./node_modules/defu
 COPY --from=builder /app/node_modules/pathe ./node_modules/pathe
+COPY --from=builder /app/node_modules/wemotoo-common ./node_modules/wemotoo-common
 
 # Set environment variables
 ENV NODE_ENV=production

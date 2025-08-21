@@ -27,6 +27,14 @@ export const order_columns = [
 		label: 'Gross Amt',
 	},
 	{
+		key: 'tax_amt_exc',
+		label: 'Tax Amt Exc',
+	},
+	// {
+	// 	key: 'tax_amt_inc',
+	// 	label: 'Tax Amt Inc',
+	// },
+	{
 		key: 'net_amt',
 		label: 'Net Amt',
 	},
@@ -35,15 +43,15 @@ export const order_columns = [
 		label: 'Discount Amt',
 	},
 	{
-		key: 'void_amt',
-		label: 'Void Amt',
-	},
-	{
 		key: 'total_qty',
 		label: 'Total Qty',
 	},
-	{
-		key: 'total_voided_qty',
-		label: 'Total Voided Qty',
-	},
+	// {
+	// 	key: 'void_amt',
+	// 	label: 'Void Amt',
+	// },
+	// {
+	// 	key: 'total_voided_qty',
+	// 	label: 'Total Voided Qty',
+	// },
 ];

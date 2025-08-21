@@ -65,12 +65,17 @@
 		<tfoot>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header text-right border-b">Sub Total ({{ currencyCode }})</td>
+				<td class="cell-header border-b">Sub Total ({{ currencyCode }})</td>
 				<td class="cell-center font-bold text-lg italic border-b">{{ totalGrossAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header text-right border-b-4 border-double">Total ({{ currencyCode }})</td>
+				<td class="cell-header border-b">Tax ({{ currencyCode }})</td>
+				<td class="cell-center text-red-500 italic border-b">-{{ totalTaxAmt?.toFixed(2) ?? 0 }}</td>
+			</tr>
+			<tr>
+				<td colspan="2"></td>
+				<td class="cell-header border-b-4 border-double">Total ({{ currencyCode }})</td>
 				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ totalNetAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
 		</tfoot>
@@ -87,6 +92,7 @@ defineProps<{
 	currencyCode: string | undefined;
 	totalGrossAmt: number | undefined;
 	totalNetAmt: number | undefined;
+	totalTaxAmt: number | undefined;
 	editable: boolean;
 }>();
 

@@ -1,4 +1,4 @@
-import { KEY } from 'wemotoo-common';
+import { KEY } from '~/composables/useWemotooCommon';
 
 export default defineNuxtRouteMiddleware(async (to, _from) => {
 	if (import.meta.client) {

@@ -76,6 +76,16 @@
 						<p>{{ row.disc_amt.toFixed(2) }}</p>
 					</template>
 
+					<template #tax_amt_exc-header>
+						<p>
+							Tax Amt Exc <span class="italic text-gray-500">({{ currency_code }})</span>
+						</p>
+					</template>
+
+					<template #tax_amt_exc-data="{ row }">
+						<p>{{ row.tax_amt_exc.toFixed(2) }}</p>
+					</template>
+
 					<template #void_amt-header>
 						<p>
 							Void Amt <span class="italic text-gray-500">({{ currency_code }})</span>

@@ -105,17 +105,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	// For TypeScript support
-	typescript: {
-		tsConfig: {
-			compilerOptions: {
-				paths: {
-					'wemotoo-common': ['../wemotoo-common/dist'],
-				},
-			},
-		},
-	},
-
 	eslint: {
 		config: {
 			stylistic: {
