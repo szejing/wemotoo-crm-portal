@@ -45,41 +45,41 @@
 						<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
 
-					<template #gross_amt-header>
+					<!-- <template #gross_amt-header>
 						<p>
 							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #gross_amt-data="{ row }">
 						<p>{{ row.gross_amt.toFixed(2) }}</p>
 					</template>
 
-					<template #net_amt-header>
+					<!-- <template #net_amt-header>
 						<p>
 							Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #net_amt-data="{ row }">
 						<p>{{ row.net_amt.toFixed(2) }}</p>
 					</template>
 
-					<template #disc_amt-header>
+					<!-- <template #disc_amt-header>
 						<p>
 							Disc Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #disc_amt-data="{ row }">
 						<p>{{ row.disc_amt.toFixed(2) }}</p>
 					</template>
 
-					<template #void_amt-header>
+					<!-- <template #void_amt-header>
 						<p>
 							Void Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #void_amt-data="{ row }">
 						<p>{{ row.void_amt.toFixed(2) }}</p>
@@ -131,8 +131,6 @@ const links = [
 const page = ref(1);
 const saleStore = useSaleStore();
 const { bills, filter, total_bills, loading } = storeToRefs(saleStore);
-
-const currency_code = ref(filter.value.currency_code);
 
 const selectedColumns = ref(sale_columns);
 const columnsTable = computed(() => sale_columns.filter((column) => selectedColumns.value.includes(column)));

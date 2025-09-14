@@ -4,7 +4,7 @@
 
 @layer base {
 	body {
-		@apply bg-neutral-100 font-lato;
+		@apply bg-neutral-100;
 	}
 
 	.section-page-size {
@@ -88,23 +88,23 @@
 
 	/**************************** word styling ****************************/
 	h1 {
-		@apply font-lato font-semibold text-2xl text-secondary-600;
+		@apply font-semibold text-2xl text-secondary-600;
 	}
 
 	h2 {
-		@apply font-lato font-semibold text-xl text-secondary-600;
+		@apply font-semibold text-xl text-secondary-600;
 	}
 
 	h3 {
-		@apply font-lato font-semibold text-base text-secondary-600;
+		@apply font-semibold text-base text-secondary-600;
 	}
 
 	h4 {
-		@apply font-lato font-medium text-base text-secondary-600;
+		@apply font-medium text-base text-secondary-600;
 	}
 
 	p {
-		@apply font-lato font-normal text-base;
+		@apply font-normal text-base;
 	}
 
 	/**************************** container styling ****************************/

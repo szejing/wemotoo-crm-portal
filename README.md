@@ -12,3 +12,7 @@ docker compose down
 docker compose up -d
 
 docker rmi
+
+docker-compose up --build wemotoo-crm
+
+docker run -d -p 3000:3000 --name wemotoo-crm registry.digitalocean.com/wemotoo/crm-portal:latest

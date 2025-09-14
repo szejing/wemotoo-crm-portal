@@ -23,16 +23,11 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Install only the essential production dependencies using package.json
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/.output ./
+# Copy the built application with all dependencies included
+COPY --from=builder /app/.output ./.output
 
-# Copy specific node_modules that are needed at runtime
-COPY --from=builder /app/node_modules/ofetch ./node_modules/ofetch
-COPY --from=builder /app/node_modules/ufo ./node_modules/ufo
-COPY --from=builder /app/node_modules/defu ./node_modules/defu
-COPY --from=builder /app/node_modules/pathe ./node_modules/pathe
-COPY --from=builder /app/node_modules/wemotoo-common ./node_modules/wemotoo-common
+# Copy package.json for reference (optional)
+COPY --from=builder /app/package.json ./
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -56,4 +51,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node --version || exit 1
 
 # Start the application
-CMD ["node", "server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]

@@ -23,21 +23,21 @@
 						<p class="font-bold">{{ row.total_qty }}</p>
 					</template>
 
-					<template #gross_amt-header>
+					<!-- <template #gross_amt-header>
 						<p>
 							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #gross_amt-data="{ row }">
 						<p class="font-bold">{{ row.gross_amt.toFixed(2) }}</p>
 					</template>
 
-					<template #net_amt-header>
+					<!-- <template #net_amt-header>
 						<p>
 							Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 						</p>
-					</template>
+					</template> -->
 
 					<template #net_amt-data="{ row }">
 						<p class="font-bold">{{ row.net_amt.toFixed(2) }}</p>
@@ -62,21 +62,21 @@
 									<UBadge v-else-if="item.item_status == OrderItemStatus.VOIDED" variant="outline" color="red">VOIDED</UBadge>
 								</template>
 
-								<template #gross_amt-header>
+								<!-- <template #gross_amt-header>
 									<p>
 										Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 									</p>
-								</template>
+								</template> -->
 
 								<template #gross_amt-data="{ row: item }">
 									<p>{{ item.gross_amt.toFixed(2) }}</p>
 								</template>
 
-								<template #net_amt-header>
+								<!-- <template #net_amt-header>
 									<p>
 										Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
 									</p>
-								</template>
+								</template> -->
 
 								<template #net_amt-data="{ row: item }">
 									<p>{{ item.net_amt.toFixed(2) }}</p>
@@ -122,8 +122,6 @@ onMounted(async () => {
 const salesSummStore = useSummSaleStore();
 const { sale_summ_items } = storeToRefs(salesSummStore);
 const current_page = computed(() => sale_summ_items.value.current_page);
-
-const currency_code = ref(sale_summ_items.value.filter.currency_code);
 
 const is_loading = computed(() => sale_summ_items.value.is_loading);
 const data = computed(() => sale_summ_items.value.data);
