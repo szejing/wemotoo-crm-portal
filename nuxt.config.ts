@@ -4,7 +4,6 @@ export default defineNuxtConfig({
 		// https://devtools.nuxtjs.org/
 		// https://motion.vueuse.org/nuxt.html
 		// https://vueuse.org/
-
 		// https://github.com/nuxt-modules/icon
 		// https://nuxtseo.com/sitemap/getting-started/how-it-works
 		'@pinia/nuxt',
@@ -34,18 +33,12 @@ export default defineNuxtConfig({
 
 	app: {
 		head: {
-			script: [
-				{ src: 'https://unpkg.com/vue@next', async: true },
-				{ src: 'https://unpkg.com/@vueup/vue-quill@1.2.0', async: true },
-			],
-			link: [
-				{ rel: 'stylesheet', href: 'https://unpkg.com/@vueup/vue-quill@1.2.0/dist/vue-quill.snow.prod.cs' },
-				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
-			],
+			link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
 		},
+		baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
 	},
 
-	css: ['~/assets/css/main.css', '~/assets/css/tailwind.css'],
+	css: ['~/assets/css/tailwind.css'],
 
 	colorMode: {
 		preference: 'light',
@@ -76,6 +69,10 @@ export default defineNuxtConfig({
 		},
 	},
 
+	build: {
+		extractCSS: true,
+	},
+
 	routeRules: {
 		'/api**': {
 			// enable CORS
@@ -92,16 +89,38 @@ export default defineNuxtConfig({
 		},
 	},
 
+	experimental: {
+		inlineSSRStyles: false,
+	},
+
 	compatibilityDate: '2024-04-03',
 
+	nitro: {
+		compressPublicAssets: true,
+	},
+
 	vite: {
+		css: {
+			preprocessorOptions: {
+				css: {
+					charset: false,
+				},
+			},
+		},
 		server: {
 			fs: {
 				allow: [
 					'.', // project root
-					'/Users/szejinggo/Documents/Projects/wemotoo-common', // explicitly allow this path
+					'..', // parent directory for potential shared modules
 				],
 			},
+		},
+	},
+
+	postcss: {
+		plugins: {
+			tailwindcss: {},
+			autoprefixer: {},
 		},
 	},
 

@@ -1,35 +1,44 @@
+# ==============================
 # Build stage
+# ==============================
 FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
-# Install git for git dependencies
+# Install git for git-based dependencies
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-# Copy package files and install dependencies
+# Copy dependency files first (better caching)
 COPY package.json bun.lockb ./
 
-# Install dependencies with proper Git handling
+# Install ALL deps (dev + prod)
 RUN bun install --frozen-lockfile
 
-# Copy source code and configuration
+# Copy full project
 COPY . .
 
-# Build the application
+# Build Nuxt app (production) with increased memory
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN bun run build:prod
 
-# Production stage - use Node.js for runtime compatibility
+
+# ==============================
+# Production stage
+# ==============================
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Copy the built application with all dependencies included
-COPY --from=builder /app/.output ./.output
+# Copy only built output (server + public assets)
+COPY --from=builder /app/.output/ ./.output/
 
-# Copy package.json for reference (optional)
+# Copy package.json (useful for debugging/env checks)
 COPY --from=builder /app/package.json ./
 
-# Set environment variables
+# Copy environment file if it exists
+COPY .env.prod* ./
+
+# Env vars
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV NITRO_HOST=0.0.0.0
@@ -43,12 +52,12 @@ RUN addgroup -g 1001 -S nodejs && \
 RUN chown -R nuxt:nodejs /app
 USER nuxt
 
-# Expose port
+# Expose Nuxt app port
 EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node --version || exit 1
+  CMD wget -qO- http://127.0.0.1:3000 || exit 1
 
-# Start the application
+# Start Nuxt SSR server
 CMD ["node", ".output/server/index.mjs"]

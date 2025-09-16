@@ -208,4 +208,4 @@ const selectAppointment = async (appointment: Appointment) => {
 };
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

@@ -163,4 +163,4 @@ const selectSale = (row: Bill) => {
 };
 </script>
 
-<style></style>
+<style scoped lang="postcss"></style>

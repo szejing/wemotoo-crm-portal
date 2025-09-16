@@ -1,6 +1,6 @@
 import { API_PATH } from 'wemotoo-common';
 
-const prefix: string = '/api';
+const prefix: string = '';
 
 const MerchantRoutes = {
 	Images: {

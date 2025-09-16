@@ -1,14 +1,16 @@
 <template>
-	<QuillEditor
-		v-model:content="text"
-		content-type="html"
-		theme="snow"
-		:options="{
-			placeholder: placeholder,
-		}"
-		class="quil-editor"
-		toolbar="full"
-	/>
+	<client-only>
+		<QuillEditor
+			v-model:content="text"
+			content-type="html"
+			theme="snow"
+			:options="{
+				placeholder: placeholder,
+			}"
+			class="quil-editor"
+			toolbar="full"
+		/>
+	</client-only>
 </template>
 
 <script lang="ts" setup>

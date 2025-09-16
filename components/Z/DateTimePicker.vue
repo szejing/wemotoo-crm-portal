@@ -50,7 +50,7 @@ function onDayClick(_: any, event: MouseEvent): void {
 }
 </script>
 
-<style>
+<style scoped lang="postcss">
 :root {
 	--vc-gray-50: rgb(var(--color-gray-50));
 	--vc-gray-100: rgb(var(--color-gray-100));
