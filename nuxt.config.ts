@@ -44,6 +44,15 @@ export default defineNuxtConfig({
 		preference: 'light',
 	},
 
+	ui: {
+		global: true,
+		icons: ['heroicons', 'simple-icons'],
+		safelistColors: ['primary', 'secondary', 'main', 'neutral'],
+		primary: 'main',
+		gray: 'neutral',
+		strategy: 'merge',
+	},
+
 	// routeRules: {
 	// 	'/**': {
 	// 		proxy: { to: 'http://127.0.0.1:8888/**' },
@@ -69,10 +78,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	build: {
-		extractCSS: true,
-	},
-
 	routeRules: {
 		'/api**': {
 			// enable CORS
@@ -89,8 +94,8 @@ export default defineNuxtConfig({
 		},
 	},
 
-	experimental: {
-		inlineSSRStyles: false,
+	features: {
+		inlineStyles: false,
 	},
 
 	compatibilityDate: '2024-04-03',
@@ -102,10 +107,13 @@ export default defineNuxtConfig({
 	vite: {
 		css: {
 			preprocessorOptions: {
-				css: {
+				scss: {
 					charset: false,
 				},
 			},
+		},
+		build: {
+			cssCodeSplit: false,
 		},
 		server: {
 			fs: {
@@ -133,5 +141,10 @@ export default defineNuxtConfig({
 				braceStyle: '1tbs',
 			},
 		},
+	},
+
+	tailwindcss: {
+		viewer: false,
+		exposeConfig: true,
 	},
 });

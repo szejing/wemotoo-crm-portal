@@ -57,7 +57,8 @@
 		"@vueuse/core": "^13.7.0",
 		"@vueuse/motion": "3.0.3",
 		"@vueuse/nuxt": "^13.7.0",
-		"eslint": "^9.33.0"
+		"eslint": "^9.33.0",
+		"tailwindcss": "3.4.17"
 	},
 	"module": "index.ts",
 	"peerDependencies": {

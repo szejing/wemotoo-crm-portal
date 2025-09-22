@@ -1,7 +1,7 @@
 # ==============================
 # Build stage
 # ==============================
-FROM oven/bun:1 AS builder
+FROM --platform=linux/amd64 oven/bun:1 AS builder
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ RUN bun run build:prod
 # ==============================
 # Production stage
 # ==============================
-FROM node:20-alpine AS production
+FROM --platform=linux/amd64 node:20-alpine AS production
 
 WORKDIR /app
 
