@@ -3,8 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # Force amd64 for Digital Ocean deployment
       platforms:
-        - linux/amd64 # For Digital Ocean deployment
+        - linux/amd64
     ports:
       - '3000:3000'
     environment:
@@ -13,10 +14,6 @@ services:
       - NITRO_PORT=3000
     # env_file:
     # - .env.prod
-    # volumes:
-    # For development, you can mount source code
-    # - .:/app
-    # - /app/node_modules
     tty: true
     stdin_open: true
     restart: unless-stopped

@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { DatePicker as VCalendarDatePicker } from 'v-calendar';
-import 'v-calendar/dist/style.css';
+// import 'v-calendar/dist/style.css';
 import type { DatePickerRangeObject } from 'v-calendar/dist/types/src/use/datePicker.js';
 
 defineOptions({

@@ -3,20 +3,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # Use native architecture for faster local development
       platforms:
-        - linux/amd64 # For Digital Ocean deployment
+        - linux/arm64 # For Apple Silicon development
     ports:
       - '3000:3000'
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - NITRO_HOST=0.0.0.0
       - NITRO_PORT=3000
-    # env_file:
-    # - .env.prod
-    # volumes:
-    # For development, you can mount source code
-    # - .:/app
-    # - /app/node_modules
+    volumes:
+      # For development hot-reloading
+      - .:/app
+      - /app/node_modules
     tty: true
     stdin_open: true
     restart: unless-stopped

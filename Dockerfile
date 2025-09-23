@@ -1,7 +1,10 @@
 # ==============================
 # Build stage
 # ==============================
-FROM --platform=linux/amd64 oven/bun:1 AS builder
+# Use buildx for multi-platform support
+# For local development: native architecture (arm64 on Apple Silicon)
+# For production: amd64 for Digital Ocean
+FROM --platform=${BUILDPLATFORM:-linux/arm64} oven/bun:1 AS builder
 
 WORKDIR /app
 
@@ -25,7 +28,8 @@ RUN bun run build:prod
 # ==============================
 # Production stage
 # ==============================
-FROM --platform=linux/amd64 node:20-alpine AS production
+# Always use target platform for production (amd64 for Digital Ocean)
+FROM --platform=${TARGETPLATFORM:-linux/amd64} node:20-alpine AS production
 
 WORKDIR /app
 

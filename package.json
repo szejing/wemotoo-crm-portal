@@ -15,7 +15,11 @@
 		"postinstall": "nuxt prepare",
 		"typecheck": "nuxt typecheck",
 		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint:fix": "eslint . --fix",
+		"docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
+		"docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
+		"docker:build:dev": "docker buildx build --platform linux/arm64 -t wemotoo-crm:dev .",
+		"docker:build:prod": "docker buildx build --platform linux/amd64 -t wemotoo-crm:prod ."
 	},
 	"dependencies": {
 		"@nuxt/eslint": "^1.2.0",
@@ -26,10 +30,12 @@
 		"@types/uuid": "^10.0.0",
 		"@vee-validate/zod": "^4.15.0",
 		"@vueup/vue-quill": "^1.2.0",
+		"autoprefixer": "^10.4.21",
 		"chart.js": "^4.4.8",
 		"date-fns": "^4.1.0",
 		"nuxt": "^3.18.1",
 		"pinia": "^3.0.3",
+		"postcss": "^8.5.6",
 		"v-calendar": "^3.1.2",
 		"vee-validate": "^4.15.1",
 		"vue": "latest",

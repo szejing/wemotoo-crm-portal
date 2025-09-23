@@ -17,7 +17,6 @@
 	</div>
 </template>
 
-//
 <script lang="ts" setup>
 import { ZModalMessage } from '#components';
 
@@ -55,3 +54,5 @@ watch(modal, () => {
 	}
 });
 </script>
+
+<style scoped lang="postcss"></style>

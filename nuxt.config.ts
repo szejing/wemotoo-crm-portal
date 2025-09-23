@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 		// https://github.com/nuxt-modules/icon
 		// https://nuxtseo.com/sitemap/getting-started/how-it-works
 		'@pinia/nuxt',
-		'@nuxt/devtools',
+		// '@nuxt/devtools', // Temporarily removed to fix UnoCSS style conflicts
 		'@nuxt/image',
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
@@ -29,7 +29,7 @@ export default defineNuxtConfig({
 		'@samk-dev/nuxt-vcalendar',
 	],
 
-	devtools: { enabled: true },
+	// devtools: { enabled: false }, // Temporarily disabled to fix UnoCSS style conflicts
 
 	app: {
 		head: {
@@ -42,15 +42,6 @@ export default defineNuxtConfig({
 
 	colorMode: {
 		preference: 'light',
-	},
-
-	ui: {
-		global: true,
-		icons: ['heroicons', 'simple-icons'],
-		safelistColors: ['primary', 'secondary', 'main', 'neutral'],
-		primary: 'main',
-		gray: 'neutral',
-		strategy: 'merge',
 	},
 
 	// routeRules: {
@@ -114,6 +105,7 @@ export default defineNuxtConfig({
 		},
 		build: {
 			cssCodeSplit: false,
+			sourcemap: true,
 		},
 		server: {
 			fs: {
@@ -122,13 +114,6 @@ export default defineNuxtConfig({
 					'..', // parent directory for potential shared modules
 				],
 			},
-		},
-	},
-
-	postcss: {
-		plugins: {
-			tailwindcss: {},
-			autoprefixer: {},
 		},
 	},
 
@@ -146,5 +131,7 @@ export default defineNuxtConfig({
 	tailwindcss: {
 		viewer: false,
 		exposeConfig: true,
+		configPath: './tailwind.config.js',
+		cssPath: '~/assets/css/tailwind.css',
 	},
 });
