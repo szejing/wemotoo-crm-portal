@@ -114,6 +114,8 @@ const appointmentStore = useAppointmentStore();
 const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 
+useHead({ title: 'Appointments' });
+
 watch(modal.isOpen, (value) => {
 	if (!value) {
 		modal.reset();

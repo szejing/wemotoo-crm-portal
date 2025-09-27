@@ -70,6 +70,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Payment Methods' });
+
 const isUpdating = ref(false);
 const paymentMethodStore = usePaymentMethodStore();
 const { payment_methods, page_size, current_page, total_payment_methods } = storeToRefs(paymentMethodStore);

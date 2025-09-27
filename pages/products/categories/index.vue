@@ -74,6 +74,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Categories' });
+
 const modal = useModal();
 const categoryStore = useProductCategoryStore();
 await categoryStore.getCategories();

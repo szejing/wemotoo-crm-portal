@@ -84,6 +84,8 @@ const links = [
 const productStore = useProductStore();
 // const { newProduct } = storeToRefs(productStore);
 
+useHead({ title: 'Wemotoo CRM - Create Product' });
+
 onBeforeRouteLeave(() => {
 	productStore.resetNewProduct();
 });

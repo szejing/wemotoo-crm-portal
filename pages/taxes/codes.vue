@@ -74,6 +74,8 @@ const links = [
 const modal = useModal();
 const taxStore = useTaxStore();
 
+useHead({ title: 'Wemotoo CRM - Tax Codes' });
+
 onMounted(async () => {
 	await taxStore.getTaxes();
 });

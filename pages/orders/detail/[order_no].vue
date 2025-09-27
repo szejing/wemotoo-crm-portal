@@ -85,6 +85,8 @@ const { detail } = storeToRefs(orderStore);
 const modal = useModal();
 const order = computed(() => detail.value);
 
+useHead({ title: 'Wemotoo CRM - Order Detail #' + order.value?.order_no });
+
 onMounted(async () => {
 	const route = useRoute();
 	const order_no = route.params.order_no;

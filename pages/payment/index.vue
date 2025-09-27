@@ -18,6 +18,8 @@ const payment_navigations = [
 		to: '/payment/methods',
 	},
 ];
+
+useHead({ title: 'Wemotoo CRM - Payment' });
 </script>
 
 <style scoped lang="postcss"></style>

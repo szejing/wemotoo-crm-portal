@@ -89,6 +89,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Order Summary' });
+
 onMounted(async () => {
 	await orderSummStore.getOrderSummary();
 });

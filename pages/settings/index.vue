@@ -50,6 +50,8 @@ const links = [
 
 const settingsStore = useSettingStore();
 
+useHead({ title: 'Wemotoo CRM - Settings' });
+
 onMounted(async () => {
 	await settingsStore.getSettings();
 });

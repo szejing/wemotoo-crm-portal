@@ -38,6 +38,8 @@ const product_navigations = [
 	// 	to: '/products/types',
 	// },
 ];
+
+useHead({ title: 'Wemotoo CRM - Products' });
 </script>
 
 <style scoped lang="postcss"></style>

@@ -70,6 +70,8 @@ const modal = useModal();
 const tagsStore = useProductTagStore();
 await tagsStore.getTags();
 
+useHead({ title: 'Wemotoo CRM - Tags' });
+
 watch(modal.isOpen, (value) => {
 	if (!value) {
 		modal.reset();

@@ -87,6 +87,8 @@ const { current_product } = storeToRefs(productStore);
 const new_thumbnail = ref<File | undefined>(undefined);
 const new_images = ref<File[]>([]);
 
+useHead({ title: 'Wemotoo CRM - Product Detail #' + current_product.value?.code });
+
 onBeforeRouteLeave(() => {
 	current_product.value = undefined;
 });

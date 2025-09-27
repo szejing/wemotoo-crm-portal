@@ -64,6 +64,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Options' });
+
 const modal = useModal();
 const productOptionsStore = useProductOptionStore();
 await productOptionsStore.getOptions();

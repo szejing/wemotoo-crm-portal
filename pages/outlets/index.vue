@@ -64,6 +64,8 @@ const links = [
 const modal = useModal();
 const outletStore = useOutletStore();
 
+useHead({ title: 'Wemotoo CRM - Outlets' });
+
 onMounted(async () => {
 	await outletStore.getOutlets();
 });

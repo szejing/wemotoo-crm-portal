@@ -1,4 +1,4 @@
-import type { $Fetch, NitroFetchOptions } from 'nitropack';
+import type { NitroFetchOptions } from 'nitropack';
 import { ApiErrorModel } from '~/utils/types/api-error-model';
 
 interface IHttpFactory {
@@ -29,12 +29,6 @@ interface IHttpFactory {
 }
 
 class HttpFactory {
-	private readonly $fetch: $Fetch;
-
-	constructor(fetch: $Fetch) {
-		this.$fetch = fetch;
-	}
-
 	async call<T>({
 		method,
 		url,
@@ -57,7 +51,7 @@ class HttpFactory {
 			// if (error instanceof 401) {
 			// 	refresh token -> call again
 			// }
-			throw error.data?.data ? error.data?.data : new ApiErrorModel(500, 'Internal Server Error');
+			throw error.data?.data.error.message ? error.data?.data.error : new ApiErrorModel(500, 'Internal Server Error');
 		}
 	}
 }

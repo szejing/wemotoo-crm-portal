@@ -77,6 +77,8 @@ const links = [
 const modal = useModal();
 const brandStore = useBrandStore();
 
+useHead({ title: 'Wemotoo CRM - Brands' });
+
 onMounted(async () => {
 	await brandStore.getBrands();
 });

@@ -31,6 +31,8 @@ const modal = useModal();
 const taxRuleStore = useTaxRuleStore();
 const { new_tax_rule, adding } = storeToRefs(taxRuleStore);
 
+useHead({ title: 'Wemotoo CRM - Create Tax Rule' });
+
 onMounted(() => {
 	taxRuleStore.resetNewTaxRule();
 });

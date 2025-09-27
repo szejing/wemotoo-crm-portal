@@ -23,6 +23,8 @@ const tax_navigations = [
 		to: '/taxes/rules',
 	},
 ];
+
+useHead({ title: 'Wemotoo CRM - Taxes' });
 </script>
 
 <style scoped lang="postcss"></style>

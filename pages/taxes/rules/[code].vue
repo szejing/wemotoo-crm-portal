@@ -45,6 +45,8 @@ onMounted(async () => {
 	}
 });
 
+useHead({ title: 'Wemotoo CRM - Tax Rule #' + current_tax_rule.value?.code });
+
 const links = [
 	{
 		label: 'Taxes',

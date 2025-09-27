@@ -61,6 +61,8 @@ const links = [
 const modal = useModal();
 const customerStore = useCustomerStore();
 
+useHead({ title: 'Wemotoo CRM - Customers' });
+
 watch(modal.isOpen, (value) => {
 	if (!value) {
 		modal.reset();

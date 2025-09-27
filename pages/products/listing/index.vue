@@ -84,9 +84,9 @@ const links = [
 const modal = useModal();
 const productStore = useProductStore();
 
-onMounted(() => {
-	productStore.getProducts();
-});
+useHead({ title: 'Wemotoo CRM - Products' });
+
+onMounted(() => productStore.getProducts());
 
 watch(modal.isOpen, (value) => {
 	if (!value) {

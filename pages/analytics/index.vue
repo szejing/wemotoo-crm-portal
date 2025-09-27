@@ -13,6 +13,8 @@
 </template>
 
 <script lang="ts" setup>
+useHead({ title: 'Wemotoo CRM - Analytics' });
+
 const order_navigations = [
 	{
 		title: 'Order Summary',

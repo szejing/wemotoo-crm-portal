@@ -74,6 +74,8 @@ const modal = useModal();
 const taxGroupStore = useTaxGroupStore();
 const { loading, tax_groups, page_size, current_page, total_tax_groups } = storeToRefs(taxGroupStore);
 
+useHead({ title: 'Wemotoo CRM - Tax Groups' });
+
 onMounted(async () => {
 	await taxGroupStore.getTaxGroups();
 });

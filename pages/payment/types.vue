@@ -39,6 +39,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Payment Types' });
+
 const paymentTypeStore = usePaymentTypeStore();
 const { payment_type_groups, page_size, current_page, total_payment_type_groups } = storeToRefs(paymentTypeStore);
 

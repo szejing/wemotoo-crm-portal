@@ -139,6 +139,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Orders' });
+
 const orderStore = useOrderStore();
 const { orders, filter, total_orders, loading } = storeToRefs(orderStore);
 

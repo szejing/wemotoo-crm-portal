@@ -38,6 +38,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Dashboard' });
+
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 

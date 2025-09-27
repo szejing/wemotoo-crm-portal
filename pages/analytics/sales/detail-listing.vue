@@ -128,6 +128,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Sale Detail Listing' });
+
 onMounted(async () => {
 	await saleStore.getBills();
 });

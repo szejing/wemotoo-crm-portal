@@ -128,6 +128,8 @@ const links = [
 	},
 ];
 
+useHead({ title: 'Wemotoo CRM - Transactions' });
+
 const page = ref(1);
 const saleStore = useSaleStore();
 const { bills, filter, total_bills, loading } = storeToRefs(saleStore);

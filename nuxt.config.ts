@@ -33,7 +33,11 @@ export default defineNuxtConfig({
 
 	app: {
 		head: {
-			link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }],
+			title: 'Wemotoo CRM', // default fallback title
+			link: [
+				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			],
 		},
 		baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
 	},
