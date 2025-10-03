@@ -161,7 +161,7 @@ const updatePage = async (page: number) => {
 };
 
 const selectSale = (row: Bill) => {
-	navigateTo(`/bills/detail/${row.bill_no}`);
+	navigateTo(`/bills/detail/${encodeURIComponent(row.bill_no)}`);
 };
 </script>
 

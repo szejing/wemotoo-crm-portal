@@ -37,6 +37,29 @@ type OrderItemDto_ = {
 	adj_amt?: number;
 	status: OrderItemStatus;
 	appointment?: Appointment;
+	taxes: OrderItemTaxDto_[];
+};
+
+type OrderItemTaxDto_ = {
+	tax_code: string;
+	item_line: string;
+	tax_rate: number;
+	tax_amt: number;
+	taxable_amt: number;
+	gross_tax_amt: number;
+	disc_tax_amt: number;
+};
+
+type OrderTaxDto_ = {
+	tax_code: string;
+	item_line: string;
+	tax_line: string;
+	tax_desc: string;
+	tax_rate: number;
+	tax_amt: number;
+	taxable_amt: number;
+	gross_tax_amt: number;
+	disc_tax_amt: number;
 };
 
 type OrderPaymentDto_ = {
@@ -63,6 +86,7 @@ export type Order = {
 	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;
+	net_total: number;
 	disc_amt: number;
 	gross_amt_exc: number;
 	net_amt_exc: number;
@@ -78,4 +102,5 @@ export type Order = {
 	items: OrderItemDto_[];
 	payments: OrderPaymentDto_[];
 	customer: OrderCustomerDto_;
+	taxes: OrderTaxDto_[];
 };

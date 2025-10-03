@@ -68,14 +68,14 @@
 				<td class="cell-header border-b">Sub Total ({{ currencyCode }})</td>
 				<td class="cell-center font-bold text-lg italic border-b">{{ totalGrossAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
-			<tr>
+			<tr v-for="tax in taxes" :key="tax.tax_code">
 				<td colspan="2"></td>
-				<td class="cell-header border-b">Tax ({{ currencyCode }})</td>
-				<td class="cell-center text-red-500 italic border-b">-{{ totalTaxAmt?.toFixed(2) ?? 0 }}</td>
+				<td class="cell-header border-b">{{ tax.tax_desc }} ({{ currencyCode }})</td>
+				<td class="cell-center text-red-500 italic border-b">-{{ tax.tax_amt.toFixed(2) }}</td>
 			</tr>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header border-b-4 border-double">Total ({{ currencyCode }})</td>
+				<td class="cell-header border-b-4 border-double">Net Total ({{ currencyCode }})</td>
 				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ totalNetAmt?.toFixed(2) ?? 0 }}</td>
 			</tr>
 		</tfoot>
@@ -86,13 +86,14 @@
 import { ZModalInformation, ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
+import type { TaxModel } from '~/utils/models/tax.model';
 
 defineProps<{
 	items: ItemModel[];
+	taxes: TaxModel[];
 	currencyCode: string | undefined;
 	totalGrossAmt: number | undefined;
 	totalNetAmt: number | undefined;
-	totalTaxAmt: number | undefined;
 	editable: boolean;
 }>();
 

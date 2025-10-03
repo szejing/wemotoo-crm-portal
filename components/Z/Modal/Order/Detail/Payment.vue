@@ -6,7 +6,7 @@
 	>
 		<UCard>
 			<template #header><h3>Update Payment Info</h3></template>
-			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
 					v-model:payment-date-time="state.payment.payment_date_time"
@@ -21,7 +21,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
+					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" @click="onSubmit">Update</UButton>
 				</div>
 			</UForm>
 		</UCard>
@@ -46,6 +46,7 @@ const props = defineProps({
 		required: false,
 	},
 });
+
 const emit = defineEmits(['update', 'cancel']);
 const state = reactive({
 	payment: props.payment || {
@@ -61,6 +62,7 @@ const state = reactive({
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+	console.log('onSubmit', event.data);
 	try {
 		if (!detail.value) {
 			throw new Error('Order not found');

@@ -1,19 +1,13 @@
 <template>
 	<div class="section-grid-basic-details">
-		<div class="flex-jbetween-icenter w-full mt-4">
+		<div class="flex-jbetween-icenter w-full">
 			<div class="flex-icenter gap-4">
 				<div>
-					<h2 class="font-light">#{{ prodCode }}</h2>
-					<p>{{ prodName }}</p>
+					<h2 class="font-bold">#{{ prodCode }}</h2>
+					<p class="font-light">{{ prodName }}</p>
 				</div>
-				<div>
-					<UBadge v-if="status == OrderItemStatus.ACTIVE" size="md" color="green">
-						ACTIVE
-						<template #trailing>
-							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
-						</template>
-					</UBadge>
-					<UBadge v-else-if="status == OrderItemStatus.VOIDED" size="md" color="main">
+				<div class="ml-4">
+					<UBadge v-if="status == OrderItemStatus.VOIDED" size="md" color="main">
 						VOIDED
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
@@ -23,6 +17,12 @@
 						REFUNDED
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
+						</template>
+					</UBadge>
+					<UBadge else-if="status == OrderItemStatus.ACTIVE" size="md" color="green">
+						ACTIVE
+						<template #trailing>
+							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
 						</template>
 					</UBadge>
 				</div>
@@ -61,17 +61,23 @@
 			<h2 class="text-main">Pricing</h2>
 
 			<div class="grid grid-cols-2 gap-4 mt-2">
-				<UFormGroup label="Currency" name="currency">
-					<ZSelectMenuCurrency v-model:currency-code="currencyCode" class="mt-2" />
+				<UFormGroup label="Currency" name="currency" disabled>
+					<ZSelectMenuCurrency :currency-code="currencyCode" class="mt-2" />
 				</UFormGroup>
 
-				<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" required>
-					<UInput v-model="unitSellPrice" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Unit Sell Price" class="mt-2" />
+				<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" disabled>
+					<UInput
+						:model-value="unitSellPrice.toFixed(2)"
+						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+						placeholder="Unit Sell Price"
+						class="mt-2"
+						disabled
+					/>
 				</UFormGroup>
 			</div>
 		</div>
 
-		<div v-if="prodVariants.length > 0">
+		<!-- <div v-if="prodVariants.length > 0">
 			<h2 class="text-main">Variants</h2>
 
 			<ul>
@@ -86,10 +92,10 @@
 					</UButton>
 				</div>
 			</ul>
-		</div>
+		</div> -->
 
 		<div class="mt-4 text-end">
-			<h3 class="text-main">Total Price : {{ currencyCode }} {{ total }}</h3>
+			<h3 class="text-main">Total Price : {{ currencyCode }} {{ netTotal.toFixed(2) }}</h3>
 		</div>
 	</div>
 </template>
@@ -136,18 +142,7 @@ onMounted(async () => {
 	}
 });
 
-const emit = defineEmits([
-	'update:status',
-	'update:prodCode',
-	'update:prodName',
-	'update:prodVariantCode',
-	'update:prodVariantName',
-	'update:prodVariantSku',
-	'update:currencyCode',
-	'update:orderQty',
-	'update:unitSellPrice',
-	'update:appointment',
-]);
+const emit = defineEmits(['update:status', 'update:orderQty', 'update:appointment']);
 
 const status = computed({
 	get() {
@@ -158,76 +153,12 @@ const status = computed({
 	},
 });
 
-const prodCode = computed({
-	get() {
-		return props.prodCode;
-	},
-	set(value) {
-		emit('update:prodCode', value);
-	},
-});
-
-const prodName = computed({
-	get() {
-		return props.prodName;
-	},
-	set(value) {
-		emit('update:prodName', value);
-	},
-});
-
-// const prodVariantId = computed({
-// 	get() {
-// 		return props.prodVariantId;
-// 	},
-// 	set(value) {
-// 		emit('update:prodVariantId', value);
-// 	},
-// });
-
-// const prodVariantName = computed({
-// 	get() {
-// 		return props.prodVariantName;
-// 	},
-// 	set(value) {
-// 		emit('update:prodVariantName', value);
-// 	},
-// });
-
-// const prodVariantSku = computed({
-// 	get() {
-// 		return props.prodVariantSku;
-// 	},
-// 	set(value) {
-// 		emit('update:prodVariantSku', value);
-// 	},
-// });
-
-const currencyCode = computed({
-	get() {
-		return props.currencyCode;
-	},
-	set(value) {
-		emit('update:currencyCode', value);
-	},
-});
-
 const orderQty = computed({
 	get() {
 		return props.orderQty;
 	},
 	set(value) {
-		console.log(value);
 		emit('update:orderQty', value);
-	},
-});
-
-const unitSellPrice = computed({
-	get() {
-		return props.unitSellPrice;
-	},
-	set(value) {
-		emit('update:unitSellPrice', value);
 	},
 });
 
@@ -253,18 +184,18 @@ const updateStatus = (newStatus: OrderItemStatus) => {
 	status.value = newStatus;
 };
 
-const updateVariant = (variant: ProductVariant) => {
-	selectedVariantCode.value = variant.variant_code;
+// const updateVariant = (variant: ProductVariant) => {
+// 	selectedVariantCode.value = variant.variant_code;
 
-	emit('update:prodVariantCode', variant.variant_code);
-	emit('update:prodVariantName', variant.name);
-	emit('update:prodVariantSku', variant.sku);
+// 	emit('update:prodVariantCode', variant.variant_code);
+// 	emit('update:prodVariantName', variant.name);
+// 	emit('update:prodVariantSku', variant.sku);
 
-	unitSellPrice.value = variant!.price_types![0].sale_price ?? 0;
-};
+// 	unitSellPrice.value = variant!.price_types![0].sale_price ?? 0;
+// };
 
-const total = computed(() => {
-	return unitSellPrice.value * orderQty.value;
+const netTotal = computed(() => {
+	return props.unitSellPrice * orderQty.value;
 });
 </script>
 

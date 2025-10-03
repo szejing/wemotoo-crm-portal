@@ -33,6 +33,6 @@ const { showSidebar } = storeToRefs(appUiStore);
 }
 
 .main-content {
-	@apply px-8 py-4 transform duration-500;
+	@apply px-2 py-4 transform duration-500;
 }
 </style>

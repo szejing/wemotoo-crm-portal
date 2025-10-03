@@ -47,12 +47,13 @@
 								</UPopover>
 							</div>
 						</template>
+
 						<ZSectionOrderDetailItems
 							:items="items ?? []"
 							:currency-code="currency_code"
 							:total-gross-amt="order?.gross_amt"
-							:total-net-amt="order?.net_amt"
-							:total-tax-amt="order?.tax_amt_exc"
+							:total-net-amt="order?.net_total"
+							:taxes="order?.taxes ?? []"
 							:editable="order?.status == OrderStatus.NEW"
 							@refresh="getOrder(order?.order_no as string)"
 						/>

@@ -34,7 +34,7 @@
 				>
 					<template #amount-data="{ row }">
 						<div class="text-right">
-							<span class="font-bold">{{ row.currency_code }} {{ row.payment_amt }} </span><br />
+							<span class="font-bold">{{ row.currency_code }} {{ row.payment_amt?.toFixed(2) }} </span><br />
 							<span class="text-[10px] text-neutral-400">{{ row.ref_no1 }}</span>
 						</div>
 					</template>
@@ -44,8 +44,6 @@
 			<div v-else>
 				<p class="text-center text-neutral-400">Not yet paid</p>
 			</div>
-
-			<template #footer> </template>
 		</UCard>
 	</div>
 </template>

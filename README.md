@@ -10,7 +10,7 @@ docker pull registry.digitalocean.com/wemotoo/crm-portal:latest
 
 docker compose down
 docker compose up -d
-
+ 
 docker rmi
 
 docker-compose up --build wemotoo-crm

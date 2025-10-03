@@ -1,5 +1,6 @@
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
+import type { TaxModel } from '~/utils/models/tax.model';
 
 export type Order = {
 	biz_date: string;
@@ -11,6 +12,7 @@ export type Order = {
 	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;
+	net_total: number;
 	disc_amt: number;
 	gross_amt_exc: number;
 	net_amt_exc: number;
@@ -26,4 +28,5 @@ export type Order = {
 	items: ItemModel[];
 	payments: PaymentModel[];
 	customer: CustomerModel;
+	taxes: TaxModel[];
 };

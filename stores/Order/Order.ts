@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getFormattedDate, isEmptyOrNull, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { getFormattedDate, isEmptyOrNull, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -57,6 +57,7 @@ export const useOrderStore = defineStore('orderStore', {
 
 			this.getOrders();
 		},
+
 		async getOrders() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -119,21 +120,23 @@ export const useOrderStore = defineStore('orderStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
-					const data = await $api.sale.updateOrderToSale(order_no, customer_no);
+				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
 
-					if (data.bill) {
-						this.detail = undefined;
-						successNotification('Order status updated successfully');
-					}
-				} else {
-					const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
-
-					if (data.order) {
-						this.detail = data.order;
-						successNotification('Order status updated successfully');
-					}
+				if (data.status) {
+					this.getOrderByOrderNo(order_no);
+					successNotification('Order status updated successfully');
 				}
+
+				// if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
+				// 	const data = await $api.sale.updateOrderToSale(order_no, customer_no);
+
+				// 	if (data.bill) {
+				// 		this.detail = undefined;
+				// 		successNotification('Order status updated successfully');
+				// 	}
+				// } else {
+
+				// }
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
@@ -147,8 +150,8 @@ export const useOrderStore = defineStore('orderStore', {
 			try {
 				const data = await $api.order.updateOrder(order_no, customer_no, payment_status);
 
-				if (data.order) {
-					this.detail = data.order;
+				if (data.status) {
+					this.getOrderByOrderNo(order_no);
 					successNotification('Payment status updated successfully');
 				}
 			} catch (err: any) {
@@ -173,8 +176,8 @@ export const useOrderStore = defineStore('orderStore', {
 			try {
 				const data = await $api.order.updatePayments(order_no, this.detail!.customer.customer_no, payments);
 
-				if (data.order) {
-					this.detail = data.order;
+				if (data.status) {
+					this.getOrderByOrderNo(order_no);
 					successNotification('Payment Info Added successfully');
 				}
 			} catch (err: any) {
@@ -190,8 +193,8 @@ export const useOrderStore = defineStore('orderStore', {
 			try {
 				const data = await $api.order.updateCustomer(order_no, customer);
 
-				if (data.order) {
-					this.detail = data.order;
+				if (data.status) {
+					this.getOrderByOrderNo(order_no);
 					successNotification('Customer updated successfully');
 				}
 			} catch (err: any) {
@@ -214,8 +217,8 @@ export const useOrderStore = defineStore('orderStore', {
 
 				const data = await $api.order.updateItems(order_no, this.detail!.customer.customer_no, items ?? []);
 
-				if (data.order) {
-					this.detail = data.order;
+				if (data.status) {
+					this.getOrderByOrderNo(order_no);
 					successNotification('Order item updated successfully');
 				}
 			} catch (err: any) {

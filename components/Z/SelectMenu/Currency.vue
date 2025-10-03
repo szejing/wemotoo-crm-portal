@@ -1,21 +1,19 @@
 <template>
-	<UFormGroup name="currencies">
-		<USelectMenu
-			v-model="currency_code"
-			v-model:query="query"
-			:options="currencies"
-			searchable
-			size="md"
-			value-attribute="code"
-			option-attribute="code"
-			:disabled="currencies.length == 1"
-		>
-			<template #label>
-				<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
-				<span v-else class="text-gray-400">Select Currency</span>
-			</template>
-		</USelectMenu>
-	</UFormGroup>
+	<USelectMenu
+		v-model="currency_code"
+		v-model:query="query"
+		:options="currencies"
+		searchable
+		size="md"
+		value-attribute="code"
+		option-attribute="code"
+		:disabled="currencies.length == 1"
+	>
+		<template #label>
+			<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
+			<span v-else class="text-gray-400">Select Currency</span>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>

@@ -30,18 +30,6 @@ class SaleModule extends HttpFactory {
 			url: `${this.RESOURCE.Single(bill_no)}`,
 		});
 	}
-
-	/**
-	 * Updates order to sale
-	 * @returns
-	 */
-	async updateOrderToSale(order_no: string, customer_no: string): Promise<GetSaleResp> {
-		return await this.call<GetSaleResp>({
-			method: 'POST',
-			url: `${this.RESOURCE.Process()}`,
-			body: { order_no, customer_no },
-		});
-	}
 }
 
 export default SaleModule;

@@ -91,7 +91,7 @@ const refNo2 = computed({
 
 const paymentAmount = computed({
 	get() {
-		return props.paymentAmount;
+		return props.paymentAmount?.toFixed(2);
 	},
 	set(value) {
 		emit('update:paymentAmount', value);

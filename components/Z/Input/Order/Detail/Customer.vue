@@ -11,7 +11,8 @@
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<ZSelectMenuCountry v-model:country-code="dial_code" />
+			<!-- todo: add country code -->
+			<!-- <ZSelectMenuCountry v-model:country-code="dial_code" /> -->
 
 			<UFormGroup v-slot="{ error }" label="Phone Number" name="phone_no" required>
 				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Phone Number" />

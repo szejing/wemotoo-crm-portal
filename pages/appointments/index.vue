@@ -2,17 +2,14 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
-		<div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+		<div class="mt-4 grid grid-cols-1 lg:grid-cols-4 lg:gap-4 space-y-4 lg:space-y-0">
 			<!-- Calendar Section -->
-			<div class="order-1 shadow-md">
-				<div class="bg-white rounded-lg border border-gray-200 p-4">
-					<h2 class="text-lg font-semibold mb-4 text-gray-900">Calendar</h2>
-					<VCalendar :attributes="dates" :columns="calendarColumns" @dayclick="onDateSelect" />
-				</div>
+			<div class="order-1 shadow-md bg-white rounded-lg border border-gray-200 p-4">
+				<VCalendar expanded borderless :attributes="dates" :columns="1" @dayclick="onDateSelect" @did-move="onMonthChange" />
 			</div>
 
 			<!-- Appointments List Section -->
-			<div class="order-2">
+			<div class="order-2 col-span-3 row-span-2">
 				<div class="bg-white rounded-lg border border-gray-200 p-4 shadow-md">
 					<div class="flex items-center justify-between mb-4">
 						<h2 class="text-lg font-semibold text-gray-900">Upcoming Appointments</h2>
@@ -109,10 +106,13 @@ const links = [
 	},
 ];
 
+const today = new Date();
 const modal = useModal();
 const appointmentStore = useAppointmentStore();
 const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
+const selectedMonth = ref(today.getMonth() + 1);
+const selectedYear = ref(today.getFullYear());
 
 useHead({ title: 'Appointments' });
 
@@ -123,21 +123,10 @@ watch(modal.isOpen, (value) => {
 });
 
 // Responsive calendar columns
-const calendarColumns = ref(1);
-const today = new Date();
 
 // Update columns based on screen size
 onMounted(async () => {
-	const updateColumns = () => {
-		calendarColumns.value = window.innerWidth >= 1024 ? 2 : 1;
-	};
-
-	updateColumns(); // Initial check
-	window.addEventListener('resize', updateColumns);
-
-	const months = calendarColumns.value > 2 ? [today.getMonth() + 1, today.getMonth() + 2] : today.getMonth() + 1;
-
-	await appointmentStore.getAppointments(AppointmentStatus.CONFIRMED, months);
+	await appointmentStore.getAppointments(selectedMonth.value);
 });
 
 // Display appointments based on filter state
@@ -147,7 +136,12 @@ const displayedAppointments = computed(() => {
 	}
 
 	return appointments.value
-		.filter((appointment) => isFuture(new Date(appointment.date_time)))
+		.filter(
+			(appointment) =>
+				new Date(appointment.date_time).getMonth() == selectedMonth.value - 1 &&
+				new Date(appointment.date_time).getFullYear() == selectedYear.value &&
+				isFuture(new Date(appointment.date_time)),
+		)
 		.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime())
 		.slice(0, 10);
 });
@@ -165,6 +159,15 @@ const dates = computed(() => {
 		customData: appointment,
 	}));
 });
+
+const onMonthChange = async (page: any) => {
+	selectedMonth.value = page[0].month;
+	selectedYear.value = page[0].year;
+
+	filteredAppointments.value = [];
+
+	await appointmentStore.getAppointments(selectedMonth.value);
+};
 
 // Handle calendar date selection
 const onDateSelect = (selectedDate: any) => {

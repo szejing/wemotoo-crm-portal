@@ -11,6 +11,7 @@ export default withNuxt({
 		'vue/singleline-html-element-content-newline': 'off',
 		'vue/no-multiple-template-root': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
+		'operator-linebreak': 'off',
 		'import/order': 'off',
 		'vue/html-indent': [
 			'error',
@@ -28,6 +29,7 @@ export default withNuxt({
 		'@stylistic/arrow-parens': 'off',
 		'@stylistic/indent-binary-ops': 'off',
 		'@stylistic/no-mixed-spaces-and-tabs': 'off',
+		'@stylistic/operator-linebreak': 'off',
 	},
 });
 // Your custom configs here

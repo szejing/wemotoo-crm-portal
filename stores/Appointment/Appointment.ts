@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { Appointment } from '~/utils/types/appointment';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import type { AppointmentStatus } from 'wemotoo-common';
+import { AppointmentStatus } from 'wemotoo-common';
 
 export const useAppointmentStore = defineStore('appointmentStore', {
 	state: () => ({
@@ -12,16 +12,15 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 		errors: [] as string[],
 	}),
 	actions: {
-		async getAppointments(status?: AppointmentStatus, months?: number | number[]) {
+		async getAppointments(months?: number | number[]) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = '';
+				// eq = equal, ne = not equal
+				// exclude completed
+				let filter = `status ne '${AppointmentStatus.COMPLETED}'`;
 
 				// Add status filter if provided
-				if (status) {
-					filter = `status eq '${status}'`;
-				}
 
 				// Handle months filter
 				if (months !== undefined) {
@@ -36,7 +35,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 						const startDateStr = startDate.toISOString();
 						const endDateStr = endDate.toISOString();
 
-						return `(date_time ge '${startDateStr}' and date_time le '${endDateStr}')`;
+						return `date_time between '${startDateStr}' and '${endDateStr}'`;
 					});
 
 					const monthFilter = dateFilters.join(' or ');
@@ -48,9 +47,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					}
 				}
 
-				const { data } = await $api.appointment.getMany({
-					$filter: filter,
-				});
+				const { data } = await $api.appointment.getMany({ $filter: filter });
 
 				if (data) {
 					this.appointments = data;
