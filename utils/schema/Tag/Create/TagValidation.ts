@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
 export const CreateTagValidation = z.object({
-	value: z.string(),
-	metadata: z.record(z.unknown()).optional(),
+	value: z.string({ message: 'Tag is required' }),
+	metadata: z.record(z.string(), z.unknown()).optional(),
 });

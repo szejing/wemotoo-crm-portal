@@ -60,9 +60,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		country_code,
 		state,
 		postal_code,
-		longitude,
-		latitude,
-		tax_rule,
+		longitude: longitude ?? undefined,
+		latitude: latitude ?? undefined,
+		tax_rule: tax_rule ?? undefined,
 	};
 
 	await outletStore.createOutlet();

@@ -19,8 +19,8 @@
 			</UFormGroup>
 		</div>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<div class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
+		<div v-if="shipping_address || billing_address" class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
+			<div v-if="shipping_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
 				<h3>Shipping Address</h3>
 				<ZInputAddress
 					v-if="shipping_address"
@@ -35,7 +35,7 @@
 				/>
 			</div>
 
-			<div class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
+			<div v-if="billing_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
 				<div class="flex-between">
 					<h3>Billing Address</h3>
 					<UCheckbox

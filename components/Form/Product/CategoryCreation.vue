@@ -22,7 +22,6 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-
 import { CreateCategoryValidation } from '~/utils/schema';
 
 type Schema = z.output<typeof CreateCategoryValidation>;

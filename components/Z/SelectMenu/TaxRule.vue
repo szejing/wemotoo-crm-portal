@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { TaxRuleInput, TaxRule } from '~/utils/types/tax-rule';
+import type { TaxRule, TaxRuleInput } from '~/utils/types/tax-rule';
 
 const query = ref('');
 const taxRuleStore = useTaxRuleStore();
 const { tax_rules: tax_rules_options } = storeToRefs(taxRuleStore);
 
-const props = defineProps<{ taxRule: TaxRule | TaxRuleInput | undefined }>();
+const props = defineProps<{ taxRule: TaxRule | TaxRuleInput | string | undefined }>();
 
 const emit = defineEmits(['update:taxRule']);
 

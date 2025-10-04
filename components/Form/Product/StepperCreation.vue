@@ -48,124 +48,124 @@
 		</div>
 
 		<!-- Step Content -->
-		<UCard
-			class="min-h-[500px] max-w-[100%] sm:max-w-[100%] md:max-w-[80%] lg:max-w-[80%] mx-auto flex flex-col"
-			:ui="{
-				base: 'flex flex-col h-full',
-				body: { base: 'flex-1', padding: 'px-4' },
-				header: { padding: 'px-4 py-4' },
-				footer: { padding: 'px-4 py-4' },
-				ring: 'ring-0',
-				shadow: 'shadow-lg',
-			}"
-		>
-			<template #header>
-				<h2 class="text-xl font-semibold">{{ getCurrentStep()?.name }}</h2>
-				<p class="text-sm text-gray-500 mt-1">{{ getCurrentStep()?.description }}</p>
-			</template>
+		<UForm :schema="CreateProductValidation" :state="new_product" class="space-y-4" @submit="onSubmit">
+			<UCard
+				class="min-h-[500px] max-w-[100%] sm:max-w-[100%] md:max-w-[80%] lg:max-w-[80%] mx-auto flex flex-col"
+				:ui="{
+					base: 'flex flex-col h-full',
+					body: { base: 'flex-1', padding: 'px-4' },
+					header: { padding: 'px-4 py-4' },
+					footer: { padding: 'px-4 py-4' },
+					ring: 'ring-0',
+					shadow: 'shadow-lg',
+				}"
+			>
+				<template #header>
+					<h2 class="text-xl font-semibold">{{ getCurrentStep()?.name }}</h2>
+					<p class="text-sm text-gray-500 mt-1">{{ getCurrentStep()?.description }}</p>
+				</template>
 
-			<!-- Step 1: Images & Basic Info -->
-			<div v-if="currentStep === 1" class="space-y-6">
-				<ZInputProductGeneralInfo
-					v-model:is-active="new_product.is_active"
-					v-model:is-giftcard="new_product.is_giftcard"
-					v-model:is-discountable="new_product.is_discountable"
-					v-model:code="new_product.code"
-					v-model:name="new_product.name"
-					v-model:short-desc="new_product.short_desc"
-					v-model:long-desc="new_product.long_desc"
-					v-model:type="new_product.type"
-					:card-ui="borderlessCardUi"
-					hide-header
-				/>
+				<!-- Step 1: Images & Basic Info -->
+				<div v-if="currentStep === 1" class="space-y-6">
+					<ZInputProductGeneralInfo
+						v-model:is-active="new_product.is_active"
+						v-model:is-giftcard="new_product.is_giftcard"
+						v-model:is-discountable="new_product.is_discountable"
+						v-model:code="new_product.code"
+						v-model:name="new_product.name"
+						v-model:short-desc="new_product.short_desc"
+						v-model:long-desc="new_product.long_desc"
+						v-model:type="new_product.type"
+						:card-ui="borderlessCardUi"
+						hide-header
+					/>
 
-				<hr />
+					<hr />
 
-				<div class="flex flex-col justify-start items-start md:flex-row md:justify-between gap-4">
-					<div class="flex flex-col w-full">
-						<h3 class="text-lg font-medium">Thumbnail</h3>
-						<p class="text-xs text-gray-400">
-							Recommended size: 1:1 <br />
-							Image will be used as thumbnail
-						</p>
-						<ZDropzone class="mt-4 max-w-[250px]" :existing-images="new_product.thumbnail ? [new_product.thumbnail] : []" @files-selected="updateThumbnail" />
-					</div>
+					<div class="flex flex-col justify-start items-start md:flex-row md:justify-between gap-4">
+						<div class="flex flex-col w-full">
+							<h3 class="text-lg font-medium">Thumbnail</h3>
+							<p class="text-xs text-gray-400">
+								Recommended size: 1:1 <br />
+								Image will be used as thumbnail
+							</p>
+							<ZDropzone class="mt-4 max-w-[250px]" :existing-images="new_product.thumbnail ? [new_product.thumbnail] : []" @files-selected="updateThumbnail" />
+						</div>
 
-					<div class="flex flex-col w-full">
-						<h3 class="text-lg font-medium">Images</h3>
-						<p class="text-xs text-gray-400">
-							Recommended size: 1:1 <br />
-							Max 3 images, images will be used as product images
-						</p>
-						<ZDropzone multiple :max-images="3" class="mt-4 max-w-[250px]" :existing-images="new_product.images" @files-selected="updateImages" />
-					</div>
-				</div>
-			</div>
-
-			<!-- Step 2: Categories, Tags & Brands -->
-			<div v-if="currentStep === 2" class="space-y-6">
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<div>
-						<h3 class="text-lg font-medium mb-4">Categories</h3>
-						<ZSelectMenuCategories v-model:categories="new_product.categories" />
-					</div>
-
-					<div>
-						<h3 class="text-lg font-medium mb-4">Tags</h3>
-						<ZSelectMenuTags v-model:tags="new_product.tags" />
-					</div>
-
-					<div>
-						<h3 class="text-lg font-medium mb-4">Brands</h3>
-						<ZSelectMenuBrands v-model:brands="new_product.brands" />
+						<div class="flex flex-col w-full">
+							<h3 class="text-lg font-medium">Images</h3>
+							<p class="text-xs text-gray-400">
+								Recommended size: 1:1 <br />
+								Max 3 images, images will be used as product images
+							</p>
+							<ZDropzone multiple :max-images="3" class="mt-4 max-w-[250px]" :existing-images="new_product.images" @files-selected="updateImages" />
+						</div>
 					</div>
 				</div>
 
-				<!-- <div>
+				<!-- Step 2: Categories, Tags & Brands -->
+				<div v-if="currentStep === 2" class="space-y-6">
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<div>
+							<h3 class="text-lg font-medium mb-4">Categories</h3>
+							<ZSelectMenuCategories v-model:categories="new_product.categories" />
+						</div>
+
+						<div>
+							<h3 class="text-lg font-medium mb-4">Tags</h3>
+							<ZSelectMenuTags v-model:tags="new_product.tags" />
+						</div>
+
+						<div>
+							<h3 class="text-lg font-medium mb-4">Brands</h3>
+							<ZSelectMenuBrands v-model:brands="new_product.brands" />
+						</div>
+					</div>
+
+					<!-- <div>
 					<h3 class="text-lg font-medium mb-4">Product Status</h3>
 					<ZSelectMenuProductStatus v-model:status="new_product.status" />
 				</div> -->
-			</div>
-
-			<!-- Step 3: Pricing -->
-			<div v-if="currentStep === 3" class="space-y-6">
-				<ZInputPricing
-					v-model:orig-sell-price.number="orig_sell_price"
-					v-model:cost-price.number="cost_price"
-					v-model:sale-price.number="sale_price"
-					v-model:currency-code="currency_code"
-					:card-ui="borderlessCardUi"
-					hide-header
-				/>
-			</div>
-
-			<!-- Step 4: Product Variants (Optional) -->
-			<div v-if="currentStep === 4" class="space-y-6">
-				<ZInputProductAdditionalInfo
-					:product="new_product"
-					:card-ui="borderlessCardUi"
-					hide-header
-					@update:options="updateProductOptions"
-					@update:variants="updateProductVariants"
-					@update:metadata="updateProductMetadata"
-				/>
-			</div>
-
-			<template #footer>
-				<div class="flex justify-between items-center">
-					<UButton v-if="currentStep > 1" color="gray" variant="outline" @click="previousStep"> Previous </UButton>
-					<div v-else></div>
-
-					<div class="flex space-x-3">
-						<UButton color="gray" variant="ghost" :loading="saving" @click="saveDraft"> Save as Draft </UButton>
-
-						<UButton v-if="currentStep < 4" color="primary" @click="nextStep"> Next Step </UButton>
-
-						<UButton v-else color="green" :loading="adding" @click="createProduct"> Create Product </UButton>
-					</div>
 				</div>
-			</template>
-		</UCard>
+
+				<!-- Step 3: Pricing -->
+				<div v-if="currentStep === 3" class="space-y-6">
+					<ZInputPricing
+						v-model:orig-sell-price.number="orig_sell_price"
+						v-model:cost-price.number="cost_price"
+						v-model:sale-price.number="sale_price"
+						v-model:currency-code="currency_code"
+						:card-ui="borderlessCardUi"
+						hide-header
+					/>
+				</div>
+
+				<!-- Step 4: Product Variants (Optional) -->
+				<div v-if="currentStep === 4" class="space-y-6">
+					<ZInputProductAdditionalInfo
+						:product="new_product"
+						:card-ui="borderlessCardUi"
+						hide-header
+						@update:options="updateProductOptions"
+						@update:variants="updateProductVariants"
+						@update:metadata="updateProductMetadata"
+					/>
+				</div>
+
+				<template #footer>
+					<div class="flex justify-between items-center">
+						<UButton v-if="currentStep > 1" color="gray" variant="outline" @click="previousStep"> Previous </UButton>
+						<div v-else></div>
+
+						<div class="flex space-x-3">
+							<UButton color="gray" variant="ghost" :loading="saving" @click="saveDraft"> Save as Draft </UButton>
+							<UButton v-if="currentStep < 4" color="primary" @click="nextStep"> Next Step </UButton>
+							<UButton v-else color="green" :loading="adding" type="submit"> Create Product </UButton>
+						</div>
+					</div>
+				</template>
+			</UCard>
+		</UForm>
 	</div>
 </template>
 
@@ -177,7 +177,11 @@ import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
 import type { TagInput } from '~/utils/types/tag';
 import { ZModalLoading } from '#components';
 import type { BrandInput } from '~/utils/types/brand';
+import type { FormSubmitEvent } from '#ui/types';
+import type { z } from 'zod';
+import { CreateProductValidation } from '~/utils/schema';
 
+type Schema = z.output<typeof CreateProductValidation>;
 const productStore = useProductStore();
 const { new_product, adding } = storeToRefs(productStore);
 
@@ -332,7 +336,8 @@ const saveDraft = async () => {
 	}
 };
 
-const createProduct = async () => {
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+	console.log(event.data);
 	// Clear variants if not needed
 	new_product.value.options = [];
 	new_product.value.variants = [];
@@ -404,9 +409,7 @@ const createProduct = async () => {
 
 	const brands: BrandInput[] = [];
 	new_product.value.brands?.forEach((brand) => {
-		brands.push({
-			code: brand.code!,
-		});
+		brands.push({ code: brand.code! });
 	});
 
 	new_product.value.is_discountable = true;

@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 const Price = z.object({
-	currency_code: z.string(),
-	orig_sell_price: z.number(),
-	cost_price: z.number().optional(),
-	sale_price: z.number().optional(),
+	currency_code: z.string({ message: 'Currency code is required' }),
+	orig_sell_price: z.number({ message: 'Original sell price is required' }),
+	cost_price: z.number().optional().nullable(),
+	sale_price: z.number().optional().nullable(),
 });
 
 const Category = z.object({ code: z.string().optional(), name: z.string().optional() });
@@ -38,12 +38,12 @@ const Variant = z.object({
 });
 
 export const CreateProductValidation = z.object({
-	code: z.string().max(16),
-	name: z.string(),
+	code: z.string({ message: 'Code is required' }).max(16, 'Max. 16 characters'),
+	name: z.string({ message: 'Name is required' }),
 	short_desc: z.string().optional(),
 	long_desc: z.string().optional(),
 	is_active: z.boolean().default(true),
-	status: z.string(),
+	status: z.string({ message: 'Status is required' }),
 	// categories
 	categories: z.array(Category).optional(),
 	// tags

@@ -4,6 +4,7 @@ import type { CategoryInput } from '../category';
 import type { PriceInput } from '../price';
 import type { ProdOptionInput, ProdVariantInput } from '../product';
 import type { BrandInput } from '../brand';
+import type { Image } from '../image';
 
 export type ProductCreate = {
 	code: string | undefined;
@@ -29,10 +30,10 @@ export type ProductCreate = {
 	tags: TagInput[] | undefined;
 
 	// thumbnail
-	thumbnail: File | undefined;
+	thumbnail: File | Image | undefined;
 
 	// images
-	images: File[] | undefined;
+	images: File[] | Image[] | undefined;
 
 	// price
 	price_types: PriceInput[] | undefined;

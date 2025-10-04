@@ -135,8 +135,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		prodPrice.push({
 			id: undefined,
 			orig_sell_price: price.orig_sell_price,
-			cost_price: price.cost_price,
-			sale_price: price.sale_price,
+			cost_price: price.cost_price ?? undefined,
+			sale_price: price.sale_price ?? undefined,
 			currency_code: price.currency_code,
 		});
 	});
@@ -183,8 +183,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 				return {
 					id: undefined,
 					orig_sell_price: price.orig_sell_price,
-					cost_price: price.cost_price,
-					sale_price: price.sale_price,
+					cost_price: price.cost_price ?? undefined,
+					sale_price: price.sale_price ?? undefined,
 					currency_code: price.currency_code,
 				};
 			}),

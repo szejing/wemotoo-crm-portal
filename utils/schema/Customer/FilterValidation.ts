@@ -5,7 +5,7 @@ const AddressValidation = z.object({
 	address2: z.string().optional(),
 	address3: z.string().optional(),
 	city: z.string(),
-	postal_code: z.string().max(6),
+	postal_code: z.string().min(1, 'Postal code is required').max(6, 'Max. 6 characters'),
 	country_code: z.string(),
 	state_name: z.string(),
 });

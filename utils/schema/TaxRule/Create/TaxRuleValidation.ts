@@ -20,13 +20,13 @@ export const TaxConditionValidation = z.object({
 
 export const TaxDetailValidation = z.object({
 	id: z.number().optional(),
-	description: z.string(),
+	description: z.string({ message: 'Tax rule description is required' }),
 	tax_code: z.string().optional(),
 	tax_condition: TaxConditionValidation.optional(),
 });
 
 export const CreateTaxRuleValidation = z.object({
-	code: z.string(),
-	description: z.string(),
+	code: z.string({ message: 'Tax rule code is required' }),
+	description: z.string({ message: 'Tax rule description is required' }),
 	details: z.array(TaxDetailValidation),
 });

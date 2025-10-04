@@ -1,5 +1,3 @@
-import type { TaxRuleInput } from '../tax-rule';
-
 export type OutletCreate = {
 	code: string | undefined;
 	description: string | undefined;
@@ -12,5 +10,5 @@ export type OutletCreate = {
 	postal_code: string | undefined;
 	longitude: number | undefined;
 	latitude: number | undefined;
-	tax_rule: TaxRuleInput | undefined;
+	tax_rule: string | undefined;
 };

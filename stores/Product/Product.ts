@@ -146,7 +146,7 @@ export const useProductStore = defineStore('productStore', {
 			try {
 				let images: ImageReq[] = [];
 				if (this.new_product.images) {
-					const resp = await $api.image.uploadMultiple(this.new_product.images, `${dir.products}/${this.new_product.code}`);
+					const resp = await $api.image.uploadMultiple(this.new_product.images as File[], `${dir.products}/${this.new_product.code}`);
 					images = resp.images.map((image) => ({
 						id: image.id,
 						url: image.url,
@@ -155,7 +155,7 @@ export const useProductStore = defineStore('productStore', {
 
 				let thumbnail: ImageReq | undefined;
 				if (this.new_product.thumbnail) {
-					const resp = await $api.image.upload(this.new_product.thumbnail, `${dir.products}/${this.new_product.code}`);
+					const resp = await $api.image.upload(this.new_product.thumbnail as File, `${dir.products}/${this.new_product.code}`);
 					thumbnail = {
 						id: resp.image.id,
 						url: resp.image.url,

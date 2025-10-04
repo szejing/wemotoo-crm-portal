@@ -53,7 +53,7 @@
 <script setup lang="ts">
 interface InputTags {
 	canAdd?: boolean;
-	modelValue: string[];
+	modelValue?: string[];
 	name?: string;
 	options?: string[];
 	placeholder?: string;

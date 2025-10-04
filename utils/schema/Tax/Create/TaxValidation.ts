@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const CreateTaxValidation = z.object({
-	code: z.string().min(1),
-	description: z.string(),
-	is_inclusive: z.boolean(),
+	code: z.string({ message: 'Tax code is required' }).min(1),
+	description: z.string({ message: 'Tax description is required' }),
+	is_inclusive: z.boolean().default(false),
 	is_active: z.boolean().default(true),
-	metadata: z.record(z.unknown()).optional(),
+	metadata: z.record(z.string(), z.unknown()).optional(),
 });

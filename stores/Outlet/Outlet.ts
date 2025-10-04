@@ -67,8 +67,6 @@ export const useOutletStore = defineStore('outletStore', {
 					$skip: (this.current_page - 1) * this.page_size,
 				});
 
-				console.log(data);
-
 				if (data) {
 					if (this.current_page > 1 && this.total_outlets > this.outlets.length) {
 						this.outlets = [...this.outlets, ...data];

@@ -1,6 +1,6 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
+		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
 			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
 		</UFormGroup>
 
@@ -24,6 +24,7 @@ const code = computed({
 		return props.code;
 	},
 	set(value) {
+		console.log('value', value);
 		emit('update:code', value?.toUpperCase());
 	},
 });
