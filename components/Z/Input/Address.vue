@@ -13,12 +13,12 @@
 		</UFormGroup>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormGroup v-slot="{ error }" label="City" name="city" required>
-				<UInput v-model="city" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="City" />
-			</UFormGroup>
-
 			<UFormGroup v-slot="{ error }" label="Postal Code" name="postal_code" required>
 				<UInput v-model="postal_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Postal Code" />
+			</UFormGroup>
+
+			<UFormGroup v-slot="{ error }" label="City" name="city" required>
+				<UInput v-model="city" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="City" />
 			</UFormGroup>
 		</div>
 
@@ -45,6 +45,8 @@
 </template>
 
 <script lang="ts" setup>
+import { findPostcode } from 'malaysia-postcodes';
+
 const props = defineProps<{
 	address1?: string;
 	address2?: string;
@@ -111,6 +113,11 @@ const postal_code = computed({
 		return props.postalCode;
 	},
 	set(value) {
+		const location = findPostcode(value ?? '');
+		if (location) {
+			emit('update:city', location.city);
+			emit('update:stateName', location.state);
+		}
 		emit('update:postalCode', value);
 	},
 });
