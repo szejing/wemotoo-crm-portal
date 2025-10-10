@@ -1,10 +1,10 @@
 <template>
 	<UCard>
 		<div class="w-full flex flex-col gap-4">
-			<div class="gap-2 sm:flex-jbetween-icenter w-full sm:w-[60%]">
+			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Date</h4>
 
-				<div class="flex-col-start gap-2">
+				<div class="flex-col-start">
 					<ZSelectMenuDateRange
 						:start-date="filter.start_date"
 						:end-date="filter.end_date"
@@ -17,6 +17,12 @@
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Order Status</h4>
 				<ZSelectMenuOrderStatus v-model:status="filter.status" />
+			</div>
+			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
+				<h4>Order No</h4>
+				<UFormGroup name="query">
+					<UInput v-model="filter.query" placeholder="Order No" :icon="ICONS.SEARCH_ROUNDED" />
+				</UFormGroup>
 			</div>
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Currency</h4>

@@ -1,5 +1,8 @@
+/* eslint-disable indent */
+/* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import { getFormattedDate, isEmptyOrNull, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
+import type { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -9,7 +12,7 @@ import type { PaymentModel } from '~/utils/models/payment.model';
 
 type OrderFilter = {
 	query: string;
-	status: OrderStatus;
+	status: OrderStatus | string;
 	start_date: Date;
 	end_date: Date | undefined;
 	page_size: number;
@@ -19,7 +22,7 @@ type OrderFilter = {
 
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
-	status: OrderStatus.NEW,
+	status: 'All',
 	start_date: new Date(),
 	end_date: undefined,
 	page_size: options_page_size[0],
@@ -62,13 +65,26 @@ export const useOrderStore = defineStore('orderStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = `status eq '${this.filter.status}'`;
-				if (this.filter.end_date) {
-					filter += ` and (biz_date ge '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
-						this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
-					}')`;
-				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+				let filter = '';
+
+				// For 'All' status, don't add any status filter - let all statuses through
+				if (this.filter.status !== 'All') {
+					filter = `status eq '${this.filter.status}'`;
+				}
+
+				// Add date filter
+				const dateFilter = this.filter.end_date
+					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
+							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
+					  }')`
+					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+
+				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
+
+				// Add query filter if provided
+				if (this.filter.query) {
+					const queryFilter = `order_no contains '${this.filter.query}'`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.order.getOrders({
@@ -76,7 +92,7 @@ export const useOrderStore = defineStore('orderStore', {
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
 					$filter: filter,
-					$search: isEmptyOrNull(this.filter.query) ? undefined : this.filter.query,
+					$orderby: 'biz_date desc, created_at desc',
 				});
 
 				if (data) {

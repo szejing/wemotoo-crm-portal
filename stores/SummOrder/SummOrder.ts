@@ -104,7 +104,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				}
 
 				if (this.order_summ.filter.end_date) {
-					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and '${
 						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
@@ -168,7 +168,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				}
 
 				if (this.order_summ_item.filter.end_date) {
-					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and '${
 						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
@@ -232,7 +232,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				}
 
 				if (this.order_summ_customer.filter.end_date) {
-					filter += ` and (biz_date ge '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and biz_date le '${
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and '${
 						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {

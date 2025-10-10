@@ -1,10 +1,10 @@
 <template>
-	<VCalendarDatePicker v-model.range="date" :columns="2" v-bind="{ ...attrs, ...$attrs }" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
+	<VCalendarDatePicker v-model.range="date" :columns="2" :attributes="[attrs]" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
 </template>
 
 <script setup lang="ts">
 import { DatePicker as VCalendarDatePicker } from 'v-calendar';
-// import 'v-calendar/dist/style.css';
+import 'v-calendar/dist/style.css';
 import type { DatePickerRangeObject } from 'v-calendar/dist/types/src/use/datePicker.js';
 
 defineOptions({
@@ -42,7 +42,6 @@ const date = computed({
 const attrs = {
 	'transparent': true,
 	'borderless': true,
-	'color': 'primary',
 	'is-dark': { selector: 'html', darkClass: 'dark' },
 	'first-day-of-week': 2,
 };
