@@ -95,7 +95,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 						this.sale_summ.filter.end_date ? getFormattedDate(this.sale_summ.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.sale_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSales({
@@ -159,7 +159,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 						this.sale_summ_items.filter.end_date ? getFormattedDate(this.sale_summ_items.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
@@ -223,7 +223,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 						this.sale_summ_payments.filter.end_date ? getFormattedDate(this.sale_summ_payments.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSalesPayments({
@@ -267,7 +267,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 						this.sale_summ_payments.filter.end_date ? getFormattedDate(this.sale_summ_payments.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data } = await $api.summSales.getSummSalesCustomers({

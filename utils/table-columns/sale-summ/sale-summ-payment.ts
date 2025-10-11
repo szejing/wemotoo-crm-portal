@@ -21,7 +21,7 @@ export const sale_summ_payment_columns = [
 	},
 	{
 		key: 'payment_amt',
-		label: 'Payment Amount',
+		label: 'Payment Amt',
 	},
 	{
 		key: 'local_amt',

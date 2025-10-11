@@ -1,27 +1,38 @@
 export const order_summ_item_columns = [
 	{
 		key: 'prod_code',
-		label: 'Code',
+		label: 'Product',
+		sortable: false,
 	},
 	{
 		key: 'status',
 		label: 'Order Status',
+		class: 'text-center',
+		sortable: false,
 	},
 	{
 		key: 'item_status',
 		label: 'Item Status',
+		class: 'text-center',
+		sortable: false,
+	},
+	{
+		key: 'total_qty',
+		label: 'Qty',
+		class: 'text-center',
+		sortable: false,
 	},
 	{
 		key: 'gross_amt',
 		label: 'Gross Amt',
+		class: 'text-center',
+		sortable: false,
 	},
 	{
 		key: 'net_amt',
 		label: 'Net Amt',
-	},
-	{
-		key: 'total_qty',
-		label: 'Total Qty',
+		class: 'text-center',
+		sortable: false,
 	},
 ];
 

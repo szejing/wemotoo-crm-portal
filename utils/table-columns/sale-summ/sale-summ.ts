@@ -13,11 +13,11 @@ export const sale_summ_columns = [
 	},
 	{
 		key: 'gross_amt',
-		label: 'Gross Amount',
+		label: 'Gross Amt',
 	},
 	{
 		key: 'net_amt',
-		label: 'Net Amount',
+		label: 'Net Amt',
 	},
 	{
 		key: 'total_txns',

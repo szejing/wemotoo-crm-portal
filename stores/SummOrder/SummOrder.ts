@@ -108,7 +108,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrders({
@@ -172,7 +172,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderItems({
@@ -236,7 +236,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date eq '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderCustomers({

@@ -1,27 +1,38 @@
 export const sale_summ_item_columns = [
 	{
 		key: 'prod_code',
-		label: 'Code',
+		label: 'Product',
+		sortable: false,
 	},
 	{
 		key: 'item_status',
-		label: 'Item Status',
+		label: 'Status',
+		class: 'text-center',
+		sortable: false,
 	},
-
+	{
+		key: 'total_qty',
+		label: 'Qty',
+		class: 'text-center',
+		sortable: false,
+	},
 	{
 		key: 'gross_amt',
-		label: 'Gross Amount',
+		label: 'Gross Amt',
+		class: 'text-center',
+		sortable: false,
+	},
+	{
+		key: 'net_amt',
+		label: 'Net Amt',
+		class: 'text-center',
+		sortable: false,
 	},
 
 	// {
 	// 	key: 'disc_amt',
 	// 	label: 'Discount Amount',
 	// },
-
-	{
-		key: 'net_amt',
-		label: 'Net Amount',
-	},
 
 	// {
 	// 	key: 'gross_amt_exc',
@@ -52,11 +63,6 @@ export const sale_summ_item_columns = [
 	// 	key: 'adj_amt',
 	// 	label: 'Adjustment Amount',
 	// },
-
-	{
-		key: 'total_qty',
-		label: 'Total Quantity',
-	},
 ];
 
 export const sale_summ_item_header_columns = [
