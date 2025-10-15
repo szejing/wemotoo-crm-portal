@@ -1,6 +1,7 @@
 import type { OrderItemStatus, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { AddressModel } from '~/utils/models/customer.model';
 import type { Appointment } from './appointment';
+import type { Currency } from './currency';
 
 type OrderCustomerDto_ = {
 	customer_no: string;
@@ -98,7 +99,7 @@ export type Order = {
 	voided_qty: number;
 	ref_no: string;
 	remarks: string;
-	currency_code: string;
+	currency: Currency;
 	items: OrderItemDto_[];
 	payments: OrderPaymentDto_[];
 	customer: OrderCustomerDto_;

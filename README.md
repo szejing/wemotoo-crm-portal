@@ -21,3 +21,4 @@ docker run -d -p 3000:3000 --name wemotoo-crm registry.digitalocean.com/wemotoo/
 docker push registry.digitalocean.com/wemotoo/frontend:1.0.0 && docker push registry.digitalocean.com/wemotoo/backend:1.0.0
 
 docker pull registry.digitalocean.com/wemotoo/frontend:1.0.0
+docker pull registry.digitalocean.com/wemotoo/backend:1.0.0

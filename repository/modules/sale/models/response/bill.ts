@@ -1,5 +1,6 @@
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
+import type { Currency } from '~/utils/types/currency';
 
 export type Bill = {
 	biz_date: string;
@@ -21,7 +22,7 @@ export type Bill = {
 	voided_qty: number;
 	ref_no: string;
 	remarks: string;
-	currency_code: string;
+	currency: Currency;
 	items: ItemModel[];
 	payments: PaymentModel[];
 	customer: CustomerModel;

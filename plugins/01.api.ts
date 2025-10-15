@@ -56,39 +56,38 @@ export default defineNuxtPlugin((_) => {
 	// const config = useRuntimeConfig();
 	// const NUXT_BASE_URL_PROXY_SERVER: string = config.public.apiBaseUrl;
 
-	const apiFetcher = $fetch.create({
-		// baseURL: NUXT_BASE_URL_PROXY_SERVER,
-		// onRequest({ request, response }) {
-		// 	console.log('Request:', request);
-		// 	console.log('Response:', response);
-		// },
-	});
+	// const apiFetcher = $fetch.create({
+	// baseURL: NUXT_BASE_URL_PROXY_SERVER,
+	// onRequest({ request, response }) {
+	// 	console.log('Request:', request);
+	// 	console.log('Response:', response);
+	// },
+	// });
 
-	const authModule = new AuthModule(apiFetcher);
-
-	const currencyModule = new CurrencyModule(apiFetcher);
-	const productModule = new ProductModule(apiFetcher);
-	const tagModule = new ProductTagModule(apiFetcher);
-	const categoryModule = new ProductCategoryModule(apiFetcher);
-	const productOptionModule = new ProductOptionModule(apiFetcher);
-	const imageModule = new ImageModule(apiFetcher);
-	const settingModule = new SettingModule(apiFetcher);
-	const productTypeModule = new ProductTypeModule(apiFetcher);
-	const summOrderModule = new SummOrderModule(apiFetcher);
-	const summSalesModule = new SaleSummaryModule(apiFetcher);
-	const orderModule = new OrderModule(apiFetcher);
-	const productVariantModule = new ProductVariantModule(apiFetcher);
-	const paymentTypeGroupModule = new PaymentTypeGroupModule(apiFetcher);
-	const paymentMethodModule = new PaymentMethodModule(apiFetcher);
-	const countryModule = new CountryModule(apiFetcher);
-	const saleModule = new SaleModule(apiFetcher);
-	const customerModule = new CustomerModule(apiFetcher);
-	const brandModule = new ProductBrandModule(apiFetcher);
-	const appointmentModule = new AppointmentModule(apiFetcher);
-	const taxRuleModule = new TaxRuleModule(apiFetcher);
-	const taxModule = new TaxModule(apiFetcher);
-	const taxGroupModule = new TaxGroupModule(apiFetcher);
-	const outletModule = new OutletModule(apiFetcher);
+	const authModule = new AuthModule();
+	const currencyModule = new CurrencyModule();
+	const productModule = new ProductModule();
+	const tagModule = new ProductTagModule();
+	const categoryModule = new ProductCategoryModule();
+	const productOptionModule = new ProductOptionModule();
+	const imageModule = new ImageModule();
+	const settingModule = new SettingModule();
+	const productTypeModule = new ProductTypeModule();
+	const summOrderModule = new SummOrderModule();
+	const summSalesModule = new SaleSummaryModule();
+	const orderModule = new OrderModule();
+	const productVariantModule = new ProductVariantModule();
+	const paymentTypeGroupModule = new PaymentTypeGroupModule();
+	const paymentMethodModule = new PaymentMethodModule();
+	const countryModule = new CountryModule();
+	const saleModule = new SaleModule();
+	const customerModule = new CustomerModule();
+	const brandModule = new ProductBrandModule();
+	const appointmentModule = new AppointmentModule();
+	const taxRuleModule = new TaxRuleModule();
+	const taxModule = new TaxModule();
+	const taxGroupModule = new TaxGroupModule();
+	const outletModule = new OutletModule();
 
 	const modules: IApiInstance = {
 		auth: authModule,

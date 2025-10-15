@@ -93,6 +93,21 @@ class OrderModule extends HttpFactory {
 			body: { customer_no, items },
 		});
 	}
+
+	/**
+	 * Exports orders as CSV
+	 * @returns Blob containing CSV data
+	 */
+	async exportOrders(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.Export()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
 }
 
 export default OrderModule;

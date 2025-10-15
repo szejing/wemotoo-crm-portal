@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import { getFormattedDate } from 'wemotoo-common';
+import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands } from 'wemotoo-common';
 import type { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
@@ -33,6 +33,7 @@ const initialEmptyOrderFilter: OrderFilter = {
 export const useOrderStore = defineStore('orderStore', {
 	state: () => ({
 		loading: false as boolean,
+		exporting: false as boolean,
 		orders: [] as Order[],
 		total_orders: 0 as number,
 		detail: undefined as Order | undefined,
@@ -92,6 +93,7 @@ export const useOrderStore = defineStore('orderStore', {
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
 					$filter: filter,
+					$expand: removeDuplicateExpands(defaultOrderRelations).join(','),
 					$orderby: 'biz_date desc, created_at desc',
 				});
 
@@ -241,6 +243,67 @@ export const useOrderStore = defineStore('orderStore', {
 				console.error(err);
 				failedNotification(err.message);
 				throw err;
+			}
+		},
+
+		async exportOrders() {
+			this.exporting = true;
+			const { $api } = useNuxtApp();
+			try {
+				let filter = '';
+
+				// For 'All' status, don't add any status filter - let all statuses through
+				if (this.filter.status !== 'All') {
+					filter = `status eq '${this.filter.status}'`;
+				}
+
+				// Add date filter
+				const dateFilter = this.filter.end_date
+					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
+							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
+					  }')`
+					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+
+				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
+
+				// Add query filter if provided
+				if (this.filter.query) {
+					const queryFilter = `order_no contains '${this.filter.query}'`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const blob = await $api.order.exportOrders({
+					$top: this.filter.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$count: true,
+					$filter: filter,
+					$expand: removeDuplicateExpands(defaultOrderRelations).join(','),
+					$orderby: 'biz_date desc, created_at desc',
+				});
+
+				if (blob) {
+					// Create a download link and trigger download
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `orders_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					// Cleanup
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Orders exported successfully');
+				} else {
+					failedNotification('Failed to export orders');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+				throw err;
+			} finally {
+				this.exporting = false;
 			}
 		},
 	},

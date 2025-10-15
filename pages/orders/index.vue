@@ -6,11 +6,6 @@
 			<UCard class="mt-4">
 				<div class="flex-jbetween-icenter">
 					<div class="flex gap-4">
-						<!-- <UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton> -->
-
 						<!-- <UButton color="green" @click="navigateTo('/orders/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
@@ -22,7 +17,12 @@
 							<USelect v-model="filter.page_size" :options="options_page_size" @update:model-value="updatePageSize" />
 						</span>
 
-						<ZSelectMenuTableColumns :columns="order_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<UButton :disabled="exporting" :loading="exporting" @click="exportOrders">
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
+							Export
+						</UButton>
+
+						<!-- <ZSelectMenuTableColumns :columns="order_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" /> -->
 					</div>
 				</div>
 
@@ -46,6 +46,9 @@
 						<UBadge v-else-if="row.status === OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
 
+					<template #total_qty-data="{ row }">
+						<p>{{ row.total_order_qty }}</p>
+					</template>
 					<!-- <template #gross_amt-header>
 						<p>
 							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
@@ -92,13 +95,9 @@
 						</p>
 					</template> -->
 
-					<template #void_amt-data="{ row }">
+					<!-- <template #void_amt-data="{ row }">
 						<p>{{ row.void_amt.toFixed(2) }}</p>
-					</template>
-
-					<template #total_qty-data="{ row }">
-						<p>{{ row.total_order_qty }}</p>
-					</template>
+					</template> -->
 
 					<template #total_voided_qty-data="{ row }">
 						<p v-if="row.voided_qty">{{ row.voided_qty }}</p>
@@ -142,16 +141,16 @@ const links = [
 useHead({ title: 'Wemotoo CRM - Orders' });
 
 const orderStore = useOrderStore();
-const { orders, filter, total_orders, loading } = storeToRefs(orderStore);
+const { orders, filter, total_orders, loading, exporting } = storeToRefs(orderStore);
 
 const current_page = computed(() => filter.value.current_page);
 
 const selectedColumns = ref(order_columns);
 const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
 
-const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
-	selectedColumns.value = columns;
-};
+// const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
+// 	selectedColumns.value = columns;
+// };
 
 const rows = computed(() => {
 	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
@@ -165,6 +164,10 @@ const updatePageSize = async (size: number) => {
 const updatePage = async (page: number) => {
 	filter.value.current_page = page;
 	await orderStore.getOrders();
+};
+
+const exportOrders = async () => {
+	await orderStore.exportOrders();
 };
 
 const selectOrder = (row: Order) => {

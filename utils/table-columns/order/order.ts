@@ -16,12 +16,16 @@ export const order_columns = [
 	},
 	{
 		key: 'status',
-		label: 'Order Status',
+		label: 'Status',
 	},
 	// {
 	// 	key: 'currency_code',
 	// 	label: 'Currency',
 	// },
+	{
+		key: 'total_qty',
+		label: 'Order Qty',
+	},
 	{
 		key: 'gross_amt',
 		label: 'Gross Amt',
@@ -38,14 +42,11 @@ export const order_columns = [
 		key: 'net_amt',
 		label: 'Net Amt',
 	},
-	{
-		key: 'disc_amt',
-		label: 'Discount Amt',
-	},
-	{
-		key: 'total_qty',
-		label: 'Total Qty',
-	},
+	// {
+	// 	key: 'disc_amt',
+	// 	label: 'Discount Amt',
+	// },
+
 	// {
 	// 	key: 'void_amt',
 	// 	label: 'Void Amt',

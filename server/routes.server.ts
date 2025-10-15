@@ -102,6 +102,7 @@ export const Routes = {
 		UpdateOrderItems: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}/items`,
 		UpdateOrderPayments: (order_no: string) => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}/payments`,
 		Process: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
+		Export: () => `${API_PATH.MERCHANT}/${API_PATH.ORDERS}/export`,
 	},
 	Sales: {
 		Many: () => `${API_PATH.MERCHANT}/${API_PATH.SALES}`,
