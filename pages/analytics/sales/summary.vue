@@ -6,7 +6,11 @@
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">
-						<ZSelectMenuTableColumns :columns="sale_summ_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<!-- <ZSelectMenuTableColumns :columns="sale_summ_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" /> -->
+						<UButton :disabled="sale_summ.exporting" :loading="sale_summ.exporting" @click="exportSalesSummary">
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
+							Export
+						</UButton>
 					</div>
 				</template>
 
@@ -103,9 +107,9 @@ const columnsTable = computed(() => sale_summ_columns.filter((column) => selecte
 
 const current_page = computed(() => sale_summ.value.current_page);
 
-const updateColumns = (columns: { key: string; label: string }[]) => {
-	selectedColumns.value = columns;
-};
+// const updateColumns = (columns: { key: string; label: string }[]) => {
+// 	selectedColumns.value = columns;
+// };
 
 const rows = computed(() => {
 	return data.value.slice((current_page.value - 1) * sale_summ.value.page_size, current_page.value * sale_summ.value.page_size);
@@ -114,6 +118,10 @@ const rows = computed(() => {
 const updatePage = async (page: number) => {
 	sale_summ.value.current_page = page;
 	await salesSummStore.getSaleSummary();
+};
+
+const exportSalesSummary = async () => {
+	await salesSummStore.exportSalesSummary();
 };
 </script>
 

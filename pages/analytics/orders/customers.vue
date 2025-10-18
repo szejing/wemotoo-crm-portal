@@ -6,7 +6,12 @@
 			<UCard class="mt-4">
 				<template #header>
 					<div class="flex-jend">
-						<ZSelectMenuTableColumns :columns="order_summ_customer_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<!-- <ZSelectMenuTableColumns :columns="order_summ_customer_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" /> -->
+
+						<UButton :disabled="order_summ_customer.exporting" :loading="order_summ_customer.exporting" @click="exportOrderCustomerSummaryToCsv">
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
+							Export
+						</UButton>
 					</div>
 				</template>
 
@@ -95,13 +100,17 @@ const columnsTable = computed(() => order_summ_customer_columns.filter((column) 
 
 const current_page = computed(() => order_summ_customer.value.current_page);
 
-const updateColumns = (columns: { key: string; label: string }[]) => {
-	selectedColumns.value = columns;
-};
+// const updateColumns = (columns: { key: string; label: string }[]) => {
+// 	selectedColumns.value = columns;
+// };
 
 const updatePage = async (page: number) => {
 	order_summ_customer.value.current_page = page;
 	await orderSummStore.getOrderCustomerSummary();
+};
+
+const exportOrderCustomerSummaryToCsv = async () => {
+	await orderSummStore.exportOrderCustomerSummary();
 };
 </script>
 

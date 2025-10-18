@@ -1,5 +1,5 @@
 import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptySaleSumm } from './models/sale-summ.model';
 import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
@@ -122,6 +122,55 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			}
 		},
 
+		async exportSalesSummary() {
+			this.sale_summ.exporting = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				let filter = `status eq '${this.sale_summ.filter.status}'`;
+
+				if (this.sale_summ.filter.currency_code) {
+					filter += ` and currency_code eq '${this.sale_summ.filter.currency_code}'`;
+				}
+
+				if (this.sale_summ.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.sale_summ.filter.end_date ? getFormattedDate(this.sale_summ.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summSales.exportSalesSummary({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$top: this.sale_summ.page_size,
+					$skip: (this.sale_summ.current_page - 1) * this.sale_summ.page_size,
+				});
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `sales_summary_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Sales summary exported successfully');
+				} else {
+					failedNotification('Failed to export sales summary');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.sale_summ.is_loading = false;
+			}
+		},
+
 		async updateSaleItemSummPageSize(size: number) {
 			this.sale_summ_items.page_size = size;
 			this.getSaleItemSummary();
@@ -162,27 +211,75 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
+				// const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
+				// 	$filter: filter,
+				// 	$orderby: 'biz_date desc',
+				// 	$count: true,
+				// 	$top: this.sale_summ_items.page_size,
+				// 	$skip: (this.sale_summ_items.current_page - 1) * this.sale_summ_items.page_size,
+				// });
+				// if (data) {
+				// 	if (this.sale_summ_items.current_page > 1 && this.sale_summ_items.total_data > this.sale_summ_items.data.length) {
+				// 		this.sale_summ_items.data = [...this.sale_summ_items.data, ...data];
+				// 	} else {
+				// 		this.sale_summ_items.data = data;
+				// 	}
+
+				// 	this.sale_summ_items.total_data = total ?? 0;
+				// }
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.sale_summ_items.is_loading = false;
+			}
+		},
+
+		async exportSaleItemSummary() {
+			this.sale_summ_items.exporting = true;
+			const { $api } = useNuxtApp();
+			try {
+				let filter = `status eq '${this.sale_summ_items.filter.status}'`;
+
+				if (this.sale_summ_items.filter.currency_code) {
+					filter += ` and currency_code eq '${this.sale_summ_items.filter.currency_code}'`;
+				}
+
+				if (this.sale_summ_items.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.sale_summ_items.filter.end_date ? getFormattedDate(this.sale_summ_items.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summSales.exportSalesItems({
 					$filter: filter,
 					$orderby: 'biz_date desc',
 					$count: true,
 					$top: this.sale_summ_items.page_size,
 					$skip: (this.sale_summ_items.current_page - 1) * this.sale_summ_items.page_size,
 				});
-				if (data) {
-					if (this.sale_summ_items.current_page > 1 && this.sale_summ_items.total_data > this.sale_summ_items.data.length) {
-						this.sale_summ_items.data = [...this.sale_summ_items.data, ...data];
-					} else {
-						this.sale_summ_items.data = data;
-					}
 
-					this.sale_summ_items.total_data = total ?? 0;
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `sales_items_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+					successNotification('Sales items exported successfully');
+				} else {
+					failedNotification('Failed to export sales items');
 				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.sale_summ_items.is_loading = false;
+				this.sale_summ_items.exporting = false;
 			}
 		},
 
@@ -251,6 +348,55 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			}
 		},
 
+		async exportSalePaymentSummary() {
+			this.sale_summ_payments.exporting = true;
+			const { $api } = useNuxtApp();
+			try {
+				let filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+
+				if (this.sale_summ_payments.filter.currency_code) {
+					filter += ` and currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+				}
+
+				if (this.sale_summ_payments.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.sale_summ_payments.filter.end_date ? getFormattedDate(this.sale_summ_payments.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summSales.exportSalesPayments({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$count: true,
+					$top: this.sale_summ_payments.page_size,
+					$skip: (this.sale_summ_payments.current_page - 1) * this.sale_summ_payments.page_size,
+				});
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `sales_payments_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Sales payments exported successfully');
+				} else {
+					failedNotification('Failed to export sales payments');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.sale_summ_payments.is_loading = false;
+			}
+		},
+
 		async getSaleCustomerSummary() {
 			this.sale_summ_customer.is_loading = true;
 			const { $api } = useNuxtApp();
@@ -286,6 +432,56 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				failedNotification(err.message);
 			} finally {
 				this.sale_summ_customer.is_loading = false;
+			}
+		},
+
+		async exportSaleCustomerSummary() {
+			this.sale_summ_customer.exporting = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				let filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+
+				if (this.sale_summ_payments.filter.currency_code) {
+					filter += ` and currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+				}
+
+				if (this.sale_summ_payments.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.sale_summ_payments.filter.end_date ? getFormattedDate(this.sale_summ_payments.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summSales.exportSalesCustomers({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$count: true,
+					$top: this.sale_summ_customer.page_size,
+					$skip: (this.sale_summ_customer.current_page - 1) * this.sale_summ_customer.page_size,
+				});
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `sales_customers_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Sales customers exported successfully');
+				} else {
+					failedNotification('Failed to export sales customers');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.sale_summ_customer.exporting = false;
 			}
 		},
 	},

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import type { SaleStatus } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { Bill } from '~/repository/modules/sale/models/response/bill';
 
 type SaleFilter = {
@@ -31,6 +31,7 @@ const initialEmptySaleFilter: SaleFilter = {
 
 export const useSaleStore = defineStore('saleStore', {
 	state: () => ({
+		exporting: false as boolean,
 		loading: false as boolean,
 		bills: [] as Bill[],
 		total_bills: 0 as number,
@@ -110,6 +111,62 @@ export const useSaleStore = defineStore('saleStore', {
 				throw err;
 			} finally {
 				this.loading = false;
+			}
+		},
+
+		async exportBills() {
+			this.exporting = true;
+			const { $api } = useNuxtApp();
+			try {
+				let filter = '';
+
+				// For 'All' status, don't add any status filter - let all statuses through
+				if (this.filter.status !== 'All') {
+					filter = `status eq '${this.filter.status}'`;
+				}
+
+				// Add date filter
+				const dateFilter = this.filter.end_date
+					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
+							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
+					  }')`
+					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+
+				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
+
+				// Add query filter if provided
+				if (this.filter.query) {
+					const queryFilter = `bill_no contains '${this.filter.query}'`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const blob = await $api.sale.exportBills({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$count: true,
+					$top: this.filter.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+				});
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `bills_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+					successNotification('Bills exported successfully');
+				} else {
+					failedNotification('Failed to export bills');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.exporting = false;
 			}
 		},
 

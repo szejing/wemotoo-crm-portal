@@ -1,4 +1,4 @@
-import type { SummSaleBill, SummSaleCustomer, SummSaleItem, SummSalePayment } from '~/utils/types/summ-sales';
+import type { SummSaleBill, SummSaleCustomer, SummSalePayment } from '~/utils/types/summ-sales';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetDashboardSummReq } from './models/request';
@@ -34,14 +34,32 @@ class SaleSummaryModule extends HttpFactory {
 	}
 
 	/**
-	 * Fetches summ sales items
+	 * Exports sales summary as CSV
 	 * @returns
 	 */
-	async getSummSalesItems(query: BaseODataReq): Promise<BaseODataResp<SummSaleItem>> {
-		return await this.call<BaseODataResp<SummSaleItem>>({
-			method: 'GET',
-			url: `${this.RESOURCE.Items()}`,
+	async exportSalesSummary(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.Export()}`,
 			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
+
+	/**
+	 * Exports sales items as CSV
+	 * @returns
+	 */
+	async exportSalesItems(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.ExportItems()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
 		});
 	}
 
@@ -58,6 +76,21 @@ class SaleSummaryModule extends HttpFactory {
 	}
 
 	/**
+	 * Exports sales customers as CSV
+	 * @returns
+	 */
+	async exportSalesCustomers(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.ExportCustomers()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
+
+	/**
 	 * Fetches summ sales payments
 	 * @returns
 	 */
@@ -66,6 +99,21 @@ class SaleSummaryModule extends HttpFactory {
 			method: 'GET',
 			url: `${this.RESOURCE.Payments()}`,
 			query,
+		});
+	}
+
+	/**
+	 * Exports sales payments as CSV
+	 * @returns
+	 */
+	async exportSalesPayments(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.ExportPayments()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
 		});
 	}
 }

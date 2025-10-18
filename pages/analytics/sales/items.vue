@@ -2,12 +2,17 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="py-4">
-			<ZSectionFilterSaleSummItems />
+			<!-- <ZSectionFilterSaleSummItems /> -->
 
 			<!-- Column Selector -->
 			<!-- <div class="flex justify-end mb-4">
 				<ZSelectMenuTableColumns :columns="sale_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
 			</div> -->
+
+			<UButton :disabled="sale_summ_items.exporting" :loading="sale_summ_items.exporting" @click="exportSalesItemsToCsv">
+				<UIcon :name="ICONS.EXCEL" class="size-5" />
+				Export
+			</UButton>
 
 			<!-- Loading State -->
 			<div v-if="is_loading" class="flex justify-center items-center py-12">
@@ -170,6 +175,10 @@ const groupedByDate = computed(() => {
 const updatePage = async (page: number) => {
 	sale_summ_items.value.current_page = page;
 	await salesSummStore.getSaleItemSummary();
+};
+
+const exportSalesItemsToCsv = async () => {
+	await salesSummStore.exportSaleItemSummary();
 };
 </script>
 

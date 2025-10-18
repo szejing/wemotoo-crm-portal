@@ -10,6 +10,7 @@ type SaleSummCustomer = {
 		status: string;
 		currency_code: string;
 	};
+	exporting: boolean;
 	is_loading: boolean;
 	page_size: number;
 	current_page: number;
@@ -25,6 +26,7 @@ export const initialEmptySaleSummCustomer: SaleSummCustomer = {
 		status: SaleStatus.COMPLETED,
 		currency_code: 'MYR',
 	},
+	exporting: false,
 	is_loading: false,
 	page_size: options_page_size[0],
 	current_page: 1,

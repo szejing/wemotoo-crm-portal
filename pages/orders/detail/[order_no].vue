@@ -100,7 +100,7 @@ onBeforeRouteLeave(() => {
 
 const customer = computed(() => order.value?.customer);
 const items = computed(() => order.value?.items);
-const currency_code = computed(() => order.value?.currency_code);
+const currency_code = computed(() => order.value?.currency.code);
 
 const getOrder = async (order_no: string) => {
 	is_loading.value = true;

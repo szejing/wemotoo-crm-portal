@@ -7,6 +7,11 @@
 			<!-- Column Selector -->
 			<!-- <div class="flex justify-end mb-4">
 				<ZSelectMenuTableColumns :columns="order_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+
+				<UButton :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
+					<UIcon :name="ICONS.EXCEL" class="size-5" />
+					Export
+				</UButton>
 			</div> -->
 
 			<!-- Loading State -->

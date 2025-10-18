@@ -40,8 +40,8 @@ const { order_summ_item } = storeToRefs(orderSummStore);
 
 const is_loading = computed(() => orderSummStore.order_summ_item.is_loading);
 
-const generate = () => {
-	orderSummStore.getOrderItemSummary();
+const generate = async () => {
+	await orderSummStore.getOrderItemSummary();
 };
 </script>
 

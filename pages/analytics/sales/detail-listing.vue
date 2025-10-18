@@ -6,11 +6,6 @@
 			<UCard class="mt-4">
 				<div class="flex-jbetween-icenter">
 					<div class="flex gap-4">
-						<!-- <UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton> -->
-
 						<!-- <UButton color="green" @click="navigateTo('/orders/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
@@ -22,7 +17,11 @@
 							<USelect v-model="filter.page_size" :options="options_page_size" @update:model-value="updatePageSize" />
 						</span>
 
-						<ZSelectMenuTableColumns :columns="sale_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
+						<UButton :disabled="exporting" :loading="exporting" @click="exportSalesToCsv">
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
+							Export
+						</UButton>
+						<!-- <ZSelectMenuTableColumns :columns="sale_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" /> -->
 					</div>
 				</div>
 
@@ -135,16 +134,16 @@ onMounted(async () => {
 });
 
 const saleStore = useSaleStore();
-const { bills, filter, total_bills, loading } = storeToRefs(saleStore);
+const { bills, filter, total_bills, loading, exporting } = storeToRefs(saleStore);
 
 const selectedColumns = ref(sale_columns);
 const columnsTable = computed(() => sale_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const current_page = computed(() => filter.value.current_page);
 
-const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
-	selectedColumns.value = columns;
-};
+// const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
+// 	selectedColumns.value = columns;
+// };
 
 const rows = computed(() => {
 	return bills.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
@@ -162,6 +161,10 @@ const updatePage = async (page: number) => {
 
 const selectSale = (row: Bill) => {
 	navigateTo(`/bills/detail/${encodeURIComponent(row.bill_no)}`);
+};
+
+const exportSalesToCsv = async () => {
+	await saleStore.exportBills();
 };
 </script>
 

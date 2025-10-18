@@ -34,6 +34,21 @@ class OrderSummaryModule extends HttpFactory {
 	}
 
 	/**
+	 * Exports summ orders as CSV
+	 * @returns
+	 */
+	async exportSummOrders(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.Export()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
+
+	/**
 	 * Fetches summ order items
 	 * @returns
 	 */
@@ -46,6 +61,21 @@ class OrderSummaryModule extends HttpFactory {
 	}
 
 	/**
+	 * Exports summ order items as CSV
+	 * @returns
+	 */
+	async exportSummOrderItems(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.ExportItems()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
+
+	/**
 	 * Fetches summ order customers
 	 * @returns
 	 */
@@ -54,6 +84,21 @@ class OrderSummaryModule extends HttpFactory {
 			method: 'GET',
 			url: `${this.RESOURCE.Customers()}`,
 			query,
+		});
+	}
+
+	/**
+	 * Exports summ order customers as CSV
+	 * @returns
+	 */
+	async exportSummOrderCustomers(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.ExportCustomers()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
 		});
 	}
 }

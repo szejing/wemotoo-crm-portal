@@ -21,6 +21,21 @@ class SaleModule extends HttpFactory {
 	}
 
 	/**
+	 * Exports bills as CSV
+	 * @returns
+	 */
+	async exportBills(query: BaseODataReq): Promise<Blob> {
+		return await this.call<Blob>({
+			method: 'POST',
+			url: `${this.RESOURCE.Export()}`,
+			query,
+			fetchOptions: {
+				responseType: 'blob', // Tell the HTTP client to expect a blob response
+			},
+		});
+	}
+
+	/**
 	 * Fetches sale by bill no
 	 * @returns
 	 */

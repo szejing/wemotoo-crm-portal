@@ -95,7 +95,7 @@ const selectDetail = (detail: TaxRuleDetail | undefined) => {
 	});
 };
 
-const deleteDetail = async (detail: TaxRuleDetail) => {
+const deleteDetail = async (_detail: TaxRuleDetail) => {
 	// current_tax_rule.value.details.splice(index, 1);
 };
 

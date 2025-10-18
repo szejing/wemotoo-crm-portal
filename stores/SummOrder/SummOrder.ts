@@ -1,5 +1,5 @@
 import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { initialEmptyOrderSumm } from './model/order-summ.model';
 import { initialEmptyOrderSummItem } from './model/order-summ-item.model';
 import { getFormattedDate } from 'wemotoo-common';
@@ -136,6 +136,50 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			}
 		},
 
+		async exportOrderSummary() {
+			this.order_summ.exporting = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				let filter = `status eq '${this.order_summ.filter.status}'`;
+
+				if (this.order_summ.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ.filter.currency_code}'`;
+				}
+
+				if (this.order_summ.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summOrder.exportSummOrders({ $filter: filter, $orderby: 'biz_date desc' });
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `summ_orders_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Order summary exported successfully');
+				} else {
+					failedNotification('Failed to export order summary');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ.is_loading = false;
+			}
+		},
+
 		async updateOrderItemSummPageSize(size: number) {
 			this.order_summ_item.page_size = size;
 			this.getOrderItemSummary();
@@ -200,6 +244,50 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			}
 		},
 
+		async exportOrderItemSummary() {
+			this.order_summ_item.exporting = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				let filter = `status eq '${this.order_summ_item.filter.status}'`;
+
+				if (this.order_summ_item.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ_item.filter.currency_code}'`;
+				}
+
+				if (this.order_summ_item.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summOrder.exportSummOrderItems({ $filter: filter, $orderby: 'biz_date desc' });
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `summ_order_items_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Order items exported successfully');
+				} else {
+					failedNotification('Failed to export order items');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ_item.exporting = false;
+			}
+		},
+
 		async updateOrderCustomerSummPageSize(size: number) {
 			this.order_summ_customer.page_size = size;
 			this.getOrderCustomerSummary();
@@ -261,6 +349,50 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				failedNotification(err.message);
 			} finally {
 				this.order_summ_customer.is_loading = false;
+			}
+		},
+
+		async exportOrderCustomerSummary() {
+			this.order_summ_customer.exporting = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				let filter = `status eq '${this.order_summ_customer.filter.status}'`;
+
+				if (this.order_summ_customer.filter.currency_code) {
+					filter += ` and currency_code eq '${this.order_summ_customer.filter.currency_code}'`;
+				}
+
+				if (this.order_summ_customer.filter.end_date) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and '${
+						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
+					}')`;
+				} else {
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
+				}
+
+				const blob = await $api.summOrder.exportSummOrderCustomers({ $filter: filter, $orderby: 'biz_date desc' });
+
+				if (blob) {
+					const url = window.URL.createObjectURL(blob);
+					const link = document.createElement('a');
+					link.href = url;
+					link.download = `summ_order_customers_${getFormattedDate(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+					document.body.appendChild(link);
+					link.click();
+
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(url);
+
+					successNotification('Order customers exported successfully');
+				} else {
+					failedNotification('Failed to export order customers');
+				}
+			} catch (err: any) {
+				console.error(err);
+				failedNotification(err.message);
+			} finally {
+				this.order_summ_customer.exporting = false;
 			}
 		},
 	},
