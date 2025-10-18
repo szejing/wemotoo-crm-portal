@@ -2,17 +2,12 @@
 	<div>
 		<UBreadcrumb :links="links" />
 		<div class="py-4">
-			<!-- <ZSectionFilterSaleSummItems /> -->
+			<ZSectionFilterSaleSummItems />
 
 			<!-- Column Selector -->
 			<!-- <div class="flex justify-end mb-4">
 				<ZSelectMenuTableColumns :columns="sale_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
 			</div> -->
-
-			<UButton :disabled="sale_summ_items.exporting" :loading="sale_summ_items.exporting" @click="exportSalesItemsToCsv">
-				<UIcon :name="ICONS.EXCEL" class="size-5" />
-				Export
-			</UButton>
 
 			<!-- Loading State -->
 			<div v-if="is_loading" class="flex justify-center items-center py-12">
@@ -28,57 +23,90 @@
 			</UCard>
 
 			<!-- Grouped by Date -->
-			<div v-else class="space-y-6 mt-4">
-				<UCard v-for="group in groupedByDate" :key="group.date">
+			<div v-else class="mt-4">
+				<UCard class="overflow-hidden">
 					<template #header>
-						<div class="flex items-center justify-between py-2">
-							<div class="flex items-center gap-3">
-								<div class="text-white px-4 py-2 rounded-lg shadow-sm border border-primary">
-									<h3 class="text-lg font-bold text-primary">{{ getFormattedDate(new Date(group.date)) }}</h3>
+						<UButton :disabled="sale_summ_items.exporting" :loading="sale_summ_items.exporting" @click="exportSalesItemsToCsv">
+							<UIcon :name="ICONS.EXCEL" class="size-5" />
+							Export
+						</UButton>
+					</template>
+
+					<div v-for="(group, index) in groupedByDate" :key="group.date">
+						<!-- Date Header -->
+						<div class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-gray-200': index > 0 }">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-4">
+									<h3 class="text-lg font-bold text-gray-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+									<div class="flex items-center gap-3 text-sm">
+										<div class="flex items-center gap-1.5 text-gray-600">
+											<Icon name="i-heroicons-shopping-cart" class="text-base" />
+											<span class="font-medium">{{ group.total_orders }} orders</span>
+										</div>
+										<div class="h-4 w-px bg-gray-300"></div>
+										<div class="flex items-center gap-1.5 text-green-600">
+											<Icon name="i-heroicons-cube" class="text-base" />
+											<span class="font-medium">{{ group.active_qty }} items</span>
+										</div>
+										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-gray-300"></div>
+										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
+											<Icon name="i-heroicons-x-circle" class="text-base" />
+											<span class="font-medium">{{ group.voided_qty }} voided</span>
+										</div>
+									</div>
 								</div>
-								<div class="flex items-center gap-2 text-sm text-gray-600">
-									<span class="font-medium">{{ group.total_orders }} orders • {{ group.total_qty }} items</span>
+								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
+									<span>Total: {{ group.net_amt.toFixed(2) }}</span>
 								</div>
 							</div>
 						</div>
-					</template>
 
-					<UTable :rows="group.items" :columns="selectedColumns" :ui="{ tr: { base: '' }, table: 'table-fixed' }">
-						<template #prod_code-data="{ row }">
-							<div v-if="row.is_total_row" class="font-semibold text-gray-700">{{ row.prod_name }}</div>
-							<div v-else>
-								<p class="font-medium text-gray-900">{{ row.prod_name }}</p>
-								<p class="text-xs text-gray-500">{{ row.prod_code }}</p>
-							</div>
-						</template>
+						<!-- Items Table -->
+						<div class="px-6 pb-6 pt-4">
+							<UTable
+								:rows="group.items"
+								:columns="selectedColumns"
+								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
+							>
+								<template #prod_code-data="{ row }">
+									<div v-if="row.is_total_row" class="font-semibold text-gray-700">{{ row.prod_name }}</div>
+									<div v-else>
+										<p class="font-medium text-gray-900">{{ row.prod_name }}</p>
+										<p class="text-xs text-gray-500">{{ row.prod_code }}</p>
+									</div>
+								</template>
 
-						<template #item_status-data="{ row }">
-							<div class="flex justify-center">
-								<span v-if="row.is_total_row"></span>
-								<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="green" size="xs">Active</UBadge>
-								<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
-								<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="red" size="xs">Voided</UBadge>
-							</div>
-						</template>
+								<template #item_status-data="{ row }">
+									<div class="flex justify-center">
+										<span v-if="row.is_total_row"></span>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="green" size="xs">Active</UBadge>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="red" size="xs">Voided</UBadge>
+									</div>
+								</template>
 
-						<template #total_qty-data="{ row }">
-							<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.total_qty }}</p>
-						</template>
+								<template #total_qty-data="{ row }">
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.total_qty }}</p>
+								</template>
 
-						<template #gross_amt-data="{ row }">
-							<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.gross_amt.toFixed(2) }}</p>
-						</template>
+								<template #gross_amt-data="{ row }">
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.gross_amt.toFixed(2) }}</p>
+								</template>
 
-						<template #net_amt-data="{ row }">
-							<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-gray-900'">{{ row.net_amt.toFixed(2) }}</p>
-						</template>
+								<template #net_amt-data="{ row }">
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-gray-900'">
+										{{ row.net_amt.toFixed(2) }}
+									</p>
+								</template>
 
-						<template #empty-state>
-							<div class="flex flex-col items-center justify-center py-6">
-								<span class="text-sm text-gray-500">No items found</span>
-							</div>
-						</template>
-					</UTable>
+								<template #empty-state>
+									<div class="flex flex-col items-center justify-center py-6">
+										<span class="text-sm text-gray-500">No items found</span>
+									</div>
+								</template>
+							</UTable>
+						</div>
+					</div>
 				</UCard>
 			</div>
 
@@ -141,9 +169,16 @@ const groupedByDate = computed(() => {
 				acc.total_qty += item.total_qty;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
+
+				// Separate voided and non-voided quantities
+				if (item.item_status === OrderItemStatus.VOIDED) {
+					acc.voided_qty += item.total_qty;
+				} else {
+					acc.active_qty += item.total_qty;
+				}
 				return acc;
 			},
-			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0 },
+			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0 },
 		);
 
 		// Add total row to items with a special flag
