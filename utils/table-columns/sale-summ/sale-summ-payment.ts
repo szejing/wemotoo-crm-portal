@@ -1,17 +1,11 @@
 export const sale_summ_payment_columns = [
 	{
-		key: 'biz_date',
-		label: 'Date',
-	},
-	{
 		key: 'currency_code',
 		label: 'Currency',
-		class: 'text-center',
 	},
 	{
 		key: 'status',
 		label: 'Status',
-		class: 'text-center',
 	},
 	{
 		key: 'payment_type_code',

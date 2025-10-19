@@ -65,16 +65,14 @@
 								:columns="columnsTable"
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
-								<template #status-data="{ row }">
-									<div class="flex justify-center">
-										<UBadge v-if="row.status == OrderStatus.NEW" variant="soft" color="green" size="xs">New</UBadge>
-										<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
-										<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
-									</div>
+								<template #currency_code-data="{ row }">
+									<p>{{ row.currency_code }}</p>
 								</template>
 
-								<template #currency_code-data="{ row }">
-									<p class="text-center">{{ row.currency_code }}</p>
+								<template #status-data="{ row }">
+									<UBadge v-if="row.status == OrderStatus.NEW" variant="soft" color="green" size="xs">New</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
 								</template>
 
 								<template #gross_amt-data="{ row }">

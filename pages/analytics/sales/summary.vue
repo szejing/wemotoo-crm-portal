@@ -40,16 +40,6 @@
 											<Icon name="i-heroicons-banknotes" class="text-base" />
 											<span class="font-medium">{{ group.total_txns }} transactions</span>
 										</div>
-										<div class="h-4 w-px bg-gray-300"></div>
-										<div class="flex items-center gap-1.5 text-green-600">
-											<Icon name="i-heroicons-cube" class="text-base" />
-											<span class="font-medium">{{ group.active_qty }} items</span>
-										</div>
-										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-gray-300"></div>
-										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
-											<Icon name="i-heroicons-x-circle" class="text-base" />
-											<span class="font-medium">{{ group.voided_qty }} voided</span>
-										</div>
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
@@ -66,13 +56,13 @@
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
 								<template #status-data="{ row }">
-									<div class="flex justify-center">
+									<div>
 										<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="green" size="xs">Completed</UBadge>
 									</div>
 								</template>
 
 								<template #currency_code-data="{ row }">
-									<p class="text-center">{{ row.currency_code }}</p>
+									<p>{{ row.currency_code }}</p>
 								</template>
 
 								<template #gross_amt-data="{ row }">
@@ -162,17 +152,13 @@ const groupedByDate = computed(() => {
 	return Object.entries(grouped).map(([date, items]) => {
 		const totals = items.reduce(
 			(acc, item) => {
-				acc.total_txns += item.total_orders;
+				acc.total_txns += item.total_txns;
 				acc.total_qty += item.total_qty;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
-
-				// Calculate voided quantity (total_qty - total_voided_qty = active)
-				acc.voided_qty += item.total_voided_qty || 0;
-				acc.active_qty += item.total_qty - (item.total_voided_qty || 0);
 				return acc;
 			},
-			{ total_txns: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0 },
+			{ total_txns: 0, total_qty: 0, gross_amt: 0, net_amt: 0 },
 		);
 
 		return {

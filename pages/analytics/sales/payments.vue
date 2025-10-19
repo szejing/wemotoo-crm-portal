@@ -56,13 +56,11 @@
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
 								<template #status-data="{ row }">
-									<div class="flex justify-center">
-										<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="green" size="xs">Completed</UBadge>
-									</div>
+									<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="green" size="xs">Completed</UBadge>
 								</template>
 
 								<template #currency_code-data="{ row }">
-									<p class="text-center">{{ row.currency_code }}</p>
+									<p>{{ row.currency_code }}</p>
 								</template>
 
 								<template #payment_type_code-data="{ row }">
