@@ -5,12 +5,6 @@ export const order_summ_item_columns = [
 		sortable: false,
 	},
 	{
-		key: 'status',
-		label: 'Order Status',
-		class: 'text-center',
-		sortable: false,
-	},
-	{
 		key: 'item_status',
 		label: 'Item Status',
 		class: 'text-center',

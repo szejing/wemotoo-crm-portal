@@ -77,15 +77,6 @@
 									</div>
 								</template>
 
-								<template #status-data="{ row }">
-									<div class="flex justify-center">
-										<span v-if="row.is_total_row"></span>
-										<UBadge v-else-if="row.status == OrderStatus.NEW" variant="soft" color="green" size="xs">New</UBadge>
-										<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
-										<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
-									</div>
-								</template>
-
 								<template #item_status-data="{ row }">
 									<div class="flex justify-center">
 										<span v-if="row.is_total_row"></span>
@@ -129,7 +120,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, OrderItemStatus, getFormattedDate } from 'wemotoo-common';
+import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
 import { order_summ_item_columns } from '~/utils/table-columns';
 
 const links = [

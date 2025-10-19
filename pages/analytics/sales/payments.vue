@@ -40,16 +40,6 @@
 											<Icon name="i-heroicons-banknotes" class="text-base" />
 											<span class="font-medium">{{ group.total_txns }} transactions</span>
 										</div>
-										<div class="h-4 w-px bg-gray-300"></div>
-										<div class="flex items-center gap-1.5 text-green-600">
-											<Icon name="i-heroicons-cube" class="text-base" />
-											<span class="font-medium">{{ group.active_qty }} items</span>
-										</div>
-										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-gray-300"></div>
-										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
-											<Icon name="i-heroicons-x-circle" class="text-base" />
-											<span class="font-medium">{{ group.voided_qty }} voided</span>
-										</div>
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
@@ -75,24 +65,24 @@
 									<p class="text-center">{{ row.currency_code }}</p>
 								</template>
 
-								<template #gross_amt-data="{ row }">
-									<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
+								<template #payment_type_code-data="{ row }">
+									<p class="text-center">{{ row.payment_type_code }}</p>
 								</template>
 
-								<template #net_amt-data="{ row }">
-									<p class="text-center font-medium text-gray-900">{{ row.net_amt.toFixed(2) }}</p>
+								<template #payment_type_desc-data="{ row }">
+									<p class="text-center">{{ row.payment_type_desc }}</p>
+								</template>
+
+								<template #payment_amt-data="{ row }">
+									<p class="text-center font-medium text-gray-900">{{ row.payment_amt.toFixed(2) }}</p>
+								</template>
+
+								<template #local_amt-data="{ row }">
+									<p class="text-center">{{ row.local_amt.toFixed(2) }}</p>
 								</template>
 
 								<template #total_txns-data="{ row }">
 									<p class="text-center">{{ row.total_txns }}</p>
-								</template>
-
-								<template #total_qty-data="{ row }">
-									<p class="text-center">{{ row.total_qty }}</p>
-								</template>
-
-								<template #total_voided_qty-data="{ row }">
-									<p class="text-center">{{ row.total_voided_qty }}</p>
 								</template>
 
 								<template #empty-state>
@@ -121,6 +111,7 @@
 
 <script lang="ts" setup>
 import { SaleStatus, getFormattedDate } from 'wemotoo-common';
+import OrderStatus from '~/components/Z/SelectMenu/OrderStatus.vue';
 import { sale_summ_payment_columns } from '~/utils/table-columns';
 
 const links = [
@@ -167,23 +158,14 @@ const groupedByDate = computed(() => {
 		const totals = items.reduce(
 			(acc, item) => {
 				acc.total_txns += item.total_txns;
-				acc.total_qty += item.local_amt;
-				acc.gross_amt += item.local_amt;
+				acc.total_voided_txns += item.status === OrderStatus.REFUNDED ? item.total_txns : 0;
 				acc.net_amt += item.payment_amt;
-
-				// Calculate voided quantity (total_qty - total_voided_qty = active)
-				acc.voided_qty += item.void_amt || 0;
-				acc.active_qty += item.local_amt - (item.void_amt || 0);
 				return acc;
 			},
-			{ total_txns: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0 },
+			{ total_txns: 0, total_voided_txns: 0, net_amt: 0 },
 		);
 
-		return {
-			date,
-			items: items,
-			...totals,
-		};
+		return { date, items: items, ...totals };
 	});
 });
 
