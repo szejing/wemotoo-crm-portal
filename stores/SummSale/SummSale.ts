@@ -211,22 +211,22 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.start_date, 'yyyy-MM-dd')}'`;
 				}
 
-				// const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
-				// 	$filter: filter,
-				// 	$orderby: 'biz_date desc',
-				// 	$count: true,
-				// 	$top: this.sale_summ_items.page_size,
-				// 	$skip: (this.sale_summ_items.current_page - 1) * this.sale_summ_items.page_size,
-				// });
-				// if (data) {
-				// 	if (this.sale_summ_items.current_page > 1 && this.sale_summ_items.total_data > this.sale_summ_items.data.length) {
-				// 		this.sale_summ_items.data = [...this.sale_summ_items.data, ...data];
-				// 	} else {
-				// 		this.sale_summ_items.data = data;
-				// 	}
+				const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
+					$filter: filter,
+					$orderby: 'biz_date desc',
+					$count: true,
+					$top: this.sale_summ_items.page_size,
+					$skip: (this.sale_summ_items.current_page - 1) * this.sale_summ_items.page_size,
+				});
+				if (data) {
+					if (this.sale_summ_items.current_page > 1 && this.sale_summ_items.total_data > this.sale_summ_items.data.length) {
+						this.sale_summ_items.data = [...this.sale_summ_items.data, ...data];
+					} else {
+						this.sale_summ_items.data = data;
+					}
 
-				// 	this.sale_summ_items.total_data = total ?? 0;
-				// }
+					this.sale_summ_items.total_data = total ?? 0;
+				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);

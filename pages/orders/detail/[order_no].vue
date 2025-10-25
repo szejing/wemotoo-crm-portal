@@ -10,10 +10,12 @@
 						<h2 v-if="order?.order_date_time">Date Time: {{ getFormattedDate(order?.order_date_time, 'dd MMM yyyy HH:mm') }}</h2>
 					</div>
 					<div>
-						<UBadge v-if="order?.status == OrderStatus.NEW" color="green" variant="outline" size="lg">NEW</UBadge>
-						<UBadge v-else-if="order?.status == OrderStatus.CANCELLED" color="red" variant="outline" size="lg">CANCELLED</UBadge>
-						<UBadge v-else-if="order?.status == OrderStatus.COMPLETED" color="main" variant="outline" size="lg">COMPLETED</UBadge>
-						<UBadge v-else-if="order?.status == OrderStatus.REFUNDED" color="gray" variant="outline" size="lg">REFUNDED</UBadge>
+						<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="cyan">PENDING PAYMENT</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="sky">PROCESSING</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="green">COMPLETED</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="yellow">REQUIRES ACTION</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="red">REFUNDED</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="red">CANCELLED</UBadge>
 					</div>
 				</div>
 				<div class="flex flex-col gap-4 w-full mt-4">
@@ -33,7 +35,7 @@
 						<template #header>
 							<div class="flex-between">
 								<h2 class="text-main">Items</h2>
-								<UPopover v-if="order?.status != OrderStatus.NEW" overlay>
+								<UPopover v-if="order?.status !== OrderStatus.PENDING_PAYMENT" overlay>
 									<UButton color="gray" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
 
 									<template #panel>
@@ -54,7 +56,7 @@
 							:total-gross-amt="order?.gross_amt"
 							:total-net-amt="order?.net_total"
 							:taxes="order?.taxes ?? []"
-							:editable="order?.status == OrderStatus.NEW"
+							:editable="order?.status == OrderStatus.PENDING_PAYMENT"
 							@refresh="getOrder(order?.order_no as string)"
 						/>
 					</UCard>
@@ -62,8 +64,8 @@
 			</div>
 			<div v-if="order !== undefined" class="side-wrapper">
 				<ZInputOrderSidebar
-					:order="order"
 					:update-order-status="async (status: OrderStatus) => { await updateOrderStatus(status); }"
+					:order="order"
 					:update-payment-status="async (status: PaymentStatus) => { await updatePaymentStatus(status); }"
 					:add-payment-info="addPaymentInfo"
 					:view-payment-info="viewPaymentInfo"
@@ -153,7 +155,7 @@ const updatePaymentStatus = async (new_status: PaymentStatus) => {
 		throw new Error('Customer not found');
 	}
 
-	if (new_status == PaymentStatus.SUCCESS && order.value.payments?.length == 0) {
+	if (new_status == PaymentStatus.PAID && order.value.payments?.length == 0) {
 		failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
 		return;
 	}

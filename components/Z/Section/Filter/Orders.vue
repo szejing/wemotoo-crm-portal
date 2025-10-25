@@ -14,7 +14,7 @@
 					/>
 				</div>
 			</div>
-			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
+			<div class="flex-jbetween-icenter w-full sm:hidden">
 				<h4>Order Status</h4>
 				<ZSelectMenuOrderStatus v-model:status="filter.status" />
 			</div>

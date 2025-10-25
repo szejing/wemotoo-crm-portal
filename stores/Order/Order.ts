@@ -1,8 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands } from 'wemotoo-common';
-import type { OrderStatus } from 'wemotoo-common';
+import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Order } from '~/utils/types/order';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -69,8 +68,12 @@ export const useOrderStore = defineStore('orderStore', {
 				let filter = '';
 
 				// For 'All' status, don't add any status filter - let all statuses through
-				if (this.filter.status !== 'All') {
-					filter = `status eq '${this.filter.status}'`;
+				if (this.filter.status === 'pending') {
+					filter = `status in ('${OrderStatus.PENDING_PAYMENT}', '${OrderStatus.PROCESSING}')`;
+				} else if (this.filter.status === 'completed') {
+					filter = `status eq '${OrderStatus.COMPLETED}'`;
+				} else if (this.filter.status === 'cancelled') {
+					filter = `status in ('${OrderStatus.CANCELLED}', '${OrderStatus.REFUNDED}')`;
 				}
 
 				// Add date filter

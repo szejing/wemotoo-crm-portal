@@ -5,11 +5,16 @@
 			<ZSectionFilterOrders />
 			<UCard class="mt-4">
 				<div class="flex-jbetween-icenter">
-					<div class="flex gap-4">
-						<!-- <UButton color="green" @click="navigateTo('/orders/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
-						</UButton> -->
+					<div class="gap-4 hidden sm:flex sm:w-1/2">
+						<UButton
+							v-for="(tab, index) in tabItems"
+							:key="tab.value"
+							:variant="selectedTab === index ? 'solid' : 'soft'"
+							:color="selectedTab === index ? 'primary' : 'neutral'"
+							@click="selectTab(index)"
+						>
+							{{ tab.label }}
+						</UButton>
 					</div>
 
 					<div class="flex gap-4">
@@ -26,28 +31,36 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="loading" @select="selectOrder">
+				<UTable :rows="rows" :columns="columnsTable" :loading="loading" class="mt-4" @select="selectOrder">
 					<template #index-data="{ index }">
-						<p>{{ index + 1 }}.</p>
+						<p class="text-left">{{ index + 1 }}.</p>
 					</template>
 
 					<template #biz_date-data="{ row }">
-						<p v-if="row.biz_date">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
+						<p v-if="row.biz_date" class="text-left">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
+					</template>
+
+					<template #order_no-data="{ row }">
+						<p class="text-center">{{ row.order_no }}</p>
 					</template>
 
 					<template #currency_code-data="{ row }">
-						<p>{{ row.currency_code }}</p>
+						<p class="text-center">{{ row.currency_code }}</p>
 					</template>
 
 					<template #status-data="{ row }">
-						<UBadge v-if="row.status === OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
-						<UBadge v-if="row.status === OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
-						<UBadge v-else-if="row.status === OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
-						<UBadge v-else-if="row.status === OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
+						<div class="flex justify-center">
+							<UBadge v-if="row.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="cyan">PENDING PAYMENT</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.PROCESSING" color="sky">PROCESSING</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.COMPLETED" color="green">COMPLETED</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.REQUIRES_ACTION" color="yellow">REQUIRES ACTION</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.REFUNDED" color="red">REFUNDED</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.CANCELLED" color="red">CANCELLED</UBadge>
+						</div>
 					</template>
 
 					<template #total_qty-data="{ row }">
-						<p>{{ row.total_order_qty }}</p>
+						<p class="text-center">{{ row.total_order_qty }}</p>
 					</template>
 					<!-- <template #gross_amt-header>
 						<p>
@@ -56,7 +69,7 @@
 					</template> -->
 
 					<template #gross_amt-data="{ row }">
-						<p>{{ row.gross_amt.toFixed(2) }}</p>
+						<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
 					</template>
 
 					<!-- <template #net_amt-header>
@@ -66,7 +79,7 @@
 					</template> -->
 
 					<template #net_amt-data="{ row }">
-						<p>{{ row.net_amt.toFixed(2) }}</p>
+						<p class="text-center">{{ row.net_amt.toFixed(2) }}</p>
 					</template>
 
 					<!-- <template #disc_amt-header>
@@ -76,7 +89,7 @@
 					</template> -->
 
 					<template #disc_amt-data="{ row }">
-						<p>{{ row.disc_amt.toFixed(2) }}</p>
+						<p class="text-center">{{ row.disc_amt.toFixed(2) }}</p>
 					</template>
 
 					<!-- <template #tax_amt_exc-header>
@@ -86,7 +99,7 @@
 					</template> -->
 
 					<template #tax_amt_exc-data="{ row }">
-						<p>{{ row.tax_amt_exc.toFixed(2) }}</p>
+						<p class="text-center">{{ row.tax_amt_exc.toFixed(2) }}</p>
 					</template>
 
 					<!-- <template #void_amt-header>
@@ -100,8 +113,8 @@
 					</template> -->
 
 					<template #total_voided_qty-data="{ row }">
-						<p v-if="row.voided_qty">{{ row.voided_qty }}</p>
-						<p v-else>0</p>
+						<p v-if="row.voided_qty" class="text-center">{{ row.voided_qty }}</p>
+						<p v-else class="text-center">0</p>
 					</template>
 
 					<template #empty-state>
@@ -112,7 +125,7 @@
 				</UTable>
 
 				<div v-if="orders.length > 0" class="section-pagination">
-					<UPagination v-model="current_page" :page-count="filter.page_size" :total="total_orders" @update:model-value="updatePage" />
+					<UPagination v-model="current_page" :page-count="filter.page_size" :total="orders.length" @update:model-value="updatePage" />
 				</div>
 			</UCard>
 		</div>
@@ -141,20 +154,44 @@ const links = [
 useHead({ title: 'Wemotoo CRM - Orders' });
 
 const orderStore = useOrderStore();
-const { orders, filter, total_orders, loading, exporting } = storeToRefs(orderStore);
+const { orders, filter, loading, exporting } = storeToRefs(orderStore);
 
 const current_page = computed(() => filter.value.current_page);
+
+const selectedTab = ref(0);
+
+const tabItems = [
+	{
+		label: 'All',
+		value: 'all',
+	},
+	{
+		label: 'Pending',
+		value: 'pending',
+	},
+	{
+		label: 'Completed',
+		value: 'completed',
+	},
+	{
+		label: 'Cancelled',
+		value: 'cancelled',
+	},
+];
 
 const selectedColumns = ref(order_columns);
 const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
 
-// const updateColumns = (columns: { key: string; label: string; sortable?: boolean }[]) => {
-// 	selectedColumns.value = columns;
-// };
-
 const rows = computed(() => {
 	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
 });
+
+const selectTab = async (index: number) => {
+	selectedTab.value = index;
+	filter.value.current_page = 1;
+	filter.value.status = tabItems[index].value as OrderStatus;
+	await orderStore.getOrders();
+};
 
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;

@@ -1,4 +1,4 @@
-import type { SummSaleBill, SummSaleCustomer, SummSalePayment } from '~/utils/types/summ-sales';
+import type { SummSaleBill, SummSaleCustomer, SummSaleItem, SummSalePayment } from '~/utils/types/summ-sales';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetDashboardSummReq } from './models/request';
@@ -45,6 +45,18 @@ class SaleSummaryModule extends HttpFactory {
 			fetchOptions: {
 				responseType: 'blob', // Tell the HTTP client to expect a blob response
 			},
+		});
+	}
+
+	/**
+	 * Fetches summ sales items
+	 * @returns
+	 */
+	async getSummSalesItems(query: BaseODataReq): Promise<BaseODataResp<SummSaleItem>> {
+		return await this.call<BaseODataResp<SummSaleItem>>({
+			method: 'GET',
+			url: `${this.RESOURCE.Items()}`,
+			query,
 		});
 	}
 
