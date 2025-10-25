@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia';
 import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import type { Order } from '~/utils/types/order';
+import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { ItemModel } from '~/utils/models/item.model';
@@ -33,9 +33,9 @@ export const useOrderStore = defineStore('orderStore', {
 	state: () => ({
 		loading: false as boolean,
 		exporting: false as boolean,
-		orders: [] as Order[],
+		orders: [] as OrderHistory[],
 		total_orders: 0 as number,
-		detail: undefined as Order | undefined,
+		detail: undefined as OrderHistory | undefined,
 		errors: [] as string[],
 		filter: initialEmptyOrderFilter,
 	}),
@@ -124,7 +124,7 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.getOrderByOrderNo(order_no);
 
 				if (data.order) {
-					this.detail = data.order;
+					this.detail = data.order as OrderHistory;
 				}
 			} catch (err: any) {
 				console.error(err);
@@ -133,7 +133,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		setDetail(order: Order | undefined) {
+		setDetail(order: OrderHistory | undefined) {
 			this.detail = order;
 		},
 

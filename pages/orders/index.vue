@@ -37,11 +37,11 @@
 					</template>
 
 					<template #biz_date-data="{ row }">
-						<p v-if="row.biz_date" class="text-left">{{ getFormattedDate(new Date(row.biz_date)) }}</p>
+						<p v-if="row.biz_date" class="text-left">{{ row.biz_date }}</p>
 					</template>
 
 					<template #order_no-data="{ row }">
-						<p class="text-center">{{ row.order_no }}</p>
+						<p class="text-center">{{ row.transaction_no }}</p>
 					</template>
 
 					<template #currency_code-data="{ row }">
@@ -60,7 +60,7 @@
 					</template>
 
 					<template #total_qty-data="{ row }">
-						<p class="text-center">{{ row.total_order_qty }}</p>
+						<p class="text-center">{{ row.total_qty }}</p>
 					</template>
 					<!-- <template #gross_amt-header>
 						<p>
