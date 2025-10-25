@@ -44,11 +44,11 @@ const sales_navigations = [
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/summary',
 	},
-	{
-		title: 'Sales Detail Listing',
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/detail-listing',
-	},
+	// {
+	// 	title: 'Sales Detail Listing',
+	// 	icon: ICONS.REPORT_SALES,
+	// 	to: '/analytics/sales/detail-listing',
+	// },
 	{
 		title: 'Sales Items',
 		icon: ICONS.REPORT_SALES,
