@@ -18,7 +18,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			try {
 				// eq = equal, ne = not equal
 				// exclude completed
-				let filter = `status ne '${AppointmentStatus.COMPLETED}'`;
+				let filter = `status eq '${AppointmentStatus.CONFIRMED}'`;
 
 				// Add status filter if provided
 
