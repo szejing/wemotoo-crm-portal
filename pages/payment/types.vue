@@ -6,7 +6,7 @@
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
 				</div>
 
 				<!-- Table  -->

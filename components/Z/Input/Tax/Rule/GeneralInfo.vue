@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<UFormGroup v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
+		<UFormField v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
 			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
-		</UFormGroup>
+		</UFormField>
 
-		<UFormGroup v-slot="{ error }" label="Description" name="description" required class="mt-4">
+		<UFormField v-slot="{ error }" label="Description" name="description" required class="mt-4">
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
-		</UFormGroup>
+		</UFormField>
 	</div>
 </template>
 

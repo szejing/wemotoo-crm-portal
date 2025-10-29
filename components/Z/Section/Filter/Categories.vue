@@ -1,8 +1,8 @@
 <template>
 	<UForm :schema="FilterCategoryValidation" :state="state" @submit="onSubmit">
-		<UFormGroup name="query">
+		<UFormField name="query">
 			<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." :icon="ICONS.SEARCH_ROUNDED" />
-		</UFormGroup>
+		</UFormField>
 	</UForm>
 </template>
 

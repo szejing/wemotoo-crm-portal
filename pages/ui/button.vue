@@ -6,8 +6,8 @@
 		<UButton block size="md" color="primary" variant="outline" disabled>Submit</UButton>
 
 		<h1>GREEN COLOR</h1>
-		<UButton block size="md" color="green" variant="solid">Submit</UButton>
-		<UButton block size="md" color="green" variant="outline">Submit</UButton>
+		<UButton block size="md" color="success" variant="solid">Submit</UButton>
+		<UButton block size="md" color="success" variant="outline">Submit</UButton>
 	</div>
 </template>
 

@@ -1,11 +1,11 @@
 <template>
 	<UCard>
 		<UForm :schema="FilterCustomerValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup name="query" class="col-span-2">
+			<UFormField name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Name / Phone No / Email..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup name="status" class="col-start-4">
+			<UFormField name="status" class="col-start-4">
 				<USelectMenu
 					v-model="state.status"
 					v-model:query="query"
@@ -21,7 +21,7 @@
 						<span v-else>Account Status</span>
 					</template>
 				</USelectMenu>
-			</UFormGroup>
+			</UFormField>
 		</UForm>
 	</UCard>
 </template>

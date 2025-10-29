@@ -1,12 +1,12 @@
 <template>
-	<UFormGroup name="productTypes" class="mt-2">
-		<USelectMenu v-model="productTypeId" :options="prod_types" size="md" value-attribute="id" option-attribute="value">
+	<UFormField name="productTypes" class="mt-2">
+		<USelectMenu v-model="productTypeId" :items="prod_types" size="md" value-attribute="id" option-attribute="value">
 			<template #label>
 				<span v-if="productTypeId" class="truncate">{{ prod_types.find((type) => type.id === productTypeId)?.value?.toUpperCase() }}</span>
-				<span v-else class="text-gray-400">Select Type</span>
+				<span v-else class="text-neutral-400">Select Type</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

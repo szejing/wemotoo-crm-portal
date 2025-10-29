@@ -1,15 +1,15 @@
 <template>
-	<UFormGroup name="time" class="mt-2">
-		<USelectMenu v-model="time" :options="time_options" size="md">
+	<UFormField name="time" class="mt-2">
+		<USelectMenu v-model="time" :items="time_options" size="md">
 			<template #label>
 				<span v-if="time" class="truncate">
 					{{ props.type === 'start' ? 'Start : ' : 'End : ' }}
 					{{ time }}
 				</span>
-				<span v-else class="text-gray-400">{{ title }}</span>
+				<span v-else class="text-neutral-400">{{ title }}</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

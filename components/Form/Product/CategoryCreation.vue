@@ -13,7 +13,7 @@
 			</div> -->
 
 			<div class="flex-center text-center mt-3">
-				<UButton size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
+				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
 			</div>
 		</UForm>
 	</div>

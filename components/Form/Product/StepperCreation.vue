@@ -12,14 +12,14 @@
 								<span v-else class="step-number">{{ step.id }}</span>
 							</div>
 							<div class="mobile-step-text" @click="goToStep(step.id)">
-								<h3 class="step-title" :class="[currentStep >= step.id ? 'text-gray-900' : 'text-gray-500']">
+								<h3 class="step-title" :class="[currentStep >= step.id ? 'text-neutral-900' : 'text-neutral-500']">
 									{{ step.name }}
 									<span v-if="step.required" class="text-red-500">*</span>
 								</h3>
 								<p class="step-description">{{ step.description }}</p>
 							</div>
 						</div>
-						<div v-if="index < steps.length - 1" class="mobile-step-connector" :class="[currentStep > step.id ? 'bg-green-500' : 'bg-gray-300']"></div>
+						<div v-if="index < steps.length - 1" class="mobile-step-connector" :class="[currentStep > step.id ? 'bg-green-500' : 'bg-neutral-300']"></div>
 					</div>
 				</div>
 			</div>
@@ -34,14 +34,14 @@
 								<span v-else class="desktop-step-number">{{ step.id }}</span>
 							</div>
 							<div class="desktop-step-text" @click="goToStep(step.id)">
-								<h3 class="step-title desktop-title" :class="[currentStep >= step.id ? 'text-gray-900' : 'text-gray-500']">
+								<h3 class="step-title desktop-title" :class="[currentStep >= step.id ? 'text-neutral-900' : 'text-neutral-500']">
 									{{ step.name }}
 									<span v-if="step.required" class="text-red-500">*</span>
 								</h3>
 								<p class="desktop-step-description">{{ step.description }}</p>
 							</div>
 						</div>
-						<div v-if="index < steps.length - 1" class="desktop-step-connector" :class="[currentStep > step.id ? 'bg-green-500' : 'bg-gray-300']"></div>
+						<div v-if="index < steps.length - 1" class="desktop-step-connector" :class="[currentStep > step.id ? 'bg-green-500' : 'bg-neutral-300']"></div>
 					</div>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 			>
 				<template #header>
 					<h2 class="text-xl font-semibold">{{ getCurrentStep()?.name }}</h2>
-					<p class="text-sm text-gray-500 mt-1">{{ getCurrentStep()?.description }}</p>
+					<p class="text-sm text-neutral-500 mt-1">{{ getCurrentStep()?.description }}</p>
 				</template>
 
 				<!-- Step 1: Images & Basic Info -->
@@ -85,7 +85,7 @@
 					<div class="flex flex-col justify-start items-start md:flex-row md:justify-between gap-4">
 						<div class="flex flex-col w-full">
 							<h3 class="text-lg font-medium">Thumbnail</h3>
-							<p class="text-xs text-gray-400">
+							<p class="text-xs text-neutral-400">
 								Recommended size: 1:1 <br />
 								Image will be used as thumbnail
 							</p>
@@ -94,7 +94,7 @@
 
 						<div class="flex flex-col w-full">
 							<h3 class="text-lg font-medium">Images</h3>
-							<p class="text-xs text-gray-400">
+							<p class="text-xs text-neutral-400">
 								Recommended size: 1:1 <br />
 								Max 3 images, images will be used as product images
 							</p>
@@ -160,7 +160,7 @@
 						<div class="flex space-x-3">
 							<UButton color="gray" variant="ghost" :loading="saving" @click="saveDraft"> Save as Draft </UButton>
 							<UButton v-if="currentStep < 4" color="primary" @click="nextStep"> Next Step </UButton>
-							<UButton v-else color="green" :loading="adding" type="submit"> Create Product </UButton>
+							<UButton v-else color="success" :loading="adding" type="submit"> Create Product </UButton>
 						</div>
 					</div>
 				</template>
@@ -286,7 +286,7 @@ const sale_price = computed({
 const getStepClass = (id: number) => {
 	if (currentStep.value === id) return 'bg-primary-500 border-primary-500 text-white';
 	if (currentStep.value > id) return 'bg-green-500 border-green-500 text-white';
-	return 'bg-white border-gray-300 text-gray-500';
+	return 'bg-white border-neutral-300 text-neutral-500';
 };
 
 // Methods
@@ -491,7 +491,7 @@ const goToStep = (id: number) => {
 
 /* Common Step Styles */
 .step-circle {
-	@apply flex items-center justify-center rounded-full border-2 transition-colors cursor-pointer hover:bg-gray-50 hover:text-primary-500 hover:border-primary-500 mb-2;
+	@apply flex items-center justify-center rounded-full border-2 transition-colors cursor-pointer hover:bg-neutral-50 hover:text-primary-500 hover:border-primary-500 mb-2;
 	width: 2rem;
 	height: 2rem;
 }
@@ -527,11 +527,11 @@ const goToStep = (id: number) => {
 }
 
 .step-description {
-	@apply text-xs text-gray-500 leading-tight break-words;
+	@apply text-xs text-neutral-500 leading-tight break-words;
 }
 
 .desktop-step-description {
-	@apply text-xs text-gray-500;
+	@apply text-xs text-neutral-500;
 }
 
 /* Legacy styles for backward compatibility */
@@ -540,7 +540,7 @@ const goToStep = (id: number) => {
 }
 
 .step-line {
-	@apply flex-1 h-[0.125rem] bg-gray-300;
+	@apply flex-1 h-[0.125rem] bg-neutral-300;
 }
 
 .step-line.completed {

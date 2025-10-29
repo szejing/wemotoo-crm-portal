@@ -6,14 +6,14 @@
 
 			<UCard class="mt-4">
 				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
 					<div class="flex gap-4">
 						<UButton>
 							<UIcon :name="ICONS.EXCEL" class="size-5" />
 							Export
 						</UButton>
 
-						<UButton color="green">
+						<UButton color="success">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
@@ -29,7 +29,7 @@
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No one here!</span>
-							<UButton color="green">
+							<UButton color="success">
 								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 								Create
 							</UButton>

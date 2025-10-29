@@ -213,7 +213,7 @@ const previewFiles = (files) => {
 }
 
 .dropzone {
-	@apply border-2 border-dashed border-gray-300 rounded-xl p-1 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
+	@apply border-2 border-dashed border-neutral-300 rounded-xl p-1 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
 	flex: 1;
 }
 
@@ -239,7 +239,7 @@ const previewFiles = (files) => {
 }
 
 .preview-header {
-	@apply flex justify-between items-center text-sm text-gray-600;
+	@apply flex justify-between items-center text-sm text-neutral-600;
 }
 
 .preview-count {
@@ -261,7 +261,7 @@ const previewFiles = (files) => {
 }
 
 .preview-grid::-webkit-scrollbar-thumb {
-	@apply bg-gray-300 rounded-full;
+	@apply bg-neutral-300 rounded-full;
 }
 
 .preview-item {

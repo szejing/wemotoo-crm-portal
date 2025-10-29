@@ -1,11 +1,11 @@
 <template>
-	<UFormGroup name="date" class="mt-2 w-[150px] max-w-[250px]">
-		<USelectMenu v-model="date" :options="date_range" size="md" option-attribute="name">
+	<UFormField name="date" class="mt-2 w-[150px] max-w-[250px]">
+		<USelectMenu v-model="date" :items="date_range" size="md" option-attribute="name">
 			<template #label>
 				<span class="truncate text-sm font-bold text-neutral">{{ date?.name }}</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

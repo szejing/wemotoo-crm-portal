@@ -19,7 +19,7 @@
 
 					<div class="flex gap-4">
 						<span class="section-page-size">
-							<USelect v-model="filter.page_size" :options="options_page_size" @update:model-value="updatePageSize" />
+							<USelect v-model="filter.page_size" :items="options_page_size" @update:model-value="updatePageSize" />
 						</span>
 
 						<UButton :disabled="exporting" :loading="exporting" @click="exportOrders">
@@ -52,7 +52,7 @@
 						<div class="flex justify-center">
 							<UBadge v-if="row.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="cyan">PENDING PAYMENT</UBadge>
 							<UBadge v-else-if="row.status === OrderStatus.PROCESSING" color="sky">PROCESSING</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.COMPLETED" color="green">COMPLETED</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
 							<UBadge v-else-if="row.status === OrderStatus.REQUIRES_ACTION" color="yellow">REQUIRES ACTION</UBadge>
 							<UBadge v-else-if="row.status === OrderStatus.REFUNDED" color="red">REFUNDED</UBadge>
 							<UBadge v-else-if="row.status === OrderStatus.CANCELLED" color="red">CANCELLED</UBadge>
@@ -64,7 +64,7 @@
 					</template>
 					<!-- <template #gross_amt-header>
 						<p>
-							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Gross Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 
@@ -74,7 +74,7 @@
 
 					<!-- <template #net_amt-header>
 						<p>
-							Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Net Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 
@@ -84,7 +84,7 @@
 
 					<!-- <template #disc_amt-header>
 						<p>
-							Disc Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Disc Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 
@@ -94,7 +94,7 @@
 
 					<!-- <template #tax_amt_exc-header>
 						<p>
-							Tax Amt Exc <span class="italic text-gray-500">({{ currency_code }})</span>
+							Tax Amt Exc <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 
@@ -104,7 +104,7 @@
 
 					<!-- <template #void_amt-header>
 						<p>
-							Void Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Void Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 

@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="filter_type">
+	<UFormField name="filter_type">
 		<USelectMenu
 			v-model="filter_type"
 			:options="date_filter_type_options"
@@ -8,7 +8,7 @@
 			value-attribute="value"
 			:ui="{ base: 'min-w-[200px]' }"
 		/>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

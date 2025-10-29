@@ -139,6 +139,6 @@ const updatePage = async (page: number) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

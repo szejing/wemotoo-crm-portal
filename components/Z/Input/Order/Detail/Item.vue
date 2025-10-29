@@ -19,7 +19,7 @@
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
 						</template>
 					</UBadge>
-					<UBadge else-if="status == OrderItemStatus.ACTIVE" size="md" color="green">
+					<UBadge else-if="status == OrderItemStatus.ACTIVE" size="md" color="success">
 						ACTIVE
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
@@ -61,11 +61,11 @@
 			<h2 class="text-main">Pricing</h2>
 
 			<div class="grid grid-cols-2 gap-4 mt-2">
-				<UFormGroup label="Currency" name="currency" disabled>
+				<UFormField label="Currency" name="currency" disabled>
 					<ZSelectMenuCurrency :currency-code="currencyCode" class="mt-2" />
-				</UFormGroup>
+				</UFormField>
 
-				<UFormGroup v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" disabled>
+				<UFormField v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" disabled>
 					<UInput
 						:model-value="unitSellPrice.toFixed(2)"
 						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
@@ -73,7 +73,7 @@
 						class="mt-2"
 						disabled
 					/>
-				</UFormGroup>
+				</UFormField>
 			</div>
 		</div>
 

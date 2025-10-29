@@ -1,21 +1,21 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
+		<UFormField v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
 			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
-		</UFormGroup>
+		</UFormField>
 
-		<UFormGroup v-slot="{ error }" label="Description" name="description" required>
+		<UFormField v-slot="{ error }" label="Description" name="description" required>
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
-		</UFormGroup>
+		</UFormField>
 
 		<div class="grid grid-cols-2 gap-4">
-			<UFormGroup v-slot="{ error }" label="Inclusive" name="isInclusive" required>
+			<UFormField v-slot="{ error }" label="Inclusive" name="isInclusive" required>
 				<UCheckbox v-model="isInclusive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Is Inclusive" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Active" name="isActive" required>
-				<UToggle v-model="isActive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Is Active" />
-			</UFormGroup>
+			<UFormField v-slot="{ error }" label="Active" name="isActive" required>
+				<USwitch v-model="isActive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Is Active" />
+			</UFormField>
 		</div>
 	</div>
 </template>

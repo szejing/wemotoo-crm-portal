@@ -6,14 +6,14 @@
 
 			<!-- Loading State -->
 			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-gray-500">Loading...</div>
+				<div class="text-neutral-500">Loading...</div>
 			</div>
 
 			<!-- Empty State -->
 			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
 				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-gray-400 text-4xl" />
-					<span class="text-gray-500">No payment data found</span>
+					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
+					<span class="text-neutral-500">No payment data found</span>
 				</div>
 			</UCard>
 
@@ -31,12 +31,15 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-gray-200': index > 0 }">
+						<div
+							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
+							:class="{ 'border-t border-neutral-200': index > 0 }"
+						>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
-									<h3 class="text-lg font-bold text-gray-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
 									<div class="flex items-center gap-3 text-sm">
-										<div class="flex items-center gap-1.5 text-gray-600">
+										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-banknotes" class="text-base" />
 											<span class="font-medium">{{ group.total_txns }} transactions</span>
 										</div>
@@ -56,7 +59,7 @@
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
 								<template #status-data="{ row }">
-									<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="green" size="xs">Completed</UBadge>
+									<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="success" size="xs">Completed</UBadge>
 								</template>
 
 								<template #currency_code-data="{ row }">
@@ -72,7 +75,7 @@
 								</template>
 
 								<template #payment_amt-data="{ row }">
-									<p class="text-center font-medium text-gray-900">{{ row.payment_amt.toFixed(2) }}</p>
+									<p class="text-center font-medium text-neutral-900">{{ row.payment_amt.toFixed(2) }}</p>
 								</template>
 
 								<template #local_amt-data="{ row }">
@@ -85,7 +88,7 @@
 
 								<template #empty-state>
 									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-gray-500">No items found</span>
+										<span class="text-sm text-neutral-500">No items found</span>
 									</div>
 								</template>
 							</UTable>

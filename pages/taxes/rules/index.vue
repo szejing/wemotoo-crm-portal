@@ -4,10 +4,10 @@
 		<div class="py-4">
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
 
 					<div class="flex gap-4">
-						<UButton color="green" @click="navigateTo('/taxes/rules/create')">
+						<UButton color="success" @click="navigateTo('/taxes/rules/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
@@ -26,16 +26,16 @@
 						<div class="flex-col-start text-neutral-700 space-y-3">
 							<div v-if="row.details && row.details.length > 0" class="space-y-3">
 								<div v-for="(detail, index) in row.details" :key="index" class="text-sm">
-									<div class="border-l-2 border-gray-300 pl-2 space-y-1">
-										<h4 class="text-gray-800 font-bold">{{ detail.tax?.description || detail.description }}</h4>
+									<div class="border-l-2 border-neutral-300 pl-2 space-y-1">
+										<h4 class="text-neutral-800 font-bold">{{ detail.tax?.description || detail.description }}</h4>
 										<div v-if="detail.tax_condition" class="flex items-center gap-2 mt-2">
 											<UBadge :label="getAmountTypeLabel(detail.tax_condition.amount_type)" variant="soft" size="md" />
-											<UBadge :label="`${detail.tax_condition.rate * 100}%`" variant="soft" color="green" size="md" />
+											<UBadge :label="`${detail.tax_condition.rate * 100}%`" variant="soft" color="success" size="md" />
 										</div>
 									</div>
 								</div>
 							</div>
-							<div v-else class="text-xs text-gray-400">No details configured</div>
+							<div v-else class="text-xs text-neutral-400">No details configured</div>
 						</div>
 					</template>
 
@@ -132,6 +132,6 @@ const updatePage = async (page: number) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

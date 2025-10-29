@@ -4,19 +4,19 @@
 			<div class="w-full flex-between items-center">
 				<h2>Inventory</h2>
 				<div class="w-[50%] flex-jend items-center gap-4">
-					<UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="green" />
+					<UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="success" />
 				</div>
 			</div>
 		</template>
 
 		<div v-if="variantDetail.manage_inventory" class="section-grid-basic-details">
-			<UFormGroup v-slot="{ error }" label="Sku" name="sku">
+			<UFormField v-slot="{ error }" label="Sku" name="sku">
 				<UInput v-model="variantDetail.sku" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Quantity" name="quantity">
+			<UFormField v-slot="{ error }" label="Quantity" name="quantity">
 				<UInput v-model="variantDetail.inventory_quantity" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" type="number" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 	</UCard>
 </template>

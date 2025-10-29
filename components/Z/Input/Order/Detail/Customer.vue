@@ -1,22 +1,22 @@
 <template>
 	<div class="section-grid-basic-details">
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup v-slot="{ error }" label="Customer Name" name="customer_name" required>
+			<UFormField v-slot="{ error }" label="Customer Name" name="customer_name" required>
 				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Customer Name" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Email Address" name="email_address" required>
+			<UFormField v-slot="{ error }" label="Email Address" name="email_address" required>
 				<UInput v-model="email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Email Address" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
 			<!-- todo: add country code -->
 			<!-- <ZSelectMenuCountry v-model:country-code="dial_code" /> -->
 
-			<UFormGroup v-slot="{ error }" label="Phone Number" name="phone_no" required>
+			<UFormField v-slot="{ error }" label="Phone Number" name="phone_no" required>
 				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Phone Number" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<div v-if="shipping_address || billing_address" class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">

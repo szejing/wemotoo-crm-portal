@@ -8,12 +8,16 @@ export default defineAppConfig({
 	theme,
 	ui: {
 		strategy: 'override',
-		primary: theme.main,
-		gray: theme.gray,
+		colors: {
+			primary: theme.main,
+			neutral: theme.gray,
+		},
 
 		//* Modal *//
 		modal: {
-			width: 'w-full max-w-[90%] sm:max-w-[60%]',
+			slots: {
+				root: 'w-full max-w-[90%] sm:max-w-[60%]',
+			},
 		},
 		//* Notification *//
 		notifications: {
@@ -21,278 +25,229 @@ export default defineAppConfig({
 		},
 
 		notification: {
-			background: 'bg-{color}-500',
-			title: 'text-sm font-medium text-white',
-			description: 'mt-1 text-sm leading-4 text-white',
-			icon: {
-				color: 'text-white',
-			},
-			progress: {
-				background: 'bg-white',
+			slots: {
+				root: 'bg-{color}-500',
+				title: 'text-sm font-medium text-white',
+				description: 'mt-1 text-sm leading-4 text-white',
+				icon: 'text-white',
+				progress: 'bg-white',
 			},
 		},
 
 		//* Card *//
 		card: {
-			base: 'transition duration-200 py-2',
-			background: 'bg-white',
-			shadow: 'shadow-md',
-			divide: 'divide-none',
-			rounded: `rounded`,
-			header: {
-				base: '',
-				background: '',
-				padding: 'px-4 py-2',
-			},
-			body: {
-				base: '',
-				background: '',
-				padding: 'px-4 py-3',
-			},
-			footer: {
-				base: '',
-				background: '',
-				padding: 'px-4 pt-2 pb-2',
+			slots: {
+				root: 'transition duration-200 py-2 bg-white shadow-md divide-none rounded',
+				header: 'px-4 py-2',
+				body: 'px-4 py-3',
+				footer: 'px-4 pt-2 pb-2',
 			},
 		},
 
 		//* Button *//
 		button: {
-			base: 'transition duration-200',
-			font: 'font-bold',
-			rounded: 'rounded',
-			default: {
+			slots: {
+				base: 'transition duration-200 font-bold rounded',
+			},
+			defaultVariants: {
+				size: 'md',
+				color: 'primary',
 				loadingIcon: 'i-material-symbols-sync-rounded',
 			},
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
-			},
-			color: {
-				primary: {
-					solid: 'button-primary-solid disabled:button-primary-solid-disabled',
-					outline: 'button-primary-outline disabled:button-primary-outline-disabled',
+			variants: {
+				size: {
+					'2xs': 'text-xs md:text-xs px-2 py-1',
+					'xs': 'text-xs md:text-xs px-2.5 py-1',
+					'sm': 'text-sm md:text-sm px-2.5 py-1',
+					'md': 'text-sm md:text-base px-3 py-2',
+					'lg': 'text-sm md:text-xl px-5 py-3',
+					'xl': 'text-sm md:text-2xl px-10 py-3',
 				},
-				green: {
-					solid: 'button-green-solid',
-					outline: 'button-green-outline disabled:button-green-outline-disabled',
+				color: {
+					primary: {
+						solid: 'button-primary-solid disabled:button-primary-solid-disabled',
+						outline: 'button-primary-outline disabled:button-primary-outline-disabled',
+					},
+					success: {
+						solid: 'button-green-solid',
+						outline: 'button-green-outline disabled:button-green-outline-disabled',
+					},
+					error: {
+						solid: 'button-red-solid',
+						soft: 'button-red-soft',
+						ghost: 'button-red-ghost',
+						outline: 'button-red-outline disabled:button-red-outline-disabled',
+					},
+					neutral: {
+						solid: 'button-neutral-solid',
+						ghost: 'button-neutral-ghost',
+						soft: 'button-neutral-soft',
+						outline: 'button-neutral-outline disabled:button-neutral-outline-disabled',
+					},
+					white: {
+						link: 'button-white-link',
+					},
 				},
-				danger: {
-					solid: 'button-red-solid',
-					soft: 'button-red-soft',
-					ghost: 'button-red-ghost',
-					outline: 'button-red-outline disabled:button-red-outline-disabled',
-				},
-				neutral: {
-					solid: 'button-neutral-solid',
-					ghost: 'button-neutral-ghost',
-					soft: 'button-neutral-soft',
-					outline: 'button-neutral-outline disabled:button-neutral-outline-disabled',
-				},
-				white: {
-					link: 'button-white-link',
-				},
-			},
-			padding: {
-				'2xs': 'px-2 py-1',
-				'xs': 'px-2.5 py-1',
-				'sm': 'px-2.5 py-1',
-				'md': 'px-3 py-2',
-				'lg': 'px-5 py-3',
-				'xl': 'px-10 py-3',
 			},
 		},
 
 		//* Badge *//
 		badge: {
-			rounded: 'rounded',
+			slots: {
+				root: 'rounded',
+			},
 		},
 
 		checkbox: {
-			container: 'flex items-center h-6',
-			base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
-			label: 'text-base font-medium text-gray-700',
-			required: 'text-base text-red-500 ',
-			help: 'text-base text-gray-500 ',
+			slots: {
+				root: 'flex items-center h-6',
+				base: 'h-5 w-5 disabled:opacity-50 disabled:cursor-not-allowed focus:ring-0 focus:ring-transparent focus:ring-offset-transparent',
+				label: 'text-base font-medium text-neutral-700',
+				required: 'text-base text-error-500',
+				help: 'text-base text-neutral-500',
+			},
 		},
 
-		// * FormGroup *//
-		formGroup: {
-			wrapper: '',
-			inner: '',
-			label: {
-				wrapper: 'flex content-center items-center justify-between',
-				base: 'block font-normal text-secondary-700',
-				required: "after:content-['*'] after:ms-0.5 after:text-red-500",
+		// * FormField *//
+		formField: {
+			slots: {
+				wrapper: '',
+				inner: '',
+				label: 'block font-normal text-secondary-700',
+				container: 'mt-1 relative',
+				description: 'text-neutral-500',
+				hint: 'text-neutral-500',
+				help: 'mt-2 text-neutral-500',
+				error: 'mt-2 text-error-500',
 			},
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
-			},
-			container: 'mt-1 relative',
-			description: 'text-gray-500',
-			hint: 'text-gray-500',
-			help: 'mt-2 text-gray-500',
-			error: 'mt-2 text-red-500',
-			default: {
+			defaultVariants: {
 				size: 'sm',
+			},
+			variants: {
+				size: {
+					'2xs': 'text-xs md:text-xs',
+					'xs': 'text-xs md:text-xs',
+					'sm': 'text-sm md:text-sm',
+					'md': 'text-sm md:text-base',
+					'lg': 'text-sm md:text-xl',
+					'xl': 'text-sm md:text-2xl',
+				},
 			},
 		},
 
 		//* Input *//
 		input: {
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-md',
-				'lg': 'text-base md:text-xl',
-				'xl': 'text-base md:text-2xl',
+			slots: {
+				base: 'rounded',
 			},
-			padding: {
-				'2xs': 'px-2 py-1',
-				'xs': 'px-2 py-1',
-				'sm': 'px-2 py-1',
-				'md': 'px-4 py-2',
-				'lg': 'px-4 py-2',
-				'xl': 'px-4 py-3',
-			},
-			leading: {
-				padding: {
-					'2xs': 'ps-8',
-					'xs': 'ps-9',
-					'sm': 'ps-10',
-					'md': 'ps-11',
-					'lg': 'ps-12',
-					'xl': 'ps-13',
-				},
-			},
-			trailing: {
-				padding: {
-					'2xs': 'pe-8',
-					'xs': 'pe-9',
-					'sm': 'pe-10',
-					'md': 'pe-11',
-					'lg': 'pe-12',
-					'xl': 'pe-13',
-				},
-			},
-			default: {
+			defaultVariants: {
 				size: 'md',
 				loadingIcon: 'i-material-symbols-sync-rounded',
 			},
-			rounded: `rounded`,
+			variants: {
+				size: {
+					'2xs': 'text-xs md:text-xs px-2 py-1',
+					'xs': 'text-xs md:text-xs px-2 py-1',
+					'sm': 'text-sm md:text-sm px-2 py-1',
+					'md': 'text-sm md:text-md px-4 py-2',
+					'lg': 'text-base md:text-xl px-4 py-2',
+					'xl': 'text-base md:text-2xl px-4 py-3',
+				},
+			},
 		},
 
 		//* Textarea *//
 		textarea: {
-			rounded: 'rounded',
+			slots: {
+				root: 'rounded',
+			},
 		},
 
 		//* Select *//
 		select: {
-			rounded: 'rounded',
-			size: {
-				'2xs': 'text-xs md:text-xs',
-				'xs': 'text-xs md:text-xs',
-				'sm': 'text-sm md:text-sm',
-				'md': 'text-sm md:text-base',
-				'lg': 'text-sm md:text-xl',
-				'xl': 'text-sm md:text-2xl',
+			slots: {
+				base: 'rounded',
+				placeholder: 'text-neutral-400',
 			},
-			padding: {
-				'2xs': 'px-2 py-1',
-				'xs': 'px-2 py-1',
-				'sm': 'px-2 py-1',
-				'md': 'px-4 py-2',
-				'lg': 'px-4 py-2',
-				'xl': 'px-4 py-3',
-			},
-			placeholder: 'text-gray-400',
-			default: {
+			defaultVariants: {
 				loadingIcon: 'i-material-symbols-sync-rounded',
 				trailingIcon: 'i-material-symbols-expand-more-rounded',
+			},
+			variants: {
+				size: {
+					'2xs': 'text-xs md:text-xs px-2 py-1',
+					'xs': 'text-xs md:text-xs px-2 py-1',
+					'sm': 'text-sm md:text-sm px-2 py-1',
+					'md': 'text-sm md:text-base px-4 py-2',
+					'lg': 'text-sm md:text-xl px-4 py-2',
+					'xl': 'text-sm md:text-2xl px-4 py-3',
+				},
 			},
 		},
 
 		//* Select Menu *//
 		selectMenu: {
-			rounded: 'rounded',
-			padding: 'px-2 py-2',
-			option: {
-				padding: 'px-4 py-1',
+			slots: {
+				base: 'rounded px-2 py-2',
+				option: 'px-4 py-1',
+				placeholder: 'text-neutral-400',
 			},
-			placeholder: 'text-gray-400',
-			default: {
+			defaultVariants: {
 				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
 			},
 		},
 
 		//* Command Palette *//
 		commandPalette: {
-			default: {
+			defaultVariants: {
 				icon: 'i-material-symbols-search-rounded',
 				loadingIcon: 'i-material-symbols-sync-rounded',
 				selectedIcon: 'i-material-symbols-fitbit-check-small-rounded',
-				emptyState: {
-					icon: 'i-material-symbols-search-rounded',
-				},
+				emptyStateIcon: 'i-material-symbols-search-rounded',
 			},
 		},
 
 		//* Table *//
 		table: {
-			wrapper: 'relative overflow-x-auto',
-			default: {
+			slots: {
+				wrapper: 'relative overflow-x-auto',
+			},
+			defaultVariants: {
 				sortAscIcon: 'octicon:sort-asc-24',
 				sortDescIcon: 'octicon:sort-desc-24',
-				// sortButton: {
-				// 	icon: 'octicon-arrow-switch-24',
-				// },
-				loadingState: {
-					icon: 'i-material-symbols-sync-rounded',
-				},
-				emptyState: {
-					icon: 'i-material-symbols-database-outline',
-				},
+				loadingIcon: 'i-material-symbols-sync-rounded',
+				emptyStateIcon: 'i-material-symbols-database-outline',
 			},
 		},
 
 		//* Avatar *//
 		avatar: {
-			default: {},
-			rounded: 'rounded',
+			slots: {
+				root: 'rounded',
+			},
 		},
 
 		//* Breadcrumb *//
 		breadcrumb: {
-			li: 'flex items-center gap-x-1.5 text-secondary-200  text-sm leading-6 min-w-0',
-			base: 'flex items-center gap-x-1.5 group font-light min-w-0',
-			active: 'text-secondary-800 font-medium',
-			inactive: 'hover:text-secondary-500',
-			default: {
+			slots: {
+				root: 'flex items-center gap-x-1.5 text-secondary-200 text-sm leading-6 min-w-0',
+				item: 'flex items-center gap-x-1.5 group font-light min-w-0',
+				active: 'text-secondary-800 font-medium',
+				inactive: 'hover:text-secondary-500',
+			},
+			defaultVariants: {
 				divider: 'i-material-symbols-light-chevron-right',
 			},
 		},
 
 		//* Pagination *//
 		pagination: {
-			rounded: 'first:rounded-l-button last:rounded-r-button',
-			default: {
-				prevButton: {
-					icon: 'i-material-symbols-arrow-back-rounded',
-				},
-				nextButton: {
-					icon: 'i-material-symbols-arrow-forward-rounded',
-				},
+			slots: {
+				root: 'first:rounded-l-button last:rounded-r-button',
+			},
+			defaultVariants: {
+				prevIcon: 'i-material-symbols-arrow-back-rounded',
+				nextIcon: 'i-material-symbols-arrow-forward-rounded',
 			},
 		},
 
@@ -303,7 +258,7 @@ export default defineAppConfig({
 		// 	base: 'focus:outline-none',
 		// 	list: {
 		// 		base: 'relative',
-		// 		background: 'bg-gray-100',
+		// 		background: 'bg-neutral-100',
 		// 		rounded: 'rounded-lg',
 		// 		shadow: '',
 		// 		padding: 'p-1',
@@ -319,8 +274,8 @@ export default defineAppConfig({
 		// 		tab: {
 		// 			base: 'relative inline-flex items-center justify-center flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500  ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
 		// 			background: '',
-		// 			active: 'text-gray-900',
-		// 			inactive: 'text-gray-500',
+		// 			active: 'text-neutral-900',
+		// 			inactive: 'text-neutral-500',
 		// 			height: 'h-8',
 		// 			padding: 'px-3',
 		// 			size: 'text-sm',

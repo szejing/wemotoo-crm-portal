@@ -4,23 +4,23 @@
 			<div class="w-full flex-between items-center">
 				<h2>General Info</h2>
 				<div class="w-[50%] flex-jend items-center gap-4">
-					<!-- <UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="green" /> -->
-					<UCheckbox v-model="variantDetail.allow_backorder" name="allowBackorder" label="Allow Backorder" color="green" />
+					<!-- <UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="success" /> -->
+					<UCheckbox v-model="variantDetail.allow_backorder" name="allowBackorder" label="Allow Backorder" color="success" />
 
-					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="green" />
-					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="green" /> -->
+					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="success" />
+					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="success" /> -->
 				</div>
 			</div>
 		</template>
 
 		<div class="section-grid-basic-details">
-			<!-- <UFormGroup v-slot="{ error }" label="Short Description" name="short_desc">
+			<!-- <UFormField v-slot="{ error }" label="Short Description" name="short_desc">
 				<UInput v-model="variantDetail.barcode" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup> -->
+			</UFormField> -->
 
-			<!-- <UFormGroup v-slot="{ error }" label="Subtitle" name="subtitle">
+			<!-- <UFormField v-slot="{ error }" label="Subtitle" name="subtitle">
 				<UInput v-model="variantDetail.ean" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup> -->
+			</UFormField> -->
 		</div>
 	</UCard>
 </template>

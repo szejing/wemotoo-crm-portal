@@ -33,7 +33,7 @@
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
-			<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block>Submit</UButton>
+			<UButton class="w-[100%] sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block>Submit</UButton>
 		</div>
 	</UForm>
 </template>

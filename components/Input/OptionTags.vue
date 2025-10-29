@@ -231,13 +231,13 @@ useDetectClickOutside(elementInputTags, () => {
 }
 
 .section-available-tag {
-	@apply p-2 border border-gray-200 rounded-md bg-white flex flex-col gap-y-2 absolute translate-y-10 left-0 right-0 top-0;
+	@apply p-2 border border-neutral-200 rounded-md bg-white flex flex-col gap-y-2 absolute translate-y-10 left-0 right-0 top-0;
 }
 
 .wrapper-available-tag {
 }
 
 .wrapper-available-tag li {
-	@apply px-2 py-1 hover:bg-gray-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
+	@apply px-2 py-1 hover:bg-neutral-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
 }
 </style>

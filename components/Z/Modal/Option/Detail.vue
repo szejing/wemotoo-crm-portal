@@ -9,9 +9,9 @@
 				<template #header><h3>Update Product Option</h3></template>
 				<!-- *********************** General Info *********************** -->
 
-				<UFormGroup v-slot="{ error }" label="Name" name="name" required>
+				<UFormField v-slot="{ error }" label="Name" name="name" required>
 					<UInput v-model="state.option.name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
-				</UFormGroup>
+				</UFormField>
 
 				<div class="mt-4">
 					<h6 class="text-secondary-700 text-sm font-bold">Values</h6>
@@ -19,15 +19,15 @@
 						<div v-for="(value, index) in state.option.values" :key="index" class="w-full flex-jbetween-icenter space-y-2">
 							<h5 class="text-neutral-300">#{{ value.id }}</h5>
 
-							<UFormGroup v-slot="{ error }" name="value" required>
+							<UFormField v-slot="{ error }" name="value" required>
 								<UInput v-model="state.option.values[index].value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
-							</UFormGroup>
+							</UFormField>
 						</div>
 					</div>
 				</div>
 
 				<div class="flex-jend w-full mt-3">
-					<UButton size="md" color="green" variant="outline" block @click="onAddNew">Create</UButton>
+					<UButton size="md" color="success" variant="outline" block @click="onAddNew">Create</UButton>
 				</div>
 
 				<!-- *********************** General Info *********************** -->

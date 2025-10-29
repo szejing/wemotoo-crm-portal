@@ -5,7 +5,7 @@
 			<ZSectionFilterProducts />
 			<UCard class="mt-4">
 				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :options="options_page_size" /> </span>
+					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
 
 					<div class="flex gap-4">
 						<!-- <UButton>
@@ -13,7 +13,7 @@
 							Export
 						</UButton> -->
 
-						<UButton color="green" @click="navigateTo('/products/create')">
+						<UButton color="success" @click="navigateTo('/products/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 							Create
 						</UButton>
@@ -46,7 +46,7 @@
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No Products !</span>
 
-							<UButton color="green" @click="navigateTo('/products/create')">
+							<UButton color="success" @click="navigateTo('/products/create')">
 								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 								Create
 							</UButton>

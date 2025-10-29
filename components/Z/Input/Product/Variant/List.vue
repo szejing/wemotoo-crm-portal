@@ -2,11 +2,11 @@
 	<div class="space-y-2">
 		<div class="flex-jbetween-icenter">
 			<h3>Variations</h3>
-			<UButton v-if="prodOptions?.length > 0 && totalPossibleVariants > prodVariants.length" color="green" variant="ghost" @click="autoGenerate">
+			<UButton v-if="prodOptions?.length > 0 && totalPossibleVariants > prodVariants.length" color="success" variant="ghost" @click="autoGenerate">
 				Auto Generate
 			</UButton>
 
-			<UButton v-if="prodVariants.length > 0" color="green" variant="ghost" @click="autoGenerate">Update</UButton>
+			<UButton v-if="prodVariants.length > 0" color="success" variant="ghost" @click="autoGenerate">Update</UButton>
 		</div>
 
 		<div v-for="(variant, index) in prodVariants" :key="index">
@@ -24,7 +24,7 @@
 			Add Variant
 		</UButton>
 
-		<UModal v-if="variantDetail" v-model="isVariantDetailsModalOpen">
+		<UModal v-if="variantDetail" v-model:open="isVariantDetailsModalOpen">
 			<ZInputProductVariantDetail
 				:product="props.product"
 				:details="variantDetail"

@@ -28,7 +28,7 @@
 					:ui="{
 						thead: 'border-b text-xs text-neutral-400',
 						tbody: 'text-xs',
-						tr: { base: 'cursor-pointer hover:bg-gray-50' },
+						tr: { base: 'cursor-pointer hover:bg-neutral-50' },
 					}"
 					@select="viewPaymentInfo"
 				>

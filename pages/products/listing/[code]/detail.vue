@@ -24,7 +24,7 @@
 				/>
 			</div>
 
-			<UModal v-model="isOpen">
+			<UModal v-model:open="isOpen">
 				<UCard
 					:ui="{
 						body: {

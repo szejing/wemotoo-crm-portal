@@ -1,5 +1,5 @@
 <template>
-	<UFormGroup name="categories" class="mt-2">
+	<UFormField name="categories" class="mt-2">
 		<USelectMenu
 			v-model="category"
 			v-model:query="query"
@@ -26,7 +26,7 @@
 				</div>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

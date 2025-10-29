@@ -4,15 +4,15 @@
 		<UBreadcrumb :links="links" />
 		<div class="mt-4 grid grid-cols-1 lg:grid-cols-4 lg:gap-4 space-y-4 lg:space-y-0">
 			<!-- Calendar Section -->
-			<div class="order-1 shadow-md bg-white rounded-lg border border-gray-200 p-4">
+			<div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
 				<VCalendar expanded borderless :attributes="dates" :columns="1" @dayclick="onDateSelect" @did-move="onMonthChange" />
 			</div>
 
 			<!-- Appointments List Section -->
 			<div class="order-2 col-span-3 row-span-2">
-				<div class="bg-white rounded-lg border border-gray-200 p-4 shadow-md">
+				<div class="bg-white rounded-lg border border-neutral-200 p-4 shadow-md">
 					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-lg font-semibold text-gray-900">Upcoming Appointments</h2>
+						<h2 class="text-lg font-semibold text-neutral-900">Upcoming Appointments</h2>
 						<UIcon v-if="filteredAppointments.length > 0" :name="ICONS.RESET" size="24" class="cursor-pointer" @click="resetFilter" />
 					</div>
 
@@ -21,7 +21,7 @@
 
 					<!-- Empty state -->
 					<div v-else-if="displayedAppointments.length == 0" class="text-center py-8">
-						<div class="text-gray-500">
+						<div class="text-neutral-500">
 							<h2 class="text-lg font-medium">No appointments found</h2>
 							<p class="text-sm">
 								{{ filteredAppointments.length > 0 ? 'No appointments for the selected date.' : 'Schedule your first appointment to get started.' }}
@@ -71,7 +71,7 @@
 								</div>
 
 								<div class="ml-4">
-									<UBadge v-if="appointment.status === AppointmentStatus.CONFIRMED" color="green" variant="subtle">
+									<UBadge v-if="appointment.status === AppointmentStatus.CONFIRMED" color="success" variant="subtle">
 										{{ appointment.status.toUpperCase() }}
 									</UBadge>
 									<UBadge v-else-if="appointment.status === AppointmentStatus.PENDING" color="yellow" variant="subtle">

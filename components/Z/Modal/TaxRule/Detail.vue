@@ -13,17 +13,17 @@
 					<div class="flex-jbetween-icenter">
 						<h4 class="text-neutral-700 text-sm">Code <span class="text-red-500">*</span></h4>
 
-						<UFormGroup name="code" required>
+						<UFormField name="code" required>
 							<ZSelectMenuTax :tax="state.detail.tax_code" @update:tax="updateTax" />
-						</UFormGroup>
+						</UFormField>
 					</div>
 
 					<div class="flex-jbetween-icenter">
 						<h4 class="text-neutral-700 text-sm">Description <span class="text-red-500">*</span></h4>
 
-						<UFormGroup v-slot="{ error }" name="description" required>
+						<UFormField v-slot="{ error }" name="description" required>
 							<UInput v-model="state.detail.description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
-						</UFormGroup>
+						</UFormField>
 					</div>
 				</div>
 				<!-- *********************** Tax Detail *********************** -->

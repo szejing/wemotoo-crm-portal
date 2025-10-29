@@ -1,9 +1,9 @@
 <template>
 	<UCard>
 		<UForm :schema="FilterProductValidation" :state="state" class="grid grid-cols-1 sm:grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup name="query" class="col-span-2">
+			<UFormField name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormGroup>
+			</UFormField>
 
 			<div class="sm:col-start-4">
 				<ZSelectMenuProductStatus v-model:status="state.status" />

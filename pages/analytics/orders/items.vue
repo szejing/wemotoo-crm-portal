@@ -12,14 +12,14 @@
 
 			<!-- Loading State -->
 			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-gray-500">Loading...</div>
+				<div class="text-neutral-500">Loading...</div>
 			</div>
 
 			<!-- Empty State -->
 			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
 				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-gray-400 text-4xl" />
-					<span class="text-gray-500">No order data found</span>
+					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
+					<span class="text-neutral-500">No order data found</span>
 				</div>
 			</UCard>
 
@@ -35,21 +35,24 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-gray-200': index > 0 }">
+						<div
+							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
+							:class="{ 'border-t border-neutral-200': index > 0 }"
+						>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
-									<h3 class="text-lg font-bold text-gray-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
 									<div class="flex items-center gap-3 text-sm">
-										<div class="flex items-center gap-1.5 text-gray-600">
+										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-shopping-cart" class="text-base" />
 											<span class="font-medium">{{ group.total_orders }} orders</span>
 										</div>
-										<div class="h-4 w-px bg-gray-300"></div>
+										<div class="h-4 w-px bg-neutral-300"></div>
 										<div class="flex items-center gap-1.5 text-green-600">
 											<Icon name="i-heroicons-cube" class="text-base" />
 											<span class="font-medium">{{ group.active_qty }} items</span>
 										</div>
-										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-gray-300"></div>
+										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
 										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
 											<Icon name="i-heroicons-x-circle" class="text-base" />
 											<span class="font-medium">{{ group.voided_qty }} voided</span>
@@ -70,39 +73,39 @@
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
 								<template #prod_code-data="{ row }">
-									<div v-if="row.is_total_row" class="font-semibold text-gray-700">{{ row.prod_name }}</div>
+									<div v-if="row.is_total_row" class="font-semibold text-neutral-700">{{ row.prod_name }}</div>
 									<div v-else>
-										<p class="font-medium text-gray-900">{{ row.prod_name }}</p>
-										<p class="text-xs text-gray-500">{{ row.prod_code }}</p>
+										<p class="font-medium text-neutral-900">{{ row.prod_name }}</p>
+										<p class="text-xs text-neutral-500">{{ row.prod_code }}</p>
 									</div>
 								</template>
 
 								<template #item_status-data="{ row }">
 									<div class="flex justify-center">
 										<span v-if="row.is_total_row"></span>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="green" size="xs">Active</UBadge>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="success" size="xs">Active</UBadge>
 										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
 										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="red" size="xs">Voided</UBadge>
 									</div>
 								</template>
 
 								<template #total_qty-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.total_qty }}</p>
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.total_qty }}</p>
 								</template>
 
 								<template #gross_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-gray-900' : 'text-gray-900'">{{ row.gross_amt.toFixed(2) }}</p>
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.gross_amt.toFixed(2) }}</p>
 								</template>
 
 								<template #net_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-gray-900'">
+									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-neutral-900'">
 										{{ row.net_amt.toFixed(2) }}
 									</p>
 								</template>
 
 								<template #empty-state>
 									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-gray-500">No items found</span>
+										<span class="text-sm text-neutral-500">No items found</span>
 									</div>
 								</template>
 							</UTable>

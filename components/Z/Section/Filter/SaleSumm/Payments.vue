@@ -29,7 +29,7 @@
 		</div>
 
 		<template #footer>
-			<UButton color="green" :disabled="is_loading" :loading="is_loading" @click="generate">Generate</UButton>
+			<UButton color="success" :disabled="is_loading" :loading="is_loading" @click="generate">Generate</UButton>
 		</template>
 	</UCard>
 </template>

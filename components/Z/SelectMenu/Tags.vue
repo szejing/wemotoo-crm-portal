@@ -1,16 +1,16 @@
 <template>
-	<UFormGroup name="tags" class="mt-2">
-		<USelectMenu v-model="tags" v-model:query="query" :options="tag_options" searchable size="md" option-attribute="value" multiple by="id">
+	<UFormField name="tags" class="mt-2">
+		<USelectMenu v-model="tags" v-model:query="query" :items="tag_options" searchable size="md" option-attribute="value" multiple by="id">
 			<template #label>
 				<span v-if="tags.length" class="truncate">{{ tags.map((tag: Tag) => tag.value).join(', ') }}</span>
-				<span v-else class="text-gray-400">Select Tags</span>
+				<span v-else class="text-neutral-400">Select Tags</span>
 			</template>
 
 			<template #option-empty>
-				<UButton color="green" variant="ghost">Create "{{ query }}"</UButton>
+				<UButton color="success" variant="ghost">Create "{{ query }}"</UButton>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

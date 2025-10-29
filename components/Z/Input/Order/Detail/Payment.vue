@@ -1,28 +1,28 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup label="Payment Date" name="paymentDate">
+		<UFormField label="Payment Date" name="paymentDate">
 			<ZSelectMenuDateTime :date-time="paymentDateTime" placeholder="Payment Date" @update:date-time="paymentDateTime = $event" />
-		</UFormGroup>
+		</UFormField>
 
 		<!-- // Date selection -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup label="Payment Type" name="paymentType">
+			<UFormField label="Payment Type" name="paymentType">
 				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
+			<UFormField v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
 				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" disabled />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormGroup v-slot="{ error }" label="Ref No. 1" name="refNo1">
+			<UFormField v-slot="{ error }" label="Ref No. 1" name="refNo1">
 				<UInput v-model="refNo1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 1" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Ref No. 2" name="refNo2">
+			<UFormField v-slot="{ error }" label="Ref No. 2" name="refNo2">
 				<UInput v-model="refNo2" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 2" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<!-- // add table to allow meta data (key, value) -->

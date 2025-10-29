@@ -4,7 +4,7 @@
 			<div class="w-full flex-between items-center">
 				<div v-if="!hideHeader">
 					<h2 class="text-xl font-semibold">Basic Info</h2>
-					<p class="text-sm text-gray-500 mt-1">Product basic information</p>
+					<p class="text-sm text-neutral-500 mt-1">Product basic information</p>
 				</div>
 				<UTabs v-if="prod_types.length > 0" v-model="product_type" :items="items" :default-index="0" :ui="ui_tabs">
 					<template #default="{ item }">
@@ -12,35 +12,35 @@
 					</template>
 				</UTabs>
 				<div class="w-[50%] flex-jend items-center gap-4">
-					<UCheckbox v-model="is_active" name="isActive" label="Active" color="green" />
+					<UCheckbox v-model="is_active" name="isActive" label="Active" color="success" />
 
-					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="green" />
-					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="green" /> -->
+					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="success" />
+					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="success" /> -->
 				</div>
 			</div>
 		</template>
 
 		<div class="section-grid-basic-details mt-4">
-			<UFormGroup v-slot="{ error }" label="Product Code" name="code" required>
+			<UFormField v-slot="{ error }" label="Product Code" name="code" required>
 				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :disabled="disabledCode" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup v-slot="{ error }" label="Name" name="name" required>
+			<UFormField v-slot="{ error }" label="Name" name="name" required>
 				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup label="Short Description" name="shortDesc">
+			<UFormField label="Short Description" name="shortDesc">
 				<UInput v-model="short_desc" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
-		<!-- <UFormGroup class="mt-4" label="Description" name="description">
+		<!-- <UFormField class="mt-4" label="Description" name="description">
 			<UInput v-model="description" />
-		</UFormGroup> -->
+		</UFormField> -->
 
-		<UFormGroup v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
+		<UFormField v-if="!hideLongDesc" class="mt-4" label="Long Description" name="longDesc">
 			<ZTextEditor v-model:value="long_desc" placeholder="Product Description" />
-		</UFormGroup>
+		</UFormField>
 	</UCard>
 </template>
 
@@ -192,9 +192,9 @@ const product_type = computed({
 	min-height: 200px;
 }
 :deep(.ql-toolbar.ql-snow) {
-	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
+	@apply shadow-sm bg-white text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
 }
 :deep(.ql-container.ql-snow) {
-	@apply shadow-sm bg-white text-gray-900 ring-1 ring-inset ring-gray-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
+	@apply shadow-sm bg-white text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
 }
 </style>

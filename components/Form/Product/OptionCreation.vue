@@ -6,7 +6,7 @@
 			<!-- *********************** General Info *********************** -->
 
 			<div class="flex-center text-center mt-3">
-				<UButton class="w-[100%] sm:w-[50%]" size="md" color="green" variant="solid" type="submit" block :loading="adding">Create</UButton>
+				<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
 			</div>
 		</UForm>
 	</div>

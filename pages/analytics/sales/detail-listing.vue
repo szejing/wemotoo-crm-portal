@@ -6,14 +6,14 @@
 
 			<!-- Loading State -->
 			<div v-if="loading" class="flex justify-center items-center py-12">
-				<div class="text-gray-500">Loading...</div>
+				<div class="text-neutral-500">Loading...</div>
 			</div>
 
 			<!-- Empty State -->
 			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
 				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-gray-400 text-4xl" />
-					<span class="text-gray-500">No sales data found</span>
+					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
+					<span class="text-neutral-500">No sales data found</span>
 				</div>
 			</UCard>
 
@@ -31,16 +31,19 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-gray-200': index > 0 }">
+						<div
+							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
+							:class="{ 'border-t border-neutral-200': index > 0 }"
+						>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
-									<h3 class="text-lg font-bold text-gray-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
 									<div class="flex items-center gap-3 text-sm">
-										<div class="flex items-center gap-1.5 text-gray-600">
+										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-banknotes" class="text-base" />
 											<span class="font-medium">{{ group.total_items }} transactions</span>
 										</div>
-										<div class="h-4 w-px bg-gray-300"></div>
+										<div class="h-4 w-px bg-neutral-300"></div>
 										<div class="flex items-center gap-1.5 text-green-600">
 											<Icon name="i-heroicons-cube" class="text-base" />
 											<span class="font-medium">{{ group.total_qty }} items</span>
@@ -59,7 +62,7 @@
 								:rows="group.items"
 								:columns="columnsTable"
 								:ui="{
-									tr: { base: 'cursor-pointer hover:bg-gray-50' },
+									tr: { base: 'cursor-pointer hover:bg-neutral-50' },
 									table: 'table-fixed',
 									divide: 'divide-y divide-gray-200',
 									wrapper: 'relative overflow-auto',
@@ -71,7 +74,7 @@
 								</template>
 
 								<template #status-data="{ row }">
-									<UBadge v-if="row.status === SaleStatus.COMPLETED" variant="soft" color="green" size="xs">Completed</UBadge>
+									<UBadge v-if="row.status === SaleStatus.COMPLETED" variant="soft" color="success" size="xs">Completed</UBadge>
 									<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="soft" color="orange" size="xs">Refunded</UBadge>
 									<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
 								</template>
@@ -81,7 +84,7 @@
 								</template>
 
 								<template #net_amt-data="{ row }">
-									<p class="text-center font-medium text-gray-900">{{ row.net_amt.toFixed(2) }}</p>
+									<p class="text-center font-medium text-neutral-900">{{ row.net_amt.toFixed(2) }}</p>
 								</template>
 
 								<template #disc_amt-data="{ row }">
@@ -98,7 +101,7 @@
 
 								<template #empty-state>
 									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-gray-500">No items found</span>
+										<span class="text-sm text-neutral-500">No items found</span>
 									</div>
 								</template>
 							</UTable>

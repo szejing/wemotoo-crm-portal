@@ -30,7 +30,7 @@
 
 							<template #is_active-data="{ row }">
 								<div class="flex-col-start text-neutral-700" @click.stop>
-									<UToggle :model-value="row.is_active" @update:model-value="onUpdateActive(row)" />
+									<USwitch :model-value="row.is_active" @update:model-value="onUpdateActive(row)" />
 								</div>
 							</template>
 
@@ -169,6 +169,6 @@ const updatePage = async (page: number) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

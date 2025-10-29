@@ -1,12 +1,12 @@
 <template>
-	<UFormGroup name="days" class="mt-2">
-		<USelectMenu v-model="days" :options="days_options" size="md" multiple option-attribute="long" value-attribute="short">
+	<UFormField name="days" class="mt-2">
+		<USelectMenu v-model="days" :items="days_options" size="md" multiple option-attribute="long" value-attribute="short">
 			<template #label>
 				<span v-if="days.length > 0" class="truncate">{{ days?.map((day) => days_options.find((d) => d.short === day)?.short).join(', ') }}</span>
-				<span v-else class="text-gray-400">Mon, Tue, Wed...</span>
+				<span v-else class="text-neutral-400">Mon, Tue, Wed...</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

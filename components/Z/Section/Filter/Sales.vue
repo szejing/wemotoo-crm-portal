@@ -27,9 +27,9 @@
 
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
 				<h4>Bill No</h4>
-				<UFormGroup name="query">
+				<UFormField name="query">
 					<UInput v-model="filter.query" placeholder="Bill No" :icon="ICONS.SEARCH_ROUNDED" />
-				</UFormGroup>
+				</UFormField>
 			</div>
 
 			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<template #footer>
-			<UButton color="green" :disabled="is_loading" :loading="is_loading" @click="search">Search</UButton>
+			<UButton color="success" :disabled="is_loading" :loading="is_loading" @click="search">Search</UButton>
 		</template>
 	</UCard>
 </template>

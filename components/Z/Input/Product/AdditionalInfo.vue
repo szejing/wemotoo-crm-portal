@@ -98,24 +98,24 @@ import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
-	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
+	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-neutral-100 p-4 rounded-md',
 	list: {
 		width: 'w-80',
 		rounded: 'rounded-md',
 		tab: {
-			base: 'relative inline-flex items-center justify-start flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500 ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
+			base: 'relative inline-flex items-center justify-start flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
 			height: 'h-12',
 		},
 	},
 };
 
 const normal_ui_tabs = {
-	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-gray-100 p-4 rounded-md',
+	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-neutral-100 p-4 rounded-md',
 	list: {
 		rounded: 'rounded-md',
 		height: 'h-12',
 		tab: {
-			base: 'relative inline-flex items-center justify-center flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 ui-focus-visible:ring-primary-500 ui-not-focus-visible:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
+			base: 'relative inline-flex items-center justify-center flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
 			height: 'h-10',
 		},
 	},

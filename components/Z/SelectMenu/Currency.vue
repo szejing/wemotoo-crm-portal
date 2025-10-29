@@ -11,7 +11,7 @@
 	>
 		<template #label>
 			<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
-			<span v-else class="text-gray-400">Select Currency</span>
+			<span v-else class="text-neutral-400">Select Currency</span>
 		</template>
 	</USelectMenu>
 </template>

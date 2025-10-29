@@ -1,12 +1,12 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormGroup v-slot="{ error }" label="Code" name="code" required>
+		<UFormField v-slot="{ error }" label="Code" name="code" required>
 			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" />
-		</UFormGroup>
+		</UFormField>
 
-		<UFormGroup v-slot="{ error }" label="Description" name="description" required>
+		<UFormField v-slot="{ error }" label="Description" name="description" required>
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
-		</UFormGroup>
+		</UFormField>
 	</div>
 </template>
 

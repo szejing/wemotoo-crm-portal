@@ -8,7 +8,7 @@
 			<UCard>
 				<div class="flex-jbetween-icenter gap-4">
 					<h3>Update Category</h3>
-					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="green" />
+					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
 				</div>
 
 				<div class="w-[100%]">

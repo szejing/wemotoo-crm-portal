@@ -3,9 +3,9 @@
 		<!-- <div class="flex-jbetween-icenter">
 			<h4 class="text-neutral-700 text-sm">Code <span class="text-red-500">*</span></h4>
 
-			<UFormGroup v-slot="{ error }" name="code" :required="!isUpdate">
+			<UFormField v-slot="{ error }" name="code" :required="!isUpdate">
 				<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
-			</UFormGroup>
+			</UFormField>
 		</div> -->
 
 		<div class="flex-jbetween-icenter">
@@ -15,29 +15,29 @@
 
 		<div class="flex-jbetween-icenter">
 			<h4 class="text-neutral-700 text-sm">Rate (%) <span class="text-red-500">*</span></h4>
-			<UFormGroup v-slot="{ error }" name="rate" required>
+			<UFormField v-slot="{ error }" name="rate" required>
 				<UInput v-model="rate" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Rate" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-2 gap-4">
-			<UFormGroup label="Start Date" name="startDate">
+			<UFormField label="Start Date" name="startDate">
 				<ZSelectMenuDate :date="startDate" placeholder="Start Date" @update:date="startDate = $event" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup label="End Date" name="endDate">
+			<UFormField label="End Date" name="endDate">
 				<ZSelectMenuDate :date="endDate" placeholder="End Date" @update:date="endDate = $event" />
-			</UFormGroup>
+			</UFormField>
 		</div>
 
 		<!-- <div class="grid grid-cols-2 gap-4">
-			<UFormGroup label="Min Amount" name="minAmount">
+			<UFormField label="Min Amount" name="minAmount">
 				<UInput v-model="minAmount" placeholder="Min Amount" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup label="Max Amount" name="maxAmount">
+			<UFormField label="Max Amount" name="maxAmount">
 				<UInput v-model="maxAmount" placeholder="Max Amount" />
-			</UFormGroup>
+			</UFormField>
 		</div> -->
 	</div>
 </template>

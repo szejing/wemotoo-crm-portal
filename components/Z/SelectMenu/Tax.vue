@@ -1,12 +1,12 @@
 <template>
-	<UFormGroup name="tags" class="mt-2">
-		<USelectMenu v-model="tax" v-model:query="query" :options="tax_options" searchable size="md" option-attribute="code" by="code">
+	<UFormField name="tags" class="mt-2">
+		<USelectMenu v-model="tax" v-model:query="query" :items="tax_options" searchable size="md" option-attribute="code" by="code">
 			<template #label>
 				<span v-if="tax" class="truncate">{{ tax.code }}</span>
-				<span v-else class="text-gray-400">Select Tax Code</span>
+				<span v-else class="text-neutral-400">Select Tax Code</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

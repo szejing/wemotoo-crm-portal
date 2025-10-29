@@ -1,13 +1,13 @@
 <template>
 	<UCard>
 		<UForm :schema="FilterPaymentTypeGroupValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormGroup name="query" class="col-span-2">
+			<UFormField name="query" class="col-span-2">
 				<UInput v-model="state.query" placeholder="Search by Code or Description..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormGroup>
+			</UFormField>
 
-			<UFormGroup name="currency_code" class="col-start-4">
+			<UFormField name="currency_code" class="col-start-4">
 				<ZSelectMenuCurrency v-model:currency-code="state.currency_code" />
-			</UFormGroup>
+			</UFormField>
 		</UForm>
 	</UCard>
 </template>

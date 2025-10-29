@@ -1,12 +1,12 @@
 <template>
-	<UFormGroup name="duration" class="mt-2">
-		<USelectMenu v-model="duration" :options="duration_options" size="md">
+	<UFormField name="duration" class="mt-2">
+		<USelectMenu v-model="duration" :items="duration_options" size="md">
 			<template #label>
 				<span v-if="duration" class="truncate">{{ duration }}</span>
-				<span v-else class="text-gray-400">Duration (30m)</span>
+				<span v-else class="text-neutral-400">Duration (30m)</span>
 			</template>
 		</USelectMenu>
-	</UFormGroup>
+	</UFormField>
 </template>
 
 <script lang="ts" setup>

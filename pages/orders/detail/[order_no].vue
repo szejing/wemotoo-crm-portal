@@ -12,7 +12,7 @@
 					<div>
 						<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="cyan">PENDING PAYMENT</UBadge>
 						<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="sky">PROCESSING</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="green">COMPLETED</UBadge>
+						<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
 						<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="yellow">REQUIRES ACTION</UBadge>
 						<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="red">REFUNDED</UBadge>
 						<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="red">CANCELLED</UBadge>
@@ -231,6 +231,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 }
 
 .section-empty p {
-	@apply text-gray-400;
+	@apply text-neutral-400;
 }
 </style>

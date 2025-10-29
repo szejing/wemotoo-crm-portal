@@ -141,7 +141,7 @@ const editItem = (item: ItemModel) => {
 }
 
 .cell-header {
-	@apply p-4 text-gray-400 font-normal italic;
+	@apply p-4 text-neutral-400 font-normal italic;
 }
 
 .cell-item {

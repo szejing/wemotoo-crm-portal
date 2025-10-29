@@ -18,19 +18,19 @@
 				<UTable :rows="tableData" :columns="columnsTable" :loading="is_loading">
 					<template #customer-data="{ row: item }">
 						<p>
-							{{ item.customer_name }} <span class="text-gray-500">#{{ item.customer_no }}</span>
+							{{ item.customer_name }} <span class="text-neutral-500">#{{ item.customer_no }}</span>
 						</p>
 					</template>
 
 					<template #status-data="{ row: item }">
-						<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
+						<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="success">NEW</UBadge>
 						<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
 						<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
 
 					<!-- <template #gross_amt-header>
 						<p>
-							Gross Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Gross Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 
@@ -40,7 +40,7 @@
 
 					<!-- <template #net_amt-header>
 						<p>
-							Net Amt <span class="italic text-gray-500">({{ currency_code }})</span>
+							Net Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
 						</p>
 					</template> -->
 

@@ -26,7 +26,6 @@ export default defineNuxtConfig({
 				preload: true,
 			},
 		],
-		'@samk-dev/nuxt-vcalendar',
 	],
 
 	// devtools: { enabled: false }, // Temporarily disabled to fix UnoCSS style conflicts
@@ -42,7 +41,7 @@ export default defineNuxtConfig({
 		baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
 	},
 
-	css: ['~/assets/css/tailwind.css'],
+	css: ['~/assets/css/main.css'],
 
 	colorMode: {
 		preference: 'light',
@@ -130,12 +129,5 @@ export default defineNuxtConfig({
 				braceStyle: '1tbs',
 			},
 		},
-	},
-
-	tailwindcss: {
-		viewer: false,
-		exposeConfig: true,
-		configPath: './tailwind.config.js',
-		cssPath: '~/assets/css/tailwind.css',
 	},
 });

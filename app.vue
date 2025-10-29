@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<UApp>
 		<NuxtRouteAnnouncer />
 		<NuxtLayout>
 			<NuxtLoadingIndicator color="repeating-linear-gradient(to right,#C2C9FF 0%,#402E7A 100%)" />
@@ -13,8 +13,7 @@
 				padded: true,
 			}"
 		/>
-		<UModals />
-	</div>
+	</UApp>
 </template>
 
 <script lang="ts" setup>
@@ -33,7 +32,7 @@ watch(notification, () => {
 			title: notification.value?.title,
 			description: notification.value?.description,
 			icon: notification.value?.icon,
-			timeout: notification.value?.timeout,
+			duration: notification.value?.timeout,
 			closeButton: notification.value?.closeButton,
 		});
 	}
