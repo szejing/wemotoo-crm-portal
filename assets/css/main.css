@@ -26,7 +26,7 @@
 	--color-main-700: #924515;
 	--color-main-800: #6d3410;
 	--color-main-900: #49230b;
-	--color-main: var(--color-main-500);
+	--color-main: #f37323;
 
 	/* Custom secondary color palette */
 	--color-secondary-50: #f2f6fa;
@@ -231,15 +231,15 @@ html {
 
 	/**************************** primary button ****************************/
 	.button-primary-solid {
-		@apply ring-1 ring-inset ring-main hover:ring-main-700 text-white bg-main focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
+		@apply ring-1 ring-inset ring-main-500 hover:ring-main-700 text-white bg-main-500 focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-700;
 	}
 
 	.button-primary-solid-disabled {
-		@apply ring-1 ring-inset ring-main text-white disabled:bg-white;
+		@apply ring-1 ring-inset ring-main-500 text-white disabled:bg-white;
 	}
 
 	.button-primary-outline {
-		@apply ring-1 ring-inset ring-main text-main focus-visible:ring-2 focus-visible:ring-main hover:bg-main-100;
+		@apply ring-1 ring-inset ring-main-500 text-main-500 focus-visible:ring-2 focus-visible:ring-main-500 hover:bg-main-100;
 	}
 
 	.button-primary-outline-disabled {
@@ -272,6 +272,10 @@ html {
 		@apply text-red-500/50 disabled:bg-red-50 hover:text-red-500;
 	}
 
+	.button-red-soft {
+		@apply text-red-600 bg-red-50 hover:bg-red-100 disabled:bg-red-50 aria-disabled:bg-red-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-300;
+	}
+
 	.button-red-solid-disabled {
 		@apply ring-1 ring-inset ring-red-100 text-red-100 disabled:bg-red-50;
 	}
@@ -298,9 +302,9 @@ html {
 		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 disabled:bg-neutral-50;
 	}
 
-	/* .button-neutral-ghost {
-		@apply text-neutral-300 hover:text-neutral-700 hover:bg-neutral-50 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-500;
-	} */
+	.button-neutral-ghost {
+		@apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 disabled:bg-transparent aria-disabled:bg-transparent focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neutral-300;
+	}
 
 	.button-neutral-ghost-disabled {
 		@apply ring-1 ring-inset ring-neutral-100 text-neutral-100 bg-neutral-300;

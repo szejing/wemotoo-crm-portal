@@ -1,5 +1,5 @@
-export type EventNotification = {
-	color: 'green' | 'red' | 'orange';
+export type ToastNotification = {
+	color: 'success' | 'error' | 'warning';
 	icon?: string | undefined;
 	id?: string | undefined;
 	title?: string | undefined;

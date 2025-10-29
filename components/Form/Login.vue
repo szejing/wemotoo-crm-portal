@@ -1,65 +1,97 @@
 <template>
-	<div class="h-screen flex justify-center items-center">
-		<div class="hidden sm:flex w-full h-full bg-main flex-col items-center justify-center">
-			<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
-		</div>
-		<div class="w-full sm:w-[60%] px-10">
-			<UForm :schema="LoginValidation" :state="state" class="space-y-4" @submit="onSubmit">
-				<UCard>
-					<template #header>
-						<div class="flex sm:hidden w-full">
-							<img class="my-2 text-center mx-auto" src="../../assets/logo/logo.png" alt="logo" @click="navigateTo('/')" />
-						</div>
-					</template>
-
-					<div class="flex flex-col gap-2">
-						<h1 class="text-center">CRM Merchant Login</h1>
-						<UFormField v-slot="{ error }" label="Merchant Id" name="merchant_id" required>
-							<UInput v-model="state.merchant_id" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormField>
-
-						<UFormField v-slot="{ error }" label="Email" name="email_address" required>
-							<UInput v-model="state.email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormField>
-
-						<UFormField v-slot="{ error }" label="Password" name="password" required>
-							<UInput v-model="state.password" type="password" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
-						</UFormField>
+	<UForm :schema="LoginValidation" :state="state" class="space-y-4" @submit="onSubmit" @error="onError">
+		<UCard variant="outline">
+			<template #header>
+				<div>
+					<div class="flex sm:hidden w-full">
+						<NuxtImg class="my-2 mx-auto w-full cursor-pointer rounded-sm" src="/logo/logo.png" alt="logo" @click="navigateTo('/')" />
 					</div>
+					<h1 class="text-center">CRM Merchant Login</h1>
+				</div>
+			</template>
 
-					<template #footer>
-						<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
-					</template>
-				</UCard>
-			</UForm>
-		</div>
-	</div>
+			<div class="flex flex-col gap-2">
+				<UFormField label="Merchant Id" name="merchant_id" required>
+					<UInput v-model="state.merchant_id" />
+				</UFormField>
+
+				<UFormField label="Email" name="email_address" required>
+					<UInput v-model="state.email_address" />
+				</UFormField>
+
+				<UFormField label="Password" name="password" required>
+					<UInput v-model="state.password" :type="state.show ? 'text' : 'password'">
+						<template v-if="state.password?.length" #trailing>
+							<UButton
+								color="neutral"
+								variant="link"
+								size="sm"
+								:icon="state.show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+								:aria-label="state.show ? 'Hide password' : 'Show password'"
+								:aria-pressed="state.show"
+								aria-controls="password"
+								@click="state.show = !state.show"
+							/>
+						</template>
+					</UInput>
+				</UFormField>
+			</div>
+
+			<template #footer>
+				<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
+			</template>
+		</UCard>
+	</UForm>
 </template>
 
 <script lang="ts" setup>
 import { LoginValidation } from '~/utils/schema';
-import type { FormSubmitEvent } from '#ui/types';
+import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
 type Schema = z.output<typeof LoginValidation>;
 
+const toast = useToast();
 const state = reactive({
-	merchant_id: undefined,
-	email_address: undefined,
-	password: undefined,
+	merchant_id: undefined as string | undefined,
+	email_address: undefined as string | undefined,
+	password: undefined as string | undefined,
+	show: false as boolean,
 });
 
 const authStore = useAuthStore();
 const { loading } = storeToRefs(authStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { merchant_id, email_address, password } = event.data;
+	try {
+		const { merchant_id, email_address, password } = event.data;
 
-	const authStore = useAuthStore();
-	await authStore.login(merchant_id, email_address, password);
+		const authStore = useAuthStore();
+		await authStore.login(merchant_id, email_address, password);
 
-	navigateTo('/');
+		navigateTo('/');
+	} catch (error: any) {
+		toast.add({
+			title: 'Login Failed',
+			description: error?.message || 'An error occurred during login',
+			color: 'error',
+		});
+	}
+};
+
+const onError = async (event: FormErrorEvent) => {
+	const firstError = event.errors[0];
+	if (firstError?.name) {
+		const element = document.getElementById(firstError.name);
+		element?.focus();
+		element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped lang="postcss">
+/* Hide the password reveal button in Edge */
+::-ms-reveal {
+	display: none;
+}
+</style>

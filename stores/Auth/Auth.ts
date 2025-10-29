@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('authStore', {
 			const { $api } = useNuxtApp();
 
 			this.loading = true;
+			const appUiStore = useAppUiStore();
 
 			const mid = useCookie(KEY.X_MERCHANT_ID, { maxAge: 60 * 60 * 24 * 7 });
 			mid.value = merchant_id;
@@ -37,12 +38,18 @@ export const useAuthStore = defineStore('authStore', {
 
 				const app = useAppStore();
 				await app.init();
+
+				appUiStore.showToast({
+					color: 'success',
+					icon: ICONS.CHECK_OUTLINE_ROUNDED,
+					title: 'Login Successful',
+					description: 'Welcome back!',
+				});
 			} catch (err: any) {
 				this.clearCookies();
 
-				const appUiStore = useAppUiStore();
-				appUiStore.addNotification({
-					color: 'red',
+				appUiStore.showToast({
+					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
 					title: err.message,
 				});

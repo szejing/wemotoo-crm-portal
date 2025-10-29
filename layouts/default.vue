@@ -5,7 +5,7 @@
 			<div class="flex h-full">
 				<Sidebar />
 
-				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-[15rem] md:w-[calc(100vw-15rem)]' : 'md:ml-[3rem] md:w-[calc(100vw-3rem)]']">
+				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-60 md:w-[calc(100vw-60rem)]' : 'md:ml-12 md:w-[calc(100vw-12rem)]']">
 					<slot />
 				</div>
 			</div>
@@ -29,10 +29,19 @@ const { showSidebar } = storeToRefs(appUiStore);
 
 <style scoped lang="postcss">
 .default-bg {
-	@apply bg-slate-100 min-h-screen;
+	background-color: #f1f5f9; /* slate-100 */
+	min-height: 100vh;
 }
 
 .main-content {
-	@apply px-2 sm:px-4 py-2 sm:py-4 transform duration-500;
+	padding: 0.5rem; /* px-2 py-2 */
+	transform: translateX(0);
+	transition-duration: 500ms;
+}
+
+@media (min-width: 640px) {
+	.main-content {
+		padding: 1rem; /* sm:px-4 sm:py-4 */
+	}
 }
 </style>

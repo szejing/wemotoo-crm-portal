@@ -11,7 +11,7 @@
 		}"
 		:duration="1000"
 	>
-		<img src="../../assets/logo/logo.png" alt="logo" />
+		<NuxtImg src="/logo/logo.png" alt="logo" />
 	</div>
 </template>
 

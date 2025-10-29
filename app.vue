@@ -5,14 +5,6 @@
 			<NuxtLoadingIndicator color="repeating-linear-gradient(to right,#C2C9FF 0%,#402E7A 100%)" />
 			<NuxtPage />
 		</NuxtLayout>
-		<UNotifications
-			:close-button="{
-				icon: ICONS.CLOSE_ROUNDED,
-				variant: 'link',
-				color: 'white',
-				padded: true,
-			}"
-		/>
 	</UApp>
 </template>
 
@@ -22,34 +14,35 @@ import { ZModalMessage } from '#components';
 const toast = useToast();
 
 const appUiStore = useAppUiStore();
-const { notification, modal } = storeToRefs(appUiStore);
+const { toastNotification, modal } = storeToRefs(appUiStore);
 
-watch(notification, () => {
-	if (notification.value) {
+watch(toastNotification, () => {
+	if (toastNotification.value) {
 		toast.add({
-			id: notification.value?.id,
-			color: notification.value?.color,
-			title: notification.value?.title,
-			description: notification.value?.description,
-			icon: notification.value?.icon,
-			duration: notification.value?.timeout,
-			closeButton: notification.value?.closeButton,
+			id: toastNotification.value.id,
+			color: toastNotification.value.color,
+			title: toastNotification.value.title,
+			description: toastNotification.value.description,
+			icon: toastNotification.value.icon,
+			duration: toastNotification.value.timeout,
+			progress: false,
+			closeIcon: ICONS.CLOSE_ROUNDED,
 		});
 	}
 });
 
 watch(modal, () => {
-	const m = useModal();
+	const m = useOverlay();
 	if (modal.value) {
-		m.open(ZModalMessage, {
-			notification: modal.value,
-			action: 'Ok',
-			onConfirm: () => {
-				appUiStore.clearModal();
+		m.create(ZModalMessage, {
+			props: {
+				notification: modal.value,
+				action: 'Ok',
+				onConfirm: () => {
+					appUiStore.clearModal();
+				},
 			},
 		});
-	} else {
-		m.close();
 	}
 });
 </script>

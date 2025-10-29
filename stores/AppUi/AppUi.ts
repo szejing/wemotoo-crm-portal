@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { EventNotification } from '~/utils/types/event-notification';
+import type { ToastNotification } from '~/utils/types/event-notification';
 import type { Navigation } from '~/utils/types/navigation.ts';
 
 const merchantNavigation = [
@@ -70,8 +70,8 @@ export const useAppUiStore = defineStore('appUiStore', {
 		showSidebar: true as boolean,
 		showSidebarModal: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
-		notification: undefined as EventNotification | undefined,
-		modal: undefined as EventNotification | undefined,
+		toastNotification: undefined as ToastNotification | undefined,
+		modal: undefined as ToastNotification | undefined,
 	}),
 	actions: {
 		toggleSidebar() {
@@ -82,19 +82,19 @@ export const useAppUiStore = defineStore('appUiStore', {
 			this.showSidebarModal = !this.showSidebarModal;
 		},
 
-		addNotification(notification: EventNotification) {
-			this.notification = notification;
+		showToast(notification: ToastNotification) {
+			this.toastNotification = notification;
 
-			if (this.notification.id === undefined) {
-				this.notification.id = Date.now().toString();
+			if (this.toastNotification.id === undefined) {
+				this.toastNotification.id = Date.now().toString();
 			}
 
-			if (this.notification.timeout === undefined) {
-				this.notification.timeout = 3000;
+			if (this.toastNotification.timeout === undefined) {
+				this.toastNotification.timeout = 3000;
 			}
 
-			if (this.notification.closeButton === undefined) {
-				this.notification.closeButton = {
+			if (this.toastNotification.closeButton === undefined) {
+				this.toastNotification.closeButton = {
 					icon: ICONS.CLOSE_ROUNDED,
 					color: 'white',
 					variant: 'link',
@@ -102,11 +102,11 @@ export const useAppUiStore = defineStore('appUiStore', {
 			}
 		},
 
-		clearNotification() {
-			this.notification = undefined;
+		dismissToast() {
+			this.toastNotification = undefined;
 		},
 
-		addModal(notification: EventNotification) {
+		addModal(notification: ToastNotification) {
 			this.modal = notification;
 
 			if (this.modal.id === undefined) {
@@ -134,8 +134,8 @@ export const useAppUiStore = defineStore('appUiStore', {
 
 export const successNotification = (description: string) => {
 	const appUiStore = useAppUiStore();
-	appUiStore.addNotification({
-		color: 'green',
+	appUiStore.showToast({
+		color: 'success',
 		icon: ICONS.CHECK_OUTLINE_ROUNDED,
 		description,
 	});
@@ -143,8 +143,8 @@ export const successNotification = (description: string) => {
 
 export const failedNotification = (description: string) => {
 	const appUiStore = useAppUiStore();
-	appUiStore.addNotification({
-		color: 'red',
+	appUiStore.showToast({
+		color: 'error',
 		icon: ICONS.ERROR_OUTLINE,
 		description,
 	});
@@ -153,7 +153,7 @@ export const failedNotification = (description: string) => {
 export const failedModal = (description: string, title?: string) => {
 	const appUiStore = useAppUiStore();
 	appUiStore.addModal({
-		color: 'red',
+		color: 'error',
 		icon: ICONS.ERROR_OUTLINE,
 		description,
 		title,
