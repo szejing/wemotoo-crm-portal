@@ -7,7 +7,7 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 	state: () => ({
 		payment_methods: [] as PaymentMethod[],
 		total_payment_methods: 0 as number,
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		loading: false as boolean,
 	}),

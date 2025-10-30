@@ -15,24 +15,6 @@
 					<div>
 						<!-- Table  -->
 						<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select-row="selectTaxGroup">
-							<template #code-data="{ row }">
-								<div class="flex-col-start">
-									<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
-									<h5 class="text-neutral-400">{{ row.description }}</h5>
-								</div>
-							</template>
-
-							<template #taxes-data="{ row }">
-								<div class="flex-col-start">
-									<div v-for="tax in row.taxes" :key="tax.code" class="flex-col-start">
-										<h3 class="text-neutral-800 font-bold">
-											{{ tax.code }}
-											<span class="text-neutral-400 font-light italic text-xs">({{ tax.description }})</span>
-										</h3>
-									</div>
-								</div>
-							</template>
-
 							<template #empty-state>
 								<div class="flex-col-center section-empty">
 									<h2>No tax group Found</h2>

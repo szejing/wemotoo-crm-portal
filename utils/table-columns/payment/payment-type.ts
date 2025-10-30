@@ -1,14 +1,16 @@
-export const payment_type_columns = [
+import type { ColumnDef } from '@tanstack/vue-table';
+
+export const payment_type_columns: ColumnDef<any>[] = [
 	{
-		key: 'code',
-		label: 'Code',
+		accessorKey: 'code',
+		header: 'Code',
 	},
 	{
-		key: 'desc',
-		label: 'Description',
+		accessorKey: 'desc',
+		header: 'Description',
 	},
 	{
-		key: 'short_desc',
-		label: 'Short Description',
+		accessorKey: 'short_desc',
+		header: 'Short Description',
 	},
 ];

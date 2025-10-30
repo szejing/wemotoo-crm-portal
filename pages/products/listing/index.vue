@@ -1,61 +1,31 @@
 <template>
 	<div>
 		<UBreadcrumb :links="links" />
+
 		<div class="py-4">
 			<ZSectionFilterProducts />
+
 			<UCard class="mt-4">
-				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
+				<div>
+					<div class="flex-between">
+						<span class="section-page-size">
+							Show :
+							<USelect v-model="page_size" :items="options_page_size" />
+						</span>
 
-					<div class="flex gap-4">
-						<!-- <UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton> -->
-
-						<UButton color="success" @click="navigateTo('/products/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
-						</UButton>
-					</div>
-				</div>
-
-				<UTable :data="rows" :columns="product_columns" :loading="loading" @select-row="selectProduct">
-					<template #name-data="{ row }">
-						<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
-							<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
-							<div class="flex flex-col">
-								<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
-								<p class="font-light text-neutral-400 text-sm">{{ row.name }}</p>
-							</div>
-						</div>
-					</template>
-
-					<template #orig_sell_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">{{ price.currency_code }} {{ price.orig_sell_price.toFixed(2) }}</p>
-					</template>
-
-					<template #sale_price-data="{ row }">
-						<p v-for="price in row.price_types" :key="price.currency" class="font-bold">
-							<span v-if="price.sale_price != undefined && price.sale_price > 0">{{ price.currency_code }} {{ price.sale_price.toFixed(2) }}</span>
-							<span v-else> - </span>
-						</p>
-					</template>
-
-					<template #empty-state>
-						<div class="flex flex-col items-center justify-center py-6 gap-3">
-							<span class="italic text-sm">No Products !</span>
-
+						<div class="flex gap-4">
 							<UButton color="success" @click="navigateTo('/products/create')">
 								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
 								Create
 							</UButton>
 						</div>
-					</template>
-				</UTable>
+					</div>
 
-				<div v-if="products.length > 0" class="section-pagination">
-					<UPagination v-model="current_page" :page-count="page_size" :total="total_products" @update:model-value="updatePage" />
+					<UTable :data="rows" :columns="product_columns" :loading="loading" @select-row="selectProduct" />
+
+					<div v-if="products.length > 0" class="section-pagination">
+						<UPagination v-model="current_page" :page-count="page_size" :total="total_products" @update:model-value="updatePage" />
+					</div>
 				</div>
 			</UCard>
 		</div>

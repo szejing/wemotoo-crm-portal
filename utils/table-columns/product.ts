@@ -1,17 +1,23 @@
-export const product_columns = [
+import type { TableColumn } from '@nuxt/ui';
+import type { Product } from '~/utils/types/product';
+
+export const product_columns: TableColumn<Product>[] = [
 	{
-		key: 'name',
-		label: 'Code & Name',
-		sortable: true,
+		accessorKey: 'name',
+		header: () => h('div', { class: 'text-left' }, 'Code & Name'),
 	},
 	{
-		key: 'orig_sell_price',
-		label: 'Selling Price',
-		sortable: true,
+		accessorKey: 'orig_sell_price',
+		header: 'Selling Price',
+		cell: ({ row }) => {
+			return h('div', { class: 'text-left' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('orig_sell_price'))]);
+		},
 	},
 	{
-		key: 'sale_price',
-		label: 'Sale Price',
-		sortable: true,
+		accessorKey: 'sale_price',
+		header: () => h('div', { class: 'text-right' }, 'Sale Price'),
+		cell: ({ row }) => {
+			return h('div', { class: 'text-left' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('sale_price'))]);
+		},
 	},
 ];

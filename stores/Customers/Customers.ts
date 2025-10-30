@@ -8,7 +8,7 @@ export const useCustomerStore = defineStore('customerStore', {
 		loading: false as boolean,
 		customers: [] as Customer[],
 		total_customers: 0 as number,
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

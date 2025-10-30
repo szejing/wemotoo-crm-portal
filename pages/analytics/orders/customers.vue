@@ -15,43 +15,7 @@
 					</div>
 				</template>
 
-				<UTable :data="tableData" :columns="columnsTable" :loading="is_loading">
-					<template #customer-data="{ row: item }">
-						<p>
-							{{ item.customer_name }} <span class="text-neutral-500">#{{ item.customer_no }}</span>
-						</p>
-					</template>
-
-					<template #status-data="{ row: item }">
-						<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="success">NEW</UBadge>
-						<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="error">REFUNDED</UBadge>
-						<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="error">CANCELLED</UBadge>
-					</template>
-
-					<!-- <template #gross_amt-header>
-						<p>
-							Gross Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #gross_amt-data="{ row: item }">
-						<p>{{ item.gross_amt.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #net_amt-header>
-						<p>
-							Net Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #net_amt-data="{ row: item }">
-						<p>{{ item.net_amt.toFixed(2) }}</p>
-					</template>
-
-					<template #total_qty-data="{ row: item }">
-						<p>{{ item.total_qty }}</p>
-					</template>
-				</UTable>
+				<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" />
 
 				<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
 					<UPagination
@@ -67,7 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus } from 'wemotoo-common';
 import { order_summ_customer_columns } from '~/utils/table-columns';
 
 const links = [
@@ -93,10 +56,10 @@ const orderSummStore = useSummOrderStore();
 const { order_summ_customer } = storeToRefs(orderSummStore);
 
 const is_loading = computed(() => order_summ_customer.value.is_loading);
-const tableData = computed(() => order_summ_customer.value.data);
+const data = computed(() => order_summ_customer.value.data);
 
-const selectedColumns = ref(order_summ_customer_columns);
-const columnsTable = computed(() => order_summ_customer_columns.filter((column) => selectedColumns.value.includes(column)));
+// const selectedColumns = ref(order_summ_customer_columns);
+// const columnsTable = computed(() => order_summ_customer_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const current_page = computed(() => order_summ_customer.value.current_page);
 

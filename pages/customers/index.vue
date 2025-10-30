@@ -22,10 +22,6 @@
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select-row="selectCustomer">
-					<template #phone_number-data="{ row }">
-						<h5 class="text-neutral-500">(+{{ row.dial_code }}) {{ row.phone_no }}</h5>
-					</template>
-
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No one here!</span>
@@ -58,7 +54,6 @@ const links = [
 	},
 ];
 
-const overlay = useOverlay();
 const customerStore = useCustomerStore();
 
 useHead({ title: 'Wemotoo CRM - Customers' });

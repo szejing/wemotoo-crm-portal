@@ -31,10 +31,7 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div
-							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
-							:class="{ 'border-t border-neutral-200': index > 0 }"
-						>
+						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -60,7 +57,7 @@
 						<div class="px-6 pb-6 pt-4">
 							<UTable
 								:data="group.items"
-								:columns="columnsTable"
+								:columns="sale_columns"
 								:ui="{
 									tr: { base: 'cursor-pointer hover:bg-neutral-50' },
 									table: 'table-fixed',
@@ -68,43 +65,7 @@
 									wrapper: 'relative overflow-auto',
 								}"
 								@select-row="selectSale"
-							>
-								<template #bill_no-data="{ row }">
-									<p>{{ row.bill_no }}</p>
-								</template>
-
-								<template #status-data="{ row }">
-									<UBadge v-if="row.status === SaleStatus.COMPLETED" variant="soft" color="success" size="xs">Completed</UBadge>
-									<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="soft" color="error" size="xs">Refunded</UBadge>
-									<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="soft" color="error" size="xs">Cancelled</UBadge>
-								</template>
-
-								<template #gross_amt-data="{ row }">
-									<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #net_amt-data="{ row }">
-									<p class="text-center font-medium text-neutral-900">{{ row.net_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #disc_amt-data="{ row }">
-									<p class="text-center">{{ row.disc_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #void_amt-data="{ row }">
-									<p class="text-center">{{ row.void_amt ? row.void_amt.toFixed(2) : '0.00' }}</p>
-								</template>
-
-								<template #total_item_qty-data="{ row }">
-									<p class="text-center">{{ row.total_item_qty || 0 }}</p>
-								</template>
-
-								<template #empty-state>
-									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-neutral-500">No items found</span>
-									</div>
-								</template>
-							</UTable>
+							/>
 						</div>
 					</div>
 				</UCard>
@@ -119,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SaleStatus, getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 import { sale_columns } from '~/utils/table-columns';
 import type { Bill } from '~/repository/modules/sale/models/response/bill';
 
@@ -145,10 +106,10 @@ onMounted(async () => {
 const saleStore = useSaleStore();
 const { bills, filter, total_bills, loading, exporting } = storeToRefs(saleStore);
 
-const selectedColumns = ref(sale_columns);
-const columnsTable = computed(() =>
-	sale_columns.filter((column) => selectedColumns.value.includes(column) && column.key !== 'index' && column.key !== 'biz_date'),
-);
+// const selectedColumns = ref(sale_columns);
+// const columnsTable = computed(() =>
+// 	sale_columns.filter((column) => selectedColumns.value.includes(column) && column.accessorKey !== 'bill_no' && column.accessorKey !== 'biz_date'),
+// );
 
 const current_page = computed(() => filter.value.current_page);
 

@@ -28,7 +28,7 @@ export const initialEmptySaleSummCustomer: SaleSummCustomer = {
 	},
 	exporting: false,
 	is_loading: false,
-	page_size: options_page_size[0],
+	page_size: options_page_size[0] as number,
 	current_page: 1,
 	total_data: 0,
 	data: [],

@@ -5,7 +5,7 @@
 			<h2 class="my-6">Add Tax Rule</h2>
 		</div>
 		<div class="wrapper-grid">
-			<FormTaxRuleCreation />
+			<FormTaxRuleCreation :adding="false" :new-tax-rule="new_tax_rule" />
 		</div>
 	</div>
 </template>

@@ -7,7 +7,7 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 	state: () => ({
 		payment_type_groups: [] as PaymentTypeGroup[],
 		total_payment_type_groups: 0 as number,
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		loading: false as boolean,
 	}),

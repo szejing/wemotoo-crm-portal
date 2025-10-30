@@ -5,52 +5,12 @@
 			<ZSectionFilterSaleSummCustomers />
 			<UCard class="mt-4">
 				<template #header>
-					<div class="flex-jend">
+					<!-- <div class="flex-jend">
 						<ZSelectMenuTableColumns :columns="sale_summ_customer_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
-					</div>
+					</div> -->
 				</template>
 
-				<UTable :data="tableData" :columns="columnsTable" :loading="is_loading">
-					<template #customer-data="{ row: item }">
-						<p>
-							{{ item.customer_name }} <span class="text-neutral-500">#{{ item.customer_no }}</span>
-						</p>
-					</template>
-
-					<template #status-data="{ row: item }">
-						<UBadge v-if="item.status == SaleStatus.COMPLETED" variant="outline" color="success">COMPLETED</UBadge>
-						<UBadge v-else-if="item.status == SaleStatus.CANCELLED" variant="outline" color="error">CANCELLED</UBadge>
-						<UBadge v-else-if="item.status == SaleStatus.REFUNDED" variant="outline" color="warning">REFUNDED</UBadge>
-					</template>
-
-					<!-- <template #gross_amt-header>
-						<p>
-							Gross Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #gross_amt-data="{ row: item }">
-						<p>{{ item.gross_amt.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #net_amt-header>
-						<p>
-							Net Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #net_amt-data="{ row: item }">
-						<p>{{ item.net_amt.toFixed(2) }}</p>
-					</template>
-
-					<template #total_txns-data="{ row: item }">
-						<p>{{ item.total_txns }}</p>
-					</template>
-
-					<template #total_qty-data="{ row: item }">
-						<p>{{ item.total_qty }}</p>
-					</template>
-				</UTable>
+				<UTable :data="data" :columns="sale_summ_customer_columns" :loading="is_loading" />
 
 				<div v-if="sale_summ_customer.data.length > 0" class="section-pagination">
 					<UPagination
@@ -66,7 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SaleStatus } from 'wemotoo-common';
 import { sale_summ_customer_columns } from '~/utils/table-columns';
 
 const links = [
@@ -92,16 +51,16 @@ const saleSummStore = useSummSaleStore();
 const { sale_summ_customer } = storeToRefs(saleSummStore);
 
 const is_loading = computed(() => sale_summ_customer.value.is_loading);
-const tableData = computed(() => sale_summ_customer.value.data);
+const data = computed(() => sale_summ_customer.value.data);
 
-const selectedColumns = ref(sale_summ_customer_columns);
-const columnsTable = computed(() => sale_summ_customer_columns.filter((column) => selectedColumns.value.includes(column)));
+// const selectedColumns = ref(sale_summ_customer_columns);
+// const columnsTable = computed(() => sale_summ_customer_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const current_page = computed(() => sale_summ_customer.value.current_page);
 
-const updateColumns = (columns: { key: string; label: string }[]) => {
-	selectedColumns.value = columns;
-};
+// const updateColumns = (columns: { key: string; label: string }[]) => {
+// 	selectedColumns.value = columns;
+// };
 
 const updatePage = async (page: number) => {
 	sale_summ_customer.value.current_page = page;

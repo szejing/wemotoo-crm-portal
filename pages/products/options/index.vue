@@ -15,24 +15,7 @@
 
 					<div>
 						<!-- Table  -->
-						<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select-row="selectProductOption">
-							<template #values-data="{ row }">
-								<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
-							</template>
-
-							<!-- <template #actions-data="{ row }">
-								<ZActionDropdown :items="options(row)" />
-							</template> -->
-
-							<template #empty-state>
-								<div class="flex-center section-empty">
-									<div>
-										<h2>No Options Found</h2>
-										<p>Create a new option to get started</p>
-									</div>
-								</div>
-							</template>
-						</UTable>
+						<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select-row="selectProductOption" />
 
 						<!-- Pagination  -->
 						<div v-if="prod_option.length > 0" class="section-pagination">

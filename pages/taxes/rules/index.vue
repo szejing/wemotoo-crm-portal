@@ -15,30 +15,6 @@
 				</div>
 				<!-- Table  -->
 				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select-row="selectTaxRule">
-					<template #code-data="{ row }">
-						<div class="flex-col-start">
-							<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
-							<h5 class="text-neutral-400">{{ row.description }}</h5>
-						</div>
-					</template>
-
-					<template #details-data="{ row }">
-						<div class="flex-col-start text-neutral-700 space-y-3">
-							<div v-if="row.details && row.details.length > 0" class="space-y-3">
-								<div v-for="(detail, index) in row.details" :key="index" class="text-sm">
-									<div class="border-l-2 border-neutral-300 pl-2 space-y-1">
-										<h4 class="text-neutral-800 font-bold">{{ detail.tax?.description || detail.description }}</h4>
-										<div v-if="detail.tax_condition" class="flex items-center gap-2 mt-2">
-											<UBadge :label="getAmountTypeLabel(detail.tax_condition.amount_type)" variant="soft" size="md" />
-											<UBadge :label="`${detail.tax_condition.rate * 100}%`" variant="soft" color="success" size="md" />
-										</div>
-									</div>
-								</div>
-							</div>
-							<div v-else class="text-xs text-neutral-400">No details configured</div>
-						</div>
-					</template>
-
 					<template #empty-state>
 						<div class="flex-col-center section-empty">
 							<h2>No tax code Found</h2>

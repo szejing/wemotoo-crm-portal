@@ -19,7 +19,7 @@ export const useTaxStore = defineStore('taxStore', {
 		taxes: [] as Tax[],
 		total_taxes: 0 as number,
 		new_tax: structuredClone(initialEmptyTax),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

@@ -21,29 +21,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="payment_method_columns">
-					<template #code-data="{ row }">
-						<h4 class="font-bold text-neutral-800">{{ row.code }}</h4>
-						<p class="text-sm italic text-neutral-400">{{ row.desc }}</p>
-					</template>
-					<template #detail-data="{ row }">
-						<p class="text-sm font-medium">Supported : {{ row.currency_code }}</p>
-						<p v-if="row.short_desc" class="text-sm italic text-neutral-400">{{ row.short_desc }}</p>
-					</template>
-					<template #active-data="{ row }">
-						<USwitch v-model="row.is_active" :loading="isUpdating" :disabled="isUpdating" @update:model-value="updateStatus(row.code, row.is_active)" />
-					</template>
-
-					<template #empty-state>
-						<div class="flex flex-col items-center justify-center py-6 gap-3">
-							<span class="italic text-sm">No one here!</span>
-							<UButton color="success">
-								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-								Create
-							</UButton>
-						</div>
-					</template>
-				</UTable>
+				<UTable :data="rows" :columns="payment_method_columns" />
 
 				<div v-if="payment_methods.length > 0" class="section-pagination">
 					<UPagination v-model="current_page" :page-count="page_size" :total="total_payment_methods" @update:model-value="updatePage" />

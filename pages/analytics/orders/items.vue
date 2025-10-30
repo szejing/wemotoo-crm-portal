@@ -35,10 +35,7 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div
-							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
-							:class="{ 'border-t border-neutral-200': index > 0 }"
-						>
+						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -152,7 +149,7 @@ const current_page = computed(() => order_summ_item.value.current_page);
 const is_loading = computed(() => order_summ_item.value.is_loading);
 const data = computed(() => order_summ_item.value.data);
 
-const selectedColumns = ref(order_summ_item_columns);
+// const selectedColumns = ref(order_summ_item_columns);
 
 // Group data by date
 const groupedByDate = computed(() => {

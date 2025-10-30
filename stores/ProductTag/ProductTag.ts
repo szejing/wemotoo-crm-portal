@@ -16,7 +16,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 		tags: [] as Tag[],
 		total_tags: 0 as number,
 		new_tag: structuredClone(initialEmptyTag),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

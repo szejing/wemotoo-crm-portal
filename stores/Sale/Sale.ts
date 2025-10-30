@@ -24,7 +24,7 @@ const initialEmptySaleFilter: SaleFilter = {
 	// payment_status: PaymentStatus.SUCCESS,
 	start_date: new Date(),
 	end_date: undefined,
-	page_size: options_page_size[0],
+	page_size: options_page_size[0] as number,
 	current_page: 1,
 	currency_code: 'MYR',
 };
@@ -76,7 +76,7 @@ export const useSaleStore = defineStore('saleStore', {
 				const dateFilter = this.filter.end_date
 					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
 							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
-					  }')`
+						}')`
 					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
@@ -129,7 +129,7 @@ export const useSaleStore = defineStore('saleStore', {
 				const dateFilter = this.filter.end_date
 					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
 							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
-					  }')`
+						}')`
 					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;

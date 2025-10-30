@@ -1,85 +1,80 @@
-export const sale_summ_item_columns = [
+import { h, resolveComponent } from 'vue';
+import { OrderItemStatus } from 'wemotoo-common';
+import type { TableColumn } from '@nuxt/ui';
+import type { SummSaleItem } from '~/utils/types/summ-sales';
+
+const UBadge = resolveComponent('UBadge');
+
+export const sale_summ_item_columns: TableColumn<SummSaleItem>[] = [
 	{
-		key: 'prod_code',
-		label: 'Product',
-		sortable: false,
+		accessorKey: 'prod_code',
+		header: 'Product',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_code'))]);
+		},
 	},
 	{
-		key: 'item_status',
-		label: 'Status',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'item_status',
+		header: 'Status',
+		cell: ({ row }) => {
+			const color = {
+				[OrderItemStatus.ACTIVE]: 'success' as const,
+				[OrderItemStatus.REFUNDED]: 'error' as const,
+				[OrderItemStatus.VOIDED]: 'error' as const,
+			}[row.getValue('item_status') as OrderItemStatus];
+			return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.getValue('item_status'));
+		},
 	},
 	{
-		key: 'total_qty',
-		label: 'Qty',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'total_qty',
+		header: 'Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
-
-	// {
-	// 	key: 'disc_amt',
-	// 	label: 'Discount Amount',
-	// },
-
-	// {
-	// 	key: 'gross_amt_exc',
-	// 	label: 'Gross Amount Excluding Tax',
-	// },
-
-	// {
-	// 	key: 'disc_amt_exc',
-	// 	label: 'Discount Amount Excluding Tax',
-	// },
-
-	// {
-	// 	key: 'net_amt_exc',
-	// 	label: 'Net Amount Excluding Tax',
-	// },
-
-	// {
-	// 	key: 'tax_amt_inc',
-	// 	label: 'Tax Amount Including Tax',
-	// },
-
-	// {
-	// 	key: 'tax_amt_exc',
-	// 	label: 'Tax Amount Excluding Tax',
-	// },
-
-	// {
-	// 	key: 'adj_amt',
-	// 	label: 'Adjustment Amount',
-	// },
 ];
 
-export const sale_summ_item_header_columns = [
+export const sale_summ_item_header_columns: TableColumn<SummSaleItem>[] = [
 	{
-		key: 'biz_date',
-		label: 'Biz Date',
+		accessorKey: 'biz_date',
+		header: 'Biz Date',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('biz_date'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 	{
-		key: 'total_qty',
-		label: 'Total Qty',
+		accessorKey: 'total_qty',
+		header: 'Total Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+		},
 	},
 ];

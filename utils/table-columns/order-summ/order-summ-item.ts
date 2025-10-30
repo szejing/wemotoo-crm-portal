@@ -1,54 +1,77 @@
-export const order_summ_item_columns = [
+import type { TableColumn } from '@nuxt/ui';
+
+export const order_summ_item_columns: TableColumn<any>[] = [
 	{
-		key: 'prod_code',
-		label: 'Product',
-		sortable: false,
+		accessorKey: 'prod_code',
+		header: 'Product',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_code'))]);
+		},
 	},
 	{
-		key: 'item_status',
-		label: 'Item Status',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'item_status',
+		header: 'Item Status',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('item_status'))]);
+		},
 	},
 	{
-		key: 'total_qty',
-		label: 'Qty',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'total_qty',
+		header: 'Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
-		class: 'text-center',
-		sortable: false,
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 ];
 
-export const order_summ_item_header_columns = [
+export const order_summ_item_header_columns: TableColumn<any>[] = [
 	{
-		key: 'biz_date',
-		label: 'Biz Date',
+		accessorKey: 'biz_date',
+		header: 'Biz Date',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('biz_date'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 	{
-		key: 'total_orders',
-		label: 'Total Orders',
+		accessorKey: 'total_orders',
+		header: 'Total Orders',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_orders'))]);
+		},
 	},
 	{
-		key: 'total_qty',
-		label: 'Total Qty',
+		accessorKey: 'total_qty',
+		header: 'Total Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+		},
 	},
 ];

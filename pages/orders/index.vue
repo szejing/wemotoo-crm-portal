@@ -31,92 +31,7 @@
 					</div>
 				</div>
 
-				<UTable :data="rows" :columns="columnsTable" :loading="loading" class="mt-4" @select-row="selectOrder">
-					<template #index-data="{ index }">
-						<p class="text-left">{{ index + 1 }}.</p>
-					</template>
-
-					<template #biz_date-data="{ row }">
-						<p v-if="row.biz_date" class="text-left">{{ row.biz_date }}</p>
-					</template>
-
-					<template #order_no-data="{ row }">
-						<p class="text-center">{{ row.transaction_no }}</p>
-					</template>
-
-					<template #currency_code-data="{ row }">
-						<p class="text-center">{{ row.currency_code }}</p>
-					</template>
-
-					<template #status-data="{ row }">
-						<div class="flex justify-center">
-							<UBadge v-if="row.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info">PENDING PAYMENT</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.PROCESSING" color="info">PROCESSING</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.REQUIRES_ACTION" color="warning">REQUIRES ACTION</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.REFUNDED" color="error">REFUNDED</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.CANCELLED" color="error">CANCELLED</UBadge>
-						</div>
-					</template>
-
-					<template #total_qty-data="{ row }">
-						<p class="text-center">{{ row.total_qty }}</p>
-					</template>
-					<!-- <template #gross_amt-header>
-						<p>
-							Gross Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #gross_amt-data="{ row }">
-						<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #net_amt-header>
-						<p>
-							Net Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #net_amt-data="{ row }">
-						<p class="text-center">{{ row.net_amt.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #disc_amt-header>
-						<p>
-							Disc Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #disc_amt-data="{ row }">
-						<p class="text-center">{{ row.disc_amt.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #tax_amt_exc-header>
-						<p>
-							Tax Amt Exc <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<template #tax_amt_exc-data="{ row }">
-						<p class="text-center">{{ row.tax_amt_exc.toFixed(2) }}</p>
-					</template>
-
-					<!-- <template #void_amt-header>
-						<p>
-							Void Amt <span class="italic text-neutral-500">({{ currency_code }})</span>
-						</p>
-					</template> -->
-
-					<!-- <template #void_amt-data="{ row }">
-						<p>{{ row.void_amt.toFixed(2) }}</p>
-					</template> -->
-
-					<template #total_voided_qty-data="{ row }">
-						<p v-if="row.voided_qty" class="text-center">{{ row.voided_qty }}</p>
-						<p v-else class="text-center">0</p>
-					</template>
-
+				<UTable :data="rows" :columns="order_columns" :loading="loading" class="mt-4" @select-row="selectOrder">
 					<template #empty-state>
 						<div class="flex flex-col items-center justify-center py-6 gap-3">
 							<span class="italic text-sm">No Orders !</span>
@@ -133,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, getFormattedDate } from 'wemotoo-common';
+import type { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
 import type { Order } from '~/utils/types/order';
@@ -179,8 +94,8 @@ const tabItems = [
 	},
 ];
 
-const selectedColumns = ref(order_columns);
-const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
+// const selectedColumns = ref(order_columns);
+// const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const rows = computed(() => {
 	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
@@ -189,7 +104,7 @@ const rows = computed(() => {
 const selectTab = async (index: number) => {
 	selectedTab.value = index;
 	filter.value.current_page = 1;
-	filter.value.status = tabItems[index].value as OrderStatus;
+	filter.value.status = tabItems[index]?.value as OrderStatus;
 	await orderStore.getOrders();
 };
 

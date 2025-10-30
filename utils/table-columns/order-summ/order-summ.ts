@@ -1,35 +1,53 @@
-export const order_summ_columns = [
+import type { ColumnDef } from '@tanstack/vue-table';
+
+export const order_summ_columns: ColumnDef<any>[] = [
 	{
-		key: 'currency_code',
-		label: 'Currency',
+		accessorKey: 'currency_code',
+		header: 'Currency',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
+		},
 	},
 	{
-		key: 'status',
-		label: 'Order Status',
+		accessorKey: 'status',
+		header: 'Order Status',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('status'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
-		class: 'text-center',
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
-		class: 'text-center',
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 	{
-		key: 'total_orders',
-		label: 'Total Orders',
-		class: 'text-center',
+		accessorKey: 'total_orders',
+		header: 'Total Orders',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_orders'))]);
+		},
 	},
 	{
-		key: 'total_qty',
-		label: 'Total Qty',
-		class: 'text-center',
+		accessorKey: 'total_qty',
+		header: 'Total Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+		},
 	},
 	{
-		key: 'total_voided_qty',
-		label: 'Total Voided Qty',
-		class: 'text-center',
+		accessorKey: 'total_voided_qty',
+		header: 'Total Voided Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_voided_qty'))]);
+		},
 	},
 ];

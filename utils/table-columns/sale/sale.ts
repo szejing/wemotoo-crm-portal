@@ -1,40 +1,67 @@
-export const sale_columns = [
+import { SaleStatus } from 'wemotoo-common';
+import { h, resolveComponent } from 'vue';
+import type { Bill } from '~/repository/modules/sale/models/response/bill';
+import type { TableColumn } from '@nuxt/ui';
+
+const UBadge = resolveComponent('UBadge');
+
+export const sale_columns: TableColumn<Bill>[] = [
 	{
-		key: 'bill_no',
-		label: 'Bill No',
-		sortable: true,
+		accessorKey: 'bill_no',
+		header: 'Bill No',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('bill_no'))]);
+		},
 	},
 	{
-		key: 'status',
-		label: 'Status',
+		accessorKey: 'status',
+		header: 'Status',
+		cell: ({ row }) => {
+			const color = {
+				[SaleStatus.COMPLETED]: 'success' as const,
+				[SaleStatus.CANCELLED]: 'neutral' as const,
+				[SaleStatus.REFUNDED]: 'error' as const,
+			}[row.getValue('status') as SaleStatus];
+			return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.getValue('status'));
+		},
 	},
 	// {
-	// 	key: 'currency_code',
-	// 	label: 'Currency',
+	// 	accessorKey: 'currency_code',
+	// 	header: 'Currency',
 	// },
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
-		class: 'text-center',
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
-		class: 'text-center',
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 	{
-		key: 'disc_amt',
-		label: 'Discount Amt',
-		class: 'text-center',
+		accessorKey: 'disc_amt',
+		header: 'Discount Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('disc_amt'))]);
+		},
 	},
 	{
-		key: 'void_amt',
-		label: 'Void Amt',
-		class: 'text-center',
+		accessorKey: 'void_amt',
+		header: 'Void Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('void_amt'))]);
+		},
 	},
 	{
-		key: 'total_item_qty',
-		label: 'Total Qty',
-		class: 'text-center',
+		accessorKey: 'total_item_qty',
+		header: 'Total Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_item_qty'))]);
+		},
 	},
 ];

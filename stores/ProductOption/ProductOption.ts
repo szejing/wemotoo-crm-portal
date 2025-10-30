@@ -19,7 +19,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		prod_option: [] as ProductOption[],
 		total_options: 0 as number,
 		new_prod_option: structuredClone(initialEmptyOption),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

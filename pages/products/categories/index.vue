@@ -15,35 +15,7 @@
 
 					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory">
-							<template #code-data="{ row }">
-								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
-									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-15 h-15 rounded-sm" />
-									<h5 class="font-bold text-secondary-800">{{ row.code }}</h5>
-								</div>
-							</template>
-
-							<template #name-data="{ row }">
-								<div>
-									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
-								</div>
-							</template>
-
-							<template #total_items-header>
-								<h5 class="text-center">No of Items</h5>
-							</template>
-
-							<template #total_items-data="{ row }">
-								<h5 class="text-neutral-500 text-center">{{ row.total_products ?? 0 }}</h5>
-							</template>
-
-							<template #empty-state>
-								<div class="flex-col-center section-empty">
-									<h2>No Categories Found</h2>
-									<p>Create a new category to get started</p>
-								</div>
-							</template>
-						</UTable>
+						<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory" />
 
 						<!-- Pagination  -->
 						<div v-if="categories.length > 0" class="section-pagination">

@@ -1,30 +1,53 @@
-export const order_item_columns = [
+import type { ColumnDef } from '@tanstack/vue-table';
+
+export const order_item_columns: ColumnDef<any>[] = [
 	{
-		key: 'prod_code',
-		label: 'Prod Code',
+		accessorKey: 'prod_code',
+		header: 'Prod Code',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_code'))]);
+		},
 	},
 	{
-		key: 'prod_name',
-		label: 'Prod Name',
+		accessorKey: 'prod_name',
+		header: 'Prod Name',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_name'))]);
+		},
 	},
 	{
-		key: 'status',
-		label: 'Item Status',
+		accessorKey: 'status',
+		header: 'Item Status',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('status'))]);
+		},
 	},
 	{
-		key: 'order_qty',
-		label: 'Qty',
+		accessorKey: 'order_qty',
+		header: 'Qty',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('order_qty'))]);
+		},
 	},
 	{
-		key: 'gross_amt',
-		label: 'Gross Amt',
+		accessorKey: 'gross_amt',
+		header: 'Gross Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		},
 	},
 	{
-		key: 'net_amt',
-		label: 'Net Amt',
+		accessorKey: 'net_amt',
+		header: 'Net Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		},
 	},
 	{
-		key: 'total_amt',
-		label: 'Total Amt',
+		accessorKey: 'total_amt',
+		header: 'Total Amt',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_amt'))]);
+		},
 	},
 ];

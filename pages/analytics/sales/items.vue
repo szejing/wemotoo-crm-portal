@@ -34,10 +34,7 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div
-							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
-							:class="{ 'border-t border-neutral-200': index > 0 }"
-						>
+						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -68,46 +65,9 @@
 						<div class="px-6 pb-6 pt-4">
 							<UTable
 								:data="group.items"
-								:columns="selectedColumns"
+								:columns="sale_summ_item_columns"
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
-							>
-								<template #prod_code-data="{ row }">
-									<div v-if="row.is_total_row" class="font-semibold text-neutral-700">{{ row.prod_name }}</div>
-									<div v-else>
-										<p class="font-medium text-neutral-900">{{ row.prod_name }}</p>
-										<p class="text-xs text-neutral-500">{{ row.prod_code }}</p>
-									</div>
-								</template>
-
-								<template #item_status-data="{ row }">
-									<div class="flex justify-center">
-										<span v-if="row.is_total_row"></span>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="success" size="xs">Active</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="info" size="xs">Refunded</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="error" size="xs">Voided</UBadge>
-									</div>
-								</template>
-
-								<template #total_qty-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.total_qty }}</p>
-								</template>
-
-								<template #gross_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.gross_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #net_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-neutral-900'">
-										{{ row.net_amt.toFixed(2) }}
-									</p>
-								</template>
-
-								<template #empty-state>
-									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-neutral-500">No items found</span>
-									</div>
-								</template>
-							</UTable>
+							/>
 						</div>
 					</div>
 				</UCard>
@@ -151,7 +111,7 @@ const current_page = computed(() => sale_summ_items.value.current_page);
 const is_loading = computed(() => sale_summ_items.value.is_loading);
 const data = computed(() => sale_summ_items.value.data);
 
-const selectedColumns = ref(sale_summ_item_columns);
+// const selectedColumns = ref(sale_summ_item_columns);
 
 // Group data by date
 const groupedByDate = computed(() => {

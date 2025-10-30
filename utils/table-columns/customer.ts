@@ -1,21 +1,34 @@
-export const customer_columns = [
+import type { ColumnDef } from '@tanstack/vue-table';
+
+export const customer_columns: ColumnDef<any>[] = [
 	{
-		key: 'customer_no',
-		label: 'No',
-		sortable: true,
+		accessorKey: 'customer_no',
+		header: 'No',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('customer_no'))]);
+		},
 	},
 	{
-		key: 'name',
-		label: 'Name',
-		sortable: true,
+		accessorKey: 'name',
+		header: 'Name',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('name'))]);
+		},
 	},
 	{
-		key: 'email_address',
-		label: 'Email',
-		sortable: true,
+		accessorKey: 'email_address',
+		header: 'Email',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('email_address'))]);
+		},
 	},
 	{
-		key: 'phone_number',
-		label: 'Phone',
+		accessorKey: 'phone_number',
+		header: 'Phone',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('h5', { class: 'text-neutral-500' }, `(+${row.getValue('dial_code')}) ${row.getValue('phone_no')}`),
+			]);
+		},
 	},
 ];

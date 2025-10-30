@@ -1,17 +1,26 @@
-export const category_columns = [
+import type { TableColumn } from '@nuxt/ui';
+import type { Category } from '~/utils/types/category';
+
+export const category_columns: TableColumn<Category>[] = [
 	{
-		key: 'code',
-		label: 'Code',
-		sortable: true,
+		accessorKey: 'code',
+		header: 'Code',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('code'))]);
+		},
 	},
 	{
-		key: 'description',
-		label: 'Description',
-		sortable: true,
+		accessorKey: 'description',
+		header: 'Description',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('description'))]);
+		},
 	},
 	{
-		key: 'total_items',
-		label: 'No of Items',
-		sortable: true,
+		accessorKey: 'total_items',
+		header: 'No of Items',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_items'))]);
+		},
 	},
 ];

@@ -15,20 +15,6 @@
 					<div>
 						<!-- Table  -->
 						<UTable :data="rows" :columns="outlet_columns" :loading="loading" @select-row="selectOutlet">
-							<template #code-data="{ row }">
-								<div class="flex-col-start">
-									<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
-									<h5 class="text-neutral-400">{{ row.description }}</h5>
-								</div>
-							</template>
-
-							<template #address-data="{ row }">
-								<div class="flex-col-start text-neutral-700">
-									<h5>{{ row.address1 }}, {{ row.address2 }}, {{ row.address3 }}</h5>
-									<h5>{{ row.city }} {{ row.postal_code }}, {{ row.state }}, {{ row.country_code }}</h5>
-								</div>
-							</template>
-
 							<template #empty-state>
 								<div class="flex-col-center section-empty">
 									<h2>No outlet Found</h2>

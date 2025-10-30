@@ -14,28 +14,7 @@
 					<ZSectionFilterTags />
 					<div>
 						<!-- Table  -->
-						<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag">
-							<template #name-data="{ row }">
-								<div>
-									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
-								</div>
-							</template>
-
-							<template #total_items-header>
-								<h5 class="text-center">No of Items</h5>
-							</template>
-
-							<template #total_items-data="{ row }">
-								<h5 class="text-neutral-500 text-center">{{ row.total_products ?? 0 }}</h5>
-							</template>
-
-							<template #empty-state>
-								<div class="flex-col-center section-empty">
-									<h2>No Tags Found</h2>
-									<p>Create a new tag to get started</p>
-								</div>
-							</template>
-						</UTable>
+						<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag" />
 
 						<!-- Pagination  -->
 						<div v-if="tags.length > 0" class="section-pagination">

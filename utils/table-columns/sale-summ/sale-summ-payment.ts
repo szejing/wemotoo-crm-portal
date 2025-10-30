@@ -1,35 +1,26 @@
-export const sale_summ_payment_columns = [
+import type { TableColumn } from '@nuxt/ui';
+import type { SummSalePayment } from '~/utils/types/summ-sales';
+
+export const sale_summ_payment_columns: TableColumn<SummSalePayment>[] = [
 	{
-		key: 'currency_code',
-		label: 'Currency',
+		accessorKey: 'currency_code',
+		header: 'Currency',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
+		},
 	},
 	{
-		key: 'status',
-		label: 'Status',
+		accessorKey: 'payment_type_desc',
+		header: 'Desc',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('payment_type_desc'))]);
+		},
 	},
 	{
-		key: 'payment_type_code',
-		label: 'Payment Type',
-		class: 'text-center',
-	},
-	{
-		key: 'payment_type_desc',
-		label: 'Desc',
-		class: 'text-center',
-	},
-	{
-		key: 'payment_amt',
-		label: 'Payment Amt',
-		class: 'text-center',
-	},
-	{
-		key: 'local_amt',
-		label: 'Local Amount',
-		class: 'text-center',
-	},
-	{
-		key: 'total_txns',
-		label: 'Total Txns',
-		class: 'text-center',
+		accessorKey: 'total_txns',
+		header: 'Total Txns',
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_txns'))]);
+		},
 	},
 ];

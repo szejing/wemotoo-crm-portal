@@ -26,7 +26,7 @@ export const useOutletStore = defineStore('outletStore', {
 		outlets: [] as Outlet[],
 		total_outlets: 0 as number,
 		new_outlet: structuredClone(initialEmptyOutlet),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

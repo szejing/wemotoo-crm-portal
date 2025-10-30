@@ -15,25 +15,6 @@
 					<div>
 						<!-- Table  -->
 						<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select-row="selectTax">
-							<template #code-data="{ row }">
-								<div class="flex-col-start">
-									<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
-									<h5 class="text-neutral-400">{{ row.description }}</h5>
-								</div>
-							</template>
-
-							<template #type-data="{ row }">
-								<div class="flex-col-start text-neutral-700">
-									<h5>{{ row.is_inclusive ? 'Inclusive' : 'Exclusive' }}</h5>
-								</div>
-							</template>
-
-							<template #is_active-data="{ row }">
-								<div class="flex-col-start text-neutral-700" @click.stop>
-									<USwitch :model-value="row.is_active" @update:model-value="onUpdateActive(row)" />
-								</div>
-							</template>
-
 							<template #empty-state>
 								<div class="flex-col-center section-empty">
 									<h2>No tax code Found</h2>

@@ -17,7 +17,7 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		prod_types: [] as ProductType[],
 		total_prod_types: 0 as number,
 		new_prod_type: structuredClone(initialEmptyProductType),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),
