@@ -33,7 +33,7 @@ const { toggleSidebar } = appUiStore;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	overflow-y: auto;
 	transform: translateX(0);
-	transition-duration: 200ms;
+	transition: transform 200ms ease;
 	display: none;
 	background: linear-gradient(to bottom, var(--color-secondary-600), var(--color-main-600));
 }

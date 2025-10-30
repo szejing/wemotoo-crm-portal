@@ -1,17 +1,14 @@
 <template>
 	<div>
-		<div class="cursor-pointer px-4" @click="isMerchantInfoModal = true">
-			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
-		</div>
-
-		<UModal v-model:open="isMerchantInfoModal">
-			<UCard>
-				<template #header>
-					<div class="merchant-info-modal">
-						<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
-					</div>
-				</template>
-			</UCard>
+		<UModal v-model:open="open">
+			<div class="cursor-pointer px-4" @click="open = true">
+				<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
+			</div>
+			<template #header>
+				<div class="merchant-info-modal">
+					<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
+				</div>
+			</template>
 		</UModal>
 	</div>
 </template>
@@ -21,7 +18,7 @@ import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 
-const isMerchantInfoModal = ref(false);
+const open = ref(false);
 
 const merchantName = computed(() => {
 	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.NAME)?.getString() ?? '';

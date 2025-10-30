@@ -5,7 +5,7 @@
 			<div class="flex h-full">
 				<Sidebar />
 
-				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-60 md:w-[calc(100vw-60rem)]' : 'md:ml-12 md:w-[calc(100vw-12rem)]']">
+				<div class="main-content" :class="['ml-0 w-full', showSidebar ? 'md:ml-60 md:w-[calc(100vw-15rem)]' : 'md:ml-20 md:w-[calc(100vw-5rem)]']">
 					<slot />
 				</div>
 			</div>
@@ -35,8 +35,9 @@ const { showSidebar } = storeToRefs(appUiStore);
 
 .main-content {
 	padding: 0.5rem; /* px-2 py-2 */
-	transform: translateX(0);
-	transition-duration: 500ms;
+	transition:
+		margin-left 500ms ease,
+		width 500ms ease;
 }
 
 @media (min-width: 640px) {

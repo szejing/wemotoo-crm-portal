@@ -11,7 +11,7 @@
 			@click="onClickThumbnail"
 		/>
 		<div class="inner-tile-container">
-			<h3 class="font-medium text-secondary-100" :class="[onClickTitle ? 'cursor-pointer' : '']" :onclick="onClickTitle">{{ title }}</h3>
+			<h3 class="font-medium text-secondary-800" :class="[onClickTitle ? 'cursor-pointer' : '']" :onclick="onClickTitle">{{ title }}</h3>
 			<p class="text-sm text-secondary-400" :class="[onClickSubtitle ? 'cursor-pointer' : '']" :onclick="onClickSubtitle">{{ subtitle }}</p>
 		</div>
 	</div>
@@ -49,10 +49,16 @@ const { title, subtitle, thumbnailUrl } = props;
 
 <style scoped lang="postcss">
 .tile-container {
-	@apply flex justify-start items-center gap-2;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 .inner-tile-container {
-	@apply flex flex-col justify-center items-start;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
 }
 </style>
