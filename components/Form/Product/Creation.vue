@@ -32,7 +32,7 @@
 		<!-- *********************** Additional Info *********************** -->
 
 		<div class="flex-center text-center">
-			<UButton class="w-[100%] sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Submit</UButton>
+			<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Submit</UButton>
 		</div>
 	</UForm>
 </template>
@@ -214,10 +214,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
-	const modal = useModal();
-	modal.open(ZModalLoading, {
-		key: 'loading',
+	const overlay = useOverlay();
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
 	});
+
+	loadingModal.open();
 
 	try {
 		const result = await productStore.createProduct();
@@ -228,9 +232,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	} catch (error) {
 		console.error(error);
 	} finally {
-		modal.close();
+		loadingModal.close();
 	}
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

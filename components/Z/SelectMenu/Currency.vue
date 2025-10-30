@@ -35,4 +35,4 @@ const currency_code = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

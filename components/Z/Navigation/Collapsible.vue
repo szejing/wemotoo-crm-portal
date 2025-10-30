@@ -54,7 +54,7 @@ const toggleCollapse = () => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .rotate-90 {
 	transform: rotate(90deg);
 }
@@ -71,6 +71,8 @@ const toggleCollapse = () => {
 }
 
 .wrapper-border {
-	@apply border-b-[1px] border-secondary-400 pb-2;
+	border-bottom-width: 1px;
+	border-bottom-color: var(--color-secondary-400);
+	padding-bottom: 0.5rem;
 }
 </style>

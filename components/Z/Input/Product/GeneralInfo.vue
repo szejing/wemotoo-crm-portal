@@ -184,17 +184,37 @@ const product_type = computed({
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .section-grid-basic-details {
-	@apply grid grid-cols-2 gap-4;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
 }
 :deep(.ql-editor) {
 	min-height: 200px;
 }
 :deep(.ql-toolbar.ql-snow) {
-	@apply shadow-sm bg-white text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-t-md;
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	background-color: white;
+	color: var(--color-neutral-900);
+	border: 1px solid var(--color-neutral-50);
+	border-top-left-radius: 0.375rem;
+	border-top-right-radius: 0.375rem;
+}
+:deep(.ql-toolbar.ql-snow):focus {
+	border-width: 2px;
+	border-color: var(--color-primary-500);
 }
 :deep(.ql-container.ql-snow) {
-	@apply shadow-sm bg-white text-neutral-900 ring-1 ring-inset ring-neutral-50 focus:ring-2 focus:ring-primary-500 rounded-b-md;
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	background-color: white;
+	color: var(--color-neutral-900);
+	border: 1px solid var(--color-neutral-50);
+	border-bottom-left-radius: 0.375rem;
+	border-bottom-right-radius: 0.375rem;
+}
+:deep(.ql-container.ql-snow):focus {
+	border-width: 2px;
+	border-color: var(--color-primary-500);
 }
 </style>

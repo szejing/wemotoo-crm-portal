@@ -15,7 +15,7 @@
 
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
+						<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select-row="selectProductOption">
 							<template #values-data="{ row }">
 								<span>{{ row.values.map((v: ProductOptionValue) => v.value).join(' · ') }}</span>
 							</template>
@@ -66,7 +66,7 @@ const links = [
 
 useHead({ title: 'Wemotoo CRM - Options' });
 
-const modal = useModal();
+const overlay = useOverlay();
 const productOptionsStore = useProductOptionStore();
 await productOptionsStore.getOptions();
 
@@ -77,43 +77,45 @@ const rows = computed(() => {
 	return prod_option.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
-
 const deleteProductOption = async (id: number) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this option?',
-		action: 'delete',
-		onConfirm: async () => {
-			await productOptionsStore.deleteProductOption(id);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this option?',
+			action: 'delete',
+			onConfirm: async () => {
+				await productOptionsStore.deleteProductOption(id);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectProductOption = async (option: ProductOption) => {
 	if (!option) return;
 
-	modal.open(ZModalOptionDetail, {
-		productOption: JSON.parse(JSON.stringify(option)),
-		onUpdate: async (name: string, values: ProductOptionValue[]) => {
-			await productOptionsStore.updateProductOption(option.id!, name, values);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteProductOption(option.id!);
-		},
-		onCancel: () => {
-			modal.close();
+	const optionModal = overlay.create(ZModalOptionDetail, {
+		props: {
+			productOption: JSON.parse(JSON.stringify(option)),
+			onUpdate: async (name: string, values: ProductOptionValue[]) => {
+				await productOptionsStore.updateProductOption(option.id!, name, values);
+				optionModal.close();
+			},
+			onDelete: async () => {
+				optionModal.close();
+				await deleteProductOption(option.id!);
+			},
+			onCancel: () => {
+				optionModal.close();
+			},
 		},
 	});
+
+	optionModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -121,24 +123,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

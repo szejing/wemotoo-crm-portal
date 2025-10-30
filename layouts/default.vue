@@ -27,7 +27,7 @@ const appUiStore = useAppUiStore();
 const { showSidebar } = storeToRefs(appUiStore);
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .default-bg {
 	background-color: #f1f5f9; /* slate-100 */
 	min-height: 100vh;

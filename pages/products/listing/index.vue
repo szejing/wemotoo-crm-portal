@@ -20,7 +20,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="product_columns" :loading="loading" @select="selectProduct">
+				<UTable :data="rows" :columns="product_columns" :loading="loading" @select-row="selectProduct">
 					<template #name-data="{ row }">
 						<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
 							<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-10 h-10 rounded-sm" />
@@ -81,18 +81,12 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const productStore = useProductStore();
 
 useHead({ title: 'Wemotoo CRM - Products' });
 
 onMounted(() => productStore.getProducts());
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
 
 const { products, loading, page_size, current_page, total_products } = storeToRefs(productStore);
 
@@ -101,12 +95,16 @@ const rows = computed(() => {
 });
 
 const selectProduct = async (product: Product) => {
-	modal.open(ZModalLoading, {
-		key: 'loading',
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
 	});
 
+	loadingModal.open();
+
 	const prod = await productStore.getProduct(product.code!);
-	await modal.close();
+	loadingModal.close();
 
 	if (prod) {
 		productStore.current_product = prod;
@@ -120,4 +118,4 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

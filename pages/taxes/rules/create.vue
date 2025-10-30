@@ -27,7 +27,7 @@ import type { AmountType, FilterOperator, FilterCondition } from 'wemotoo-common
 import type { TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
 
-const modal = useModal();
+const overlay = useOverlay();
 const taxRuleStore = useTaxRuleStore();
 const { new_tax_rule, adding } = storeToRefs(taxRuleStore);
 
@@ -54,34 +54,38 @@ const links = [
 ];
 
 const selectRuleDetail = (detail: TaxRuleDetail | undefined) => {
-	modal.open(ZModalTaxRuleDetail, {
-		detail,
-		onUpdate: async (detail: TaxRuleDetail) => {
-			new_tax_rule.value.details.push({
-				description: detail.description,
-				tax_code: detail.tax_code,
-				tax_condition: {
-					tax_code: detail.tax_condition?.tax_code ?? detail.tax_code ?? '',
-					starts_at: detail.tax_condition?.starts_at ? new Date(detail.tax_condition.starts_at) : undefined,
-					ends_at: detail.tax_condition?.ends_at ? new Date(detail.tax_condition.ends_at) : undefined,
-					amount_type: detail.tax_condition?.amount_type as AmountType,
-					rate: detail.tax_condition?.rate ?? 0,
-					min_amount: detail.tax_condition?.min_amount ?? 0,
-					max_amount: detail.tax_condition?.max_amount ?? 0,
-					filters: [],
-				},
-			});
+	const taxRuleDetailModal = overlay.create(ZModalTaxRuleDetail, {
+		props: {
+			detail,
+			onUpdate: async (detail: TaxRuleDetail) => {
+				new_tax_rule.value.details.push({
+					description: detail.description,
+					tax_code: detail.tax_code,
+					tax_condition: {
+						tax_code: detail.tax_condition?.tax_code ?? detail.tax_code ?? '',
+						starts_at: detail.tax_condition?.starts_at ? new Date(detail.tax_condition.starts_at) : undefined,
+						ends_at: detail.tax_condition?.ends_at ? new Date(detail.tax_condition.ends_at) : undefined,
+						amount_type: detail.tax_condition?.amount_type as AmountType,
+						rate: detail.tax_condition?.rate ?? 0,
+						min_amount: detail.tax_condition?.min_amount ?? 0,
+						max_amount: detail.tax_condition?.max_amount ?? 0,
+						filters: [],
+					},
+				});
 
-			modal.close();
-		},
-		onDelete: async (detail: TaxRuleDetail) => {
-			// deleteRuleDetail(new_tax_rule.value.details.indexOf(detail.tax_code));
-			// modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+				taxRuleDetailModal.close();
+			},
+			onDelete: async (detail: TaxRuleDetail) => {
+				// deleteRuleDetail(new_tax_rule.value.details.indexOf(detail.tax_code));
+				// taxRuleDetailModal.close();
+			},
+			onCancel: () => {
+				taxRuleDetailModal.close();
+			},
 		},
 	});
+
+	taxRuleDetailModal.open();
 };
 
 const deleteRuleDetail = (index: number) => {
@@ -118,24 +122,50 @@ const createTaxRule = async (tax_rule: TaxRuleCreate) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .wrapper-grid {
-	@apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.wrapper-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 .wrapper-stepper {
-	@apply w-full;
+	width: 100%;
 }
 
 .side-wrapper {
-	@apply hidden sm:block col-span-1;
+	display: none;
+	grid-column: span 1 / span 1;
+}
+
+@media (min-width: 640px) {
+	.side-wrapper {
+		display: block;
+	}
 }
 
 h2 {
-	@apply text-secondary-600 font-normal;
+	color: var(--color-secondary-600);
+	font-weight: 400;
 }
 
 .section-menu {
-	@apply bg-white shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
+	background-color: white;
+	box-shadow:
+		0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
+	padding: 0.5rem;
+	border-radius: 9999px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--color-secondary-600);
 }
 </style>

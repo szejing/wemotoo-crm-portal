@@ -99,60 +99,100 @@ defineProps<{
 
 const emit = defineEmits(['refresh']);
 
-const modal = useModal();
+const overlay = useOverlay();
 const editItem = (item: ItemModel) => {
 	if (item.status == OrderItemStatus.ACTIVE) {
-		modal.open(ZModalOrderDetailItem, {
-			item: JSON.parse(JSON.stringify(item)),
-			onCancel: () => {
-				modal.close();
-			},
-			onUpdate: (requiresRefresh: boolean) => {
-				if (requiresRefresh) {
-					emit('refresh');
-				}
-				modal.close();
+		const itemModal = overlay.create(ZModalOrderDetailItem, {
+			props: {
+				item: JSON.parse(JSON.stringify(item)),
+				onCancel: () => {
+					itemModal.close();
+				},
+				onUpdate: (requiresRefresh: boolean) => {
+					if (requiresRefresh) {
+						emit('refresh');
+					}
+					itemModal.close();
+				},
 			},
 		});
+
+		itemModal.open();
 	} else {
-		modal.open(ZModalInformation, {
-			title: 'Warning',
-			message: 'Unable to edit this item because it is already voided by customer.',
-			action: 'confirm',
-			onConfirm: () => {
-				modal.close();
+		const infoModal = overlay.create(ZModalInformation, {
+			props: {
+				title: 'Warning',
+				message: 'Unable to edit this item because it is already voided by customer.',
+				action: 'confirm',
+				onConfirm: () => {
+					infoModal.close();
+				},
 			},
 		});
+
+		infoModal.open();
 	}
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .order-detail-item {
-	@apply flex flex-col sm:flex-row;
+	display: flex;
+	flex-direction: column;
+}
+
+@media (min-width: 640px) {
+	.order-detail-item {
+		flex-direction: row;
+	}
 }
 
 .order-detail-item span:first-child {
-	@apply w-full sm:w-[200px] lg:w-[240px] text-neutral-400;
+	width: 100%;
+	color: var(--color-neutral-400);
+}
+
+@media (min-width: 640px) {
+	.order-detail-item span:first-child {
+		width: 200px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.order-detail-item span:first-child {
+		width: 240px;
+	}
 }
 
 .order-detail-item span:last-child {
-	@apply font-medium text-neutral-800;
+	font-weight: 500;
+	color: var(--color-neutral-800);
 }
 
 .cell-header {
-	@apply p-4 text-neutral-400 font-normal italic;
+	padding: 1rem;
+	color: var(--color-neutral-400);
+	font-weight: 400;
+	font-style: italic;
 }
 
 .cell-item {
-	@apply p-4 text-left w-[400px];
+	padding: 1rem;
+	text-align: left;
+	width: 400px;
 }
 
 .cell-center {
-	@apply p-4 text-center;
+	padding: 1rem;
+	text-align: center;
 }
 
 .editable-cell {
-	@apply cursor-pointer transition hover:bg-neutral-50;
+	cursor: pointer;
+	transition: background-color 150ms;
+}
+
+.editable-cell:hover {
+	background-color: var(--color-neutral-50);
 }
 </style>

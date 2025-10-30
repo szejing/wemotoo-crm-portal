@@ -33,4 +33,4 @@ const text = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

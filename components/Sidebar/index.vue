@@ -17,7 +17,7 @@ const { forcedShow, showSidebar } = storeToRefs(appUiStore);
 const { toggleSidebar } = appUiStore;
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .header-container {
 	padding: 2.5rem 1rem;
 	border-bottom: 1px solid var(--color-secondary-400);

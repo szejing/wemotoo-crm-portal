@@ -14,7 +14,7 @@
 					</div>
 				</div>
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select-row="selectTaxRule">
 					<template #code-data="{ row }">
 						<div class="flex-col-start">
 							<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
@@ -74,19 +74,12 @@ const links = [
 	},
 ];
 
-const modal = useModal();
 const taxRuleStore = useTaxRuleStore();
 
 useHead({ title: 'Wemotoo CRM - Tax Rules' });
 
 onMounted(async () => {
 	await taxRuleStore.getTaxRules();
-});
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
 });
 
 const { loading, tax_rules, page_size, current_page, total_tax_rules } = storeToRefs(taxRuleStore);
@@ -114,24 +107,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

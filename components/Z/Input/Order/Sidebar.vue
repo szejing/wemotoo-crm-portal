@@ -93,4 +93,4 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

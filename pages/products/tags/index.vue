@@ -14,7 +14,7 @@
 					<ZSectionFilterTags />
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="tag_columns" :loading="loading" @select="selectTag">
+						<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag">
 							<template #name-data="{ row }">
 								<div>
 									<h5 class="font-bold text-secondary-800">{{ row.name }}</h5>
@@ -66,17 +66,11 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const tagsStore = useProductTagStore();
 await tagsStore.getTags();
 
 useHead({ title: 'Wemotoo CRM - Tags' });
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
 
 const { loading, tags, total_tags, page_size, current_page } = storeToRefs(tagsStore);
 
@@ -85,36 +79,44 @@ const rows = computed(() => {
 });
 
 const deleteTag = async (id: number) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this tag?',
-		action: 'delete',
-		onConfirm: async () => {
-			await tagsStore.deleteTag(id);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this tag?',
+			action: 'delete',
+			onConfirm: async () => {
+				await tagsStore.deleteTag(id);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectTag = async (tag: Tag) => {
 	if (!tag) return;
 
-	modal.open(ZModalTagDetail, {
-		tag: JSON.parse(JSON.stringify(tag)),
-		onUpdate: async (tag: Tag) => {
-			await tagsStore.updateTag(tag.id, tag);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteTag(tag.id);
-		},
-		onCancel: () => {
-			modal.close();
+	const tagModal = overlay.create(ZModalTagDetail, {
+		props: {
+			tag: JSON.parse(JSON.stringify(tag)),
+			onUpdate: async (tag: Tag) => {
+				await tagsStore.updateTag(tag.id, tag);
+				tagModal.close();
+			},
+			onDelete: async () => {
+				tagModal.close();
+				await deleteTag(tag.id);
+			},
+			onCancel: () => {
+				tagModal.close();
+			},
 		},
 	});
+
+	tagModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -122,24 +124,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

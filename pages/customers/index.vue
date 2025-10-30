@@ -21,7 +21,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="customer_columns" :loading="loading" @select="selectCustomer">
+				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select-row="selectCustomer">
 					<template #phone_number-data="{ row }">
 						<h5 class="text-neutral-500">(+{{ row.dial_code }}) {{ row.phone_no }}</h5>
 					</template>
@@ -58,16 +58,10 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const customerStore = useCustomerStore();
 
 useHead({ title: 'Wemotoo CRM - Customers' });
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
 
 const { loading, customers, page_size, current_page, total_customers } = storeToRefs(customerStore);
 
@@ -84,4 +78,4 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

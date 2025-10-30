@@ -47,7 +47,7 @@ const props = defineProps({
 const { title, subtitle, thumbnailUrl } = props;
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .tile-container {
 	display: flex;
 	justify-content: flex-start;

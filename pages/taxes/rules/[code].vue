@@ -9,7 +9,7 @@
 				<template #header>
 					<div class="flex-between">
 						<h2>Tax Rule</h2>
-						<UButton color="danger" variant="ghost" @click="deleteTaxRule">Delete</UButton>
+						<UButton color="error" variant="ghost" @click="deleteTaxRule">Delete</UButton>
 					</div>
 				</template>
 				<FormTaxRuleUpdate
@@ -59,40 +59,48 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 
 const deleteTaxRule = async () => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this tax rule?',
-		action: 'delete',
-		onConfirm: async () => {
-			await taxRuleStore.deleteTaxRule(current_tax_rule.value!.code);
-			modal.close();
-			navigateTo('/taxes/rules');
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this tax rule?',
+			action: 'delete',
+			onConfirm: async () => {
+				await taxRuleStore.deleteTaxRule(current_tax_rule.value!.code);
+				confirmModal.close();
+				navigateTo('/taxes/rules');
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectDetail = (detail: TaxRuleDetail | undefined) => {
-	modal.open(ZModalTaxRuleDetail, {
-		detail,
-		onUpdate: async (detail: TaxRuleDetail) => {
-			current_tax_rule.value!.details.push(detail);
-			// await taxRuleStore.updateTaxRuleDetail(detail.tax_code);
-			modal.close();
-		},
-		onDelete: async (detail: TaxRuleDetail) => {
-			await deleteDetail(detail);
-			modal.close();
-			// await taxRuleStore.deleteTaxRuleDetail(detail.tax_code);
-		},
-		onCancel: () => {
-			modal.close();
+	const detailModal = overlay.create(ZModalTaxRuleDetail, {
+		props: {
+			detail,
+			onUpdate: async (detail: TaxRuleDetail) => {
+				current_tax_rule.value!.details.push(detail);
+				// await taxRuleStore.updateTaxRuleDetail(detail.tax_code);
+				detailModal.close();
+			},
+			onDelete: async (detail: TaxRuleDetail) => {
+				await deleteDetail(detail);
+				detailModal.close();
+				// await taxRuleStore.deleteTaxRuleDetail(detail.tax_code);
+			},
+			onCancel: () => {
+				detailModal.close();
+			},
 		},
 	});
+
+	detailModal.open();
 };
 
 const deleteDetail = async (_detail: TaxRuleDetail) => {
@@ -105,24 +113,50 @@ const onUpdate = async (updated_tax_rule: TaxRule) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .wrapper-grid {
-	@apply grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+@media (min-width: 768px) {
+	.wrapper-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 .wrapper-stepper {
-	@apply w-full;
+	width: 100%;
 }
 
 .side-wrapper {
-	@apply hidden sm:block col-span-1;
+	display: none;
+	grid-column: span 1 / span 1;
+}
+
+@media (min-width: 640px) {
+	.side-wrapper {
+		display: block;
+	}
 }
 
 h2 {
-	@apply text-secondary-600 font-normal;
+	color: var(--color-secondary-600);
+	font-weight: 400;
 }
 
 .section-menu {
-	@apply bg-white shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
+	background-color: white;
+	box-shadow:
+		0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
+	padding: 0.5rem;
+	border-radius: 9999px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--color-secondary-600);
 }
 </style>

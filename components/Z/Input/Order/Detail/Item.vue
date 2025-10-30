@@ -7,13 +7,13 @@
 					<p class="font-light">{{ prodName }}</p>
 				</div>
 				<div class="ml-4">
-					<UBadge v-if="status == OrderItemStatus.VOIDED" size="md" color="main">
+					<UBadge v-if="status == OrderItemStatus.VOIDED" size="md" color="primary">
 						VOIDED
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
 						</template>
 					</UBadge>
-					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="red">
+					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="error">
 						REFUNDED
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
@@ -199,12 +199,16 @@ const netTotal = computed(() => {
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .section-grid-basic-details {
-	@apply grid gap-4;
+	display: grid;
+	gap: 1rem;
 }
 
 ul {
-	@apply flex flex-wrap gap-4 mt-2;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 0.5rem;
 }
 </style>

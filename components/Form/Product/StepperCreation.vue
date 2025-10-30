@@ -154,11 +154,11 @@
 
 				<template #footer>
 					<div class="flex justify-between items-center">
-						<UButton v-if="currentStep > 1" color="gray" variant="outline" @click="previousStep"> Previous </UButton>
+						<UButton v-if="currentStep > 1" color="neutral" variant="outline" @click="previousStep"> Previous </UButton>
 						<div v-else></div>
 
 						<div class="flex space-x-3">
-							<UButton color="gray" variant="ghost" :loading="saving" @click="saveDraft"> Save as Draft </UButton>
+							<UButton color="neutral" variant="ghost" :loading="saving" @click="saveDraft"> Save as Draft </UButton>
 							<UButton v-if="currentStep < 4" color="primary" @click="nextStep"> Next Step </UButton>
 							<UButton v-else color="success" :loading="adding" type="submit"> Create Product </UButton>
 						</div>
@@ -423,10 +423,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
-	const modal = useModal();
-	modal.open(ZModalLoading, {
-		key: 'loading',
+	const overlay = useOverlay();
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
 	});
+
+	loadingModal.open();
 
 	try {
 		const result = await productStore.createProduct();
@@ -437,7 +441,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	} catch (error) {
 		console.error(error);
 	} finally {
-		modal.close();
+		loadingModal.close();
 	}
 };
 
@@ -446,104 +450,161 @@ const goToStep = (id: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 /* Mobile Stepper Styles */
 .mobile-stepper-container {
-	@apply flex items-start justify-between gap-2;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.5rem;
 }
 
 .mobile-step-wrapper {
-	@apply flex items-start flex-1;
+	display: flex;
+	align-items: flex-start;
+	flex: 1;
 }
 
 .mobile-step-content {
-	@apply flex flex-col items-center text-center w-full;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	width: 100%;
 }
 
 .mobile-step-text {
-	@apply cursor-pointer w-full;
+	cursor: pointer;
+	width: 100%;
 }
 
 .mobile-step-connector {
-	@apply w-4 h-[0.125rem] mt-4 mx-1 flex-shrink-0 transition-colors;
+	width: 1rem;
+	height: 0.125rem;
+	margin-top: 1rem;
+	margin-left: 0.25rem;
+	margin-right: 0.25rem;
+	flex-shrink: 0;
+	transition: color 150ms;
 }
 
 /* Desktop Stepper Styles */
 .desktop-stepper-container {
-	@apply flex items-center justify-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .desktop-step-wrapper {
-	@apply flex items-center flex-1;
+	display: flex;
+	align-items: center;
+	flex: 1;
 }
 
 .desktop-step-content {
-	@apply flex items-center;
+	display: flex;
+	align-items: center;
 }
 
 .desktop-step-text {
-	@apply ml-3 min-w-0 cursor-pointer;
+	margin-left: 0.75rem;
+	min-width: 0;
+	cursor: pointer;
 }
 
 .desktop-step-connector {
-	@apply flex-1 h-[0.125rem] mx-4 transition-colors;
+	flex: 1;
+	height: 0.125rem;
+	margin-left: 1rem;
+	margin-right: 1rem;
+	transition: color 150ms;
 }
 
 /* Common Step Styles */
 .step-circle {
-	@apply flex items-center justify-center rounded-full border-2 transition-colors cursor-pointer hover:bg-neutral-50 hover:text-primary-500 hover:border-primary-500 mb-2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 9999px;
+	border-width: 2px;
+	transition: all 150ms;
+	cursor: pointer;
+	margin-bottom: 0.5rem;
 	width: 2rem;
 	height: 2rem;
 }
 
+.step-circle:hover {
+	background-color: var(--color-neutral-50);
+	color: var(--color-primary-500);
+	border-color: var(--color-primary-500);
+}
+
 .desktop-circle {
-	@apply mb-0;
+	margin-bottom: 0;
 	width: 2.5rem;
 	height: 2.5rem;
 }
 
 .step-icon {
-	@apply w-4 h-4;
+	width: 1rem;
+	height: 1rem;
 }
 
 .desktop-step-icon {
-	@apply w-5 h-5;
+	width: 1.25rem;
+	height: 1.25rem;
 }
 
 .step-number {
-	@apply text-xs font-medium;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	font-weight: 500;
 }
 
 .desktop-step-number {
-	@apply text-sm font-medium;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	font-weight: 500;
 }
 
 .step-title {
-	@apply font-bold mb-1;
+	font-weight: 700;
+	margin-bottom: 0.25rem;
 }
 
 .desktop-title {
-	@apply whitespace-nowrap;
+	white-space: nowrap;
 }
 
 .step-description {
-	@apply text-xs text-neutral-500 leading-tight break-words;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	color: var(--color-neutral-500);
+	line-height: 1.25;
+	overflow-wrap: break-word;
 }
 
 .desktop-step-description {
-	@apply text-xs text-neutral-500;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	color: var(--color-neutral-500);
 }
 
 /* Legacy styles for backward compatibility */
 .step-indicator {
-	@apply flex items-center space-x-4;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
 }
 
 .step-line {
-	@apply flex-1 h-[0.125rem] bg-neutral-300;
+	flex: 1;
+	height: 0.125rem;
+	background-color: var(--color-neutral-300);
 }
 
 .step-line.completed {
-	@apply bg-green-500;
+	background-color: var(--color-green-500);
 }
 </style>

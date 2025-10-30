@@ -157,4 +157,4 @@ const updateEndTime = (value: string) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

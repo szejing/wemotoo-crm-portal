@@ -1,6 +1,6 @@
 <template>
 	<UDropdownMenu :items="items">
-		<UButton color="gray" variant="ghost" :icon="ICONS.HORIZONTAL_ELLIPSIS" />
+		<UButton color="neutral" variant="ghost" :icon="ICONS.HORIZONTAL_ELLIPSIS" />
 
 		<template #item="{ item }">
 			<UIcon :name="item.icon" class="size-5 text-neutral-500" />
@@ -18,4 +18,4 @@
 defineProps<{ items: any }>();
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

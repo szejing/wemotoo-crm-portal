@@ -33,4 +33,4 @@ const onSubmit = async (_: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

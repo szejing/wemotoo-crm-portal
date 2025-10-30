@@ -42,4 +42,4 @@ const product_navigations = [
 useHead({ title: 'Wemotoo CRM - Products' });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

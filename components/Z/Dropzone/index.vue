@@ -207,80 +207,151 @@ const previewFiles = (files) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .dropzone-container {
-	@apply flex flex-col;
+	display: flex;
+	flex-direction: column;
 }
 
 .dropzone {
-	@apply border-2 border-dashed border-neutral-300 rounded-xl p-1 text-center cursor-pointer transition-all duration-200 flex justify-center items-center flex-col min-h-[120px];
+	border-width: 2px;
+	border-style: dashed;
+	border-color: var(--color-neutral-300);
+	border-radius: 0.75rem;
+	padding: 0.25rem;
+	text-align: center;
+	cursor: pointer;
+	transition: all 200ms;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	min-height: 120px;
 	flex: 1;
 }
 
 .dropzone:hover {
-	@apply bg-main-50 border-main-500;
+	background-color: var(--color-main-50);
+	border-color: var(--color-main-500);
 }
 
 .dropzone:hover p,
 .dropzone:hover span {
-	@apply text-main font-bold;
+	color: var(--color-main);
+	font-weight: 700;
 }
 
 .dropzone--active {
-	@apply bg-main-100 border-main-500 transition-all duration-200 text-main font-bold;
+	background-color: var(--color-main-100);
+	border-color: var(--color-main-500);
+	transition: all 200ms;
+	color: var(--color-main);
+	font-weight: 700;
 }
 
 .upload-limit-warning {
-	@apply flex items-center gap-2 text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200 text-sm mt-2;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: rgb(217 119 6);
+	background-color: rgb(254 252 232);
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgb(252 211 77);
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	margin-top: 0.5rem;
 }
 
 .preview-section {
-	@apply w-full;
+	width: 100%;
 }
 
 .preview-header {
-	@apply flex justify-between items-center text-sm text-neutral-600;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	color: var(--color-neutral-600);
 }
 
 .preview-count {
-	@apply font-medium;
+	font-weight: 500;
 }
 
 .preview-grid {
-	@apply flex gap-4 overflow-x-auto overflow-y-hidden py-2 px-1;
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.5rem 0.25rem;
 	scrollbar-width: thin;
-	scrollbar-color: theme('colors.gray.300') transparent;
+	scrollbar-color: rgb(209 213 219) transparent;
 }
 
 .preview-grid::-webkit-scrollbar {
-	@apply h-2;
+	height: 0.5rem;
 }
 
 .preview-grid::-webkit-scrollbar-track {
-	@apply bg-transparent;
+	background-color: transparent;
 }
 
 .preview-grid::-webkit-scrollbar-thumb {
-	@apply bg-neutral-300 rounded-full;
+	background-color: var(--color-neutral-300);
+	border-radius: 9999px;
 }
 
 .preview-item {
-	@apply relative min-w-[120px] flex-shrink-0;
+	position: relative;
+	min-width: 120px;
+	flex-shrink: 0;
 }
 
 .preview-item-container {
-	@apply relative w-[120px] h-[120px] flex items-center justify-center;
+	position: relative;
+	width: 120px;
+	height: 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .preview-item img {
-	@apply w-[120px] h-[120px] object-cover border-2 border-main-500/50 rounded-lg;
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	border-width: 2px;
+	border-color: rgba(var(--color-main-500-rgb, 99, 102, 241), 0.5);
+	border-radius: 0.5rem;
 }
 
 .delete-button {
-	@apply absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600 z-10;
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	background-color: rgb(239 68 68);
+	color: white;
+	padding: 0.25rem;
+	border-radius: 9999px;
+	opacity: 0;
+	transition: opacity 200ms;
+	z-index: 10;
+}
+
+.group:hover .delete-button {
+	opacity: 1;
+}
+
+.delete-button:hover {
+	background-color: rgb(220 38 38);
 }
 
 .dropzone-message {
-	@apply flex flex-col items-center gap-2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
 }
 </style>

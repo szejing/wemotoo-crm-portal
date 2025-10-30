@@ -17,7 +17,7 @@
 
 				<template #footer>
 					<div class="flex-jbetween-icenter">
-						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
 
 						<div class="flex-jend gap-4">
 							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
@@ -67,4 +67,4 @@ const onDelete = () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

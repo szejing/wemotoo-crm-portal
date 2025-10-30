@@ -2,7 +2,7 @@
 	<UCard>
 		<h1 class="text-center">Product Options</h1>
 
-		<UTable v-model="selectedOptions" :rows="productOptions" :columns="product_option_columns" by="name" @select="select">
+		<UTable v-model="selectedOptions" :data="productOptions" :columns="product_option_columns" by="name" @select-row="select">
 			<template #values-data="{ row }">
 				<span>{{ row.values.map((v: ProdOptionValuesInput) => v.value).join(' · ') }}</span>
 			</template>
@@ -54,4 +54,4 @@ const updateProductOptions = () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

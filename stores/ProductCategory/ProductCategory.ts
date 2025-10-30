@@ -32,7 +32,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		categories: [] as Category[],
 		total_categories: 0 as number,
 		new_category: structuredClone(initialEmptyCategory),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

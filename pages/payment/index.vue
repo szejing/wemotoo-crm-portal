@@ -22,4 +22,4 @@ const payment_navigations = [
 useHead({ title: 'Wemotoo CRM - Payment' });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

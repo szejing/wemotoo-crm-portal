@@ -17,4 +17,4 @@
 
 <script lang="ts" setup></script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

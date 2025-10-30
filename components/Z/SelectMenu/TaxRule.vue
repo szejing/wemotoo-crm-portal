@@ -40,4 +40,4 @@ const tax_rule = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

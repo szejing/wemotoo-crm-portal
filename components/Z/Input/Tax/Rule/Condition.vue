@@ -148,8 +148,10 @@ const rate = computed({
 // });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .section-grid-basic-details {
-	@apply grid grid-cols-1 gap-3;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 0.75rem;
 }
 </style>

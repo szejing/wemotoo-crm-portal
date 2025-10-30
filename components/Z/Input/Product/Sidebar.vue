@@ -112,4 +112,4 @@ const updateImages = (files: File[]) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

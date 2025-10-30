@@ -35,4 +35,4 @@ const filter_type = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

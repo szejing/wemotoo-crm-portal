@@ -74,13 +74,13 @@
 									<UBadge v-if="appointment.status === AppointmentStatus.CONFIRMED" color="success" variant="subtle">
 										{{ appointment.status.toUpperCase() }}
 									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.PENDING" color="yellow" variant="subtle">
+									<UBadge v-else-if="appointment.status === AppointmentStatus.PENDING" color="warning" variant="subtle">
 										{{ appointment.status.toUpperCase() }}
 									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.CANCELLED" color="red" variant="subtle">
+									<UBadge v-else-if="appointment.status === AppointmentStatus.CANCELLED" color="error" variant="subtle">
 										{{ appointment.status.toUpperCase() }}
 									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.COMPLETED" color="blue" variant="subtle">
+									<UBadge v-else-if="appointment.status === AppointmentStatus.COMPLETED" color="info" variant="subtle">
 										{{ appointment.status.toUpperCase() }}
 									</UBadge>
 								</div>
@@ -107,7 +107,7 @@ const links = [
 ];
 
 const today = new Date();
-const modal = useModal();
+const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
 const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
@@ -115,12 +115,6 @@ const selectedMonth = ref(today.getMonth() + 1);
 const selectedYear = ref(today.getFullYear());
 
 useHead({ title: 'Appointments' });
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
 
 // Responsive calendar columns
 
@@ -180,37 +174,45 @@ const resetFilter = () => {
 };
 
 const deleteAppointment = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this appointment?',
-		action: 'delete',
-		onConfirm: async () => {
-			await appointmentStore.deleteAppointment(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this appointment?',
+			action: 'delete',
+			onConfirm: async () => {
+				await appointmentStore.deleteAppointment(code);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectAppointment = async (appointment: Appointment) => {
 	if (!appointment) return;
 
-	modal.open(ZModalAppointmentDetail, {
-		appointment: JSON.parse(JSON.stringify(appointment)),
-		onUpdate: async ({ date_time, ref_no, status }) => {
-			await appointmentStore.updateAppointment(appointment.code, date_time, ref_no, status);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteAppointment(appointment.code);
-		},
-		onCancel: () => {
-			modal.close();
+	const appointmentModal = overlay.create(ZModalAppointmentDetail, {
+		props: {
+			appointment: JSON.parse(JSON.stringify(appointment)),
+			onUpdate: async ({ date_time, ref_no, status }) => {
+				await appointmentStore.updateAppointment(appointment.code, date_time, ref_no, status);
+				appointmentModal.close();
+			},
+			onDelete: async () => {
+				appointmentModal.close();
+				await deleteAppointment(appointment.code);
+			},
+			onCancel: () => {
+				appointmentModal.close();
+			},
 		},
 	});
+
+	appointmentModal.open();
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

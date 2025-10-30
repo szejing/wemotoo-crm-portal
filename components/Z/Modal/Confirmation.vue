@@ -13,7 +13,7 @@
 			<template #footer>
 				<div v-if="action == 'delete'" class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="red" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
+					<UButton color="error" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
 				</div>
 
 				<div v-else class="flex-jend gap-4">
@@ -54,4 +54,4 @@ const onCancel = () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

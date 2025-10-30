@@ -18,7 +18,7 @@
 				</h5>
 			</div>
 
-			<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="danger" @click="viewVariant" />
+			<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" color="error" @click="viewVariant" />
 		</div>
 	</UCard>
 </template>
@@ -45,12 +45,15 @@ const viewVariant = () => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 h4 {
-	@apply font-bold;
+	font-weight: 700;
 }
 
 h5 {
-	@apply font-medium text-sm text-main;
+	font-weight: 500;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	color: var(--color-main);
 }
 </style>

@@ -14,7 +14,7 @@
 					<!-- <ZSectionFilteroutlet /> -->
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
+						<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select-row="selectTaxGroup">
 							<template #code-data="{ row }">
 								<div class="flex-col-start">
 									<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
@@ -70,7 +70,7 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const taxGroupStore = useTaxGroupStore();
 const { loading, tax_groups, page_size, current_page, total_tax_groups } = storeToRefs(taxGroupStore);
 
@@ -80,50 +80,52 @@ onMounted(async () => {
 	await taxGroupStore.getTaxGroups();
 });
 
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
-
 const rows = computed(() => {
 	return tax_groups.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
 const deleteTaxGroup = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this outlet?',
-		action: 'delete',
-		onConfirm: async () => {
-			await taxGroupStore.deleteTaxGroup(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this outlet?',
+			action: 'delete',
+			onConfirm: async () => {
+				await taxGroupStore.deleteTaxGroup(code);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectTaxGroup = async (taxGroup: TaxGroup) => {
 	if (!taxGroup) return;
 
-	modal.open(ZModalTaxGroupDetail, {
-		taxGroup: JSON.parse(JSON.stringify(taxGroup)),
-		onUpdate: async (_taxGroup: TaxGroup) => {
-			await taxGroupStore.updateTaxGroup(taxGroup.code, {
-				..._taxGroup,
-				taxes: _taxGroup.taxes,
-			});
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteTaxGroup(taxGroup.code);
-		},
-		onCancel: () => {
-			modal.close();
+	const taxGroupModal = overlay.create(ZModalTaxGroupDetail, {
+		props: {
+			taxGroup: JSON.parse(JSON.stringify(taxGroup)),
+			onUpdate: async (_taxGroup: TaxGroup) => {
+				await taxGroupStore.updateTaxGroup(taxGroup.code, {
+					..._taxGroup,
+					taxes: _taxGroup.taxes,
+				});
+				taxGroupModal.close();
+			},
+			onDelete: async () => {
+				taxGroupModal.close();
+				await deleteTaxGroup(taxGroup.code);
+			},
+			onCancel: () => {
+				taxGroupModal.close();
+			},
 		},
 	});
+
+	taxGroupModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -131,24 +133,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

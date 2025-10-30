@@ -78,8 +78,13 @@ const updateSettingValue = (template: SettingTempl, value: string | number | boo
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .setting-templs-title {
-	@apply text-sm font-medium text-neutral-400 px-4;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	font-weight: 500;
+	color: var(--color-neutral-400);
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 </style>

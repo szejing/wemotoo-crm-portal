@@ -168,12 +168,14 @@ const updateProductMetadata = (value: Record<string, unknown>) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 h2 {
-	@apply leading-tight;
+	line-height: 1.25;
 }
 
 p {
-	@apply text-secondary-400 leading-tight mt-1;
+	color: var(--color-secondary-400);
+	line-height: 1.25;
+	margin-top: 0.25rem;
 }
 </style>

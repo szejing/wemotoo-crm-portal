@@ -38,7 +38,7 @@ const logout = async () => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 /* Custom component styles */
 .topbar-bg {
 	width: 100%;
@@ -91,10 +91,14 @@ const logout = async () => {
 
 /* Styles for child component (ZTile) */
 :deep(h2) {
-	@apply font-semibold text-secondary-900;
+	font-weight: 600;
+	color: var(--color-secondary-900);
 }
 
 :deep(p) {
-	@apply font-normal text-xs text-secondary-700;
+	font-weight: 400;
+	font-size: 0.75rem;
+	line-height: 1rem;
+	color: var(--color-secondary-700);
 }
 </style>

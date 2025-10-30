@@ -89,7 +89,7 @@ const onError = async (event: FormErrorEvent) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 /* Hide the password reveal button in Edge */
 ::-ms-reveal {
 	display: none;

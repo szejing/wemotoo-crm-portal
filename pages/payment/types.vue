@@ -10,7 +10,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="payment_type_group_columns">
+				<UTable :data="rows" :columns="payment_type_group_columns">
 					<template #index-data="{ index }"> {{ index + 1 }}. </template>
 				</UTable>
 
@@ -53,4 +53,4 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

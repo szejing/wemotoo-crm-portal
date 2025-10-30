@@ -54,7 +54,7 @@
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
 							<UTable
-								:rows="group.items"
+								:data="group.items"
 								:columns="columnsTable"
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
@@ -182,4 +182,4 @@ const exportSalesSummary = async () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

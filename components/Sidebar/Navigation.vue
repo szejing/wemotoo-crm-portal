@@ -47,14 +47,30 @@ const toggleCollapse = (id: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 /**************************** sidebar styling ****************************/
 
 .active-link {
-	@apply px-4 py-3 mx-2 rounded-md text-base font-light cursor-pointer text-secondary-100 bg-transparent
-	hover:bg-main-50 hover:text-secondary-700 hover:font-semibold transition duration-500 ease-in-out;
+	padding: 0.75rem 1rem;
+	margin: 0 0.5rem;
+	border-radius: 0.375rem;
+	font-size: 1rem;
+	font-weight: 300;
+	cursor: pointer;
+	color: var(--color-secondary-100);
+	background-color: transparent;
+	transition: all 500ms ease-in-out;
 }
+
+.active-link:hover {
+	background-color: var(--color-main-50);
+	color: var(--color-secondary-700);
+	font-weight: 600;
+}
+
 .exact-active-link {
-	@apply bg-main-50 text-secondary-700 font-semibold;
+	background-color: var(--color-main-50);
+	color: var(--color-secondary-700);
+	font-weight: 600;
 }
 </style>

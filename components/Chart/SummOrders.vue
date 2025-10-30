@@ -74,4 +74,4 @@ const chartOptions = {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

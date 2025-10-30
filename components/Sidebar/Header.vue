@@ -33,16 +33,19 @@ const thumbnail = computed(() => {
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .header-container {
-	@apply px-4;
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 
 .merchant-info-modal :deep(h2) {
-	@apply text-secondary-800 font-semibold;
+	color: var(--color-secondary-800);
+	font-weight: 600;
 }
 
 .merchant-info-modal :deep(p) {
-	@apply text-secondary-500 font-medium;
+	color: var(--color-secondary-500);
+	font-weight: 500;
 }
 </style>

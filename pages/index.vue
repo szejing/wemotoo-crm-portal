@@ -63,4 +63,4 @@ const updateEndDate = async (endDate: Date) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

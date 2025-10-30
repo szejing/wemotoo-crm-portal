@@ -62,16 +62,22 @@ const joinAddress = (address: AddressModel | undefined) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .customer-detail-item {
-	@apply flex flex-col text-sm;
+	display: flex;
+	flex-direction: column;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
 }
 
 .customer-detail-item span:first-child {
-	@apply text-neutral-400 font-light mb-1;
+	color: var(--color-neutral-400);
+	font-weight: 300;
+	margin-bottom: 0.25rem;
 }
 
 .customer-detail-item span:last-child {
-	@apply font-bold text-neutral-800;
+	font-weight: 700;
+	color: var(--color-neutral-800);
 }
 </style>

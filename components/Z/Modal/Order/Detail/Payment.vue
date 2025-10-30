@@ -85,4 +85,4 @@ const onCancel = () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

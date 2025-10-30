@@ -21,7 +21,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :rows="rows" :columns="payment_method_columns">
+				<UTable :data="rows" :columns="payment_method_columns">
 					<template #code-data="{ row }">
 						<h4 class="font-bold text-neutral-800">{{ row.code }}</h4>
 						<p class="text-sm italic text-neutral-400">{{ row.desc }}</p>
@@ -96,4 +96,4 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

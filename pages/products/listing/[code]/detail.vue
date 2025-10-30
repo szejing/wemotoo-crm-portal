@@ -81,7 +81,7 @@ const links = [
 
 const isOpen = ref(false);
 
-const modal = useModal();
+const overlay = useOverlay();
 const productStore = useProductStore();
 const { current_product } = storeToRefs(productStore);
 const new_thumbnail = ref<File | undefined>(undefined);
@@ -135,9 +135,13 @@ const updateImages = (value: File[]) => {
 };
 
 const updateProduct = async () => {
-	modal.open(ZModalLoading, {
-		key: 'loading',
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
 	});
+
+	loadingModal.open();
 
 	try {
 		await productStore.updateProduct(new_thumbnail.value, new_images.value);
@@ -146,7 +150,7 @@ const updateProduct = async () => {
 	} catch (error) {
 		console.error(error);
 	} finally {
-		modal.close();
+		loadingModal.close();
 	}
 };
 
@@ -158,9 +162,13 @@ const deleteVariant = async (variant: ProdVariantInput) => {
 		return;
 	}
 
-	modal.open(ZModalLoading, {
-		key: 'loading',
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
 	});
+
+	loadingModal.open();
 
 	try {
 		await productStore.deleteVariant(product_code, variant_code);
@@ -168,7 +176,7 @@ const deleteVariant = async (variant: ProdVariantInput) => {
 	} catch (error) {
 		console.error(error);
 	} finally {
-		modal.close();
+		loadingModal.close();
 	}
 };
 
@@ -274,20 +282,46 @@ const deleteVariant = async (variant: ProdVariantInput) => {
 // };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .wrapper-grid {
-	@apply grid grid-cols-1 sm:grid-cols-4 gap-4;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.wrapper-grid {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
 }
 
 .side-wrapper {
-	@apply hidden sm:block col-span-1;
+	display: none;
+	grid-column: span 1 / span 1;
+}
+
+@media (min-width: 640px) {
+	.side-wrapper {
+		display: block;
+	}
 }
 
 h2 {
-	@apply text-secondary-600 font-normal;
+	color: var(--color-secondary-600);
+	font-weight: 400;
 }
 
 .section-menu {
-	@apply bg-white shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
+	background-color: white;
+	box-shadow:
+		0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
+	padding: 0.5rem;
+	border-radius: 9999px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--color-secondary-600);
 }
 </style>

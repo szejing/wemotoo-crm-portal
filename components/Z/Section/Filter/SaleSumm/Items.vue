@@ -45,4 +45,4 @@ const generate = () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

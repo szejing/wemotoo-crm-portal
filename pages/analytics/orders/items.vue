@@ -68,8 +68,8 @@
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
 							<UTable
-								:rows="group.items"
-								:columns="selectedColumns"
+								:data="group.items"
+								:columns="order_summ_item_columns"
 								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
 							>
 								<template #prod_code-data="{ row }">
@@ -84,8 +84,8 @@
 									<div class="flex justify-center">
 										<span v-if="row.is_total_row"></span>
 										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="success" size="xs">Active</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="red" size="xs">Voided</UBadge>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="info" size="xs">Refunded</UBadge>
+										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="error" size="xs">Voided</UBadge>
 									</div>
 								</template>
 
@@ -221,7 +221,7 @@ const exportToCsv = async () => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 :deep(tr:last-child) {
 	background-color: rgb(249 250 251);
 	border-top: 2px solid rgb(209 213 219);

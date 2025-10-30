@@ -47,8 +47,10 @@ const variantDetail = computed({
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .section-grid-basic-details {
-	@apply grid grid-cols-2 gap-4;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
 }
 </style>

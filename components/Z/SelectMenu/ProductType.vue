@@ -27,4 +27,4 @@ const productTypeId = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

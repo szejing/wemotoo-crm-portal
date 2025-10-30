@@ -27,4 +27,4 @@ const tax_navigations = [
 useHead({ title: 'Wemotoo CRM - Taxes' });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

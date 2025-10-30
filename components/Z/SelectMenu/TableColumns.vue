@@ -9,7 +9,7 @@
 			base: 'overflow-y-auto scrollbar-hide',
 		}"
 	>
-		<UButton icon="i-heroicons-view-columns" color="gray" size="xs"> Show Columns </UButton>
+		<UButton icon="i-heroicons-view-columns" color="neutral" size="xs"> Show Columns </UButton>
 	</USelectMenu>
 </template>
 
@@ -46,4 +46,4 @@ watch(selectedColumns, (value) => {
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

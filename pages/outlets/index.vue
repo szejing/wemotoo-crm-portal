@@ -14,7 +14,7 @@
 					<!-- <ZSectionFilteroutlet /> -->
 					<div>
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="outlet_columns" :loading="loading" @select="selectOutlet">
+						<UTable :data="rows" :columns="outlet_columns" :loading="loading" @select-row="selectOutlet">
 							<template #code-data="{ row }">
 								<div class="flex-col-start">
 									<h3 class="text-neutral-800 font-bold">{{ row.code }}</h3>
@@ -61,19 +61,13 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const outletStore = useOutletStore();
 
 useHead({ title: 'Wemotoo CRM - Outlets' });
 
 onMounted(async () => {
 	await outletStore.getOutlets();
-});
-
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
 });
 
 const { loading, outlets, page_size, current_page, total_outlets } = storeToRefs(outletStore);
@@ -83,36 +77,44 @@ const rows = computed(() => {
 });
 
 const deleteOutlet = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this outlet?',
-		action: 'delete',
-		onConfirm: async () => {
-			await outletStore.deleteOutlet(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this outlet?',
+			action: 'delete',
+			onConfirm: async () => {
+				await outletStore.deleteOutlet(code);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectOutlet = async (outlet: Outlet) => {
 	if (!outlet) return;
 
-	modal.open(ZModalOutletDetail, {
-		outlet: JSON.parse(JSON.stringify(outlet)),
-		onUpdate: async (_outlet: Outlet) => {
-			await outletStore.updateOutlet(outlet.code, _outlet);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteOutlet(outlet.code);
-		},
-		onCancel: () => {
-			modal.close();
+	const outletModal = overlay.create(ZModalOutletDetail, {
+		props: {
+			outlet: JSON.parse(JSON.stringify(outlet)),
+			onUpdate: async (_outlet: Outlet) => {
+				await outletStore.updateOutlet(outlet.code, _outlet);
+				outletModal.close();
+			},
+			onDelete: async () => {
+				outletModal.close();
+				await deleteOutlet(outlet.code);
+			},
+			onCancel: () => {
+				outletModal.close();
+			},
 		},
 	});
+
+	outletModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -120,24 +122,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

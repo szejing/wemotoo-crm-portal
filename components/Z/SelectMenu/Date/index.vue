@@ -7,7 +7,7 @@
 			color="neutral"
 		/>
 
-		<template #panel="{ close }">
+		<template #content="{ close }">
 			<ZDatePicker v-model="currentDate" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
 		</template>
 	</UPopover>
@@ -38,4 +38,4 @@ const currentDate = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

@@ -28,24 +28,50 @@ const links = [
 ];
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .wrapper-grid {
-	@apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.wrapper-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 .wrapper-stepper {
-	@apply w-full;
+	width: 100%;
 }
 
 .side-wrapper {
-	@apply hidden sm:block col-span-1;
+	display: none;
+	grid-column: span 1 / span 1;
+}
+
+@media (min-width: 640px) {
+	.side-wrapper {
+		display: block;
+	}
 }
 
 h2 {
-	@apply text-secondary-600 font-normal;
+	color: var(--color-secondary-600);
+	font-weight: 400;
 }
 
 .section-menu {
-	@apply bg-white shadow-md p-2 rounded-full text-center flex justify-center items-center text-secondary-600;
+	background-color: white;
+	box-shadow:
+		0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
+	padding: 0.5rem;
+	border-radius: 9999px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--color-secondary-600);
 }
 </style>

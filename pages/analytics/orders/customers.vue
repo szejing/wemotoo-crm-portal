@@ -15,7 +15,7 @@
 					</div>
 				</template>
 
-				<UTable :rows="tableData" :columns="columnsTable" :loading="is_loading">
+				<UTable :data="tableData" :columns="columnsTable" :loading="is_loading">
 					<template #customer-data="{ row: item }">
 						<p>
 							{{ item.customer_name }} <span class="text-neutral-500">#{{ item.customer_no }}</span>
@@ -24,8 +24,8 @@
 
 					<template #status-data="{ row: item }">
 						<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="success">NEW</UBadge>
-						<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
-						<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
+						<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="error">REFUNDED</UBadge>
+						<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="error">CANCELLED</UBadge>
 					</template>
 
 					<!-- <template #gross_amt-header>
@@ -114,4 +114,4 @@ const exportOrderCustomerSummaryToCsv = async () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

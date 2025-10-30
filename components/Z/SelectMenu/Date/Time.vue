@@ -7,7 +7,7 @@
 			color="neutral"
 		/>
 
-		<template #panel="{ close }">
+		<template #content="{ close }">
 			<ZDateTimePicker v-model="currentDateTime" is-required :min-date="minDate" :max-date="maxDate" @close="close" />
 		</template>
 	</UPopover>
@@ -46,4 +46,4 @@ const currentDateTime = computed({
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

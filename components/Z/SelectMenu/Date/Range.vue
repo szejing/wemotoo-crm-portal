@@ -2,7 +2,7 @@
 	<UPopover :popper="{ placement: 'bottom-start' }">
 		<UButton icon="i-heroicons-calendar-days-20-solid" :label="dateRangeLabel" variant="outline" color="neutral" />
 
-		<template #panel="{ close }">
+		<template #content="{ close }">
 			<ZDateRangePicker v-model="dateRange" :min-date="minDate" :max-date="maxDate" @close="close" />
 		</template>
 	</UPopover>
@@ -62,4 +62,4 @@ const dateRangeLabel = computed(() => {
 });
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

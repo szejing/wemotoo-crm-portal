@@ -46,4 +46,4 @@ const search = async () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

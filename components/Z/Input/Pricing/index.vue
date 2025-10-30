@@ -135,8 +135,22 @@ const formatCurrencyInput = (input: string, event: any) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .section-grid-price-details {
-	@apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.section-grid-price-details {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 768px) {
+	.section-grid-price-details {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
 }
 </style>

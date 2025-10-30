@@ -215,25 +215,81 @@ useDetectClickOutside(elementInputTags, () => {
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .tag-icon {
-	@apply size-5 ml-1 hover:bg-black hover:bg-opacity-10 rounded-sm transition duration-100;
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-left: 0.25rem;
+	border-radius: 0.125rem;
+	transition: background-color 100ms;
 }
+
+.tag-icon:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
 .wrapper-selected-tag {
-	@apply flex gap-x-1 items-center absolute inset-2 right-auto cursor-pointer;
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	bottom: 0.5rem;
+	right: auto;
+	cursor: pointer;
 }
+
 .wrapper-selected-tag li {
-	@apply px-2 py-1 border border-main-200 hover:border-main-600 rounded-md text-xs leading-none flex gap-x-1 items-center cursor-pointer bg-main-50;
+	padding: 0.25rem 0.5rem;
+	border: 1px solid var(--color-main-200);
+	border-radius: 0.375rem;
+	font-size: 0.75rem;
+	line-height: 1;
+	display: flex;
+	gap: 0.25rem;
+	align-items: center;
+	cursor: pointer;
+	background-color: var(--color-main-50);
+}
+
+.wrapper-selected-tag li:hover {
+	border-color: var(--color-main-600);
 }
 
 .section-available-tag {
-	@apply p-2 border border-neutral-200 rounded-md bg-white flex flex-col gap-y-2 absolute translate-y-10 left-0 right-0 top-0;
+	padding: 0.5rem;
+	border: 1px solid var(--color-neutral-200);
+	border-radius: 0.375rem;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	position: absolute;
+	transform: translateY(2.5rem);
+	left: 0;
+	right: 0;
+	top: 0;
 }
 
 .wrapper-available-tag {
 }
 
 .wrapper-available-tag li {
-	@apply px-2 py-1 hover:bg-neutral-900 rounded-md text-sm cursor-default hover:cursor-pointer select-none relative flex items-center justify-between gap-1;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	cursor: default;
+	user-select: none;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.25rem;
+}
+
+.wrapper-available-tag li:hover {
+	background-color: var(--color-neutral-900);
+	cursor: pointer;
 }
 </style>

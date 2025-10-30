@@ -20,7 +20,7 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 		tax_rules: [] as TaxRule[],
 		total_tax_rules: 0 as number,
 		new_tax_rule: structuredClone(initialEmptyTaxRule),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

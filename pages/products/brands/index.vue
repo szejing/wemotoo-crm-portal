@@ -15,7 +15,7 @@
 
 					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="brand_columns" :loading="loading" @select="selectBrand">
+						<UTable :data="rows" :columns="brand_columns" :loading="loading" @select-row="selectBrand">
 							<template #code-data="{ row }">
 								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
 									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-15 h-15 rounded-sm" />
@@ -74,7 +74,7 @@ const links = [
 	},
 ];
 
-const modal = useModal();
+const overlay = useOverlay();
 const brandStore = useBrandStore();
 
 useHead({ title: 'Wemotoo CRM - Brands' });
@@ -89,42 +89,44 @@ const rows = computed(() => {
 	return brands.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
-
 const deleteBrand = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this brand?',
-		action: 'delete',
-		onConfirm: async () => {
-			await brandStore.deleteBrand(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this brand?',
+			action: 'delete',
+			onConfirm: async () => {
+				await brandStore.deleteBrand(code);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectBrand = async (brand: Brand) => {
 	if (!brand) return;
-	modal.open(ZModalBrandDetail, {
-		brand: JSON.parse(JSON.stringify(brand)),
-		onUpdate: async ({ description, is_active }) => {
-			await brandStore.updateBrand(description, is_active);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteBrand(brand.code);
-		},
-		onCancel: () => {
-			modal.close();
+	const brandModal = overlay.create(ZModalBrandDetail, {
+		props: {
+			brand: JSON.parse(JSON.stringify(brand)),
+			onUpdate: async ({ description, is_active }) => {
+				await brandStore.updateBrand(description, is_active);
+				brandModal.close();
+			},
+			onDelete: async () => {
+				brandModal.close();
+				await deleteBrand(brand.code);
+			},
+			onCancel: () => {
+				brandModal.close();
+			},
 		},
 	});
+
+	brandModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -132,24 +134,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

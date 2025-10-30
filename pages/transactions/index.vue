@@ -26,7 +26,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="loading" @select="selectSale">
+				<UTable :data="rows" :columns="columnsTable" :loading="loading" @select-row="selectSale">
 					<template #index-data="{ index }">
 						<p>{{ index + 1 }}.</p>
 					</template>
@@ -41,8 +41,8 @@
 
 					<template #status-data="{ row }">
 						<UBadge v-if="row.status === SaleStatus.COMPLETED" variant="outline" color="success">COMPLETED</UBadge>
-						<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
-						<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
+						<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="outline" color="primary">REFUNDED</UBadge>
+						<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="outline" color="error">CANCELLED</UBadge>
 					</template>
 
 					<!-- <template #gross_amt-header>
@@ -160,4 +160,4 @@ const selectSale = (row: Bill) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

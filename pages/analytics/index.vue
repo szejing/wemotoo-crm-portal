@@ -67,4 +67,4 @@ const sales_navigations = [
 ];
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

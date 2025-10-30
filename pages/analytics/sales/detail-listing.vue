@@ -59,7 +59,7 @@
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
 							<UTable
-								:rows="group.items"
+								:data="group.items"
 								:columns="columnsTable"
 								:ui="{
 									tr: { base: 'cursor-pointer hover:bg-neutral-50' },
@@ -67,7 +67,7 @@
 									divide: 'divide-y divide-gray-200',
 									wrapper: 'relative overflow-auto',
 								}"
-								@select="selectSale"
+								@select-row="selectSale"
 							>
 								<template #bill_no-data="{ row }">
 									<p>{{ row.bill_no }}</p>
@@ -75,8 +75,8 @@
 
 								<template #status-data="{ row }">
 									<UBadge v-if="row.status === SaleStatus.COMPLETED" variant="soft" color="success" size="xs">Completed</UBadge>
-									<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="soft" color="orange" size="xs">Refunded</UBadge>
-									<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
+									<UBadge v-else-if="row.status === SaleStatus.REFUNDED" variant="soft" color="error" size="xs">Refunded</UBadge>
+									<UBadge v-else-if="row.status === SaleStatus.CANCELLED" variant="soft" color="error" size="xs">Cancelled</UBadge>
 								</template>
 
 								<template #gross_amt-data="{ row }">
@@ -200,4 +200,4 @@ const exportSalesToCsv = async () => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

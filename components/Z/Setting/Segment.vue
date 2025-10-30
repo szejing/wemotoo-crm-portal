@@ -44,8 +44,10 @@ const shouldHide = computed(() => {
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .segment-desc {
-	@apply bg-slate-100 px-4 py-2 rounded-md;
+	background-color: rgb(241 245 249);
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
 }
 </style>

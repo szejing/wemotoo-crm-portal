@@ -66,4 +66,4 @@ const items = segments.value.map((segment) => ({
 }));
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

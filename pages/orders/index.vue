@@ -31,7 +31,7 @@
 					</div>
 				</div>
 
-				<UTable :rows="rows" :columns="columnsTable" :loading="loading" class="mt-4" @select="selectOrder">
+				<UTable :data="rows" :columns="columnsTable" :loading="loading" class="mt-4" @select-row="selectOrder">
 					<template #index-data="{ index }">
 						<p class="text-left">{{ index + 1 }}.</p>
 					</template>
@@ -50,12 +50,12 @@
 
 					<template #status-data="{ row }">
 						<div class="flex justify-center">
-							<UBadge v-if="row.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="cyan">PENDING PAYMENT</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.PROCESSING" color="sky">PROCESSING</UBadge>
+							<UBadge v-if="row.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info">PENDING PAYMENT</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.PROCESSING" color="info">PROCESSING</UBadge>
 							<UBadge v-else-if="row.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.REQUIRES_ACTION" color="yellow">REQUIRES ACTION</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.REFUNDED" color="red">REFUNDED</UBadge>
-							<UBadge v-else-if="row.status === OrderStatus.CANCELLED" color="red">CANCELLED</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.REQUIRES_ACTION" color="warning">REQUIRES ACTION</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.REFUNDED" color="error">REFUNDED</UBadge>
+							<UBadge v-else-if="row.status === OrderStatus.CANCELLED" color="error">CANCELLED</UBadge>
 						</div>
 					</template>
 
@@ -212,4 +212,4 @@ const selectOrder = (row: Order) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

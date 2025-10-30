@@ -15,7 +15,7 @@
 
 					<div class="mt-4">
 						<!-- Table  -->
-						<UTable :rows="rows" :columns="category_columns" :loading="loading" @select="selectCategory">
+						<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory">
 							<template #code-data="{ row }">
 								<div class="flex flex-col-start sm:flex-row sm:justify-start sm:items-center gap-2">
 									<NuxtImg v-if="row.thumbnail" :src="row.thumbnail?.url" class="w-15 h-15 rounded-sm" />
@@ -76,7 +76,7 @@ const links = [
 
 useHead({ title: 'Wemotoo CRM - Categories' });
 
-const modal = useModal();
+const overlay = useOverlay();
 const categoryStore = useProductCategoryStore();
 await categoryStore.getCategories();
 
@@ -86,42 +86,44 @@ const rows = computed(() => {
 	return categories.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
-watch(modal.isOpen, (value) => {
-	if (!value) {
-		modal.reset();
-	}
-});
-
 const deleteCategory = async (code: string) => {
-	modal.open(ZModalConfirmation, {
-		message: 'Are you sure you want to delete this category?',
-		action: 'delete',
-		onConfirm: async () => {
-			await categoryStore.deleteCategory(code);
-			modal.close();
-		},
-		onCancel: () => {
-			modal.close();
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: 'Are you sure you want to delete this category?',
+			action: 'delete',
+			onConfirm: async () => {
+				await categoryStore.deleteCategory(code);
+				confirmModal.close();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
 		},
 	});
+
+	confirmModal.open();
 };
 
 const selectCategory = async (category: Category) => {
 	if (!category) return;
-	modal.open(ZModalCategoryDetail, {
-		category: JSON.parse(JSON.stringify(category)),
-		onUpdate: async ({ code, description, is_active, is_internal, parent_category, thumbnail, images }) => {
-			await categoryStore.updateCategory(code, description, is_active, is_internal, parent_category, thumbnail, images);
-			modal.close();
-		},
-		onDelete: async () => {
-			await modal.close();
-			await deleteCategory(category.code);
-		},
-		onCancel: () => {
-			modal.close();
+	const categoryModal = overlay.create(ZModalCategoryDetail, {
+		props: {
+			category: JSON.parse(JSON.stringify(category)),
+			onUpdate: async ({ code, description, is_active, is_internal, parent_category, thumbnail, images }) => {
+				await categoryStore.updateCategory(code, description, is_active, is_internal, parent_category, thumbnail, images);
+				categoryModal.close();
+			},
+			onDelete: async () => {
+				categoryModal.close();
+				await deleteCategory(category.code);
+			},
+			onCancel: () => {
+				categoryModal.close();
+			},
 		},
 	});
+
+	categoryModal.open();
 };
 
 const updatePage = async (page: number) => {
@@ -129,24 +131,36 @@ const updatePage = async (page: number) => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .base {
-	@apply container grid grid-cols-1 sm:grid-cols-6 gap-6 mt-4;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 1.5rem;
+	margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+	.base {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
 }
 
 .section-empty {
-	@apply h-52;
+	height: 13rem;
 }
 
 .section-empty div {
-	@apply text-center;
+	text-align: center;
 }
 
 .section-empty h2 {
-	@apply text-2xl font-semibold;
+	font-size: 1.5rem;
+	line-height: 2rem;
+	font-weight: 600;
 }
 
 .section-empty p {
-	@apply text-neutral-400;
+	color: var(--color-neutral-400);
 }
 </style>

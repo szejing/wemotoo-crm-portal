@@ -25,9 +25,9 @@
 									{{ detail.tax_code ?? detail.tax?.code ?? 'No tax code' }}
 								</p>
 
-								<UBadge v-if="detail.tax_condition?.amount_type" :label="`${detail.tax_condition.amount_type}`" size="xs" color="blue" variant="soft" />
+								<UBadge v-if="detail.tax_condition?.amount_type" :label="`${detail.tax_condition.amount_type}`" size="xs" color="info" variant="soft" />
 								<UBadge v-if="detail.tax_condition?.rate" :label="`${detail.tax_condition.rate}%`" size="xs" color="success" variant="soft" />
-								<UBadge v-if="detail.tax_condition?.min_amount" :label="`Min: ${detail.tax_condition.min_amount}`" size="xs" color="gray" variant="soft" />
+								<UBadge v-if="detail.tax_condition?.min_amount" :label="`Min: ${detail.tax_condition.min_amount}`" size="xs" color="neutral" variant="soft" />
 							</div>
 							<p class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
 								{{ detail.description || 'No description' }}
@@ -41,7 +41,7 @@
 								</p>
 							</div>
 						</div>
-						<UButton icon="i-heroicons-trash" size="xs" color="red" variant="ghost" @click="deleteDetail(index)" />
+						<UButton icon="i-heroicons-trash" size="xs" color="error" variant="ghost" @click="deleteDetail(index)" />
 					</div>
 				</div>
 			</div>
@@ -133,4 +133,4 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped></style>

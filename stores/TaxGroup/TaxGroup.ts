@@ -17,7 +17,7 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		tax_groups: [] as TaxGroup[],
 		total_tax_groups: 0 as number,
 		new_tax_group: structuredClone(initialEmptyTaxGroup),
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

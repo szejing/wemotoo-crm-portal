@@ -18,7 +18,7 @@ export const useBrandStore = defineStore('brandStore', {
 		brands: [] as Brand[],
 		total_brands: 0 as number,
 		current_brand: undefined as Brand | undefined,
-		page_size: options_page_size[0],
+		page_size: options_page_size[0] as number,
 		current_page: 1,
 		errors: [] as string[],
 	}),

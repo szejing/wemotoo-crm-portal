@@ -52,12 +52,16 @@ const increaseQuantity = () => {
 };
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .quantity-control {
-	@apply flex items-center gap-2;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 .quantity-value {
-	@apply w-8 text-center font-medium;
+	width: 2rem;
+	text-align: center;
+	font-weight: 500;
 }
 </style>
