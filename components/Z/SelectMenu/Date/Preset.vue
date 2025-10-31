@@ -1,7 +1,7 @@
 <template>
 	<UFormField name="date" class="mt-2 w-[150px] max-w-[250px]">
-		<USelectMenu v-model="date" :items="date_range" size="md" option-attribute="name">
-			<template #label>
+		<USelectMenu v-model="date" :items="dateRangeItems" value-key="seq" size="md">
+			<template #default>
 				<span class="truncate text-sm font-bold text-neutral">{{ date?.name }}</span>
 			</template>
 		</USelectMenu>
@@ -36,6 +36,13 @@ const date_range = [
 	{ seq: 3, name: 'Last 60 Days', start_date: last60Days, end_date: today },
 	{ seq: 4, name: 'Last Month', start_date: lastMonth, end_date: thisMonth },
 ];
+
+const dateRangeItems = computed(() => {
+	return date_range.map((range) => ({
+		...range,
+		label: range.name,
+	}));
+});
 
 const props = defineProps<{ startDate: Date; endDate: Date }>();
 const emit = defineEmits(['update:startDate', 'update:endDate']);

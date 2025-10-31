@@ -1,24 +1,34 @@
 <template>
 	<UFormField name="status">
-		<USelectMenu v-model="status" :items="options_sale_status" size="md" :ui="{ base: 'min-w-[150px]' }">
-			<template #label>
-				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
+		<USelectMenu v-model="status" :items="statusItems" value-key="label" size="md" :ui="{ base: 'min-w-[150px]' }">
+			<template #default>
+				<span v-if="status">
+					<UBadge :color="getSaleStatusColor(status)" variant="subtle" class="truncate">
+						{{ capitalizeFirstLetter(status) }}
+					</UBadge>
+				</span>
 				<span v-else class="text-neutral-400">Select Status</span>
 			</template>
 
-			<template #option="{ option }">
-				<span class="truncate">{{ capitalizeFirstLetter(option) }}</span>
+			<template #item="{ item }">
+				<UBadge :color="getSaleStatusColor(item.label)" variant="subtle" class="truncate">
+					{{ capitalizeFirstLetter(item.label) }}
+				</UBadge>
 			</template>
 		</USelectMenu>
 	</UFormField>
 </template>
 
 <script lang="ts" setup>
-import { options_sale_status } from '~/utils/options';
+import { options_sale_status, getSaleStatusColor } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
 const props = defineProps<{ status: string }>();
 const emit = defineEmits(['update:status']);
+
+const statusItems = computed(() => {
+	return options_sale_status.map((status) => ({ label: status }));
+});
 
 const status = computed({
 	get() {

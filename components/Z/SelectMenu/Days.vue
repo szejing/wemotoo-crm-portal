@@ -1,7 +1,7 @@
 <template>
 	<UFormField name="days" class="mt-2">
-		<USelectMenu v-model="days" :items="days_options" size="md" multiple option-attribute="long" value-attribute="short">
-			<template #label>
+		<USelectMenu v-model="days" :items="daysItems" size="md" multiple value-key="short">
+			<template #default>
 				<span v-if="days.length > 0" class="truncate">{{ days?.map((day) => days_options.find((d) => d.short === day)?.short).join(', ') }}</span>
 				<span v-else class="text-neutral-400">Mon, Tue, Wed...</span>
 			</template>
@@ -19,6 +19,13 @@ const days_options = [
 	{ seq: 6, short: 'Sat', long: 'Saturday' },
 	{ seq: 7, short: 'Sun', long: 'Sunday' },
 ];
+
+const daysItems = computed(() => {
+	return days_options.map((day) => ({
+		...day,
+		label: day.long,
+	}));
+});
 
 const props = defineProps<{ days: string[] | null }>();
 

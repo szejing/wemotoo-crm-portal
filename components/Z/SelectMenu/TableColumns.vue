@@ -1,12 +1,10 @@
 <template>
 	<USelectMenu
 		v-model="selectedColumns"
-		:options="props.columns"
+		:items="props.columns"
 		multiple
-		:ui-menu="{
-			width: 'w-50',
-			height: 'max-h-40',
-			base: 'overflow-y-auto scrollbar-hide',
+		:ui="{
+			content: 'w-50 max-h-40 overflow-y-auto scrollbar-hide',
 		}"
 	>
 		<UButton icon="i-heroicons-view-columns" color="neutral" size="xs"> Show Columns </UButton>

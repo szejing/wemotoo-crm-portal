@@ -1,7 +1,7 @@
 <template>
 	<UFormField name="tags" class="mt-2">
-		<USelectMenu v-model="taxes" v-model:query="query" :items="tax_options" searchable size="md" option-attribute="code" multiple by="code">
-			<template #label>
+		<USelectMenu v-model="taxes" v-model:search-term="searchTerm" :items="taxItems" :search-input="{}" size="md" value-key="code" multiple>
+			<template #default>
 				<span v-if="taxes.length" class="truncate">{{ taxes.map((tax: Tax) => tax.code).join(', ') }}</span>
 				<span v-else class="text-neutral-400">Select Taxes</span>
 			</template>
@@ -12,9 +12,16 @@
 <script lang="ts" setup>
 import type { Tax } from '~/utils/types/tax';
 
-const query = ref('');
+const searchTerm = ref('');
 const taxStore = useTaxStore();
 const { taxes: tax_options } = storeToRefs(taxStore);
+
+const taxItems = computed(() => {
+	return tax_options.value.map((tax) => ({
+		...tax,
+		label: tax.code,
+	}));
+});
 
 const props = defineProps<{ taxes: Tax[] | undefined }>();
 

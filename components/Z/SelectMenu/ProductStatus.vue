@@ -1,13 +1,13 @@
 <template>
 	<UFormField name="status">
-		<USelectMenu v-model="status" :items="options_product_status" size="md">
-			<template #label>
+		<USelectMenu v-model="status" :items="statusItems" value-key="label" size="md">
+			<template #default>
 				<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
 				<span v-else class="text-neutral-400">Select Product Status</span>
 			</template>
 
-			<template #option="{ option }">
-				<span class="truncate">{{ capitalizeFirstLetter(option) }}</span>
+			<template #item="{ item }">
+				<span class="truncate">{{ capitalizeFirstLetter(item.label) }}</span>
 			</template>
 		</USelectMenu>
 	</UFormField>
@@ -20,6 +20,10 @@ import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as nec
 
 const props = defineProps<{ status: ProductStatus | undefined }>();
 const emit = defineEmits(['update:status']);
+
+const statusItems = computed(() => {
+	return options_product_status.map((status) => ({ label: status }));
+});
 
 const status = computed({
 	get() {

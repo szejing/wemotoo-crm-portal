@@ -1,7 +1,7 @@
 <template>
 	<UFormField name="tags" class="mt-2">
-		<USelectMenu v-model="tax_rule" v-model:query="query" :items="tax_rules_options" searchable size="md" option-attribute="code" by="code">
-			<template #label>
+		<USelectMenu v-model="tax_rule" v-model:search-term="searchTerm" :items="taxRuleItems" :search-input="{}" size="md" value-key="code">
+			<template #default>
 				<span v-if="tax_rule" class="truncate">{{ tax_rule.code }}</span>
 				<span v-else class="text-neutral-400">Select Tax Rule</span>
 			</template>
@@ -12,9 +12,16 @@
 <script lang="ts" setup>
 import type { TaxRule, TaxRuleInput } from '~/utils/types/tax-rule';
 
-const query = ref('');
+const searchTerm = ref('');
 const taxRuleStore = useTaxRuleStore();
 const { tax_rules: tax_rules_options } = storeToRefs(taxRuleStore);
+
+const taxRuleItems = computed(() => {
+	return tax_rules_options.value.map((taxRule) => ({
+		...taxRule,
+		label: taxRule.code,
+	}));
+});
 
 const props = defineProps<{ taxRule: TaxRule | TaxRuleInput | string | undefined }>();
 

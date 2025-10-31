@@ -1,7 +1,7 @@
 <template>
 	<UFormField name="time" class="mt-2">
-		<USelectMenu v-model="time" :items="time_options" size="md">
-			<template #label>
+		<USelectMenu v-model="time" :items="timeItems" value-key="label" size="md">
+			<template #default>
 				<span v-if="time" class="truncate">
 					{{ props.type === 'start' ? 'Start : ' : 'End : ' }}
 					{{ time }}
@@ -39,6 +39,10 @@ const time_options = [
 	'10.00 pm',
 	'11.00 pm',
 ];
+
+const timeItems = computed(() => {
+	return time_options.map((time) => ({ label: time }));
+});
 
 const props = defineProps<{ title: string; time: string | null; type: 'start' | 'end' }>();
 

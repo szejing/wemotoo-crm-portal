@@ -2,10 +2,9 @@
 	<UFormField name="filter_type">
 		<USelectMenu
 			v-model="filter_type"
-			:options="date_filter_type_options"
+			:items="filterTypeItems"
 			size="md"
-			option-attribute="name"
-			value-attribute="value"
+			value-key="value"
 			:ui="{ base: 'min-w-[200px]' }"
 		/>
 	</UFormField>
@@ -20,6 +19,13 @@ const date_filter_type_options = [
 	{ name: 'Less Than or Equal', value: '<=' },
 	{ name: 'Between', value: 'between' },
 ];
+
+const filterTypeItems = computed(() => {
+	return date_filter_type_options.map((option) => ({
+		...option,
+		label: option.name,
+	}));
+});
 
 const props = defineProps<{ filterType: string }>();
 

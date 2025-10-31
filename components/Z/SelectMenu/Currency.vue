@@ -1,15 +1,14 @@
 <template>
 	<USelectMenu
 		v-model="currency_code"
-		v-model:query="query"
-		:options="currencies"
-		searchable
+		v-model:search-term="searchTerm"
+		:items="currencyItems"
+		:search-input="{}"
 		size="md"
-		value-attribute="code"
-		option-attribute="code"
+		value-key="code"
 		:disabled="currencies.length == 1"
 	>
-		<template #label>
+		<template #default>
 			<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
 			<span v-else class="text-neutral-400">Select Currency</span>
 		</template>
@@ -17,9 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-const query = ref('');
+const searchTerm = ref('');
 const merchantInfoStore = useMerchantInfoStore();
 const { currencies } = storeToRefs(merchantInfoStore);
+
+const currencyItems = computed(() => {
+	return currencies.value.map((currency) => ({
+		...currency,
+		label: currency.code,
+	}));
+});
 
 const props = defineProps<{ currencyCode: string | undefined }>();
 

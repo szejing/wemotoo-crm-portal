@@ -1,13 +1,13 @@
 <template>
 	<UFormField name="brands" class="mt-2">
-		<USelectMenu v-model="brands" v-model:query="query" :items="brand_options" searchable size="md" option-attribute="code" multiple by="code">
-			<template #label>
+		<USelectMenu v-model="brands" v-model:search-term="searchTerm" :items="brandItems" :search-input="{}" size="md" value-key="code" multiple>
+			<template #default>
 				<span v-if="brands.length" class="truncate">{{ brands.map((brand) => brand.code).join(', ') }}</span>
 				<span v-else class="text-neutral-400">Select Brands</span>
 			</template>
 
-			<template #option-empty>
-				<UButton color="success" variant="ghost">Create "{{ query }}"</UButton>
+			<template #empty>
+				<UButton color="success" variant="ghost">Create "{{ searchTerm }}"</UButton>
 			</template>
 		</USelectMenu>
 	</UFormField>
@@ -16,9 +16,16 @@
 <script lang="ts" setup>
 import type { Brand, BrandInput } from '~/utils/types/brand';
 
-const query = ref('');
+const searchTerm = ref('');
 const brandStore = useBrandStore();
 const { brands: brand_options } = storeToRefs(brandStore);
+
+const brandItems = computed(() => {
+	return brand_options.value.map((brand) => ({
+		...brand,
+		label: brand.code,
+	}));
+});
 
 const props = defineProps<{ brands: Brand[] | BrandInput[] | undefined }>();
 
