@@ -1,25 +1,24 @@
-import type { ColumnDef } from '@tanstack/vue-table';
+import type { TableColumn } from '@nuxt/ui';
+import type { Brand } from '~/utils/types/brand';
 
-export const brand_columns: ColumnDef<any>[] = [
+export const brand_columns: TableColumn<Brand>[] = [
 	{
 		accessorKey: 'code',
 		header: 'Code',
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('code'))]);
-		},
-	},
-	{
-		accessorKey: 'description',
-		header: 'Description',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('description'))]);
+			return h('div', [
+				h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
+				h('div', { class: 'text-neutral-600' }, row.original.description),
+			]);
 		},
 	},
 	{
 		accessorKey: 'total_items',
-		header: 'No of Items',
+		header: () => h('h1', { class: 'flex justify-end w-full' }, [h('h1', 'No of Items')]),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_items'))]);
+			return h('div', { class: 'flex justify-end w-full' }, [
+				h('div', { class: 'text-center', style: 'min-width: 90px' }, [h('p', { class: 'text-neutral-900' }, row.original.total_products)]),
+			]);
 		},
 	},
 ];

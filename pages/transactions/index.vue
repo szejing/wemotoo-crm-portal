@@ -102,7 +102,7 @@
 				</UTable>
 
 				<div v-if="bills.length > 0" class="section-pagination">
-					<UPagination v-model="page" :page-count="filter.page_size" :total="total_bills" @update:model-value="updatePage" />
+					<UPagination :default-page="page" :items-per-page="filter.page_size" :total="total_bills" @update:page="updatePage" />
 				</div>
 			</UCard>
 		</div>

@@ -13,7 +13,7 @@
 				<UTable :data="rows" :columns="payment_type_group_columns" />
 
 				<div v-if="payment_type_groups.length > 0" class="section-pagination">
-					<UPagination v-model="current_page" :page-count="page_size" :total="total_payment_type_groups" @update:model-value="updatePage" />
+					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_payment_type_groups" @update:page="updatePage" />
 				</div>
 			</UCard>
 		</div>

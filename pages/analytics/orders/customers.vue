@@ -19,10 +19,10 @@
 
 				<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
 					<UPagination
-						v-model="current_page"
-						:page-count="order_summ_customer.page_size"
+						:default-page="current_page"
+						:items-per-page="order_summ_customer.page_size"
 						:total="order_summ_customer.total_data"
-						@update:model-value="updatePage"
+						@update:page="updatePage"
 					/>
 				</div>
 			</UCard>

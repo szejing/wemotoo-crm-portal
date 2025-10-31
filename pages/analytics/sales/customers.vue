@@ -14,10 +14,10 @@
 
 				<div v-if="sale_summ_customer.data.length > 0" class="section-pagination">
 					<UPagination
-						v-model="current_page"
-						:page-count="sale_summ_customer.page_size"
+						:default-page="current_page"
+						:items-per-page="sale_summ_customer.page_size"
 						:total="sale_summ_customer.total_data"
-						@update:model-value="updatePage"
+						@update:page="updatePage"
 					/>
 				</div>
 			</UCard>

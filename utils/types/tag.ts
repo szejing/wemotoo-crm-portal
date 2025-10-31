@@ -6,6 +6,6 @@ export type TagInput = {
 export type Tag = {
 	id: number;
 	value: string;
-	total_items: number;
+	total_products: number;
 	metadata?: Record<string, unknown> | undefined;
 };

@@ -24,7 +24,7 @@
 					<UTable :data="rows" :columns="product_columns" :loading="loading" @select-row="selectProduct" />
 
 					<div v-if="products.length > 0" class="section-pagination">
-						<UPagination v-model="current_page" :page-count="page_size" :total="total_products" @update:model-value="updatePage" />
+						<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_products" @update:page="updatePage" />
 					</div>
 				</div>
 			</UCard>

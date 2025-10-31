@@ -40,7 +40,7 @@
 				</UTable>
 
 				<div v-if="orders.length > 0" class="section-pagination">
-					<UPagination v-model="current_page" :page-count="filter.page_size" :total="orders.length" @update:model-value="updatePage" />
+					<UPagination :default-page="current_page" :items-per-page="filter.page_size" :total="orders.length" @update:page="updatePage" />
 				</div>
 			</UCard>
 		</div>

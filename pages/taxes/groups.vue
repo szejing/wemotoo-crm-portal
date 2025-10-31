@@ -25,7 +25,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="tax_groups.length > 0" class="section-pagination">
-							<UPagination v-model="current_page" :page-count="page_size" :total="total_tax_groups" @update:model-value="updatePage" />
+							<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tax_groups" @update:page="updatePage" />
 						</div>
 					</div>
 				</UCard>

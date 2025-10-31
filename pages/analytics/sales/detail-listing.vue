@@ -73,7 +73,7 @@
 
 			<!-- Pagination -->
 			<div v-if="bills.length > 0" class="mt-6 flex justify-center">
-				<UPagination v-model="current_page" :page-count="filter.page_size" :total="total_bills" @update:model-value="updatePage" />
+				<UPagination :default-page="current_page" :items-per-page="filter.page_size" :total="total_bills" @update:page="updatePage" />
 			</div>
 		</div>
 	</div>

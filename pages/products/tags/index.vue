@@ -18,7 +18,7 @@
 
 						<!-- Pagination  -->
 						<div v-if="tags.length > 0" class="section-pagination">
-							<UPagination v-model="current_page" :page-count="page_size" :total="total_tags" @update:model-value="updatePage" />
+							<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tags" @update:page="updatePage" />
 						</div>
 					</div>
 				</UCard>
