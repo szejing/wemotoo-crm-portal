@@ -1,36 +1,34 @@
+import { USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { Tax } from '~/utils/types/tax';
-
-const USwitch = resolveComponent('USwitch');
 
 export const tax_code_columns: TableColumn<Tax>[] = [
 	{
 		accessorKey: 'code',
-		header: 'Code',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Code'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex-col-start' }, [
-				h('h3', { class: 'text-neutral-800 font-bold' }, row.getValue('code')),
-				h('h5', { class: 'text-neutral-400' }, row.getValue('description')),
+			return h('div', { class: 'flex flex-col gap-1' }, [
+				h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
+				h('h5', { class: 'text-neutral-400' }, row.original.description),
 			]);
 		},
 	},
 	{
 		accessorKey: 'type',
-		header: 'Tax Type',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Tax Type'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex-col-start text-neutral-700' }, [
-				h('h5', { class: 'text-neutral-900' }, row.getValue('is_inclusive') ? 'Inclusive' : 'Exclusive'),
-			]);
+			return h('div', { class: 'flex flex-col gap-1 text-neutral-900' }, [h('h5', row.original.is_inclusive ? 'Inclusive' : 'Exclusive')]);
 		},
 	},
 	{
 		accessorKey: 'is_active',
-		header: 'Active',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Active'),
 		cell: ({ row }) => {
 			return h(USwitch, {
-				modelValue: row.getValue('active'),
-				disabled: row.getValue('disabled'),
-				onUpdate: (value: boolean) => {
+				'class': 'size-5',
+				'modelValue': row.original.is_active,
+				'disabled': false,
+				'onUpdate:modelValue': (value: boolean) => {
 					row.original.is_active = value;
 				},
 			});

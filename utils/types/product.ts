@@ -1,30 +1,30 @@
 import type { ProductStatus } from 'wemotoo-common';
-import type { PriceInput } from './price';
-import type { CategoryInput } from './category';
-import type { TagInput } from './tag';
-import type { BrandInput } from './brand';
+import type { Price, PriceInput } from './price';
+import type { Category } from './category';
+import type { Tag } from './tag';
+import type { Brand } from './brand';
 import type { Image } from './image';
+import type { ProductType } from './product-type';
+import type { ProductVariant } from './product-variant';
+import type { ProductOption } from './product-option';
 
-export type ProdVariantOptionValuesInput = {
-	id: number;
+// ============================================
+// INPUT TYPES (for create/update operations)
+// ============================================
+
+export type ProductOptionValueInput = {
+	id?: number;
 	option_id?: number;
-	value?: string | undefined;
+	value: string;
 };
 
-export type ProdOptionValuesInput = {
-	id: number;
-	option_id?: number;
-	value?: string | undefined;
-};
-
-export type ProdOptionInput = {
-	id: number;
+export type ProductOptionInput = {
+	id?: number;
 	name: string;
-	value?: string | undefined;
-	values: ProdOptionValuesInput[] | undefined;
+	values: ProductOptionValueInput[];
 };
 
-export type ProdVariantInput = {
+export type ProductVariantInput = {
 	variant_code?: string;
 	product_code?: string;
 	name?: string;
@@ -42,47 +42,94 @@ export type ProdVariantInput = {
 	width?: number;
 	origin_country?: string;
 	material?: string;
-	price_types?: PriceInput[] | undefined;
-	options?: ProdOptionValuesInput[];
+	price_types?: PriceInput[];
+	options?: ProductOptionValueInput[];
 	metadata?: Record<string, unknown>;
 };
 
-export type Product = {
-	code: string | undefined;
-	name: string | undefined;
-	short_desc: string | undefined;
-	long_desc: string | undefined;
+export type ProductInput = {
+	code?: string;
+	name: string;
+	short_desc?: string;
+	long_desc?: string;
 	is_discountable: boolean;
 	is_giftcard: boolean;
 	is_active: boolean;
-
 	status: ProductStatus;
 
-	// brands
-	brands: BrandInput[] | undefined;
+	// Relations (using codes/IDs for input)
+	brand_codes?: string[];
+	category_codes: string[];
+	tag_ids?: number[];
+	type_id: number;
 
-	// categories
-	categories: CategoryInput[] | undefined;
+	// File uploads
+	thumbnail?: File;
+	images?: File[];
 
-	// product types
-	type: number;
+	// Nested inputs
+	price_types?: PriceInput[];
+	options?: ProductOptionInput[];
+	variants?: ProductVariantInput[];
 
-	// tags
-	tags: TagInput[] | undefined;
-
-	// thumbnail
-	thumbnail: File | Image | undefined;
-
-	// images
-	images: File[] | Image[] | undefined;
-
-	// price
-	price_types: PriceInput[] | undefined;
-
-	// variants
-	options: ProdOptionInput[] | undefined;
-	variants: ProdVariantInput[] | undefined;
-
-	// metadata
-	metadata: Record<string, unknown> | undefined;
+	metadata?: Record<string, unknown>;
 };
+
+// Reference type for selections/dropdowns
+export type ProductRef = {
+	code: string;
+	name?: string;
+};
+
+// ============================================
+// MODEL TYPES (for display/read operations)
+// ============================================
+
+export type Product = {
+	code: string;
+	name: string;
+	short_desc?: string;
+	long_desc?: string;
+	is_discountable: boolean;
+	is_giftcard: boolean;
+	is_active: boolean;
+	status: ProductStatus;
+
+	// Relations (populated objects)
+	brands?: Brand[];
+	categories?: Category[];
+	tags?: Tag[];
+	type?: ProductType;
+
+	// Images (URLs from backend)
+	thumbnail?: Image;
+	images?: Image[];
+
+	// Nested models
+	price_types?: Price[];
+	options?: ProductOption[];
+	variants?: ProductVariant[];
+
+	// Timestamps
+	created_at?: string;
+	updated_at?: string;
+
+	metadata?: Record<string, unknown>;
+};
+
+// ============================================
+// DEPRECATED ALIASES (for backward compatibility)
+// Remove these after migration
+// ============================================
+
+/** @deprecated Use ProductOptionValueInput instead */
+export type ProdVariantOptionValuesInput = ProductOptionValueInput;
+
+/** @deprecated Use ProductOptionValueInput instead */
+export type ProdOptionValuesInput = ProductOptionValueInput;
+
+/** @deprecated Use ProductOptionInput instead */
+export type ProdOptionInput = ProductOptionInput;
+
+/** @deprecated Use ProductVariantInput instead */
+export type ProdVariantInput = ProductVariantInput;

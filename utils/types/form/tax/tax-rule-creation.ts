@@ -19,12 +19,12 @@ export type TaxConditionCreate = {
 
 export type TaxDetailCreate = {
 	description: string;
-	tax_code: string | undefined;
+	tax_code: string;
 	tax_condition: TaxConditionCreate;
 };
 
 export type TaxRuleCreate = {
-	code: string | undefined;
-	description: string | undefined;
+	code: string;
+	description?: string;
 	details: TaxDetailCreate[];
 };

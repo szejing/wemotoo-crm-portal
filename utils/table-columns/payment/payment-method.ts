@@ -1,31 +1,24 @@
+import { USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { PaymentMethod } from '~/utils/types/payment-method';
-
-const USwitch = resolveComponent('USwitch');
 
 export const payment_method_columns: TableColumn<PaymentMethod>[] = [
 	{
 		accessorKey: 'code',
-		header: 'Code',
+		header: () => h('div', { class: 'text-neutral-400' }, 'Code'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('code'))]);
-		},
-	},
-	{
-		accessorKey: 'detail',
-		header: 'Detail',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('detail'))]);
+			return h('div', [h('div', { class: 'font-bold text-neutral-900' }, row.original.code), h('div', { class: 'text-neutral-600' }, row.original.short_desc)]);
 		},
 	},
 	{
 		accessorKey: 'active',
-		header: 'Active',
+		header: () => h('div', { class: 'text-neutral-400' }, 'Active'),
 		cell: ({ row }) => {
 			return h(USwitch, {
-				modelValue: row.getValue('active'),
-				disabled: row.getValue('disabled'),
-				onUpdate: (value: boolean) => {
+				'class': 'size-5',
+				'modelValue': row.original.is_active,
+				'disabled': false,
+				'onUpdate:modelValue': (value: boolean) => {
 					row.original.is_active = value;
 				},
 			});

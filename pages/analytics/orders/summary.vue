@@ -31,10 +31,7 @@
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div
-							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
-							:class="{ 'border-t border-neutral-200': index > 0 }"
-						>
+						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -65,45 +62,14 @@
 						<div class="px-6 pb-6 pt-4">
 							<UTable
 								:data="group.items"
-								:columns="columnsTable"
-								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
-							>
-								<template #currency_code-data="{ row }">
-									<p>{{ row.currency_code }}</p>
-								</template>
-
-								<template #status-data="{ row }">
-									<UBadge v-if="row.status == OrderStatus.NEW" variant="soft" color="success" size="xs">New</UBadge>
-									<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="soft" color="info" size="xs">Refunded</UBadge>
-									<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="soft" color="error" size="xs">Cancelled</UBadge>
-								</template>
-
-								<template #gross_amt-data="{ row }">
-									<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #net_amt-data="{ row }">
-									<p class="text-center font-medium text-neutral-900">{{ row.net_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #total_orders-data="{ row }">
-									<p class="text-center">{{ row.total_orders }}</p>
-								</template>
-
-								<template #total_qty-data="{ row }">
-									<p class="text-center">{{ row.total_qty }}</p>
-								</template>
-
-								<template #total_voided_qty-data="{ row }">
-									<p class="text-center">{{ row.total_voided_qty }}</p>
-								</template>
-
-								<template #empty-state>
-									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-neutral-500">No items found</span>
-									</div>
-								</template>
-							</UTable>
+								:columns="order_summ_columns"
+								:ui="{
+									root: 'relative overflow-auto',
+									base: 'table-fixed',
+									tbody: 'divide-y divide-gray-200',
+									tr: '',
+								}"
+							/>
 						</div>
 					</div>
 				</UCard>
@@ -118,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 import { order_summ_columns } from '~/utils/table-columns';
 
 const links = [
@@ -146,8 +112,8 @@ const current_page = computed(() => order_summ.value.current_page);
 
 const is_loading = computed(() => order_summ.value.is_loading);
 const data = computed(() => order_summ.value.data);
-const selectedColumns = ref(order_summ_columns);
-const columnsTable = computed(() => order_summ_columns.filter((column) => selectedColumns.value.includes(column)));
+// const selectedColumns = ref(order_summ_columns);
+// const columnsTable = computed(() => order_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
 // Group data by date
 const groupedByDate = computed(() => {
@@ -179,7 +145,7 @@ const groupedByDate = computed(() => {
 
 		return {
 			date,
-			items: items,
+			items,
 			...totals,
 		};
 	});

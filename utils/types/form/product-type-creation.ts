@@ -1,4 +1,4 @@
 export type ProductTypeCreate = {
-	// name
-	value: string | undefined;
+	value: string;
+	metadata?: Record<string, unknown>;
 };

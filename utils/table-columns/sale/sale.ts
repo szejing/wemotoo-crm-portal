@@ -1,9 +1,8 @@
 import { SaleStatus } from 'wemotoo-common';
-import { h, resolveComponent } from 'vue';
+import { h } from 'vue';
 import type { Bill } from '~/repository/modules/sale/models/response/bill';
 import type { TableColumn } from '@nuxt/ui';
-
-const UBadge = resolveComponent('UBadge');
+import { UBadge } from '#components';
 
 export const sale_columns: TableColumn<Bill>[] = [
 	{

@@ -1,15 +1,15 @@
 export type CreateOutletReq = {
-	code: string | undefined;
-	description: string | undefined;
-	address1: string | undefined;
-	address2: string | undefined;
-	address3: string | undefined;
-	city: string | undefined;
-	country_code: string | undefined;
-	state: string | undefined;
-	postal_code: string | undefined;
-	longitude: number | undefined;
-	latitude: number | undefined;
-	// thumbnail
-	// thumbnail: ImageReq | undefined;
+	code: string;
+	description: string;
+	address1: string;
+	address2?: string;
+	address3?: string;
+	city: string;
+	country_code: string;
+	state: string;
+	postal_code: string;
+	longitude?: number;
+	latitude?: number;
+	tax_rule_code?: string;
+	metadata?: Record<string, unknown>;
 };

@@ -67,45 +67,13 @@
 							<UTable
 								:data="group.items"
 								:columns="order_summ_item_columns"
-								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
-							>
-								<template #prod_code-data="{ row }">
-									<div v-if="row.is_total_row" class="font-semibold text-neutral-700">{{ row.prod_name }}</div>
-									<div v-else>
-										<p class="font-medium text-neutral-900">{{ row.prod_name }}</p>
-										<p class="text-xs text-neutral-500">{{ row.prod_code }}</p>
-									</div>
-								</template>
-
-								<template #item_status-data="{ row }">
-									<div class="flex justify-center">
-										<span v-if="row.is_total_row"></span>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.ACTIVE" variant="soft" color="success" size="xs">Active</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.REFUNDED" variant="soft" color="info" size="xs">Refunded</UBadge>
-										<UBadge v-else-if="row.item_status == OrderItemStatus.VOIDED" variant="soft" color="error" size="xs">Voided</UBadge>
-									</div>
-								</template>
-
-								<template #total_qty-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.total_qty }}</p>
-								</template>
-
-								<template #gross_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-neutral-900' : 'text-neutral-900'">{{ row.gross_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #net_amt-data="{ row }">
-									<p class="text-center" :class="row.is_total_row ? 'font-semibold text-green-600' : 'font-medium text-neutral-900'">
-										{{ row.net_amt.toFixed(2) }}
-									</p>
-								</template>
-
-								<template #empty-state>
-									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-neutral-500">No items found</span>
-									</div>
-								</template>
-							</UTable>
+								:ui="{
+									root: 'relative overflow-auto',
+									base: 'table-fixed',
+									tbody: 'divide-y divide-gray-200',
+									tr: '',
+								}"
+							/>
 						</div>
 					</div>
 				</UCard>

@@ -1,6 +1,6 @@
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import type { ProductOptionValueInput } from '~/utils/types/product-option-value';
 
 export type CreateProductOptionReq = {
 	name: string;
-	values: ProductOptionValue[];
+	values: ProductOptionValueInput[];
 };

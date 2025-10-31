@@ -7,28 +7,28 @@ import type { OrderHistory } from '~/repository/modules/order/models/response/ge
 export const order_columns: TableColumn<OrderHistory>[] = [
 	{
 		accessorKey: 'index',
-		header: () => h('h1', 'No.'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'No.'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.index + 1)]);
 		},
 	},
 	{
 		accessorKey: 'biz_date',
-		header: () => h('h1', 'Date'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Date'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.biz_date)]);
 		},
 	},
 	{
 		accessorKey: 'order_no',
-		header: () => h('h1', 'Order No'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Order No'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.order_no)]);
 		},
 	},
 	{
 		accessorKey: 'status',
-		header: () => h('h1', 'Status'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Status'),
 		cell: ({ row }) => {
 			const color = {
 				[OrderStatus.COMPLETED]: 'success' as const,
@@ -59,7 +59,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'gross_amt',
-		header: () => h('h1', 'Gross Amt'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.gross_amt)]);
 		},
@@ -72,7 +72,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'tax_amt_exc',
-		header: () => h('h1', 'Tax Amt Exc'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Tax Amt Exc'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.tax_amt_exc)]);
 		},
@@ -85,7 +85,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'net_amt',
-		header: () => h('h1', 'Net Amt'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
 		cell: ({ row }) => {
 			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.net_amt)]);
 		},

@@ -66,7 +66,12 @@
 							<UTable
 								:data="group.items"
 								:columns="sale_summ_item_columns"
-								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
+								:ui="{
+									root: 'relative overflow-auto',
+									base: 'table-fixed',
+									tbody: 'divide-y divide-gray-200',
+									tr: '',
+								}"
 							/>
 						</div>
 					</div>

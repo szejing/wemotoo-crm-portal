@@ -1,7 +1,5 @@
-import type { TaxInput } from '../../tax';
-
 export type TaxGroupCreate = {
-	code: string | undefined;
-	description: string | undefined;
-	taxes: TaxInput[] | undefined;
+	code: string;
+	description?: string;
+	tax_codes?: string[];
 };
