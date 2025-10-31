@@ -10,7 +10,8 @@
 				</div>
 			</div>
 
-			<SidebarModal />
+			<!-- mobile -->
+			<!-- <SidebarModal /> -->
 
 			<template #fallback>
 				<div class="w-full h-svh flex-col-center bg-primary-500">
