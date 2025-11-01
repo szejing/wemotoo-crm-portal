@@ -1,28 +1,37 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="flex-jbetween-icenter">
-			<h2 class="my-6">Update Tax Rule</h2>
-		</div>
-		<div class="wrapper-grid">
-			<UCard>
-				<template #header>
-					<div class="flex-between">
-						<h2>Tax Rule</h2>
-						<UButton color="error" variant="ghost" @click="deleteTaxRule">Delete</UButton>
-					</div>
+	<UDashboardPanel id="taxes-rules">
+		<template #header>
+			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
 				</template>
-				<FormTaxRuleUpdate
-					v-if="current_tax_rule"
-					:current-tax-rule="current_tax_rule"
-					@select-detail="selectDetail"
-					@delete-detail="deleteDetail"
-					@update="onUpdate"
-				/>
-				<div v-else><ZLoading /></div>
-			</UCard>
-		</div>
-	</div>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="flex-jbetween-icenter">
+				<h2 class="my-6">Update Tax Rule</h2>
+			</div>
+			<div class="wrapper-grid">
+				<UCard>
+					<template #header>
+						<div class="flex-between">
+							<h2>Tax Rule</h2>
+							<UButton color="error" variant="ghost" @click="deleteTaxRule">Delete</UButton>
+						</div>
+					</template>
+					<FormTaxRuleUpdate
+						v-if="current_tax_rule"
+						:current-tax-rule="current_tax_rule"
+						@select-detail="selectDetail"
+						@delete-detail="deleteDetail"
+						@update="onUpdate"
+					/>
+					<div v-else><ZLoading /></div>
+				</UCard>
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -46,18 +55,6 @@ onMounted(async () => {
 });
 
 useHead({ title: 'Wemotoo CRM - Tax Rule #' + current_tax_rule.value?.code });
-
-const links = [
-	{
-		label: 'Taxes',
-		icon: ICONS.TAX,
-		to: '/taxes',
-	},
-	{
-		label: 'Tax Rules',
-		to: '/taxes/rules',
-	},
-];
 
 const overlay = useOverlay();
 

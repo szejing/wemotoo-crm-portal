@@ -1,24 +1,33 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="flex-jbetween-icenter">
-			<h2 class="my-6">Add Tax Rule</h2>
-		</div>
-		<div class="wrapper-grid">
-			<UCard>
-				<template #header>
-					<h2>New Tax Rule</h2>
+	<UDashboardPanel id="taxes-rules-create">
+		<template #header>
+			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
 				</template>
-				<FormTaxRuleCreation
-					:adding="adding"
-					:new-tax-rule="new_tax_rule"
-					@create-tax-rule="createTaxRule"
-					@select-detail="selectRuleDetail"
-					@delete-detail="deleteRuleDetail"
-				/>
-			</UCard>
-		</div>
-	</div>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="flex-jbetween-icenter">
+				<h2 class="my-6">Add Tax Rule</h2>
+			</div>
+			<div class="wrapper-grid">
+				<UCard>
+					<template #header>
+						<h2>New Tax Rule</h2>
+					</template>
+					<FormTaxRuleCreation
+						:adding="adding"
+						:new-tax-rule="new_tax_rule"
+						@create-tax-rule="createTaxRule"
+						@select-detail="selectRuleDetail"
+						@delete-detail="deleteRuleDetail"
+					/>
+				</UCard>
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -36,22 +45,6 @@ useHead({ title: 'Wemotoo CRM - Create Tax Rule' });
 onMounted(() => {
 	taxRuleStore.resetNewTaxRule();
 });
-
-const links = [
-	{
-		label: 'Taxes',
-		icon: ICONS.TAX,
-		to: '/taxes',
-	},
-	{
-		label: 'Tax Rules',
-		to: '/taxes/rules',
-	},
-	{
-		label: 'New Tax Rule',
-		to: '/taxes/rules/create',
-	},
-];
 
 const selectRuleDetail = (detail: TaxRuleDetail | undefined) => {
 	const taxRuleDetailModal = overlay.create(ZModalTaxRuleDetail, {

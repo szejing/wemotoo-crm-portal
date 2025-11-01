@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="base">
+	<UDashboardPanel id="products-brands">
+		<template #header>
+			<UDashboardNavbar title="Brands" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<div class="sm:col-span-2">
 				<UCard>
 					<h2>Add New Brand</h2>
@@ -24,27 +31,14 @@
 					</div>
 				</UCard>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { ZModalBrandDetail, ZModalConfirmation } from '#components';
 import { brand_columns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
-
-const links = [
-	{
-		label: 'Products',
-		icon: ICONS.LIST,
-		to: '/products',
-	},
-	{
-		label: 'All Brands',
-		icon: ICONS.ADDITIONAL,
-		to: '/products/brands',
-	},
-];
 
 const overlay = useOverlay();
 const brandStore = useBrandStore();

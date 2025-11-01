@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="orders">
+		<template #header>
+			<UDashboardNavbar title="Home" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterOrders />
 			<UCard class="mt-4">
 				<div class="flex-jbetween-icenter">
@@ -43,8 +50,8 @@
 					<UPagination :default-page="current_page" :items-per-page="filter.page_size" :total="orders.length" @update:page="updatePage" />
 				</div>
 			</UCard>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -53,28 +60,12 @@ import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
 import type { Order } from '~/utils/types/order';
 
-const links = [
-	{
-		label: 'Orders',
-		icon: ICONS.ORDER,
-		to: '/',
-	},
-	{
-		label: 'All Orders',
-		icon: ICONS.LIST,
-		to: '/products',
-	},
-];
-
 useHead({ title: 'Wemotoo CRM - Orders' });
 
 const orderStore = useOrderStore();
 const { orders, filter, loading, exporting } = storeToRefs(orderStore);
-
 const current_page = computed(() => filter.value.current_page);
-
 const selectedTab = ref(0);
-
 const tabItems = [
 	{
 		label: 'All',

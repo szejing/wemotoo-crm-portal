@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="payment-types">
+		<template #header>
+			<UDashboardNavbar title="Payment Types" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterPaymentTypeGroups />
 
 			<UCard class="mt-4">
@@ -16,26 +23,13 @@
 					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_payment_type_groups" @update:page="updatePage" />
 				</div>
 			</UCard>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { payment_type_group_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Payment',
-		icon: ICONS.LIST,
-		to: '/payment',
-	},
-	{
-		label: 'Payment Types',
-		icon: ICONS.PAYMENT_METHODS,
-		to: '/payment/types',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Payment Types' });
 

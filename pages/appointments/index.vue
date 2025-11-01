@@ -1,12 +1,19 @@
 <!-- eslint-disable indent -->
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="mt-4 grid grid-cols-1 lg:grid-cols-4 lg:gap-4 space-y-4 lg:space-y-0">
+	<UDashboardPanel id="appointments">
+		<template #header>
+			<UDashboardNavbar title="Appointments" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<!-- Calendar Section -->
-			<div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
+			<!-- <div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
 				<VCalendar expanded borderless :attributes="dates" :columns="1" @dayclick="onDateSelect" @did-move="onMonthChange" />
-			</div>
+			</div> -->
 
 			<!-- Appointments List Section -->
 			<div class="order-2 col-span-3 row-span-2">
@@ -89,22 +96,14 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { AppointmentStatus, getFormattedDate, isFuture, isSameDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
-
-const links = [
-	{
-		label: 'Appointments',
-		icon: ICONS.CALENDAR,
-		to: '/',
-	},
-];
 
 const today = new Date();
 const overlay = useOverlay();

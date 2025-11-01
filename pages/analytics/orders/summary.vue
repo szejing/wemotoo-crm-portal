@@ -1,34 +1,17 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
-			<ZSectionFilterOrderSumm />
+	<UDashboardPanel id="analytics-orders-summary">
+		<template #header>
+			<UDashboardNavbar title="Analytics Orders Summary" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-			<!-- Loading State -->
-			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-neutral-500">Loading...</div>
-			</div>
-
-			<!-- Empty State -->
-			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
-				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
-					<span class="text-neutral-500">No order data found</span>
-				</div>
-			</UCard>
-
+		<template #body>
 			<!-- Grouped by Date -->
-			<div v-else class="mt-4">
+			<div class="mt-4">
 				<UCard class="overflow-hidden">
-					<template #header>
-						<div class="flex-jend">
-							<UButton :disabled="order_summ.exporting" :loading="order_summ.exporting" @click="exportOrderSummaryToCsv">
-								<UIcon :name="ICONS.EXCEL" class="size-5" />
-								Export
-							</UButton>
-						</div>
-					</template>
-
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
 						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
@@ -74,31 +57,13 @@
 					</div>
 				</UCard>
 			</div>
-
-			<!-- Pagination -->
-			<div v-if="data.length > 0" class="mt-6 flex justify-center">
-				<UPagination :default-page="current_page" :items-per-page="order_summ.page_size" :total="order_summ.total_data" @update:page="updatePage" />
-			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { getFormattedDate } from 'wemotoo-common';
 import { order_summ_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		label: 'Order Summary',
-		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/summary',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Order Summary' });
 

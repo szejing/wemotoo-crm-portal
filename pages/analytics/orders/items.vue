@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="analytics-orders-items">
+		<template #header>
+			<UDashboardNavbar title="Analytics Orders Items" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterOrderSummItems />
 
 			<!-- Column Selector -->
@@ -83,26 +90,13 @@
 			<div v-if="data.length > 0" class="mt-6 flex justify-center">
 				<UPagination :default-page="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
 import { order_summ_item_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		label: 'Order Item Reports',
-		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/items',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Order Item Summary' });
 

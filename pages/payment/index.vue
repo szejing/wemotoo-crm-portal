@@ -1,8 +1,17 @@
 <template>
-	<div class="space-y-8">
-		<h2 class="font-bold">Payment Management</h2>
-		<ZMenu :navigations="payment_navigations" />
-	</div>
+	<UDashboardPanel id="payment">
+		<template #header>
+			<UDashboardNavbar title="Payment Management" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<ZMenu :navigations="payment_navigations" />
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>

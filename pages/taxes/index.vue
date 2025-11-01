@@ -1,8 +1,17 @@
 <template>
-	<div class="space-y-8">
-		<h2 class="font-bold">Tax Management</h2>
-		<ZMenu :navigations="tax_navigations" />
-	</div>
+	<UDashboardPanel id="taxes">
+		<template #header>
+			<UDashboardNavbar title="Tax Management" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<ZMenu :navigations="tax_navigations" />
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>

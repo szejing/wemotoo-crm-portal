@@ -1,15 +1,25 @@
 <template>
-	<div class="space-y-8">
-		<div>
-			<h2 class="font-bold">Order Report</h2>
-			<ZMenu :navigations="order_navigations" />
-		</div>
+	<UDashboardPanel id="analytics">
+		<template #header>
+			<UDashboardNavbar title="Analytics" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-		<div class="mt-8">
-			<h2 class="font-bold">Sales Report</h2>
-			<ZMenu :navigations="sales_navigations" />
-		</div>
-	</div>
+		<template #body>
+			<div>
+				<h3>Order Analytics</h3>
+				<ZMenu :navigations="order_navigations" class="mt-4" />
+			</div>
+
+			<div>
+				<h3>Sales Analytics</h3>
+				<ZMenu :navigations="sales_navigations" class="mt-4" />
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -21,11 +31,6 @@ const order_navigations = [
 		icon: ICONS.REPORT_ORDER,
 		to: '/analytics/orders/summary',
 	},
-	// {
-	// 	title: 'Order Detail Listing',
-	// 	icon: ICONS.REPORT_ORDER,
-	// 	to: '/analytics/orders/detail-listing',
-	// },
 	{
 		title: 'Order Item',
 		icon: ICONS.REPORT_ORDER,

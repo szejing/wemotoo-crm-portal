@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="analytics-sales-payments">
+		<template #header>
+			<UDashboardNavbar title="Analytics Sales Payments" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterSaleSummPayments />
 
 			<!-- Loading State -->
@@ -103,27 +110,14 @@
 					@update:page="updatePage"
 				/>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { SaleStatus, getFormattedDate } from 'wemotoo-common';
 import OrderStatus from '~/components/Z/SelectMenu/OrderStatus.vue';
 import { sale_summ_payment_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		label: 'Payment Reports',
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/payments',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Sale Payment Summary' });
 

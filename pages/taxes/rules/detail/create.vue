@@ -1,32 +1,25 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="flex-jbetween-icenter">
-			<h2 class="my-6">Add Tax Rule</h2>
-		</div>
-		<div class="wrapper-grid">
-			<FormTaxRuleCreation :adding="false" :new-tax-rule="new_tax_rule" />
-		</div>
-	</div>
+	<UDashboardPanel id="taxes-rules-detail-create">
+		<template #header>
+			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="flex-jbetween-icenter">
+				<h2 class="my-6">Add Tax Rule</h2>
+			</div>
+			<div class="wrapper-grid">
+				<FormTaxRuleCreation :adding="false" :new-tax-rule="new_tax_rule" />
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup>
-const links = [
-	{
-		label: 'Taxes',
-		icon: ICONS.TAX,
-		to: '/taxes',
-	},
-	{
-		label: 'Tax Rules',
-		to: '/taxes/rules',
-	},
-	{
-		label: 'New Tax Rule',
-		to: '/taxes/rules/create',
-	},
-];
-</script>
+<script lang="ts" setup></script>
 
 <style scoped>
 .wrapper-grid {

@@ -12,18 +12,14 @@ export function isNumeric(value: any): boolean {
 	return !isNaN(parseFloat(value)) && isFinite(value as any);
 }
 
-export function formatCurrency(value: number, fractionDigits: number = 2): string {
+export function formatCurrency(value: number, currency: string = 'MYR', fractionDigits: number = 2): string {
 	if (value === null || value === undefined) {
 		throw new Error('value cannot be null or undefined');
 	}
 
-	// Convert cents into hundreds.
-	value = value / 100;
+	const formatter = Intl.NumberFormat('en-MY', { style: 'currency', currency, maximumFractionDigits: fractionDigits });
 
-	// Format the number to the specified fraction digits
-	const formattedValue = value.toFixed(fractionDigits);
-
-	return formattedValue;
+	return formatter.format(value);
 }
 
 export const capitalizeFirstLetter = (value: string | any) => {

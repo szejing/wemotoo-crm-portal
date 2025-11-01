@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="analytics-orders-customers">
+		<template #header>
+			<UDashboardNavbar title="Analytics Orders Customers" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterOrderSummCustomers />
 			<UCard class="mt-4">
 				<template #header>
@@ -26,25 +33,12 @@
 					/>
 				</div>
 			</UCard>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { order_summ_customer_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		label: 'Order Customer Summary',
-		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/customers',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Order Customer Summary' });
 

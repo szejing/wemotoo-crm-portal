@@ -1,8 +1,17 @@
 <template>
-	<div>
-		<h2 class="font-bold">Services/Products Management</h2>
-		<ZMenu :navigations="product_navigations" />
-	</div>
+	<UDashboardPanel id="products">
+		<template #header>
+			<UDashboardNavbar title="Services/Products Management" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<ZMenu :navigations="product_navigations" />
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>

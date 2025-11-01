@@ -1,66 +1,58 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="pb-4">
-			<DashboardMetricsOverview />
+	<UDashboardPanel id="home">
+		<template #header>
+			<UDashboardNavbar title="Home" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
 
-			<div class="flex items-center justify-between">
-				<h1 class="text-neutral-800 font-normal">
-					Summary
-					<span class="text-neutral-800 font-medium italic underline">{{ getFormattedDate(filterRange.startDate) }}</span>
-					<span class="text-neutral-400 italic"> - </span>
-					<span class="text-neutral-800 font-medium italic underline">{{ getFormattedDate(filterRange.endDate) }}</span>
-				</h1>
-				<ZSelectMenuDatePreset
-					:start-date="filterRange.startDate"
-					:end-date="filterRange.endDate"
-					@update:start-date="updateStartDate"
-					@update:end-date="updateEndDate"
-				/>
-			</div>
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-				<ChartSummOrders class="col-span-1 sm:col-span-2 sm:row-span-2" />
-				<ChartCustomers class="col-span-1" />
-				<ChartProducts class="col-span-1" />
-			</div>
-		</div>
-	</div>
+				<template #right>
+					<UDropdownMenu :items="items">
+						<UButton icon="i-lucide-plus" size="md" class="rounded-full" />
+					</UDropdownMenu>
+				</template>
+			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<DashboardDateRangePicker v-model="range" class="-ms-1" />
+					<DashboardPeriodSelect v-model="period" :range="range" />
+				</template>
+			</UDashboardToolbar>
+		</template>
+
+		<template #body>
+			<DashboardStats />
+			<DashboardOrderAmtChart />
+			<DashboardOrders />
+		</template>
+	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup>
-import { getFormattedDate } from 'wemotoo-common';
+<script setup lang="ts">
+import { sub } from 'date-fns';
+import type { DropdownMenuItem } from '@nuxt/ui';
+import type { Period } from '~/utils/types/period';
+import type { Range } from '~/utils/interface';
 
-const links = [
-	{
-		label: 'Overview',
-		icon: ICONS.DASHBOARD_ROUNDED,
-		to: '/',
-	},
-];
+const items = [
+	[
+		{
+			label: 'New mail',
+			icon: 'i-lucide-send',
+			to: '/inbox',
+		},
+		{
+			label: 'New customer',
+			icon: 'i-lucide-user-plus',
+			to: '/customers',
+		},
+	],
+] satisfies DropdownMenuItem[][];
 
-useHead({ title: 'Wemotoo CRM - Dashboard' });
-
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const last7Days = new Date(today);
-last7Days.setDate(today.getDate() - 7);
-
-const filterRange = ref({
-	startDate: last7Days,
-	endDate: today,
+const range = shallowRef<Range>({
+	start: sub(new Date(), { days: 14 }),
+	end: new Date(),
 });
-
-const updateStartDate = (startDate: Date) => {
-	filterRange.value.startDate = startDate;
-};
-
-const updateEndDate = async (endDate: Date) => {
-	filterRange.value.endDate = endDate;
-
-	const summOrderStore = useSummOrderStore();
-	await summOrderStore.getDashboardSummary(filterRange.value.startDate, filterRange.value.endDate);
-};
+const period = ref<Period>('daily');
 </script>
-
-<style scoped></style>

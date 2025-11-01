@@ -1,54 +1,50 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
-			<UCard class="mt-4">
-				<div class="flex-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
+	<UDashboardPanel id="taxes-rules">
+		<template #header>
+			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-					<div class="flex gap-4">
-						<UButton color="success" @click="navigateTo('/taxes/rules/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
-						</UButton>
-					</div>
-				</div>
-				<!-- Table  -->
-				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select-row="selectTaxRule">
-					<template #empty-state>
-						<div class="flex-col-center section-empty">
-							<h2>No tax code Found</h2>
-							<p>Create a new tax code to get started</p>
+		<template #body>
+			<div class="py-4">
+				<UCard class="mt-4">
+					<div class="flex-between">
+						<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
+
+						<div class="flex gap-4">
+							<UButton color="success" @click="navigateTo('/taxes/rules/create')">
+								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
+								Create
+							</UButton>
 						</div>
-					</template>
-				</UTable>
+					</div>
+					<!-- Table  -->
+					<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select-row="selectTaxRule">
+						<template #empty-state>
+							<div class="flex-col-center section-empty">
+								<h2>No tax code Found</h2>
+								<p>Create a new tax code to get started</p>
+							</div>
+						</template>
+					</UTable>
 
-				<!-- Pagination  -->
-				<div v-if="tax_rules.length > 0" class="section-pagination">
-					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tax_rules" @update:page="updatePage" />
-				</div>
-			</UCard>
-		</div>
-	</div>
+					<!-- Pagination  -->
+					<div v-if="tax_rules.length > 0" class="section-pagination">
+						<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tax_rules" @update:page="updatePage" />
+					</div>
+				</UCard>
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { tax_rule_columns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
-
-const links = [
-	{
-		label: 'Taxes',
-		icon: ICONS.TAX,
-		to: '/taxes',
-	},
-	{
-		label: 'All Tax Rules',
-		icon: ICONS.LIST,
-		to: '/taxes/rules',
-	},
-];
 
 const taxRuleStore = useTaxRuleStore();
 
@@ -63,14 +59,6 @@ const { loading, tax_rules, page_size, current_page, total_tax_rules } = storeTo
 const rows = computed(() => {
 	return tax_rules.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
-
-const getAmountTypeLabel = (amountType: string) => {
-	const labels: Record<string, string> = {
-		gross_amount: 'Gross Amt',
-		net_amount: 'Net Amt',
-	};
-	return labels[amountType] || amountType;
-};
 
 const selectTaxRule = async (taxRule: TaxRule) => {
 	if (!taxRule) return;

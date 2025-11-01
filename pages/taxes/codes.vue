@@ -1,37 +1,46 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="base">
-			<div class="sm:col-span-2">
-				<UCard>
-					<h2>Add New Tax</h2>
-					<FormTaxCreation class="mt-4" />
-				</UCard>
-			</div>
+	<UDashboardPanel id="taxes-codes">
+		<template #header>
+			<UDashboardNavbar title="Tax Codes" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-			<div class="sm:col-span-4">
-				<UCard>
-					<ZSectionFilteroutlet />
-					<div>
-						<!-- Table  -->
-						<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select-row="selectTax">
-							<template #empty-state>
-								<div class="flex-col-center section-empty">
-									<h2>No tax code Found</h2>
-									<p>Create a new tax code to get started</p>
-								</div>
-							</template>
-						</UTable>
+		<template #body>
+			<div class="base">
+				<div class="sm:col-span-2">
+					<UCard>
+						<h2>Add New Tax</h2>
+						<FormTaxCreation class="mt-4" />
+					</UCard>
+				</div>
 
-						<!-- Pagination  -->
-						<div v-if="taxes.length > 0" class="section-pagination">
-							<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_taxes" @update:page="updatePage" />
+				<div class="sm:col-span-4">
+					<UCard>
+						<ZSectionFilteroutlet />
+						<div>
+							<!-- Table  -->
+							<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select-row="selectTax">
+								<template #empty-state>
+									<div class="flex-col-center section-empty">
+										<h2>No tax code Found</h2>
+										<p>Create a new tax code to get started</p>
+									</div>
+								</template>
+							</UTable>
+
+							<!-- Pagination  -->
+							<div v-if="taxes.length > 0" class="section-pagination">
+								<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_taxes" @update:page="updatePage" />
+							</div>
 						</div>
-					</div>
-				</UCard>
+					</UCard>
+				</div>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>

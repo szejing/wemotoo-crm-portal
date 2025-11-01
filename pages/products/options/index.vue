@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="base">
+	<UDashboardPanel id="products-options">
+		<template #header>
+			<UDashboardNavbar title="Options" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<div class="sm:col-span-2">
 				<UCard>
 					<h2>Add New Option</h2>
@@ -24,8 +31,8 @@
 					</div>
 				</UCard>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
@@ -33,19 +40,6 @@ import { ZModalConfirmation, ZModalOptionDetail } from '#components';
 import { product_option_columns } from '~/utils/table-columns';
 import type { ProductOption } from '~/utils/types/product-option';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
-
-const links = [
-	{
-		label: 'Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-	},
-	{
-		label: 'All Options',
-		icon: ICONS.LIST,
-		to: '/products/options',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Options' });
 

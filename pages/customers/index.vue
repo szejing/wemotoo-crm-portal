@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="customers">
+		<template #header>
+			<UDashboardNavbar title="Customers" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterCustomers />
 
 			<UCard class="mt-4">
@@ -37,22 +44,14 @@
 					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_customers" @update:page="updatePage" />
 				</div>
 			</UCard>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { customer_columns } from '~/utils/table-columns';
 import type { Customer } from '~/utils/types/customer';
-
-const links = [
-	{
-		label: 'Customers',
-		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
-		to: '/',
-	},
-];
 
 const customerStore = useCustomerStore();
 

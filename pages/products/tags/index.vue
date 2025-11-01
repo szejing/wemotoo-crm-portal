@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="base">
+	<UDashboardPanel id="products-tags">
+		<template #header>
+			<UDashboardNavbar title="Tags" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<div class="sm:col-span-2">
 				<UCard>
 					<h2>Add New Tag</h2>
@@ -23,27 +30,14 @@
 					</div>
 				</UCard>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
 import { tag_columns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
-
-const links = [
-	{
-		label: 'Products',
-		icon: ICONS.LIST,
-		to: '/products',
-	},
-	{
-		label: 'All Tags',
-		icon: ICONS.ADDITIONAL,
-		to: '/products/tags',
-	},
-];
 
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();

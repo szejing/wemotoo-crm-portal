@@ -1,86 +1,95 @@
 <template>
-	<div>
-		<ZLoading v-if="is_loading" />
+	<UDashboardPanel id="orders-detail">
+		<template #header>
+			<UDashboardNavbar title="Order Detail" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-		<div v-else class="wrapper-grid">
-			<div class="main-wrapper">
-				<div class="flex-jbetween-icenter w-full mt-4">
-					<div>
-						<h2 class="font-light">Order #{{ order?.order_no }}</h2>
-						<h2 v-if="order?.order_date_time">Date Time: {{ getFormattedDate(order?.order_date_time, 'dd MMM yyyy HH:mm') }}</h2>
+		<template #body>
+			<ZLoading v-if="is_loading" />
+			<div v-else class="wrapper-grid">
+				<div class="main-wrapper">
+					<div class="flex-jbetween-icenter w-full mt-4">
+						<div>
+							<h2 class="font-light">Order #{{ order?.order_no }}</h2>
+							<h2 v-if="order?.order_date_time">Date Time: {{ getFormattedDate(order?.order_date_time, 'dd MMM yyyy HH:mm') }}</h2>
+						</div>
+						<div>
+							<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info">PENDING PAYMENT</UBadge>
+							<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info">PROCESSING</UBadge>
+							<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
+							<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning">REQUIRES ACTION</UBadge>
+							<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error">REFUNDED</UBadge>
+							<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error">CANCELLED</UBadge>
+						</div>
 					</div>
-					<div>
-						<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info">PENDING PAYMENT</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info">PROCESSING</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success">COMPLETED</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning">REQUIRES ACTION</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error">REFUNDED</UBadge>
-						<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error">CANCELLED</UBadge>
+					<div class="flex flex-col gap-4 w-full mt-4">
+						<!-- Customer Detail -->
+						<UCard>
+							<template #header>
+								<div class="flex-between">
+									<h2 class="text-main">Customer</h2>
+									<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" @click="editCustomerDetail" />
+								</div>
+							</template>
+							<ZSectionOrderDetailCustomer :customer="customer" />
+						</UCard>
+
+						<!-- Order Detail -->
+						<UCard>
+							<template #header>
+								<div class="flex-between">
+									<h2 class="text-main">Items</h2>
+									<UPopover v-if="order?.status !== OrderStatus.PENDING_PAYMENT" overlay>
+										<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
+
+										<template #content>
+											<div class="p-4">
+												<p>
+													This order is no longer editable.<br />
+													Please switch <b class="text-main">Order Status</b> to <b class="text-main">Pending Payment</b> if you want to edit this order.
+												</p>
+											</div>
+										</template>
+									</UPopover>
+								</div>
+							</template>
+
+							<ZSectionOrderDetailItems
+								:items="items ?? []"
+								:currency-code="currency_code"
+								:total-gross-amt="order?.gross_amt"
+								:total-net-amt="order?.net_total"
+								:taxes="order?.taxes ?? []"
+								:editable="order?.status == OrderStatus.PENDING_PAYMENT"
+								@refresh="getOrder(order?.order_no as string)"
+							/>
+						</UCard>
 					</div>
 				</div>
-				<div class="flex flex-col gap-4 w-full mt-4">
-					<!-- Customer Detail -->
-					<UCard>
-						<template #header>
-							<div class="flex-between">
-								<h2 class="text-main">Customer</h2>
-								<UButton variant="ghost" class="flex-none" square :icon="ICONS.VERTICAL_ELLIPSIS" size="sm" @click="editCustomerDetail" />
-							</div>
-						</template>
-						<ZSectionOrderDetailCustomer :customer="customer" />
-					</UCard>
-
-					<!-- Order Detail -->
-					<UCard>
-						<template #header>
-							<div class="flex-between">
-								<h2 class="text-main">Items</h2>
-								<UPopover v-if="order?.status !== OrderStatus.PENDING_PAYMENT" overlay>
-									<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
-
-									<template #content>
-										<div class="p-4">
-											<p>
-												This order is no longer editable.<br />
-												Please switch <b class="text-main">Order Status</b> to <b class="text-main">Pending Payment</b> if you want to edit this order.
-											</p>
-										</div>
-									</template>
-								</UPopover>
-							</div>
-						</template>
-
-						<ZSectionOrderDetailItems
-							:items="items ?? []"
-							:currency-code="currency_code"
-							:total-gross-amt="order?.gross_amt"
-							:total-net-amt="order?.net_total"
-							:taxes="order?.taxes ?? []"
-							:editable="order?.status == OrderStatus.PENDING_PAYMENT"
-							@refresh="getOrder(order?.order_no as string)"
-						/>
-					</UCard>
+				<div v-if="order !== undefined" class="side-wrapper">
+					<ZInputOrderSidebar
+						:update-order-status="
+							async (status: OrderStatus) => {
+								await updateOrderStatus(status);
+							}
+						"
+						:order="order"
+						:update-payment-status="
+							async (status: PaymentStatus) => {
+								await updatePaymentStatus(status);
+							}
+						"
+						:add-payment-info="addPaymentInfo"
+						:view-payment-info="viewPaymentInfo"
+					/>
 				</div>
 			</div>
-			<div v-if="order !== undefined" class="side-wrapper">
-				<ZInputOrderSidebar
-					:update-order-status="
-						async (status: OrderStatus) => {
-							await updateOrderStatus(status);
-						}
-					"
-					:order="order"
-					:update-payment-status="
-						async (status: PaymentStatus) => {
-							await updatePaymentStatus(status);
-						}
-					"
-					:add-payment-info="addPaymentInfo"
-					:view-payment-info="viewPaymentInfo"
-				/>
-			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>

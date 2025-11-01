@@ -1,50 +1,46 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="base">
-			<div class="sm:col-span-2">
-				<UCard>
-					<h2>Add New Category</h2>
-					<FormProductCategoryCreation class="mt-4" />
-				</UCard>
-			</div>
+	<UDashboardPanel id="products-categories">
+		<template #header>
+			<UDashboardNavbar title="Categories" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
 
-			<div class="sm:col-span-4">
-				<UCard>
-					<ZSectionFilterCategories />
+		<template #body>
+			<div class="base">
+				<div class="sm:col-span-2">
+					<UCard>
+						<h2>Add New Category</h2>
+						<FormProductCategoryCreation class="mt-4" />
+					</UCard>
+				</div>
 
-					<div class="mt-4">
-						<!-- Table  -->
-						<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory" />
+				<div class="sm:col-span-4">
+					<UCard>
+						<ZSectionFilterCategories />
 
-						<!-- Pagination  -->
-						<div v-if="categories.length > 0" class="section-pagination">
-							<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_categories" @update:page="updatePage" />
+						<div class="mt-4">
+							<!-- Table  -->
+							<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory" />
+
+							<!-- Pagination  -->
+							<div v-if="categories.length > 0" class="section-pagination">
+								<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_categories" @update:page="updatePage" />
+							</div>
 						</div>
-					</div>
-				</UCard>
+					</UCard>
+				</div>
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
 import { category_columns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
-
-const links = [
-	{
-		label: 'Products',
-		icon: ICONS.LIST,
-		to: '/products',
-	},
-	{
-		label: 'All Categories',
-		icon: ICONS.CATEGORY,
-		to: '/products/categories',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Categories' });
 

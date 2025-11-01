@@ -2,6 +2,129 @@ import { defineStore } from 'pinia';
 import type { ToastNotification } from '~/utils/types/event-notification';
 import type { Navigation } from '~/utils/types/navigation.ts';
 
+// Grouped navigation structure for UDashboardGroup
+const merchantNavigationGrouped = [
+	// Main section
+	{
+		label: 'Main',
+		links: [
+			{
+				label: 'Overview',
+				icon: ICONS.DASHBOARD_ROUNDED,
+				to: '/',
+			},
+			{
+				label: 'Analytics',
+				icon: ICONS.ANALYTICS,
+				to: '/analytics',
+			},
+		],
+	},
+	// Business Operations section
+	{
+		label: 'Business Operations',
+		links: [
+			{
+				label: 'Appointments',
+				icon: ICONS.CALENDAR,
+				to: '/appointments',
+			},
+			{
+				label: 'Booking/Orders',
+				icon: ICONS.ORDER,
+				to: '/orders',
+			},
+			{
+				label: 'Services/Products',
+				icon: ICONS.PRODUCT,
+				to: '/products',
+				children: [
+					{
+						label: 'All Products',
+						to: '/products',
+					},
+					{
+						label: 'Categories',
+						to: '/products/categories',
+					},
+					{
+						label: 'Brands',
+						to: '/products/brands',
+					},
+					{
+						label: 'Tags',
+						to: '/products/tags',
+					},
+					{
+						label: 'Options',
+						to: '/products/options',
+					},
+				],
+			},
+			{
+				label: 'Customers',
+				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
+				to: '/customers',
+			},
+		],
+	},
+	// Configuration section
+	{
+		label: 'Configuration',
+		links: [
+			{
+				label: 'Outlets',
+				icon: ICONS.OUTLET,
+				to: '/outlets',
+			},
+			{
+				label: 'Payment',
+				icon: ICONS.PAYMENT_METHODS,
+				to: '/payment',
+				children: [
+					{
+						label: 'Overview',
+						to: '/payment',
+					},
+					{
+						label: 'Payment Methods',
+						to: '/payment/methods',
+					},
+					{
+						label: 'Payment Types',
+						to: '/payment/types',
+					},
+				],
+			},
+			{
+				label: 'Tax',
+				icon: ICONS.TAX,
+				to: '/taxes',
+				children: [
+					{
+						label: 'Overview',
+						to: '/taxes',
+					},
+					{
+						label: 'Tax Codes',
+						to: '/taxes/codes',
+					},
+					{
+						label: 'Tax Groups',
+						to: '/taxes/groups',
+					},
+				],
+			},
+			{
+				label: 'Settings',
+				icon: ICONS.SETTINGS_ROUNDED,
+				to: '/settings',
+			},
+		],
+	},
+];
+
+// Flat navigation (legacy - kept for backward compatibility)
 const merchantNavigation = [
 	{
 		title: 'Overview',
@@ -67,19 +190,15 @@ const merchantNavigation = [
 export const useAppUiStore = defineStore('appUiStore', {
 	state: () => ({
 		forcedShow: true as boolean,
-		showSidebar: true as boolean,
-		showSidebarModal: false as boolean,
+		showSidebar: false as boolean,
 		navigations: merchantNavigation as Array<Navigation>,
+		navigationGroups: merchantNavigationGrouped,
 		toastNotification: undefined as ToastNotification | undefined,
 		modal: undefined as ToastNotification | undefined,
 	}),
 	actions: {
 		toggleSidebar() {
 			this.showSidebar = !this.showSidebar;
-		},
-
-		toggleSidebarModal() {
-			this.showSidebarModal = !this.showSidebarModal;
 		},
 
 		showToast(notification: ToastNotification) {

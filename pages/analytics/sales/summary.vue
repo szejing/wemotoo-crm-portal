@@ -1,7 +1,14 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="py-4">
+	<UDashboardPanel id="analytics-sales-summary">
+		<template #header>
+			<UDashboardNavbar title="Analytics Sales Summary" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
 			<ZSectionFilterSaleSumm />
 
 			<!-- Loading State -->
@@ -103,26 +110,13 @@
 			<div v-if="data.length > 0" class="mt-6 flex justify-center">
 				<UPagination :default-page="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
 			</div>
-		</div>
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
 import { SaleStatus, getFormattedDate } from 'wemotoo-common';
 import { sale_summ_columns } from '~/utils/table-columns';
-
-const links = [
-	{
-		label: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		label: 'Sales Summary',
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/summary',
-	},
-];
 
 useHead({ title: 'Wemotoo CRM - Sale Summary' });
 

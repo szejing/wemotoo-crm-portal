@@ -2,6 +2,7 @@ type SummOrderTxnDaily_ = {
 	biz_date: string;
 	total_orders: number;
 	total_qty: number;
+	total_net_amt: number;
 	currency_code: string;
 };
 
