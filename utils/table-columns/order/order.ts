@@ -7,28 +7,28 @@ import type { OrderHistory } from '~/repository/modules/order/models/response/ge
 export const order_columns: TableColumn<OrderHistory>[] = [
 	{
 		accessorKey: 'index',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'No.'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'No.'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.index + 1)]);
+			return h('div', [h('p', row.index + 1)]);
 		},
 	},
 	{
 		accessorKey: 'biz_date',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Date'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Date'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.biz_date)]);
+			return h('div', [h('p', row.original.biz_date)]);
 		},
 	},
 	{
 		accessorKey: 'order_no',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Order No'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Order No'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.order_no)]);
+			return h('div', [h('p', row.original.order_no)]);
 		},
 	},
 	{
 		accessorKey: 'status',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Status'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Status'),
 		cell: ({ row }) => {
 			const color = {
 				[OrderStatus.COMPLETED]: 'success' as const,
@@ -59,9 +59,9 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'gross_amt',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Gross Amt'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.gross_amt)]);
+			return h('div', [h('p', row.original.gross_amt)]);
 		},
 		meta: {
 			class: {
@@ -72,9 +72,9 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'tax_amt_exc',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Tax Amt Exc'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Tax Amt Exc'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.tax_amt_exc)]);
+			return h('div', [h('p', row.original.tax_amt_exc)]);
 		},
 		meta: {
 			class: {
@@ -85,9 +85,9 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'net_amt',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
+		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Net Amt'),
 		cell: ({ row }) => {
-			return h('div', [h('p', { class: 'text-neutral-900' }, row.original.net_amt)]);
+			return h('div', [h('p', row.original.net_amt)]);
 		},
 		meta: {
 			class: {

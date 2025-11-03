@@ -187,23 +187,23 @@ html {
 
 	/**************************** word styling ****************************/
 	h1 {
-		@apply font-semibold text-2xl text-secondary-600;
+		@apply font-semibold text-2xl text-gray-900 dark:text-gray-100;
 	}
 
 	h2 {
-		@apply font-semibold text-xl text-secondary-600;
+		@apply font-semibold text-xl text-gray-800 dark:text-gray-200;
 	}
 
 	h3 {
-		@apply font-semibold text-base text-secondary-600;
+		@apply font-semibold text-base text-gray-800 dark:text-gray-200;
 	}
 
 	h4 {
-		@apply font-medium text-base text-secondary-600;
+		@apply font-medium text-base text-gray-700 dark:text-gray-300;
 	}
 
 	p {
-		@apply font-normal text-base;
+		@apply font-normal text-base text-gray-600 dark:text-gray-400;
 	}
 
 	/**************************** container styling ****************************/

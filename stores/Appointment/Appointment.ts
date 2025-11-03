@@ -1,7 +1,29 @@
+import { options_page_size } from '~/utils/options';
 import { defineStore } from 'pinia';
-import type { Appointment } from '~/utils/types/appointment';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import { AppointmentStatus } from 'wemotoo-common';
+import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
+import type { Range } from '~/utils/interface';
+import { add, sub } from 'date-fns';
+import type { Appointment } from '~/utils/types/appointment';
+
+type AppointmentFilter = {
+	query: string;
+	status: AppointmentStatus | string;
+	date_range: Range;
+	page_size: number;
+	current_page: number;
+};
+
+const initialEmptyAppointmentFilter: AppointmentFilter = {
+	query: '',
+	status: 'All',
+	date_range: {
+		start: sub(new Date(), { days: 14 }),
+		end: add(new Date(), { days: 14 }),
+	},
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
 
 export const useAppointmentStore = defineStore('appointmentStore', {
 	state: () => ({
@@ -10,44 +32,52 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 		updating: false as boolean,
 		appointments: [] as Appointment[],
 		errors: [] as string[],
+		filter: initialEmptyAppointmentFilter,
 	}),
 	actions: {
-		async getAppointments(months?: number | number[]) {
+		async getAppointments() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				// eq = equal, ne = not equal
-				// exclude completed
-				let filter = `status eq '${AppointmentStatus.CONFIRMED}'`;
+				let filter = '';
 
-				// Add status filter if provided
-
-				// Handle months filter
-				if (months !== undefined) {
-					const monthsArray = Array.isArray(months) ? months : [months];
-					const currentYear = new Date().getFullYear();
-
-					// Create date range filters for each month
-					const dateFilters = monthsArray.map((month) => {
-						const startDate = new Date(currentYear, month - 1, 1); // month - 1 because months are 0-indexed
-						const endDate = new Date(currentYear, month, 0, 23, 59, 59, 999); // Last day of the month
-
-						const startDateStr = startDate.toISOString();
-						const endDateStr = endDate.toISOString();
-
-						return `date_time between '${startDateStr}' and '${endDateStr}'`;
-					});
-
-					const monthFilter = dateFilters.join(' or ');
-
-					if (filter) {
-						filter += ` and (${monthFilter})`;
-					} else {
-						filter = monthFilter;
-					}
+				// For 'All' status, don't add any status filter - let all statuses through
+				if (this.filter.status === 'pending') {
+					filter = `status in ('${AppointmentStatus.PENDING}')`;
+				} else if (this.filter.status === 'confirmed') {
+					filter = `status eq '${AppointmentStatus.CONFIRMED}'`;
+				} else if (this.filter.status === 'completed') {
+					filter = `status eq '${AppointmentStatus.COMPLETED}'`;
+				} else if (this.filter.status === 'cancelled') {
+					filter = `status in ('${AppointmentStatus.CANCELLED}', '${AppointmentStatus.VOIDED}')`;
 				}
 
-				const { data } = await $api.appointment.getMany({ $filter: filter });
+				let { start, end } = this.filter.date_range;
+
+				start = start ?? new Date();
+				end = end ?? new Date();
+
+				// Add date filter
+				const dateFilter = end
+					? `(date_time between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
+					: `date_time le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
+
+				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
+
+				// Add query filter if provided
+				if (this.filter.query) {
+					const queryFilter = `order_no contains '${this.filter.query}'`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.appointment.getMany({
+					$top: this.filter.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$count: true,
+					$filter: filter,
+					// $expand: removeDuplicateExpands(defaultOrderRelations).join(','),
+					$orderby: 'date_time desc',
+				});
 
 				if (data) {
 					this.appointments = data;

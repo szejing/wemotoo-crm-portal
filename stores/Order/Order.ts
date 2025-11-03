@@ -8,12 +8,13 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { PaymentModel } from '~/utils/models/payment.model';
+import type { Range } from '~/utils/interface';
+import { sub } from 'date-fns';
 
 type OrderFilter = {
 	query: string;
 	status: OrderStatus | string;
-	start_date: Date;
-	end_date: Date | undefined;
+	date_range: Range;
 	page_size: number;
 	current_page: number;
 	currency_code: string;
@@ -22,8 +23,10 @@ type OrderFilter = {
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
 	status: 'All',
-	start_date: new Date(),
-	end_date: undefined,
+	date_range: {
+		start: sub(new Date(), { days: 14 }),
+		end: new Date(),
+	},
 	page_size: options_page_size[0] as number,
 	current_page: 1,
 	currency_code: 'MYR',
@@ -76,12 +79,15 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = `status in ('${OrderStatus.CANCELLED}', '${OrderStatus.REFUNDED}')`;
 				}
 
+				let { start, end } = this.filter.date_range;
+
+				start = start ?? new Date();
+				end = end ?? new Date();
+
 				// Add date filter
-				const dateFilter = this.filter.end_date
-					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
-							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
-						}')`
-					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+				const dateFilter = end
+					? `(biz_date between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
+					: `biz_date le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
@@ -260,12 +266,15 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = `status eq '${this.filter.status}'`;
 				}
 
+				let { start, end } = this.filter.date_range;
+
+				start = start ?? new Date();
+				end = end ?? new Date();
+
 				// Add date filter
-				const dateFilter = this.filter.end_date
-					? `(biz_date between '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}' and '${
-							this.filter.end_date ? getFormattedDate(this.filter.end_date, 'yyyy-MM-dd') : undefined
-						}')`
-					: `biz_date le '${getFormattedDate(this.filter.start_date, 'yyyy-MM-dd')}'`;
+				const dateFilter = end
+					? `(biz_date between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
+					: `biz_date le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 

@@ -1,61 +1,95 @@
 <template>
 	<UDashboardPanel id="orders">
 		<template #header>
-			<UDashboardNavbar title="Home" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar title="Orders" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterOrders />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterOrders />
-			<UCard class="mt-4">
-				<div class="flex-jbetween-icenter">
-					<div class="gap-4 hidden sm:flex sm:w-1/2">
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+					<!-- Status Tabs - Desktop -->
+					<div class="hidden sm:flex gap-2">
 						<UButton
 							v-for="(tab, index) in tabItems"
 							:key="tab.value"
 							:variant="selectedTab === index ? 'solid' : 'soft'"
 							:color="selectedTab === index ? 'primary' : 'neutral'"
+							size="sm"
 							@click="selectTab(index)"
 						>
 							{{ tab.label }}
 						</UButton>
 					</div>
 
-					<div class="flex gap-4">
-						<span class="section-page-size">
-							<USelect v-model="filter.page_size" :items="options_page_size" @update:model-value="updatePageSize" />
-						</span>
+					<!-- Table Actions -->
+					<div class="flex items-center gap-3">
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+							<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+						</div>
 
-						<UButton :disabled="exporting" :loading="exporting" @click="exportOrders">
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
+						<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportOrders">
+							<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
 							Export
 						</UButton>
-
-						<!-- <ZSelectMenuTableColumns :columns="order_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" /> -->
 					</div>
 				</div>
 
-				<UTable :data="rows" :columns="order_columns" :loading="loading" class="mt-4" @select-row="selectOrder">
-					<template #empty-state>
-						<div class="flex flex-col items-center justify-center py-6 gap-3">
-							<span class="italic text-sm">No Orders !</span>
-						</div>
-					</template>
-				</UTable>
+				<!-- Orders Table -->
+				<UCard class="[&>div]:p-0!">
+					<UTable
+						:data="rows"
+						:columns="order_columns"
+						:loading="loading"
+						class="[&_tr]:hover:bg-gray-50 dark:[&_tr]:hover:bg-gray-800/50 [&_tr]:cursor-pointer [&_tr]:transition-colors"
+						@select-row="selectOrder"
+					/>
 
-				<div v-if="orders.length > 0" class="section-pagination">
-					<UPagination :default-page="current_page" :items-per-page="filter.page_size" :total="orders.length" @update:page="updatePage" />
-				</div>
-			</UCard>
+					<!-- Pagination -->
+					<div v-if="orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+						<div class="flex-1 flex justify-between sm:hidden">
+							<UButton variant="outline" size="sm" :disabled="current_page <= 1" @click="updatePage(current_page - 1)"> Previous </UButton>
+							<UButton variant="outline" size="sm" :disabled="current_page * filter.page_size >= orderStore.total_orders" @click="updatePage(current_page + 1)">
+								Next
+							</UButton>
+						</div>
+						<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+							<div class="text-sm text-gray-700 dark:text-gray-300">
+								Showing <span class="font-medium">{{ (current_page - 1) * filter.page_size + 1 }}</span> to
+								<span class="font-medium">{{ Math.min(current_page * filter.page_size, orderStore.total_orders) }}</span> of
+								<span class="font-medium">{{ orderStore.total_orders }}</span> results
+							</div>
+							<UPagination
+								v-model="current_page"
+								:total="orderStore.total_orders"
+								:page-size="filter.page_size"
+								show-last
+								show-first
+								size="sm"
+								@update:model-value="updatePage"
+							/>
+						</div>
+					</div>
+				</UCard>
+			</div>
 		</template>
 	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
-import type { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
 import type { Order } from '~/utils/types/order';
@@ -66,27 +100,32 @@ const orderStore = useOrderStore();
 const { orders, filter, loading, exporting } = storeToRefs(orderStore);
 const current_page = computed(() => filter.value.current_page);
 const selectedTab = ref(0);
-const tabItems = [
+
+const tabItems = computed(() => [
 	{
 		label: 'All',
-		value: 'all',
+		value: 'All',
 	},
 	{
 		label: 'Pending',
-		value: 'pending',
+		value: OrderStatus.PENDING_PAYMENT,
 	},
 	{
 		label: 'Completed',
-		value: 'completed',
+		value: OrderStatus.COMPLETED,
 	},
 	{
 		label: 'Cancelled',
-		value: 'cancelled',
+		value: OrderStatus.CANCELLED,
 	},
-];
+]);
 
-// const selectedColumns = ref(order_columns);
-// const columnsTable = computed(() => order_columns.filter((column) => selectedColumns.value.includes(column)));
+// Load orders on mount
+onMounted(async () => {
+	if (orders.value.length === 0) {
+		await orderStore.getOrders();
+	}
+});
 
 const rows = computed(() => {
 	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
@@ -95,12 +134,13 @@ const rows = computed(() => {
 const selectTab = async (index: number) => {
 	selectedTab.value = index;
 	filter.value.current_page = 1;
-	filter.value.status = tabItems[index]?.value as OrderStatus;
+	filter.value.status = tabItems.value[index]?.value as OrderStatus;
 	await orderStore.getOrders();
 };
 
 const updatePageSize = async (size: number) => {
 	filter.value.page_size = size;
+	filter.value.current_page = 1;
 	await orderStore.getOrders();
 };
 

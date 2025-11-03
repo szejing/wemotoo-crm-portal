@@ -8,26 +8,20 @@
 				<ZSelectMenuDateRange v-model="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
 			</div>
 
-			<!-- Order Number Search -->
+			<!-- Search Filter -->
 			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order No.</label>
-				<UInput v-model="filter.query" placeholder="Search order no..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
-			</div>
-
-			<!-- Currency Filter -->
-			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
-				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
+				<UInput v-model="filter.query" placeholder="Search by name, phone..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Status Filter - Mobile Only -->
 			<div class="flex flex-col gap-1.5 sm:hidden">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Status</label>
-				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+				<USelect v-model="filter.status" :items="statusOptions" @update:model-value="handleStatusChange" />
 			</div>
 
 			<!-- Actions -->
-			<div class="flex flex-col gap-1.5 justify-end">
+			<div class="flex flex-col gap-1.5 justify-end lg:col-start-4">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
@@ -50,44 +44,39 @@
 				color="primary"
 				variant="subtle"
 				size="sm"
-				@click="clearFilter('date')"
+				@click="clearFilter('date_range')"
 			>
 				Date: {{ formatDateRange(filter.date_range) }}
-				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
-			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm" @click="clearFilter('query')">
-				Order: {{ filter.query }}
-				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
-			</UBadge>
-			<UBadge v-if="filter.status && filter.status !== 'all'" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
-				Status: {{ filter.status }}
-				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
-			</UBadge>
-			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm">
-				Currency: {{ filter.currency_code }}
-			</UBadge>
+			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm"> Search: {{ filter.query }} </UBadge>
+			<UBadge v-if="filter.status && filter.status !== 'all'" color="success" variant="subtle" size="sm"> Status: {{ filter.status }} </UBadge>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { AppointmentStatus } from 'wemotoo-common';
 import type { Range } from '~/utils/interface';
-import { sub, format } from 'date-fns';
+import { format } from 'date-fns';
 
-const orderStore = useOrderStore();
-const { filter } = storeToRefs(orderStore);
+const appointmentStore = useAppointmentStore();
+const { loading, filter } = storeToRefs(appointmentStore);
 
-const is_loading = computed(() => orderStore.loading);
+const is_loading = computed(() => loading.value);
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
+const statusOptions = [
+	{ label: 'All', value: 'all' },
+	{ label: 'Pending', value: AppointmentStatus.PENDING },
+	{ label: 'Confirmed', value: AppointmentStatus.CONFIRMED },
+	{ label: 'Completed', value: AppointmentStatus.COMPLETED },
+	{ label: 'Cancelled', value: AppointmentStatus.CANCELLED },
+];
+
+// Check if any filters are active
 const hasActiveFilters = computed(() => {
 	const hasDateFilter = filter.value.date_range && (filter.value.date_range.start || filter.value.date_range.end);
-	return (
-		filter.value.query ||
-		(filter.value.status && filter.value.status !== 'all') ||
-		(filter.value.currency_code && filter.value.currency_code !== 'MYR') ||
-		hasDateFilter
-	);
+	return filter.value.query || (filter.value.status && filter.value.status !== 'all') || hasDateFilter;
 });
 
 const formatDateRange = (range: Range) => {
@@ -100,8 +89,9 @@ const formatDateRange = (range: Range) => {
 	return startDate || endDate;
 };
 
+// Emit events to parent
 const search = async () => {
-	await orderStore.getOrders();
+	await appointmentStore.getAppointments();
 };
 
 const debouncedSearch = () => {
@@ -118,44 +108,40 @@ const handleDateRangeChange = async (newValue: Range) => {
 	await search();
 };
 
-const handleCurrencyChange = async () => {
-	await search();
-};
-
 const handleStatusChange = async () => {
 	await search();
 };
 
 const clearFilters = async () => {
+	filter.value.date_range = {};
 	filter.value.query = '';
 	filter.value.status = 'all';
-	filter.value.currency_code = 'MYR';
-	filter.value.date_range = {
-		start: sub(new Date(), { days: 14 }),
-		end: new Date(),
-	};
-	filter.value.current_page = 1;
 	await search();
 };
 
 const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'query') {
 		filter.value.query = '';
+		await search();
 	} else if (filterKey === 'status') {
 		filter.value.status = 'all';
+		await search();
 	} else if (filterKey === 'date') {
-		filter.value.date_range = {
-			start: sub(new Date(), { days: 14 }),
-			end: new Date(),
-		};
+		filter.value.date_range = {};
+		await search();
 	}
-	await search();
 };
 
 onUnmounted(() => {
 	if (searchTimeout.value) {
 		clearTimeout(searchTimeout.value);
 	}
+});
+
+// Expose methods for parent to call
+defineExpose({
+	clearFilters,
+	filter,
 });
 </script>
 

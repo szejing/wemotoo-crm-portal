@@ -8,6 +8,7 @@ export type Appointment = {
 	code: string;
 	date_time: Date;
 	item_line: number;
+	appt_desc?: string;
 	cart_no?: string;
 	order_no?: string;
 	bill_no?: string;
