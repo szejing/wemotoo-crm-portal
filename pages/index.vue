@@ -15,8 +15,7 @@
 
 			<UDashboardToolbar>
 				<template #left>
-					<DashboardDateRangePicker v-model="range" class="-ms-1" />
-					<DashboardPeriodSelect v-model="period" :range="range" />
+					<ZSelectMenuDateRange v-model="range" class="-ms-1" @update:model-value="updateRange" />
 				</template>
 			</UDashboardToolbar>
 		</template>
@@ -32,7 +31,6 @@
 <script setup lang="ts">
 import { sub } from 'date-fns';
 import type { DropdownMenuItem } from '@nuxt/ui';
-import type { Period } from '~/utils/types/period';
 import type { Range } from '~/utils/interface';
 
 const items = [
@@ -54,5 +52,10 @@ const range = shallowRef<Range>({
 	start: sub(new Date(), { days: 14 }),
 	end: new Date(),
 });
-const period = ref<Period>('daily');
+
+const updateRange = async (newValue: Range) => {
+	range.value = newValue;
+	const summOrderStore = useSummOrderStore();
+	await summOrderStore.getDashboardSummary(range.value);
+};
 </script>

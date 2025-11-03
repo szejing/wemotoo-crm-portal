@@ -10,86 +10,95 @@
 		</template>
 
 		<template #body>
-			<!-- Calendar Section -->
-			<!-- <div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
-				<VCalendar expanded borderless :attributes="dates" :columns="1" @dayclick="onDateSelect" @did-move="onMonthChange" />
-			</div> -->
+			<div class="grid grid-cols-4 gap-4">
+				<!-- Calendar Section -->
+				<div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
+					<UCalendar v-model="selectedDate">
+						<template #day="{ day }">
+							<div class="relative w-full h-full flex items-center justify-center">
+								<span>{{ day.day }}</span>
+								<div v-if="hasAppointments(day)" class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-green-500" />
+							</div>
+						</template>
+					</UCalendar>
+				</div>
 
-			<!-- Appointments List Section -->
-			<div class="order-2 col-span-3 row-span-2">
-				<div class="bg-white rounded-lg border border-neutral-200 p-4 shadow-md">
-					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-lg font-semibold text-neutral-900">Upcoming Appointments</h2>
-						<UIcon v-if="filteredAppointments.length > 0" :name="ICONS.RESET" size="24" class="cursor-pointer" @click="resetFilter" />
-					</div>
-
-					<!-- Loading state -->
-					<ZLoading v-if="appointmentStore.loading" />
-
-					<!-- Empty state -->
-					<div v-else-if="displayedAppointments.length == 0" class="text-center py-8">
-						<div class="text-neutral-500">
-							<h2 class="text-lg font-medium">No appointments found</h2>
-							<p class="text-sm">
-								{{ filteredAppointments.length > 0 ? 'No appointments for the selected date.' : 'Schedule your first appointment to get started.' }}
-							</p>
+				<!-- Appointments List Section -->
+				<div class="order-2 col-span-3 row-span-2">
+					<div class="bg-white rounded-lg border border-neutral-200 p-4 shadow-md">
+						<div class="flex items-center justify-between mb-4">
+							<h2 class="text-lg font-semibold text-neutral-900">Upcoming Appointments</h2>
+							<UIcon v-if="filteredAppointments.length > 0" :name="ICONS.RESET" size="24" class="cursor-pointer" @click="resetFilter" />
 						</div>
-					</div>
 
-					<!-- Appointments list -->
-					<div v-else class="space-y-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
-						<div
-							v-for="appointment in displayedAppointments"
-							:key="appointment.code"
-							:class="['border rounded-lg p-4 transition-colors cursor-pointer']"
-							@click="selectAppointment(appointment)"
-						>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<h3 class="text-lg font-semibold text-secondary-900">
-										{{ appointment.order_no }}
-									</h3>
-									<div class="flex items-center gap-2 mb-2">
-										<div class="w-3 h-3 rounded-full bg-green-500"></div>
-										<h3 class="font-medium text-secondary-900">
-											{{ appointment.customer_name }}
+						<!-- Loading state -->
+						<ZLoading v-if="appointmentStore.loading" />
+
+						<!-- Empty state -->
+						<div v-else-if="displayedAppointments.length == 0" class="text-center py-8">
+							<div class="text-neutral-500">
+								<h2 class="text-lg font-medium">No appointments found</h2>
+								<p class="text-sm">
+									{{ filteredAppointments.length > 0 ? 'No appointments for the selected date.' : 'Schedule your first appointment to get started.' }}
+								</p>
+							</div>
+						</div>
+
+						<!-- Appointments list -->
+						<div v-else class="space-y-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
+							<div
+								v-for="appointment in displayedAppointments"
+								:key="appointment.code"
+								:class="['border rounded-lg p-4 transition-colors cursor-pointer']"
+								@click="selectAppointment(appointment)"
+							>
+								<div class="flex items-start justify-between">
+									<div class="flex-1">
+										<h3 class="text-lg font-semibold text-secondary-900">
+											{{ appointment.order_no }}
 										</h3>
+										<div class="flex items-center gap-2 mb-2">
+											<div class="w-3 h-3 rounded-full bg-green-500"></div>
+											<h3 class="font-medium text-secondary-900">
+												{{ appointment.customer_name }}
+											</h3>
+										</div>
+
+										<div class="space-y-1 text-sm text-secondary-600">
+											<div class="flex items-center gap-2">
+												{{ appointment.customer_phone }}
+											</div>
+
+											<div class="flex items-center gap-2">
+												{{ getFormattedDate(appointment.date_time, 'dd/MM/yyyy HH:mm') }}
+											</div>
+
+											<div v-if="appointment.duration" class="flex items-center gap-2">
+												<span class="text-neutral-400">Duration:</span>
+												{{ appointment.duration }} minutes
+											</div>
+
+											<div v-if="appointment.ref_no" class="flex items-center gap-2">
+												<span class="text-neutral-400">Ref:</span>
+												{{ appointment.ref_no }}
+											</div>
+										</div>
 									</div>
 
-									<div class="space-y-1 text-sm text-secondary-600">
-										<div class="flex items-center gap-2">
-											{{ appointment.customer_phone }}
-										</div>
-
-										<div class="flex items-center gap-2">
-											{{ getFormattedDate(appointment.date_time, 'dd/MM/yyyy HH:mm') }}
-										</div>
-
-										<div v-if="appointment.duration" class="flex items-center gap-2">
-											<span class="text-neutral-400">Duration:</span>
-											{{ appointment.duration }} minutes
-										</div>
-
-										<div v-if="appointment.ref_no" class="flex items-center gap-2">
-											<span class="text-neutral-400">Ref:</span>
-											{{ appointment.ref_no }}
-										</div>
+									<div class="ml-4">
+										<UBadge v-if="appointment.status === AppointmentStatus.CONFIRMED" color="success" variant="subtle">
+											{{ appointment.status.toUpperCase() }}
+										</UBadge>
+										<UBadge v-else-if="appointment.status === AppointmentStatus.PENDING" color="warning" variant="subtle">
+											{{ appointment.status.toUpperCase() }}
+										</UBadge>
+										<UBadge v-else-if="appointment.status === AppointmentStatus.CANCELLED" color="error" variant="subtle">
+											{{ appointment.status.toUpperCase() }}
+										</UBadge>
+										<UBadge v-else-if="appointment.status === AppointmentStatus.COMPLETED" color="info" variant="subtle">
+											{{ appointment.status.toUpperCase() }}
+										</UBadge>
 									</div>
-								</div>
-
-								<div class="ml-4">
-									<UBadge v-if="appointment.status === AppointmentStatus.CONFIRMED" color="success" variant="subtle">
-										{{ appointment.status.toUpperCase() }}
-									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.PENDING" color="warning" variant="subtle">
-										{{ appointment.status.toUpperCase() }}
-									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.CANCELLED" color="error" variant="subtle">
-										{{ appointment.status.toUpperCase() }}
-									</UBadge>
-									<UBadge v-else-if="appointment.status === AppointmentStatus.COMPLETED" color="info" variant="subtle">
-										{{ appointment.status.toUpperCase() }}
-									</UBadge>
 								</div>
 							</div>
 						</div>
@@ -104,6 +113,7 @@
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { AppointmentStatus, getFormattedDate, isFuture, isSameDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
+import type { DateValue } from '@internationalized/date';
 
 const today = new Date();
 const overlay = useOverlay();
@@ -112,6 +122,7 @@ const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 const selectedMonth = ref(today.getMonth() + 1);
 const selectedYear = ref(today.getFullYear());
+const selectedDate = ref<DateValue>();
 
 useHead({ title: 'Appointments' });
 
@@ -139,33 +150,31 @@ const displayedAppointments = computed(() => {
 		.slice(0, 10);
 });
 
-const dates = computed(() => {
-	return appointments.value.map((appointment) => ({
-		key: appointment.code,
-		dot: {
-			color: 'green',
-		},
-		dates: appointment.date_time as any,
-		popover: {
-			label: `${appointment.customer_name} - ${appointment.customer_phone}`,
-		},
-		customData: appointment,
-	}));
+// Get appointments for a specific date
+const getAppointmentsForDate = (date: Date) => {
+	return appointments.value.filter((appointment) => isSameDate(new Date(appointment.date_time), date));
+};
+
+// Check if a date has appointments
+const hasAppointments = (date: DateValue) => {
+	const jsDate = new Date(date.year, date.month - 1, date.day);
+	return getAppointmentsForDate(jsDate).length > 0;
+};
+
+// Watch for date selection changes
+watch(selectedDate, (newDate) => {
+	if (newDate) {
+		const jsDate = new Date(newDate.year, newDate.month - 1, newDate.day);
+		filteredAppointments.value = appointments.value.filter((appointment) => isSameDate(new Date(appointment.date_time), jsDate));
+
+		// Check if month/year changed
+		if (newDate.month !== selectedMonth.value || newDate.year !== selectedYear.value) {
+			selectedMonth.value = newDate.month;
+			selectedYear.value = newDate.year;
+			appointmentStore.getAppointments(selectedMonth.value);
+		}
+	}
 });
-
-const onMonthChange = async (page: any) => {
-	selectedMonth.value = page[0].month;
-	selectedYear.value = page[0].year;
-
-	filteredAppointments.value = [];
-
-	await appointmentStore.getAppointments(selectedMonth.value);
-};
-
-// Handle calendar date selection
-const onDateSelect = (selectedDate: any) => {
-	filteredAppointments.value = appointments.value.filter((appointment) => isSameDate(new Date(appointment.date_time), selectedDate.date));
-};
 
 // Reset filter to show all upcoming appointments
 const resetFilter = () => {
@@ -196,7 +205,8 @@ const selectAppointment = async (appointment: Appointment) => {
 	const appointmentModal = overlay.create(ZModalAppointmentDetail, {
 		props: {
 			appointment: JSON.parse(JSON.stringify(appointment)),
-			onUpdate: async ({ date_time, ref_no, status }) => {
+			onUpdate: async (data: { date_time: string; ref_no: string; status: AppointmentStatus }) => {
+				const { date_time, ref_no, status } = data;
 				await appointmentStore.updateAppointment(appointment.code, date_time, ref_no, status);
 				appointmentModal.close();
 			},

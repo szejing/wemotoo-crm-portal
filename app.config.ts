@@ -7,9 +7,7 @@ export default defineAppConfig({
 	theme,
 	ui: {
 		strategy: 'merge',
-		icons: {
-			loading: 'i-material-symbols-sync-rounded',
-		},
+
 		colors: {
 			primary: theme.main,
 		},

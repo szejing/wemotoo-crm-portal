@@ -18,12 +18,6 @@ const merchantNavigationGrouped = [
 				icon: ICONS.ANALYTICS,
 				to: '/analytics',
 			},
-		],
-	},
-	// Business Operations section
-	{
-		label: 'Business Operations',
-		links: [
 			{
 				label: 'Appointments',
 				icon: ICONS.CALENDAR,
@@ -40,8 +34,12 @@ const merchantNavigationGrouped = [
 				to: '/products',
 				children: [
 					{
-						label: 'All Products',
+						label: 'Overview',
 						to: '/products',
+					},
+					{
+						label: 'Products/Services',
+						to: '/products/listing',
 					},
 					{
 						label: 'Categories',
@@ -66,12 +64,6 @@ const merchantNavigationGrouped = [
 				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 				to: '/customers',
 			},
-		],
-	},
-	// Configuration section
-	{
-		label: 'Configuration',
-		links: [
 			{
 				label: 'Outlets',
 				icon: ICONS.OUTLET,

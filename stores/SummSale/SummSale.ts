@@ -5,6 +5,7 @@ import { initialEmptySaleSumm } from './models/sale-summ.model';
 import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
 import { initialEmptySaleSummPayment } from './models/sale-summ-payments.model';
 import { initialEmptySaleSummCustomer } from './models/sale-summ-customer.model';
+import type { Range } from '~/utils/interface';
 
 export const useSummSaleStore = defineStore('summSaleStore', {
 	state: () => ({
@@ -19,24 +20,26 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 		sale_summ_customer: initialEmptySaleSummCustomer,
 	}),
 	actions: {
-		async getDashboardSummary(start_date?: Date, end_date?: Date) {
+		async getDashboardSummary(range?: Range) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 
-			if (end_date == undefined) {
-				end_date = new Date();
-				end_date.setHours(0, 0, 0, 0);
+			let { start, end } = range ?? { start: undefined, end: undefined };
+
+			if (end == undefined) {
+				end = new Date();
+				end.setHours(0, 0, 0, 0);
 			}
 
-			if (start_date == undefined) {
-				start_date = new Date(end_date);
-				start_date.setDate(start_date.getDate() - 7);
+			if (start == undefined) {
+				start = new Date(end);
+				start.setDate(start.getDate() - 7);
 			}
 
 			try {
 				const data = await $api.summOrder.getDashboardOrderSummary({
-					start_date: getFormattedDate(start_date!),
-					end_date: getFormattedDate(end_date!),
+					start_date: getFormattedDate(start!),
+					end_date: getFormattedDate(end!),
 				});
 
 				if (data.daily_summaries) {

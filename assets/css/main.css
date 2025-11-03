@@ -106,10 +106,6 @@ html {
 }
 
 @layer base {
-	body {
-		@apply bg-neutral-100;
-	}
-
 	.section-page-size {
 		@apply flex text-base  text-neutral-400 items-center gap-4;
 	}

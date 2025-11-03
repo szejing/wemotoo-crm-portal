@@ -1,19 +1,22 @@
 <template>
-	<VCalendarDatePicker v-model.range="date" :columns="2" :attributes="[attrs]" :min-date="minDate" :max-date="maxDate" @dayclick="onDayClick" />
+	<UCalendar v-model="internalRange" range :number-of-months="2" :min-value="minDateValue" :max-value="maxDateValue" />
 </template>
 
 <script setup lang="ts">
-import { DatePicker as VCalendarDatePicker } from 'v-calendar';
-import 'v-calendar/dist/style.css';
-import type { DatePickerRangeObject } from 'v-calendar/dist/types/src/use/datePicker.js';
+import { CalendarDate, type DateValue } from '@internationalized/date';
 
 defineOptions({
 	inheritAttrs: false,
 });
 
+export interface DateRange {
+	start: Date | null;
+	end: Date | null;
+}
+
 const props = defineProps({
 	modelValue: {
-		type: Object as PropType<DatePickerRangeObject | null>,
+		type: Object as PropType<DateRange | null>,
 		default: null,
 	},
 	minDate: {
@@ -28,54 +31,46 @@ const props = defineProps({
 
 const emit = defineEmits(['update:model-value', 'close']);
 
-const date = computed({
-	get: () => props.modelValue,
-	set: (value: DatePickerRangeObject | null) => {
-		emit('update:model-value', value);
+// Convert JavaScript Date to CalendarDate
+const dateToCalendarDate = (date: Date | null): DateValue | undefined => {
+	if (!date) return undefined;
+	return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+};
+
+// Convert CalendarDate to JavaScript Date
+const calendarDateToDate = (calendarDate: DateValue | undefined): Date | null => {
+	if (!calendarDate) return null;
+	return new Date(calendarDate.year, calendarDate.month - 1, calendarDate.day);
+};
+
+const minDateValue = computed(() => dateToCalendarDate(props.minDate));
+const maxDateValue = computed(() => dateToCalendarDate(props.maxDate));
+
+const internalRange = computed({
+	get: () => {
+		if (!props.modelValue) return undefined;
+		return {
+			start: dateToCalendarDate(props.modelValue.start),
+			end: dateToCalendarDate(props.modelValue.end),
+		};
+	},
+	set: (value) => {
+		if (!value) {
+			emit('update:model-value', null);
+			return;
+		}
+
+		const range: DateRange = {
+			start: calendarDateToDate(value.start),
+			end: calendarDateToDate(value.end),
+		};
+
+		emit('update:model-value', range);
+
 		// Only emit close when both start and end dates are selected
-		if (value?.start && value?.end) {
+		if (range.start && range.end) {
 			emit('close');
 		}
 	},
 });
-
-const attrs = {
-	'transparent': true,
-	'borderless': true,
-	'is-dark': { selector: 'html', darkClass: 'dark' },
-	'first-day-of-week': 2,
-};
-
-function onDayClick(_: any, event: MouseEvent): void {
-	const target = event.target as HTMLElement;
-	target.blur();
-}
 </script>
-
-<style scoped>
-:root {
-	--vc-gray-50: rgb(var(--color-gray-50));
-	--vc-gray-100: rgb(var(--color-gray-100));
-	--vc-gray-200: rgb(var(--color-gray-200));
-	--vc-gray-300: rgb(var(--color-gray-300));
-	--vc-gray-400: rgb(var(--color-gray-400));
-	--vc-gray-500: rgb(var(--color-gray-500));
-	--vc-gray-600: rgb(var(--color-gray-600));
-	--vc-gray-700: rgb(var(--color-gray-700));
-	--vc-gray-800: rgb(var(--color-gray-800));
-	--vc-gray-900: rgb(var(--color-gray-900));
-}
-
-.vc-primary {
-	--vc-accent-50: rgb(var(--color-primary-50));
-	--vc-accent-100: rgb(var(--color-primary-100));
-	--vc-accent-200: rgb(var(--color-primary-200));
-	--vc-accent-300: rgb(var(--color-primary-300));
-	--vc-accent-400: rgb(var(--color-primary-400));
-	--vc-accent-500: rgb(var(--color-primary-500));
-	--vc-accent-600: rgb(var(--color-primary-600));
-	--vc-accent-700: rgb(var(--color-primary-700));
-	--vc-accent-800: rgb(var(--color-primary-800));
-	--vc-accent-900: rgb(var(--color-primary-900));
-}
-</style>

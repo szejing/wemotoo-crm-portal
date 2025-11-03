@@ -13,7 +13,7 @@
 			</template>
 
 			<template #footer="{ collapsed }">
-				<UserMenu :collapsed="collapsed" />
+				<ZUserMenu :collapsed="collapsed" />
 			</template>
 		</UDashboardSidebar>
 		<slot />
