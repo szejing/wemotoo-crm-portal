@@ -70,9 +70,11 @@
 								</template>
 
 								<template #status-data="{ row }">
-									<UBadge v-if="row.status == OrderStatus.NEW" variant="soft" color="green" size="xs">New</UBadge>
-									<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="soft" color="blue" size="xs">Refunded</UBadge>
-									<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="soft" color="red" size="xs">Cancelled</UBadge>
+									<UBadge v-if="row.status == OrderStatus.PENDING_PAYMENT" variant="outline" color="blue">PENDING PAYMENT</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.PROCESSING" variant="outline" color="yellow">PROCESSING</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
+									<UBadge v-else-if="row.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 								</template>
 
 								<template #gross_amt-data="{ row }">

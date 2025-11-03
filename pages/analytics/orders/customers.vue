@@ -23,7 +23,9 @@
 					</template>
 
 					<template #status-data="{ row: item }">
-						<UBadge v-if="item.status == OrderStatus.NEW" variant="outline" color="green">NEW</UBadge>
+						<UBadge v-if="item.status == OrderStatus.PENDING_PAYMENT" variant="outline" color="blue">PENDING PAYMENT</UBadge>
+						<UBadge v-else-if="item.status == OrderStatus.PROCESSING" variant="outline" color="yellow">PROCESSING</UBadge>
+						<UBadge v-else-if="item.status == OrderStatus.COMPLETED" variant="outline" color="green">COMPLETED</UBadge>
 						<UBadge v-else-if="item.status == OrderStatus.REFUNDED" variant="outline" color="main">REFUNDED</UBadge>
 						<UBadge v-else-if="item.status == OrderStatus.CANCELLED" variant="outline" color="red">CANCELLED</UBadge>
 					</template>
