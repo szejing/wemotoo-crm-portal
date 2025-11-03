@@ -1,5 +1,5 @@
 <template>
-	<div class="mt-4 p-4 bg-white rounded-lg">
+	<div class="mt-4 p-4 rounded-lg">
 		<h1 class="text-lg font-bold">Orders</h1>
 		<UTable :data="rows" :columns="order_columns" :loading="loading" @select-row="selectOrder">
 			<template #empty-state>

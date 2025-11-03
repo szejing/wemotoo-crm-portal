@@ -7,13 +7,19 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar class="sm:hidden">
+				<template #left>
+					<ZSelectMenuDateRange v-model="selectedDateRange" class="-ms-1" @update:model-value="updateRange" />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<div class="grid grid-cols-4 gap-4">
+			<div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
 				<!-- Calendar Section -->
-				<div class="order-1 shadow-md bg-white rounded-lg border border-neutral-200 p-4">
-					<UCalendar v-model="selectedDate">
+				<div class="order-1 hidden sm:block shadow-md bg-white rounded-lg border border-neutral-200 p-4">
+					<UCalendar v-model="calendarRange" range>
 						<template #day="{ day }">
 							<div class="relative w-full h-full flex items-center justify-center">
 								<span>{{ day.day }}</span>
@@ -24,7 +30,7 @@
 				</div>
 
 				<!-- Appointments List Section -->
-				<div class="order-2 col-span-3 row-span-2">
+				<div class="order-2 sm:col-span-3 row-span-2">
 					<div class="bg-white rounded-lg border border-neutral-200 p-4 shadow-md">
 						<div class="flex items-center justify-between mb-4">
 							<h2 class="text-lg font-semibold text-neutral-900">Upcoming Appointments</h2>
@@ -45,15 +51,15 @@
 						</div>
 
 						<!-- Appointments list -->
-						<div v-else class="space-y-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
+						<div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
 							<div
 								v-for="appointment in displayedAppointments"
 								:key="appointment.code"
 								:class="['border rounded-lg p-4 transition-colors cursor-pointer']"
 								@click="selectAppointment(appointment)"
 							>
-								<div class="flex items-start justify-between">
-									<div class="flex-1">
+								<div class="flex items-start">
+									<div>
 										<h3 class="text-lg font-semibold text-secondary-900">
 											{{ appointment.order_no }}
 										</h3>
@@ -70,7 +76,7 @@
 											</div>
 
 											<div class="flex items-center gap-2">
-												{{ getFormattedDate(appointment.date_time, 'dd/MM/yyyy HH:mm') }}
+												{{ getFormattedDate(appointment.date_time, 'dd MMM yyyy HH:mm') }}
 											</div>
 
 											<div v-if="appointment.duration" class="flex items-center gap-2">
@@ -112,7 +118,9 @@
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { AppointmentStatus, getFormattedDate, isFuture, isSameDate } from 'wemotoo-common';
+import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import type { Appointment } from '~/utils/types/appointment';
+import type { Range } from '~/utils/interface';
 import type { DateValue } from '@internationalized/date';
 
 const today = new Date();
@@ -122,13 +130,42 @@ const { appointments } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 const selectedMonth = ref(today.getMonth() + 1);
 const selectedYear = ref(today.getFullYear());
-const selectedDate = ref<DateValue>();
+const selectedDateRange = ref<Range>({});
 
 useHead({ title: 'Appointments' });
 
-// Responsive calendar columns
+// Helper function to convert Date to CalendarDate
+const toCalendarDate = (date: Date) => {
+	return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+};
 
-// Update columns based on screen size
+// Computed property to convert Range to CalendarDate format for UCalendar
+const calendarRange = computed({
+	get: () => ({
+		start: selectedDateRange.value.start ? toCalendarDate(selectedDateRange.value.start) : undefined,
+		end: selectedDateRange.value.end ? toCalendarDate(selectedDateRange.value.end) : undefined,
+	}),
+	set: (newValue: { start: CalendarDate | null; end: CalendarDate | null }) => {
+		const startDate = newValue.start ? newValue.start.toDate(getLocalTimeZone()) : undefined;
+		const endDate = newValue.end ? newValue.end.toDate(getLocalTimeZone()) : undefined;
+
+		// Set start time to 00:00:00
+		if (startDate) {
+			startDate.setHours(0, 0, 0, 0);
+		}
+
+		// Set end time to 23:59:59
+		if (endDate) {
+			endDate.setHours(23, 59, 59, 999);
+		}
+
+		selectedDateRange.value = {
+			start: startDate,
+			end: endDate,
+		};
+	},
+});
+
 onMounted(async () => {
 	await appointmentStore.getAppointments(selectedMonth.value);
 });
@@ -161,24 +198,33 @@ const hasAppointments = (date: DateValue) => {
 	return getAppointmentsForDate(jsDate).length > 0;
 };
 
-// Watch for date selection changes
-watch(selectedDate, (newDate) => {
-	if (newDate) {
-		const jsDate = new Date(newDate.year, newDate.month - 1, newDate.day);
-		filteredAppointments.value = appointments.value.filter((appointment) => isSameDate(new Date(appointment.date_time), jsDate));
+// Watch for date range selection changes (ZSelectMenuDateRange)
+watch(
+	selectedDateRange,
+	(newRange) => {
+		if (newRange.start && newRange.end) {
+			filteredAppointments.value = appointments.value.filter((appointment) => {
+				const appointmentDate = new Date(appointment.date_time);
+				return appointmentDate >= newRange.start! && appointmentDate <= newRange.end!;
+			});
 
-		// Check if month/year changed
-		if (newDate.month !== selectedMonth.value || newDate.year !== selectedYear.value) {
-			selectedMonth.value = newDate.month;
-			selectedYear.value = newDate.year;
-			appointmentStore.getAppointments(selectedMonth.value);
+			// Update month/year based on start date
+			const startMonth = newRange.start.getMonth() + 1;
+			const startYear = newRange.start.getFullYear();
+			if (startMonth !== selectedMonth.value || startYear !== selectedYear.value) {
+				selectedMonth.value = startMonth;
+				selectedYear.value = startYear;
+				appointmentStore.getAppointments(selectedMonth.value);
+			}
 		}
-	}
-});
+	},
+	{ deep: true },
+);
 
 // Reset filter to show all upcoming appointments
 const resetFilter = () => {
 	filteredAppointments.value = [];
+	selectedDateRange.value = {};
 };
 
 const deleteAppointment = async (code: string) => {

@@ -81,6 +81,25 @@ const selectRange = (range: { days?: number; months?: number; years?: number }) 
 		end: endDate.toDate(getLocalTimeZone()),
 	};
 };
+
+// Check if screen is mobile
+const isMobile = ref(false);
+
+const checkMobile = () => {
+	isMobile.value = window.innerWidth < 640; // sm breakpoint
+};
+
+// Number of months to display in calendar
+const numberOfMonths = computed(() => (isMobile.value ? 1 : 2));
+
+onMounted(() => {
+	checkMobile();
+	window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+	window.removeEventListener('resize', checkMobile);
+});
 </script>
 
 <template>
@@ -117,7 +136,7 @@ const selectRange = (range: { days?: number; months?: number; years?: number }) 
 					/>
 				</div>
 
-				<UCalendar v-model="calendarRange" class="p-2" :number-of-months="2" range />
+				<UCalendar v-model="calendarRange" class="p-2" :number-of-months="numberOfMonths" range />
 			</div>
 		</template>
 	</UPopover>
