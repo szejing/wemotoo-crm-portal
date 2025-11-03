@@ -56,6 +56,6 @@ const range = shallowRef<Range>({
 const updateRange = async (newValue: Range) => {
 	range.value = newValue;
 	const summOrderStore = useSummOrderStore();
-	await summOrderStore.getDashboardSummary(range.value);
+	await summOrderStore.getDashboardSummary(newValue);
 };
 </script>

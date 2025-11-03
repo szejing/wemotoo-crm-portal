@@ -7,16 +7,6 @@ const df = new DateFormatter('en-US', {
 });
 
 const selected = defineModel<Range>({ required: true });
-const emit = defineEmits(['update:modelValue']);
-
-// Watch for changes in selected and emit update:modelValue
-watch(
-	selected,
-	(newValue) => {
-		emit('update:modelValue', newValue);
-	},
-	{ deep: true },
-);
 
 const ranges = [
 	{ label: 'Last 7 days', days: 7 },

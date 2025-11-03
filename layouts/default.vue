@@ -7,8 +7,8 @@
 
 			<!-- Grouped Navigation Sections -->
 			<template #default="{ collapsed }">
-				<template v-for="group in navigationGroups" :key="group.label">
-					<UNavigationMenu :collapsed="collapsed" :items="group.links" orientation="vertical" tooltip popover />
+				<template v-for="nav in navigations" :key="nav.label">
+					<UNavigationMenu :collapsed="collapsed" :items="nav.links" orientation="vertical" tooltip popover />
 				</template>
 			</template>
 
@@ -22,5 +22,5 @@
 
 <script lang="ts" setup>
 const appUiStore = useAppUiStore();
-const { navigationGroups, showSidebar } = storeToRefs(appUiStore);
+const { navigations, showSidebar } = storeToRefs(appUiStore);
 </script>

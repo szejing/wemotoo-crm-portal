@@ -5,10 +5,12 @@ import type { VerifyResp } from '~/repository/modules/auth/models/response/verif
 import { useMerchantInfoStore } from '~/stores/MerchantInfo/MerchantInfo';
 import { useAppStore } from '~/stores/App';
 import { useAppUiStore } from '~/stores/AppUi/AppUi';
+import type { User } from '~/utils/types/user';
 
 export const useAuthStore = defineStore('authStore', {
 	state: () => ({
 		loading: false as boolean,
+		user: null as User | null,
 	}),
 	actions: {
 		// login
@@ -32,6 +34,8 @@ export const useAuthStore = defineStore('authStore', {
 
 				const refresh_token = useCookie(KEY.REFRESH_TOKEN, { maxAge: 60 * 60 * 24 * 7 });
 				refresh_token.value = data.refresh_token;
+
+				this.user = data.user;
 
 				const merchantInfo = useMerchantInfoStore();
 				await merchantInfo.setMerchantInfo(data.merchant_info);
@@ -102,6 +106,8 @@ export const useAuthStore = defineStore('authStore', {
 				if (!data.user || !data.merchant_info) {
 					this.clearCookies();
 				}
+
+				this.user = data.user;
 
 				const merchantInfo = useMerchantInfoStore();
 				await merchantInfo.setMerchantInfo(data.merchant_info);

@@ -42,28 +42,14 @@ defineProps<{
 }>();
 
 const colorMode = useColorMode();
-const appConfig = useAppConfig();
-
-const user = ref({
-	name: 'Benjamin Canac',
-	avatar: {
-		src: 'https://github.com/benjamincanac.png',
-		alt: 'Benjamin Canac',
-	},
-});
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
 
 const items = computed<DropdownMenuItem[][]>(() => [
 	[
 		{
 			type: 'label',
-			label: user.value.name,
-			avatar: user.value.avatar,
-		},
-	],
-	[
-		{
-			label: 'Profile',
-			icon: 'i-lucide-user',
+			label: user.value?.name,
 		},
 		{
 			label: 'Settings',
@@ -108,6 +94,10 @@ const items = computed<DropdownMenuItem[][]>(() => [
 		{
 			label: 'Log out',
 			icon: 'i-lucide-log-out',
+			onSelect: async () => {
+				await authStore.logout();
+				navigateTo('/login');
+			},
 		},
 	],
 ]);

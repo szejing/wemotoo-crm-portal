@@ -1,13 +1,7 @@
-import type { UserRoles } from 'wemotoo-common';
 import type { MerchantInfo } from '~/utils/types/merchant-info';
+import type { User } from '~/utils/types/user';
 
 export type VerifyResp = {
-	user: {
-		role: UserRoles;
-		email_address: string;
-		first_name: string;
-		last_name: string;
-		phone_number: string;
-	};
+	user: User;
 	merchant_info: MerchantInfo[];
 };

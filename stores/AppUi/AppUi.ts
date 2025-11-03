@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
 import type { ToastNotification } from '~/utils/types/event-notification';
-import type { Navigation } from '~/utils/types/navigation.ts';
 
 // Grouped navigation structure for UDashboardGroup
-const merchantNavigationGrouped = [
+const navigations = [
 	// Main section
 	{
 		label: 'Main',
@@ -116,75 +115,11 @@ const merchantNavigationGrouped = [
 	},
 ];
 
-// Flat navigation (legacy - kept for backward compatibility)
-const merchantNavigation = [
-	{
-		title: 'Overview',
-		icon: ICONS.DASHBOARD_ROUNDED,
-		to: '/',
-		isCollapsed: false,
-	},
-	{
-		title: 'Analytics',
-		icon: ICONS.ANALYTICS,
-		to: '/analytics',
-	},
-	{
-		title: 'Appointments',
-		icon: ICONS.CALENDAR,
-		to: '/appointments',
-		isCollapsed: false,
-	},
-	{
-		title: 'Booking/Orders',
-		icon: ICONS.ORDER,
-		to: '/orders',
-		isCollapsed: false,
-	},
-	{
-		title: 'Services/Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-		isCollapsed: false,
-	},
-	{
-		title: 'Customers',
-		icon: ICONS.CUSTOMER_GROUP_ROUNDED,
-		to: '/customers',
-		isCollapsed: false,
-	},
-	{
-		title: 'Outlets',
-		icon: ICONS.OUTLET,
-		to: '/outlets',
-		isCollapsed: false,
-	},
-	{
-		title: 'Payment',
-		icon: ICONS.PAYMENT_METHODS,
-		to: '/payment',
-		isCollapsed: false,
-	},
-	{
-		title: 'Tax',
-		icon: ICONS.TAX,
-		to: '/taxes',
-		isCollapsed: false,
-	},
-	{
-		title: 'Settings',
-		icon: ICONS.SETTINGS_ROUNDED,
-		to: '/settings',
-		isCollapsed: false,
-	},
-];
-
 export const useAppUiStore = defineStore('appUiStore', {
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: false as boolean,
-		navigations: merchantNavigation as Array<Navigation>,
-		navigationGroups: merchantNavigationGrouped,
+		navigations: navigations,
 		toastNotification: undefined as ToastNotification | undefined,
 		modal: undefined as ToastNotification | undefined,
 	}),

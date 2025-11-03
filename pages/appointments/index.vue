@@ -52,10 +52,12 @@
 
 						<!-- Appointments list -->
 						<div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:max-h-[calc(100vh-220px)] overflow-y-auto">
-							<div
+							<UButton
 								v-for="appointment in displayedAppointments"
 								:key="appointment.code"
-								:class="['border rounded-lg p-4 transition-colors cursor-pointer']"
+								color="neutral"
+								variant="outline"
+								class="p-4"
 								@click="selectAppointment(appointment)"
 							>
 								<div class="flex items-start">
@@ -106,7 +108,7 @@
 										</UBadge>
 									</div>
 								</div>
-							</div>
+							</UButton>
 						</div>
 					</div>
 				</div>
@@ -201,7 +203,7 @@ const hasAppointments = (date: DateValue) => {
 // Watch for date range selection changes (ZSelectMenuDateRange)
 watch(
 	selectedDateRange,
-	(newRange) => {
+	async (newRange) => {
 		if (newRange.start && newRange.end) {
 			filteredAppointments.value = appointments.value.filter((appointment) => {
 				const appointmentDate = new Date(appointment.date_time);
@@ -214,7 +216,7 @@ watch(
 			if (startMonth !== selectedMonth.value || startYear !== selectedYear.value) {
 				selectedMonth.value = startMonth;
 				selectedYear.value = startYear;
-				appointmentStore.getAppointments(selectedMonth.value);
+				await appointmentStore.getAppointments(selectedMonth.value);
 			}
 		}
 	},
@@ -267,6 +269,11 @@ const selectAppointment = async (appointment: Appointment) => {
 	});
 
 	appointmentModal.open();
+};
+
+const updateRange = async (newValue: Range) => {
+	selectedDateRange.value = newValue;
+	await appointmentStore.getAppointments(selectedMonth.value);
 };
 </script>
 

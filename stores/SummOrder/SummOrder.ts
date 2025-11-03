@@ -37,6 +37,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 			}
 
 			try {
+				console.log(start, end);
 				const data = await $api.summOrder.getDashboardOrderSummary({
 					start_date: getFormattedDate(start!),
 					end_date: getFormattedDate(end!),
