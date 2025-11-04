@@ -96,7 +96,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		},
 
 		async getOrderSummary() {
-			this.order_summ.is_loading = true;
+			this.order_summ.loading = true;
 			const { $api } = useNuxtApp();
 
 			try {
@@ -135,7 +135,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.order_summ.is_loading = false;
+				this.order_summ.loading = false;
 			}
 		},
 
@@ -179,7 +179,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.order_summ.is_loading = false;
+				this.order_summ.loading = false;
 			}
 		},
 
@@ -204,7 +204,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		},
 
 		async getOrderItemSummary() {
-			this.order_summ_item.is_loading = true;
+			this.order_summ_item.loading = true;
 			const { $api } = useNuxtApp();
 
 			try {
@@ -243,7 +243,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.order_summ_item.is_loading = false;
+				this.order_summ_item.loading = false;
 			}
 		},
 
@@ -312,7 +312,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		},
 
 		async getOrderCustomerSummary() {
-			this.order_summ_customer.is_loading = true;
+			this.order_summ_customer.loading = true;
 			const { $api } = useNuxtApp();
 
 			try {
@@ -351,7 +351,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				console.error(err);
 				failedNotification(err.message);
 			} finally {
-				this.order_summ_customer.is_loading = false;
+				this.order_summ_customer.loading = false;
 			}
 		},
 

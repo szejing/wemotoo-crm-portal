@@ -5,12 +5,32 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<UButton variant="outline" :disabled="order_summ.exporting" :loading="order_summ.exporting" @click="exportOrderSummaryToCsv">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterOrderSumm />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
+			<!-- Empty State -->
+			<div v-if="!loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
+				<UIcon name="i-heroicons-chart-bar" class="w-12 h-12 text-gray-400" />
+				<p class="text-sm text-gray-600 dark:text-gray-400">No order summary data found.</p>
+				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+			</div>
+
 			<!-- Grouped by Date -->
-			<div class="mt-4">
+			<div v-else class="mt-4">
 				<UCard class="overflow-hidden">
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
@@ -43,16 +63,7 @@
 
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
-							<UTable
-								:data="group.items"
-								:columns="order_summ_columns"
-								:ui="{
-									root: 'relative overflow-auto',
-									base: 'table-fixed',
-									tbody: 'divide-y divide-gray-200',
-									tr: '',
-								}"
-							/>
+							<UTable :data="group.items" :columns="order_summ_columns" :loading="loading" />
 						</div>
 					</div>
 				</UCard>
@@ -72,13 +83,9 @@ onMounted(async () => {
 });
 
 const orderSummStore = useSummOrderStore();
-const { order_summ } = storeToRefs(orderSummStore);
-const current_page = computed(() => order_summ.value.current_page);
+const { order_summ, loading } = storeToRefs(orderSummStore);
 
-const is_loading = computed(() => order_summ.value.is_loading);
 const data = computed(() => order_summ.value.data);
-// const selectedColumns = ref(order_summ_columns);
-// const columnsTable = computed(() => order_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
 // Group data by date
 const groupedByDate = computed(() => {
@@ -116,10 +123,10 @@ const groupedByDate = computed(() => {
 	});
 });
 
-const updatePage = async (page: number) => {
-	order_summ.value.current_page = page;
-	await orderSummStore.getOrderSummary();
-};
+// const updatePage = async (page: number) => {
+// 	order_summ.value.current_page = page;
+// 	await orderSummStore.getOrderSummary();
+// };
 
 const exportOrderSummaryToCsv = async () => {
 	await orderSummStore.exportOrderSummary();

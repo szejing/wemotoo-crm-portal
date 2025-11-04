@@ -1,47 +1,124 @@
 <template>
-	<UCard>
-		<div class="w-full flex flex-col gap-4">
-			<div class="gap-2 sm:flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Date</h4>
+	<div class="w-full py-4">
+		<!-- Compact Filter Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
+			<!-- Date Range Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>
+				<ZSelectMenuDateRange v-model="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
+			</div>
 
-				<div class="flex-col-start gap-2">
-					<ZSelectMenuDateRange
-						:start-date="order_summ_item.filter.start_date"
-						:end-date="order_summ_item.filter.end_date"
-						placeholder="Date"
-						@update:start-date="order_summ_item.filter.start_date = $event"
-						@update:end-date="order_summ_item.filter.end_date = $event"
-					/>
+			<!-- Order Status Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order Status</label>
+				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+			</div>
+
+			<!-- Currency Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
+				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
+			</div>
+
+			<!-- Actions -->
+			<div class="flex flex-col gap-1.5 justify-end sm:col-span-2">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
+				<div class="flex gap-2">
+					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
+						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+						Clear
+					</UButton>
+					<UButton color="primary" :disabled="is_loading" :loading="is_loading" @click="search">
+						<UIcon :name="ICONS.SEARCH_ROUNDED" class="w-4 h-4" />
+						Search
+					</UButton>
 				</div>
-			</div>
-			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Order Status</h4>
-				<ZSelectMenuOrderStatus v-model:status="order_summ_item.filter.status" />
-			</div>
-			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Item Status</h4>
-				<ZSelectMenuOrderItemStatus v-model:status="order_summ_item.filter.item_status" />
-			</div>
-			<div class="flex-jbetween-icenter w-full sm:w-[60%]">
-				<h4>Currency</h4>
-				<ZSelectMenuCurrency v-model:currency-code="order_summ_item.filter.currency_code" />
 			</div>
 		</div>
 
-		<template #footer>
-			<UButton color="success" :disabled="is_loading" :loading="is_loading" @click="generate">Generate</UButton>
-		</template>
-	</UCard>
+		<!-- Active Filters Display -->
+		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
+			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<UBadge v-if="filter.date_range.start || filter.date_range.end" color="primary" variant="subtle" size="sm" @click="clearFilter('date')">
+				Date: {{ formatDateRange(filter.date_range) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
+				Status: {{ capitalizeFirstLetter(filter.status) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm" @click="clearFilter('currency')">
+				Currency: {{ filter.currency_code }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
+import type { Range } from '~/utils/interface';
+import { format } from 'date-fns';
+import { OrderStatus } from 'wemotoo-common';
+
 const orderSummStore = useSummOrderStore();
 const { order_summ_item } = storeToRefs(orderSummStore);
+const filter = computed(() => order_summ_item.value.filter);
 
-const is_loading = computed(() => orderSummStore.order_summ_item.is_loading);
+const is_loading = computed(() => order_summ_item.value.loading);
 
-const generate = async () => {
+const hasActiveFilters = computed(() => {
+	return (
+		filter.value.date_range.start || filter.value.date_range.end || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR')
+	);
+});
+
+const formatDateRange = (range: Range) => {
+	if (!range) return '';
+	const startDate = range.start ? format(new Date(range.start), 'dd/MM/yyyy') : '';
+	const endDate = range.end ? format(new Date(range.end), 'dd/MM/yyyy') : '';
+	if (startDate && endDate) {
+		return `${startDate} - ${endDate}`;
+	}
+	return startDate || endDate;
+};
+
+const search = async () => {
 	await orderSummStore.getOrderItemSummary();
+};
+
+const handleDateRangeChange = async (newValue: Range) => {
+	filter.value.date_range.start = newValue.start ? new Date(newValue.start) : new Date();
+	filter.value.date_range.end = newValue.end ? new Date(newValue.end) : undefined;
+	await search();
+};
+
+const handleStatusChange = async () => {
+	await search();
+};
+
+const handleCurrencyChange = async () => {
+	await search();
+};
+
+const clearFilters = async () => {
+	filter.value.date_range.start = new Date();
+	filter.value.date_range.end = undefined;
+	filter.value.status = OrderStatus.PENDING_PAYMENT;
+	filter.value.currency_code = 'MYR';
+	order_summ_item.value.current_page = 1;
+	await search();
+};
+
+const clearFilter = async (filterKey: string) => {
+	if (filterKey === 'date') {
+		filter.value.date_range.start = new Date();
+		filter.value.date_range.end = undefined;
+	} else if (filterKey === 'status') {
+		filter.value.status = undefined;
+	} else if (filterKey === 'currency') {
+		filter.value.currency_code = 'MYR';
+	}
+	await search();
 };
 </script>
 

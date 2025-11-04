@@ -6,38 +6,35 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterSaleSummItems />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterSaleSummItems />
-
-			<!-- Column Selector -->
-			<!-- <div class="flex justify-end mb-4">
-				<ZSelectMenuTableColumns :columns="sale_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
-			</div> -->
-
-			<!-- Loading State -->
-			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-neutral-500">Loading...</div>
-			</div>
-
-			<!-- Empty State -->
-			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
-				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
-					<span class="text-neutral-500">No sales data found</span>
-				</div>
-			</UCard>
-
 			<!-- Grouped by Date -->
-			<div v-else class="mt-4">
-				<UCard class="overflow-hidden">
-					<template #header>
-						<UButton :disabled="sale_summ_items.exporting" :loading="sale_summ_items.exporting" @click="exportSalesItemsToCsv">
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton>
-					</template>
+			<div class="space-y-6">
+				<div v-if="!loading && groupedByDate.length == 0">
+					<div class="flex flex-col items-center justify-center py-6">
+						<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
+						<p class="text-sm text-gray-600 dark:text-gray-400">No sales item summary data found.</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+					</div>
+				</div>
+
+				<div v-else>
+					<!-- Table Controls -->
+					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+						<!-- Page Size -->
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+							<USelect v-model="sale_summ_items.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+						</div>
+					</div>
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
@@ -70,19 +67,10 @@
 
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
-							<UTable
-								:data="group.items"
-								:columns="sale_summ_item_columns"
-								:ui="{
-									root: 'relative overflow-auto',
-									base: 'table-fixed',
-									tbody: 'divide-y divide-gray-200',
-									tr: '',
-								}"
-							/>
+							<UTable :data="group.items" :columns="sale_summ_item_columns" :loading="loading" />
 						</div>
 					</div>
-				</UCard>
+				</div>
 			</div>
 
 			<!-- Pagination -->
@@ -96,6 +84,7 @@
 <script lang="ts" setup>
 import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
 import { sale_summ_item_columns } from '~/utils/table-columns';
+import { options_page_size } from '~/utils/options';
 
 useHead({ title: 'Wemotoo CRM - Sale Item Summary' });
 
@@ -104,11 +93,9 @@ onMounted(async () => {
 });
 
 const salesSummStore = useSummSaleStore();
-const { sale_summ_items } = storeToRefs(salesSummStore);
-const current_page = computed(() => sale_summ_items.value.current_page);
-
-const is_loading = computed(() => sale_summ_items.value.is_loading);
+const { sale_summ_items, loading } = storeToRefs(salesSummStore);
 const data = computed(() => sale_summ_items.value.data);
+const current_page = computed(() => sale_summ_items.value.current_page);
 
 // const selectedColumns = ref(sale_summ_item_columns);
 
@@ -174,8 +161,15 @@ const updatePage = async (page: number) => {
 	await salesSummStore.getSaleItemSummary();
 };
 
-const exportSalesItemsToCsv = async () => {
-	await salesSummStore.exportSaleItemSummary();
+const updatePageSize = async (size: number) => {
+	sale_summ_items.value.page_size = size;
+
+	if (sale_summ_items.value.page_size > sale_summ_items.value.total_data) {
+		sale_summ_items.value.current_page = 1;
+		return;
+	}
+
+	await salesSummStore.getSaleItemSummary();
 };
 </script>
 

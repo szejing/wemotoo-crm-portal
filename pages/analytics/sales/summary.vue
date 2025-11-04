@@ -6,42 +6,38 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterSaleSumm />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterSaleSumm />
-
-			<!-- Loading State -->
-			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-neutral-500">Loading...</div>
-			</div>
-
-			<!-- Empty State -->
-			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
-				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
-					<span class="text-neutral-500">No sales data found</span>
+			<div class="space-y-6">
+				<div v-if="!loading && groupedByDate.length == 0">
+					<div class="flex flex-col items-center justify-center py-6">
+						<UIcon name="i-heroicons-banknotes" class="w-12 h-12 text-gray-400" />
+						<p class="text-sm text-gray-600 dark:text-gray-400">No sales summary data found.</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+					</div>
 				</div>
-			</UCard>
 
-			<!-- Grouped by Date -->
-			<div v-else class="mt-4">
-				<UCard class="overflow-hidden">
-					<template #header>
-						<div class="flex-jend">
-							<UButton :disabled="sale_summ.exporting" :loading="sale_summ.exporting" @click="exportSalesSummary">
-								<UIcon :name="ICONS.EXCEL" class="size-5" />
-								Export
-							</UButton>
+				<div v-else>
+					<!-- Table Controls -->
+					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+						<!-- Page Size -->
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+							<USelect v-model="sale_summ.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
 						</div>
-					</template>
+					</div>
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
-						<div
-							class="bg-gradient-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4"
-							:class="{ 'border-t border-neutral-200': index > 0 }"
-						>
+						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-4">
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -60,50 +56,10 @@
 
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
-							<UTable
-								:data="group.items"
-								:columns="columnsTable"
-								:ui="{ tr: { base: '' }, table: 'table-fixed', divide: 'divide-y divide-gray-200', wrapper: 'relative overflow-auto' }"
-							>
-								<template #status-data="{ row }">
-									<div>
-										<UBadge v-if="row.status == SaleStatus.COMPLETED" variant="soft" color="success" size="xs">Completed</UBadge>
-									</div>
-								</template>
-
-								<template #currency_code-data="{ row }">
-									<p>{{ row.currency_code }}</p>
-								</template>
-
-								<template #gross_amt-data="{ row }">
-									<p class="text-center">{{ row.gross_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #net_amt-data="{ row }">
-									<p class="text-center font-medium text-neutral-900">{{ row.net_amt.toFixed(2) }}</p>
-								</template>
-
-								<template #total_txns-data="{ row }">
-									<p class="text-center">{{ row.total_txns }}</p>
-								</template>
-
-								<template #total_qty-data="{ row }">
-									<p class="text-center">{{ row.total_qty }}</p>
-								</template>
-
-								<template #total_voided_qty-data="{ row }">
-									<p class="text-center">{{ row.total_voided_qty }}</p>
-								</template>
-
-								<template #empty-state>
-									<div class="flex flex-col items-center justify-center py-6">
-										<span class="text-sm text-neutral-500">No items found</span>
-									</div>
-								</template>
-							</UTable>
+							<UTable :data="group.items" :columns="sale_summ_columns" :loading="loading" />
 						</div>
 					</div>
-				</UCard>
+				</div>
 			</div>
 
 			<!-- Pagination -->
@@ -115,8 +71,9 @@
 </template>
 
 <script lang="ts" setup>
-import { SaleStatus, getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 import { sale_summ_columns } from '~/utils/table-columns';
+import { options_page_size } from '~/utils/options';
 
 useHead({ title: 'Wemotoo CRM - Sale Summary' });
 
@@ -125,12 +82,9 @@ onMounted(async () => {
 });
 
 const salesSummStore = useSummSaleStore();
-const { sale_summ } = storeToRefs(salesSummStore);
+const { sale_summ, loading } = storeToRefs(salesSummStore);
 
-const is_loading = computed(() => sale_summ.value.is_loading);
 const data = computed(() => sale_summ.value.data);
-const selectedColumns = ref(sale_summ_columns);
-const columnsTable = computed(() => sale_summ_columns.filter((column) => selectedColumns.value.includes(column)));
 
 const current_page = computed(() => sale_summ.value.current_page);
 
@@ -169,6 +123,10 @@ const groupedByDate = computed(() => {
 const updatePage = async (page: number) => {
 	sale_summ.value.current_page = page;
 	await salesSummStore.getSaleSummary();
+};
+
+const updatePageSize = async (size: number) => {
+	await salesSummStore.updateSaleSummPageSize(size);
 };
 
 const exportSalesSummary = async () => {

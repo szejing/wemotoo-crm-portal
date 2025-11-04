@@ -5,41 +5,42 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<UButton variant="outline" :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterOrderSummItems />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterOrderSummItems />
-
-			<!-- Column Selector -->
-			<!-- <div class="flex justify-end mb-4">
-				<ZSelectMenuTableColumns :columns="order_summ_item_columns" :selected-columns="selectedColumns" @update:columns="updateColumns" />
-
-			</div> -->
-
-			<!-- Loading State -->
-			<div v-if="is_loading" class="flex justify-center items-center py-12">
-				<div class="text-neutral-500">Loading...</div>
+			<!-- Empty State -->
+			<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
+				<UIcon name="i-heroicons-cube" class="w-12 h-12 text-gray-400" />
+				<p class="text-sm text-gray-600 dark:text-gray-400">No order item summary data found.</p>
+				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 			</div>
 
-			<!-- Empty State -->
-			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
-				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
-					<span class="text-neutral-500">No order data found</span>
-				</div>
-			</UCard>
-
 			<!-- Grouped by Date -->
-			<div v-else class="mt-4">
-				<UCard class="overflow-hidden">
-					<template #header>
-						<UButton :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton>
-					</template>
+			<div v-else class="mt-4 space-y-6">
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="order_summ_item.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+					</div>
+				</div>
 
+				<UCard class="overflow-hidden">
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
 						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
@@ -97,6 +98,7 @@
 <script lang="ts" setup>
 import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
 import { order_summ_item_columns } from '~/utils/table-columns';
+import { options_page_size } from '~/utils/options';
 
 useHead({ title: 'Wemotoo CRM - Order Item Summary' });
 
@@ -108,10 +110,8 @@ const orderSummStore = useSummOrderStore();
 const { order_summ_item } = storeToRefs(orderSummStore);
 const current_page = computed(() => order_summ_item.value.current_page);
 
-const is_loading = computed(() => order_summ_item.value.is_loading);
+const is_loading = computed(() => order_summ_item.value.loading);
 const data = computed(() => order_summ_item.value.data);
-
-// const selectedColumns = ref(order_summ_item_columns);
 
 // Group data by date
 const groupedByDate = computed(() => {
@@ -166,13 +166,13 @@ const groupedByDate = computed(() => {
 	});
 });
 
-// const updateColumns = (columns: { key: string; label: string }[]) => {
-// 	selectedColumns.value = columns;
-// };
-
 const updatePage = async (page: number) => {
 	order_summ_item.value.current_page = page;
 	await orderSummStore.getOrderItemSummary();
+};
+
+const updatePageSize = async (size: number) => {
+	await orderSummStore.updateOrderItemSummPageSize(size);
 };
 
 const exportToCsv = async () => {

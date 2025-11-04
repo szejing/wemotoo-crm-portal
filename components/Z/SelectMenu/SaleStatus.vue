@@ -22,8 +22,9 @@
 <script lang="ts" setup>
 import { options_sale_status, getSaleStatusColor } from '~/utils/options';
 import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
+import type { SaleStatus } from 'wemotoo-common';
 
-const props = defineProps<{ status: string }>();
+const props = defineProps<{ status: SaleStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
 const statusItems = computed(() => {

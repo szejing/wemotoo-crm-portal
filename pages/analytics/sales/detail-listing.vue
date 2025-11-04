@@ -6,35 +6,35 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterSaleSummDetailListing />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterSales />
-
-			<!-- Loading State -->
-			<div v-if="loading" class="flex justify-center items-center py-12">
-				<div class="text-neutral-500">Loading...</div>
-			</div>
-
-			<!-- Empty State -->
-			<UCard v-else-if="groupedByDate.length === 0" class="mt-4">
-				<div class="flex flex-col items-center justify-center py-12 gap-3">
-					<Icon name="i-heroicons-inbox" class="text-neutral-400 text-4xl" />
-					<span class="text-neutral-500">No sales data found</span>
-				</div>
-			</UCard>
-
 			<!-- Grouped by Date -->
-			<div v-else class="mt-4">
-				<UCard class="overflow-hidden">
-					<template #header>
-						<div class="flex-jend">
-							<UButton :disabled="exporting" :loading="exporting" @click="exportSalesToCsv">
-								<UIcon :name="ICONS.EXCEL" class="size-5" />
-								Export
-							</UButton>
+			<div class="space-y-6">
+				<div v-if="!loading && groupedByDate.length == 0">
+					<div class="flex flex-col items-center justify-center py-6">
+						<UIcon name="i-heroicons-banknotes" class="w-12 h-12 text-gray-400" />
+						<p class="text-sm text-gray-600 dark:text-gray-400">No sales detail listing data found.</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+					</div>
+				</div>
+
+				<div v-else>
+					<!-- Table Controls -->
+					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+						<!-- Page Size -->
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+							<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
 						</div>
-					</template>
+					</div>
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date">
 						<!-- Date Header -->
@@ -62,20 +62,10 @@
 
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
-							<UTable
-								:data="group.items"
-								:columns="sale_columns"
-								:ui="{
-									tr: { base: 'cursor-pointer hover:bg-neutral-50' },
-									table: 'table-fixed',
-									divide: 'divide-y divide-gray-200',
-									wrapper: 'relative overflow-auto',
-								}"
-								@select-row="selectSale"
-							/>
+							<UTable :data="group.items" :columns="sale_columns" :loading="loading" @select-row="selectSale" />
 						</div>
 					</div>
-				</UCard>
+				</div>
 			</div>
 
 			<!-- Pagination -->
@@ -90,6 +80,7 @@
 import { getFormattedDate } from 'wemotoo-common';
 import { sale_columns } from '~/utils/table-columns';
 import type { Bill } from '~/repository/modules/sale/models/response/bill';
+import { options_page_size } from '~/utils/options';
 
 useHead({ title: 'Wemotoo CRM - Sale Detail Listing' });
 
@@ -98,13 +89,7 @@ onMounted(async () => {
 });
 
 const saleStore = useSaleStore();
-const { bills, filter, total_bills, loading, exporting } = storeToRefs(saleStore);
-
-// const selectedColumns = ref(sale_columns);
-// const columnsTable = computed(() =>
-// 	sale_columns.filter((column) => selectedColumns.value.includes(column) && column.accessorKey !== 'bill_no' && column.accessorKey !== 'biz_date'),
-// );
-
+const { bills, filter, total_bills, loading } = storeToRefs(saleStore);
 const current_page = computed(() => filter.value.current_page);
 
 // Group data by date
@@ -146,12 +131,17 @@ const updatePage = async (page: number) => {
 	await saleStore.getBills();
 };
 
-const selectSale = (row: Bill) => {
-	navigateTo(`/bills/detail/${encodeURIComponent(row.bill_no)}`);
+const updatePageSize = async (size: number) => {
+	filter.value.page_size = size;
+
+	if (filter.value.page_size > total_bills.value) {
+		filter.value.current_page = 1;
+		return;
+	}
 };
 
-const exportSalesToCsv = async () => {
-	await saleStore.exportBills();
+const selectSale = (row: Bill) => {
+	navigateTo(`/bills/detail/${encodeURIComponent(row.bill_no)}`);
 };
 </script>
 
