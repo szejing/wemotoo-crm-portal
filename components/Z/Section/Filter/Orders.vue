@@ -59,8 +59,8 @@
 				Order: {{ filter.query }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
-			<UBadge v-if="filter.status && filter.status !== 'all'" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
-				Status: {{ filter.status }}
+			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
+				Status: {{ capitalizeFirstLetter(filter.status) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm">
@@ -82,12 +82,7 @@ const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const hasActiveFilters = computed(() => {
 	const hasDateFilter = filter.value.date_range && (filter.value.date_range.start || filter.value.date_range.end);
-	return (
-		filter.value.query ||
-		(filter.value.status && filter.value.status !== 'all') ||
-		(filter.value.currency_code && filter.value.currency_code !== 'MYR') ||
-		hasDateFilter
-	);
+	return filter.value.query || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR') || hasDateFilter;
 });
 
 const formatDateRange = (range: Range) => {
@@ -128,7 +123,7 @@ const handleStatusChange = async () => {
 
 const clearFilters = async () => {
 	filter.value.query = '';
-	filter.value.status = 'all';
+	filter.value.status = undefined;
 	filter.value.currency_code = 'MYR';
 	filter.value.date_range = {
 		start: sub(new Date(), { days: 14 }),
@@ -142,7 +137,7 @@ const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'query') {
 		filter.value.query = '';
 	} else if (filterKey === 'status') {
-		filter.value.status = 'all';
+		filter.value.status = undefined;
 	} else if (filterKey === 'date') {
 		filter.value.date_range = {
 			start: sub(new Date(), { days: 14 }),

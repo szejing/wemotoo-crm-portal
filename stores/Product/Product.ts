@@ -5,10 +5,25 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 import { dir } from '~/utils/constants/dir';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type ProductFilter = {
+	query: string;
+	status: ProductStatus | undefined;
+	page_size: number;
+	current_page: number;
+};
+
+const initialEmptyProductFilter: ProductFilter = {
+	query: '',
+	status: undefined,
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
 
 const initialEmptyProduct: ProductCreate = {
 	code: undefined,
-	name: undefined,
+	name: '',
 	short_desc: undefined,
 	long_desc: undefined,
 	is_active: true,
@@ -18,16 +33,16 @@ const initialEmptyProduct: ProductCreate = {
 	status: ProductStatus.PUBLISHED,
 
 	// product types
-	type: 1,
+	type_id: 1,
 
 	// categories
-	categories: [],
+	category_codes: [],
 
 	// brands
-	brands: [],
+	brand_codes: [],
 
 	// tags
-	tags: [],
+	tag_ids: [],
 
 	// thumbnail
 	thumbnail: undefined,
@@ -40,7 +55,7 @@ const initialEmptyProduct: ProductCreate = {
 		{
 			id: undefined,
 			currency_code: 'MYR',
-			orig_sell_price: undefined,
+			orig_sell_price: 0,
 			cost_price: undefined,
 			sale_price: undefined,
 		},
@@ -59,12 +74,12 @@ export const useProductStore = defineStore('productStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		new_product: structuredClone(initialEmptyProduct),
 		products: [] as Product[],
 		total_products: 0 as number,
 		current_product: undefined as Product | undefined,
-		page_size: options_page_size[0] as number,
-		current_page: 1,
+		filter: initialEmptyProductFilter,
 		errors: [] as string[],
 	}),
 
@@ -74,10 +89,10 @@ export const useProductStore = defineStore('productStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.products.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.products.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -85,9 +100,9 @@ export const useProductStore = defineStore('productStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.products.length === this.total_products) {
+			if (this.filter.current_page < 0 || this.products.length === this.total_products) {
 				return;
 			}
 
@@ -113,15 +128,37 @@ export const useProductStore = defineStore('productStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data, '@odata.count': total } = await $api.product.getMany({
-					$top: this.page_size,
+				const { query, status } = this.filter;
+
+				let filter = '';
+
+				// Add status filter if provided
+				if (status) {
+					filter = `status eq '${status}'`;
+				}
+
+				// Add query filter if provided
+				if (query) {
+					const queryFilter = `(code contains '${query}' or name contains '${query}' or short_desc contains '${query}')`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
-					$skip: (this.current_page - 1) * this.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$expand: defaultSimpleProductRelations.join(','),
-				});
+				};
+
+				// Only add $filter if it's not empty
+				if (filter) {
+					queryParams.$filter = filter;
+				}
+
+				const { data, '@odata.count': total } = await $api.product.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_products > this.products.length) {
+					if (this.filter.current_page > 1 && this.total_products > this.products.length) {
 						this.products = [...this.products, ...data];
 					} else {
 						this.products = data;
@@ -195,53 +232,51 @@ export const useProductStore = defineStore('productStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let images: ImageReq[] = [];
-				if (new_images && new_images.length > 0) {
-					const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
-					images = resp.images.map((image) => ({
-						id: image.id,
-						url: image.url,
-					}));
-				}
+				// let images: ImageReq[] = [];
+				// if (new_images && new_images.length > 0) {
+				// 	const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
+				// 	images = resp.images.map((image) => ({
+				// 		id: image.id,
+				// 		url: image.url,
+				// 	}));
+				// }
 
-				let thumbnail: ImageReq | undefined;
-				if (new_thumbnail) {
-					const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
-					thumbnail = {
-						id: resp.image.id,
-						url: resp.image.url,
-					};
-				}
+				// let thumbnail: ImageReq | undefined;
+				// if (new_thumbnail) {
+				// 	const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
+				// 	thumbnail = {
+				// 		id: resp.image.id,
+				// 		url: resp.image.url,
+				// 	};
+				// }
 
-				const data = await $api.product.update(code, {
-					name: this.current_product.name,
-					short_desc: this.current_product.short_desc ?? undefined,
-					long_desc: this.current_product.long_desc ?? undefined,
-					is_active: this.current_product.is_active,
-					is_discountable: this.current_product.is_discountable,
-					is_giftcard: this.current_product.is_giftcard,
-					price_types: this.current_product.price_types,
-					categories: this.current_product.categories,
-					type: this.current_product.type,
-					tags: this.current_product.tags,
-					status: this.current_product.status,
-					images: images,
-					thumbnail: thumbnail,
-					options: this.current_product.options,
-					variants: this.current_product.variants,
-				});
+				// const data = await $api.product.update(code, {
+				// 	name: this.current_product.name,
+				// 	short_desc: this.current_product.short_desc ?? undefined,
+				// 	long_desc: this.current_product.long_desc ?? undefined,
+				// 	is_active: this.current_product.is_active,
+				// 	is_discountable: this.current_product.is_discountable,
+				// 	is_giftcard: this.current_product.is_giftcard,
+				// 	price_types: this.current_product.price_types,
+				// 	category_codes: this.current_product.categories.map((category) => category.code),
+				// 	type_id: this.current_product.type.id,
+				// 	tag_ids: this.current_product.tags.map((tag) => tag.id),
+				// 	status: this.current_product.status,
+				// 	thumbnail: thumbnail,
+				// 	images: images,
+				// });
 
-				if (data.product) {
-					successNotification(`Product ${code} Updated !`);
-					this.products = this.products.map((product) => {
-						if (product.code === code) {
-							return data.product;
-						}
-						return product;
-					});
+				// if (data.product) {
+				// 	successNotification(`Product ${code} Updated !`);
+				// 	this.products = this.products.map((product) => {
+				// 		if (product.code === code) {
+				// 			return data.product;
+				// 		}
+				// 		return product;
+				// 	});
+				// }
 
-					// await this.getProducts();
-				}
+				return true;
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
@@ -296,6 +331,20 @@ export const useProductStore = defineStore('productStore', {
 			} finally {
 				this.loading = false;
 			}
+		},
+
+		async exportProducts() {
+			this.exporting = true;
+			const { $api } = useNuxtApp();
+
+			// try {
+			// 	const data = await $api.product.exportProducts();
+			// } catch (err: any) {
+			// 	console.error(err);
+			// 	failedNotification(err.message);
+			// } finally {
+			// 	this.exporting = false;
+			// }
 		},
 	},
 });

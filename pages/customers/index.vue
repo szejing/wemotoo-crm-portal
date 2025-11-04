@@ -6,44 +6,48 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterCustomers />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterCustomers />
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Table Actions -->
+					<div class="flex items-center gap-3">
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+							<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+						</div>
 
-			<UCard class="mt-4">
-				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
-					<div class="flex gap-4">
-						<UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
+						<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportCustomers">
+							<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
 							Export
-						</UButton>
-
-						<UButton color="success">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
 						</UButton>
 					</div>
 				</div>
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select-row="selectCustomer">
-					<template #empty-state>
-						<div class="flex flex-col items-center justify-center py-6 gap-3">
-							<span class="italic text-sm">No one here!</span>
-							<UButton color="success">
-								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-								Create
-							</UButton>
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">No customers found.</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 						</div>
 					</template>
 				</UTable>
 
 				<div v-if="customers.length > 0" class="section-pagination">
-					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_customers" @update:page="updatePage" />
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_customers" @update:page="updatePage" />
 				</div>
-			</UCard>
+			</div>
 		</template>
 	</UDashboardPanel>
 </template>
@@ -53,14 +57,13 @@ import { options_page_size } from '~/utils/options';
 import { customer_columns } from '~/utils/table-columns';
 import type { Customer } from '~/utils/types/customer';
 
-const customerStore = useCustomerStore();
-
 useHead({ title: 'Wemotoo CRM - Customers' });
 
-const { loading, customers, page_size, current_page, total_customers } = storeToRefs(customerStore);
+const customerStore = useCustomerStore();
+const { loading, customers, filter, total_customers, exporting } = storeToRefs(customerStore);
 
 const rows = computed(() => {
-	return customers.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return customers.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const selectCustomer = async (customer: Customer) => {
@@ -69,6 +72,14 @@ const selectCustomer = async (customer: Customer) => {
 
 const updatePage = async (page: number) => {
 	await customerStore.updatePage(page);
+};
+
+const updatePageSize = async (size: number) => {
+	await customerStore.updatePageSize(size);
+};
+
+const exportCustomers = async () => {
+	await customerStore.exportCustomers();
 };
 </script>
 

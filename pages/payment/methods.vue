@@ -6,34 +6,46 @@
 					<UDashboardSidebarCollapse />
 				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterPaymentMethods />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<ZSectionFilterPaymentMethods />
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+					</div>
 
-			<UCard class="mt-4">
-				<div class="flex justify-between">
-					<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
-					<!-- <div class="flex gap-4">
-						<UButton>
-							<UIcon :name="ICONS.EXCEL" class="size-5" />
-							Export
-						</UButton>
-
-						<UButton color="success">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-							Create
-						</UButton>
-					</div> -->
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportPaymentMethods">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
 				</div>
 
-				<!-- Table  -->
-				<UTable :data="rows" :columns="payment_method_columns" />
+				<!-- Table -->
+				<UTable :data="rows" :columns="payment_method_columns" :loading="loading">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-credit-card" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">No payment methods found.</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+						</div>
+					</template>
+				</UTable>
 
 				<div v-if="payment_methods.length > 0" class="section-pagination">
-					<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_payment_methods" @update:page="updatePage" />
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_payment_methods" @update:page="updatePage" />
 				</div>
-			</UCard>
+			</div>
 		</template>
 	</UDashboardPanel>
 </template>
@@ -44,27 +56,25 @@ import { payment_method_columns } from '~/utils/table-columns';
 
 useHead({ title: 'Wemotoo CRM - Payment Methods' });
 
-const isUpdating = ref(false);
+onMounted(() => paymentMethodStore.getPaymentMethods());
+
 const paymentMethodStore = usePaymentMethodStore();
-const { payment_methods, page_size, current_page, total_payment_methods } = storeToRefs(paymentMethodStore);
+const { payment_methods, filter, total_payment_methods, loading, exporting } = storeToRefs(paymentMethodStore);
 
 const rows = computed(() => {
-	return payment_methods.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return payment_methods.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
-
-const updateStatus = async (code: string, is_active: boolean) => {
-	try {
-		isUpdating.value = true;
-		await paymentMethodStore.updateStatus({ code, is_active });
-	} catch (error) {
-		console.error(error);
-	} finally {
-		isUpdating.value = false;
-	}
-};
 
 const updatePage = async (page: number) => {
 	await paymentMethodStore.updatePage(page);
+};
+
+const updatePageSize = async (size: number) => {
+	await paymentMethodStore.updatePageSize(size);
+};
+
+const exportPaymentMethods = async () => {
+	await paymentMethodStore.exportPaymentMethods();
 };
 </script>
 

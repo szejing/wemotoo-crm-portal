@@ -1,39 +1,101 @@
 <template>
-	<UCard>
-		<UForm :schema="FilterProductValidation" :state="state" class="grid grid-cols-1 sm:grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormField name="query" class="col-span-2">
-				<UInput v-model="state.query" placeholder="Search by Code / Name / Description..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormField>
-
-			<div class="sm:col-start-4">
-				<ZSelectMenuProductStatus v-model:status="state.status" />
+	<div class="w-full py-4">
+		<!-- Compact Filter Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+			<!-- Product Search -->
+			<div class="flex flex-col gap-1.5 sm:col-span-2">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Product</label>
+				<UInput v-model="filter.query" placeholder="Search by Code / Name / Description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
-		</UForm>
-	</UCard>
+
+			<!-- Status Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Status</label>
+				<ZSelectMenuProductStatus v-model:status="filter.status as ProductStatus" @update:model-value="handleStatusChange" />
+			</div>
+
+			<!-- Actions -->
+			<div class="flex flex-col gap-1.5 justify-end">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
+				<div class="flex gap-2">
+					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
+						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+						Clear
+					</UButton>
+					<UButton color="primary" :disabled="is_loading" :loading="is_loading" @click="search">
+						<UIcon :name="ICONS.SEARCH_ROUNDED" class="w-4 h-4" />
+						Search
+					</UButton>
+				</div>
+			</div>
+		</div>
+
+		<!-- Active Filters Display -->
+		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
+			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm" @click="clearFilter('query')">
+				Search: {{ filter.query }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
+				Status: {{ capitalizeFirstLetter(filter.status) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import type { z } from 'zod';
 import type { ProductStatus } from 'wemotoo-common';
-import { FilterProductValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof FilterProductValidation>;
+const productStore = useProductStore();
+const { filter } = storeToRefs(productStore);
 
-const state = ref<{ query: string | undefined; status: ProductStatus | undefined }>({
-	query: undefined,
-	status: undefined,
+const is_loading = computed(() => productStore.loading);
+const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
+const hasActiveFilters = computed(() => {
+	return filter.value.query || filter.value.status;
 });
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, name, description } = event.data;
-
-	console.log(code, name, description);
-
-	// const authStore = useAuthStore();
-	// authStore.login(email, password);
-	// await navigateTo('/');
+const search = async () => {
+	await productStore.getProducts();
 };
+
+const debouncedSearch = () => {
+	if (searchTimeout.value) {
+		clearTimeout(searchTimeout.value);
+	}
+	searchTimeout.value = setTimeout(async () => {
+		await search();
+	}, 500);
+};
+
+const handleStatusChange = async () => {
+	await search();
+};
+
+const clearFilters = async () => {
+	filter.value.query = '';
+	filter.value.status = undefined;
+	filter.value.current_page = 1;
+	await search();
+};
+
+const clearFilter = async (filterKey: string) => {
+	if (filterKey === 'query') {
+		filter.value.query = '';
+	} else if (filterKey === 'status') {
+		filter.value.status = undefined;
+	}
+	await search();
+};
+
+onUnmounted(() => {
+	if (searchTimeout.value) {
+		clearTimeout(searchTimeout.value);
+	}
+});
 </script>
 
 <style scoped></style>

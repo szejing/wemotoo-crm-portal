@@ -13,7 +13,7 @@ import { sub } from 'date-fns';
 
 type OrderFilter = {
 	query: string;
-	status: OrderStatus | string;
+	status: OrderStatus | undefined;
 	date_range: Range;
 	page_size: number;
 	current_page: number;
@@ -22,7 +22,7 @@ type OrderFilter = {
 
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
-	status: 'All',
+	status: undefined,
 	date_range: {
 		start: sub(new Date(), { days: 14 }),
 		end: new Date(),
@@ -71,11 +71,11 @@ export const useOrderStore = defineStore('orderStore', {
 				let filter = '';
 
 				// For 'All' status, don't add any status filter - let all statuses through
-				if (this.filter.status === 'pending') {
+				if (this.filter.status === OrderStatus.PENDING_PAYMENT) {
 					filter = `status in ('${OrderStatus.PENDING_PAYMENT}', '${OrderStatus.PROCESSING}')`;
-				} else if (this.filter.status === 'completed') {
+				} else if (this.filter.status === OrderStatus.COMPLETED) {
 					filter = `status eq '${OrderStatus.COMPLETED}'`;
-				} else if (this.filter.status === 'cancelled') {
+				} else if (this.filter.status === OrderStatus.CANCELLED) {
 					filter = `status in ('${OrderStatus.CANCELLED}', '${OrderStatus.REFUNDED}')`;
 				}
 
@@ -262,8 +262,12 @@ export const useOrderStore = defineStore('orderStore', {
 				let filter = '';
 
 				// For 'All' status, don't add any status filter - let all statuses through
-				if (this.filter.status !== 'All') {
-					filter = `status eq '${this.filter.status}'`;
+				if (this.filter.status === OrderStatus.PENDING_PAYMENT) {
+					filter = `status in ('${OrderStatus.PENDING_PAYMENT}', '${OrderStatus.PROCESSING}')`;
+				} else if (this.filter.status === OrderStatus.COMPLETED) {
+					filter = `status eq '${OrderStatus.COMPLETED}'`;
+				} else if (this.filter.status === OrderStatus.CANCELLED) {
+					filter = `status in ('${OrderStatus.CANCELLED}', '${OrderStatus.REFUNDED}')`;
 				}
 
 				let { start, end } = this.filter.date_range;

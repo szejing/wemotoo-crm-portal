@@ -1,36 +1,99 @@
 <template>
-	<UCard>
-		<UForm :schema="FilterPaymentMethodValidation" :state="state" class="grid grid-cols-4 gap-4" @submit="onSubmit">
-			<UFormField name="query" class="col-span-2">
-				<UInput v-model="state.query" placeholder="Search by Code or Description..." :icon="ICONS.SEARCH_ROUNDED" />
-			</UFormField>
+	<div class="w-full py-4">
+		<!-- Compact Filter Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+			<!-- Payment Method Search -->
+			<div class="flex flex-col gap-1.5 sm:col-span-2">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
+				<UInput v-model="filter.query" placeholder="Search by Code / Description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+			</div>
 
-			<UFormField name="currency_code" class="col-start-4">
-				<ZSelectMenuCurrency v-model:currency-code="state.currency_code" />
-			</UFormField>
-		</UForm>
-	</UCard>
+			<!-- Currency Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
+				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
+			</div>
+
+			<!-- Actions -->
+			<div class="flex flex-col gap-1.5 justify-end">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
+				<div class="flex gap-2">
+					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
+						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+						Clear
+					</UButton>
+					<UButton color="primary" :disabled="is_loading" :loading="is_loading" @click="search">
+						<UIcon :name="ICONS.SEARCH_ROUNDED" class="w-4 h-4" />
+						Search
+					</UButton>
+				</div>
+			</div>
+		</div>
+
+		<!-- Active Filters Display -->
+		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
+			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm" @click="clearFilter('query')">
+				Search: {{ filter.query }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm" @click="clearFilter('currency')">
+				Currency: {{ filter.currency_code }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import { isEmptyOrNull } from 'wemotoo-common';
-import type { z } from 'zod';
-import { FilterPaymentMethodValidation } from '~/utils/schema';
+const paymentMethodStore = usePaymentMethodStore();
+const { filter } = storeToRefs(paymentMethodStore);
 
-type Schema = z.output<typeof FilterPaymentMethodValidation>;
+const is_loading = computed(() => paymentMethodStore.loading);
+const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
-const state = reactive({
-	query: undefined,
-	currency_code: 'MYR',
+const hasActiveFilters = computed(() => {
+	return filter.value.query || (filter.value.currency_code && filter.value.currency_code !== 'MYR');
 });
 
-const onSubmit = async (_: FormSubmitEvent<Schema>) => {
-	const paymentMethodStore = usePaymentMethodStore();
-	await paymentMethodStore.getPaymentMethods({
-		q: isEmptyOrNull(state.query ?? '') ? undefined : state.query,
-	});
+const search = async () => {
+	await paymentMethodStore.getPaymentMethods();
 };
+
+const debouncedSearch = () => {
+	if (searchTimeout.value) {
+		clearTimeout(searchTimeout.value);
+	}
+	searchTimeout.value = setTimeout(async () => {
+		await search();
+	}, 500);
+};
+
+const handleCurrencyChange = async () => {
+	await search();
+};
+
+const clearFilters = async () => {
+	filter.value.query = '';
+	filter.value.currency_code = 'MYR';
+	filter.value.current_page = 1;
+	await search();
+};
+
+const clearFilter = async (filterKey: string) => {
+	if (filterKey === 'query') {
+		filter.value.query = '';
+	} else if (filterKey === 'currency') {
+		filter.value.currency_code = 'MYR';
+	}
+	await search();
+};
+
+onUnmounted(() => {
+	if (searchTimeout.value) {
+		clearTimeout(searchTimeout.value);
+	}
+});
 </script>
 
 <style scoped></style>

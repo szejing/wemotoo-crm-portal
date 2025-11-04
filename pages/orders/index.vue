@@ -55,7 +55,15 @@
 						:loading="loading"
 						class="[&_tr]:hover:bg-gray-50 dark:[&_tr]:hover:bg-gray-800/50 [&_tr]:cursor-pointer [&_tr]:transition-colors"
 						@select-row="selectOrder"
-					/>
+					>
+						<template #empty>
+							<div class="flex flex-col items-center justify-center py-12 gap-3">
+								<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
+								<p class="text-sm text-gray-600 dark:text-gray-400">No orders found.</p>
+								<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							</div>
+						</template>
+					</UTable>
 
 					<!-- Pagination -->
 					<div v-if="orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
