@@ -44,7 +44,7 @@
 				<UTable :data="rows" :columns="product_columns" :loading="loading" @select="selectProduct">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
-							<UIcon name="i-heroicons-cube" class="w-12 h-12 text-gray-400" />
+							<UIcon :name="ICONS.PRODUCT" class="w-12 h-12 text-gray-400" />
 							<p class="text-sm text-gray-600 dark:text-gray-400">No products found.</p>
 							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 						</div>

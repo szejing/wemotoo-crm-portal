@@ -5,13 +5,6 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<UButton variant="outline" :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>
@@ -24,7 +17,7 @@
 		<template #body>
 			<!-- Empty State -->
 			<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-				<UIcon name="i-heroicons-cube" class="w-12 h-12 text-gray-400" />
+				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
 				<p class="text-sm text-gray-600 dark:text-gray-400">No order item summary data found.</p>
 				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 			</div>
@@ -38,6 +31,11 @@
 						<USelect v-model="order_summ_item.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
 						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
 					</div>
+
+					<UButton variant="outline" :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
 				</div>
 
 				<UCard class="overflow-hidden">

@@ -5,18 +5,6 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<UButton
-						variant="outline"
-						:disabled="order_summ_customer.exporting"
-						:loading="order_summ_customer.exporting"
-						@click="exportOrderCustomerSummaryToCsv"
-					>
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>
@@ -30,7 +18,7 @@
 			<div class="space-y-6">
 				<div v-if="!is_loading && data.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
-						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
+						<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
 						<p class="text-sm text-gray-600 dark:text-gray-400">No customer summary data found.</p>
 						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 					</div>
@@ -44,6 +32,16 @@
 							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
 							<USelect v-model="order_summ_customer.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
 							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+
+							<UButton
+								variant="outline"
+								:disabled="order_summ_customer.exporting"
+								:loading="order_summ_customer.exporting"
+								@click="exportOrderCustomerSummaryToCsv"
+							>
+								<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+								Export
+							</UButton>
 						</div>
 					</div>
 

@@ -40,7 +40,15 @@
 					</UButton>
 				</div>
 
-				<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption" />
+				<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">No options found.</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+						</div>
+					</template>
+				</UTable>
 
 				<!-- Pagination  -->
 				<div v-if="prod_option.length > 0" class="section-pagination">

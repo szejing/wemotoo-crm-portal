@@ -1,5 +1,5 @@
 export type TaxGroupCreate = {
-	code: string;
+	code: string | undefined;
 	description?: string;
 	tax_codes?: string[];
 };

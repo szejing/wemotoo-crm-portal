@@ -5,13 +5,6 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<UButton variant="outline" :disabled="order_summ.exporting" :loading="order_summ.exporting" @click="exportOrderSummaryToCsv">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>
@@ -24,7 +17,7 @@
 		<template #body>
 			<!-- Empty State -->
 			<div v-if="!loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-				<UIcon name="i-heroicons-chart-bar" class="w-12 h-12 text-gray-400" />
+				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
 				<p class="text-sm text-gray-600 dark:text-gray-400">No order summary data found.</p>
 				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 			</div>
@@ -128,9 +121,9 @@ const groupedByDate = computed(() => {
 // 	await orderSummStore.getOrderSummary();
 // };
 
-const exportOrderSummaryToCsv = async () => {
-	await orderSummStore.exportOrderSummary();
-};
+// const exportOrderSummaryToCsv = async () => {
+// 	await orderSummStore.exportOrderSummary();
+// };
 </script>
 
 <style scoped></style>

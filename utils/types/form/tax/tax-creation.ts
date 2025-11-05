@@ -1,5 +1,5 @@
 export type TaxCreate = {
-	code: string;
+	code: string | undefined;
 	description?: string;
 	is_inclusive: boolean;
 	is_active: boolean;

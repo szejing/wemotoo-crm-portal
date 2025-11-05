@@ -3,10 +3,22 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { TaxGroup } from '~/utils/types/tax-group';
 import type { TaxGroupCreate } from '~/utils/types/form/tax/tax-group-creation';
 
+type TaxGroupFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
+
+const initialTaxGroupFilter: TaxGroupFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
+
 const initialEmptyTaxGroup: TaxGroupCreate = {
 	code: undefined,
 	description: undefined,
-	taxes: [],
+	tax_codes: [],
 };
 
 export const useTaxGroupStore = defineStore('taxGroupStore', {
@@ -14,11 +26,11 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		tax_groups: [] as TaxGroup[],
+		filter: structuredClone(initialTaxGroupFilter),
 		total_tax_groups: 0 as number,
 		new_tax_group: structuredClone(initialEmptyTaxGroup),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -27,10 +39,10 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.tax_groups.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.tax_groups.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -38,9 +50,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.tax_groups.length === this.total_tax_groups) {
+			if (this.filter.current_page < 0 || this.tax_groups.length === this.total_tax_groups) {
 				return;
 			}
 
@@ -52,9 +64,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			const { $api } = useNuxtApp();
 			try {
 				const { data, '@odata.count': total } = await $api.taxGroup.getMany({
-					$top: this.page_size,
+					$top: this.filter.page_size,
 					$count: true,
-					$skip: (this.current_page - 1) * this.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 				});
 
 				if (data) {
@@ -91,7 +103,16 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.taxGroup.create(this.new_tax_group);
+				if (!this.new_tax_group.code) {
+					failedNotification('Tax group code is required');
+					return;
+				}
+
+				const data = await $api.taxGroup.create({
+					code: this.new_tax_group.code,
+					description: this.new_tax_group.description ?? '',
+					tax_codes: this.new_tax_group.tax_codes ?? [],
+				});
 
 				if (data.tax_group) {
 					successNotification(`${this.new_tax_group.code} - Tax Group Created !`);

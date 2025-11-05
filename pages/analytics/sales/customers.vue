@@ -18,7 +18,7 @@
 			<div class="space-y-6">
 				<div v-if="!loading && data.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
-						<UIcon name="i-heroicons-inbox" class="w-12 h-12 text-gray-400" />
+						<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
 						<p class="text-sm text-gray-600 dark:text-gray-400">No sales customer summary data found.</p>
 						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 					</div>

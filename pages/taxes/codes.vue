@@ -5,38 +5,55 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<div class="flex items-center gap-3">
+						<UButton color="success" @click="navigateTo('/products/create')">
+							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
+							Create
+						</UButton>
+					</div>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterTaxCodes />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<div class="base">
-				<div class="sm:col-span-2">
-					<UCard>
-						<h2>Add New Tax</h2>
-						<FormTaxCreation class="mt-4" @update:active="onUpdateActive" />
-					</UCard>
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+					</div>
+
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTaxes">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
 				</div>
 
-				<div class="sm:col-span-4">
-					<UCard>
-						<ZSectionFilteroutlet />
-						<div>
-							<!-- Table  -->
-							<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select="selectTax">
-								<template #empty-state>
-									<div class="flex-col-center section-empty">
-										<h2>No tax code Found</h2>
-										<p>Create a new tax code to get started</p>
-									</div>
-								</template>
-							</UTable>
-
-							<!-- Pagination  -->
-							<div v-if="taxes.length > 0" class="section-pagination">
-								<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_taxes" @update:page="updatePage" />
-							</div>
+				<!-- Table  -->
+				<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select="selectTax">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">No tax codes found.</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 						</div>
-					</UCard>
+					</template>
+				</UTable>
+
+				<!-- Pagination  -->
+				<div v-if="taxes.length > 0" class="section-pagination">
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_taxes" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>
@@ -44,13 +61,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation, ZModalTaxDetail, ZModalLoading } from '#components';
+import { ZModalConfirmation, ZModalTaxDetail } from '#components';
 import { tax_code_columns } from '~/utils/table-columns';
 import type { Tax } from '~/utils/types/tax';
 import type { TableRow } from '@nuxt/ui';
-
-const overlay = useOverlay();
-const taxStore = useTaxStore();
+import { options_page_size } from '~/utils/options';
 
 useHead({ title: 'Wemotoo CRM - Tax Codes' });
 
@@ -58,10 +73,12 @@ onMounted(async () => {
 	await taxStore.getTaxes();
 });
 
-const { loading, taxes, page_size, current_page, total_taxes } = storeToRefs(taxStore);
+const overlay = useOverlay();
+const taxStore = useTaxStore();
+const { loading, taxes, filter, total_taxes, exporting } = storeToRefs(taxStore);
 
 const rows = computed(() => {
-	return taxes.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return taxes.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteTax = async (code: string) => {
@@ -109,66 +126,17 @@ const selectTax = async (e: Event, row: TableRow<Tax>) => {
 	taxModal.open();
 };
 
-const onUpdateActive = async (e: Event, row: TableRow<Tax>) => {
-	const tax = row.original;
-	if (!tax) return;
-
-	const loadingModal = overlay.create(ZModalLoading, {
-		props: {
-			key: 'loading',
-		},
-	});
-
-	loadingModal.open();
-
-	try {
-		await taxStore.updateTax(tax.code, {
-			...tax,
-			is_active: !tax.is_active,
-			metadata: tax.metadata || undefined,
-		});
-	} catch (error) {
-		console.error(error);
-	} finally {
-		loadingModal.close();
-	}
-};
-
 const updatePage = async (page: number) => {
 	await taxStore.updatePage(page);
 };
+
+const updatePageSize = async (size: number) => {
+	await taxStore.updatePageSize(size);
+};
+
+const exportTaxes = async () => {
+	// await taxStore.exportTaxes();
+};
 </script>
 
-<style scoped>
-.base {
-	width: 100%;
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 1.5rem;
-	margin-top: 1rem;
-}
-
-@media (min-width: 640px) {
-	.base {
-		grid-template-columns: repeat(6, minmax(0, 1fr));
-	}
-}
-
-.section-empty {
-	height: 13rem;
-}
-
-.section-empty div {
-	text-align: center;
-}
-
-.section-empty h2 {
-	font-size: 1.5rem;
-	line-height: 2rem;
-	font-weight: 600;
-}
-
-.section-empty p {
-	color: var(--color-neutral-400);
-}
-</style>
+<style scoped></style>

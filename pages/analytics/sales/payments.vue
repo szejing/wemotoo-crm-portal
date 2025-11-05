@@ -18,7 +18,7 @@
 			<div class="space-y-6">
 				<div v-if="!loading && groupedByDate.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
-						<UIcon name="i-heroicons-banknotes" class="w-12 h-12 text-gray-400" />
+						<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
 						<p class="text-sm text-gray-600 dark:text-gray-400">No sales payment summary data found.</p>
 						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 					</div>
@@ -131,9 +131,11 @@ const updatePageSize = async (size: number) => {
 		sale_summ_payments.value.current_page = 1;
 		return;
 	}
-
-	await salesSummStore.exportSalePaymentSummary();
 };
+
+// const exportSalePaymentSummary = async () => {
+// 	await salesSummStore.exportSalePaymentSummary();
+// };
 </script>
 
 <style scoped></style>

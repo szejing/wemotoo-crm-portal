@@ -5,38 +5,55 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<div class="flex items-center gap-3">
+						<UButton color="success" @click="navigateTo('/products/create')">
+							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
+							Create
+						</UButton>
+					</div>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterTaxGroups />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<div class="base">
-				<div class="sm:col-span-2">
-					<UCard>
-						<h2>Add New Tax Group</h2>
-						<FormTaxGroupCreation class="mt-4" />
-					</UCard>
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+					</div>
+
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTaxGroups">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
 				</div>
 
-				<div class="sm:col-span-4">
-					<UCard>
-						<!-- <ZSectionFilteroutlet /> -->
-						<div>
-							<!-- Table  -->
-							<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
-								<template #empty-state>
-									<div class="flex-col-center section-empty">
-										<h2>No tax group Found</h2>
-										<p>Create a new tax group to get started</p>
-									</div>
-								</template>
-							</UTable>
-
-							<!-- Pagination  -->
-							<div v-if="tax_groups.length > 0" class="section-pagination">
-								<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tax_groups" @update:page="updatePage" />
-							</div>
+				<!-- Table  -->
+				<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">No tax groups found.</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
 						</div>
-					</UCard>
+					</template>
+				</UTable>
+
+				<!-- Pagination  -->
+				<div v-if="tax_groups.length > 0" class="section-pagination">
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_groups" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>
@@ -48,10 +65,11 @@ import { ZModalConfirmation, ZModalTaxGroupDetail } from '#components';
 import { tax_group_columns } from '~/utils/table-columns';
 import type { TaxGroup } from '~/utils/types/tax-group';
 import type { TableRow } from '@nuxt/ui';
+import { options_page_size } from '~/utils/options';
 
 const overlay = useOverlay();
 const taxGroupStore = useTaxGroupStore();
-const { loading, tax_groups, page_size, current_page, total_tax_groups } = storeToRefs(taxGroupStore);
+const { loading, tax_groups, filter, total_tax_groups, exporting } = storeToRefs(taxGroupStore);
 
 useHead({ title: 'Wemotoo CRM - Tax Groups' });
 
@@ -60,7 +78,7 @@ onMounted(async () => {
 });
 
 const rows = computed(() => {
-	return tax_groups.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return tax_groups.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteTaxGroup = async (code: string) => {
@@ -111,38 +129,14 @@ const selectTaxGroup = async (e: Event, row: TableRow<TaxGroup>) => {
 const updatePage = async (page: number) => {
 	await taxGroupStore.updatePage(page);
 };
+
+const updatePageSize = async (size: number) => {
+	await taxGroupStore.updatePageSize(size);
+};
+
+const exportTaxGroups = async () => {
+	// await taxGroupStore.exportTaxGroups();
+};
 </script>
 
-<style scoped>
-.base {
-	width: 100%;
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 1.5rem;
-	margin-top: 1rem;
-}
-
-@media (min-width: 640px) {
-	.base {
-		grid-template-columns: repeat(6, minmax(0, 1fr));
-	}
-}
-
-.section-empty {
-	height: 13rem;
-}
-
-.section-empty div {
-	text-align: center;
-}
-
-.section-empty h2 {
-	font-size: 1.5rem;
-	line-height: 2rem;
-	font-weight: 600;
-}
-
-.section-empty p {
-	color: var(--color-neutral-400);
-}
-</style>
+<style scoped></style>
