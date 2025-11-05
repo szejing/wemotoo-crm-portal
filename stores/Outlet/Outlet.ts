@@ -2,20 +2,21 @@ import { options_page_size } from '~/utils/options';
 import type { Outlet } from '~/utils/types/outlet';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { OutletCreate } from '~/utils/types/form/outlet-creation';
+import type { BaseODataReq } from '~/repository/base/base.req';
 
 const initialEmptyOutlet: OutletCreate = {
-	code: undefined,
-	description: undefined,
-	address1: undefined,
-	address2: undefined,
-	address3: undefined,
-	city: undefined,
-	country_code: undefined,
-	state: undefined,
-	postal_code: undefined,
+	code: '',
+	description: '',
+	address1: '',
+	address2: '',
+	address3: '',
+	city: '',
+	country_code: '',
+	state: '',
+	postal_code: '',
 	longitude: undefined,
 	latitude: undefined,
-	tax_rule: undefined,
+	tax_rule_code: undefined,
 };
 
 export const useOutletStore = defineStore('outletStore', {
@@ -23,12 +24,16 @@ export const useOutletStore = defineStore('outletStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		outlets: [] as Outlet[],
 		total_outlets: 0 as number,
 		new_outlet: structuredClone(initialEmptyOutlet),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
 		errors: [] as string[],
+		filter: {
+			query: '',
+			page_size: options_page_size[0] as number,
+			current_page: 1,
+		},
 	}),
 	actions: {
 		resetNewOutlet() {
@@ -36,10 +41,10 @@ export const useOutletStore = defineStore('outletStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.outlets.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.outlets.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -47,9 +52,9 @@ export const useOutletStore = defineStore('outletStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.outlets.length === this.total_outlets) {
+			if (this.filter.current_page < 0 || this.outlets.length === this.total_outlets) {
 				return;
 			}
 
@@ -60,15 +65,28 @@ export const useOutletStore = defineStore('outletStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data, '@odata.count': total } = await $api.outlet.getMany({
-					$top: this.page_size,
+				let filter = '';
+
+				if (this.filter.query) {
+					const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
+					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
 					$expand: 'tax_rule',
-					$skip: (this.current_page - 1) * this.page_size,
-				});
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+				};
+
+				if (filter) {
+					queryParams.$filter = filter;
+				}
+
+				const { data, '@odata.count': total } = await $api.outlet.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_outlets > this.outlets.length) {
+					if (this.filter.current_page > 1 && this.total_outlets > this.outlets.length) {
 						this.outlets = [...this.outlets, ...data];
 					} else {
 						this.outlets = data;
