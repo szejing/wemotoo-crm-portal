@@ -1,11 +1,11 @@
 <template>
 	<UModal
+		title="Update Customer"
 		:ui="{
-			width: 'w-full sm:w-[70%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UCard>
-			<template #header><h3>Update Customer</h3></template>
+		<template #body>
 			<UForm :schema="UpdateOrderCustomerValidation" :state="state.customer" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailCustomer
@@ -22,7 +22,7 @@
 					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
 				</div>
 			</UForm>
-		</UCard>
+		</template>
 	</UModal>
 </template>
 

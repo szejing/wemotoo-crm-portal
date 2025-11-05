@@ -5,37 +5,54 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<div class="flex items-center gap-3">
+						<UButton color="success" @click="navigateTo('/products/create')">
+							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
+							Create
+						</UButton>
+					</div>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterTaxRules />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<div class="py-4">
-				<UCard class="mt-4">
-					<div class="flex-between">
-						<span class="section-page-size"> Show :<USelect v-model="page_size" :items="options_page_size" /> </span>
+			<div class="space-y-6">
+				<!-- Table Controls -->
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+					</div>
 
-						<div class="flex gap-4">
-							<UButton color="success" @click="navigateTo('/taxes/rules/create')">
-								<UIcon :name="ICONS.ADD_OUTLINE" class="size-5" />
-								Create
-							</UButton>
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTaxes">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
+				</div>
+
+				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+					<template #empty-state>
+						<div class="flex-col-center section-empty">
+							<h2>No tax code Found</h2>
+							<p>Create a new tax code to get started</p>
 						</div>
-					</div>
-					<!-- Table  -->
-					<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
-						<template #empty-state>
-							<div class="flex-col-center section-empty">
-								<h2>No tax code Found</h2>
-								<p>Create a new tax code to get started</p>
-							</div>
-						</template>
-					</UTable>
+					</template>
+				</UTable>
 
-					<!-- Pagination  -->
-					<div v-if="tax_rules.length > 0" class="section-pagination">
-						<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tax_rules" @update:page="updatePage" />
-					</div>
-				</UCard>
+				<!-- Pagination  -->
+				<div v-if="tax_rules.length > 0" class="section-pagination">
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_rules" @update:page="updatePage" />
+				</div>
 			</div>
 		</template>
 	</UDashboardPanel>
@@ -55,10 +72,10 @@ onMounted(async () => {
 	await taxRuleStore.getTaxRules();
 });
 
-const { loading, tax_rules, page_size, current_page, total_tax_rules } = storeToRefs(taxRuleStore);
+const { loading, exporting, tax_rules, filter, total_tax_rules } = storeToRefs(taxRuleStore);
 
 const rows = computed(() => {
-	return tax_rules.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return tax_rules.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const selectTaxRule = async (e: Event, row: TableRow<TaxRule>) => {
@@ -70,6 +87,14 @@ const selectTaxRule = async (e: Event, row: TableRow<TaxRule>) => {
 
 const updatePage = async (page: number) => {
 	await taxRuleStore.updatePage(page);
+};
+
+const updatePageSize = async (size: number) => {
+	await taxRuleStore.updatePageSize(size);
+};
+
+const exportTaxes = async () => {
+	// await taxRuleStore.exportTaxes();
 };
 </script>
 

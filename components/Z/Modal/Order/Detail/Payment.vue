@@ -1,11 +1,11 @@
 <template>
 	<UModal
+		title="Update Payment Info"
 		:ui="{
-			width: 'w-full sm:w-[70%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UCard>
-			<template #header><h3>Update Payment Info</h3></template>
+		<template #body>
 			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
@@ -24,7 +24,7 @@
 					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" @click="onSubmit">Update</UButton>
 				</div>
 			</UForm>
-		</UCard>
+		</template>
 	</UModal>
 </template>
 

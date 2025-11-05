@@ -1,21 +1,21 @@
 <template>
 	<UModal
+		title="Update Category"
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
-			<UCard>
+		<template #body>
+			<UForm ref="formRef" :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
-					<h3>Update Category</h3>
 					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
 				</div>
 
-				<div class="w-[100%]">
+				<div class="w-full">
 					<ZDropzone class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
 				</div>
 
-				<div class="w-[100%] hidden">
+				<div class="w-full hidden">
 					<ZDropzone class="mt-2" multiple :existing-images="state.category.images" @files-selected="updateImages" />
 				</div>
 
@@ -27,19 +27,19 @@
 					<h4>Parent Category</h4>
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
 				</div> -->
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="danger" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="submitForm">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 
@@ -67,6 +67,7 @@ const categoryStore = useProductCategoryStore();
 const { updating } = storeToRefs(categoryStore);
 const newThumbnail = ref<File>();
 const newImages = ref<File[]>();
+const formRef = ref();
 
 const updateThumbnail = (files: File[]) => {
 	newThumbnail.value = files[0];
@@ -79,6 +80,10 @@ const updateImages = (files: File[]) => {
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, is_active, is_internal, parent_category } = event.data;
 	emit('update', { code, description, is_active, is_internal, parent_category, thumbnail: newThumbnail.value, images: newImages.value });
+};
+
+const submitForm = () => {
+	formRef.value?.submit();
 };
 
 const onCancel = () => {

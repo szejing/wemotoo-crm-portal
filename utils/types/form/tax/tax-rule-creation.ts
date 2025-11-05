@@ -24,7 +24,7 @@ export type TaxDetailCreate = {
 };
 
 export type TaxRuleCreate = {
-	code: string;
+	code: string | undefined;
 	description?: string;
 	details: TaxDetailCreate[];
 };

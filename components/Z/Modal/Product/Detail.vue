@@ -1,20 +1,21 @@
 <template>
 	<UModal
+		title="Update Product"
 		:ui="{
-			width: 'w-full sm:w-[80%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
-			<UCard>
-				<template #header>
-					<div class="flex-jbetween-icenter">
-						<NuxtImg v-if="current_product.thumbnail" :src="current_product.thumbnail.url" class="w-52 h-52 rounded-md" />
-					</div>
-					<div v-if="current_product.images && current_product.images.length > 0">
-						<NuxtImg v-for="image in current_product.images" :key="image.id" :src="image.url" class="w-24 rounded-sm" :alt="image.name" />
-					</div>
-				</template>
+		<template #header>
+			<div class="flex-jbetween-icenter">
+				<NuxtImg v-if="current_product.thumbnail" :src="current_product.thumbnail.url" class="w-52 h-52 rounded-md" />
+			</div>
+			<div v-if="current_product.images && current_product.images.length > 0">
+				<NuxtImg v-for="image in current_product.images" :key="image.id" :src="image.url" class="w-24 rounded-sm" :alt="image.name" />
+			</div>
+		</template>
 
+		<template #body>
+			<UForm :schema="UpdateProductValidation" :state="current_product" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductGeneralInfo
 					v-model:is-active="current_product.is_active"
@@ -70,19 +71,19 @@
 					@update:variants="updateProductVariants"
 				/>
 				<!-- *********************** Additional Info *********************** -->
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 

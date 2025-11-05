@@ -1,14 +1,12 @@
 <template>
 	<UModal
+		title="Update Product Option"
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
-			<UCard>
-				<template #header><h3>Update Product Option</h3></template>
-				<!-- *********************** General Info *********************** -->
-
+		<template #body>
+			<UForm :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
 				<UFormField v-slot="{ error }" label="Name" name="name" required>
 					<UInput v-model="state.option.name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
 				</UFormField>
@@ -20,7 +18,7 @@
 							<h5 class="text-neutral-300">#{{ value.id }}</h5>
 
 							<UFormField v-slot="{ error }" name="value" required>
-								<UInput v-model="state.option.values[index].value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
+								<UInput v-model="state.option.values[index]?.value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
 							</UFormField>
 						</div>
 					</div>
@@ -31,19 +29,19 @@
 				</div>
 
 				<!-- *********************** General Info *********************** -->
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 
@@ -71,11 +69,11 @@ const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
 const onAddNew = () => {
-	if (state.option.values[state.option.values.length - 1].value === undefined || state.option.values[state.option.values.length - 1].value === '') {
+	if (state.option.values[state.option.values.length - 1]?.value === undefined || state.option.values[state.option.values.length - 1]?.value === '') {
 		return;
 	}
 
-	state.option.values.push({ value: '', metadata: null });
+	state.option.values.push({ value: '', metadata: undefined, id: 0, option_id: 0 });
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

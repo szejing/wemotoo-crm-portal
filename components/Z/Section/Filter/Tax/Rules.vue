@@ -2,7 +2,7 @@
 	<div class="w-full py-4">
 		<!-- Compact Filter Grid -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-			<!-- Payment Method Search -->
+			<!-- Payment Type Search -->
 			<div class="flex flex-col gap-1.5 sm:col-span-2">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
 				<UInput v-model="filter.query" placeholder="Search by Code / Description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
@@ -36,10 +36,10 @@
 </template>
 
 <script lang="ts" setup>
-const taxStore = useTaxStore();
-const { filter } = storeToRefs(taxStore);
+const taxRuleStore = useTaxRuleStore();
+const { filter } = storeToRefs(taxRuleStore);
 
-const is_loading = computed(() => taxStore.loading);
+const is_loading = computed(() => taxRuleStore.loading);
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const hasActiveFilters = computed(() => {
@@ -47,7 +47,7 @@ const hasActiveFilters = computed(() => {
 });
 
 const search = async () => {
-	await taxStore.getTaxes();
+	await taxRuleStore.getTaxRules();
 };
 
 const debouncedSearch = () => {
@@ -59,16 +59,22 @@ const debouncedSearch = () => {
 	}, 500);
 };
 
-const clearFilters = async () => {
-	filter.value.query = '';
-	await search();
-};
-
 const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'query') {
 		filter.value.query = '';
 	}
 };
+
+const clearFilters = async () => {
+	filter.value.query = '';
+	await search();
+};
+
+onUnmounted(() => {
+	if (searchTimeout.value) {
+		clearTimeout(searchTimeout.value);
+	}
+});
 </script>
 
 <style scoped></style>

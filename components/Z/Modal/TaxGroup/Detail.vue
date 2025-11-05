@@ -1,29 +1,26 @@
 <template>
 	<UModal
+		title="Update Tax Group"
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateTaxGroupValidation" :state="state.tax" class="space-y-4" @submit="onSubmit">
-			<UCard>
-				<template #header><h3>Update Tax Group</h3></template>
-
-				<!-- *********************** General Info *********************** -->
+		<template #body>
+			<UForm :schema="UpdateTaxGroupValidation" :state="state.tax" class="space-y-4" @submit="onSubmit">
 				<ZInputTaxGroupGeneralInfo v-model:code="state.tax.code" v-model:description="state.tax.description" v-model:taxes="state.tax.taxes" is-update />
-				<!-- *********************** General Info *********************** -->
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 

@@ -1,19 +1,20 @@
 <template>
 	<UModal
+		title="Update Appointment"
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateAppointmentValidation" :state="state.appointment" class="space-y-4" @submit="onSubmit">
-			<UCard>
-				<template #header>
-					<h2 class="text-main">Appointment</h2>
-					<div class="mt-2">
-						<h4 class="font-bold text-neutral-400">#{{ appointment!.code }}</h4>
-						<h4 class="font-bold text-neutral-700">Order No. #{{ appointment!.order_no }}</h4>
-					</div>
-				</template>
+		<template #header>
+			<h2 class="text-main">Appointment</h2>
+			<div class="mt-2">
+				<h4 class="font-bold text-neutral-400">#{{ appointment!.code }}</h4>
+				<h4 class="font-bold text-neutral-700">Order No. #{{ appointment!.order_no }}</h4>
+			</div>
+		</template>
 
+		<template #body>
+			<UForm :schema="UpdateAppointmentValidation" :state="state.appointment" class="space-y-4" @submit="onSubmit">
 				<div class="flex flex-col gap-4">
 					<div class="flex-jbetween-icenter">
 						<div>
@@ -37,19 +38,19 @@
 						/>
 					</div>
 				</div>
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 

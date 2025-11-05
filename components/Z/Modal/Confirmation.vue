@@ -1,27 +1,27 @@
 <template>
 	<UModal
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UCard>
+		<template #body>
 			<div class="space-y-2">
 				<h3>{{ title }}</h3>
 				<p>{{ message }}</p>
 			</div>
+		</template>
 
-			<template #footer>
-				<div v-if="action == 'delete'" class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="error" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
-				</div>
+		<template #footer>
+			<div v-if="action == 'delete'" class="flex-jend gap-4">
+				<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
+				<UButton color="error" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
+			</div>
 
-				<div v-else class="flex-jend gap-4">
-					<UButton @click="onCancel">Cancel</UButton>
-					<UButton :loading="loading" @click="onConfirm">Confirm</UButton>
-				</div>
-			</template>
-		</UCard>
+			<div v-else class="flex-jend gap-4">
+				<UButton @click="onCancel">Cancel</UButton>
+				<UButton :loading="loading" @click="onConfirm">Confirm</UButton>
+			</div>
+		</template>
 	</UModal>
 </template>
 

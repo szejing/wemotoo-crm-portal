@@ -8,12 +8,6 @@
 				<UInput v-model="filter.query" placeholder="Search by Code / Description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
-			<!-- Currency Filter -->
-			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
-				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
-			</div>
-
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
@@ -37,27 +31,23 @@
 				Search: {{ filter.query }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
-			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm" @click="clearFilter('currency')">
-				Currency: {{ filter.currency_code }}
-				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
-			</UBadge>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-const paymentTypeStore = usePaymentTypeStore();
-const { filter } = storeToRefs(paymentTypeStore);
+const taxGroupStore = useTaxGroupStore();
+const { filter } = storeToRefs(taxGroupStore);
 
-const is_loading = computed(() => paymentTypeStore.loading);
+const is_loading = computed(() => taxGroupStore.loading);
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const hasActiveFilters = computed(() => {
-	return filter.value.query || (filter.value.currency_code && filter.value.currency_code !== 'MYR');
+	return filter.value.query;
 });
 
 const search = async () => {
-	await paymentTypeStore.getPaymentTypeGroups();
+	await taxGroupStore.getTaxGroups();
 };
 
 const debouncedSearch = () => {
@@ -69,23 +59,14 @@ const debouncedSearch = () => {
 	}, 500);
 };
 
-const handleCurrencyChange = async () => {
-	await search();
+const clearFilter = async (filterKey: string) => {
+	if (filterKey === 'query') {
+		filter.value.query = '';
+	}
 };
 
 const clearFilters = async () => {
 	filter.value.query = '';
-	filter.value.currency_code = 'MYR';
-	filter.value.current_page = 1;
-	await search();
-};
-
-const clearFilter = async (filterKey: string) => {
-	if (filterKey === 'query') {
-		filter.value.query = '';
-	} else if (filterKey === 'currency') {
-		filter.value.currency_code = 'MYR';
-	}
 	await search();
 };
 

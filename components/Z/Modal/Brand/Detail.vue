@@ -1,32 +1,32 @@
 <template>
 	<UModal
+		title="Update Brand"
 		:ui="{
-			width: 'w-full sm:w-[60%] md:w-[40%] lg:w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
-		<UForm :schema="UpdateBrandValidation" :state="state.brand" class="space-y-4" @submit="onSubmit">
-			<UCard>
+		<template #body>
+			<UForm :schema="UpdateBrandValidation" :state="state.brand" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
-					<h3>Update Brand</h3>
 					<UCheckbox v-model="state.brand.is_active" name="isActive" label="Active" color="success" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductBrandGeneralInfo v-model:code="state.brand.code" v-model:description="state.brand.description" />
 				<!-- *********************** General Info *********************** -->
+			</UForm>
+		</template>
 
-				<template #footer>
-					<div class="flex-jbetween-icenter">
-						<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+		<template #footer>
+			<div class="flex-jbetween-icenter w-full">
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
-						<div class="flex-jend gap-4">
-							<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-							<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
-						</div>
-					</div>
-				</template>
-			</UCard>
-		</UForm>
+				<div class="flex-jend gap-4">
+					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+				</div>
+			</div>
+		</template>
 	</UModal>
 </template>
 
