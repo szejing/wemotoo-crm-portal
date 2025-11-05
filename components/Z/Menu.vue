@@ -1,7 +1,7 @@
 <template>
 	<div class="space-y-4">
 		<div class="flex items-center gap-3">
-			<UIcon :name="props.icon" class="text-2xl" :class="`text-${props.color}-500`" />
+			<UIcon :name="props.icon" class="text-2xl" :class="iconColorClass" />
 			<div>
 				<h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ props.title }}</h3>
 				<p class="text-sm text-gray-600 dark:text-gray-400">{{ props.description }}</p>
@@ -26,6 +26,22 @@ const props = defineProps<{
 		description: string;
 	}[];
 }>();
+
+const colorMap: Record<string, string> = {
+	blue: 'text-blue-500',
+	green: 'text-green-500',
+	purple: 'text-purple-500',
+	red: 'text-red-500',
+	yellow: 'text-yellow-500',
+	indigo: 'text-indigo-500',
+	pink: 'text-pink-500',
+	orange: 'text-orange-500',
+	primary: 'text-primary-500',
+};
+
+const iconColorClass = computed(() => {
+	return colorMap[props.color] ?? colorMap.blue!;
+});
 </script>
 
 <style scoped></style>

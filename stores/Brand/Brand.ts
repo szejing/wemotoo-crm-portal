@@ -2,6 +2,13 @@ import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { Brand } from '~/utils/types/brand';
 import type { BrandCreate } from '~/utils/types/form/brand-creation';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type BrandFilter = {
+	query: string;
+	current_page: number;
+	page_size: number;
+};
 
 const initialEmptyBrand: BrandCreate = {
 	code: '',
@@ -9,29 +16,30 @@ const initialEmptyBrand: BrandCreate = {
 	is_active: true,
 };
 
+const initialEmptyFilter: BrandFilter = {
+	query: '',
+	current_page: 1,
+	page_size: options_page_size[0] as number,
+};
+
 export const useBrandStore = defineStore('brandStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		new_brand: structuredClone(initialEmptyBrand),
 		brands: [] as Brand[],
 		total_brands: 0 as number,
-		current_brand: undefined as Brand | undefined,
-		page_size: options_page_size[0] as number,
-		current_page: 1,
+		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
 	actions: {
-		resetNewBrand() {
-			this.new_brand = structuredClone(initialEmptyBrand);
-		},
-
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.brands.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.brands.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -39,9 +47,9 @@ export const useBrandStore = defineStore('brandStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.brands.length === this.total_brands) {
+			if (this.filter.current_page < 0 || this.brands.length === this.total_brands) {
 				return;
 			}
 
@@ -67,14 +75,28 @@ export const useBrandStore = defineStore('brandStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data, '@odata.count': total } = await $api.brand.getMany({
-					$top: this.page_size,
+				const { query } = this.filter;
+
+				let filter = '';
+
+				if (query) {
+					filter = `(code contains '${query}' or description contains '${query}')`;
+				}
+
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
-					$skip: (this.current_page - 1) * this.page_size,
-				});
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+				};
+
+				if (filter) {
+					queryParams.$filter = filter;
+				}
+
+				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_brands > this.brands.length) {
+					if (this.filter.current_page > 1 && this.total_brands > this.brands.length) {
 						this.brands = [...this.brands, ...data];
 					} else {
 						this.brands = data;
@@ -106,7 +128,7 @@ export const useBrandStore = defineStore('brandStore', {
 					this.brands.push(data.brand);
 				}
 
-				this.resetNewBrand();
+				this.new_brand = structuredClone(initialEmptyBrand);
 				return true;
 			} catch (err: any) {
 				console.error(err);
@@ -119,10 +141,10 @@ export const useBrandStore = defineStore('brandStore', {
 		},
 
 		async updateBrand(description: string, is_active: boolean) {
-			if (!this.current_brand) {
+			if (!this.new_brand) {
 				return;
 			}
-			const code = this.current_brand.code;
+			const code = this.new_brand.code;
 			this.updating = true;
 
 			const { $api } = useNuxtApp();

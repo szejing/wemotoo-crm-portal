@@ -2,10 +2,10 @@
 	<div class="w-full py-4">
 		<!-- Compact Filter Grid -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-			<!-- Tag Search -->
+			<!-- Brand Code Search -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
-				<UInput v-model="filter.query" placeholder="Search categories..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+				<UInput v-model="filter.query" placeholder="Search brand code/description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Actions -->
@@ -36,10 +36,10 @@
 </template>
 
 <script lang="ts" setup>
-const categoryStore = useProductCategoryStore();
-const { filter } = storeToRefs(categoryStore);
+const brandStore = useBrandStore();
+const { filter } = storeToRefs(brandStore);
 
-const is_loading = computed(() => categoryStore.loading);
+const is_loading = computed(() => brandStore.loading);
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const hasActiveFilters = computed(() => {
@@ -47,7 +47,7 @@ const hasActiveFilters = computed(() => {
 });
 
 const search = async () => {
-	await categoryStore.getCategories();
+	await brandStore.getBrands();
 };
 
 const debouncedSearch = () => {

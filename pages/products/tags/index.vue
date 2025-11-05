@@ -5,30 +5,46 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<div class="flex items-center gap-3">
+						<UButton color="success" @click="navigateTo('/products/create')">
+							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
+							Create
+						</UButton>
+					</div>
+				</template>
 			</UDashboardNavbar>
+
+			<UDashboardToolbar>
+				<template #left>
+					<ZSectionFilterTags />
+				</template>
+			</UDashboardToolbar>
 		</template>
 
 		<template #body>
-			<div class="sm:col-span-2">
-				<UCard>
-					<h2>Add New Tag</h2>
-					<FormProductTagCreation class="mt-4" />
-				</UCard>
-			</div>
-
-			<div class="sm:col-span-4">
-				<UCard>
-					<ZSectionFilterTags />
-					<div>
-						<!-- Table  -->
-						<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag" />
-
-						<!-- Pagination  -->
-						<div v-if="tags.length > 0" class="section-pagination">
-							<UPagination :default-page="current_page" :items-per-page="page_size" :total="total_tags" @update:page="updatePage" />
-						</div>
+			<div class="space-y-6">
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+					<!-- Page Size -->
+					<div class="flex items-center gap-2">
+						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="tagsStore.updatePageSize" />
+						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
 					</div>
-				</UCard>
+
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTags">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
+				</div>
+
+				<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag" />
+
+				<!-- Pagination  -->
+				<div v-if="tags.length > 0" class="section-pagination">
+					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_tags" @update:page="updatePage" />
+				</div>
 			</div>
 		</template>
 	</UDashboardPanel>
@@ -38,6 +54,7 @@
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
 import { tag_columns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
+import { options_page_size } from '~/utils/options';
 
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();
@@ -45,10 +62,10 @@ await tagsStore.getTags();
 
 useHead({ title: 'Wemotoo CRM - Tags' });
 
-const { loading, tags, total_tags, page_size, current_page } = storeToRefs(tagsStore);
+const { loading, tags, total_tags, filter, exporting } = storeToRefs(tagsStore);
 
 const rows = computed(() => {
-	return tags.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
+	return tags.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteTag = async (id: number) => {
@@ -94,6 +111,10 @@ const selectTag = async (tag: Tag) => {
 
 const updatePage = async (page: number) => {
 	await tagsStore.updatePage(page);
+};
+
+const exportTags = async () => {
+	// await tagsStore.exportTags();
 };
 </script>
 

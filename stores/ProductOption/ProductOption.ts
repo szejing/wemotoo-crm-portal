@@ -5,10 +5,23 @@ import type { ProductOption } from '~/utils/types/product-option';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import { defaultProductOptionRelations } from 'wemotoo-common';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type ProductOptionFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
 
 const initialEmptyOption: ProductOptionCreate = {
 	name: undefined,
 	values: undefined,
+};
+
+const initialEmptyProductOptionFilter: ProductOptionFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
 };
 
 export const useProductOptionStore = defineStore('productOptionStore', {
@@ -16,11 +29,11 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		prod_option: [] as ProductOption[],
 		total_options: 0 as number,
 		new_prod_option: structuredClone(initialEmptyOption),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
+		filter: initialEmptyProductOptionFilter,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -29,10 +42,10 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.prod_option.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.prod_option.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -40,9 +53,9 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.prod_option.length === this.total_options) {
+			if (this.filter.current_page < 0 || this.prod_option.length === this.total_options) {
 				return;
 			}
 
@@ -57,15 +70,23 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data, '@odata.count': total } = await $api.productOption.getMany({
-					$top: this.page_size,
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
-					$skip: (this.current_page - 1) * this.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$expand: filterRelations(defaultProductOptionRelations).join(','),
-				});
+					$orderby: 'updated_at desc',
+				};
+
+				if (this.filter.query) {
+					const queryFilter = `(name contains '${this.filter.query}')`;
+					queryParams.$filter = queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.productOption.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_options > this.prod_option.length) {
+					if (this.filter.current_page > 1 && this.total_options > this.prod_option.length) {
 						this.prod_option = [...this.prod_option, ...data];
 					} else {
 						this.prod_option = data;

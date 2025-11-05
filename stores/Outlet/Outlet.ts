@@ -4,6 +4,11 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { OutletCreate } from '~/utils/types/form/outlet-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
+type OutletFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
 const initialEmptyOutlet: OutletCreate = {
 	code: '',
 	description: '',
@@ -19,6 +24,12 @@ const initialEmptyOutlet: OutletCreate = {
 	tax_rule_code: undefined,
 };
 
+const initialEmptyOutletFilter: OutletFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
+
 export const useOutletStore = defineStore('outletStore', {
 	state: () => ({
 		loading: false as boolean,
@@ -29,11 +40,7 @@ export const useOutletStore = defineStore('outletStore', {
 		total_outlets: 0 as number,
 		new_outlet: structuredClone(initialEmptyOutlet),
 		errors: [] as string[],
-		filter: {
-			query: '',
-			page_size: options_page_size[0] as number,
-			current_page: 1,
-		},
+		filter: initialEmptyOutletFilter,
 	}),
 	actions: {
 		resetNewOutlet() {
@@ -77,6 +84,7 @@ export const useOutletStore = defineStore('outletStore', {
 					$count: true,
 					$expand: 'tax_rule',
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
 				};
 
 				if (filter) {

@@ -4,7 +4,7 @@
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Outlet Code Search -->
 			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Outlet Code</label>
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
 				<UInput v-model="filter.query" placeholder="Search outlet code/description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 

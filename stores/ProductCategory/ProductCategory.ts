@@ -5,6 +5,13 @@ import type { Category } from '~/utils/types/category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { dir } from '~/utils/constants/dir';
 import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type CategoryFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
 
 const initialEmptyCategory: CategoryCreate = {
 	code: '',
@@ -24,17 +31,23 @@ const initialEmptyCategory: CategoryCreate = {
 	parent_category_code: undefined,
 };
 
+const initialEmptyCategoryFilter: CategoryFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
+
 export const useProductCategoryStore = defineStore('productCategoryStore', {
 	state: () => ({
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		categories: [] as Category[],
 		total_categories: 0 as number,
 		new_category: structuredClone(initialEmptyCategory),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
 		errors: [] as string[],
+		filter: initialEmptyCategoryFilter,
 	}),
 	actions: {
 		resetNewCategory() {
@@ -42,10 +55,10 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.categories.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.categories.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -53,9 +66,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.categories.length === this.total_categories) {
+			if (this.filter.current_page < 0 || this.categories.length === this.total_categories) {
 				return;
 			}
 
@@ -67,15 +80,23 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const { data, '@odata.count': total } = await $api.category.getMany({
-					$top: this.page_size,
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
 					$expand: 'products',
-					$skip: (this.current_page - 1) * this.page_size,
-				});
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
+				};
+
+				if (this.filter.query) {
+					const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
+					queryParams.$filter = queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_categories > this.categories.length) {
+					if (this.filter.current_page > 1 && this.total_categories > this.categories.length) {
 						this.categories = [...this.categories, ...data];
 					} else {
 						this.categories = data;

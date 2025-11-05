@@ -3,9 +3,22 @@ import { options_page_size } from '~/utils/options';
 import type { TagCreate } from '~/utils/types/form/tag-creation';
 import type { Tag } from '~/utils/types/tag';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type TagFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
 
 const initialEmptyTag: TagCreate = {
 	value: undefined,
+};
+
+const initialEmptyTagFilter: TagFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
 };
 
 export const useProductTagStore = defineStore('productTagStore', {
@@ -13,11 +26,11 @@ export const useProductTagStore = defineStore('productTagStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		tags: [] as Tag[],
 		total_tags: 0 as number,
 		new_tag: structuredClone(initialEmptyTag),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
+		filter: initialEmptyTagFilter,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -26,10 +39,10 @@ export const useProductTagStore = defineStore('productTagStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.tags.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.tags.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -37,9 +50,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.tags.length === this.total_tags) {
+			if (this.filter.current_page < 0 || this.tags.length === this.total_tags) {
 				return;
 			}
 
@@ -50,16 +63,23 @@ export const useProductTagStore = defineStore('productTagStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const { data, '@odata.count': total } = await $api.tag.getMany({
-					$top: this.page_size,
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
 					$expand: 'products',
-					$orderby: 'value asc',
-					$skip: (this.current_page - 1) * this.page_size,
-				});
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
+				};
+
+				if (this.filter.query) {
+					const queryFilter = `(value contains '${this.filter.query}')`;
+					queryParams.$filter = queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_tags > this.tags.length) {
+					if (this.filter.current_page > 1 && this.total_tags > this.tags.length) {
 						this.tags = [...this.tags, ...data];
 					} else {
 						this.tags = data;

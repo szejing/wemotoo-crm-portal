@@ -10,7 +10,7 @@
 
 			<!-- Customer Search -->
 			<div class="flex flex-col gap-1.5 sm:col-span-2">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Customer</label>
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
 				<UInput v-model="filter.query" placeholder="Search by Name / Phone No / Email..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 

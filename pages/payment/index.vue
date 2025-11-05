@@ -21,7 +21,7 @@
 					title="Payment Configuration"
 					:icon="ICONS.PAYMENT_METHODS"
 					description="Configure payment types and methods for your business"
-					color="blue"
+					color="green"
 					:navigations="payment_navigations"
 				/>
 			</div>

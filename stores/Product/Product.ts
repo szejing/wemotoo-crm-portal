@@ -148,6 +148,7 @@ export const useProductStore = defineStore('productStore', {
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$expand: defaultSimpleProductRelations.join(','),
+					$orderby: 'updated_at desc',
 				};
 
 				// Only add $filter if it's not empty

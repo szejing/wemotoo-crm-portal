@@ -1,3 +1,3 @@
 export type TagCreate = {
-	value: string;
+	value: string | undefined;
 };

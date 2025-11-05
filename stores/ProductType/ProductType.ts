@@ -4,9 +4,22 @@ import { options_page_size } from '~/utils/options';
 import type { ProductType } from '~/utils/types/product-type';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductTypeCreate } from '~/utils/types/form/product-type-creation';
+import type { BaseODataReq } from '~/repository/base/base.req';
+
+type ProductTypeFilter = {
+	query: string;
+	page_size: number;
+	current_page: number;
+};
 
 const initialEmptyProductType: ProductTypeCreate = {
 	value: undefined,
+};
+
+const initialEmptyProductTypeFilter: ProductTypeFilter = {
+	query: '',
+	page_size: options_page_size[0] as number,
+	current_page: 1,
 };
 
 export const useProductTypeStore = defineStore('productTypeStore', {
@@ -17,8 +30,7 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		prod_types: [] as ProductType[],
 		total_prod_types: 0 as number,
 		new_prod_type: structuredClone(initialEmptyProductType),
-		page_size: options_page_size[0] as number,
-		current_page: 1,
+		filter: initialEmptyProductTypeFilter,
 		errors: [] as string[],
 	}),
 	actions: {
@@ -27,10 +39,10 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		},
 
 		async updatePageSize(size: number) {
-			this.page_size = size;
+			this.filter.page_size = size;
 
-			if (this.page_size > this.prod_types.length) {
-				this.current_page = 1;
+			if (this.filter.page_size > this.prod_types.length) {
+				this.filter.current_page = 1;
 				return;
 			}
 
@@ -38,9 +50,9 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 		},
 
 		async updatePage(page: number) {
-			this.current_page = page;
+			this.filter.current_page = page;
 
-			if (this.current_page < 0 || this.prod_types.length === this.total_prod_types) {
+			if (this.filter.current_page < 0 || this.prod_types.length === this.total_prod_types) {
 				return;
 			}
 
@@ -53,14 +65,22 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const { data, '@odata.count': total } = await $api.productType.getMany({
-					$top: this.page_size,
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
 					$count: true,
-					$skip: (this.current_page - 1) * this.page_size,
-				});
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
+				};
+
+				if (this.filter.query) {
+					const queryFilter = `(value contains '${this.filter.query}')`;
+					queryParams.$filter = queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.productType.getMany(queryParams);
 
 				if (data) {
-					if (this.current_page > 1 && this.total_prod_types > this.prod_types.length) {
+					if (this.filter.current_page > 1 && this.total_prod_types > this.prod_types.length) {
 						this.prod_types = [...this.prod_types, ...data];
 					} else {
 						this.prod_types = data;

@@ -73,6 +73,7 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$expand: filterRelations(defaultPaymentTypeGroupRelations).join(','),
+					$orderby: 'updated_at desc',
 				};
 
 				// Only add $filter if it's not empty
