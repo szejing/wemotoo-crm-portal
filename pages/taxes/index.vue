@@ -17,34 +17,7 @@
 				</div>
 
 				<!-- Tax Configuration Section -->
-				<div class="space-y-4">
-					<div class="flex items-center gap-3">
-						<UIcon :name="ICONS.TAX" class="text-2xl text-emerald-500" />
-						<div>
-							<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Tax Configuration</h3>
-							<p class="text-sm text-gray-600 dark:text-gray-400">Set up and manage tax settings</p>
-						</div>
-					</div>
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-						<UCard
-							v-for="(navigate, index) in tax_navigations"
-							:key="index"
-							:to="navigate.to"
-							class="hover:shadow-lg transition-all duration-200 cursor-pointer hover:scale-[1.02] border border-gray-200 dark:border-gray-700"
-						>
-							<div class="flex items-start gap-4">
-								<div class="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-									<UIcon :name="navigate.icon" class="text-2xl text-emerald-600 dark:text-emerald-400" />
-								</div>
-								<div class="flex-1">
-									<h4 class="font-semibold text-gray-900 dark:text-white mb-1">{{ navigate.title }}</h4>
-									<p class="text-sm text-gray-600 dark:text-gray-400">{{ navigate.description }}</p>
-								</div>
-								<UIcon name="i-heroicons-arrow-right" class="text-gray-400 dark:text-gray-500" />
-							</div>
-						</UCard>
-					</div>
-				</div>
+				<ZMenu title="Tax Configuration" :icon="ICONS.TAX" description="Set up and manage tax settings" color="emerald" :navigations="tax_navigations" />
 			</div>
 		</template>
 	</UDashboardPanel>
