@@ -4,8 +4,8 @@
 			<ZSettingTemplate :templates="filteredSettingTempls" />
 		</div>
 
-		<div v-for="child in visibleChildren" :key="child.seq_no" class="space-y-3">
-			<h2 class="segment-desc">{{ child.segment_desc }}</h2>
+		<div v-for="child in visibleChildren" :key="child.seq_no" class="pb-2">
+			<h2 class="segment-desc font-bold bg-gray-100 dark:bg-gray-800">{{ child.segment_desc }}</h2>
 			<ZSettingTemplate :templates="child.filteredTempls" />
 		</div>
 	</div>
@@ -46,7 +46,6 @@ const shouldHide = computed(() => {
 
 <style scoped>
 .segment-desc {
-	background-color: rgb(241 245 249);
 	padding: 0.5rem 1rem;
 	border-radius: 0.375rem;
 }

@@ -1,6 +1,6 @@
 <template>
-	<div v-for="template in templates" :key="template.set_code" class="space-y-2">
-		<div class="flex justify-between items-center space-y-2">
+	<div v-for="template in templates" :key="template.set_code" class="py-3">
+		<div class="flex justify-between items-center">
 			<h6 class="setting-templs-title">{{ template.set_desc }}</h6>
 
 			<div class="min-w-[50%] text-end">
@@ -9,6 +9,7 @@
 					type="text"
 					:model-value="getSettingValue(template)"
 					:disabled="template.is_disabled"
+					:placeholder="template.default_val"
 					@update:model-value="(value) => updateSettingValue(template, value)"
 				/>
 				<UInput
@@ -16,20 +17,35 @@
 					type="number"
 					:model-value="getSettingValue(template)"
 					:disabled="template.is_disabled"
+					:placeholder="template.default_val"
 					@update:model-value="(value) => updateSettingValue(template, value)"
 				/>
 				<UCheckbox
 					v-if="template.input_type === InputTypeEnum.BOOLEAN"
 					:model-value="getSettingValue(template)"
 					:disabled="template.is_disabled"
-					@update:model-value="(value) => updateSettingValue(template, value)"
+					@update:model-value="(value: boolean | 'indeterminate') => updateSettingValue(template, value)"
 				/>
 				<UTextarea
 					v-if="template.input_type === InputTypeEnum.TEXTAREA"
 					:model-value="getSettingValue(template)"
 					:disabled="template.is_disabled"
+					:placeholder="template.default_val"
+					:rows="4"
 					@update:model-value="(value) => updateSettingValue(template, value)"
 				/>
+				<UInput
+					v-if="template.input_type === InputTypeEnum.MASKEDTEXTBOX"
+					type="text"
+					:model-value="getSettingValue(template)"
+					:disabled="template.is_disabled"
+					:placeholder="template.default_val"
+					@update:model-value="(value) => updateSettingValue(template, value)"
+				/>
+				<div v-if="template.input_type === InputTypeEnum.GETFILENAME" class="space-y-1">
+					<UInput type="file" :disabled="template.is_disabled" @change="handleFileChange(template, $event)" />
+					<p v-if="getSettingValue(template)" class="text-xs text-gray-500">Current: {{ getSettingValue(template) }}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -75,6 +91,14 @@ const updateSettingValue = (template: SettingTempl, value: string | number | boo
 	};
 	const updatedSetting = new Setting(settingData as unknown as Setting);
 	settingsStore.addToUpdatedSettings(updatedSetting);
+};
+
+const handleFileChange = (template: SettingTempl, event: Event) => {
+	const target = event.target as HTMLInputElement;
+	const file = target.files?.[0];
+	if (file) {
+		updateSettingValue(template, file.name);
+	}
 };
 </script>
 

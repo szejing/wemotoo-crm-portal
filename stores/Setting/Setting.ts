@@ -26,8 +26,8 @@ export const useSettingStore = defineStore('settingStore', {
 				});
 
 				if (data) {
-					this.segments = data[0].segments;
-					this.settings = data[0].settings.map((setting) => new Setting(setting));
+					this.segments = data[0]?.segments ?? [];
+					this.settings = data[0]?.settings.map((setting) => new Setting(setting)) ?? [];
 					// this.total_settings = data[0]['@odata.count'] ?? 0;
 				}
 			} catch (error) {
