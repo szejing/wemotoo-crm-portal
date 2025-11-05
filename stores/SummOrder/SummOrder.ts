@@ -106,12 +106,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ.filter.currency_code}'`;
 				}
 
-				if (this.order_summ.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ.filter.date_range.end ? getFormattedDate(this.order_summ.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrders({
@@ -150,12 +150,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ.filter.currency_code}'`;
 				}
 
-				if (this.order_summ.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ.filter.end_date ? getFormattedDate(this.order_summ.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ.filter.date_range.end ? getFormattedDate(this.order_summ.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const blob = await $api.summOrder.exportSummOrders({ $filter: filter, $orderby: 'biz_date desc' });
@@ -214,12 +214,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ_item.filter.currency_code}'`;
 				}
 
-				if (this.order_summ_item.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ_item.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ_item.filter.date_range.end ? getFormattedDate(this.order_summ_item.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderItems({
@@ -258,12 +258,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ_item.filter.currency_code}'`;
 				}
 
-				if (this.order_summ_item.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ_item.filter.end_date ? getFormattedDate(this.order_summ_item.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ_item.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_item.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ_item.filter.date_range.end ? getFormattedDate(this.order_summ_item.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_item.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const blob = await $api.summOrder.exportSummOrderItems({ $filter: filter, $orderby: 'biz_date desc' });
@@ -322,12 +322,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ_customer.filter.currency_code}'`;
 				}
 
-				if (this.order_summ_customer.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ_customer.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ_customer.filter.date_range.end ? getFormattedDate(this.order_summ_customer.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const { data, '@odata.count': total } = await $api.summOrder.getSummOrderCustomers({
@@ -366,12 +366,12 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter += ` and currency_code eq '${this.order_summ_customer.filter.currency_code}'`;
 				}
 
-				if (this.order_summ_customer.filter.end_date) {
-					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}' and '${
-						this.order_summ_customer.filter.end_date ? getFormattedDate(this.order_summ_customer.filter.end_date, 'yyyy-MM-dd') : undefined
+				if (this.order_summ_customer.filter.date_range.end) {
+					filter += ` and (biz_date between '${getFormattedDate(this.order_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.order_summ_customer.filter.date_range.end ? getFormattedDate(this.order_summ_customer.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.start_date, 'yyyy-MM-dd')}'`;
+					filter += ` and biz_date le '${getFormattedDate(this.order_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}'`;
 				}
 
 				const blob = await $api.summOrder.exportSummOrderCustomers({ $filter: filter, $orderby: 'biz_date desc' });

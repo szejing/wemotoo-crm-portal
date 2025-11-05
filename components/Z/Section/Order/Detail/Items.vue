@@ -3,9 +3,9 @@
 		<thead>
 			<tr class="border-b">
 				<th class="cell-header text-left">Item</th>
-				<th class="cell-header">Cost ({{ currencyCode }})</th>
+				<th class="cell-header">Unit Sell Price</th>
 				<th class="cell-header">Qty</th>
-				<th class="cell-header">Total Amt ({{ currencyCode }})</th>
+				<th class="cell-header">Price</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -54,29 +54,29 @@
 				</td>
 
 				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
-					{{ item.unit_sell_price.toFixed(2) }}
+					{{ formatCurrency(item.unit_sell_price, currencyCode) }}
 				</td>
 				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.qty }}</td>
 				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
-					{{ item.status == OrderItemStatus.ACTIVE ? item.net_amt.toFixed(2) : 0 }}
+					{{ item.status == OrderItemStatus.ACTIVE ? formatCurrency(item.net_amt, currencyCode) : 0 }}
 				</td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header border-b">Sub Total ({{ currencyCode }})</td>
-				<td class="cell-center font-bold text-lg italic border-b">{{ totalGrossAmt?.toFixed(2) ?? 0 }}</td>
+				<td class="cell-header border-b">Sub Total</td>
+				<td class="cell-center font-bold text-lg italic border-b">{{ formatCurrency(totalGrossAmt ?? 0, currencyCode) }}</td>
 			</tr>
 			<tr v-for="tax in taxes" :key="tax.tax_code">
 				<td colspan="2"></td>
-				<td class="cell-header border-b">{{ tax.tax_desc }} ({{ currencyCode }})</td>
-				<td class="cell-center text-red-500 italic border-b">-{{ tax.tax_amt.toFixed(2) }}</td>
+				<td class="cell-header border-b">{{ tax.tax_desc }}</td>
+				<td class="cell-center text-red-500 italic border-b">-{{ formatCurrency(tax.tax_amt, currencyCode) }}</td>
 			</tr>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header border-b-4 border-double">Net Total ({{ currencyCode }})</td>
-				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ totalNetAmt?.toFixed(2) ?? 0 }}</td>
+				<td class="cell-header border-b-4 border-double">Net Total</td>
+				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ formatCurrency(totalNetAmt ?? 0, currencyCode) }}</td>
 			</tr>
 		</tfoot>
 	</table>
