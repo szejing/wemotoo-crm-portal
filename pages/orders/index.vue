@@ -54,7 +54,7 @@
 						:columns="order_columns"
 						:loading="loading"
 						class="[&_tr]:hover:bg-gray-50 dark:[&_tr]:hover:bg-gray-800/50 [&_tr]:cursor-pointer [&_tr]:transition-colors"
-						@select-row="selectOrder"
+						@select="selectOrder"
 					>
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-12 gap-3">
@@ -100,7 +100,8 @@
 import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
-import type { Order } from '~/utils/types/order';
+import type { TableRow } from '@nuxt/ui';
+import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
 
 useHead({ title: 'Wemotoo CRM - Orders' });
 
@@ -161,8 +162,11 @@ const exportOrders = async () => {
 	await orderStore.exportOrders();
 };
 
-const selectOrder = (row: Order) => {
-	navigateTo(`/orders/detail/${encodeURIComponent(row.order_no)}`);
+const selectOrder = (e: Event, row: TableRow<OrderHistory>) => {
+	const order = row.original;
+	if (!order) return;
+
+	navigateTo(`/orders/detail/${encodeURIComponent(order.order_no)}`);
 };
 </script>
 

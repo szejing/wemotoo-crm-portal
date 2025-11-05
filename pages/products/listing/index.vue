@@ -41,7 +41,7 @@
 				</div>
 
 				<!-- Table -->
-				<UTable :data="rows" :columns="product_columns" :loading="loading" @select-row="selectProduct">
+				<UTable :data="rows" :columns="product_columns" :loading="loading" @select="selectProduct">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-cube" class="w-12 h-12 text-gray-400" />
@@ -64,6 +64,7 @@ import { ZModalLoading } from '#components';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { Product } from '~/utils/types/product';
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const productStore = useProductStore();
@@ -78,7 +79,10 @@ const rows = computed(() => {
 	return products.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const selectProduct = async (product: Product) => {
+const selectProduct = async (e: Event, row: TableRow<Product>) => {
+	const product = row.original;
+	if (!product) return;
+
 	const loadingModal = overlay.create(ZModalLoading, {
 		props: {
 			key: 'loading',

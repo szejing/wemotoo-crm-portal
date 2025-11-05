@@ -62,7 +62,7 @@
 
 						<!-- Items Table -->
 						<div class="px-6 pb-6 pt-4">
-							<UTable :data="group.items" :columns="sale_columns" :loading="loading" @select-row="selectSale" />
+							<UTable :data="group.items" :columns="sale_columns" :loading="loading" @select="selectSale" />
 						</div>
 					</div>
 				</div>
@@ -81,6 +81,7 @@ import { getFormattedDate } from 'wemotoo-common';
 import { sale_columns } from '~/utils/table-columns';
 import type { Bill } from '~/repository/modules/sale/models/response/bill';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 useHead({ title: 'Wemotoo CRM - Sale Detail Listing' });
 
@@ -140,8 +141,11 @@ const updatePageSize = async (size: number) => {
 	}
 };
 
-const selectSale = (row: Bill) => {
-	navigateTo(`/bills/detail/${encodeURIComponent(row.bill_no)}`);
+const selectSale = (e: Event, row: TableRow<Bill>) => {
+	const bill = row.original;
+	if (!bill) return;
+
+	navigateTo(`/bills/detail/${encodeURIComponent(bill.bill_no)}`);
 };
 </script>
 

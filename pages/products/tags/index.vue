@@ -39,7 +39,7 @@
 					</UButton>
 				</div>
 
-				<UTable :data="rows" :columns="tag_columns" :loading="loading" @select-row="selectTag" />
+				<UTable :data="rows" :columns="tag_columns" :loading="loading" @select="selectTag" />
 
 				<!-- Pagination  -->
 				<div v-if="tags.length > 0" class="section-pagination">
@@ -55,6 +55,7 @@ import { ZModalConfirmation, ZModalTagDetail } from '#components';
 import { tag_columns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();
@@ -86,7 +87,8 @@ const deleteTag = async (id: number) => {
 	confirmModal.open();
 };
 
-const selectTag = async (tag: Tag) => {
+const selectTag = async (e: Event, row: TableRow<Tag>) => {
+	const tag = row.original;
 	if (!tag) return;
 
 	const tagModal = overlay.create(ZModalTagDetail, {

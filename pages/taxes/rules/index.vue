@@ -22,7 +22,7 @@
 						</div>
 					</div>
 					<!-- Table  -->
-					<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select-row="selectTaxRule">
+					<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 						<template #empty-state>
 							<div class="flex-col-center section-empty">
 								<h2>No tax code Found</h2>
@@ -45,6 +45,7 @@
 import { options_page_size } from '~/utils/options';
 import { tax_rule_columns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
+import type { TableRow } from '@nuxt/ui';
 
 const taxRuleStore = useTaxRuleStore();
 
@@ -60,7 +61,8 @@ const rows = computed(() => {
 	return tax_rules.value.slice((current_page.value - 1) * page_size.value, current_page.value * page_size.value);
 });
 
-const selectTaxRule = async (taxRule: TaxRule) => {
+const selectTaxRule = async (e: Event, row: TableRow<TaxRule>) => {
+	const taxRule = row.original;
 	if (!taxRule) return;
 
 	navigateTo(`/taxes/rules/${taxRule.code}`);

@@ -41,7 +41,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="outlet_columns" :loading="loading" loading-state="loading" @select-row="selectOutlet">
+				<UTable :data="rows" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
@@ -65,6 +65,7 @@ import { ZModalConfirmation, ZModalOutletDetail } from '#components';
 import { outlet_columns } from '~/utils/table-columns';
 import type { Outlet } from '~/utils/types/outlet';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const outletStore = useOutletStore();
@@ -99,7 +100,8 @@ const deleteOutlet = async (code: string) => {
 	confirmModal.open();
 };
 
-const selectOutlet = async (outlet: Outlet) => {
+const selectOutlet = async (e: Event, row: TableRow<Outlet>) => {
+	const outlet = row.original;
 	if (!outlet) return;
 
 	const outletModal = overlay.create(ZModalOutletDetail, {

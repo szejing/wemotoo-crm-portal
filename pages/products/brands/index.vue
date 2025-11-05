@@ -40,7 +40,7 @@
 					</UButton>
 				</div>
 
-				<UTable :data="rows" :columns="brand_columns" :loading="loading" @select-row="selectBrand" />
+				<UTable :data="rows" :columns="brand_columns" :loading="loading" @select="selectBrand" />
 
 				<!-- Pagination  -->
 				<div v-if="brands.length > 0" class="section-pagination">
@@ -56,6 +56,7 @@ import { ZModalBrandDetail, ZModalConfirmation } from '#components';
 import { brand_columns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const brandStore = useBrandStore();
@@ -90,7 +91,8 @@ const deleteBrand = async (code: string) => {
 	confirmModal.open();
 };
 
-const selectBrand = async (brand: Brand) => {
+const selectBrand = async (e: Event, row: TableRow<Brand>) => {
+	const brand = row.original;
 	if (!brand) return;
 	const brandModal = overlay.create(ZModalBrandDetail, {
 		props: {

@@ -39,7 +39,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="category_columns" :loading="loading" @select-row="selectCategory" />
+				<UTable :data="rows" :columns="category_columns" :loading="loading" @select="selectCategory" />
 
 				<!-- Pagination  -->
 				<div v-if="categories.length > 0" class="section-pagination">
@@ -55,6 +55,7 @@ import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
 import { category_columns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 useHead({ title: 'Wemotoo CRM - Categories' });
 
@@ -86,7 +87,8 @@ const deleteCategory = async (code: string) => {
 	confirmModal.open();
 };
 
-const selectCategory = async (category: Category) => {
+const selectCategory = async (e: Event, row: TableRow<Category>) => {
+	const category = row.original;
 	if (!category) return;
 	const categoryModal = overlay.create(ZModalCategoryDetail, {
 		props: {

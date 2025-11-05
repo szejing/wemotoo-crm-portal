@@ -34,7 +34,7 @@
 				</div>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select-row="selectCustomer">
+				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select="selectCustomer">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -56,6 +56,7 @@
 import { options_page_size } from '~/utils/options';
 import { customer_columns } from '~/utils/table-columns';
 import type { Customer } from '~/utils/types/customer';
+import type { TableRow } from '@nuxt/ui';
 
 useHead({ title: 'Wemotoo CRM - Customers' });
 
@@ -66,8 +67,11 @@ const rows = computed(() => {
 	return customers.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const selectCustomer = async (customer: Customer) => {
+const selectCustomer = async (e: Event, row: TableRow<Customer>) => {
+	const customer = row.original;
 	if (!customer) return;
+
+	navigateTo(`/customers/detail/${encodeURIComponent(customer.customer_no)}`);
 };
 
 const updatePage = async (page: number) => {

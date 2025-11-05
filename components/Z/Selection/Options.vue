@@ -2,7 +2,7 @@
 	<UCard>
 		<h1 class="text-center">Product Options</h1>
 
-		<UTable v-model="selectedOptions" :data="productOptions" :columns="product_option_columns" by="name" @select-row="select">
+		<UTable v-model="selectedOptions" :data="productOptions" :columns="product_option_columns" by="name" @select="select">
 			<template #values-data="{ row }">
 				<span>{{ row.values.map((v: ProdOptionValuesInput) => v.value).join(' · ') }}</span>
 			</template>
@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import { product_option_columns } from '~/utils/table-columns';
 import type { ProdOptionInput, ProdOptionValuesInput } from '~/utils/types/product';
-
+import type { TableRow } from '@nuxt/ui';
 const props = defineProps({
 	options: {
 		type: Array as PropType<ProdOptionInput[]>,
@@ -40,10 +40,13 @@ selectedOptions.value = computed(() => {
 	return props.options?.map((option) => ({ ...option })) ?? [];
 }).value;
 
-const select = (row: ProdOptionInput) => {
-	const index = selectedOptions.value.findIndex((item: ProdOptionInput) => item.id === row.id);
+const select = (e: Event, row: TableRow<ProdOptionInput>) => {
+	const option = row.original;
+	if (!option) return;
+
+	const index = selectedOptions.value.findIndex((item: ProdOptionInput) => item.id === option.id);
 	if (index === -1) {
-		selectedOptions.value.push(row);
+		selectedOptions.value.push({ ...option });
 	} else {
 		selectedOptions.value.splice(index, 1);
 	}

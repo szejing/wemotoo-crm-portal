@@ -13,7 +13,7 @@
 				<div class="sm:col-span-2">
 					<UCard>
 						<h2>Add New Tax</h2>
-						<FormTaxCreation class="mt-4" />
+						<FormTaxCreation class="mt-4" @update:active="onUpdateActive" />
 					</UCard>
 				</div>
 
@@ -22,7 +22,7 @@
 						<ZSectionFilteroutlet />
 						<div>
 							<!-- Table  -->
-							<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select-row="selectTax">
+							<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select="selectTax">
 								<template #empty-state>
 									<div class="flex-col-center section-empty">
 										<h2>No tax code Found</h2>
@@ -47,19 +47,7 @@
 import { ZModalConfirmation, ZModalTaxDetail, ZModalLoading } from '#components';
 import { tax_code_columns } from '~/utils/table-columns';
 import type { Tax } from '~/utils/types/tax';
-
-const links = [
-	{
-		label: 'Taxes',
-		icon: ICONS.TAX,
-		to: '/taxes',
-	},
-	{
-		label: 'All Tax Codes',
-		icon: ICONS.LIST,
-		to: '/taxes/codes',
-	},
-];
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const taxStore = useTaxStore();
@@ -94,7 +82,8 @@ const deleteTax = async (code: string) => {
 	confirmModal.open();
 };
 
-const selectTax = async (tax: Tax) => {
+const selectTax = async (e: Event, row: TableRow<Tax>) => {
+	const tax = row.original;
 	if (!tax) return;
 
 	const taxModal = overlay.create(ZModalTaxDetail, {
@@ -120,7 +109,10 @@ const selectTax = async (tax: Tax) => {
 	taxModal.open();
 };
 
-const onUpdateActive = async (tax: Tax) => {
+const onUpdateActive = async (e: Event, row: TableRow<Tax>) => {
+	const tax = row.original;
+	if (!tax) return;
+
 	const loadingModal = overlay.create(ZModalLoading, {
 		props: {
 			key: 'loading',

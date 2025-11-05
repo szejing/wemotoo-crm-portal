@@ -40,7 +40,7 @@
 					</UButton>
 				</div>
 
-				<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select-row="selectProductOption" />
+				<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption" />
 
 				<!-- Pagination  -->
 				<div v-if="prod_option.length > 0" class="section-pagination">
@@ -57,6 +57,7 @@ import { product_option_columns } from '~/utils/table-columns';
 import type { ProductOption } from '~/utils/types/product-option';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import { options_page_size } from '~/utils/options';
+import type { TableRow } from '@nuxt/ui';
 
 useHead({ title: 'Wemotoo CRM - Options' });
 
@@ -89,7 +90,9 @@ const deleteProductOption = async (id: number) => {
 	confirmModal.open();
 };
 
-const selectProductOption = async (option: ProductOption) => {
+const selectProductOption = async (e: Event, row: TableRow<ProductOption>) => {
+	const option = row.original;
+
 	if (!option) return;
 
 	const optionModal = overlay.create(ZModalOptionDetail, {

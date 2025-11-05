@@ -22,7 +22,7 @@
 						<!-- <ZSectionFilteroutlet /> -->
 						<div>
 							<!-- Table  -->
-							<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select-row="selectTaxGroup">
+							<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
 								<template #empty-state>
 									<div class="flex-col-center section-empty">
 										<h2>No tax group Found</h2>
@@ -47,6 +47,7 @@
 import { ZModalConfirmation, ZModalTaxGroupDetail } from '#components';
 import { tax_group_columns } from '~/utils/table-columns';
 import type { TaxGroup } from '~/utils/types/tax-group';
+import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const taxGroupStore = useTaxGroupStore();
@@ -80,7 +81,8 @@ const deleteTaxGroup = async (code: string) => {
 	confirmModal.open();
 };
 
-const selectTaxGroup = async (taxGroup: TaxGroup) => {
+const selectTaxGroup = async (e: Event, row: TableRow<TaxGroup>) => {
+	const taxGroup = row.original;
 	if (!taxGroup) return;
 
 	const taxGroupModal = overlay.create(ZModalTaxGroupDetail, {
