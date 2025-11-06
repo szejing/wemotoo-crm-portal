@@ -1,14 +1,10 @@
 <template>
-	<div>
-		<UFormField name="paymentTypes" class="mt-2">
-			<USelectMenu v-model="paymentTypeCode" :items="paymentTypeItems" size="md" value-key="code">
-				<template #default>
-					<span v-if="paymentTypeCode" class="truncate">{{ paymentTypes.find((type: any) => type.code === paymentTypeCode)?.code?.toUpperCase() }}</span>
-					<span v-else class="text-neutral-400">Select Payment Type</span>
-				</template>
-			</USelectMenu>
-		</UFormField>
-	</div>
+	<USelectMenu v-model="paymentTypeCode" :items="paymentTypeItems" size="md" value-key="code" placeholder="Select Payment Type">
+		<template #default>
+			<span v-if="paymentTypeCode" class="truncate">{{ paymentTypes.find((type: any) => type.code === paymentTypeCode)?.code?.toUpperCase() }}</span>
+			<span v-else class="text-neutral-400">Select Payment Type</span>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>

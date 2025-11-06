@@ -1,26 +1,12 @@
 <template>
-	<UFormField name="productTypes" class="mt-2">
-		<USelectMenu v-model="productTypeId" :items="productTypeItems" size="md" value-key="id">
-			<template #default>
-				<span v-if="productTypeId" class="truncate">{{ prod_types.find((type) => type.id === productTypeId)?.value?.toUpperCase() }}</span>
-				<span v-else class="text-neutral-400">Select Type</span>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu v-model="productTypeId" :items="items" size="md" value-key="id" label-key="value" description-key="value" placeholder="Select Type" />
 </template>
 
 <script lang="ts" setup>
 const productTypeStore = useProductTypeStore();
-const { prod_types } = storeToRefs(productTypeStore);
+const { prod_types: items } = storeToRefs(productTypeStore);
 
-const productTypeItems = computed(() => {
-	return prod_types.value.map((productType) => ({
-		...productType,
-		label: productType.value,
-	}));
-});
-
-const props = defineProps<{ typeId: number }>();
+const props = defineProps<{ typeId: number | undefined }>();
 
 const emit = defineEmits(['update:typeId']);
 

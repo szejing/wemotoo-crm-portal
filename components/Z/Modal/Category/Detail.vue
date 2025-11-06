@@ -23,10 +23,10 @@
 				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" is-update />
 				<!-- *********************** General Info *********************** -->
 
-				<!-- <div>
+				<div>
 					<h4>Parent Category</h4>
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
-				</div> -->
+				</div>
 			</UForm>
 		</template>
 

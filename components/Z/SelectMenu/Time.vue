@@ -1,15 +1,13 @@
 <template>
-	<UFormField name="time" class="mt-2">
-		<USelectMenu v-model="time" :items="timeItems" value-key="label" size="md">
-			<template #default>
-				<span v-if="time" class="truncate">
-					{{ props.type === 'start' ? 'Start : ' : 'End : ' }}
-					{{ time }}
-				</span>
-				<span v-else class="text-neutral-400">{{ title }}</span>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu v-model="time" :items="items" value-key="label" size="md">
+		<template #default>
+			<span v-if="time" class="truncate">
+				{{ props.type === 'start' ? 'Start : ' : 'End : ' }}
+				{{ time }}
+			</span>
+			<span v-else class="text-neutral-400">{{ title }}</span>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +38,7 @@ const time_options = [
 	'11.00 pm',
 ];
 
-const timeItems = computed(() => {
+const items = computed(() => {
 	return time_options.map((time) => ({ label: time }));
 });
 

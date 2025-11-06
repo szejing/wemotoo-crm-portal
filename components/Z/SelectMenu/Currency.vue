@@ -1,42 +1,32 @@
 <template>
 	<USelectMenu
-		v-model="currency_code"
+		v-model="currency"
 		v-model:search-term="searchTerm"
-		:items="currencyItems"
+		:items="items"
 		:search-input="{}"
 		size="md"
-		value-key="code"
-		:disabled="currencies.length == 1"
-	>
-		<template #default>
-			<span v-if="currency_code" class="truncate">{{ currency_code }}</span>
-			<span v-else class="text-neutral-400">Select Currency</span>
-		</template>
-	</USelectMenu>
+		label-key="code"
+		description-key="name"
+		:disabled="items.length == 1"
+		placeholder="Select Currency"
+	/>
 </template>
 
 <script lang="ts" setup>
 const searchTerm = ref('');
 const merchantInfoStore = useMerchantInfoStore();
-const { currencies } = storeToRefs(merchantInfoStore);
-
-const currencyItems = computed(() => {
-	return currencies.value.map((currency) => ({
-		...currency,
-		label: currency.code,
-	}));
-});
+const { currencies: items } = storeToRefs(merchantInfoStore);
 
 const props = defineProps<{ currencyCode: string | undefined }>();
 
-const emit = defineEmits(['update:currencyCode']);
+const emit = defineEmits(['update:currency']);
 
-const currency_code = computed({
+const currency = computed({
 	get() {
-		return props.currencyCode ?? undefined;
+		return items.value.find((currency) => currency.code === props.currencyCode);
 	},
 	set(value) {
-		emit('update:currencyCode', value);
+		emit('update:currency', value);
 	},
 });
 </script>

@@ -1,34 +1,29 @@
 <template>
-	<UFormField name="tags" class="mt-2">
-		<USelectMenu v-model="tax_rule" v-model:search-term="searchTerm" :items="taxRuleItems" :search-input="{}" size="md" value-key="code">
-			<template #default>
-				<span v-if="tax_rule" class="truncate">{{ tax_rule.code }}</span>
-				<span v-else class="text-neutral-400">Select Tax Rule</span>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu
+		v-model="tax_rule"
+		v-model:search-term="searchTerm"
+		:items="items"
+		:search-input="{}"
+		size="md"
+		label-key="code"
+		description-key="description"
+		placeholder="Select Tax Rule"
+	/>
 </template>
 
 <script lang="ts" setup>
-import type { TaxRule, TaxRuleInput } from '~/utils/types/tax-rule';
+import type { TaxRule } from '~/utils/types/tax-rule';
 
 const searchTerm = ref('');
 const taxRuleStore = useTaxRuleStore();
-const { tax_rules: tax_rules_options } = storeToRefs(taxRuleStore);
+const { tax_rules: items } = storeToRefs(taxRuleStore);
 
-const taxRuleItems = computed(() => {
-	return tax_rules_options.value.map((taxRule) => ({
-		...taxRule,
-		label: taxRule.code,
-	}));
-});
-
-const props = defineProps<{ taxRule: TaxRule | TaxRuleInput | string | undefined }>();
+const props = defineProps<{ taxRule: TaxRule | string | undefined }>();
 
 const emit = defineEmits(['update:taxRule']);
 
 onMounted(async () => {
-	if (tax_rules_options.value.length === 0) {
+	if (items.value.length === 0) {
 		await taxRuleStore.getTaxRules();
 	}
 });
@@ -36,7 +31,7 @@ onMounted(async () => {
 const tax_rule = computed({
 	get() {
 		if (typeof props.taxRule === 'string') {
-			return tax_rules_options.value.find((tax_rule) => tax_rule.code === props.taxRule);
+			return items.value.find((tax_rule) => tax_rule.code === props.taxRule);
 		}
 
 		return props.taxRule ?? undefined;

@@ -25,5 +25,14 @@ export default defineAppConfig({
 				root: 'w-full',
 			},
 		},
+
+		// SelectMenu
+		selectMenu: {
+			slots: {
+				base: 'min-w-30 sm:min-w-40',
+				content: 'min-w-fit',
+				trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+			},
+		},
 	},
 });

@@ -14,6 +14,12 @@
 				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
 			</div>
 
+			<!-- Order Item Status Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order Item Status</label>
+				<ZSelectMenuOrderItemStatus v-model:status="filter.item_status" @update:model-value="handleItemStatusChange" />
+			</div>
+
 			<!-- Currency Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
@@ -45,6 +51,10 @@
 			</UBadge>
 			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
 				Status: {{ capitalizeFirstLetter(filter.status) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.item_status" color="info" variant="subtle" size="sm" @click="clearFilter('item_status')">
+				Item Status: {{ capitalizeFirstLetter(filter.item_status) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm" @click="clearFilter('currency')">
@@ -96,6 +106,10 @@ const handleStatusChange = async () => {
 	await search();
 };
 
+const handleItemStatusChange = async () => {
+	await search();
+};
+
 const handleCurrencyChange = async () => {
 	await search();
 };
@@ -104,6 +118,7 @@ const clearFilters = async () => {
 	filter.value.date_range.start = new Date();
 	filter.value.date_range.end = undefined;
 	filter.value.status = OrderStatus.PENDING_PAYMENT;
+	filter.value.item_status = undefined;
 	filter.value.currency_code = 'MYR';
 	order_summ_item.value.current_page = 1;
 	await search();
@@ -115,6 +130,8 @@ const clearFilter = async (filterKey: string) => {
 		filter.value.date_range.end = undefined;
 	} else if (filterKey === 'status') {
 		filter.value.status = undefined;
+	} else if (filterKey === 'item_status') {
+		filter.value.item_status = undefined;
 	} else if (filterKey === 'currency') {
 		filter.value.currency_code = 'MYR';
 	}

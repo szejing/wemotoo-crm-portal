@@ -5,19 +5,20 @@
 			<!-- Date Range Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>
-				<ZSelectMenuDateRange
-					:model-value="{ start: filter.start_date, end: filter.end_date }"
-					placeholder="Select date range"
-					@update:model-value="handleDateRangeChange"
-				/>
+				<ZSelectMenuDateRange :model-value="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Order Status Filter -->
 			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order Status</label>
-				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Sale Status</label>
+				<ZSelectMenuSaleStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
 			</div>
 
+			<!-- Order Item Status Filter -->
+			<div class="flex flex-col gap-1.5">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order Item Status</label>
+				<ZSelectMenuOrderItemStatus v-model:status="filter.item_status" @update:model-value="handleItemStatusChange" />
+			</div>
 			<!-- Currency Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
@@ -43,12 +44,16 @@
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
 			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
-			<UBadge v-if="filter.start_date || filter.end_date" color="primary" variant="subtle" size="sm" @click="clearFilter('date')">
-				Date: {{ formatDateRange({ start: filter.start_date, end: filter.end_date }) }}
+			<UBadge v-if="filter.date_range.start || filter.date_range.end" color="primary" variant="subtle" size="sm" @click="clearFilter('date')">
+				Date: {{ formatDateRange(filter.date_range) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
 				Status: {{ capitalizeFirstLetter(filter.status) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.item_status" color="info" variant="subtle" size="sm" @click="clearFilter('item_status')">
+				Item Status: {{ capitalizeFirstLetter(filter.item_status) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm" @click="clearFilter('currency')">
@@ -62,16 +67,18 @@
 <script lang="ts" setup>
 import type { Range } from '~/utils/interface';
 import { format } from 'date-fns';
-import { OrderStatus } from 'wemotoo-common';
+import { SaleStatus } from 'wemotoo-common';
 
 const salesSummStore = useSummSaleStore();
 const { sale_summ_items } = storeToRefs(salesSummStore);
 const filter = computed(() => sale_summ_items.value.filter);
 
-const is_loading = computed(() => sale_summ_items.value.is_loading);
+const is_loading = computed(() => sale_summ_items.value.loading);
 
 const hasActiveFilters = computed(() => {
-	return filter.value.start_date || filter.value.end_date || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR');
+	return (
+		filter.value.date_range.start || filter.value.date_range.end || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR')
+	);
 });
 
 const formatDateRange = (range: Range) => {
@@ -89,12 +96,16 @@ const search = async () => {
 };
 
 const handleDateRangeChange = async (newValue: Range) => {
-	filter.value.start_date = newValue.start ? new Date(newValue.start) : new Date();
-	filter.value.end_date = newValue.end ? new Date(newValue.end) : undefined;
+	filter.value.date_range.start = newValue.start ? new Date(newValue.start) : new Date();
+	filter.value.date_range.end = newValue.end ? new Date(newValue.end) : undefined;
 	await search();
 };
 
 const handleStatusChange = async () => {
+	await search();
+};
+
+const handleItemStatusChange = async () => {
 	await search();
 };
 
@@ -103,9 +114,10 @@ const handleCurrencyChange = async () => {
 };
 
 const clearFilters = async () => {
-	filter.value.start_date = new Date();
-	filter.value.end_date = undefined;
-	filter.value.status = OrderStatus.PENDING_PAYMENT;
+	filter.value.date_range.start = new Date();
+	filter.value.date_range.end = undefined;
+	filter.value.status = SaleStatus.COMPLETED;
+	filter.value.item_status = undefined;
 	filter.value.currency_code = 'MYR';
 	sale_summ_items.value.current_page = 1;
 	await search();
@@ -113,10 +125,12 @@ const clearFilters = async () => {
 
 const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'date') {
-		filter.value.start_date = new Date();
-		filter.value.end_date = undefined;
+		filter.value.date_range.start = new Date();
+		filter.value.date_range.end = undefined;
 	} else if (filterKey === 'status') {
-		filter.value.status = OrderStatus.PENDING_PAYMENT;
+		filter.value.status = undefined;
+	} else if (filterKey === 'item_status') {
+		filter.value.item_status = undefined;
 	} else if (filterKey === 'currency') {
 		filter.value.currency_code = 'MYR';
 	}

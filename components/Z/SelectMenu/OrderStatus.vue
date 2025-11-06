@@ -1,22 +1,20 @@
 <template>
-	<UFormField name="status">
-		<USelectMenu v-model="status" :items="statusItems" value-key="label" size="md" :ui="{ base: 'min-w-[150px]' }">
-			<template #default>
-				<span v-if="status">
-					<UBadge :color="getOrderStatusColor(status)" variant="subtle" class="truncate">
-						{{ capitalizeFirstLetter(status) }}
-					</UBadge>
-				</span>
-				<span v-else class="text-neutral-400">Select Order Status</span>
-			</template>
-
-			<template #item="{ item }">
-				<UBadge :color="getOrderStatusColor(item.label)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(item.label) }}
+	<USelectMenu v-model="status" :items="items" value-key="label" size="md" placeholder="Select Order Status">
+		<template #default>
+			<span v-if="status">
+				<UBadge :color="getOrderStatusColor(status)" variant="subtle" class="truncate">
+					{{ capitalizeFirstLetter(status) }}
 				</UBadge>
-			</template>
-		</USelectMenu>
-	</UFormField>
+			</span>
+			<span v-else class="text-neutral-400">Select Order Status</span>
+		</template>
+
+		<template #item="{ item }">
+			<UBadge :color="getOrderStatusColor(item.label)" variant="subtle" class="truncate">
+				{{ capitalizeFirstLetter(item.label) }}
+			</UBadge>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
@@ -31,13 +29,13 @@ const statuses = computed(() => {
 	return options_order_status.filter((status) => status !== OrderStatus.REQUIRES_ACTION && status !== OrderStatus.REFUNDED);
 });
 
-const statusItems = computed(() => {
+const items = computed(() => {
 	return statuses.value.map((status) => ({ label: status }));
 });
 
 const status = computed({
 	get() {
-		return props.status;
+		return props.status ?? 'All';
 	},
 	set(value) {
 		emit('update:status', value);

@@ -1,37 +1,32 @@
 <template>
-	<UFormField name="categories" class="mt-2">
-		<USelectMenu v-model="categories" v-model:search-term="searchTerm" :items="categoryItems" :search-input="{}" size="md" value-key="code" multiple>
-			<template #default>
-				<span v-if="categories.length" class="truncate">{{ categories.map((category: Category) => category.code).join(', ') }}</span>
-				<span v-else class="text-neutral-400">Select Categories</span>
-			</template>
-
-			<template #empty>
-				<UButton color="success" variant="ghost">Create "{{ searchTerm }}"</UButton>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu
+		v-model="categories"
+		v-model:search-term="searchTerm"
+		:items="items"
+		size="md"
+		label-key="code"
+		description-key="description"
+		multiple
+		placeholder="Select Categories"
+	>
+		<template #empty>
+			<UButton color="success" variant="ghost">Create "{{ searchTerm }}"</UButton>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
-import type { Category, CategoryInput } from '~/utils/types/category';
+import type { Category } from '~/utils/types/category';
 
 const searchTerm = ref('');
 const categoryStore = useProductCategoryStore();
-const { categories: category_options } = storeToRefs(categoryStore);
+const { categories: items } = storeToRefs(categoryStore);
 
-const categoryItems = computed(() => {
-	return category_options.value.map((category) => ({
-		...category,
-		label: category.code,
-	}));
-});
-
-const props = defineProps<{ categories: Category[] | CategoryInput[] | undefined }>();
+const props = defineProps<{ categories: Category[] | undefined }>();
 
 const emit = defineEmits(['update:categories']);
 
-const categories = computed({
+const categories = computed<Category[]>({
 	get() {
 		return props.categories ?? [];
 	},

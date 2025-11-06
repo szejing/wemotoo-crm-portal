@@ -1,18 +1,11 @@
 <template>
-	<UFormField name="duration" class="mt-2">
-		<USelectMenu v-model="duration" :items="durationItems" value-key="label" size="md">
-			<template #default>
-				<span v-if="duration" class="truncate">{{ duration }}</span>
-				<span v-else class="text-neutral-400">Duration (30m)</span>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu v-model="duration" :items="items" value-key="label" size="md" label-key="label" description-key="label" placeholder="Select Duration" />
 </template>
 
 <script lang="ts" setup>
 const duration_options = ['30m', '1h', '1h30m', '2h', '2h30m', '3h', '3h30m'];
 
-const durationItems = computed(() => {
+const items = computed(() => {
 	return duration_options.map((duration) => ({ label: duration }));
 });
 

@@ -1,22 +1,20 @@
 <template>
-	<UFormField name="status">
-		<USelectMenu v-model="status" :items="statusItems" value-key="label" size="md" :ui="{ base: 'min-w-[150px]' }">
-			<template #default>
-				<span v-if="status">
-					<UBadge :color="getSaleStatusColor(status)" variant="subtle" class="truncate">
-						{{ capitalizeFirstLetter(status) }}
-					</UBadge>
-				</span>
-				<span v-else class="text-neutral-400">Select Status</span>
-			</template>
-
-			<template #item="{ item }">
-				<UBadge :color="getSaleStatusColor(item.label)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(item.label) }}
+	<USelectMenu v-model="status" :items="items" value-key="label" size="md" placeholder="Select Sale Status">
+		<template #default>
+			<span v-if="status">
+				<UBadge :color="getSaleStatusColor(status)" variant="subtle" class="truncate">
+					{{ capitalizeFirstLetter(status) }}
 				</UBadge>
-			</template>
-		</USelectMenu>
-	</UFormField>
+			</span>
+			<span v-else class="text-neutral-400">Select Status</span>
+		</template>
+
+		<template #item="{ item }">
+			<UBadge :color="getSaleStatusColor(item.label)" variant="subtle" class="truncate">
+				{{ capitalizeFirstLetter(item.label) }}
+			</UBadge>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
@@ -27,7 +25,7 @@ import type { SaleStatus } from 'wemotoo-common';
 const props = defineProps<{ status: SaleStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
-const statusItems = computed(() => {
+const items = computed(() => {
 	return options_sale_status.map((status) => ({ label: status }));
 });
 
