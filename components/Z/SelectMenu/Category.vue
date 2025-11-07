@@ -13,13 +13,13 @@
 
 <script lang="ts" setup>
 import type { SelectMenuItem } from '@nuxt/ui';
-import type { Category } from '~/utils/types/category';
+import type { Category, CategoryInput } from '~/utils/types/category';
 
 const searchTerm = ref('');
 const categoryStore = useProductCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 
-const props = defineProps<{ category: Category | undefined; ignoreCodes?: string[] }>();
+const props = defineProps<{ category: Category | CategoryInput | undefined; ignoreCodes?: string[] }>();
 
 const availableCategories = computed(() => {
 	return categories.value.filter((catg) => !props.ignoreCodes?.includes(catg.code));

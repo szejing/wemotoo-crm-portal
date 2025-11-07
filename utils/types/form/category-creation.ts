@@ -1,3 +1,5 @@
+import type { CategoryInput } from '../category';
+
 export type CategoryCreate = {
 	code: string;
 	description?: string;
@@ -5,5 +7,5 @@ export type CategoryCreate = {
 	is_internal: boolean;
 	images?: File[];
 	thumbnail?: File;
-	parent_category_code?: string;
+	parent_category?: CategoryInput;
 };

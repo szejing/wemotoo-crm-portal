@@ -1,22 +1,39 @@
 <template>
-	<div>
-		<UForm :schema="CreateCategoryValidation" :state="new_category" class="space-y-4" @submit="onSubmit">
-			<ZDropzone @files-selected="updateThumbnail" />
-
-			<!-- *********************** General Info *********************** -->
-			<ZInputProductCategoryGeneralInfo v-model:code="new_category.code" v-model:description="new_category.description" />
-			<!-- *********************** General Info *********************** -->
-
-			<!-- <div>
-				<h4>Parent Category</h4>
-				<ZSelectMenuCategory v-model:category="new_category.parent_category" />
-			</div> -->
-
-			<div class="flex-center text-center mt-3">
-				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
+	<UForm :schema="CreateCategoryValidation" :state="new_category" class="space-y-6" @submit="onSubmit">
+		<div class="space-y-6">
+			<!-- Thumbnail Upload Section -->
+			<div class="space-y-2">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Category Thumbnail</h3>
+				<ZDropzone @files-selected="updateThumbnail" />
 			</div>
-		</UForm>
-	</div>
+
+			<!-- *********************** General Info *********************** -->
+			<div class="space-y-2">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+				<ZInputProductCategoryGeneralInfo v-model:code="new_category.code" v-model:description="new_category.description" />
+			</div>
+			<!-- *********************** General Info *********************** -->
+
+			<!-- Parent Category Section -->
+			<div class="space-y-2">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Parent Category</h3>
+				<ZSelectMenuCategory
+					v-model:category="new_category.parent_category"
+					:ignore-codes="[new_category.code]"
+					placeholder="Select parent category..."
+					class="sm:w-[50%] w-full"
+				/>
+			</div>
+		</div>
+
+		<!-- Submit Button -->
+		<div class="flex justify-center pt-4">
+			<UButton color="success" size="md" :loading="adding">
+				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
+				<span class="text-sm">Create Category</span>
+			</UButton>
+		</div>
+	</UForm>
 </template>
 
 <script lang="ts" setup>
@@ -48,9 +65,19 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	new_category.value.description = description;
 	new_category.value.is_internal = is_internal;
 	new_category.value.is_active = is_active;
-	new_category.value.parent_category_code = parent_category?.code ?? undefined;
+
+	if (parent_category) {
+		new_category.value.parent_category = {
+			code: parent_category.code!,
+		};
+	}
 
 	await categoryStore.createCategory();
+
+	// Navigate back to categories list after successful creation
+	if (!categoryStore.errors || categoryStore.errors.length === 0) {
+		await navigateTo('/products/categories');
+	}
 };
 </script>
 

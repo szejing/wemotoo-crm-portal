@@ -8,7 +8,7 @@
 
 				<template #right>
 					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/products/create')">
+						<UButton color="success" @click="navigateTo('/products/brands/create')">
 							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
 							Create
 						</UButton>

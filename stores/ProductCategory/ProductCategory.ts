@@ -28,7 +28,7 @@ const initialEmptyCategory: CategoryCreate = {
 	images: undefined,
 
 	// parent category
-	parent_category_code: undefined,
+	parent_category: undefined,
 };
 
 const initialEmptyCategoryFilter: CategoryFilter = {
@@ -142,7 +142,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 					is_active: this.new_category.is_active,
 					images: images,
 					thumbnail: thumbnail,
-					parent_category_code: this.new_category.parent_category_code,
+					parent_category_code: this.new_category.parent_category?.code,
 				});
 
 				if (data.category) {

@@ -53,7 +53,7 @@ type Schema = z.output<typeof UpdateCategoryValidation>;
 
 const props = defineProps({
 	category: {
-		type: Object as PropType<Category> | undefined,
+		type: Object as PropType<Category>,
 		required: true,
 	},
 });

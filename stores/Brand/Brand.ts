@@ -35,6 +35,10 @@ export const useBrandStore = defineStore('brandStore', {
 		errors: [] as string[],
 	}),
 	actions: {
+		resetNewProductBrand() {
+			this.new_brand = structuredClone(initialEmptyBrand);
+		},
+
 		async updatePageSize(size: number) {
 			this.filter.page_size = size;
 

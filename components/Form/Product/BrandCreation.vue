@@ -1,14 +1,19 @@
 <template>
-	<div>
-		<UForm :schema="CreateBrandValidation" :state="new_brand" class="space-y-4" @submit="onSubmit">
-			<!-- *********************** General Info *********************** -->
+	<UForm :schema="CreateBrandValidation" :state="new_brand" class="space-y-4" @submit="onSubmit">
+		<!-- *********************** General Info *********************** -->
+		<div class="space-y-2">
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
 			<ZInputProductBrandGeneralInfo v-model:code="new_brand.code" v-model:description="new_brand.description" />
-			<!-- *********************** General Info *********************** -->
-			<div class="flex-center text-center mt-3">
-				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
-			</div>
-		</UForm>
-	</div>
+		</div>
+
+		<!-- Submit Button -->
+		<div class="flex justify-center pt-4">
+			<UButton color="success" size="md" :loading="adding">
+				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
+				<span class="text-sm">Create Brand</span>
+			</UButton>
+		</div>
+	</UForm>
 </template>
 
 <script lang="ts" setup>
@@ -22,7 +27,7 @@ const brandStore = useBrandStore();
 const { adding, new_brand } = storeToRefs(brandStore);
 
 onMounted(() => {
-	brandStore.resetNewBrand();
+	brandStore.resetNewProductBrand();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

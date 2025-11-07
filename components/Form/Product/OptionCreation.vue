@@ -1,15 +1,13 @@
 <template>
-	<div>
-		<UForm :schema="CreateProductOptionValidation" :state="new_prod_option" class="space-y-4" @submit="onSubmit">
-			<!-- *********************** General Info *********************** -->
-			<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
-			<!-- *********************** General Info *********************** -->
+	<UForm :schema="CreateProductOptionValidation" :state="new_prod_option" class="space-y-4" @submit="onSubmit">
+		<!-- *********************** General Info *********************** -->
+		<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
+		<!-- *********************** General Info *********************** -->
 
-			<div class="flex-center text-center mt-3">
-				<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
-			</div>
-		</UForm>
-	</div>
+		<div class="flex-center text-center mt-3">
+			<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
+		</div>
+	</UForm>
 </template>
 
 <script lang="ts" setup>
