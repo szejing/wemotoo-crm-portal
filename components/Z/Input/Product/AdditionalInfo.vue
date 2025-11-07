@@ -94,7 +94,7 @@
 
 <script lang="ts" setup>
 import type { ProductCreate } from '~/utils/types/form/product-creation';
-import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
+import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
@@ -123,7 +123,7 @@ const normal_ui_tabs = {
 
 const props = defineProps({
 	product: {
-		type: Object as PropType<ProductCreate>,
+		type: Object as PropType<Product>,
 		required: true,
 	},
 	hideHeader: {
@@ -151,15 +151,15 @@ const product_additional_info = computed(() => {
 		{ label: 'Tax', slot: 'tax' },
 	];
 });
-const updateProductOptions = (value: ProdOptionInput[]) => {
+const updateProductOptions = (value: ProductOptionInput[]) => {
 	emit('update:options', value);
 };
 
-const updateProductVariants = (value: ProdVariantInput[]) => {
+const updateProductVariants = (value: ProductVariantInput[]) => {
 	emit('update:variants', value);
 };
 
-const deleteProductVariant = (value: ProdVariantInput) => {
+const deleteProductVariant = (value: ProductVariantInput) => {
 	emit('delete:variant', value);
 };
 

@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProdVariantInput } from '~/utils/types/product';
+import type { ProductVariantInput } from '~/utils/types/product';
 
-const props = defineProps<{ variant: ProdVariantInput | undefined }>();
+const props = defineProps<{ variant: ProductVariantInput | undefined }>();
 const emit = defineEmits(['update:productvariant', 'view:productvariant']);
 
 const prodVariant = computed({

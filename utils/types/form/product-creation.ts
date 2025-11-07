@@ -14,19 +14,19 @@ export type ProductCreate = {
 	status: ProductStatus;
 
 	// Relations (using codes/IDs)
-	brand_codes?: string[];
-	category_codes: string[];
-	tag_ids?: number[];
-	type_id: number;
+	brand_codes?: string[]; // optional
+	category_codes: string[]; // optional
+	tag_ids?: number[]; // optional
+	type_id: number; // item or services
 
 	// File uploads
-	thumbnail?: File | Image;
-	images?: (File | Image)[];
+	thumbnail?: File | Image; // optional
+	images?: (File | Image)[]; // optional
 
 	// Nested inputs
-	price_types?: PriceInput[];
-	options?: ProductOptionInput[];
-	variants?: ProductVariantInput[];
+	price_types?: PriceInput[]; // required
+	options?: ProductOptionInput[]; // mainly for items
+	variants?: ProductVariantInput[]; // mainly for items
 
 	metadata?: Record<string, unknown>;
 };

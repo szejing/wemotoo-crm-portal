@@ -91,7 +91,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { UpdateProductValidation } from '~/utils/schema';
-import type { ProdOptionInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProductOptionInput, ProductVariantInput, Product } from '~/utils/types/product';
 
 type Schema = z.output<typeof UpdateProductValidation>;
 
@@ -109,11 +109,11 @@ const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const current_product = ref(props.product);
 
-const updateProductOptions = (value: ProdOptionInput[]) => {
+const updateProductOptions = (value: ProductOptionInput[]) => {
 	current_product.value.options = value;
 };
 
-const updateProductVariants = (value: ProdVariantInput[]) => {
+const updateProductVariants = (value: ProductVariantInput[]) => {
 	current_product.value.variants = value;
 };
 

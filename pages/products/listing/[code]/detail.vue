@@ -60,7 +60,7 @@ import { ZModalLoading } from '#components';
 import type { ProductStatus } from 'wemotoo-common';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 import type { Category } from '~/utils/types/category';
-import type { ProdVariantInput } from '~/utils/types/product';
+import type { ProductVariantInput } from '~/utils/types/product';
 import type { Tag } from '~/utils/types/tag';
 
 definePageMeta({
@@ -154,7 +154,7 @@ const updateProduct = async () => {
 	}
 };
 
-const deleteVariant = async (variant: ProdVariantInput) => {
+const deleteVariant = async (variant: ProductVariantInput) => {
 	const { product_code, variant_code } = variant;
 
 	if (!product_code || !variant_code) {
@@ -216,7 +216,7 @@ const deleteVariant = async (variant: ProdVariantInput) => {
 // 			});
 // 		});
 // 		// product options
-// 		const prodOptions: ProdOptionInput[] = [];
+// 		const prodOptions: ProductOptionInput[] = [];
 // 		options?.forEach((option) => {
 // 			prodOptions.push({
 // 				id: option.id!,

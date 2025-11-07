@@ -37,11 +37,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProdOptionInput, ProdOptionValuesInput, Product, ProdVariantInput } from '~/utils/types/product';
+import type { ProductOptionInput, ProductOptionValueInput, Product, ProductVariantInput } from '~/utils/types/product';
 
 const isVariantDetailsModalOpen = ref(false);
-const variantDetail = ref<ProdVariantInput>();
-const props = defineProps<{ product: Product; options: ProdOptionInput[] | undefined; variants: ProdVariantInput[] | undefined }>();
+const variantDetail = ref<ProductVariantInput>();
+const props = defineProps<{ product: Product; options: ProductOptionInput[] | undefined; variants: ProductVariantInput[] | undefined }>();
 const emit = defineEmits(['update:variants', 'delete:variant']);
 
 const prodOptions = computed({
@@ -66,9 +66,9 @@ const totalPossibleVariants = computed(() => {
 
 const autoGenerate = () => {
 	if (prodOptions.value.length === 0) return;
-	const variants: ProdVariantInput[] = [];
+	const variants: ProductVariantInput[] = [];
 
-	const combine = (currentOptions: ProdOptionValuesInput[], optionIndex: number) => {
+	const combine = (currentOptions: ProductOptionValueInput[], optionIndex: number) => {
 		if (optionIndex === prodOptions.value.length) {
 			variants.push({ options: [...currentOptions] });
 			return;
@@ -98,7 +98,7 @@ const autoGenerate = () => {
 		}
 
 		for (const price of variant.price_types ?? []) {
-			if (price.id == props.product.price_types?.[0].id) {
+			if (price.id == props.product.price_types?.[0]?.id) {
 				price.id = undefined;
 			}
 		}
@@ -114,14 +114,14 @@ const addVariant = () => {
 	// });
 };
 
-const viewVariant = (variant: ProdVariantInput) => {
+const viewVariant = (variant: ProductVariantInput) => {
 	isVariantDetailsModalOpen.value = true;
 	variantDetail.value = variant;
 };
 
-const updateVariantDetail = (variant: ProdVariantInput) => {
+const updateVariantDetail = (variant: ProductVariantInput) => {
 	isVariantDetailsModalOpen.value = false;
-	const index = prodVariants.value.findIndex((v: ProdVariantInput) => v.variant_code === variant.variant_code && v.product_code === variant.product_code); // Find variant by codes
+	const index = prodVariants.value.findIndex((v: ProductVariantInput) => v.variant_code === variant.variant_code && v.product_code === variant.product_code); // Find variant by codes
 
 	if (index !== -1) {
 		prodVariants.value[index] = { ...variant }; // Replace all details of the found variant

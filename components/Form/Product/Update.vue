@@ -44,9 +44,8 @@ import type { z } from 'zod';
 import { ProductStatus } from 'wemotoo-common';
 import { UpdateProductValidation } from '~/utils/schema';
 import type { CategoryInput } from '~/utils/types/category';
-
 import type { PriceInput } from '~/utils/types/price';
-import type { ProdOptionInput, ProdVariantInput } from '~/utils/types/product';
+import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 import type { TagInput } from '~/utils/types/tag';
 
 type Schema = z.output<typeof UpdateProductValidation>;
@@ -64,7 +63,7 @@ const updateProductVariants = (value: any) => {
 	current_product.value!.variants = value;
 };
 
-const deleteProductVariant = (value: ProdVariantInput) => {
+const deleteProductVariant = (value: ProductVariantInput) => {
 	emit('delete:variant', value);
 };
 
@@ -93,7 +92,7 @@ const orig_sell_price = computed({
 	},
 	set(value) {
 		if (current_product.value!.price_types && current_product.value!.price_types.length > 0) {
-			current_product.value!.price_types[0].orig_sell_price = value;
+			current_product.value!.price_types[0]!.orig_sell_price = value;
 		} else {
 			current_product.value!.price_types = [
 				{ id: undefined, orig_sell_price: value, cost_price: cost_price.value, sale_price: sale_price.value, currency_code: currency_code.value },
@@ -164,7 +163,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	});
 
 	// product options
-	const prodOptions: ProdOptionInput[] = [];
+	const prodOptions: ProductOptionInput[] = [];
 	options?.forEach((option) => {
 		prodOptions.push({
 			id: option.id!,
@@ -179,7 +178,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	});
 
 	// product variants
-	const prodVariants: ProdVariantInput[] = [];
+	const prodVariants: ProductVariantInput[] = [];
 	variants?.forEach((variant) => {
 		prodVariants.push({
 			variant_code: variant.variant_code!,

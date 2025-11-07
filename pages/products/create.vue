@@ -1,88 +1,71 @@
 <template>
-	<div>
-		<UBreadcrumb :links="links" />
-		<div class="flex-jbetween-icenter">
-			<h2 class="my-6">Add Product</h2>
-			<!-- <div class="flex items-center gap-4">
-				<div class="block sm:hidden">
-					<div class="section-menu" @click="isOpen = !isOpen">
-						<UIcon :name="ICONS.MENU_OPEN_ROUNDED" class="size-7 block sm:hidden" />
+	<UDashboardPanel id="product-create" grow>
+		<template #header>
+			<UDashboardNavbar title="Add New Product" :ui="{ right: 'gap-3' }">
+				<template #leading>
+					<UDashboardSidebarCollapse />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="container w-full mx-auto px-4 sm:px-6 py-4">
+				<FormProductCreation />
+			</div>
+		</template>
+
+		<template #footer>
+			<!-- Fixed Footer with Actions -->
+			<div class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
+				<div class="mx-auto px-4 sm:px-6 py-4">
+					<!-- Desktop Layout -->
+					<div class="hidden md:flex justify-between items-center gap-3">
+						<UButton color="neutral" variant="ghost" size="lg" :loading="adding" @click="() => saveDraft()">
+							<UIcon :name="ICONS.SAVE" />
+							Save Draft
+						</UButton>
+
+						<div class="flex gap-3">
+							<UButton color="neutral" variant="outline" size="lg" @click="navigateTo('/products')">
+								<UIcon :name="ICONS.HORIZONTAL_ELLIPSIS" />
+								Cancel
+							</UButton>
+
+							<UButton color="success" variant="solid" size="lg" :loading="adding" @click="() => onSubmit()">
+								<UIcon :name="ICONS.CHECK_ROUNDED" />
+								Create Product
+							</UButton>
+						</div>
+					</div>
+
+					<!-- Mobile Layout -->
+					<div class="md:hidden flex flex-col gap-2">
+						<UButton color="success" size="md" class="w-full" :loading="adding" @click="() => onSubmit()">
+							<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
+							<span class="text-sm">Create Product</span>
+						</UButton>
+						<div class="flex gap-2">
+							<UButton color="neutral" variant="soft" size="sm" class="flex-1" :loading="adding" @click="() => saveDraft()">
+								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+								<span class="text-xs">Save Draft</span>
+							</UButton>
+							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="navigateTo('/products')">
+								<UIcon :name="ICONS.HORIZONTAL_ELLIPSIS" class="w-4 h-4" />
+								<span class="text-xs">Cancel</span>
+							</UButton>
+						</div>
 					</div>
 				</div>
-			</div> -->
-		</div>
-
-		<!-- Stepper Mode -->
-		<div class="wrapper-stepper">
-			<FormProductStepperCreation />
-		</div>
-
-		<!-- Original Form Mode -->
-		<!-- ***** Form ***** -->
-		<!-- <div v-else class="wrapper-grid">
-			<FormProductCreation class="col-span-3" />
-
-			<div class="side-wrapper">
-				<ZInputProductSidebar
-					:product="newProduct"
-					@update:status="updateStatus"
-					@update:brands="updateBrands"
-					@update:categories="updateCategories"
-					@update:tags="updateTags"
-					@update:thumbnail="updateThumbnail"
-					@update:images="updateImages"
-				/>
 			</div>
-
-			<UModal v-model:open="isOpen">
-				<UCard
-					:ui="{
-						body: {
-							base: 'container mx-auto',
-							background: '',
-							padding: 'px-4 py-5 sm:p-6',
-						},
-					}"
-				>
-					<template #header>
-						<div class="flex-jbetween-icenter">
-							<h2>Product Status & Thumbnails</h2>
-							<UIcon :name="ICONS.CLOSE_ROUNDED" class="size-7 text-secondary-600" @click="isOpen = false" />
-						</div>
-					</template>
-
-					<ZInputProductSidebar
-						:product="newProduct"
-						@update:status="updateStatus"
-						@update:brands="updateBrands"
-						@update:categories="updateCategories"
-						@update:tags="updateTags"
-						@update:thumbnail="updateThumbnail"
-						@update:images="updateImages"
-					/>
-				</UCard>
-			</UModal>
-		</div> -->
-	</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <script lang="ts" setup>
-const links = [
-	{
-		label: 'Products',
-		icon: ICONS.PRODUCT,
-		to: '/products',
-	},
-	{
-		label: 'New Product',
-		to: '/create',
-	},
-];
-
-// const isOpen = ref(false);
+import { ICONS } from '~/utils/icons';
 
 const productStore = useProductStore();
-// const { newProduct } = storeToRefs(productStore);
+const { adding } = storeToRefs(productStore);
 
 useHead({ title: 'Wemotoo CRM - Create Product' });
 
@@ -90,75 +73,17 @@ onBeforeRouteLeave(() => {
 	productStore.resetNewProduct();
 });
 
-// const updateStatus = (value: ProductStatus) => {
-// 	newProduct.value.status = value;
-// };
+const saveDraft = async () => {
+	await productStore.createProduct();
+};
 
-// const updateBrands = (value: Brand[]) => {
-// 	newProduct.value.brands = value;
-// };
-
-// const updateCategories = (value: Category[]) => {
-// 	newProduct.value.categories = value;
-// };
-
-// const updateTags = (value: Tag[]) => {
-// 	newProduct.value.tags = value;
-// };
-
-// const updateThumbnail = (value: File) => {
-// 	newProduct.value.thumbnail = value;
-// };
-
-// const updateImages = (value: File[]) => {
-// 	newProduct.value.images = value;
-// };
+const onSubmit = async () => {
+	await productStore.createProduct();
+};
 </script>
 
 <style scoped>
-.wrapper-grid {
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 1rem;
-}
-
-@media (min-width: 640px) {
-	.wrapper-grid {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-	}
-}
-
-.wrapper-stepper {
-	width: 100%;
-}
-
-.side-wrapper {
-	display: none;
-	grid-column: span 1 / span 1;
-}
-
-@media (min-width: 640px) {
-	.side-wrapper {
-		display: block;
-	}
-}
-
 h2 {
-	color: var(--color-secondary-600);
-	font-weight: 400;
-}
-
-.section-menu {
-	background-color: white;
-	box-shadow:
-		0 4px 6px -1px rgb(0 0 0 / 0.1),
-		0 2px 4px -2px rgb(0 0 0 / 0.1);
-	padding: 0.5rem;
-	border-radius: 9999px;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	color: var(--color-secondary-600);
 }
 </style>

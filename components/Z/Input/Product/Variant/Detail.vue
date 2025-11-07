@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import type { PriceInput } from '~/utils/types/price';
-import type { Product, ProdVariantInput } from '~/utils/types/product';
+import type { Product, ProductVariantInput } from '~/utils/types/product';
 
 const props = defineProps({
 	product: {
@@ -60,7 +60,7 @@ const props = defineProps({
 		required: true,
 	},
 	details: {
-		type: Object as PropType<ProdVariantInput>,
+		type: Object as PropType<ProductVariantInput>,
 		required: true,
 	},
 });

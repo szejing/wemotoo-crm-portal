@@ -116,20 +116,3 @@ export type Product = {
 
 	metadata?: Record<string, unknown>;
 };
-
-// ============================================
-// DEPRECATED ALIASES (for backward compatibility)
-// Remove these after migration
-// ============================================
-
-/** @deprecated Use ProductOptionValueInput instead */
-export type ProdVariantOptionValuesInput = ProductOptionValueInput;
-
-/** @deprecated Use ProductOptionValueInput instead */
-export type ProdOptionValuesInput = ProductOptionValueInput;
-
-/** @deprecated Use ProductOptionInput instead */
-export type ProdOptionInput = ProductOptionInput;
-
-/** @deprecated Use ProductVariantInput instead */
-export type ProdVariantInput = ProductVariantInput;
