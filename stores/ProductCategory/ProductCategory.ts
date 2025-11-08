@@ -173,7 +173,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let images: ImageReq[] = [];
+				let images: ImageReq[] | null = null;
 				if (new_images) {
 					const resp = await $api.image.uploadMultiple(new_images, `${dir.categories}/${code}`);
 					images = resp.images.map((image) => ({
@@ -182,7 +182,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 					}));
 				}
 
-				let thumbnail: ImageReq | undefined;
+				let thumbnail: ImageReq | null = null;
 				if (new_thumbnail) {
 					const resp = await $api.image.upload(new_thumbnail, `${dir.categories}/${code}`);
 					thumbnail = {

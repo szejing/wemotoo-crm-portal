@@ -7,10 +7,6 @@
 	>
 		<template #body>
 			<UForm ref="formRef" :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
-				<div class="flex-jbetween-icenter gap-4">
-					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
-				</div>
-
 				<div class="w-full">
 					<ZDropzone class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
 				</div>
@@ -23,9 +19,15 @@
 				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" is-update />
 				<!-- *********************** General Info *********************** -->
 
-				<div>
-					<h4>Parent Category</h4>
-					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<div>
+						<h4>Parent Category</h4>
+						<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
+					</div>
+
+					<div class="flex justify-start items-center gap-4">
+						<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
+					</div>
 				</div>
 			</UForm>
 		</template>

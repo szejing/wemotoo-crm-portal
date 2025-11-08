@@ -38,7 +38,7 @@ class ProductCategoryModule extends HttpFactory {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
-			body: removeNullValues(category),
+			body: category,
 		});
 	}
 

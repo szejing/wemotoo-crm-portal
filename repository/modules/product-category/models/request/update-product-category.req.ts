@@ -4,7 +4,7 @@ export type UpdateProductCategoryReq = {
 	description: string;
 	is_internal: boolean | undefined;
 	is_active: boolean | undefined;
-	images: ImageReq[] | undefined;
-	thumbnail: ImageReq | undefined;
-	parent_category_code: string | undefined;
+	images: ImageReq[] | undefined | null;
+	thumbnail: ImageReq | undefined | null;
+	parent_category_code: string | undefined | null;
 };
