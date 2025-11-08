@@ -83,7 +83,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
-					$expand: 'products',
+					$expand: 'products,thumbnail,images,parent_category',
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$orderby: 'updated_at desc',
 				};
@@ -110,7 +110,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				this.loading = false;
 			}
 		},
-		async createCategory() {
+		async createCategory(): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 
@@ -150,9 +150,10 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 					this.categories.push(data.category);
 				}
 				this.resetNewCategory();
+				return true;
 			} catch (err: any) {
-				console.error(err);
 				failedNotification(err.message);
+				return false;
 			} finally {
 				this.adding = false;
 				this.loading = false;

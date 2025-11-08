@@ -24,7 +24,6 @@ const code = computed({
 		return props.code;
 	},
 	set(value) {
-		console.log('value', value);
 		emit('update:code', value?.toUpperCase());
 	},
 });

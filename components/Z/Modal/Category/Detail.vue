@@ -79,6 +79,7 @@ const updateImages = (files: File[]) => {
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { code, description, is_active, is_internal, parent_category } = event.data;
+
 	emit('update', { code, description, is_active, is_internal, parent_category, thumbnail: newThumbnail.value, images: newImages.value });
 };
 

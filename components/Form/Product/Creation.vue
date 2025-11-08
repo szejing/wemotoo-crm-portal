@@ -783,27 +783,10 @@ const onSubmit = async () => {
 
 	loadingModal.open();
 
-	try {
-		const result = await productStore.createProduct();
+	const success = await productStore.createProduct();
 
-		if (result) {
-			toast.add({
-				title: 'Success!',
-				description: 'Product created successfully',
-				icon: ICONS.CHECK_ROUNDED,
-				color: 'success',
-			});
-			navigateTo('/products');
-		}
-	} catch (error) {
-		console.error(error);
-		toast.add({
-			title: 'Error',
-			description: 'Failed to create product',
-			color: 'error',
-		});
-	} finally {
-		loadingModal.close();
+	if (success) {
+		useRouter().back();
 	}
 };
 

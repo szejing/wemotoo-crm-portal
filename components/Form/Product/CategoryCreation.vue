@@ -28,7 +28,7 @@
 
 		<!-- Submit Button -->
 		<div class="flex justify-center pt-4">
-			<UButton color="success" size="md" :loading="adding">
+			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
 				<span class="text-sm">Create Category</span>
 			</UButton>
@@ -72,11 +72,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		};
 	}
 
-	await categoryStore.createCategory();
+	const success = await categoryStore.createCategory();
 
-	// Navigate back to categories list after successful creation
-	if (!categoryStore.errors || categoryStore.errors.length === 0) {
-		await navigateTo('/products/categories');
+	if (success) {
+		useRouter().back();
 	}
 };
 </script>

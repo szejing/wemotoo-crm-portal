@@ -8,7 +8,7 @@
 
 		<!-- Submit Button -->
 		<div class="flex justify-center pt-4">
-			<UButton color="success" size="md" :loading="adding">
+			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
 				<span class="text-sm">Create Brand</span>
 			</UButton>
@@ -39,7 +39,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		is_active,
 	};
 
-	await brandStore.createBrand();
+	const success = await brandStore.createBrand();
+
+	if (success) {
+		useRouter().back();
+	}
 };
 </script>
 

@@ -95,7 +95,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 			}
 		},
 
-		async addTag(value: string) {
+		async addTag(value: string): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;
 
@@ -109,9 +109,11 @@ export const useProductTagStore = defineStore('productTagStore', {
 					this.tags.push(data.tag);
 				}
 				this.resetNewTag();
+				return true;
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
+				return false;
 			} finally {
 				this.adding = false;
 				this.loading = false;

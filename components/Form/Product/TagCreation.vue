@@ -8,7 +8,7 @@
 
 		<!-- Submit Button -->
 		<div class="flex justify-center pt-4">
-			<UButton color="success" size="md" :loading="adding">
+			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
 				<span class="text-sm">Create Tag</span>
 			</UButton>
@@ -32,7 +32,11 @@ onMounted(() => {
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { value } = event.data;
-	await tagStore.addTag(value);
+	const success = await tagStore.addTag(value);
+
+	if (success) {
+		useRouter().back();
+	}
 };
 </script>
 
