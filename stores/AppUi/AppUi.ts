@@ -101,8 +101,8 @@ const navigations = [
 						to: '/taxes/codes',
 					},
 					{
-						label: 'Tax Groups',
-						to: '/taxes/groups',
+						label: 'Tax Rules',
+						to: '/taxes/rules',
 					},
 				],
 			},

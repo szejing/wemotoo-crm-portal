@@ -15,19 +15,17 @@
 					<ZDropzone class="mt-2" multiple :existing-images="state.category.images" @files-selected="updateImages" />
 				</div>
 
+				<div class="flex justify-end">
+					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
+				</div>
+
 				<!-- *********************** General Info *********************** -->
 				<ZInputProductCategoryGeneralInfo v-model:code="state.category.code" v-model:description="state.category.description" is-update />
 				<!-- *********************** General Info *********************** -->
 
-				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<div>
-						<h4>Parent Category</h4>
-						<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" />
-					</div>
-
-					<div class="flex justify-start items-center gap-4">
-						<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
-					</div>
+				<div class="w-full">
+					<h4 class="text-sm font-medium text-neutral-900 dark:text-neutral-100">Parent Category</h4>
+					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" class="mt-2 w-full" />
 				</div>
 			</UForm>
 		</template>

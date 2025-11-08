@@ -8,7 +8,8 @@
 		label-key="code"
 		description-key="description"
 		placeholder="Select Tax"
-	/>
+	>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
@@ -40,6 +41,10 @@ const tax = computed({
 		emit('update:tax', value);
 	},
 });
+
+const remove = () => {
+	emit('update:tax', undefined);
+};
 </script>
 
 <style scoped></style>

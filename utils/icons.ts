@@ -38,4 +38,5 @@ export const ICONS = {
 	TAX: 'i-material-symbols-attach-money-rounded',
 	OUTLET: 'i-material-symbols-store-outline-rounded',
 	SAVE: 'i-material-symbols-save-outline-rounded',
+	CROSS: 'i-material-symbols-close-small-rounded',
 };
