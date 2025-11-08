@@ -1,6 +1,8 @@
 <template>
 	<UModal :fullscreen="fullscreen" :ui="{ overlay: 'bg-transparent', content: 'shadow-none' }" prevent-close>
-		<ZLoading class="h-full w-full" />
+		<template #content>
+			<ZLoading class="h-full w-full" />
+		</template>
 	</UModal>
 </template>
 

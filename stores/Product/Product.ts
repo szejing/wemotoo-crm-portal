@@ -206,11 +206,11 @@ export const useProductStore = defineStore('productStore', {
 					thumbnail,
 				});
 
-				if (data.products) {
+				if (data.product) {
 					successNotification(`${this.new_product.code} - Product Created !`);
-					this.products = data.products;
 					return true;
 				}
+				return false;
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);

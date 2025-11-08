@@ -74,7 +74,11 @@
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<UFormField label="Product Code">
 										<p class="text-xs text-neutral-500 my-1">Unique identifier for your product</p>
-										<UInput v-model="new_product.code" placeholder="e.g., PROD-001 (auto-generated if empty)" />
+										<UInput
+											v-model="new_product.code"
+											placeholder="e.g., PROD-001 (auto-generated if empty)"
+											@update:model-value="new_product.code = $event.toUpperCase()"
+										/>
 									</UFormField>
 									<UFormField label="Product Name" required>
 										<p class="text-xs text-neutral-500 my-1">The name customers will see</p>
@@ -451,9 +455,9 @@ import type { CategoryInput, Category } from '~/utils/types/category';
 import type { PriceInput } from '~/utils/types/price';
 import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 import type { TagInput, Tag } from '~/utils/types/tag';
-import { ZModalLoading } from '#components';
 import type { BrandInput, Brand } from '~/utils/types/brand';
 import { CreateProductValidation } from '~/utils/schema';
+import { ZModalLoading } from '#components';
 
 // Store
 const productStore = useProductStore();
@@ -765,12 +769,6 @@ const onSubmit = async () => {
 		prodBrands.push({ code: brand.code! });
 	});
 
-	console.log(prodCategories);
-
-	console.log(prodBrands);
-
-	console.log(prodTags);
-
 	new_product.value.price_types = prodPrice;
 	new_product.value.category_codes = prodCategories.map((c) => c.code!);
 	new_product.value.tag_ids = prodTags.map((t) => t.id!);
@@ -780,20 +778,21 @@ const onSubmit = async () => {
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
-	// const overlay = useOverlay();
-	// const loadingModal = overlay.create(ZModalLoading, {
-	// 	props: {
-	// 		key: 'loading',
-	// 	},
-	// });
+	const overlay = useOverlay();
+	const loadingModal = overlay.create(ZModalLoading, {
+		props: {
+			key: 'loading',
+		},
+	});
 
-	// loadingModal.open();
+	loadingModal.open();
 
-	// const success = await productStore.createProduct();
+	const success = await productStore.createProduct();
 
-	// if (success) {
-	// 	useRouter().back();
-	// }
+	loadingModal.close();
+	if (success) {
+		useRouter().back();
+	}
 };
 
 // Lifecycle: Auto-save on product changes
@@ -814,6 +813,11 @@ watch(
 onMounted(() => {
 	window.addEventListener('scroll', handleScroll, { passive: true });
 	handleScroll(); // Initial check
+});
+
+// Expose methods to parent component
+defineExpose({
+	onSubmit,
 });
 
 // Lifecycle: Cleanup

@@ -10,7 +10,7 @@
 
 		<template #body>
 			<div class="container w-full mx-auto px-4 sm:px-6 py-4">
-				<FormProductCreation />
+				<FormProductCreation ref="formRef" />
 			</div>
 		</template>
 
@@ -66,6 +66,7 @@ import { ICONS } from '~/utils/icons';
 
 const productStore = useProductStore();
 const { adding } = storeToRefs(productStore);
+const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
 
 useHead({ title: 'Wemotoo CRM - Create Product' });
 
@@ -78,10 +79,9 @@ const saveDraft = async () => {
 };
 
 const onSubmit = async () => {
-	// const success = await productStore.createProduct();
-	// if (success) {
-	// 	useRouter().back();
-	// }
+	if (formRef.value) {
+		await formRef.value.onSubmit();
+	}
 };
 </script>
 
