@@ -26,7 +26,7 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
+				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
 					<!-- Page Size -->
 					<div class="flex items-center gap-2">
 						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>

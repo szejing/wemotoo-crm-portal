@@ -10,7 +10,6 @@
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />

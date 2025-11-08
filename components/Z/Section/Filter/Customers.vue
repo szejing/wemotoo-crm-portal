@@ -1,22 +1,21 @@
 <template>
 	<div class="w-full py-4">
 		<!-- Compact Filter Grid -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+		<div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Date Range Filter -->
-			<div class="flex flex-col gap-1.5">
+			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Joined Date</label>
 				<ZSelectMenuDateRange v-model="filter.joined_date" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Customer Search -->
-			<div class="flex flex-col gap-1.5 sm:col-span-2">
+			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
 				<UInput v-model="filter.query" placeholder="Search by Name / Phone No / Email..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />

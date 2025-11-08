@@ -17,18 +17,28 @@
 
 		<template #body>
 			<div class="space-y-6">
-				<!-- Status Filter Tabs -->
-				<div class="hidden sm:flex gap-2 overflow-x-auto">
-					<UButton
-						v-for="(tab, index) in appointmentTabs"
-						:key="tab.value"
-						:variant="selectedTab === index ? 'solid' : 'soft'"
-						:color="selectedTab === index ? 'primary' : 'neutral'"
-						size="sm"
-						@click="selectTab(index)"
-					>
-						{{ capitalizeFirstLetter(tab.label) }}
-					</UButton>
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end sm:justify-between gap-4">
+					<!-- Status Filter Tabs -->
+					<div class="hidden sm:flex gap-2 overflow-x-auto">
+						<UButton
+							v-for="(tab, index) in appointmentTabs"
+							:key="tab.value"
+							:variant="selectedTab === index ? 'solid' : 'soft'"
+							:color="selectedTab === index ? 'primary' : 'neutral'"
+							size="sm"
+							@click="selectTab(index)"
+						>
+							{{ capitalizeFirstLetter(tab.label) }}
+						</UButton>
+					</div>
+
+					<!-- Table Actions -->
+					<div class="flex items-center gap-3 justify-end">
+						<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportAppointments">
+							<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+							Export
+						</UButton>
+					</div>
 				</div>
 
 				<!-- Main Content Grid -->
@@ -228,7 +238,7 @@ import type { Appointment } from '~/utils/types/appointment';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
-const { appointments, filter } = storeToRefs(appointmentStore);
+const { appointments, filter, exporting } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 const selectedAppointment = ref<Appointment | null>(null);
 const selectedTab = ref(0);
@@ -344,6 +354,10 @@ const openEditModal = async (appointment: Appointment) => {
 	});
 
 	appointmentModal.open();
+};
+
+const exportAppointments = async () => {
+	// await appointmentStore.exportAppointments();
 };
 </script>
 

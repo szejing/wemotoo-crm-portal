@@ -17,7 +17,7 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+				<div class="flex flex-col sm:flex-row sm:items-center justify-end sm:justify-between gap-4">
 					<!-- Status Tabs - Desktop -->
 					<div class="hidden sm:flex gap-2">
 						<UButton
@@ -33,7 +33,7 @@
 					</div>
 
 					<!-- Table Actions -->
-					<div class="flex items-center gap-3">
+					<div class="flex items-center gap-3 justify-between sm:justify-end">
 						<div class="flex items-center gap-2">
 							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
 							<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />

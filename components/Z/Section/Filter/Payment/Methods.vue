@@ -1,22 +1,21 @@
 <template>
 	<div class="w-full py-4">
 		<!-- Compact Filter Grid -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
+		<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Payment Method Search -->
-			<div class="flex flex-col gap-1.5 sm:col-span-2">
+			<div class="flex flex-col gap-1.5 col-span-2">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
 				<UInput v-model="filter.query" placeholder="Search by Code / Description..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Currency Filter -->
-			<div class="flex flex-col gap-1.5">
+			<div class="flex flex-col gap-1.5 col-span-2 sm:col-span-1">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
 				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
 			</div>
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />

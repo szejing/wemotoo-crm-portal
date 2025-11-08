@@ -30,6 +30,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		exporting: false as boolean,
 		appointments: [] as Appointment[],
 		errors: [] as string[],
 		filter: initialEmptyAppointmentFilter,
@@ -70,7 +71,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
-				const { data, '@odata.count': total } = await $api.appointment.getMany({
+				const { data, '@odata.count': _total } = await $api.appointment.getMany({
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
