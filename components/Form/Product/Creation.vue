@@ -765,6 +765,12 @@ const onSubmit = async () => {
 		prodBrands.push({ code: brand.code! });
 	});
 
+	console.log(prodCategories);
+
+	console.log(prodBrands);
+
+	console.log(prodTags);
+
 	new_product.value.price_types = prodPrice;
 	new_product.value.category_codes = prodCategories.map((c) => c.code!);
 	new_product.value.tag_ids = prodTags.map((t) => t.id!);
@@ -774,20 +780,20 @@ const onSubmit = async () => {
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
-	const overlay = useOverlay();
-	const loadingModal = overlay.create(ZModalLoading, {
-		props: {
-			key: 'loading',
-		},
-	});
+	// const overlay = useOverlay();
+	// const loadingModal = overlay.create(ZModalLoading, {
+	// 	props: {
+	// 		key: 'loading',
+	// 	},
+	// });
 
-	loadingModal.open();
+	// loadingModal.open();
 
-	const success = await productStore.createProduct();
+	// const success = await productStore.createProduct();
 
-	if (success) {
-		useRouter().back();
-	}
+	// if (success) {
+	// 	useRouter().back();
+	// }
 };
 
 // Lifecycle: Auto-save on product changes

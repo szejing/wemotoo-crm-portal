@@ -78,7 +78,10 @@ const saveDraft = async () => {
 };
 
 const onSubmit = async () => {
-	await productStore.createProduct();
+	// const success = await productStore.createProduct();
+	// if (success) {
+	// 	useRouter().back();
+	// }
 };
 </script>
 

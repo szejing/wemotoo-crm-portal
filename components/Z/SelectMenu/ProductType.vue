@@ -1,5 +1,17 @@
 <template>
-	<USelectMenu v-model="productTypeId" :items="items" size="md" value-key="id" label-key="value" description-key="value" placeholder="Select Type" />
+	<USelectMenu
+		v-model="productTypeId"
+		:items="items"
+		size="md"
+		value-key="id"
+		label-key="value"
+		description-key="value"
+		placeholder="Select Type"
+		:ui="{
+			item: 'font-semibold text-highlighted capitalize',
+			value: 'capitalize',
+		}"
+	/>
 </template>
 
 <script lang="ts" setup>

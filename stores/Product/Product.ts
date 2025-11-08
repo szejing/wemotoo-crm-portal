@@ -202,17 +202,15 @@ export const useProductStore = defineStore('productStore', {
 
 				const data = await $api.product.create({
 					...this.new_product,
-					images: images,
-					thumbnail: thumbnail,
+					images,
+					thumbnail,
 				});
 
 				if (data.products) {
 					successNotification(`${this.new_product.code} - Product Created !`);
 					this.products = data.products;
+					return true;
 				}
-
-				this.resetNewProduct();
-				return true;
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
