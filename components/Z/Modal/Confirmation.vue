@@ -4,22 +4,23 @@
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
+		<template #header>
+			<h3 class="text-lg font-bold">{{ title }}</h3>
+		</template>
+
 		<template #body>
-			<div class="space-y-2">
-				<h3>{{ title }}</h3>
-				<p>{{ message }}</p>
-			</div>
+			<p>{{ message }}</p>
 		</template>
 
 		<template #footer>
-			<div v-if="action == 'delete'" class="flex-jend gap-4">
-				<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-				<UButton color="error" variant="soft" :loading="loading" @click="onConfirm">Confirm</UButton>
+			<div v-if="action == 'delete'" class="flex justify-between gap-4 w-full">
+				<UButton color="neutral" variant="outline" @click="onCancel">Cancel</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" :loading="loading" @click="onConfirm">Confirm</UButton>
 			</div>
 
-			<div v-else class="flex-jend gap-4">
-				<UButton @click="onCancel">Cancel</UButton>
-				<UButton :loading="loading" @click="onConfirm">Confirm</UButton>
+			<div v-else class="flex justify-between gap-4 w-full">
+				<UButton color="neutral" variant="outline" @click="onCancel">Cancel</UButton>
+				<UButton color="success" :loading="loading" @click="onConfirm">Confirm</UButton>
 			</div>
 		</template>
 	</UModal>

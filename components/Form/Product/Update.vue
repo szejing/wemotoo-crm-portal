@@ -792,13 +792,17 @@ const onSubmit = async () => {
 
 	loadingModal.open();
 
-	// Now formState.value is properly typed as ProductUpdate and ready to be sent
-	// const success = await productStore.updateProduct(formState.value);
-
-	// loadingModal.close();
-	// if (success) {
-	// 	useRouter().back();
-	// }
+	try {
+		const productStore = useProductStore();
+		const success = await productStore.updateProduct(formState.value);
+		if (success) {
+			useRouter().back();
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		loadingModal.close();
+	}
 };
 
 // Lifecycle: Setup scroll spy

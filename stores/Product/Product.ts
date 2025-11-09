@@ -221,7 +221,7 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async updateProduct(product: ProductUpdate, new_thumbnail?: File, new_images?: File[]) {
+		async updateProduct(product: ProductUpdate) {
 			const code = product.code!;
 			this.updating = true;
 
@@ -229,21 +229,25 @@ export const useProductStore = defineStore('productStore', {
 
 			try {
 				let images: ImageReq[] = [];
-				if (new_images && new_images.length > 0) {
-					const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
-					images = resp.images.map((image) => ({
-						id: image.id,
-						url: image.url,
-					}));
+				if (product.images && product.images.length > 0) {
+					// if (product.images instanceof File) {
+					// 	const resp = await $api.image.uploadMultiple(product.images, `${dir.products}/${code}`);
+					// 	images = resp.images.map((image) => ({
+					// 		id: image.id,
+					// 		url: image.url,
+					// 	}));
+					// }
 				}
 
 				let thumbnail: ImageReq | undefined;
-				if (new_thumbnail) {
-					const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
-					thumbnail = {
-						id: resp.image.id,
-						url: resp.image.url,
-					};
+				if (product.thumbnail) {
+					if (product.thumbnail instanceof File) {
+						const resp = await $api.image.upload(product.thumbnail, `${dir.products}/${code}`);
+						thumbnail = {
+							id: resp.image.id,
+							url: resp.image.url,
+						};
+					}
 				}
 
 				const data = await $api.product.update(code, {
