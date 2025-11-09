@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 		if (product) {
 			productStore.current_product = product;
 		} else {
-			return navigateTo('/products');
+			return navigateTo('/products/listing');
 		}
 	}
 

@@ -228,15 +228,16 @@ export const useProductStore = defineStore('productStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let images: ImageReq[] = [];
+				const images: ImageReq[] = [];
 				if (product.images && product.images.length > 0) {
-					// if (product.images instanceof File) {
-					// 	const resp = await $api.image.uploadMultiple(product.images, `${dir.products}/${code}`);
-					// 	images = resp.images.map((image) => ({
-					// 		id: image.id,
-					// 		url: image.url,
-					// 	}));
-					// }
+					for (const image of product.images) {
+						if (image instanceof File) {
+							const resp = await $api.image.upload(image, `${dir.products}/${code}`);
+							images.push({ id: resp.image.id, url: resp.image.url });
+						} else {
+							images.push({ id: image.id, url: image.url });
+						}
+					}
 				}
 
 				let thumbnail: ImageReq | undefined;
@@ -246,6 +247,11 @@ export const useProductStore = defineStore('productStore', {
 						thumbnail = {
 							id: resp.image.id,
 							url: resp.image.url,
+						};
+					} else {
+						thumbnail = {
+							id: product.thumbnail.id,
+							url: product.thumbnail.url,
 						};
 					}
 				}

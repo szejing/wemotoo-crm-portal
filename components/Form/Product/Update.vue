@@ -103,6 +103,7 @@
 											class="max-w-full sm:max-w-[250px]"
 											:existing-images="formState.thumbnail ? [formState.thumbnail] : []"
 											@files-selected="updateThumbnail"
+											@delete-image="deleteThumbnail"
 										/>
 									</div>
 
@@ -120,6 +121,7 @@
 											class="max-w-full sm:max-w-[250px]"
 											:existing-images="formState.images"
 											@files-selected="updateImages"
+											@delete-image="deleteImage"
 										/>
 									</div>
 								</div>
@@ -445,6 +447,7 @@ import type { Brand } from '~/utils/types/brand';
 import type { ProductUpdate } from '~/utils/types/form/product-creation';
 import { UpdateProductValidation } from '~/utils/schema';
 import { ZModalLoading } from '#components';
+import type { Image } from '~/utils/types/image';
 
 const props = defineProps({
 	product: {
@@ -742,10 +745,22 @@ const updateImages = (files: File[]) => {
 	formState.value.images = files;
 };
 
+const deleteImage = (image: Image) => {
+	if (!formState.value.images) return;
+
+	const index = formState.value.images.findIndex((img) => (img as Image).id === image.id);
+	if (index !== -1) {
+		formState.value.images.splice(index, 1);
+	}
+};
+
 const updateThumbnail = (files: File[]) => {
 	formState.value.thumbnail = files[0];
 };
 
+const deleteThumbnail = () => {
+	formState.value.thumbnail = undefined;
+};
 // Methods: Currency
 const updateCurrency = (currency: any) => {
 	currency_code.value = currency.code;
