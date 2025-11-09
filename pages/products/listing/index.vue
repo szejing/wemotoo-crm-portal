@@ -60,13 +60,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalLoading } from '#components';
 import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { Product } from '~/utils/types/product';
 import type { TableRow } from '@nuxt/ui';
 
-const overlay = useOverlay();
 const productStore = useProductStore();
 
 useHead({ title: 'Wemotoo CRM - Products' });
@@ -83,22 +81,7 @@ const selectProduct = async (e: Event, row: TableRow<Product>) => {
 	const product = row.original;
 	if (!product) return;
 
-	const loadingModal = overlay.create(ZModalLoading, {
-		props: {
-			key: 'loading',
-		},
-	});
-
-	loadingModal.open();
-
-	const prod = await productStore.getProduct(product.code!);
-	loadingModal.close();
-
-	if (prod) {
-		productStore.current_product = prod;
-
-		navigateTo(`/products/listing/${product.code}/detail`);
-	}
+	navigateTo(`/products/listing/${product.code}/detail`);
 };
 
 const updatePage = async (page: number) => {

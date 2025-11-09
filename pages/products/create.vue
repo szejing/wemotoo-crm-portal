@@ -26,10 +26,7 @@
 						</UButton>
 
 						<div class="flex gap-3">
-							<UButton color="neutral" variant="outline" size="lg" @click="navigateTo('/products')">
-								<UIcon :name="ICONS.HORIZONTAL_ELLIPSIS" />
-								Cancel
-							</UButton>
+							<UButton color="neutral" variant="outline" size="lg" @click="navigateTo('/products')"> Cancel </UButton>
 
 							<UButton color="success" variant="solid" size="lg" :loading="adding" @click="() => onSubmit()">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
@@ -50,7 +47,6 @@
 								<span class="text-xs">Save Draft</span>
 							</UButton>
 							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="navigateTo('/products')">
-								<UIcon :name="ICONS.HORIZONTAL_ELLIPSIS" class="w-4 h-4" />
 								<span class="text-xs">Cancel</span>
 							</UButton>
 						</div>

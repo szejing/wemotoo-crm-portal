@@ -2,7 +2,7 @@ import { defaultSimpleProductRelations, ProductStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import type { ProductCreate } from '~/utils/types/form/product-creation';
+import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -221,59 +221,57 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async updateProduct(new_thumbnail?: File, new_images?: File[]) {
-			if (!this.current_product) {
-				return;
-			}
-			const code = this.current_product.code!;
+		async updateProduct(product: ProductUpdate, new_thumbnail?: File, new_images?: File[]) {
+			const code = product.code!;
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				// let images: ImageReq[] = [];
-				// if (new_images && new_images.length > 0) {
-				// 	const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
-				// 	images = resp.images.map((image) => ({
-				// 		id: image.id,
-				// 		url: image.url,
-				// 	}));
-				// }
+				let images: ImageReq[] = [];
+				if (new_images && new_images.length > 0) {
+					const resp = await $api.image.uploadMultiple(new_images, `${dir.products}/${code}`);
+					images = resp.images.map((image) => ({
+						id: image.id,
+						url: image.url,
+					}));
+				}
 
-				// let thumbnail: ImageReq | undefined;
-				// if (new_thumbnail) {
-				// 	const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
-				// 	thumbnail = {
-				// 		id: resp.image.id,
-				// 		url: resp.image.url,
-				// 	};
-				// }
+				let thumbnail: ImageReq | undefined;
+				if (new_thumbnail) {
+					const resp = await $api.image.upload(new_thumbnail, `${dir.products}/${code}`);
+					thumbnail = {
+						id: resp.image.id,
+						url: resp.image.url,
+					};
+				}
 
-				// const data = await $api.product.update(code, {
-				// 	name: this.current_product.name,
-				// 	short_desc: this.current_product.short_desc ?? undefined,
-				// 	long_desc: this.current_product.long_desc ?? undefined,
-				// 	is_active: this.current_product.is_active,
-				// 	is_discountable: this.current_product.is_discountable,
-				// 	is_giftcard: this.current_product.is_giftcard,
-				// 	price_types: this.current_product.price_types,
-				// 	category_codes: this.current_product.categories.map((category) => category.code),
-				// 	type_id: this.current_product.type.id,
-				// 	tag_ids: this.current_product.tags.map((tag) => tag.id),
-				// 	status: this.current_product.status,
-				// 	thumbnail: thumbnail,
-				// 	images: images,
-				// });
+				const data = await $api.product.update(code, {
+					name: product.name,
+					short_desc: product.short_desc ?? undefined,
+					long_desc: product.long_desc ?? undefined,
+					is_active: product.is_active,
+					is_discountable: product.is_discountable,
+					is_giftcard: product.is_giftcard,
+					price_types: product.price_types,
+					category_codes: product.category_codes,
+					type_id: product.type_id,
+					tag_ids: product.tag_ids,
+					brand_codes: product.brand_codes,
+					status: product.status,
+					thumbnail: thumbnail,
+					images: images,
+				});
 
-				// if (data.product) {
-				// 	successNotification(`Product ${code} Updated !`);
-				// 	this.products = this.products.map((product) => {
-				// 		if (product.code === code) {
-				// 			return data.product;
-				// 		}
-				// 		return product;
-				// 	});
-				// }
+				if (data.product) {
+					successNotification(`Product ${code} Updated !`);
+					this.products = this.products.map((product) => {
+						if (product.code === code) {
+							return data.product;
+						}
+						return product;
+					});
+				}
 
 				return true;
 			} catch (err: any) {
@@ -333,9 +331,8 @@ export const useProductStore = defineStore('productStore', {
 		},
 
 		async exportProducts() {
-			this.exporting = true;
-			const { $api } = useNuxtApp();
-
+			// this.exporting = true;
+			// const { $api } = useNuxtApp();
 			// try {
 			// 	const data = await $api.product.exportProducts();
 			// } catch (err: any) {

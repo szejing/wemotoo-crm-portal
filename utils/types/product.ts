@@ -4,7 +4,6 @@ import type { Category } from './category';
 import type { Tag } from './tag';
 import type { Brand } from './brand';
 import type { Image } from './image';
-import type { ProductType } from './product-type';
 import type { ProductVariant } from './product-variant';
 import type { ProductOption } from './product-option';
 
@@ -47,40 +46,6 @@ export type ProductVariantInput = {
 	metadata?: Record<string, unknown>;
 };
 
-export type ProductInput = {
-	code?: string;
-	name: string;
-	short_desc?: string;
-	long_desc?: string;
-	is_discountable: boolean;
-	is_giftcard: boolean;
-	is_active: boolean;
-	status: ProductStatus;
-
-	// Relations (using codes/IDs for input)
-	brand_codes?: string[];
-	category_codes: string[];
-	tag_ids?: number[];
-	type_id: number;
-
-	// File uploads
-	thumbnail?: File;
-	images?: File[];
-
-	// Nested inputs
-	price_types?: PriceInput[];
-	options?: ProductOptionInput[];
-	variants?: ProductVariantInput[];
-
-	metadata?: Record<string, unknown>;
-};
-
-// Reference type for selections/dropdowns
-export type ProductRef = {
-	code: string;
-	name?: string;
-};
-
 // ============================================
 // MODEL TYPES (for display/read operations)
 // ============================================
@@ -99,7 +64,7 @@ export type Product = {
 	brands?: Brand[];
 	categories?: Category[];
 	tags?: Tag[];
-	type?: ProductType;
+	type: number;
 
 	// Images (URLs from backend)
 	thumbnail?: Image;

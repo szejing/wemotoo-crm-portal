@@ -65,10 +65,7 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<div class="flex items-center gap-2">
-										<label class="text-sm font-medium">Active</label>
-										<UCheckbox v-model="new_product.is_active" />
-									</div>
+									<UCheckbox v-model="new_product.is_active" color="success" label="Active" />
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -662,12 +659,10 @@ const saveDraft = async (silent = false) => {
 // Methods: Images
 const updateImages = (files: File[]) => {
 	new_product.value.images = files;
-	triggerAutoSave();
 };
 
 const updateThumbnail = (files: File[]) => {
 	new_product.value.thumbnail = files[0];
-	triggerAutoSave();
 };
 
 // Methods: Currency
