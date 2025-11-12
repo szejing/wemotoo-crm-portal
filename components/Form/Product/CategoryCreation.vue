@@ -10,6 +10,9 @@
 			<!-- *********************** General Info *********************** -->
 			<div class="space-y-2">
 				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+				<p class="text-sm text-neutral-400">
+					Enter the essential information about your product category including code and description. (e.g. Electronics, Clothing, etc.)
+				</p>
 				<ZInputProductCategoryGeneralInfo v-model:code="new_category.code" v-model:description="new_category.description" />
 			</div>
 			<!-- *********************** General Info *********************** -->

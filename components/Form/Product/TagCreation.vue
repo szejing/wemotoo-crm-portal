@@ -3,6 +3,7 @@
 		<!-- *********************** General Info *********************** -->
 		<div class="space-y-2">
 			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+			<p class="text-sm text-neutral-400">Enter the essential information about your product tag including value. (e.g. Red, Large, etc.)</p>
 			<ZInputProductTagGeneralInfo v-model:value="new_tag.value" />
 		</div>
 

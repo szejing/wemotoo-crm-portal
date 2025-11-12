@@ -6,29 +6,15 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
+			<UForm ref="formRef" :schema="UpdateProductOptionValidation" :state="state.option" class="space-y-4" @submit="onSubmit">
 				<UFormField v-slot="{ error }" label="Name" name="name" required>
-					<UInput v-model="state.option.name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" />
+					<UInput v-model="state.option.name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Name" disabled />
 				</UFormField>
 
 				<div class="mt-4">
 					<h6 class="text-secondary-700 text-sm font-bold">Values</h6>
-					<div v-if="state.option.values.length > 0">
-						<div v-for="(value, index) in state.option.values" :key="index" class="w-full flex-jbetween-icenter space-y-2">
-							<h5 class="text-neutral-300">#{{ value.id }}</h5>
-
-							<UFormField v-slot="{ error }" name="value" required>
-								<UInput v-model="state.option.values[index]?.value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Value" />
-							</UFormField>
-						</div>
-					</div>
+					<UInputTags v-model="values" placeholder="Enter values..." class="w-full" color="primary" :duplicate="false" />
 				</div>
-
-				<div class="flex-jend w-full mt-3">
-					<UButton size="md" color="success" variant="outline" block @click="onAddNew">Create</UButton>
-				</div>
-
-				<!-- *********************** General Info *********************** -->
 			</UForm>
 		</template>
 
@@ -37,8 +23,8 @@
 				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" :loading="updating" :disabled="updating" @click="onCancel">Cancel</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" :disabled="updating" @click="submitForm">Update</UButton>
 				</div>
 			</div>
 		</template>
@@ -52,6 +38,7 @@ import { UpdateProductOptionValidation } from '~/utils/schema';
 import type { ProductOption } from '~/utils/types/product-option';
 
 type Schema = z.output<typeof UpdateProductOptionValidation>;
+const formRef = ref();
 
 const props = defineProps({
 	productOption: {
@@ -68,13 +55,14 @@ const state = reactive({
 const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
-const onAddNew = () => {
-	if (state.option.values[state.option.values.length - 1]?.value === undefined || state.option.values[state.option.values.length - 1]?.value === '') {
-		return;
-	}
-
-	state.option.values.push({ value: '', metadata: undefined, id: 0, option_id: 0 });
-};
+const values = computed({
+	get() {
+		return state.option.values?.map((value) => value.value) ?? [];
+	},
+	set(value) {
+		state.option.values = value.map((v) => ({ id: 0, option_id: props.productOption.id!, value: v, metadata: {} }));
+	},
+});
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { name, values } = event.data;
@@ -91,6 +79,10 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	});
 
 	emit('update', name, newValues ?? []);
+};
+
+const submitForm = () => {
+	formRef.value?.submit();
 };
 
 const onDelete = () => {

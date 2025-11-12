@@ -5,7 +5,7 @@
 		</UFormField>
 
 		<UFormField label="Values" name="values" required>
-			<InputTags v-model="values" placeholder="Values" class="flex-1 mt-2" :searchable="false" />
+			<UInputTags v-model="values" placeholder="Enter values..." class="w-full" color="primary" :duplicate="false" :add-on-blur="true" />
 		</UFormField>
 	</div>
 </template>

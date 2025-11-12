@@ -12,4 +12,6 @@ export const UpdateProductOptionValidation = z.object({
 			}),
 		)
 		.optional(),
+
+	// values: z.array(z.string()).optional(),
 });

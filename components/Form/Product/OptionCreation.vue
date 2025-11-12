@@ -1,5 +1,7 @@
 <template>
 	<UForm :schema="CreateProductOptionValidation" :state="new_prod_option" class="space-y-4" @submit="onSubmit">
+		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+		<p class="text-sm text-neutral-400">Enter the essential information about your product option including name and values. (e.g. Color, Size, etc.)</p>
 		<!-- *********************** General Info *********************** -->
 		<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
 		<!-- *********************** General Info *********************** -->
@@ -26,6 +28,7 @@ onMounted(() => {
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { name, values } = event.data;
+
 	await optionStore.addProductOption(name, values ?? []);
 };
 </script>

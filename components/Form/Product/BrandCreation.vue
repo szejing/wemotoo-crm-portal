@@ -3,6 +3,7 @@
 		<!-- *********************** General Info *********************** -->
 		<div class="space-y-2">
 			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+			<p class="text-sm text-neutral-400">Enter the essential information about your product brand including code and description. (e.g. Nike, Adidas, etc.)</p>
 			<ZInputProductBrandGeneralInfo v-model:code="new_brand.code" v-model:description="new_brand.description" />
 		</div>
 
