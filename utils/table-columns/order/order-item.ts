@@ -33,7 +33,9 @@ export const order_item_columns: ColumnDef<any>[] = [
 		accessorKey: 'gross_amt',
 		header: 'Gross Amt',
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.getValue('gross_amt'), row.getValue('currency_code'))),
+			]);
 		},
 	},
 	{

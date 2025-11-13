@@ -61,7 +61,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 		accessorKey: 'gross_amt',
 		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Gross Amt'),
 		cell: ({ row }) => {
-			return h('div', [h('p', formatCurrency(row.original.gross_amt ?? 0))]);
+			return h('div', [h('p', formatCurrency(row.original.gross_amt ?? 0, row.original.currency.code))]);
 		},
 		meta: {
 			class: {
@@ -74,7 +74,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 		accessorKey: 'tax_amt_exc',
 		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Tax Amt Exc'),
 		cell: ({ row }) => {
-			return h('div', [h('p', formatCurrency(row.original.tax_amt_exc ?? 0))]);
+			return h('div', [h('p', formatCurrency(row.original.tax_amt_exc ?? 0, row.original.currency.code))]);
 		},
 		meta: {
 			class: {
@@ -87,7 +87,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 		accessorKey: 'net_amt',
 		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Net Amt'),
 		cell: ({ row }) => {
-			return h('div', [h('p', formatCurrency(row.original.net_amt ?? 0))]);
+			return h('div', [h('p', formatCurrency(row.original.net_amt ?? 0, row.original.currency.code))]);
 		},
 		meta: {
 			class: {
