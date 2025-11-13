@@ -44,14 +44,18 @@ export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
 		accessorKey: 'gross_amt',
 		header: 'Gross Amt',
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.gross_amt)]);
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+			]);
 		},
 	},
 	{
 		accessorKey: 'net_amt',
 		header: 'Net Amt',
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.net_amt)]);
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+			]);
 		},
 	},
 ];

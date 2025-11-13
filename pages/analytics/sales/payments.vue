@@ -49,7 +49,7 @@
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ group.net_amt.toFixed(2) }}</span>
+									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>

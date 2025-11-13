@@ -63,7 +63,7 @@
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ group.net_amt.toFixed(2) }}</span>
+									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>
@@ -130,6 +130,7 @@ const groupedByDate = computed(() => {
 				acc.total_qty += item.total_qty;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
+				acc.currency_code = item.currency_code;
 
 				// Separate voided and non-voided quantities
 				if (item.item_status === OrderItemStatus.VOIDED) {
@@ -139,7 +140,7 @@ const groupedByDate = computed(() => {
 				}
 				return acc;
 			},
-			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0 },
+			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
 		);
 
 		// Add total row to items with a special flag
@@ -147,7 +148,7 @@ const groupedByDate = computed(() => {
 			...items,
 			{
 				...items[0],
-				prod_code: 'TOTAL_ROW',
+				prod_code: '',
 				prod_name: 'Total:',
 				total_qty: totals.total_qty,
 				gross_amt: totals.gross_amt,

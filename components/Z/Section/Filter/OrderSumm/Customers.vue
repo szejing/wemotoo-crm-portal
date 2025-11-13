@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full py-4">
 		<!-- Compact Filter Grid -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3 items-center">
 			<!-- Date Range Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>

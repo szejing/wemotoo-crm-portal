@@ -39,14 +39,18 @@ export const order_summ_columns: TableColumn<any>[] = [
 		accessorKey: 'gross_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+			]);
 		},
 	},
 	{
 		accessorKey: 'net_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+			]);
 		},
 	},
 	{

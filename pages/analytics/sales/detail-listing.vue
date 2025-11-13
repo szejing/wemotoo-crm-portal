@@ -55,7 +55,7 @@
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ group.net_amt.toFixed(2) }}</span>
+									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>
@@ -114,9 +114,10 @@ const groupedByDate = computed(() => {
 				acc.net_amt += item.net_amt || 0;
 				acc.disc_amt += item.disc_amt || 0;
 				acc.voided_amt += item.void_amt || 0;
+				acc.currency_code = item.currency.code;
 				return acc;
 			},
-			{ total_items: 0, total_qty: 0, gross_amt: 0, net_amt: 0, disc_amt: 0, voided_amt: 0 },
+			{ total_items: 0, total_qty: 0, gross_amt: 0, net_amt: 0, disc_amt: 0, voided_amt: 0, currency_code: 'MYR' },
 		);
 
 		return {
