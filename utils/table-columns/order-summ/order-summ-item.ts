@@ -1,8 +1,9 @@
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import { OrderItemStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
+import type { SummOrderItem } from '~/utils/types/summ-orders';
 
-export const order_summ_item_columns: TableColumn<any>[] = [
+export const order_summ_item_columns: TableColumn<SummOrderItem>[] = [
 	{
 		accessorKey: 'prod_code',
 		header: 'Product',
@@ -32,26 +33,41 @@ export const order_summ_item_columns: TableColumn<any>[] = [
 	{
 		accessorKey: 'total_qty',
 		header: 'Qty',
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.total_qty, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.total_qty)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
 		},
 	},
 	{
 		accessorKey: 'gross_amt',
 		header: 'Gross Amt',
-		cell: ({ row }) => {
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.gross_amt, 0);
+
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
 			]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code))]);
 		},
 	},
 	{
 		accessorKey: 'net_amt',
 		header: 'Net Amt',
-		cell: ({ row }) => {
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.net_amt, 0);
+
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
 			]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code))]);
 		},
 	},
 ];

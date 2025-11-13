@@ -1,5 +1,5 @@
 import { UBadge } from '#components';
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import { h } from 'vue';
 import { SaleStatus } from 'wemotoo-common';
 import type { SummSaleCustomer } from '~/utils/types/summ-sales';
@@ -37,29 +37,43 @@ export const sale_summ_customer_columns: TableColumn<SummSaleCustomer>[] = [
 	{
 		accessorKey: 'gross_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.gross_amt, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
+			]);
+		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.gross_amt)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code ?? 'MYR'))]);
 		},
 	},
 	{
 		accessorKey: 'net_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.net_amt, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
+			]);
+		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.net_amt)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.net_amt)]);
 		},
 	},
 	{
 		accessorKey: 'total_txns',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Txns'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.total_txns)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_txns)]);
 		},
 	},
 	{
 		accessorKey: 'total_qty',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Qty'),
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.total_qty)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
 		},
 	},
 ];

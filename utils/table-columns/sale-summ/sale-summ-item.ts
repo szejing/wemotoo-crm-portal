@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import { OrderItemStatus } from 'wemotoo-common';
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { UBadge } from '#components';
 
@@ -34,26 +34,41 @@ export const sale_summ_item_columns: TableColumn<SummSaleItem>[] = [
 	{
 		accessorKey: 'total_qty',
 		header: 'Qty',
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleItem>) => acc + row.original.total_qty, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_qty'))]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.getValue('total_qty'))]);
 		},
 	},
 	{
 		accessorKey: 'gross_amt',
 		header: 'Gross Amt',
-		cell: ({ row }) => {
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleItem>) => acc + row.original.gross_amt, 0);
+
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
 			]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code))]);
 		},
 	},
 	{
 		accessorKey: 'net_amt',
 		header: 'Net Amt',
-		cell: ({ row }) => {
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleItem>) => acc + row.original.net_amt, 0);
+
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
 			]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code))]);
 		},
 	},
 ];

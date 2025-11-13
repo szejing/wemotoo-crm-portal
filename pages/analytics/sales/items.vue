@@ -131,23 +131,9 @@ const groupedByDate = computed(() => {
 			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
 		);
 
-		// Add total row to items with a special flag
-		const itemsWithTotal = [
-			...items,
-			{
-				...items[0],
-				prod_code: '',
-				prod_name: 'Total:',
-				total_qty: totals.total_qty,
-				gross_amt: totals.gross_amt,
-				net_amt: totals.net_amt,
-				is_total_row: true,
-			} as any,
-		];
-
 		return {
 			date,
-			items: itemsWithTotal,
+			items,
 			...totals,
 		};
 	});
