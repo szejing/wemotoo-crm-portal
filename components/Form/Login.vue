@@ -4,7 +4,7 @@
 			<template #header>
 				<div>
 					<div class="flex sm:hidden w-full">
-						<NuxtImg class="my-2 mx-auto w-full cursor-pointer rounded-sm" src="/logo/logo.png" alt="logo" @click="navigateTo('/')" />
+						<NuxtImg class="my-2 mx-auto w-full cursor-pointer rounded-sm" src="/logo/logo.png" alt="logo" />
 					</div>
 					<h1 class="text-center">CRM Merchant Login</h1>
 				</div>
@@ -66,7 +66,6 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
 		const { merchant_id, email_address, password } = event.data;
 
-		const authStore = useAuthStore();
 		await authStore.login(merchant_id, email_address, password);
 
 		navigateTo('/');
