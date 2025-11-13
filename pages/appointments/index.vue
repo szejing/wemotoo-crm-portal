@@ -181,7 +181,7 @@
 								<!-- Service Description (Required) -->
 								<div>
 									<h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Service Details</h4>
-									<div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+									<div :class="['flex gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg', selectedAppointment.ref_no ? 'items-start' : 'items-center']">
 										<div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
 											<UIcon name="i-heroicons-wrench" class="w-6 h-6 text-gray-600 dark:text-gray-400" />
 										</div>
@@ -233,7 +233,7 @@
 
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { AppointmentStatus, getFormattedDate, isFuture } from 'wemotoo-common';
+import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 
 const overlay = useOverlay();
@@ -281,10 +281,7 @@ const getStatusColor = (status: AppointmentStatus) => {
 
 // Display appointments based on filter state
 const displayedAppointments = computed(() => {
-	let result = appointments.value;
-
-	// Apply date range filter
-	result = result.filter((appointment) => isFuture(new Date(appointment.date_time)));
+	const result = appointments.value;
 
 	// Sort by date
 	return result.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime());

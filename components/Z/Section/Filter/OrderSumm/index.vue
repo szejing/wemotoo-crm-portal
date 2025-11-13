@@ -5,24 +5,23 @@
 			<!-- Date Range Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>
-				<ZSelectMenuDateRange v-model="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
+				<ZSelectMenuDateRange :model-value="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Order Status Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order Status</label>
-				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+				<ZSelectMenuOrderStatus :status="filter.status" @update:status="handleStatusChange" />
 			</div>
 
 			<!-- Currency Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
-				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
+				<ZSelectMenuCurrency :currency-code="filter.currency_code" @update:currency-code="handleCurrencyChange" />
 			</div>
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end sm:col-span-2">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />

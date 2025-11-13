@@ -20,7 +20,6 @@
 <script lang="ts" setup>
 import type { OrderItemStatus } from 'wemotoo-common';
 import { options_order_item_status, getOrderItemStatusColor } from '~/utils/options';
-import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
 
 const props = defineProps<{ status: OrderItemStatus | undefined }>();
 const emit = defineEmits(['update:status']);
@@ -34,7 +33,11 @@ const status = computed({
 		return props.status ?? 'All';
 	},
 	set(value) {
-		emit('update:status', value);
+		if (value === 'All') {
+			emit('update:status', undefined);
+		} else {
+			emit('update:status', value);
+		}
 	},
 });
 </script>

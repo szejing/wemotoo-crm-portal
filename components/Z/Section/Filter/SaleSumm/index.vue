@@ -5,17 +5,13 @@
 			<!-- Date Range Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>
-				<ZSelectMenuDateRange
-					:model-value="{ start: filter.start_date, end: filter.end_date }"
-					placeholder="Select date range"
-					@update:model-value="handleDateRangeChange"
-				/>
+				<ZSelectMenuDateRange :model-value="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Sale Status Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Sale Status</label>
-				<ZSelectMenuSaleStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+				<ZSelectMenuSaleStatus :status="filter.status" @update:status="handleStatusChange" />
 			</div>
 
 			<!-- Currency Filter -->
@@ -26,7 +22,6 @@
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end sm:col-span-2">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
@@ -43,8 +38,8 @@
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
 			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
-			<UBadge v-if="filter.start_date || filter.end_date" color="primary" variant="subtle" size="sm" @click="clearFilter('date')">
-				Date: {{ formatDateRange({ start: filter.start_date, end: filter.end_date }) }}
+			<UBadge v-if="filter.date_range.start || filter.date_range.end" color="primary" variant="subtle" size="sm" @click="clearFilter('date')">
+				Date: {{ formatDateRange({ start: filter.date_range.start, end: filter.date_range.end }) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
@@ -68,10 +63,12 @@ const saleSummStore = useSummSaleStore();
 const { sale_summ } = storeToRefs(saleSummStore);
 const filter = computed(() => sale_summ.value.filter);
 
-const is_loading = computed(() => sale_summ.value.is_loading);
+const is_loading = computed(() => sale_summ.value.loading);
 
 const hasActiveFilters = computed(() => {
-	return filter.value.start_date || filter.value.end_date || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR');
+	return (
+		filter.value.date_range.start || filter.value.date_range.end || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR')
+	);
 });
 
 const formatDateRange = (range: Range) => {
@@ -89,8 +86,8 @@ const search = async () => {
 };
 
 const handleDateRangeChange = async (newValue: Range) => {
-	filter.value.start_date = newValue.start ? new Date(newValue.start) : new Date();
-	filter.value.end_date = newValue.end ? new Date(newValue.end) : undefined;
+	filter.value.date_range.start = newValue.start ? new Date(newValue.start) : new Date();
+	filter.value.date_range.end = newValue.end ? new Date(newValue.end) : undefined;
 	await search();
 };
 
@@ -103,8 +100,8 @@ const handleCurrencyChange = async () => {
 };
 
 const clearFilters = async () => {
-	filter.value.start_date = new Date();
-	filter.value.end_date = undefined;
+	filter.value.date_range.start = new Date();
+	filter.value.date_range.end = undefined;
 	filter.value.status = SaleStatus.COMPLETED;
 	filter.value.currency_code = 'MYR';
 	sale_summ.value.current_page = 1;
@@ -113,8 +110,8 @@ const clearFilters = async () => {
 
 const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'date') {
-		filter.value.start_date = new Date();
-		filter.value.end_date = undefined;
+		filter.value.date_range.start = new Date();
+		filter.value.date_range.end = undefined;
 	} else if (filterKey === 'status') {
 		filter.value.status = SaleStatus.COMPLETED;
 	} else if (filterKey === 'currency') {

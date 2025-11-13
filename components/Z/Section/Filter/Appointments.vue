@@ -47,8 +47,12 @@
 			>
 				Date: {{ formatDateRange(filter.date_range) }}
 			</UBadge>
-			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm"> Search: {{ filter.query }} </UBadge>
-			<UBadge v-if="filter.status && filter.status !== 'all'" color="success" variant="subtle" size="sm"> Status: {{ filter.status }} </UBadge>
+			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm">
+				Search: {{ filter.query }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
+			<UBadge v-if="filter.status && filter.status !== 'all'" color="success" variant="subtle" size="sm">
+				Status: {{ filter.status }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
 		</div>
 	</div>
 </template>

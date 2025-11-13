@@ -87,18 +87,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let filter = `status eq '${this.sale_summ.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ.filter.status) {
+					filter = `status eq '${this.sale_summ.filter.status}'`;
+				}
 
 				if (this.sale_summ.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ.filter.date_range.end ? getFormattedDate(this.sale_summ.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSales({
@@ -130,18 +137,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let filter = `status eq '${this.sale_summ.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ.filter.status) {
+					filter = `status eq '${this.sale_summ.filter.status}'`;
+				}
 
 				if (this.sale_summ.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ.filter.date_range.end ? getFormattedDate(this.sale_summ.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const blob = await $api.summSales.exportSalesSummary({
@@ -200,18 +214,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			this.sale_summ_items.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ_items.filter.status) {
+					filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				}
 
 				if (this.sale_summ_items.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ_items.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ_items.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ_items.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ_items.filter.date_range.end ? getFormattedDate(this.sale_summ_items.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSalesItems({
@@ -242,18 +263,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			this.sale_summ_items.exporting = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ_items.filter.status) {
+					filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				}
 
 				if (this.sale_summ_items.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ_items.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ_items.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ_items.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ_items.filter.date_range.end ? getFormattedDate(this.sale_summ_items.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ_items.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const blob = await $api.summSales.exportSalesItems({
@@ -312,18 +340,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			this.sale_summ_payments.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ_payments.filter.status) {
+					filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+				}
 
 				if (this.sale_summ_payments.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ_payments.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ_payments.filter.date_range.end ? getFormattedDate(this.sale_summ_payments.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.summSales.getSummSalesPayments({
@@ -355,18 +390,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			this.sale_summ_payments.exporting = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+				let filter = '';
+
+				if (this.sale_summ_payments.filter.status) {
+					filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+				}
 
 				if (this.sale_summ_payments.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+					const currencyFilter = `currency_code eq '${this.sale_summ_payments.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
 				}
 
 				if (this.sale_summ_payments.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
 						this.sale_summ_payments.filter.date_range.end ? getFormattedDate(this.sale_summ_payments.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const blob = await $api.summSales.exportSalesPayments({
@@ -405,18 +447,25 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				let filter = `status eq '${this.sale_summ_payments.filter.status}'`;
+				let filter = '';
 
-				if (this.sale_summ_payments.filter.currency_code) {
-					filter += ` and currency_code eq '${this.sale_summ_customer.filter.currency_code}'`;
+				if (this.sale_summ_customer.filter.status) {
+					filter = `status eq '${this.sale_summ_customer.filter.status}'`;
 				}
 
-				if (this.sale_summ_payments.filter.date_range.end) {
-					filter += ` and (biz_date between '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
-						this.sale_summ_payments.filter.date_range.end ? getFormattedDate(this.sale_summ_payments.filter.date_range.end!, 'yyyy-MM-dd') : undefined
+				if (this.sale_summ_customer.filter.currency_code) {
+					const currencyFilter = `currency_code eq '${this.sale_summ_customer.filter.currency_code}'`;
+					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;
+				}
+
+				if (this.sale_summ_customer.filter.date_range.end) {
+					const dateFilter = `(biz_date between '${getFormattedDate(this.sale_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}' and '${
+						this.sale_summ_customer.filter.date_range.end ? getFormattedDate(this.sale_summ_customer.filter.date_range.end!, 'yyyy-MM-dd') : undefined
 					}')`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				} else {
-					filter += ` and biz_date le '${getFormattedDate(this.sale_summ_payments.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					const dateFilter = `biz_date le '${getFormattedDate(this.sale_summ_customer.filter.date_range.start!, 'yyyy-MM-dd')}'`;
+					filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 				}
 
 				const { data } = await $api.summSales.getSummSalesCustomers({
