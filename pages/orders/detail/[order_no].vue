@@ -209,7 +209,7 @@ const addPaymentInfo = () => {
 				paymentModal.close();
 			},
 			onCancel: () => {
-				paymentModal.close();
+				// paymentModal.close();
 			},
 		},
 	});

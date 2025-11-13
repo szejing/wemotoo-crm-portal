@@ -7,7 +7,7 @@ import { UBadge } from '#components';
 export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
 	{
 		accessorKey: 'customer',
-		header: 'Customer',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Customer'),
 		cell: ({ row }) => {
 			return h('div', [
 				h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
@@ -17,7 +17,7 @@ export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
 	},
 	{
 		accessorKey: 'status',
-		header: 'Order Status',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Order Status'),
 		cell: ({ row }) => {
 			const color = {
 				[OrderStatus.COMPLETED]: 'success' as const,
@@ -42,7 +42,7 @@ export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
 	},
 	{
 		accessorKey: 'gross_amt',
-		header: 'Gross Amt',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
 		cell: ({ row }) => {
 			return h('div', { class: 'flex items-center gap-2' }, [
 				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
@@ -51,7 +51,7 @@ export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
 	},
 	{
 		accessorKey: 'net_amt',
-		header: 'Net Amt',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
 		cell: ({ row }) => {
 			return h('div', { class: 'flex items-center gap-2' }, [
 				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),

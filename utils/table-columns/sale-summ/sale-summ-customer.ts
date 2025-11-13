@@ -34,6 +34,31 @@ export const sale_summ_customer_columns: TableColumn<SummSaleCustomer>[] = [
 			return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => value);
 		},
 	},
+
+	{
+		accessorKey: 'total_txns',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Txns'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.total_txns, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_txns)]);
+		},
+	},
+	{
+		accessorKey: 'total_qty',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Qty'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.total_qty, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
+		},
+	},
 	{
 		accessorKey: 'gross_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
@@ -41,11 +66,11 @@ export const sale_summ_customer_columns: TableColumn<SummSaleCustomer>[] = [
 			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.gross_amt, 0);
 
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code)),
 			]);
 		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code ?? 'MYR'))]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code))]);
 		},
 	},
 	{
@@ -55,25 +80,11 @@ export const sale_summ_customer_columns: TableColumn<SummSaleCustomer>[] = [
 			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.net_amt, 0);
 
 			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
+				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code)),
 			]);
 		},
 		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.net_amt)]);
-		},
-	},
-	{
-		accessorKey: 'total_txns',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Txns'),
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_txns)]);
-		},
-	},
-	{
-		accessorKey: 'total_qty',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Qty'),
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code))]);
 		},
 	},
 ];

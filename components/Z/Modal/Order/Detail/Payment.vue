@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4">
+			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
 					v-model:payment-date-time="state.payment.payment_date_time"
@@ -21,7 +21,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" @click="onSubmit">Update</UButton>
+					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
 				</div>
 			</UForm>
 		</template>
@@ -55,23 +55,21 @@ const state = reactive({
 		ref_no1: undefined,
 		ref_no2: undefined,
 		payment_amt: detail.value?.net_amt,
-		currency_code: detail.value?.currency_code,
+		currency_code: detail.value?.currency?.code,
 		external_intg_type: undefined,
 		metadata: undefined,
 	},
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	console.log('onSubmit', event.data);
 	try {
 		if (!detail.value) {
 			throw new Error('Order not found');
 		}
+
 		is_loading.value = true;
 
-		const { order_no } = detail.value;
-
-		await orderStore.updatePayments(order_no, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updatePayments(detail.value?.order_no as string, JSON.parse(JSON.stringify(event.data)));
 		emit('update', true);
 	} catch {
 		emit('update', false);
