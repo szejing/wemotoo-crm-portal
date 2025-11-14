@@ -4,7 +4,7 @@
 			<div>
 				<p class="text-xs text-muted uppercase mb-1.5">Revenue</p>
 				<p class="text-3xl text-highlighted font-semibold">
-					{{ formatCurrency(total, 'MYR', 2) }}
+					{{ formatCurrency(total, 'MYR') }}
 				</p>
 			</div>
 		</template>

@@ -6,6 +6,11 @@ import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptyOrderSummCustomer } from './model/order-summ-customer.model';
 import type { Range } from '~/utils/interface';
 
+type TotalSalesAmt = {
+	currency_code: string;
+	total_sales_amt: number;
+};
+
 export const useSummOrderStore = defineStore('summOrderStore', {
 	state: () => ({
 		loading: false as boolean,
@@ -15,7 +20,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		top_purchased_products: [] as SummProduct[],
 		new_orders: 0 as number,
 		new_customers: 0 as number,
-		total_sales_amt: 0 as number,
+		total_sales_amt: [] as TotalSalesAmt[],
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
 		order_summ_customer: initialEmptyOrderSummCustomer,

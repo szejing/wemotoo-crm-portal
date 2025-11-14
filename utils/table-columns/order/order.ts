@@ -7,28 +7,28 @@ import type { OrderHistory } from '~/repository/modules/order/models/response/ge
 export const order_columns: TableColumn<OrderHistory>[] = [
 	{
 		accessorKey: 'index',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'No.'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'No.'),
 		cell: ({ row }) => {
 			return h('div', [h('p', row.index + 1)]);
 		},
 	},
 	{
 		accessorKey: 'biz_date',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Date'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Date'),
 		cell: ({ row }) => {
 			return h('div', [h('p', row.original.biz_date)]);
 		},
 	},
 	{
 		accessorKey: 'order_no',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Order No'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Order No'),
 		cell: ({ row }) => {
 			return h('div', [h('p', row.original.order_no)]);
 		},
 	},
 	{
 		accessorKey: 'status',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Status'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Status'),
 		cell: ({ row }) => {
 			const color = {
 				[OrderStatus.COMPLETED]: 'success' as const,
@@ -59,7 +59,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'gross_amt',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Gross Amt'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Gross Amt'),
 		cell: ({ row }) => {
 			return h('div', [h('p', formatCurrency(row.original.gross_amt ?? 0, row.original.currency.code))]);
 		},
@@ -72,7 +72,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'tax_amt_exc',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Tax Amt Exc'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Tax Amt Exc'),
 		cell: ({ row }) => {
 			return h('div', [h('p', formatCurrency(row.original.tax_amt_exc ?? 0, row.original.currency.code))]);
 		},
@@ -85,7 +85,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 	},
 	{
 		accessorKey: 'net_amt',
-		header: () => h('h1', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Net Amt'),
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Net Amt'),
 		cell: ({ row }) => {
 			return h('div', [h('p', formatCurrency(row.original.net_amt ?? 0, row.original.currency.code))]);
 		},

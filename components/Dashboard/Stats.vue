@@ -1,3 +1,4 @@
+<!-- eslint-disable indent -->
 <template>
 	<UPageGrid class="lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
 		<UPageCard
@@ -58,7 +59,13 @@ const baseStats = computed(() => [
 		title: 'Revenue',
 		icon: 'i-lucide-dollar-sign',
 		formatter: formatCurrency,
-		value: total_sales_amt.value ?? 0,
+		value:
+			total_sales_amt.value.length > 0
+				? formatCurrency(
+						total_sales_amt.value.reduce((acc: number, { total_sales_amt: amount }) => acc + amount, 0),
+						total_sales_amt.value[0]?.currency_code,
+					)
+				: 0,
 		to: '/analytics',
 	},
 	{
