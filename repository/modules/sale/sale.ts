@@ -2,8 +2,7 @@ import type { BaseODataReq } from '~/repository/base/base.req';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { GetSaleResp } from './models/response/get-sale.resp';
-import type { BaseODataResp } from '~/repository/base/base.resp';
-import type { Bill } from './models/response/bill';
+import type { GetSalesResp } from './models/response/get-sales.resp';
 
 class SaleModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Sales;
@@ -12,8 +11,8 @@ class SaleModule extends HttpFactory {
 	 * Fetches all sales
 	 * @returns
 	 */
-	async getBills(query: BaseODataReq): Promise<BaseODataResp<Bill>> {
-		return await this.call<BaseODataResp<Bill>>({
+	async getBills(query: BaseODataReq): Promise<GetSalesResp> {
+		return await this.call<GetSalesResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 			query,
@@ -42,7 +41,7 @@ class SaleModule extends HttpFactory {
 	async getBillDetailsByBillNo(bill_no: string): Promise<GetSaleResp> {
 		return await this.call<GetSaleResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(bill_no)}`,
+			url: `${this.RESOURCE.Single(encodeURIComponent(bill_no))}`,
 		});
 	}
 }

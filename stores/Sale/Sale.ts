@@ -5,7 +5,7 @@ import type { SaleStatus } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
-import type { Bill } from '~/repository/modules/sale/models/response/bill';
+import type { Bill } from '~/utils/types/bill';
 
 type SaleFilter = {
 	query: string;
@@ -40,6 +40,10 @@ export const useSaleStore = defineStore('saleStore', {
 		filter: initialEmptySaleFilter,
 	}),
 	actions: {
+		resetDetail() {
+			this.detail = undefined;
+		},
+
 		async updateSalePageSize(size: number) {
 			this.filter.page_size = size;
 
@@ -87,7 +91,7 @@ export const useSaleStore = defineStore('saleStore', {
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
-				const { data, '@odata.count': total } = await $api.sale.getBills({
+				const { bills, total } = await $api.sale.getBills({
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
@@ -96,11 +100,11 @@ export const useSaleStore = defineStore('saleStore', {
 					// $search: this.filter.query,
 				});
 
-				if (data) {
+				if (bills) {
 					if (this.filter.current_page > 1 && this.total_bills > this.bills.length) {
-						this.bills = [...this.bills, ...data];
+						this.bills = [...this.bills, ...bills];
 					} else {
-						this.bills = data;
+						this.bills = bills;
 					}
 
 					this.total_bills = total ?? 0;
@@ -171,7 +175,12 @@ export const useSaleStore = defineStore('saleStore', {
 		},
 
 		async getBillDetailsByBillNo(bill_no: string) {
+			if (!this.detail) {
+				this.loading = true;
+			}
+
 			const { $api } = useNuxtApp();
+
 			try {
 				const data = await $api.sale.getBillDetailsByBillNo(bill_no);
 
@@ -182,6 +191,8 @@ export const useSaleStore = defineStore('saleStore', {
 				console.error(err);
 				failedNotification(err.message);
 				throw err;
+			} finally {
+				this.loading = false;
 			}
 		},
 	},

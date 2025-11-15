@@ -51,15 +51,14 @@
 <script lang="ts" setup>
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { PaymentModel } from '~/utils/models';
-import type { Order } from '~/utils/types/order';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 const cardBg = { background: 'bg-secondary-50', shadow: 'shadow-md' };
 
 const props = defineProps<{
-	order: Order;
+	order: OrderHistory;
 	updateOrderStatus: (status: OrderStatus) => Promise<void>;
 	updatePaymentStatus: (status: PaymentStatus) => Promise<void>;
-	viewPaymentInfo: (payment: PaymentModel) => void;
 	addPaymentInfo: () => void;
 }>();
 

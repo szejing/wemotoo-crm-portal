@@ -79,9 +79,9 @@
 <script lang="ts" setup>
 import { getFormattedDate } from 'wemotoo-common';
 import { sale_columns } from '~/utils/table-columns';
-import type { Bill } from '~/repository/modules/sale/models/response/bill';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
+import type { Bill } from '~/utils/types/bill';
 
 useHead({ title: 'Wemotoo CRM - Sale Detail Listing' });
 

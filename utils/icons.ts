@@ -33,7 +33,7 @@ export const ICONS = {
 	REPORT_SALES: 'i-tabler-report-money',
 	PAYMENT_METHODS: 'i-material-symbols-payments-outline-rounded',
 	ANALYTICS: 'i-material-symbols-auto-graph-rounded',
-	CALENDAR: 'i-material-symbols-calendar-month-outline-rounded',
+	CALENDAR: 'i-heroicons-calendar-days',
 	RESET: 'i-material-symbols-refresh-rounded',
 	TAX: 'i-material-symbols-attach-money-rounded',
 	OUTLET: 'i-material-symbols-store-outline-rounded',

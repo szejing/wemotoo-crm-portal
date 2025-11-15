@@ -1,9 +1,9 @@
-import type { Currency } from '~/utils/types/currency';
 import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
-import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
-import type { TaxModel } from '~/utils/models/tax.model';
+import type { ItemModel, PaymentModel, CustomerModel } from '../models';
+import type { TaxModel } from '../models/tax.model';
+import type { Currency } from './currency';
 
-type OrderHistory = {
+export type OrderHistory = {
 	biz_date: string;
 	order_date_time: string;
 	transaction_no: string;
@@ -36,9 +36,4 @@ type OrderHistory = {
 	customer: CustomerModel;
 	taxes: TaxModel[];
 	created_at: Date;
-};
-
-export type GetOrdersResp = {
-	data: OrderHistory[];
-	total: number;
 };

@@ -101,7 +101,7 @@ import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { order_columns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
-import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 useHead({ title: 'Wemotoo CRM - Orders' });
 
@@ -162,11 +162,15 @@ const exportOrders = async () => {
 	await orderStore.exportOrders();
 };
 
-const selectOrder = (e: Event, row: TableRow<OrderHistory>) => {
+const selectOrder = async (e: Event, row: TableRow<OrderHistory>) => {
 	const order = row.original;
 	if (!order) return;
 
-	navigateTo(`/orders/detail/${encodeURIComponent(order.order_no)}`);
+	if (order.type === 'order') {
+		navigateTo(`/orders/detail/${encodeURIComponent(order.transaction_no)}`);
+	} else {
+		navigateTo(`/orders/sale/detail/${encodeURIComponent(order.transaction_no)}`);
+	}
 };
 </script>
 

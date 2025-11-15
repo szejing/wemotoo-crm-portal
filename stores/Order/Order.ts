@@ -3,13 +3,14 @@
 import { defineStore } from 'pinia';
 import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { PaymentModel } from '~/utils/models/payment.model';
 import type { Range } from '~/utils/interface';
 import { sub } from 'date-fns';
+import type { OrderHistory } from '~/utils/types/order-history';
+import type { Order } from '~/utils/types/order';
 
 type OrderFilter = {
 	query: string;
@@ -38,11 +39,15 @@ export const useOrderStore = defineStore('orderStore', {
 		exporting: false as boolean,
 		orders: [] as OrderHistory[],
 		total_orders: 0 as number,
-		detail: undefined as OrderHistory | undefined,
+		detail: undefined as Order | undefined,
 		errors: [] as string[],
 		filter: initialEmptyOrderFilter,
 	}),
 	actions: {
+		resetDetail() {
+			this.detail = undefined;
+		},
+
 		async updateOrderPageSize(size: number) {
 			this.filter.page_size = size;
 
@@ -97,7 +102,7 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
-				const { data, '@odata.count': total } = await $api.order.getOrders({
+				const { data, total } = await $api.order.getOrders({
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
@@ -125,22 +130,23 @@ export const useOrderStore = defineStore('orderStore', {
 		},
 
 		async getOrderByOrderNo(order_no: string) {
+			if (!this.detail) {
+				this.loading = true;
+			}
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.order.getOrderByOrderNo(order_no);
+				const data = await $api.order.getOrderByTransactionNo(order_no);
 
 				if (data.order) {
-					this.detail = data.order as OrderHistory;
+					this.detail = data.order;
 				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
 				throw err;
+			} finally {
+				this.loading = false;
 			}
-		},
-
-		setDetail(order: OrderHistory | undefined) {
-			this.detail = order;
 		},
 
 		async updateOrderStatus(order_no: string, customer_no: string, status: string) {
@@ -153,17 +159,6 @@ export const useOrderStore = defineStore('orderStore', {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Order status updated successfully');
 				}
-
-				// if (status === OrderStatus.COMPLETED && this.detail?.payment_status == PaymentStatus.SUCCESS) {
-				// 	const data = await $api.sale.updateOrderToSale(order_no, customer_no);
-
-				// 	if (data.bill) {
-				// 		this.detail = undefined;
-				// 		successNotification('Order status updated successfully');
-				// 	}
-				// } else {
-
-				// }
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);

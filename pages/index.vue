@@ -5,12 +5,6 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<UDropdownMenu :items="items">
-						<UButton icon="i-lucide-plus" size="md" class="rounded-full" />
-					</UDropdownMenu>
-				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>
@@ -30,23 +24,7 @@
 
 <script setup lang="ts">
 import { sub } from 'date-fns';
-import type { DropdownMenuItem } from '@nuxt/ui';
 import type { Range } from '~/utils/interface';
-
-const items = [
-	[
-		{
-			label: 'New mail',
-			icon: 'i-lucide-send',
-			to: '/inbox',
-		},
-		{
-			label: 'New customer',
-			icon: 'i-lucide-user-plus',
-			to: '/customers',
-		},
-	],
-] satisfies DropdownMenuItem[][];
 
 const range = shallowRef<Range>({
 	start: sub(new Date(), { days: 14 }),
