@@ -31,7 +31,9 @@
 										<span class="text-sm font-medium truncate">{{ section.name }}</span>
 										<span v-if="section.required" class="text-red-500 text-xs">*</span>
 									</div>
-									<p class="text-xs opacity-80 truncate">{{ section.description }}</p>
+									<p class="text-xs opacity-80 truncate" :class="[activeSection === section.id ? 'text-main-100' : 'text-neutral-700']">
+										{{ section.description }}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -310,7 +312,6 @@
 
 							<ZInputProductAdditionalInfo
 								:product="new_product"
-								:card-ui="borderlessCardUi"
 								@update:options="updateProductOptions"
 								@update:variants="updateProductVariants"
 								@update:metadata="updateProductMetadata"
@@ -470,14 +471,6 @@ const activeSection = ref('section-basic-info');
 const categories = ref<Category[]>([]);
 const tags = ref<Tag[]>([]);
 const brands = ref<Brand[]>([]);
-
-// UI Configuration
-const borderlessCardUi = {
-	body: { padding: 'py-0' },
-	header: { padding: 'py-0' },
-	ring: 'ring-0',
-	shadow: 'shadow-none',
-};
 
 // Section Navigation
 const sections = computed(() => [

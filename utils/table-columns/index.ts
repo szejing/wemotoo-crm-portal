@@ -2,6 +2,7 @@ import { order_columns } from './order/order';
 import { customer_columns } from './customer';
 import { category_columns } from './categories';
 import { product_option_columns } from './product-option';
+import { selectable_product_option_columns } from './selectable-product-option';
 import { tag_columns } from './tags';
 import { product_columns } from './product';
 import { order_summ_columns } from './order-summ/order-summ';
@@ -27,6 +28,7 @@ export {
 	tag_columns,
 	category_columns,
 	product_option_columns,
+	selectable_product_option_columns,
 	order_columns,
 	product_columns,
 	order_summ_columns,

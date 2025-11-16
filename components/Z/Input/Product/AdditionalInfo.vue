@@ -1,75 +1,141 @@
 <template>
-	<UCard :ui="cardUi">
-		<UTabs :items="product_additional_info">
-			<template #default="{ item }">
-				<div class="flex items-center gap-2">
-					<span class="text-sm font-medium hidden sm:block">{{ item.label }}</span>
+	<UTabs :items="product_additional_info">
+		<template #default="{ item }">
+			<div class="flex items-center gap-2">
+				<span class="text-sm font-medium hidden sm:block">{{ item.label }}</span>
+			</div>
+		</template>
+
+		<template #maintenance>
+			<div class="space-y-4 pt-4">
+				<div class="flex items-start justify-between mb-4">
+					<div class="flex-1">
+						<div class="flex items-center gap-2">
+							<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
+							<h3 class="text-lg font-semibold text-neutral-900">Maintenance Settings</h3>
+						</div>
+						<p class="text-sm text-neutral-500 mt-1">Configure booking requirements, duration, and operating hours for this service.</p>
+					</div>
+					<UTooltip text="Set up maintenance-specific details like booking requirements and operating hours." :popper="{ placement: 'left' }">
+						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+					</UTooltip>
 				</div>
-			</template>
 
-			<template #maintenance>
-				<div class="space-y-4 pt-4">
-					<div class="flex items-start justify-between mb-4">
-						<div class="flex-1">
-							<div class="flex items-center gap-2">
-								<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
-								<h3 class="text-lg font-semibold text-neutral-900">Maintenance Settings</h3>
-							</div>
-							<p class="text-sm text-neutral-500 mt-1">Configure booking requirements, duration, and operating hours for this service.</p>
-						</div>
-						<UTooltip text="Set up maintenance-specific details like booking requirements and operating hours." :popper="{ placement: 'left' }">
-							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-						</UTooltip>
-					</div>
-
-					<div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-						<div class="flex items-start gap-3">
-							<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
-							<div>
-								<h4 class="text-sm font-medium text-orange-900">Maintenance Information</h4>
-								<p class="text-xs text-orange-700 mt-1">
-									Add maintenance information such as booking requirements, duration, working hours, and off days for this service.
-								</p>
-							</div>
+				<div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+					<div class="flex items-start gap-3">
+						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
+						<div>
+							<h4 class="text-sm font-medium text-orange-900">Maintenance Information</h4>
+							<p class="text-xs text-orange-700 mt-1">
+								Add maintenance information such as booking requirements, duration, working hours, and off days for this service.
+							</p>
 						</div>
 					</div>
-
-					<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
 				</div>
-			</template>
 
-			<template #variants>
-				<div class="space-y-4 pt-4">
-					<div class="flex items-start justify-between mb-4">
+				<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+			</div>
+		</template>
+
+		<template #variants>
+			<div class="space-y-6 pt-4">
+				<!-- Header Section -->
+				<div class="flex items-start justify-between">
+					<div class="flex-1">
+						<div class="flex items-center gap-2">
+							<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
+							<h3 class="text-lg font-semibold text-neutral-900">Product Variants</h3>
+						</div>
+						<p class="text-sm text-neutral-500 mt-1">Create variations of this product with different options like color, size, or format.</p>
+					</div>
+					<UTooltip
+						text="Create product variants by defining options and their values. Each combination creates a unique variant."
+						:popper="{ placement: 'left' }"
+					>
+						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+					</UTooltip>
+				</div>
+
+				<!-- Info Banner -->
+				<div class="bg-linear-to-r from-primary-50 via-purple-50 to-blue-50 border-2 border-primary-200 rounded-xl p-5">
+					<div class="flex items-start gap-4">
+						<div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0">
+							<UIcon :name="ICONS.LIGHTBULB" class="text-primary-600 w-5 h-5" />
+						</div>
 						<div class="flex-1">
-							<div class="flex items-center gap-2">
-								<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
-								<h3 class="text-lg font-semibold text-neutral-900">Product Variants</h3>
-							</div>
-							<p class="text-sm text-neutral-500 mt-1">Add variations of this product with different options like color, size, or format.</p>
-						</div>
-						<UTooltip
-							text="Create product variants by defining options and their values. Each combination creates a unique variant."
-							:popper="{ placement: 'left' }"
-						>
-							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-						</UTooltip>
-					</div>
-
-					<div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-						<div class="flex items-start gap-3">
-							<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
-							<div>
-								<h4 class="text-sm font-medium text-purple-900">About Variants</h4>
-								<p class="text-xs text-purple-700 mt-1">
-									Offer your customers different options for color, format, size, shape, etc. First define options, then auto-generate or manually add variants.
-								</p>
+							<h4 class="text-sm font-semibold text-neutral-900 mb-1">How Product Variants Work</h4>
+							<p class="text-xs text-neutral-700 leading-relaxed mb-3">
+								Create product variants in two simple steps: First, define your product options (like Size, Color, Material). Then, automatically generate all
+								possible combinations or add custom variants.
+							</p>
+							<div class="flex flex-wrap gap-3 text-xs">
+								<div class="flex items-center gap-1.5 text-neutral-600">
+									<span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold">1</span>
+									<span>Define options & values</span>
+								</div>
+								<div class="flex items-center gap-1.5 text-neutral-600">
+									<span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-semibold">2</span>
+									<span>Generate combinations</span>
+								</div>
+								<div class="flex items-center gap-1.5 text-neutral-600">
+									<span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">3</span>
+									<span>Customize each variant</span>
+								</div>
 							</div>
 						</div>
 					</div>
+				</div>
 
-					<div class="space-y-6">
+				<!-- Example Preview (if no options yet) -->
+				<div v-if="!product.options || product.options.length === 0" class="bg-white border-2 border-dashed border-neutral-300 rounded-xl p-6">
+					<div class="flex flex-col sm:flex-row gap-6">
+						<div class="flex-1">
+							<h5 class="text-sm font-semibold text-neutral-900 mb-3 flex items-center gap-2">
+								<UIcon :name="ICONS.SPARKLES" class="w-4 h-4 text-amber-500" />
+								Example: T-Shirt Variants
+							</h5>
+							<div class="space-y-3 text-xs">
+								<div>
+									<p class="font-medium text-neutral-700 mb-1.5">Options you might define:</p>
+									<div class="flex flex-wrap gap-2">
+										<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-200">Size: S, M, L, XL</span>
+										<span class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">Color: Red, Blue, Black</span>
+									</div>
+								</div>
+								<div>
+									<p class="font-medium text-neutral-700 mb-1.5">Results in variants like:</p>
+									<div class="flex flex-wrap gap-2">
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / S</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / M</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Blue / S</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">...</span>
+										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium">12 total variants</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Workflow Container -->
+				<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
+					<div class="space-y-8">
+						<!-- Step 1: Options -->
 						<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
+
+						<!-- Divider -->
+						<div v-if="product.options && product.options.length > 0" class="relative">
+							<div class="absolute inset-0 flex items-center" aria-hidden="true">
+								<div class="w-full border-t border-neutral-200"></div>
+							</div>
+							<div class="relative flex justify-center">
+								<span class="bg-white px-3 text-xs font-medium text-neutral-500">
+									<UIcon :name="ICONS.ARROW_DOWN" class="w-4 h-4" />
+								</span>
+							</div>
+						</div>
+
+						<!-- Step 2: Variants -->
 						<ZInputProductVariantList
 							:options="product.options"
 							:variants="product.variants"
@@ -79,43 +145,43 @@
 						/>
 					</div>
 				</div>
-			</template>
+			</div>
+		</template>
 
-			<template #tax>
-				<div class="space-y-4 pt-4">
-					<div class="flex items-start justify-between mb-4">
-						<div class="flex-1">
-							<div class="flex items-center gap-2">
-								<UIcon :name="ICONS.TAX" class="text-primary-500 w-5 h-5" />
-								<h3 class="text-lg font-semibold text-neutral-900">Tax Settings</h3>
-							</div>
-							<p class="text-sm text-neutral-500 mt-1">Configure tax rules and rates for this product.</p>
+		<template #tax>
+			<div class="space-y-4 pt-4">
+				<div class="flex items-start justify-between mb-4">
+					<div class="flex-1">
+						<div class="flex items-center gap-2">
+							<UIcon :name="ICONS.TAX" class="text-primary-500 w-5 h-5" />
+							<h3 class="text-lg font-semibold text-neutral-900">Tax Settings</h3>
 						</div>
-						<UTooltip text="Set up tax configurations specific to this product." :popper="{ placement: 'left' }">
-							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-						</UTooltip>
+						<p class="text-sm text-neutral-500 mt-1">Configure tax rules and rates for this product.</p>
 					</div>
+					<UTooltip text="Set up tax configurations specific to this product." :popper="{ placement: 'left' }">
+						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+					</UTooltip>
+				</div>
 
-					<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-						<div class="flex items-start gap-3">
-							<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
-							<div>
-								<h4 class="text-sm font-medium text-blue-900">Tax Information</h4>
-								<p class="text-xs text-blue-700 mt-1">
-									Configure tax settings for this product. Tax rules can be applied based on your location and regulations.
-								</p>
-							</div>
+				<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+					<div class="flex items-start gap-3">
+						<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
+						<div>
+							<h4 class="text-sm font-medium text-blue-900">Tax Information</h4>
+							<p class="text-xs text-blue-700 mt-1">
+								Configure tax settings for this product. Tax rules can be applied based on your location and regulations.
+							</p>
 						</div>
-					</div>
-
-					<div class="text-center py-12 text-neutral-500">
-						<UIcon :name="ICONS.SETTINGS_ROUNDED" class="w-12 h-12 mx-auto mb-3 text-neutral-300" />
-						<p class="text-sm">Tax configuration coming soon</p>
 					</div>
 				</div>
-			</template>
-		</UTabs>
-	</UCard>
+
+				<div class="text-center py-12 text-neutral-500">
+					<UIcon :name="ICONS.SETTINGS_ROUNDED" class="w-12 h-12 mx-auto mb-3 text-neutral-300" />
+					<p class="text-sm">Tax configuration coming soon</p>
+				</div>
+			</div>
+		</template>
+	</UTabs>
 </template>
 
 <script lang="ts" setup>
@@ -127,7 +193,6 @@ const props = defineProps({
 		type: Object as PropType<ProductCreate | Product>,
 		required: true,
 	},
-	cardUi: Object,
 });
 
 const emit = defineEmits(['update:options', 'update:variants', 'delete:variant', 'update:metadata']);

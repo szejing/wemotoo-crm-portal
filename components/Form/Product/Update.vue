@@ -25,7 +25,10 @@
 										<span class="text-sm font-medium truncate">{{ section.name }}</span>
 										<span v-if="section.required" class="text-red-500 text-xs">*</span>
 									</div>
-									<p class="text-xs opacity-80 truncate">{{ section.description }}</p>
+
+									<p class="text-xs opacity-80 truncate" :class="[activeSection === section.id ? 'text-main-100' : 'text-neutral-700']">
+										{{ section.description }}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -224,6 +227,11 @@
 							</div>
 
 							<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+								<UFormField label="Currency">
+									<p class="text-xs text-neutral-500 my-1">Currency</p>
+									<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
+								</UFormField>
+
 								<UFormField label="Original Selling Price" required>
 									<p class="text-xs text-neutral-500 my-1">Your selling price for this product</p>
 									<UInput v-model.number="orig_sell_price" type="number" placeholder="e.g., 15.00" :min="0" :step="0.01" />
@@ -237,11 +245,6 @@
 								<UFormField label="Sale Price (Optional)">
 									<p class="text-xs text-neutral-500 my-1">Discounted price (leave empty if no discount)</p>
 									<UInput v-model.number="sale_price" type="number" placeholder="e.g., 12.00" :min="0" :step="0.01" />
-								</UFormField>
-
-								<UFormField label="Currency">
-									<p class="text-xs text-neutral-500 my-1">Currency</p>
-									<ZSelectMenuCurrency :currency-code="currency_code" @update:currency="updateCurrency" />
 								</UFormField>
 							</div>
 
@@ -302,7 +305,6 @@
 
 							<ZInputProductAdditionalInfo
 								:product="productForAdditionalInfo"
-								:card-ui="borderlessCardUi"
 								@update:options="updateProductOptions"
 								@update:variants="updateProductVariants"
 								@update:metadata="updateProductMetadata"
@@ -612,14 +614,6 @@ const ICONS = {
 // State
 const activeSection = ref('section-basic-info');
 
-// UI Configuration
-const borderlessCardUi = {
-	body: { padding: 'py-0' },
-	header: { padding: 'py-0' },
-	ring: 'ring-0',
-	shadow: 'shadow-none',
-};
-
 // Section Navigation
 const sections = computed(() => [
 	{
@@ -810,10 +804,6 @@ const updateProductMetadata = (value: any) => {
 
 // Methods: Form Submission
 const onSubmit = async () => {
-	// Clear variants if not needed
-	formState.value.options = [];
-	formState.value.variants = [];
-
 	// Update category_codes, tag_ids, brand_codes from UI state
 	formState.value.category_codes = categories.value?.map((cat) => cat.code!).filter(Boolean) ?? [];
 	formState.value.tag_ids = tags.value?.map((tag) => tag.id!).filter(Boolean);
@@ -827,9 +817,7 @@ const onSubmit = async () => {
 
 	const overlay = useOverlay();
 	const loadingModal = overlay.create(ZModalLoading, {
-		props: {
-			key: 'loading',
-		},
+		props: { key: 'loading' },
 	});
 
 	loadingModal.open();

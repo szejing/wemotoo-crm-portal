@@ -15,12 +15,15 @@ export type ProductOptionValueInput = {
 	id?: number;
 	option_id?: number;
 	value: string;
+	metadata?: Record<string, unknown>;
 };
 
 export type ProductOptionInput = {
 	id?: number;
 	name: string;
 	values: ProductOptionValueInput[];
+	metadata?: Record<string, unknown>;
+	selected?: boolean;
 };
 
 export type ProductVariantInput = {

@@ -1,58 +1,54 @@
 <template>
-	<UCard :ui="cardUi">
-		<template #header>
-			<div v-if="!hideHeader">
-				<h2 class="text-xl font-semibold">Pricing</h2>
-				<p class="text-sm text-neutral-500 mt-1">Product pricing</p>
+	<div class="p-4 sm:p-6 space-y-6">
+		<div class="bg-green-50 border border-green-200 rounded-lg p-4">
+			<div class="flex items-start gap-3">
+				<UIcon :name="ICONS.INFO" class="text-green-600 w-5 h-5 mt-0.5 shrink-0" />
+				<div>
+					<h4 class="text-sm font-medium text-green-900">Pricing Information</h4>
+					<p class="text-xs text-green-700 mt-1">Set your prices. Sale price is optional and will be displayed as a discount.</p>
+				</div>
 			</div>
-			<div class="section-grid-price-details" :class="[!hideHeader ? 'mt-4' : '']">
-				<UFormField label="Currency" name="currency">
-					<ZSelectMenuCurrency v-model:currency-code="currency_code" />
-				</UFormField>
-			</div>
-		</template>
+		</div>
 
-		<div class="section-grid-price-details gap-4 mt-4">
-			<UFormField v-slot="{ error }" label="Selling Price" name="orig_sell_price" required>
-				<UInput
-					v-model="orig_sell_price"
-					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
-					placeholder="0.00"
-					@input="formatCurrencyInput($event.target.value, $event.target)"
-				>
-					<template #leading>
-						<h3>RM</h3>
-					</template>
-				</UInput>
+		<div class="grid grid-cols-2 gap-6">
+			<UFormField label="Currency">
+				<p class="text-xs text-neutral-500 my-1">Currency</p>
+				<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Cost Price" name="cost_price">
-				<UInput
-					v-model="cost_price"
-					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
-					placeholder="0.00"
-					@input="formatCurrencyInput($event.target.value, $event.target)"
-				>
-					<template #leading>
-						<h3>RM</h3>
-					</template>
-				</UInput>
+			<UFormField label="Original Selling Price" required>
+				<p class="text-xs text-neutral-500 my-1">Your selling price for this product</p>
+				<UInput v-model.number="orig_sell_price" type="number" placeholder="e.g., 15.00" :min="0" :step="0.01" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Sale Price" name="sale_price">
-				<UInput
-					v-model="sale_price"
-					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
-					placeholder="0.00"
-					@input="formatCurrencyInput($event.target.value, $event.target)"
-				>
-					<template #leading>
-						<h3>RM</h3>
-					</template>
-				</UInput>
+			<UFormField label="Cost Price (Optional)">
+				<p class="text-xs text-neutral-500 my-1">Your cost for this product (for profit tracking)</p>
+				<UInput v-model.number="cost_price" type="number" placeholder="e.g., 10.00" :min="0" :step="0.01" />
+			</UFormField>
+
+			<UFormField label="Sale Price (Optional)">
+				<p class="text-xs text-neutral-500 my-1">Discounted price (leave empty if no discount)</p>
+				<UInput v-model.number="sale_price" type="number" placeholder="e.g., 12.00" :min="0" :step="0.01" />
 			</UFormField>
 		</div>
-	</UCard>
+
+		<!-- Price Preview -->
+		<div v-if="orig_sell_price" class="p-4 bg-neutral-50 rounded-lg">
+			<h4 class="text-sm font-medium mb-3">Price Preview</h4>
+			<div class="flex flex-wrap items-center gap-3">
+				<div v-if="sale_price && sale_price < orig_sell_price" class="text-2xl font-bold text-green-600">{{ currency_code }} {{ sale_price }}</div>
+				<div class="text-lg" :class="sale_price && sale_price < orig_sell_price ? 'line-through text-neutral-500' : 'font-bold text-neutral-900'">
+					{{ currency_code }} {{ orig_sell_price }}
+				</div>
+				<div v-if="sale_price && sale_price < orig_sell_price" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+					{{ Math.round(((orig_sell_price - sale_price) / orig_sell_price) * 100) }}% OFF
+				</div>
+			</div>
+			<div v-if="cost_price && orig_sell_price" class="text-xs text-neutral-600 mt-2">
+				Profit Margin: {{ currency_code }} {{ orig_sell_price - cost_price }} ({{ Math.round(((orig_sell_price - cost_price) / orig_sell_price) * 100) }}%)
+			</div>
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -63,11 +59,6 @@ const props = defineProps({
 	origSellPrice: Number,
 	costPrice: Number,
 	salePrice: Number,
-	cardUi: Object,
-	hideHeader: {
-		type: Boolean,
-		default: false,
-	},
 });
 
 const emit = defineEmits(['update:currencyCode', 'update:origSellPrice', 'update:costPrice', 'update:salePrice']);
@@ -108,6 +99,10 @@ const sale_price = computed({
 	},
 });
 
+const updateCurrency = (currency: any) => {
+	currency_code.value = currency.code;
+};
+
 if (orig_sell_price.value == undefined) {
 	orig_sell_price.value = undefined;
 }
@@ -119,38 +114,6 @@ if (cost_price.value == undefined) {
 if (sale_price.value == undefined) {
 	sale_price.value = undefined;
 }
-
-const formatCurrencyInput = (input: string, event: any) => {
-	if (event instanceof HTMLInputElement) {
-		let value = input.replace(/\D/g, ''); // Remove non-numeric characters
-		let cursorLength = value.length;
-		if (value.length > 0) {
-			value = formatCurrency(parseFloat(value), fractionDigits);
-			cursorLength = value.length;
-		}
-		event.focus();
-		event.setSelectionRange(cursorLength, cursorLength);
-		event.value = value;
-	}
-};
 </script>
 
-<style scoped>
-.section-grid-price-details {
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 1rem;
-}
-
-@media (min-width: 640px) {
-	.section-grid-price-details {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-}
-
-@media (min-width: 768px) {
-	.section-grid-price-details {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-}
-</style>
+<style scoped></style>

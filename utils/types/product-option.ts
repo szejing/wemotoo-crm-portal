@@ -5,6 +5,7 @@ export type ProductOptionInput = {
 	id?: number;
 	name: string;
 	values: ProductOptionValueInput[];
+	selected?: boolean;
 };
 
 // Model type for display/read operations

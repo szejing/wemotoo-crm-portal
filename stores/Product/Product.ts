@@ -225,6 +225,8 @@ export const useProductStore = defineStore('productStore', {
 			const code = product.code!;
 			this.updating = true;
 
+			console.log('updateProduct', product);
+
 			const { $api } = useNuxtApp();
 
 			try {
@@ -269,6 +271,8 @@ export const useProductStore = defineStore('productStore', {
 					tag_ids: product.tag_ids,
 					brand_codes: product.brand_codes,
 					status: product.status,
+					options: product.options,
+					variants: product.variants,
 					thumbnail: thumbnail,
 					images: images,
 				});

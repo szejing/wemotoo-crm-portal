@@ -1,10 +1,14 @@
 <template>
-	<UCard>
+	<UModal
+		:ui="{
+			content: 'w-full sm:max-w-[60%]',
+		}"
+	>
 		<template #header>
 			<h1>{{ product.name }} - [{{ variantDetail?.name?.replace('_', ' · ') }}]</h1>
 		</template>
 
-		<div class="space-y-4 divide-y divide-gray-300">
+		<template #body>
 			<!-- *********************** Pricing *********************** -->
 			<div v-if="variantDetail.price_types && variantDetail.price_types.length > 0">
 				<div v-for="price_type in variantDetail.price_types" :key="price_type.id">
@@ -13,7 +17,6 @@
 						v-model:cost-price.number="price_type.cost_price"
 						v-model:sale-price.number="price_type.sale_price"
 						v-model:currency-code="price_type.currency_code"
-						:card-ui="borderless_card_ui"
 					/>
 				</div>
 			</div>
@@ -23,31 +26,22 @@
 					v-model:cost-price.number="price.cost_price"
 					v-model:sale-price.number="price.sale_price"
 					v-model:currency-code="price.currency_code"
-					:card-ui="borderless_card_ui"
 				/>
 			</div>
 			<!-- *********************** Pricing *********************** -->
-
-			<!-- *********************** Info *********************** -->
-			<!-- <ZInputProductVariantInfo v-model:details="variantDetail" :card-ui="borderless_card_ui" /> -->
-			<!-- *********************** Info *********************** -->
-
-			<!-- *********************** Inventory *********************** -->
-			<!-- <ZInputProductInventory v-model:details="variantDetail" :card-ui="borderless_card_ui" /> -->
-			<!-- *********************** Inventory *********************** -->
-		</div>
+		</template>
 
 		<template #footer>
-			<div class="flex-jbetween-icenter">
+			<div class="flex justify-between gap-4 w-full">
 				<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" @click="updateProductVariant">Confirm</UButton>
+					<UButton color="primary" variant="solid" @click="onUpdate">Confirm</UButton>
 				</div>
 			</div>
 		</template>
-	</UCard>
+	</UModal>
 </template>
 
 <script lang="ts" setup>
@@ -73,7 +67,7 @@ const price = ref<PriceInput>({
 	id: undefined,
 });
 
-const emit = defineEmits(['update:variantDetail', 'cancel:variantDetail', 'delete:variantDetail']);
+const emit = defineEmits(['update', 'cancel', 'delete']);
 
 const variantDetail = computed({
 	get() {
@@ -82,20 +76,20 @@ const variantDetail = computed({
 	set(_) {},
 });
 
-const updateProductVariant = () => {
+const onUpdate = () => {
 	if (variantDetail.value.price_types?.length == 0) {
 		variantDetail.value.price_types = [price.value];
 	}
 
-	emit('update:variantDetail', variantDetail.value);
+	emit('update', variantDetail.value);
 };
 
 const onDelete = () => {
-	emit('delete:variantDetail', variantDetail.value);
+	emit('delete', variantDetail.value);
 };
 
 const onCancel = () => {
-	emit('cancel:variantDetail');
+	emit('cancel');
 };
 </script>
 
