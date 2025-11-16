@@ -131,9 +131,7 @@ const tabItems = computed(() => [
 
 // Load orders on mount
 onMounted(async () => {
-	if (orders.value.length === 0) {
-		await orderStore.getOrders();
-	}
+	await orderStore.getOrders();
 });
 
 const rows = computed(() => {

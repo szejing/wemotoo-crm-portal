@@ -152,12 +152,16 @@ export const useOrderStore = defineStore('orderStore', {
 		async updateOrderStatus(order_no: string, customer_no: string, status: string) {
 			const { $api } = useNuxtApp();
 
+			console.log(order_no, customer_no, status);
+
 			try {
 				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
 
-				if (data.status) {
+				if (data?.status && status !== OrderStatus.COMPLETED) {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Order status updated successfully');
+				} else {
+					useRouter().back();
 				}
 			} catch (err: any) {
 				console.error(err);

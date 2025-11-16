@@ -334,7 +334,7 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	}
 
 	try {
-		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer_no, new_status);
+		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
 		successNotification('Order status updated successfully');
 	} catch {
 		failedModal('Failed to update order status', 'Error');
