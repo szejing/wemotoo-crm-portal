@@ -1,94 +1,120 @@
 <template>
 	<UCard :ui="cardUi">
-		<template v-if="!hideHeader" #header>
-			<h2>Additional Info</h2>
-		</template>
+		<UTabs :items="product_additional_info">
+			<template #default="{ item }">
+				<div class="flex items-center gap-2">
+					<span class="text-sm font-medium hidden sm:block">{{ item.label }}</span>
+				</div>
+			</template>
 
-		<!-- DESKTOP -->
-		<div class="hidden sm:block" :class="[!hideHeader ? 'mt-4' : '']">
-			<UTabs :items="product_additional_info" orientation="vertical" :ui="vertical_ui_tabs">
-				<template #default="{ item, selected }">
-					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
-				</template>
+			<template #maintenance>
+				<div class="space-y-4 pt-4">
+					<div class="flex items-start justify-between mb-4">
+						<div class="flex-1">
+							<div class="flex items-center gap-2">
+								<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
+								<h3 class="text-lg font-semibold text-neutral-900">Maintenance Settings</h3>
+							</div>
+							<p class="text-sm text-neutral-500 mt-1">Configure booking requirements, duration, and operating hours for this service.</p>
+						</div>
+						<UTooltip text="Set up maintenance-specific details like booking requirements and operating hours." :popper="{ placement: 'left' }">
+							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+						</UTooltip>
+					</div>
 
-				<template #maintenance>
-					<h1>Maintenance</h1>
-					<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
+					<div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+						<div class="flex items-start gap-3">
+							<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
+							<div>
+								<h4 class="text-sm font-medium text-orange-900">Maintenance Information</h4>
+								<p class="text-xs text-orange-700 mt-1">
+									Add maintenance information such as booking requirements, duration, working hours, and off days for this service.
+								</p>
+							</div>
+						</div>
+					</div>
+
 					<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
-				</template>
+				</div>
+			</template>
 
-				<template #variants>
-					<div class="flex flex-col h-full">
-						<h1>Variants</h1>
-						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
+			<template #variants>
+				<div class="space-y-4 pt-4">
+					<div class="flex items-start justify-between mb-4">
+						<div class="flex-1">
+							<div class="flex items-center gap-2">
+								<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
+								<h3 class="text-lg font-semibold text-neutral-900">Product Variants</h3>
+							</div>
+							<p class="text-sm text-neutral-500 mt-1">Add variations of this product with different options like color, size, or format.</p>
+						</div>
+						<UTooltip
+							text="Create product variants by defining options and their values. Each combination creates a unique variant."
+							:popper="{ placement: 'left' }"
+						>
+							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+						</UTooltip>
+					</div>
 
-						<div class="space-y-8 mt-4">
-							<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
-							<ZInputProductVariantList
-								:options="product.options"
-								:variants="product.variants"
-								:product="product"
-								@delete:variant="deleteProductVariant"
-								@update:variants="updateProductVariants"
-							/>
+					<div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+						<div class="flex items-start gap-3">
+							<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
+							<div>
+								<h4 class="text-sm font-medium text-purple-900">About Variants</h4>
+								<p class="text-xs text-purple-700 mt-1">
+									Offer your customers different options for color, format, size, shape, etc. First define options, then auto-generate or manually add variants.
+								</p>
+							</div>
 						</div>
 					</div>
-				</template>
 
-				<!-- <template #shipping>
-					<h1>Shipping</h1>
-				</template> -->
-
-				<template #tax>
-					<h1>Tax</h1>
-				</template>
-			</UTabs>
-		</div>
-		<!-- DESKTOP -->
-
-		<!-- MOBILE -->
-		<div class="sm:hidden" :class="[!hideHeader ? 'mt-4' : '']">
-			<UTabs :items="product_additional_info" :ui="normal_ui_tabs">
-				<template #default="{ item, selected }">
-					<h4 class="text-start truncate" :class="[selected && 'text-primary-500']">{{ item.label }}</h4>
-				</template>
-
-				<template #maintenance>
-					<div class="flex flex-col h-full">
-						<h1>Maintenance</h1>
-						<p>Add maintenance information such as booking requirements, duration, working hours, etc.</p>
-						<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+					<div class="space-y-6">
+						<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
+						<ZInputProductVariantList
+							:options="product.options"
+							:variants="product.variants"
+							:product="product"
+							@delete:variant="deleteProductVariant"
+							@update:variants="updateProductVariants"
+						/>
 					</div>
-				</template>
+				</div>
+			</template>
 
-				<template #variants>
-					<div class="flex flex-col h-full">
-						<h1>Variants</h1>
-						<p>Add variations of this product. Offer your customers different options for color, format, size, shape, etc.</p>
+			<template #tax>
+				<div class="space-y-4 pt-4">
+					<div class="flex items-start justify-between mb-4">
+						<div class="flex-1">
+							<div class="flex items-center gap-2">
+								<UIcon :name="ICONS.TAX" class="text-primary-500 w-5 h-5" />
+								<h3 class="text-lg font-semibold text-neutral-900">Tax Settings</h3>
+							</div>
+							<p class="text-sm text-neutral-500 mt-1">Configure tax rules and rates for this product.</p>
+						</div>
+						<UTooltip text="Set up tax configurations specific to this product." :popper="{ placement: 'left' }">
+							<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
+						</UTooltip>
+					</div>
 
-						<div class="space-y-8 mt-4">
-							<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
-							<ZInputProductVariantList
-								:options="product.options"
-								:variants="product.variants"
-								:product="product"
-								@delete:variant="deleteProductVariant"
-								@update:variants="updateProductVariants"
-							/>
+					<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+						<div class="flex items-start gap-3">
+							<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
+							<div>
+								<h4 class="text-sm font-medium text-blue-900">Tax Information</h4>
+								<p class="text-xs text-blue-700 mt-1">
+									Configure tax settings for this product. Tax rules can be applied based on your location and regulations.
+								</p>
+							</div>
 						</div>
 					</div>
-				</template>
 
-				<!-- <template #shipping>
-					<h1>Shipping</h1>
-				</template> -->
-
-				<template #tax>
-					<h1>Tax</h1>
-				</template>
-			</UTabs>
-		</div>
-		<!-- MOBILE -->
+					<div class="text-center py-12 text-neutral-500">
+						<UIcon :name="ICONS.SETTINGS_ROUNDED" class="w-12 h-12 mx-auto mb-3 text-neutral-300" />
+						<p class="text-sm">Tax configuration coming soon</p>
+					</div>
+				</div>
+			</template>
+		</UTabs>
 	</UCard>
 </template>
 
@@ -96,44 +122,16 @@
 import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 
-const vertical_ui_tabs = {
-	wrapper: 'flex items-start gap-2',
-	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-neutral-100 p-4 rounded-md',
-	list: {
-		width: 'w-80',
-		rounded: 'rounded-md',
-		tab: {
-			base: 'relative inline-flex items-center justify-start flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
-			height: 'h-12',
-		},
-	},
-};
-
-const normal_ui_tabs = {
-	container: 'relative w-full h-[550px] max-h-[550px] overflow-hidden overflow-y-auto scrollbar-hide bg-neutral-100 p-4 rounded-md',
-	list: {
-		rounded: 'rounded-md',
-		height: 'h-12',
-		tab: {
-			base: 'relative inline-flex items-center justify-center flex-shrink-0 w-full ui-focus-visible:outline-0 ui-focus-visible:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 transition-colors duration-200 ease-out',
-			height: 'h-10',
-		},
-	},
-};
-
 const props = defineProps({
 	product: {
 		type: Object as PropType<ProductCreate | Product>,
 		required: true,
 	},
-	hideHeader: {
-		type: Boolean,
-		default: false,
-	},
 	cardUi: Object,
 });
 
 const emit = defineEmits(['update:options', 'update:variants', 'delete:variant', 'update:metadata']);
+
 const product = computed({
 	get() {
 		return props.product;
@@ -141,21 +139,43 @@ const product = computed({
 	set(_) {},
 });
 
-const product_additional_info = computed(() => {
-	// Check if product is ProductCreate (has type_id) or Product (has type)
+// Check if maintenance section should be shown (only for services, type_id/type === 2)
+const shouldShowMaintenance = computed(() => {
 	const typeId = 'type_id' in product.value ? product.value.type_id : product.value.type;
-	const is_maintenance = typeId === 2;
-
-	return [
-		// Conditionally add maintenance for type 2
-		...(is_maintenance ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
-		// Always add these items
-		{ label: 'Variants', slot: 'variants' },
-		// { label: 'Shipping', slot: 'shipping' },
-		{ label: 'Tax', slot: 'tax' },
-	];
+	return typeId === 2;
 });
 
+// Build tabs array with dynamic badges
+const product_additional_info = computed(() => {
+	const tabs = [];
+
+	// Conditionally add maintenance for type 2 (Services)
+	if (shouldShowMaintenance.value) {
+		tabs.push({
+			label: 'Maintenance',
+			slot: 'maintenance',
+			icon: ICONS.SETTINGS_ROUNDED,
+		});
+	}
+
+	// Always add variants
+	tabs.push({
+		label: 'Variants',
+		slot: 'variants',
+		icon: ICONS.LAYERS,
+	});
+
+	// Always add tax
+	tabs.push({
+		label: 'Tax',
+		slot: 'tax',
+		icon: ICONS.TAX,
+	});
+
+	return tabs;
+});
+
+// Event handlers
 const updateProductOptions = (value: ProductOptionInput[]) => {
 	emit('update:options', value);
 };
@@ -174,13 +194,32 @@ const updateProductMetadata = (value: Record<string, unknown>) => {
 </script>
 
 <style scoped>
-h2 {
-	line-height: 1.25;
+/* Smooth transitions for tab content */
+:deep(.ui-tabs-container) {
+	transition: all 0.2s ease-out;
 }
 
-p {
-	color: var(--color-secondary-400);
-	line-height: 1.25;
-	margin-top: 0.25rem;
+/* Improve scrollbar appearance if content overflows */
+:deep(.ui-tabs-container) {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+:deep(.ui-tabs-container)::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+:deep(.ui-tabs-container)::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+:deep(.ui-tabs-container)::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+}
+
+:deep(.ui-tabs-container)::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.2);
 }
 </style>

@@ -277,7 +277,7 @@
 					</UCard>
 
 					<!-- Section 4: Variants (only show for physical items) -->
-					<UCard v-if="!shouldSkipVariants()" id="section-variants" class="shadow-md scroll-mt-4">
+					<UCard id="section-variants" class="shadow-md scroll-mt-4">
 						<template #header>
 							<div class="flex items-start justify-between">
 								<div class="flex-1">
@@ -311,7 +311,6 @@
 							<ZInputProductAdditionalInfo
 								:product="new_product"
 								:card-ui="borderlessCardUi"
-								hide-header
 								@update:options="updateProductOptions"
 								@update:variants="updateProductVariants"
 								@update:metadata="updateProductMetadata"
@@ -407,7 +406,7 @@
 								</div>
 
 								<!-- Variants Summary -->
-								<div v-if="!shouldSkipVariants()" class="bg-neutral-50 rounded-lg p-4">
+								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-4 h-4" />
 										Variants
@@ -503,10 +502,10 @@ const sections = computed(() => [
 		description: 'Set product prices',
 		required: true,
 	},
-	...(shouldSkipVariants() ? [] : [{ id: 'section-variants', number: 4, name: 'Product Variants', description: 'Options & variations', required: false }]),
+	{ id: 'section-variants', number: 4, name: 'Product Variants', description: 'Options & variations', required: false },
 	{
 		id: 'section-review',
-		number: shouldSkipVariants() ? 4 : 5,
+		number: 5,
 		name: 'Review',
 		description: 'Final review',
 		required: true,
@@ -524,17 +523,33 @@ const scrollToSection = (sectionId: string) => {
 
 // Scroll spy - track which section is visible
 const handleScroll = () => {
-	const scrollPosition = window.scrollY + 100; // Offset for better UX
+	const threshold = 200; // Distance from top of viewport/container
+	let closestSection = sections.value[0]?.id; // Default to first section
+	let closestDistance = Infinity;
 
+	// Get the viewport/container height
+	const containerHeight =
+		scrollContainer.value === (window as any)
+			? (window as any).innerHeight
+			: (scrollContainer.value as HTMLElement)?.clientHeight || (window as any).innerHeight;
+
+	// Find the section that's closest to the threshold
 	for (const section of sections.value) {
 		const element = document.getElementById(section.id);
 		if (element) {
-			const { offsetTop, offsetHeight } = element;
-			if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-				activeSection.value = section.id;
-				break;
+			const rect = element.getBoundingClientRect();
+			const distance = Math.abs(rect.top - threshold);
+
+			// If this section's top is above the bottom of viewport and closer to threshold
+			if (rect.top < containerHeight && rect.bottom > 0 && distance < closestDistance) {
+				closestDistance = distance;
+				closestSection = section.id;
 			}
 		}
+	}
+
+	if (closestSection && activeSection.value !== closestSection) {
+		activeSection.value = closestSection;
 	}
 };
 
@@ -592,13 +607,6 @@ const sale_price = computed({
 		}
 	},
 });
-
-// Methods: Product Logic
-const shouldSkipVariants = () => {
-	// Skip variants section if product type is service (type_id === 2)
-	// return new_product.value.type_id === 2;
-	return false;
-};
 
 // Methods: Auto-save
 const triggerAutoSave = async () => {
@@ -675,12 +683,6 @@ const updateProductMetadata = (value: any) => {
 
 // Methods: Form Submission
 const onSubmit = async () => {
-	// Clear variants if not needed
-	if (shouldSkipVariants()) {
-		new_product.value.options = [];
-		new_product.value.variants = [];
-	}
-
 	// Process the data
 	const prodPrice: PriceInput[] = [];
 	new_product.value.price_types?.forEach((price) => {
@@ -791,10 +793,42 @@ watch(
 	{ deep: true },
 );
 
+// Ref to store the scroll container
+const scrollContainer = ref<HTMLElement | null>(null);
+
+// Function to find the scrollable parent
+const findScrollableParent = (element: HTMLElement | null): HTMLElement | null => {
+	if (!element) return null;
+
+	let parent = element.parentElement;
+	while (parent) {
+		const overflow = window.getComputedStyle(parent).overflow;
+		const overflowY = window.getComputedStyle(parent).overflowY;
+
+		if (overflow === 'auto' || overflow === 'scroll' || overflowY === 'auto' || overflowY === 'scroll') {
+			return parent;
+		}
+		parent = parent.parentElement;
+	}
+	return null;
+};
+
 // Lifecycle: Setup scroll spy
 onMounted(() => {
-	window.addEventListener('scroll', handleScroll, { passive: true });
-	handleScroll(); // Initial check
+	// Find the scrollable container - likely the UDashboardPanel body
+	nextTick(() => {
+		// Try to find scrollable parent from component root
+		const root = document.getElementById('section-basic-info')?.parentElement?.parentElement;
+
+		const foundScrollable = findScrollableParent(root as HTMLElement);
+
+		scrollContainer.value = foundScrollable || (window as any);
+
+		if (scrollContainer.value) {
+			scrollContainer.value.addEventListener('scroll', handleScroll, { passive: true });
+			handleScroll(); // Initial check
+		}
+	});
 });
 
 // Expose methods to parent component
@@ -807,7 +841,9 @@ onUnmounted(() => {
 	if (autoSaveTimer.value) {
 		clearTimeout(autoSaveTimer.value);
 	}
-	window.removeEventListener('scroll', handleScroll);
+	if (scrollContainer.value) {
+		scrollContainer.value.removeEventListener('scroll', handleScroll);
+	}
 });
 </script>
 
