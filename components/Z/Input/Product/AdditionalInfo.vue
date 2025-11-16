@@ -94,7 +94,7 @@
 
 <script lang="ts" setup>
 import type { ProductCreate } from '~/utils/types/form/product-creation';
-import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
+import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 
 const vertical_ui_tabs = {
 	wrapper: 'flex items-start gap-2',
@@ -123,7 +123,7 @@ const normal_ui_tabs = {
 
 const props = defineProps({
 	product: {
-		type: Object as PropType<Product>,
+		type: Object as PropType<ProductCreate | Product>,
 		required: true,
 	},
 	hideHeader: {
@@ -142,15 +142,20 @@ const product = computed({
 });
 
 const product_additional_info = computed(() => {
+	// Check if product is ProductCreate (has type_id) or Product (has type)
+	const typeId = 'type_id' in product.value ? product.value.type_id : product.value.type;
+	const is_maintenance = typeId === 2;
+
 	return [
 		// Conditionally add maintenance for type 2
-		...(product.value.type === 2 ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
+		...(is_maintenance ? [{ label: '*Maintenance', slot: 'maintenance' }] : []),
 		// Always add these items
 		{ label: 'Variants', slot: 'variants' },
 		// { label: 'Shipping', slot: 'shipping' },
 		{ label: 'Tax', slot: 'tax' },
 	];
 });
+
 const updateProductOptions = (value: ProductOptionInput[]) => {
 	emit('update:options', value);
 };

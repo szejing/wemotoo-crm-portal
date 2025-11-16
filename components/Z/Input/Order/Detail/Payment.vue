@@ -5,17 +5,15 @@
 		</UFormField>
 
 		<!-- // Date selection -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
+		<div class="grid grid-cols-1 gap-4">
 			<UFormField label="Payment Type" name="paymentType">
-				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" />
+				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" class="w-full" />
 			</UFormField>
 
 			<UFormField v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
 				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" disabled />
 			</UFormField>
-		</div>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
 			<UFormField v-slot="{ error }" label="Ref No. 1" name="refNo1">
 				<UInput v-model="refNo1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 1" />
 			</UFormField>

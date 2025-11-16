@@ -26,7 +26,7 @@
 						</UButton>
 
 						<div class="flex gap-3">
-							<UButton color="neutral" variant="outline" size="lg" @click="navigateTo('/products')"> Cancel </UButton>
+							<UButton color="neutral" variant="outline" size="lg" @click="goBack"> Cancel </UButton>
 
 							<UButton color="success" variant="solid" size="lg" :loading="adding" @click="() => onSubmit()">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
@@ -46,7 +46,7 @@
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								<span class="text-xs">Save Draft</span>
 							</UButton>
-							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="navigateTo('/products')">
+							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="goBack">
 								<span class="text-xs">Cancel</span>
 							</UButton>
 						</div>
@@ -79,10 +79,10 @@ const onSubmit = async () => {
 		await formRef.value.onSubmit();
 	}
 };
+
+const goBack = () => {
+	useRouter().back();
+};
 </script>
 
-<style scoped>
-h2 {
-	color: var(--color-secondary-600);
-}
-</style>
+<style scoped></style>

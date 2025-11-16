@@ -249,7 +249,7 @@
 
 								<UFormField label="Currency">
 									<p class="text-xs text-neutral-500 my-1">Currency</p>
-									<ZSelectMenuCurrency :currency-code="currency_code" @update:currency="updateCurrency" />
+									<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
 								</UFormField>
 							</div>
 
@@ -461,20 +461,6 @@ const productStore = useProductStore();
 const { new_product } = storeToRefs(productStore);
 const toast = useToast();
 
-// Icons
-const ICONS = {
-	CHECK_ROUNDED: 'i-heroicons-check-circle-20-solid',
-	HELP: 'i-heroicons-question-mark-circle',
-	INFO: 'i-heroicons-information-circle',
-	ARROW_RIGHT: 'i-heroicons-arrow-right',
-	ARROW_LEFT: 'i-heroicons-arrow-left',
-	TAG: 'i-heroicons-tag',
-	CURRENCY: 'i-heroicons-currency-dollar',
-	LAYERS: 'i-heroicons-squares-2x2',
-	IMAGE: 'i-heroicons-photo',
-	SAVE: 'i-heroicons-document-arrow-down',
-};
-
 // State
 const saving = ref(false);
 const lastSaved = ref<string | null>(null);
@@ -610,7 +596,8 @@ const sale_price = computed({
 // Methods: Product Logic
 const shouldSkipVariants = () => {
 	// Skip variants section if product type is service (type_id === 2)
-	return new_product.value.type_id === 2;
+	// return new_product.value.type_id === 2;
+	return false;
 };
 
 // Methods: Auto-save
@@ -825,7 +812,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Smooth scroll behavior */
 html {
 	scroll-behavior: smooth;
 }

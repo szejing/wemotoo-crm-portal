@@ -39,4 +39,12 @@ export const ICONS = {
 	OUTLET: 'i-material-symbols-store-outline-rounded',
 	SAVE: 'i-material-symbols-save-outline-rounded',
 	CROSS: 'i-material-symbols-close-small-rounded',
+	HELP: 'i-heroicons-question-mark-circle',
+	INFO: 'i-heroicons-information-circle',
+	ARROW_RIGHT: 'i-heroicons-arrow-right',
+	ARROW_LEFT: 'i-heroicons-arrow-left',
+	TAG: 'i-heroicons-tag',
+	CURRENCY: 'i-heroicons-currency-dollar',
+	LAYERS: 'i-heroicons-squares-2x2',
+	IMAGE: 'i-heroicons-photo',
 };
