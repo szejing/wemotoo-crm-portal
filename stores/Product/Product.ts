@@ -1,4 +1,4 @@
-import { defaultSimpleProductRelations, ProductStatus } from 'wemotoo-common';
+import { defaultProductRelations, defaultSimpleProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -147,7 +147,7 @@ export const useProductStore = defineStore('productStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$expand: defaultSimpleProductRelations.join(','),
+					$expand: removeDuplicateExpands(defaultProductRelations).join(','),
 					$orderby: 'updated_at desc',
 				};
 

@@ -1,6 +1,8 @@
+/* eslint-disable indent */
 import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
+import { UBadge } from '#components';
 
 export const product_columns: TableColumn<Product>[] = [
 	{
@@ -8,12 +10,25 @@ export const product_columns: TableColumn<Product>[] = [
 		header: () => h('h1', 'Code & Name'),
 		cell: ({ row }) => {
 			const thumbnailUrl = row.original.thumbnail?.url;
-			return h('div', { class: 'flex items-center gap-3' }, [
+			const variants = row.original.variants;
+
+			const variantBadge =
+				variants && variants.length > 0
+					? variants.map((variant) => h(UBadge, { class: 'capitalize', variant: 'subtle', color: 'info' }, `${variant.name || variant.variant_code}`))
+					: [];
+
+			const children: any[] = [
 				thumbnailUrl
 					? h('img', { src: thumbnailUrl, alt: row.original.name || 'Product thumbnail', class: 'w-10 h-10 rounded-md object-cover flex-shrink-0' })
 					: null,
-				h('div', [h('div', { class: 'font-bold text-neutral-900' }, row.original.code), h('div', { class: 'text-neutral-600' }, row.original.name)]),
-			]);
+				h('div', { class: 'flex-1 min-w-0' }, [
+					h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
+					h('div', { class: 'text-neutral-600' }, row.original.name),
+					variantBadge.length > 0 ? h('div', { class: 'mt-1 flex flex-wrap items-center gap-1' }, [...variantBadge]) : null,
+				]),
+			];
+
+			return h('div', { class: 'flex items-start gap-3' }, children);
 		},
 	},
 	{
