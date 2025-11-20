@@ -11,7 +11,7 @@ type OrderHistory = {
 	type: 'order' | 'sale';
 	total_qty: number;
 	order_no: string;
-	doc_no: string;
+	trace_no: string;
 	status: OrderStatus;
 	payment_status: PaymentStatus;
 	customer_no: string;

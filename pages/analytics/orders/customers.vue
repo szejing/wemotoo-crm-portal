@@ -46,7 +46,7 @@
 					</div>
 
 					<!-- Table -->
-					<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading">
+					<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" class="mt-4">
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-12 gap-3">
 								<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />

@@ -37,6 +37,30 @@ export const order_summ_columns: TableColumn<SummOrderBill>[] = [
 		},
 	},
 	{
+		accessorKey: 'total_orders',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Orders'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_orders, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_orders)]);
+		},
+	},
+	{
+		accessorKey: 'total_qty',
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Items'),
+		footer: ({ column }) => {
+			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_qty, 0);
+
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+		},
+		cell: ({ row }) => {
+			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
+		},
+	},
+	{
 		accessorKey: 'gross_amt',
 		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
 		footer: ({ column }) => {
@@ -62,30 +86,6 @@ export const order_summ_columns: TableColumn<SummOrderBill>[] = [
 		},
 		cell: ({ row }) => {
 			return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code ?? 'MYR'))]);
-		},
-	},
-	{
-		accessorKey: 'total_orders',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Orders'),
-		footer: ({ column }) => {
-			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_orders, 0);
-
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
-		},
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_orders)]);
-		},
-	},
-	{
-		accessorKey: 'total_qty',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Items'),
-		footer: ({ column }) => {
-			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_qty, 0);
-
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
-		},
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
 		},
 	},
 ];

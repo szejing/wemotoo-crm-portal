@@ -35,7 +35,7 @@
 						</div>
 					</div>
 
-					<div v-for="(group, index) in groupedByDate" :key="group.date">
+					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
 						<!-- Date Header -->
 						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">

@@ -6,7 +6,7 @@ import type { Currency } from './currency';
 export type Bill = {
 	biz_date: string;
 	bill_no: string;
-	doc_no: string;
+	trace_no: string;
 	order_date_time: Date;
 	customer_no: string;
 	status: SaleStatus;

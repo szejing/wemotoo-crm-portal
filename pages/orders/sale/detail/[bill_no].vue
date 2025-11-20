@@ -22,8 +22,8 @@
 								<UIcon :name="ICONS.CALENDAR" class="w-4 h-4" />
 								<p>{{ bill?.order_date_time }}</p>
 							</div>
-							<div v-if="bill?.doc_no" class="metadata-item">
-								<p class="text-sm text-neutral-400 italic">{{ bill?.doc_no }}</p>
+							<div v-if="bill?.trace_no" class="metadata-item">
+								<p class="text-sm text-neutral-400 italic">{{ bill?.trace_no }}</p>
 							</div>
 							<div v-if="bill?.ref_no" class="metadata-item">
 								<p>Ref: {{ bill?.ref_no }}</p>

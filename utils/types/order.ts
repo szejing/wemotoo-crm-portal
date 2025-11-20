@@ -81,7 +81,7 @@ export type Order = {
 	biz_date: string;
 	order_date_time: string;
 	order_no: string;
-	doc_no: string;
+	trace_no: string;
 	customer_no: string;
 	status: OrderStatus;
 	payment_status: PaymentStatus;

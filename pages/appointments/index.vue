@@ -89,7 +89,7 @@
 										<div class="flex items-center justify-between">
 											<div class="flex items-center gap-2">
 												<UIcon name="i-heroicons-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
-												<span class="text-lg font-bold text-gray-900 dark:text-white">{{ appointment.order_no }}</span>
+												<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.order_no }} </span>
 											</div>
 											<UBadge :color="getStatusColor(appointment.status) as any" variant="subtle" size="sm">
 												{{ appointment.status.toUpperCase() }}

@@ -35,7 +35,7 @@
 						</div>
 					</div>
 
-					<UTable :data="data" :columns="sale_summ_customer_columns" :loading="loading">
+					<UTable :data="data" :columns="sale_summ_customer_columns" :loading="loading" class="mt-4">
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-6">
 								<UIcon name="i-heroicons-inbox" class="w-12 h-12 text-gray-400" />

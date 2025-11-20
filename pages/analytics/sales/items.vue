@@ -36,7 +36,7 @@
 						</div>
 					</div>
 
-					<div v-for="(group, index) in groupedByDate" :key="group.date">
+					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
 						<!-- Date Header -->
 						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
 							<div class="flex items-center justify-between">
@@ -45,15 +45,13 @@
 									<div class="flex items-center gap-3 text-sm">
 										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-shopping-cart" class="text-base" />
-											<span class="font-medium">{{ group.total_orders }} orders</span>
+											<span class="font-medium">{{ group.total_txn }} orders</span>
 										</div>
-										<div class="h-4 w-px bg-neutral-300"></div>
-										<div class="flex items-center gap-1.5 text-green-600">
+										<div class="flex items-center gap-1.5 text-green-600 border-l border-neutral-300 pl-3">
 											<Icon name="i-heroicons-cube" class="text-base" />
 											<span class="font-medium">{{ group.active_qty }} items</span>
 										</div>
-										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
-										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
+										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600 border-l border-neutral-300 pl-3">
 											<Icon name="i-heroicons-x-circle" class="text-base" />
 											<span class="font-medium">{{ group.voided_qty }} voided</span>
 										</div>
@@ -97,8 +95,6 @@ const { sale_summ_items, loading } = storeToRefs(salesSummStore);
 const data = computed(() => sale_summ_items.value.data);
 const current_page = computed(() => sale_summ_items.value.current_page);
 
-// const selectedColumns = ref(sale_summ_item_columns);
-
 // Group data by date
 const groupedByDate = computed(() => {
 	const grouped: { [key: string]: (typeof data.value)[0][] } = {};
@@ -114,11 +110,13 @@ const groupedByDate = computed(() => {
 	return Object.entries(grouped).map(([date, items]) => {
 		const totals = items.reduce(
 			(acc, item) => {
-				acc.total_orders += item.total_orders;
+				acc.total_txn += item.total_txn;
 				acc.total_qty += item.total_qty;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
 				acc.currency_code = item.currency_code;
+
+				console.log(item);
 
 				// Separate voided and non-voided quantities
 				if (item.item_status === OrderItemStatus.VOIDED) {
@@ -128,7 +126,7 @@ const groupedByDate = computed(() => {
 				}
 				return acc;
 			},
-			{ total_orders: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
+			{ total_txn: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
 		);
 
 		return {
