@@ -19,7 +19,7 @@
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
 						</template>
 					</UBadge>
-					<UBadge else-if="status == OrderItemStatus.ACTIVE" size="md" color="success">
+					<UBadge v-else size="md" color="success">
 						ACTIVE
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
@@ -28,7 +28,7 @@
 				</div>
 			</div>
 
-			<ZQuantity v-model:quantity="orderQty" />
+			<!-- <ZQuantity v-model:quantity="orderQty" /> -->
 		</div>
 
 		<hr class="my-2" />
@@ -37,7 +37,7 @@
 			<h2 class="text-main">Appointment</h2>
 			<h4 class="text-neutral-700">#{{ appointment!.code }}</h4>
 
-			<div class="grid grid-cols-2 gap-4 mt-2">
+			<div class="grid grid-cols-1 gap-4 mt-2">
 				<div class="flex-jbetween-icenter">
 					<h4 class="text-neutral-400">Date</h4>
 					<ZSelectMenuDateTime

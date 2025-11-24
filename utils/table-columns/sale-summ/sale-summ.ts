@@ -13,7 +13,7 @@ export const sale_summ_columns: TableColumn<SummSaleBill>[] = [
 	},
 	{
 		accessorKey: 'status',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Order Status'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Status'),
 		cell: ({ row }) => {
 			const color = {
 				[SaleStatus.COMPLETED]: 'success' as const,
@@ -33,7 +33,7 @@ export const sale_summ_columns: TableColumn<SummSaleBill>[] = [
 
 	{
 		accessorKey: 'total_txns',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Orders'),
+		header: () => h('h1', { class: 'text-neutral-400' }, 'Total Transactions'),
 		footer: ({ column }) => {
 			const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleBill>) => acc + row.original.total_txns, 0);
 

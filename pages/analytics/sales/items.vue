@@ -44,8 +44,8 @@
 									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
 									<div class="flex items-center gap-3 text-sm">
 										<div class="flex items-center gap-1.5 text-neutral-600">
-											<Icon name="i-heroicons-shopping-cart" class="text-base" />
-											<span class="font-medium">{{ group.total_txn }} orders</span>
+											<Icon name="i-heroicons-banknotes" class="text-base" />
+											<span class="font-medium">{{ group.total_txns }} transactions</span>
 										</div>
 										<div class="flex items-center gap-1.5 text-green-600 border-l border-neutral-300 pl-3">
 											<Icon name="i-heroicons-cube" class="text-base" />
@@ -110,13 +110,11 @@ const groupedByDate = computed(() => {
 	return Object.entries(grouped).map(([date, items]) => {
 		const totals = items.reduce(
 			(acc, item) => {
-				acc.total_txn += item.total_txn;
+				acc.total_txns += item.total_txns;
 				acc.total_qty += item.total_qty;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
 				acc.currency_code = item.currency_code;
-
-				console.log(item);
 
 				// Separate voided and non-voided quantities
 				if (item.item_status === OrderItemStatus.VOIDED) {
@@ -126,7 +124,7 @@ const groupedByDate = computed(() => {
 				}
 				return acc;
 			},
-			{ total_txn: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
+			{ total_txns: 0, total_qty: 0, gross_amt: 0, net_amt: 0, voided_qty: 0, active_qty: 0, currency_code: 'MYR' },
 		);
 
 		return {

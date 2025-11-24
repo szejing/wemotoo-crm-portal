@@ -136,39 +136,6 @@ const editItem = (item: ItemModel) => {
 </script>
 
 <style scoped>
-.order-detail-item {
-	display: flex;
-	flex-direction: column;
-}
-
-@media (min-width: 640px) {
-	.order-detail-item {
-		flex-direction: row;
-	}
-}
-
-.order-detail-item span:first-child {
-	width: 100%;
-	color: var(--color-neutral-400);
-}
-
-@media (min-width: 640px) {
-	.order-detail-item span:first-child {
-		width: 200px;
-	}
-}
-
-@media (min-width: 1024px) {
-	.order-detail-item span:first-child {
-		width: 240px;
-	}
-}
-
-.order-detail-item span:last-child {
-	font-weight: 500;
-	color: var(--color-neutral-800);
-}
-
 .cell-header {
 	padding: 1rem;
 	color: var(--color-neutral-400);

@@ -2,7 +2,7 @@ import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
-import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 export const order_columns: TableColumn<OrderHistory>[] = [
 	{
@@ -23,7 +23,18 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 		accessorKey: 'order_no',
 		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Order No'),
 		cell: ({ row }) => {
-			return h('div', [h('p', row.original.order_no)]);
+			return h('div', [h('p', row.original.transaction_no)]);
+		},
+	},
+	{
+		accessorKey: 'customer',
+		header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, 'Customer'),
+
+		cell: ({ row }) => {
+			return h('div', { class: 'flex flex-col gap-1' }, [
+				h('h3', { class: 'text-neutral-800 font-bold' }, `${row.original.customer?.customer_no} | ${row.original.customer?.name}`),
+				h('h5', { class: 'text-neutral-400' }, row.original.customer?.email_address),
+			]);
 		},
 	},
 	{
@@ -32,7 +43,7 @@ export const order_columns: TableColumn<OrderHistory>[] = [
 		cell: ({ row }) => {
 			const color = {
 				[OrderStatus.COMPLETED]: 'success' as const,
-				[OrderStatus.CANCELLED]: 'neutral' as const,
+				[OrderStatus.CANCELLED]: 'error' as const,
 				[OrderStatus.REFUNDED]: 'error' as const,
 				[OrderStatus.PENDING_PAYMENT]: 'info' as const,
 				[OrderStatus.PROCESSING]: 'info' as const,

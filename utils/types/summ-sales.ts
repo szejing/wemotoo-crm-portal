@@ -73,7 +73,7 @@ export type SummSaleItem = {
 	tax_amt_inc?: number;
 	tax_amt_exc?: number;
 	adj_amt?: number;
-	total_txn: number;
+	total_txns: number;
 	total_qty: number;
 };
 

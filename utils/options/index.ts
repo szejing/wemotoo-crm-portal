@@ -5,7 +5,7 @@ import { options_order_item_status, getOrderItemStatusColor } from './order-item
 import { options_payment_status, getPaymentStatusColor } from './payment-status';
 import { options_page_size } from './page-size';
 import { options_sale_status, getSaleStatusColor } from './sale-status';
-import { options_appointment_status } from './appointment-status';
+import { options_appointment_status, getAppointmentStatusColor } from './appointment-status';
 import { options_amount_type } from './amount-type';
 
 export {
@@ -22,5 +22,6 @@ export {
 	options_sale_status,
 	getSaleStatusColor,
 	options_appointment_status,
+	getAppointmentStatusColor,
 	options_amount_type,
 };

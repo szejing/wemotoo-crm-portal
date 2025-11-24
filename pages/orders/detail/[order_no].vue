@@ -45,7 +45,7 @@
 							</UButton>
 
 							<div class="status-group">
-								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="neutral" size="lg"> PENDING PAYMENT </UBadge>
+								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg"> PENDING PAYMENT </UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg"> PROCESSING </UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success" size="lg"> COMPLETED </UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning" size="lg"> REQUIRES ACTION </UBadge>
