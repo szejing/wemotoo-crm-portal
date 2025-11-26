@@ -64,7 +64,7 @@
 
 			<!-- Pagination -->
 			<div v-if="data.length > 0" class="mt-6 flex justify-center">
-				<UPagination :default-page="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
+				<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
 			</div>
 		</template>
 	</UDashboardPanel>

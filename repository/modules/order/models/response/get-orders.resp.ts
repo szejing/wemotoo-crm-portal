@@ -39,6 +39,6 @@ type OrderHistory = {
 };
 
 export type GetOrdersResp = {
-	data: OrderHistory[];
-	total: number;
+	'data': OrderHistory[];
+	'@odata.count': number;
 };

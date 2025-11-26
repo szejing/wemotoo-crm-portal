@@ -43,7 +43,7 @@
 				</UTable>
 
 				<div v-if="payment_type_groups.length > 0" class="section-pagination">
-					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_payment_type_groups" @update:page="updatePage" />
+					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_payment_type_groups" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>

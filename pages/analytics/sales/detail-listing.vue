@@ -70,7 +70,7 @@
 
 			<!-- Pagination -->
 			<div v-if="bills.length > 0" class="mt-6 flex justify-center">
-				<UPagination :default-page="current_page" :items-per-page="filter.page_size" :total="total_bills" @update:page="updatePage" />
+				<UPagination v-model="current_page" :items-per-page="filter.page_size" :total="total_bills" @update:page="updatePage" />
 			</div>
 		</template>
 	</UDashboardPanel>

@@ -67,12 +67,6 @@
 
 					<!-- Pagination -->
 					<div v-if="orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
-						<div class="flex-1 flex justify-between sm:hidden">
-							<UButton variant="outline" size="sm" :disabled="current_page <= 1" @click="updatePage(current_page - 1)"> Previous </UButton>
-							<UButton variant="outline" size="sm" :disabled="current_page * filter.page_size >= orderStore.total_orders" @click="updatePage(current_page + 1)">
-								Next
-							</UButton>
-						</div>
 						<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 							<div class="text-sm text-gray-700 dark:text-gray-300">
 								Showing <span class="font-medium">{{ (current_page - 1) * filter.page_size + 1 }}</span> to
@@ -86,7 +80,7 @@
 								show-last
 								show-first
 								size="sm"
-								@update:model-value="updatePage"
+								@update:page="updatePage"
 							/>
 						</div>
 					</div>

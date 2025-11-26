@@ -51,7 +51,7 @@
 
 				<!-- Pagination  -->
 				<div v-if="categories.length > 0" class="section-pagination">
-					<UPagination :default-page="filter.current_page" :items-per-page="filter.page_size" :total="total_categories" @update:page="updatePage" />
+					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_categories" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>

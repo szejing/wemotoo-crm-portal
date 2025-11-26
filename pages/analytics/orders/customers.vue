@@ -59,7 +59,7 @@
 
 				<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
 					<UPagination
-						:default-page="current_page"
+						v-model="current_page"
 						:items-per-page="order_summ_customer.page_size"
 						:total="order_summ_customer.total_data"
 						@update:page="updatePage"

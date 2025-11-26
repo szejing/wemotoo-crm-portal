@@ -102,7 +102,7 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
-				const { data, total } = await $api.order.getOrders({
+				const { data, '@odata.count': total } = await $api.order.getOrders({
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
@@ -110,6 +110,8 @@ export const useOrderStore = defineStore('orderStore', {
 					$expand: removeDuplicateExpands(defaultOrderRelations).join(','),
 					$orderby: 'biz_date desc, created_at desc',
 				});
+
+				console.log(total);
 
 				if (data) {
 					if (this.filter.current_page > 1 && this.total_orders > this.orders.length) {

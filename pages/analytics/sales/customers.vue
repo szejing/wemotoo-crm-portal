@@ -47,12 +47,7 @@
 				</div>
 
 				<div v-if="sale_summ_customer.data.length > 0" class="section-pagination">
-					<UPagination
-						:default-page="current_page"
-						:items-per-page="sale_summ_customer.page_size"
-						:total="sale_summ_customer.total_data"
-						@update:page="updatePage"
-					/>
+					<UPagination v-model="current_page" :items-per-page="sale_summ_customer.page_size" :total="sale_summ_customer.total_data" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>

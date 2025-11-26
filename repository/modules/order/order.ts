@@ -5,7 +5,8 @@ import type { CustomerModel, PaymentModel } from '~/utils/models';
 import type { GetOrderResp } from './models/response/get-order.resp';
 import type { UpdateOrderStatusResp } from './models/response/update-order.resp';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type { GetOrdersResp } from './models/response/get-orders.resp';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;
@@ -14,8 +15,8 @@ class OrderModule extends HttpFactory {
 	 * Fetches all orders
 	 * @returns
 	 */
-	async getOrders(query: BaseODataReq): Promise<GetOrdersResp> {
-		return await this.call<GetOrdersResp>({
+	async getOrders(query: BaseODataReq): Promise<BaseODataResp<OrderHistory>> {
+		return await this.call<BaseODataResp<OrderHistory>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
 			query,
