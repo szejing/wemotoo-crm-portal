@@ -111,8 +111,6 @@ export const useOrderStore = defineStore('orderStore', {
 					$orderby: 'biz_date desc, created_at desc',
 				});
 
-				console.log(total);
-
 				if (data) {
 					if (this.filter.current_page > 1 && this.total_orders > this.orders.length) {
 						this.orders = [...this.orders, ...data];
