@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate, OrderItemStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderItemStatus, formatCurrency } from 'wemotoo-common';
 import { sale_summ_item_columns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 

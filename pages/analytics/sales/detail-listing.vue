@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate, formatCurrency } from 'wemotoo-common';
 import { sale_columns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';

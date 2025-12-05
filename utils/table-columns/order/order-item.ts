@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/vue-table';
+import { formatCurrency } from 'wemotoo-common';
 
 export const order_item_columns: ColumnDef<any>[] = [
 	{

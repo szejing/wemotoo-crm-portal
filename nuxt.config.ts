@@ -1,13 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
-		// https://devtools.nuxtjs.org/
-		// https://motion.vueuse.org/nuxt.html
-		// https://vueuse.org/
-		// https://github.com/nuxt-modules/icon
-		// https://nuxtseo.com/sitemap/getting-started/how-it-works
 		'@pinia/nuxt',
-		// '@nuxt/devtools', // Temporarily removed to fix UnoCSS style conflicts
 		'@nuxt/image',
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
@@ -27,8 +21,6 @@ export default defineNuxtConfig({
 			},
 		],
 	],
-
-	// devtools: { enabled: false }, // Temporarily disabled to fix UnoCSS style conflicts
 
 	app: {
 		head: {

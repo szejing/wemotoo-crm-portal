@@ -1,6 +1,6 @@
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { SaleStatus } from 'wemotoo-common';
+import { formatCurrency, SaleStatus } from 'wemotoo-common';
 import type { SummSaleBill } from '~/utils/types/summ-sales';
 
 export const sale_summ_columns: TableColumn<SummSaleBill>[] = [

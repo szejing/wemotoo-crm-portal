@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { GROUP_CODE, MERCHANT, getFormattedDate } from 'wemotoo-common';
+import { GROUP_CODE, MERCHANT, getFormattedDate, formatCurrency } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 const summOrderStore = useSummOrderStore();

@@ -1,7 +1,7 @@
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummOrderBill } from '~/utils/types/summ-orders';
-import { OrderStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus } from 'wemotoo-common';
 
 export const order_summ_columns: TableColumn<SummOrderBill>[] = [
 	{

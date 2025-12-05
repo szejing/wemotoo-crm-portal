@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import { OrderItemStatus, SaleStatus } from 'wemotoo-common';
+import { formatCurrency, OrderItemStatus, SaleStatus } from 'wemotoo-common';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { UBadge } from '#components';

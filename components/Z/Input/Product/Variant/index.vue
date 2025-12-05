@@ -25,6 +25,7 @@
 
 <script lang="ts" setup>
 import type { ProductVariantInput } from '~/utils/types/product';
+import { formatCurrency } from 'wemotoo-common';
 
 const props = defineProps<{ variant: ProductVariantInput | undefined }>();
 const emit = defineEmits(['update:productvariant', 'view:productvariant']);

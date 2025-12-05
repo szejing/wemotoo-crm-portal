@@ -12,16 +12,6 @@ export function isNumeric(value: any): boolean {
 	return !isNaN(parseFloat(value)) && isFinite(value as any);
 }
 
-export function formatCurrency(value: number, currency: string = 'MYR', fractionDigits: number = 2): string {
-	if (value === null || value === undefined) {
-		throw new Error('value cannot be null or undefined');
-	}
-
-	const formatter = Intl.NumberFormat('en-MY', { style: 'currency', currency, maximumFractionDigits: fractionDigits });
-
-	return formatter.format(value);
-}
-
 export const capitalizeFirstLetter = (value: string | any) => {
 	if (value === undefined) return undefined;
 

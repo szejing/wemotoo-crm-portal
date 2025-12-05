@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate, formatCurrency } from 'wemotoo-common';
 import { order_summ_columns } from '~/utils/table-columns';
 
 useHead({ title: 'Wemotoo CRM - Order Summary' });

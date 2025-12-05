@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge } from '#components';
+import { formatCurrency } from 'wemotoo-common';
 
 export const product_columns: TableColumn<Product>[] = [
 	{

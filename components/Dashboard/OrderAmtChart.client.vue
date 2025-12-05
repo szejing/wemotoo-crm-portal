@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { VisXYContainer, VisLine, VisAxis, VisArea, VisCrosshair, VisTooltip } from '@unovis/vue';
-import { getFormattedDate, parseDate } from 'wemotoo-common';
+import { getFormattedDate, parseDate, formatCurrency } from 'wemotoo-common';
 import type { DataRecord } from '~/utils/types/chart-data';
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef');

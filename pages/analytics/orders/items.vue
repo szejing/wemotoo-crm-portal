@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
+import { OrderItemStatus, getFormattedDate, formatCurrency } from 'wemotoo-common';
 import { order_summ_item_columns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 

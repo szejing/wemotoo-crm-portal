@@ -84,7 +84,7 @@
 
 <script lang="ts" setup>
 import { ZModalInformation, ZModalOrderDetailItem } from '#components';
-import { OrderItemStatus, getFormattedDate } from 'wemotoo-common';
+import { OrderItemStatus, getFormattedDate, formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { TaxModel } from '~/utils/models/tax.model';
 

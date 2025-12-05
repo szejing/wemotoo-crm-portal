@@ -163,6 +163,7 @@
 <script lang="ts" setup>
 import { ZInputProductVariantDetail } from '#components';
 import type { ProductOptionInput, ProductOptionValueInput, Product, ProductVariantInput } from '~/utils/types/product';
+import { formatCurrency } from 'wemotoo-common';
 
 const overlay = useOverlay();
 const props = defineProps<{ product: Product; options: ProductOptionInput[] | undefined; variants: ProductVariantInput[] | undefined }>();
