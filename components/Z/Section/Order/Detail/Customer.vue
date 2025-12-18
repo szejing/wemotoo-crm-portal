@@ -26,8 +26,8 @@
 				<span>{{ customer?.ref_no2 }}</span>
 			</p>
 		</div>
-		<div v-if="customer?.shipping_address || customer?.billing_address" class="grid sm:grid-cols-2 gap-4 mt-6">
-			<div v-if="customer?.shipping_address" class="flex flex-col gap-4">
+		<div v-if="hasAddressValue(customer?.shipping_address) || hasAddressValue(customer?.billing_address)" class="grid sm:grid-cols-2 gap-4 mt-6">
+			<div v-if="hasAddressValue(customer?.shipping_address)" class="flex flex-col gap-4">
 				<h3>Shipping Address :</h3>
 				<div class="text-neutral-400">
 					<p v-if="customer?.shipping_address?.address1">{{ customer?.shipping_address?.address1 }}</p>
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 
-			<div v-if="customer?.billing_address" class="flex flex-col gap-4">
+			<div v-if="hasAddressValue(customer?.billing_address)" class="flex flex-col gap-4">
 				<h3>Billing Address :</h3>
 				<div class="text-neutral-400">
 					<p v-if="customer?.billing_address?.address1">{{ customer?.billing_address?.address1 }}</p>
@@ -56,6 +56,11 @@ import type { AddressModel, CustomerModel } from '~/utils/models/customer.model'
 defineProps<{
 	customer: CustomerModel | undefined;
 }>();
+
+const hasAddressValue = (address: AddressModel | undefined) => {
+	if (!address) return false;
+	return !!(address.address1 || address.address2 || address.address3 || address.city || address.state || address.postal_code || address.country_code);
+};
 
 const joinAddress = (address: AddressModel | undefined) => {
 	return [address?.city, address?.state, address?.postal_code, address?.country_code].filter(Boolean).join(', ');
