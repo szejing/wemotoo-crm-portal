@@ -137,7 +137,14 @@
 
 								<div class="status-section">
 									<ZSelectMenuOrderStatus v-model:status="new_order_status" />
-									<UButton block color="primary" :icon="ICONS.SAVE" :disabled="new_order_status === order?.status" @click="handleUpdateOrderStatus">
+									<UButton
+										block
+										color="primary"
+										:icon="ICONS.SAVE"
+										:disabled="new_order_status === order?.status || updating"
+										:loading="updating"
+										@click="handleUpdateOrderStatus"
+									>
 										Update Order Status
 									</UButton>
 								</div>
@@ -197,7 +204,7 @@ import { ICONS } from '~/utils/icons';
 import type { Order } from '~/utils/types/order';
 
 const orderStore = useOrderStore();
-const { detail, loading } = storeToRefs(orderStore);
+const { detail, loading, updating } = storeToRefs(orderStore);
 
 const overlay = useOverlay();
 const order = computed<Order | undefined>(() => detail.value);

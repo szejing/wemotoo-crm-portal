@@ -36,6 +36,7 @@ const initialEmptyOrderFilter: OrderFilter = {
 export const useOrderStore = defineStore('orderStore', {
 	state: () => ({
 		loading: false as boolean,
+		updating: false as boolean,
 		exporting: false as boolean,
 		orders: [] as OrderHistory[],
 		total_orders: 0 as number,
@@ -151,8 +152,7 @@ export const useOrderStore = defineStore('orderStore', {
 
 		async updateOrderStatus(order_no: string, customer_no: string, status: string) {
 			const { $api } = useNuxtApp();
-
-			console.log(order_no, customer_no, status);
+			this.updating = true;
 
 			try {
 				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
@@ -167,6 +167,8 @@ export const useOrderStore = defineStore('orderStore', {
 				console.error(err);
 				failedNotification(err.message);
 				throw err;
+			} finally {
+				this.updating = false;
 			}
 		},
 
