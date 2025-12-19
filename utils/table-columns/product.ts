@@ -21,7 +21,11 @@ export const product_columns: TableColumn<Product>[] = [
 			const children: any[] = [
 				thumbnailUrl
 					? h('img', { src: thumbnailUrl, alt: row.original.name || 'Product thumbnail', class: 'w-10 h-10 rounded-md object-cover flex-shrink-0' })
-					: null,
+					: h('img', {
+							src: 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg',
+							alt: row.original.name || 'Product thumbnail',
+							class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
+						}),
 				h('div', { class: 'flex-1 min-w-0' }, [
 					h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
 					h('div', { class: 'text-neutral-600' }, row.original.name),

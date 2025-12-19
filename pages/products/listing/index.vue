@@ -41,7 +41,15 @@
 				</div>
 
 				<!-- Table -->
-				<UTable :data="rows" :columns="product_columns" :loading="loading" @select="selectProduct">
+				<UTable
+					:data="rows"
+					:columns="product_columns"
+					:loading="loading"
+					:ui="{
+						tr: 'cursor-pointer',
+					}"
+					@select="selectProduct"
+				>
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.PRODUCT" class="w-12 h-12 text-gray-400" />
