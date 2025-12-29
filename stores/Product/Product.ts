@@ -1,4 +1,4 @@
-import { defaultProductRelations, defaultSimpleProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
+import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -224,8 +224,6 @@ export const useProductStore = defineStore('productStore', {
 		async updateProduct(product: ProductUpdate) {
 			const code = product.code!;
 			this.updating = true;
-
-			console.log('updateProduct', product);
 
 			const { $api } = useNuxtApp();
 

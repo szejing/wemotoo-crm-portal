@@ -67,9 +67,7 @@ const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
 
 useHead({ title: 'Wemotoo CRM - Product Detail #' + current_product.value!.code });
 
-definePageMeta({
-	middleware: 'product-detail',
-});
+definePageMeta({ middleware: 'product-detail' });
 
 onBeforeRouteLeave(() => {
 	current_product.value = undefined;
