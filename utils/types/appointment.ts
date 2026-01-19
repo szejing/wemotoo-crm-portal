@@ -6,7 +6,8 @@ export type AppointmentInput = {
 
 export type Appointment = {
 	code: string;
-	date_time: Date;
+	start_date_time: Date;
+	end_date_time: Date;
 	item_line: number;
 	appt_desc?: string;
 	cart_no?: string;

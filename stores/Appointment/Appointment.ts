@@ -60,8 +60,8 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 
 				// Add date filter
 				const dateFilter = end
-					? `(date_time between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
-					: `date_time le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
+					? `(start_date_time between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
+					: `start_date_time le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
@@ -77,7 +77,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					$count: true,
 					$filter: filter,
 					// $expand: removeDuplicateExpands(defaultOrderRelations).join(','),
-					$orderby: 'date_time desc',
+					$orderby: 'start_date_time desc',
 				});
 
 				if (data) {

@@ -91,7 +91,7 @@
 												<UIcon name="i-heroicons-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
 												<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.order_no }} </span>
 											</div>
-											<UBadge :color="getStatusColor(appointment.status) as any" variant="subtle" size="sm">
+											<UBadge :color="getStatusColor(appointment.status)" variant="subtle" size="sm">
 												{{ appointment.status.toUpperCase() }}
 											</UBadge>
 										</div>
@@ -103,7 +103,9 @@
 											</div>
 											<div class="flex-1">
 												<p class="text-sm text-gray-600 dark:text-gray-400">Appointment Date</p>
-												<p class="font-semibold text-gray-900 dark:text-white">{{ getFormattedDate(appointment.date_time, 'dd MMM yyyy, HH:mm') }}</p>
+												<p class="font-semibold text-gray-900 dark:text-white">
+													{{ formatAppointmentDateRange(appointment.start_date_time, appointment.end_date_time) }}
+												</p>
 											</div>
 										</div>
 
@@ -153,7 +155,7 @@
 									</div>
 								</div>
 								<div class="flex items-center gap-2">
-									<UBadge :color="getStatusColor(selectedAppointment.status) as any" variant="subtle" size="md">
+									<UBadge :color="getStatusColor(selectedAppointment.status)" variant="subtle" size="md">
 										{{ selectedAppointment.status.toUpperCase() }}
 									</UBadge>
 									<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
@@ -169,7 +171,9 @@
 										</div>
 										<div class="flex-1">
 											<p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Appointment Date & Time</p>
-											<p class="text-lg font-bold text-gray-900 dark:text-white">{{ getFormattedDate(selectedAppointment.date_time, 'dd MMM yyyy, HH:mm') }}</p>
+											<p class="text-lg font-bold text-gray-900 dark:text-white">
+												{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}
+											</p>
 											<p v-if="selectedAppointment.duration" class="text-sm text-gray-600 dark:text-gray-400 mt-1 flex items-center gap-1">
 												<UIcon name="i-heroicons-clock" class="w-4 h-4" />
 												Duration: {{ selectedAppointment.duration }} minutes
@@ -233,7 +237,7 @@
 
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
+import { AppointmentStatus, getFormattedDate, isSameDate } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 
 const overlay = useOverlay();
@@ -269,14 +273,28 @@ const appointmentTabs = computed(() => [
 ]);
 
 // Helper to get status badge color
-const getStatusColor = (status: AppointmentStatus) => {
+const getStatusColor = (status: AppointmentStatus): 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral' => {
 	const colorMap: Record<string, string> = {
 		[AppointmentStatus.PENDING]: 'warning',
 		[AppointmentStatus.CONFIRMED]: 'success',
 		[AppointmentStatus.COMPLETED]: 'info',
 		[AppointmentStatus.CANCELLED]: 'error',
 	};
-	return colorMap[status] || 'neutral';
+	return colorMap[status] as 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
+};
+
+// Helper to format appointment date range
+const formatAppointmentDateRange = (startDate: string | Date, endDate: string | Date): string => {
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+
+	if (isSameDate(start, end)) {
+		// Same day: show date once, then both times
+		return `${getFormattedDate(start, 'dd MMM yyyy, HH:mm')} - ${getFormattedDate(end, 'HH:mm')}`;
+	} else {
+		// Different days: show full date-time for both
+		return `${getFormattedDate(start, 'dd MMM yyyy, HH:mm')} - ${getFormattedDate(end, 'dd MMM yyyy, HH:mm')}`;
+	}
 };
 
 // Display appointments based on filter state
@@ -284,7 +302,7 @@ const displayedAppointments = computed(() => {
 	const result = appointments.value;
 
 	// Sort by date
-	return result.sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime());
+	return result.sort((a, b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
 });
 
 const deleteAppointment = async (code: string) => {
