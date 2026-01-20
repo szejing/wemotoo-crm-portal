@@ -22,7 +22,7 @@ export const product_columns: TableColumn<Product>[] = [
 				thumbnailUrl
 					? h('img', { src: thumbnailUrl, alt: row.original.name || 'Product thumbnail', class: 'w-10 h-10 rounded-md object-cover flex-shrink-0' })
 					: h('img', {
-							src: 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg',
+							src: '/svg/product-holder.svg',
 							alt: row.original.name || 'Product thumbnail',
 							class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
 						}),
