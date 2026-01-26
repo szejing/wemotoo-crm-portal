@@ -41,12 +41,14 @@
 							>
 								{{ item.prod_name.substring(0, 10) }}
 							</div>
+
 							<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
+
 							<div v-if="item.appointment" class="flex items-center gap-2 mt-2">
 								<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
 								<div class="flex flex-col text-xs font-bold italic">
 									<span class="text-neutral-400">{{ item.appointment.code }}</span>
-									<span class="text-main">{{ getFormattedDate(item.appointment.date_time, 'dd MMM yyyy hh:mm a') }}</span>
+									{{ formatAppointmentDateRange(item.appointment.start_date_time, item.appointment.end_date_time) }}
 								</div>
 							</div>
 						</div>
@@ -87,6 +89,7 @@ import { ZModalInformation, ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus, getFormattedDate, formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { TaxModel } from '~/utils/models/tax.model';
+import { formatAppointmentDateRange } from '~/utils/utils';
 
 defineProps<{
 	items: ItemModel[];

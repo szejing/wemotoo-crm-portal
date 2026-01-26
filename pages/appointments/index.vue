@@ -237,8 +237,9 @@
 
 <script lang="ts" setup>
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { AppointmentStatus, getFormattedDate, isSameDate } from 'wemotoo-common';
+import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
+import { capitalizeFirstLetter, formatAppointmentDateRange } from '~/utils/utils';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
@@ -281,20 +282,6 @@ const getStatusColor = (status: AppointmentStatus): 'primary' | 'secondary' | 's
 		[AppointmentStatus.CANCELLED]: 'error',
 	};
 	return colorMap[status] as 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
-};
-
-// Helper to format appointment date range
-const formatAppointmentDateRange = (startDate: string | Date, endDate: string | Date): string => {
-	const start = new Date(startDate);
-	const end = new Date(endDate);
-
-	if (isSameDate(start, end)) {
-		// Same day: show date once, then both times
-		return `${getFormattedDate(start, 'dd MMM yyyy, HH:mm')} - ${getFormattedDate(end, 'HH:mm')}`;
-	} else {
-		// Different days: show full date-time for both
-		return `${getFormattedDate(start, 'dd MMM yyyy, HH:mm')} - ${getFormattedDate(end, 'dd MMM yyyy, HH:mm')}`;
-	}
 };
 
 // Display appointments based on filter state

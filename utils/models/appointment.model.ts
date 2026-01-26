@@ -2,7 +2,8 @@ import type { AppointmentStatus } from 'wemotoo-common';
 
 export type AppointmentModel = {
 	code: string;
-	date_time: Date;
+	start_date_time: Date;
+	end_date_time?: Date;
 	item_line: number;
 	cart_no?: string;
 	order_no?: string;

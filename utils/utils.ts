@@ -1,3 +1,5 @@
+import { isSameDate, getFormattedDate } from 'wemotoo-common';
+
 export const fractionDigits = 2;
 
 /**
@@ -29,16 +31,28 @@ export const removeNullValues = (obj: any): any => {
 	return JSON.parse(JSON.stringify(obj, (_, value) => (value === null ? undefined : value)));
 };
 
-export const borderless_card_ui = {
-	shadow: 'shadow-none',
-	ring: 'ring-none',
-	header: {
-		padding: 'px-0 py-2',
-	},
-	body: {
-		padding: 'px-0 py-3',
-	},
-	footer: {
-		padding: 'px-0 pt-2 pb-2',
-	},
+// Helper to adjust date from UTC to local timezone
+// Backend sends local time marked as UTC (e.g., "15:30:00.000Z" where 15:30 is already local time)
+// We need to add back the timezone offset to display the correct local time
+const adjustToLocalTimezone = (date: Date): Date => {
+	const offsetMinutes = date.getTimezoneOffset();
+	return new Date(date.getTime() + offsetMinutes * 60000);
+};
+
+// Helper to format appointment date range
+export const formatAppointmentDateRange = (startDate: string | Date, endDate: string | Date | undefined): string => {
+	const start = adjustToLocalTimezone(new Date(startDate));
+	if (endDate === undefined) {
+		return getFormattedDate(start, 'dd MMM yyyy, hh:mm aa');
+	}
+
+	const end = adjustToLocalTimezone(new Date(endDate));
+
+	if (isSameDate(start, end)) {
+		// Same day: show date once, then both times
+		return `${getFormattedDate(start, 'dd MMM yyyy, hh:mm aa')} - ${getFormattedDate(end, 'hh:mm aa')}`;
+	} else {
+		// Different days: show full date-time for both
+		return `${getFormattedDate(start, 'dd MMM yyyy, hh:mm aa')} - ${getFormattedDate(end, 'dd MMM yyyy, hh:mm aa')}`;
+	}
 };
