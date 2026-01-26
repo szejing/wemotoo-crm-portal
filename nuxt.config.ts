@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
@@ -34,6 +36,10 @@ export default defineNuxtConfig({
 	},
 
 	css: ['~/assets/css/main.css'],
+
+	future: {
+		compatibilityVersion: 4,
+	},
 
 	colorMode: {
 		preference: 'light',
@@ -85,6 +91,10 @@ export default defineNuxtConfig({
 	},
 
 	compatibilityDate: '2024-04-03',
+
+	alias: {
+		'#root': fileURLToPath(new URL('.', import.meta.url)),
+	},
 
 	nitro: {
 		compressPublicAssets: true,

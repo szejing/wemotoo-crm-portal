@@ -1,8 +1,6 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import { failedNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
-import type { UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/update-payment-method.req';
-import type { BaseODataReq } from '~/repository/base/base.req';
 
 type PaymentMethodFilter = {
 	query: string;

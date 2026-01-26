@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { order_columns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
-import type { OrderHistory } from '~/repository/modules/order/models/response/get-orders.resp';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 const orderStore = useOrderStore();
 const { orders, filter, loading } = storeToRefs(orderStore);

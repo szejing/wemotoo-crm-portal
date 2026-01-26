@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 import { KEY } from 'wemotoo-common';
-import type { LoginResp } from '~/repository/modules/auth/models/response/login.resp';
-import type { VerifyResp } from '~/repository/modules/auth/models/response/verify.resp';
 import { useMerchantInfoStore } from '~/stores/MerchantInfo/MerchantInfo';
 import { useAppStore } from '~/stores/App';
 import { useAppUiStore } from '~/stores/AppUi/AppUi';

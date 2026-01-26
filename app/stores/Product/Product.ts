@@ -3,7 +3,6 @@ import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
-import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
 

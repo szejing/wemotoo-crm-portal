@@ -1,5 +1,6 @@
 import type { ProductStatus } from 'wemotoo-common';
-import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
+import type { ImageReq } from '../../../image/models/request/image.req';
+
 import type { PriceInput } from '~/utils/types/price';
 import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 

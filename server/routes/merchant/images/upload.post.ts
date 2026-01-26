@@ -1,5 +1,5 @@
 import { generateImageHeaders } from '../../../base_api';
-import { Routes } from '~/server/routes.server';
+import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {

@@ -4,7 +4,6 @@ import type { CategoryCreate } from '~/utils/types/form/category-creation';
 import type { Category } from '~/utils/types/category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { dir } from '~/utils/constants/dir';
-import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
 type CategoryFilter = {

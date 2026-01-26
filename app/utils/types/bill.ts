@@ -1,5 +1,5 @@
 import type { PaymentStatus, SaleStatus } from 'wemotoo-common';
-import type { ItemModel, PaymentModel, CustomerModel } from '../models';
+import type { ItemModel, PaymentModel, CustomerModel } from '../../../utils/models';
 import type { TaxModel } from '../models/tax.model';
 import type { Currency } from './currency';
 

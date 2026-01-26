@@ -1,5 +1,5 @@
-import { generateHeaders } from '~/server/base_api';
-import { Routes } from '~/server/routes.server';
+import { generateHeaders } from '#root/server/base_api';
+import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {

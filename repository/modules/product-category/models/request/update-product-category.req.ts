@@ -1,4 +1,4 @@
-import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
+import type { ImageReq } from '../../../image/models/request/image.req';
 
 export type UpdateProductCategoryReq = {
 	description: string;
