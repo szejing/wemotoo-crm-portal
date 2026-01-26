@@ -23,7 +23,7 @@ import {
 	TaxGroupModule,
 	TaxModule,
 	TaxRuleModule,
-} from '../../repository/modules';
+} from '../repository/modules';
 
 interface IApiInstance {
 	product: ProductModule;
