@@ -1,0 +1,109 @@
+---
+alwaysApply: true
+---
+
+# General Coding Rules for Wemotoo CRM Portal
+
+## Project Structure
+
+### Directory Layout
+```
+app/
+├── assets/           # CSS, images, fonts
+├── components/       # Vue components (PascalCase folders for feature components)
+├── composables/      # useXxx composables
+├── layouts/          # Nuxt layouts (default.vue, auth.vue)
+├── middleware/       # Nuxt route middleware
+├── pages/            # File-based routing (kebab-case paths)
+├── plugins/          # Nuxt plugins (01.api.ts, 02.init-app.ts)
+├── repository/       # API client modules, routes, request/response models
+├── stores/           # Pinia stores
+└── utils/            # Types, schemas, table-columns, helpers, constants
+server/
+├── base_api.ts       # generateHeaders, shared server API helpers
+├── middleware/       # Nitro/H3 server middleware (e.g. cors)
+└── routes/           # Nitro API routes (merchant/*)
+```
+
+### Feature Areas
+- **Merchant API proxy**: `server/routes/merchant/` mirrors backend API paths; forwards requests with headers from `base_api`.
+- **Client API**: `app/repository/` – modules call backend via Nuxt server routes or `$fetch`/useFetch.
+- **UI**: `app/pages/`, `app/components/`, `app/layouts/`.
+
+## Naming Conventions
+
+### Files
+- Pages: `kebab-case.vue` or `[param].vue`
+- Components: `PascalCase.vue` (e.g. `DateRangePicker.vue`)
+- Composables: `useKebabCase.ts` or `usePascalCase.ts` (e.g. `useDetectClickOutside.ts`)
+- Repository modules: `kebab-case.ts` or domain name (e.g. `product.ts`)
+- Request/response models: `*.req.ts`, `*.resp.ts`, or `kebab-case.req.ts`
+- Schemas (Zod): `*Validation.ts` under `utils/schema/{Entity}/{Create|Update|Filter}/`
+- Middleware: `name.global.ts` (global) or `name.ts` (per-route)
+- Server routes: `[param].get.ts`, `create.post.ts`, `many.get.ts`, etc.
+
+### Variables and Methods
+- camelCase for variables and methods
+- UPPER_SNAKE_CASE for constants
+- Boolean prefix: `is`, `has`, `should`, `can`
+
+## TypeScript Standards
+
+### Strict Types
+```typescript
+// ✅ Good
+const items: Product[] = [];
+const id: string | undefined = route.params.id as string | undefined;
+
+// ❌ Bad
+const items: any = [];
+const id = route.params.id; // untyped
+```
+
+### Null / Undefined
+```typescript
+// ✅ Good – explicit checks
+if (!result) return;
+const { data } = result;
+
+// ❌ Bad – assume result exists
+const { data } = result;
+```
+
+### Async/Await
+```typescript
+// ✅ Good
+async function load(): Promise<Data> {
+  const result = await $fetch<Data>(url);
+  return result;
+}
+
+// ❌ Bad – unhandled promise / no typing
+function load() {
+  return $fetch(url);
+}
+```
+
+## Imports and Aliases
+
+- Use `~/` for `app/` (e.g. `~/utils/types/product`, `~/repository/factory`).
+- Use `#root/` or `#imports` where project expects root/import aliases (e.g. `#root/server/base_api`).
+- Import from `wemotoo-common` for API_PATH, KEY, enums, and shared constants.
+
+## Error Handling
+
+- In server routes: use try/catch; return a consistent error shape or rethrow; avoid leaking stack to client.
+- In UI: handle `useAsyncData` / `useFetch` `error` and `status`; use `BaseApiService.call()` or equivalent for centralised handling.
+- Prefer typed error payloads (e.g. `{ message: string; code?: string }`) instead of raw exceptions in API responses.
+
+## Security
+
+- Never expose secrets or internal tokens in client bundles; use `runtimeConfig` for public config and server-only code for secrets.
+- Auth token and merchant context: use cookies (e.g. KEY.ACCESS_TOKEN, KEY.X_MERCHANT_ID) and pass via `generateHeaders` in server routes.
+- Validate and sanitise user input with Zod (or similar) in `utils/schema` before sending to backend.
+
+## Code Quality
+
+- Prefer small, single-purpose functions and components.
+- Keep composables and utils pure where possible; avoid hidden global state.
+- Use existing patterns from `repository/`, `utils/schema/`, and `server/routes/` when adding features.

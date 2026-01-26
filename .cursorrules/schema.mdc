@@ -1,0 +1,69 @@
+---
+description: Zod validation schemas for forms and filters
+globs: app/utils/schema/**/*.ts
+alwaysApply: false
+---
+
+# Schema (Zod Validation) Rules
+
+## File Naming and Location
+
+- Directory: `app/utils/schema/{Entity}/{Create|Update|Filter}/` or `app/utils/schema/{Entity}/`.
+- File names: `*Validation.ts` (e.g. `ProductValidation.ts`, `TagValidation.ts`, `LoginValidation.ts`).
+- Group by domain: Product, Tag, Brand, Category, Outlet, Tax, TaxRule, TaxGroup, Auth, Order, Customer, Appointment, PaymentMethod, PaymentTypeGroup.
+
+## Structure
+
+### Simple Schema
+```typescript
+import { z } from 'zod';
+
+export const CreateProductValidation = z.object({
+	code: z.string({ message: 'Code is required' }).max(16, 'Max. 16 characters'),
+	name: z.string({ message: 'Name is required' }),
+	short_desc: z.string().optional(),
+	is_active: z.boolean().default(true),
+	status: z.string({ message: 'Status is required' }),
+	type: z.number().default(1),
+});
+```
+
+### Nested and Arrays
+```typescript
+const Price = z.object({
+	currency_code: z.string({ message: 'Currency code is required' }),
+	orig_sell_price: z.number({ message: 'Original sell price is required' }),
+	cost_price: z.number().optional().nullable(),
+	sale_price: z.number().optional().nullable(),
+});
+
+export const CreateProductValidation = z.object({
+	// ...
+	price_types: z.array(Price).optional(),
+	categories: z.array(z.object({ code: z.string().optional(), name: z.string().optional() })).optional(),
+});
+```
+
+### Filter / Query Schemas
+- Use optional fields and `.optional()` for $filter, $orderby, $skip, $top, $select, etc.
+- Reuse or extend from `app/repository/base/base.req.ts` (`BaseODataReq`) when the shape matches.
+
+## Conventions
+
+### Messages
+- Use `{ message: '...' }` for required and key validations so form errors are clear.
+- Use `.min()/.max()` with a message when limits matter (e.g. `.max(16, 'Max. 16 characters')`).
+
+### Exports
+- Export one schema per file as a named const (e.g. `CreateProductValidation`, `ProductFilterValidation`, `LoginValidation`).
+- Export from `app/utils/schema/index.ts` if you want a single entry point.
+
+### Usage in Forms
+- Validate with `schema.safeParse(payload)` or `schema.parse(payload)` in components or composables before calling the API.
+- Use `.strip()` or `.strict()` only when you intentionally want to drop/forbid extra keys.
+
+## Anti-Patterns
+
+- ❌ Business logic or side effects inside schema definitions
+- ❌ Duplicating the same object shape in multiple files – extract shared slices (e.g. `Price`, `Category`) and reuse
+- ❌ Skipping user-facing messages on required or bounded fields
