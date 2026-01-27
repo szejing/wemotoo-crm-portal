@@ -4,6 +4,8 @@ import { useMerchantInfoStore } from '~/stores/MerchantInfo/MerchantInfo';
 import { useAppStore } from '~/stores/App';
 import { useAppUiStore } from '~/stores/AppUi/AppUi';
 import type { User } from '~/utils/types/user';
+import type { LoginResp } from '~/repository/modules/auth/models/response/login.resp';
+import type { VerifyResp } from '~/repository/modules/auth/models/response/verify.resp';
 
 export const useAuthStore = defineStore('authStore', {
 	state: () => ({
@@ -113,6 +115,37 @@ export const useAuthStore = defineStore('authStore', {
 			} catch (err: any) {
 				console.error(err);
 				return false;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async forgotPassword(merchant_id: string, email_address: string): Promise<[boolean, string]> {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+			const appUiStore = useAppUiStore();
+
+			try {
+				await $api.auth.forgotPassword({ merchant_id, email_address });
+
+				appUiStore.showToast({
+					color: 'success',
+					icon: ICONS.CHECK_OUTLINE_ROUNDED,
+					title: 'Reset link sent',
+					description: 'We have successfully sent you a reset link to your email.',
+				});
+				return [true, ''];
+			} catch (err: any) {
+				console.error(err);
+
+				appUiStore.showToast({
+					color: 'error',
+					icon: ICONS.ERROR_OUTLINE,
+					title: 'Failed to send reset link',
+					description: err.message,
+				});
+
+				return [false, err.message];
 			} finally {
 				this.loading = false;
 			}

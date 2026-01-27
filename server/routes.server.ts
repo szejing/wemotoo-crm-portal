@@ -9,6 +9,7 @@ export const Routes = {
 		Login: () => `${API_PATH.AUTH}/login`,
 		Verify: () => `${API_PATH.AUTH}/verify`,
 		Logout: () => `${API_PATH.AUTH}/logout`,
+		ForgotPassword: () => `${API_PATH.AUTH}/forgot-password`,
 	},
 	Countries: {
 		Single: (iso2: string) => `${API_PATH.COUNTRIES}/${iso2}`,

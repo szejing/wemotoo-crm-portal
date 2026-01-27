@@ -3,9 +3,7 @@ import MerchantRoutes from '~/repository/routes.client';
 import type { LoginReq } from './models/request/login.req';
 import type { LoginResp } from './models/response/login.resp';
 import type { VerifyResp } from './models/response/verify.resp';
-
-export type ForgotPasswordReq = { email: string };
-export type ResetPasswordReq = { token: string; password: string };
+import type { ForgotPasswordReq } from './models/request/forgot-password.req';
 
 class AuthModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Auth;
@@ -25,20 +23,20 @@ class AuthModule extends HttpFactory {
 	}
 
 	async forgotPassword(data: ForgotPasswordReq): Promise<void> {
-		await this.call<void>({
+		return await this.call<void>({
 			method: 'POST',
 			url: this.RESOURCE.ForgotPassword(),
 			body: data,
 		});
 	}
 
-	async resetPassword(data: ResetPasswordReq): Promise<void> {
-		await this.call<void>({
-			method: 'POST',
-			url: this.RESOURCE.ResetPassword(),
-			body: data,
-		});
-	}
+	// async resetPassword(data: ResetPasswordReq): Promise<void> {
+	// 	await this.call<void>({
+	// 		method: 'POST',
+	// 		url: this.RESOURCE.ResetPassword(),
+	// 		body: data,
+	// 	});
+	// }
 
 	/**
 	 * refresh session
