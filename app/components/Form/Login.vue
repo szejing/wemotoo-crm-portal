@@ -38,7 +38,10 @@
 			</div>
 
 			<template #footer>
-				<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
+				<div class="flex flex-col gap-2">
+					<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
+					<NuxtLink to="/forgot-password" class="text-center text-sm text-muted hover:underline">Forgot password?</NuxtLink>
+				</div>
 			</template>
 		</UCard>
 	</UForm>

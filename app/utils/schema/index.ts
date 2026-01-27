@@ -1,6 +1,8 @@
 import { FilterProductValidation } from './Product/Filter/ProductValidation';
 import { FilterCustomerValidation } from './Customer/FilterValidation';
 import { LoginValidation } from './Auth/LoginValidation';
+import { ForgotPasswordValidation } from './Auth/ForgotPasswordValidation';
+import { ResetPasswordValidation } from './Auth/ResetPasswordValidation';
 import { FilterTagValidation } from './Tag/Filter/TagValidation';
 import { FilterCategoryValidation } from './Category/Filter/CategoryValidation';
 import { FilterOptionValidation } from './Product/Filter/OptionValidation';
@@ -34,6 +36,8 @@ import { UpdateTaxRuleValidation } from './TaxRule/Update/TaxRuleValidation';
 
 export {
 	LoginValidation,
+	ForgotPasswordValidation,
+	ResetPasswordValidation,
 	FilterCustomerValidation,
 	CreateProductValidation,
 	CreateCategoryValidation,
