@@ -1,3 +1,4 @@
+import CrmUserModule from './crm-user/crm-user';
 import OrderModule from './order/order';
 import SummOrderModule from './summ-order/summ-order';
 import SettingModule from './setting/setting';
@@ -24,6 +25,7 @@ import TaxGroupModule from './tax-groups/tax-group';
 import OutletModule from './outlets/outlet';
 
 export {
+	CrmUserModule,
 	OrderModule,
 	SummOrderModule,
 	ProductModule,

@@ -1,4 +1,5 @@
 import { isSameDate, getFormattedDate } from 'wemotoo-common';
+import type { CRMUser } from './types/crm-user';
 
 export const fractionDigits = 2;
 
@@ -55,4 +56,10 @@ export const formatAppointmentDateRange = (startDate: string | Date, endDate: st
 		// Different days: show full date-time for both
 		return `${getFormattedDate(start, 'dd MMM yyyy, hh:mm aa')} - ${getFormattedDate(end, 'dd MMM yyyy, hh:mm aa')}`;
 	}
+};
+
+/** Format phone for display: "(dial_code) number" or "—" when missing. */
+export const formatCrmUserPhone = (user: CRMUser): string => {
+	const phone = user.phone_no?.trim() || '—';
+	return user.dial_code?.trim() ? `(${user.dial_code}) ${phone}` : phone;
 };

@@ -26,6 +26,7 @@ export const ICONS = {
 	SEARCH_ROUNDED: 'i-material-symbols-search-rounded',
 	DASHBOARD_ROUNDED: 'i-material-symbols-light-dashboard-outline-rounded',
 	CUSTOMER_GROUP_ROUNDED: 'i-material-symbols-light-groups-outline-rounded',
+	USER_GROUP_ROUNDED: 'i-material-symbols-light-person-outline-rounded',
 	CUSTOMER_PLUS: 'i-material-symbols-person-add-outline-rounded',
 	SETTINGS_ROUNDED: 'i-material-symbols-light-settings-outline-rounded',
 	MENU_OPEN_ROUNDED: 'i-material-symbols-arrow-forward-rounded',

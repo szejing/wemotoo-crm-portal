@@ -1,36 +1,44 @@
 <template>
-	<div v-for="(navigate, index) in navigations" :key="index" class="flex flex-col">
-		<!-- when have child navigaiton -->
-		<div v-if="navigate.children && navigate.children.length > 0">
-			<ZNavigationCollapsible
-				:id="index"
-				:navigate="navigate"
-				:collapsed="navigate.isCollapsed"
-				:item="{
-					title:
-						'px-4 py-3 mx-2 rounded-md text-base font-light cursor-pointer text-secondary-100 bg-transparent hover:bg-main-50 hover:text-secondary-700 hover:font-semibold transition duration-500 ease-in-out',
-					icon: '',
-				}"
-				@toggle="toggleCollapse"
-			>
-				<template #content>
-					<div v-for="(child, childIndex) in navigate.children" :key="childIndex" class="flex flex-col">
-						<NuxtLink :to="child.to" class="active-link" exact-active-class="exact-active-link">
-							{{ child.title }}
-						</NuxtLink>
-					</div>
-				</template>
-			</ZNavigationCollapsible>
-		</div>
-
-		<!-- when do not have child navigaiton -->
-		<NuxtLink v-else :to="navigate.to" class="active-link" exact-active-class="exact-active-link">
-			<div class="flex items-center gap-4">
-				<UIcon v-if="navigate.icon" :name="navigate.icon" class="w-5 h-5" />
-				{{ navigate.title }}
+	<template v-for="(group, groupIndex) in navigations" :key="groupIndex">
+		<div v-for="(link, linkIndex) in group.links" :key="linkIndex" class="flex flex-col">
+			<!-- link with children -->
+			<div v-if="link.children && link.children.length > 0">
+				<ZNavigationCollapsible
+					:id="groupIndex * 1000 + linkIndex"
+					:navigate="{
+						title: link.label,
+						icon: link.icon,
+						to: link.to,
+						isCollapsed: false,
+						children: [],
+					}"
+					:collapsed="collapsedState[groupIndex * 1000 + linkIndex] ?? false"
+					:item="{
+						title:
+							'px-4 py-3 mx-2 rounded-md text-base font-light cursor-pointer text-secondary-100 bg-transparent hover:bg-main-50 hover:text-secondary-700 hover:font-semibold transition duration-500 ease-in-out',
+						icon: '',
+					}"
+					@toggle="toggleCollapse"
+				>
+					<template #content>
+						<div v-for="(child, childIndex) in link.children" :key="childIndex" class="flex flex-col">
+							<NuxtLink :to="child.to" class="active-link" exact-active-class="exact-active-link">
+								{{ child.label }}
+							</NuxtLink>
+						</div>
+					</template>
+				</ZNavigationCollapsible>
 			</div>
-		</NuxtLink>
-	</div>
+
+			<!-- link without children -->
+			<NuxtLink v-else :to="link.to" class="active-link" exact-active-class="exact-active-link">
+				<div class="flex items-center gap-4">
+					<UIcon v-if="link.icon" :name="link.icon" class="w-5 h-5" />
+					{{ link.label }}
+				</div>
+			</NuxtLink>
+		</div>
+	</template>
 </template>
 
 <script lang="ts" setup>
@@ -38,12 +46,10 @@ const appUiStore = useAppUiStore();
 
 const { navigations } = storeToRefs(appUiStore);
 
+const collapsedState = ref<Record<number, boolean>>({});
+
 const toggleCollapse = (id: number) => {
-	navigations.value.forEach((el, index) => {
-		if (id === index) {
-			el.isCollapsed = !el.isCollapsed;
-		}
-	});
+	collapsedState.value[id] = !(collapsedState.value[id] ?? false);
 };
 </script>
 

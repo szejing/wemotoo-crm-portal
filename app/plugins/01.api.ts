@@ -3,6 +3,7 @@ import {
 	ProductCategoryModule,
 	ProductTagModule,
 	CurrencyModule,
+	CrmUserModule,
 	ImageModule,
 	ProductModule,
 	ProductOptionModule,
@@ -32,6 +33,7 @@ interface IApiInstance {
 	productOption: ProductOptionModule;
 	auth: AuthModule;
 	currency: CurrencyModule;
+	crmUser: CrmUserModule;
 	image: ImageModule;
 	setting: SettingModule;
 	productType: ProductTypeModule;
@@ -80,6 +82,7 @@ export default defineNuxtPlugin((_) => {
 	const paymentTypeGroupModule = new PaymentTypeGroupModule();
 	const paymentMethodModule = new PaymentMethodModule();
 	const countryModule = new CountryModule();
+	const crmUserModule = new CrmUserModule();
 	const saleModule = new SaleModule();
 	const customerModule = new CustomerModule();
 	const brandModule = new ProductBrandModule();
@@ -106,6 +109,7 @@ export default defineNuxtPlugin((_) => {
 		paymentTypeGroup: paymentTypeGroupModule,
 		paymentMethod: paymentMethodModule,
 		country: countryModule,
+		crmUser: crmUserModule,
 		sale: saleModule,
 		customer: customerModule,
 		brand: brandModule,

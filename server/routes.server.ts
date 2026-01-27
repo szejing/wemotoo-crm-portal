@@ -88,10 +88,11 @@ export const Routes = {
 	CrmUsers: {
 		Create: () => `${API_PATH.CRM_USERS}/`,
 		Many: () => `${API_PATH.CRM_USERS}/`,
-		Single: (id: number) => `${API_PATH.CRM_USERS}/${id}`,
-		Update: (id: number) => `${API_PATH.CRM_USERS}/${id}`,
-		Delete: (id: number) => `${API_PATH.CRM_USERS}/${id}`,
-		Restore: (id: number) => `${API_PATH.CRM_USERS}/restore/${id}`,
+		Single: (id: string) => `${API_PATH.CRM_USERS}/${id}`,
+		Update: (id: string) => `${API_PATH.CRM_USERS}/${id}`,
+		UpdatePassword: (id: string) => `${API_PATH.CRM_USERS}/${id}/password`,
+		Delete: (id: string) => `${API_PATH.CRM_USERS}/${id}`,
+		Restore: (id: string) => `${API_PATH.CRM_USERS}/restore/${id}`,
 	},
 	Orders: {
 		Many: () => `${API_PATH.ORDERS}`,

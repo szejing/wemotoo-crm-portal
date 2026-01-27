@@ -22,6 +22,7 @@ import { outlet_columns } from './outlet';
 import { tax_code_columns } from './tax/tax-code';
 import { tax_group_columns } from './tax/tax-group';
 import { tax_rule_columns } from './tax/tax-rule';
+import { crm_user_columns } from './crm-user';
 
 export {
 	customer_columns,
@@ -48,4 +49,5 @@ export {
 	tax_code_columns,
 	tax_group_columns,
 	tax_rule_columns,
+	crm_user_columns,
 };
