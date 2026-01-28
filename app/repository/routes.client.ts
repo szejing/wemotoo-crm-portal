@@ -12,8 +12,9 @@ const MerchantRoutes = {
 		Refresh: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/refresh`,
 		Verify: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/verify`,
 		Logout: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/logout`,
-		ForgotPassword: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/forgot-password`,
-		ResetPassword: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/reset-password`,
+		PasswordReset: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/password-reset`,
+		PasswordResetValidate: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/password-reset-validate`,
+		PasswordResetConfirm: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AUTH}/password-reset-confirm`,
 	},
 	Countries: {
 		Single: (iso2: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COUNTRIES}/${iso2}`,

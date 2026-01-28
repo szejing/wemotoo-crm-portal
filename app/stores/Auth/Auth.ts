@@ -120,13 +120,42 @@ export const useAuthStore = defineStore('authStore', {
 			}
 		},
 
+		async validateResetPasswordToken(token: string): Promise<boolean> {
+			const { $api } = useNuxtApp();
+			const appUiStore = useAppUiStore();
+
+			try {
+				const isValid: boolean = await $api.auth.validatePasswordResetToken(token);
+
+				if (!isValid) {
+					appUiStore.showToast({
+						color: 'error',
+						icon: ICONS.ERROR_OUTLINE,
+						title: 'Invalid or expired link',
+						description: 'The link is invalid or expired.',
+					});
+				}
+
+				return true;
+			} catch (err: any) {
+				console.error(err);
+				appUiStore.showToast({
+					color: 'error',
+					icon: ICONS.ERROR_OUTLINE,
+					title: 'Failed to validate reset link',
+					description: err.message,
+				});
+				return false;
+			}
+		},
+
 		async forgotPassword(merchant_id: string, email_address: string): Promise<[boolean, string]> {
 			const { $api } = useNuxtApp();
 			this.loading = true;
 			const appUiStore = useAppUiStore();
 
 			try {
-				await $api.auth.forgotPassword({ merchant_id, email_address });
+				await $api.auth.passwordReset({ merchant_id, email_address });
 
 				appUiStore.showToast({
 					color: 'success',
@@ -146,6 +175,37 @@ export const useAuthStore = defineStore('authStore', {
 				});
 
 				return [false, err.message];
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async confirmResetPassword(token: string, password: string): Promise<boolean> {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+			const appUiStore = useAppUiStore();
+
+			try {
+				await $api.auth.confirmResetPassword({ token, password });
+
+				appUiStore.showToast({
+					color: 'success',
+					icon: ICONS.CHECK_OUTLINE_ROUNDED,
+					title: 'Password reset successful',
+					description: 'Your password has been updated. You can now sign in with your new password.',
+				});
+				return true;
+			} catch (err: any) {
+				console.error(err);
+
+				appUiStore.showToast({
+					color: 'error',
+					icon: ICONS.ERROR_OUTLINE,
+					title: 'Failed to reset password',
+					description: err.message,
+				});
+
+				return false;
 			} finally {
 				this.loading = false;
 			}

@@ -1,5 +1,17 @@
 import { KEY } from 'wemotoo-common';
 
+export const generateBasicHeaders = (event: any) => {
+	const config = useRuntimeConfig(event);
+
+	const headers = {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+		'x-api-key': config.public.apiKey,
+	};
+
+	return headers;
+};
+
 export const generateHeaders = (event: any, includeAccessToken: boolean = true, merchant_id: string = '') => {
 	const config = useRuntimeConfig(event);
 

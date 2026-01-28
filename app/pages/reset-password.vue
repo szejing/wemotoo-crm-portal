@@ -12,14 +12,10 @@
 					<template #header>
 						<h1 class="text-center">Invalid or expired link</h1>
 					</template>
-					<p class="text-muted text-sm text-center">
-						This reset link is invalid or has expired. Please request a new one.
-					</p>
+					<p class="text-muted text-sm text-center">This reset link is invalid or has expired. Please request a new one.</p>
 					<template #footer>
 						<div class="flex flex-col gap-2">
-							<UButton block variant="outline" color="primary" @click="navigateTo('/forgot-password')">
-								Request new link
-							</UButton>
+							<UButton block variant="outline" color="primary" @click="navigateTo('/forgot-password')"> Request new link </UButton>
 							<NuxtLink to="/login" class="text-center text-sm text-muted hover:underline">Back to login</NuxtLink>
 						</div>
 					</template>
@@ -30,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({ layout: 'auth' });
+definePageMeta({ layout: 'auth', middleware: 'validate-password-reset-token' });
 
 useHead({ title: 'Wemotoo CRM - Reset Password' });
 

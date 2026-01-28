@@ -27,11 +27,7 @@
 					</UInput>
 				</UFormField>
 				<UFormField label="Confirm password" name="confirmPassword" required>
-					<UInput
-						v-model="state.confirmPassword"
-						:type="state.showConfirm ? 'text' : 'password'"
-						autocomplete="new-password"
-					>
+					<UInput v-model="state.confirmPassword" :type="state.showConfirm ? 'text' : 'password'" autocomplete="new-password">
 						<template v-if="state.confirmPassword?.length" #trailing>
 							<UButton
 								color="neutral"
@@ -48,9 +44,7 @@
 
 			<template #footer>
 				<div class="flex flex-col gap-2">
-					<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">
-						Reset password
-					</UButton>
+					<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading"> Reset password </UButton>
 					<NuxtLink to="/login" class="text-center text-sm text-muted hover:underline">Back to login</NuxtLink>
 				</div>
 			</template>
@@ -67,7 +61,6 @@ type Schema = z.output<typeof ResetPasswordValidation>;
 
 const props = defineProps<{ token: string }>();
 
-const toast = useToast();
 const state = reactive({
 	password: '',
 	confirmPassword: '',
@@ -79,21 +72,11 @@ const loading = ref(false);
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	loading.value = true;
 	try {
-		const { $api } = useNuxtApp();
-		await $api.auth.resetPassword({ token: props.token, password: event.data.password });
-		toast.add({
-			title: 'Password reset',
-			description: 'Your password has been updated. You can now sign in with your new password.',
-			color: 'success',
-		});
+		const authStore = useAuthStore();
+		await authStore.confirmResetPassword(props.token, event.data.password);
 		navigateTo('/login');
 	} catch (err: any) {
-		const message = err?.message ?? 'Unable to reset password. The link may be invalid or expired.';
-		toast.add({
-			title: 'Reset failed',
-			description: message,
-			color: 'error',
-		});
+		console.error(err);
 	} finally {
 		loading.value = false;
 	}

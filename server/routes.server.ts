@@ -9,7 +9,9 @@ export const Routes = {
 		Login: () => `${API_PATH.AUTH}/login`,
 		Verify: () => `${API_PATH.AUTH}/verify`,
 		Logout: () => `${API_PATH.AUTH}/logout`,
-		ForgotPassword: () => `${API_PATH.AUTH}/forgot-password`,
+		PasswordReset: () => `${API_PATH.AUTH}/password-reset`,
+		PasswordResetValidate: () => `${API_PATH.AUTH}/password-reset/validate`,
+		PasswordResetConfirm: () => `${API_PATH.AUTH}/password-reset/confirm`,
 	},
 	Countries: {
 		Single: (iso2: string) => `${API_PATH.COUNTRIES}/${iso2}`,

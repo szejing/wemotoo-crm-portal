@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 
-		const result = await $fetch(`${Routes.Auth.ForgotPassword()}`, {
+		const result = await $fetch(`${Routes.Auth.PasswordReset()}`, {
 			baseURL: config.public.baseUrl,
 			method: 'POST',
 			body: { 'email_address': data.email_address },
