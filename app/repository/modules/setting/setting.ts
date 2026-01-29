@@ -1,15 +1,9 @@
-import type { Setting } from '~/utils/types/setting';
-import type { SettingSegment } from '~/utils/types/setting-segment';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
 import type { UpdateSettingReq } from './models/request/update-setting.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { BaseODataReq } from '~/repository/base/base.req';
-
-type SettingsResp = {
-	segments: SettingSegment[];
-	settings: Setting[];
-};
+import type { SettingsResp } from './models/response/setting.resp';
 
 class SettingModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Settings;

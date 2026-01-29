@@ -3,6 +3,10 @@ import { API_PATH } from 'wemotoo-common';
 const prefix: string = '';
 
 const MerchantRoutes = {
+	MerchantInfo: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.INFO}/many`,
+		SaveMany: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.INFO}/update`,
+	},
 	Images: {
 		Upload: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload`,
 		UploadMultiple: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.IMAGES}/upload-multiple`,

@@ -23,17 +23,17 @@ const navigations = [
 				to: '/appointments',
 			},
 			{
-				label: 'Booking/Orders',
+				label: 'Orders',
 				icon: ICONS.ORDER,
 				to: '/orders',
 			},
 			{
-				label: 'Services/Products',
+				label: 'Products',
 				icon: ICONS.PRODUCT,
 				to: '/products',
 				children: [
 					{
-						label: 'Products/Services',
+						label: 'Products',
 						to: '/products/listing',
 					},
 					{

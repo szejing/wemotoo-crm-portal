@@ -23,13 +23,13 @@ export const useAppStore = defineStore('appStore', {
 			// const taxStore = useTaxStore();
 			// const taxGroupStore = useTaxGroupStore();
 			// const taxRuleStore = useTaxRuleStore();
+			await merchantInfo.getMerchantInfos();
 
-			Promise.all([
+			await Promise.all([
 				productOptionsStore.getOptions(),
 				productTagsStore.getTags(),
 				categoryStore.getCategories(),
 				brandStore.getBrands(),
-				// productStore.getProducts(),
 				merchantInfo.getCurrencies(),
 				settingsStore.getSettings(),
 				productTypeStore.getProductTypes(),
@@ -38,7 +38,8 @@ export const useAppStore = defineStore('appStore', {
 				paymentMethodStore.getPaymentMethods(),
 				summOrderStore.getDashboardSummary(),
 				summSalesStore.getDashboardSummary(),
-				customerStore.getCustomers(),
+				// customerStore.getCustomers(),
+				// productStore.getProducts(),
 				// outletStore.getOutlets(),
 				// taxStore.getTaxes(),
 				// taxGroupStore.getTaxGroups(),

@@ -37,9 +37,6 @@ export const useAuthStore = defineStore('authStore', {
 
 				this.user = data.user;
 
-				const merchantInfo = useMerchantInfoStore();
-				await merchantInfo.setMerchantInfo(data.merchant_info);
-
 				const app = useAppStore();
 				await app.init();
 
@@ -103,14 +100,12 @@ export const useAuthStore = defineStore('authStore', {
 			try {
 				const data: VerifyResp = await $api.auth.verify();
 
-				if (!data.user || !data.merchant_info) {
+				if (!data.user) {
 					this.clearCookies();
 				}
 
 				this.user = data.user;
 
-				const merchantInfo = useMerchantInfoStore();
-				await merchantInfo.setMerchantInfo(data.merchant_info);
 				return true;
 			} catch (err: any) {
 				console.error(err);

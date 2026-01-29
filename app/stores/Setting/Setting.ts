@@ -51,6 +51,10 @@ export const useSettingStore = defineStore('settingStore', {
 			}
 		},
 
+		clearUpdatedSettings() {
+			this.updatedSettings = [];
+		},
+
 		async updateSettings() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -65,15 +69,6 @@ export const useSettingStore = defineStore('settingStore', {
 
 				if (data.segments) {
 					this.segments = data.segments;
-				}
-				if (data.settings) {
-					successNotification(`Settings Updated !`);
-					this.settings = data.settings.map((setting) => new Setting(setting));
-					const merchantInfoStore = useMerchantInfoStore();
-					merchantInfoStore.updateFromSettings(
-						data.settings.map((s) => ({ group_code: s.group_code, set_code: s.set_code, set_value: s.set_value })),
-						GROUP_CODE.INFO,
-					);
 				}
 			} catch (err: any) {
 				console.error(err);

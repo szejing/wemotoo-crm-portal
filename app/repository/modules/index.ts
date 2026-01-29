@@ -23,6 +23,7 @@ import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
 import TaxGroupModule from './tax-groups/tax-group';
 import OutletModule from './outlets/outlet';
+import MerchantInfoModule from './merchant-info/merchant-info';
 
 export {
 	CrmUserModule,
@@ -50,4 +51,5 @@ export {
 	TaxModule,
 	TaxGroupModule,
 	OutletModule,
+	MerchantInfoModule,
 };

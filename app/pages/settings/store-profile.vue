@@ -7,22 +7,10 @@
 				</template>
 
 				<template #right>
-					<template v-if="isEditing">
-						<UButton color="neutral" variant="ghost" @click="isEditing = false"> Cancel </UButton>
-						<UButton
-							color="success"
-							@click="
-								settingsStore.updateSettings();
-								isEditing = false;
-							"
-						>
-							<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-							Save
-						</UButton>
-					</template>
-					<UButton v-else color="primary" @click="isEditing = true">
-						<UIcon :name="ICONS.PENCIL" class="w-4 h-4" />
-						Edit
+					<UButton color="neutral" variant="ghost" @click="onCancel"> Cancel </UButton>
+					<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave">
+						<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+						Save
 					</UButton>
 				</template>
 			</UDashboardNavbar>
@@ -63,13 +51,12 @@
 					<div class="space-y-6">
 						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Merchant information</h3>
 
-						<!-- Thumbnail (editable only when isEditing) -->
+						<!-- Thumbnail -->
 						<div class="flex flex-col gap-2">
 							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Thumbnail</span>
 							<div
-								class="relative inline-flex h-24 w-24 items-center justify-center rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
-								:class="{ 'cursor-pointer': isEditing }"
-								@click="isEditing && triggerThumbnailInput()"
+								class="relative inline-flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+								@click="triggerThumbnailInput()"
 							>
 								<img
 									v-if="getMerchantValue(MERCHANT.THUMBNAIL)"
@@ -78,10 +65,7 @@
 									class="h-full w-full rounded-lg object-cover"
 								/>
 								<UIcon v-else :name="ICONS.IMAGE" class="h-10 w-10 text-gray-400" />
-								<div
-									v-if="isEditing"
-									class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/50 opacity-0 transition-opacity hover:opacity-100"
-								>
+								<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/50 opacity-0 transition-opacity hover:opacity-100">
 									<UIcon :name="ICONS.PENCIL" class="h-6 w-6 text-white" />
 								</div>
 								<div v-if="thumbnailUploading" class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/40">
@@ -91,98 +75,72 @@
 							<input ref="thumbnailInputEl" type="file" accept="image/*" class="hidden" @change="onThumbnailFileChange" />
 						</div>
 
-						<!-- Name, Company email, website, contact (disabled when !isEditing) -->
+						<!-- Name, Company email, website, contact -->
 						<div class="grid gap-4 sm:grid-cols-2">
 							<UFormField label="Name">
-								<UInput :model-value="getMerchantValue(MERCHANT.NAME)" :disabled="!isEditing" @update:model-value="(v) => setMerchantValue(MERCHANT.NAME, v)" />
+								<UInput :model-value="getMerchantValue(MERCHANT.NAME)" @update:model-value="(v) => setMerchantValue(MERCHANT.NAME, v)" />
 							</UFormField>
 							<UFormField label="Company email">
 								<UInput
 									type="email"
 									:model-value="getMerchantValue(MERCHANT.COMPANY_EMAIL_ADDRESS)"
-									:disabled="!isEditing"
 									@update:model-value="(v) => setMerchantValue(MERCHANT.COMPANY_EMAIL_ADDRESS, v)"
 								/>
 							</UFormField>
 							<UFormField label="Company website" class="sm:col-span-2">
-								<UInput
-									:model-value="getMerchantValue(MERCHANT.COMPANY_WEBSITE)"
-									:disabled="!isEditing"
-									@update:model-value="(v) => setMerchantValue(MERCHANT.COMPANY_WEBSITE, v)"
-								/>
+								<UInput :model-value="getMerchantValue(MERCHANT.COMPANY_WEBSITE)" @update:model-value="(v) => setMerchantValue(MERCHANT.COMPANY_WEBSITE, v)" />
 							</UFormField>
 							<UFormField label="Contact person">
-								<UInput
-									:model-value="getMerchantValue(MERCHANT.CONTACT_PERSON)"
-									:disabled="!isEditing"
-									@update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_PERSON, v)"
-								/>
+								<UInput :model-value="getMerchantValue(MERCHANT.CONTACT_PERSON)" @update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_PERSON, v)" />
 							</UFormField>
 							<UFormField label="Contact no">
-								<UInput
-									:model-value="getMerchantValue(MERCHANT.CONTACT_NO)"
-									:disabled="!isEditing"
-									@update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_NO, v)"
-								/>
+								<UInput :model-value="getMerchantValue(MERCHANT.CONTACT_NO)" @update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_NO, v)" />
 							</UFormField>
 						</div>
 
-						<!-- Address (disabled when !isEditing) -->
+						<!-- Address -->
 						<div class="space-y-4">
 							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Address</h4>
 							<div class="grid gap-4 sm:grid-cols-2">
 								<UFormField label="Address line 1">
-									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS1)"
-										:disabled="!isEditing"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS1, v)"
-									/>
+									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS1)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS1, v)" />
 								</UFormField>
 								<UFormField label="Address line 2">
-									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS2)"
-										:disabled="!isEditing"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS2, v)"
-									/>
+									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS2)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS2, v)" />
 								</UFormField>
 								<UFormField label="Address line 3">
-									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS3)"
-										:disabled="!isEditing"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS3, v)"
-									/>
+									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS3)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS3, v)" />
 								</UFormField>
 								<UFormField label="City">
-									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS_CITY)"
-										:disabled="!isEditing"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_CITY, v)"
-									/>
+									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS_CITY)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_CITY, v)" />
 								</UFormField>
 								<UFormField label="State">
-									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS_STATE)"
-										:disabled="!isEditing"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_STATE, v)"
-									/>
+									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS_STATE)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_STATE, v)" />
 								</UFormField>
 								<UFormField label="Postal code">
 									<UInput
 										:model-value="getMerchantValue(MERCHANT.ADDRESS_POSTAL_CODE)"
-										:disabled="!isEditing"
 										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_POSTAL_CODE, v)"
 									/>
 								</UFormField>
 								<UFormField label="Country">
 									<UInput
 										:model-value="getMerchantValue(MERCHANT.ADDRESS_COUNTRY)"
-										:disabled="!isEditing"
 										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_COUNTRY, v)"
 									/>
 								</UFormField>
 							</div>
 						</div>
 					</div>
+
+					<template #footer>
+						<div class="flex justify-center">
+							<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave">
+								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+								Save
+							</UButton>
+						</div>
+					</template>
 				</UCard>
 			</div>
 		</template>
@@ -190,38 +148,63 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalLeavePageConfirmation } from '#components';
 import { getFormattedDate, GROUP_CODE, MERCHANT } from 'wemotoo-common';
-import { Setting } from '~/utils/types/setting';
 import { dir } from '~/utils/constants/dir';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 import { ICONS } from '~/utils/icons';
 
 useHead({ title: 'Wemotoo CRM - Store Profile' });
 
-const settingsStore = useSettingStore();
+const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
 
-const { updatedSettings } = storeToRefs(settingsStore);
+const { updatedInfo } = storeToRefs(merchantInfoStore);
 
-const isEditing = ref(false);
+const isDirty = computed(() => updatedInfo.value.some((s) => s.group_code === GROUP_CODE.INFO));
+
 const thumbnailInputEl = ref<HTMLInputElement | null>(null);
 const thumbnailUploading = ref(false);
 
+onBeforeRouteLeave((to, from, next) => {
+	if (!isDirty.value) {
+		next();
+		return;
+	}
+	next(false);
+	const leaveModal = overlay.create(ZModalLeavePageConfirmation, {
+		props: {
+			onStay: () => leaveModal.close(),
+			onLeave: () => {
+				merchantInfoStore.clearUpdatedInfo();
+				leaveModal.close();
+				navigateTo(to.fullPath);
+			},
+		},
+	});
+	leaveModal.open();
+});
+
+const onCancel = () => {
+	merchantInfoStore.clearUpdatedInfo();
+};
+
+const onSave = async () => {
+	await merchantInfoStore.updateMerchantInfo();
+};
+
 const getMerchantValue = (setCode: string): string => {
-	const updated = updatedSettings.value.find((s) => s.group_code === GROUP_CODE.INFO && s.set_code === setCode);
+	const updated = updatedInfo.value.find((s) => s.group_code === GROUP_CODE.INFO && s.set_code === setCode);
 	if (updated) return updated.set_value ?? '';
 	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, setCode)?.getString() ?? '';
 };
 
 const setMerchantValue = (setCode: string, value: string) => {
-	settingsStore.addToUpdatedSettings(
-		new Setting({
-			group_code: GROUP_CODE.INFO,
-			set_code: setCode,
-			set_value: value ?? '',
-			value_type: '',
-		} as Setting),
-	);
+	merchantInfoStore.addToUpdatedInfo({
+		group_code: GROUP_CODE.INFO,
+		set_code: setCode,
+		set_value: value ?? '',
+	});
 };
 
 const triggerThumbnailInput = () => {
@@ -324,10 +307,6 @@ const accountStatusTextClass = computed(() => {
 	if (c === 'success') return 'text-green-700 dark:text-green-300';
 	if (c === 'error') return 'text-red-700 dark:text-red-300';
 	return 'text-gray-700 dark:text-gray-300';
-});
-
-onMounted(async () => {
-	await settingsStore.getSettings();
 });
 </script>
 

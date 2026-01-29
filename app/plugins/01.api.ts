@@ -24,6 +24,7 @@ import {
 	TaxGroupModule,
 	TaxModule,
 	TaxRuleModule,
+	MerchantInfoModule,
 } from '../repository/modules';
 
 interface IApiInstance {
@@ -36,6 +37,7 @@ interface IApiInstance {
 	crmUser: CrmUserModule;
 	image: ImageModule;
 	setting: SettingModule;
+	merchantInfo: MerchantInfoModule;
 	productType: ProductTypeModule;
 	summOrder: SummOrderModule;
 	summSales: SaleSummaryModule;
@@ -74,6 +76,7 @@ export default defineNuxtPlugin((_) => {
 	const productOptionModule = new ProductOptionModule();
 	const imageModule = new ImageModule();
 	const settingModule = new SettingModule();
+	const merchantInfoModule = new MerchantInfoModule();
 	const productTypeModule = new ProductTypeModule();
 	const summOrderModule = new SummOrderModule();
 	const summSalesModule = new SaleSummaryModule();
@@ -101,6 +104,7 @@ export default defineNuxtPlugin((_) => {
 		productOption: productOptionModule,
 		image: imageModule,
 		setting: settingModule,
+		merchantInfo: merchantInfoModule,
 		productType: productTypeModule,
 		summOrder: summOrderModule,
 		summSales: summSalesModule,

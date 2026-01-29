@@ -5,15 +5,12 @@
 		:avatar="{
 			src: thumbnail,
 			alt: merchantName,
-			ui: {
-				image: 'rounded-md',
-			},
+			ui: { image: 'rounded-md' },
 		}"
 	/>
 </template>
 
 <script lang="ts" setup>
-import type { avatar } from '#build/ui';
 import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const merchantInfoStore = useMerchantInfoStore();

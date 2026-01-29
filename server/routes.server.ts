@@ -1,6 +1,10 @@
 import { API_PATH } from 'wemotoo-common';
 
 export const Routes = {
+	MerchantInfo: {
+		Many: () => `${API_PATH.INFO}`,
+		SaveMany: () => `${API_PATH.INFO}`,
+	},
 	Images: {
 		Upload: () => `${API_PATH.IMAGES}/upload`,
 		UploadMultiple: () => `${API_PATH.IMAGES}/upload-multiple`,
