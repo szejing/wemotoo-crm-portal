@@ -8,8 +8,17 @@
 			<!-- Grouped Navigation Sections: render on client to avoid hydration mismatch and initial flash -->
 			<template #default="{ collapsed }">
 				<ClientOnly>
-					<template v-for="nav in navigations" :key="nav.label">
-						<UNavigationMenu :collapsed="collapsed" :items="navItemsWithOpen(nav.links)" orientation="vertical" type="multiple" @update:model-value="() => {}">
+					<template v-for="nav in navigations" :key="`${nav.label}-${route.path}`">
+						<UNavigationMenu
+							:collapsed="collapsed"
+							:items="navItemsWithOpen(nav.links)"
+							orientation="vertical"
+							type="multiple"
+							:ui="{
+								content: 'overflow-hidden data-[state=open]:animate-nav-accordion-down data-[state=closed]:animate-nav-accordion-up',
+							}"
+							@update:model-value="() => {}"
+						>
 							<template #item-label="{ item }">
 								<ULink v-if="item.to && Array.isArray(item.children) && item.children.length" :to="item.to" class="block size-full" @click.stop>
 									{{ item?.label }}
