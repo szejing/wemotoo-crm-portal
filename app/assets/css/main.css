@@ -63,6 +63,8 @@
 
 	/* Custom animations */
 	--animate-fade-in: fade-in 0.5s linear forwards;
+	--animate-nav-accordion-down: nav-accordion-down 0.25s ease-out;
+	--animate-nav-accordion-up: nav-accordion-up 0.2s ease-in;
 
 	/* Font family */
 	--font-family-lato: 'Lato', sans-serif;
@@ -74,6 +76,29 @@ html {
 
 :target {
 	scroll-margin-top: 4rem;
+}
+
+/* Sidebar nav accordion expand/collapse */
+@keyframes nav-accordion-down {
+	from {
+		height: 0;
+		opacity: 0;
+	}
+	to {
+		height: var(--reka-accordion-content-height);
+		opacity: 1;
+	}
+}
+
+@keyframes nav-accordion-up {
+	from {
+		height: var(--reka-accordion-content-height);
+		opacity: 1;
+	}
+	to {
+		height: 0;
+		opacity: 0;
+	}
 }
 
 /* ::selection {

@@ -8,7 +8,7 @@ const navigations = [
 		label: 'Main',
 		links: [
 			{
-				label: 'Overview',
+				label: 'Dashboard',
 				icon: ICONS.DASHBOARD_ROUNDED,
 				to: '/',
 			},
@@ -31,6 +31,7 @@ const navigations = [
 				label: 'Products',
 				icon: ICONS.PRODUCT,
 				to: '/products',
+				value: 'products',
 				children: [
 					{
 						label: 'Products',
@@ -73,6 +74,7 @@ const navigations = [
 				label: 'Payment',
 				icon: ICONS.PAYMENT_METHODS,
 				to: '/payment',
+				value: 'payment',
 				children: [
 					{
 						label: 'Payment Methods',
@@ -88,6 +90,7 @@ const navigations = [
 				label: 'Tax',
 				icon: ICONS.TAX,
 				to: '/taxes',
+				value: 'taxes',
 				children: [
 					{
 						label: 'Tax Codes',
@@ -103,6 +106,7 @@ const navigations = [
 				label: 'Settings',
 				icon: ICONS.SETTINGS_ROUNDED,
 				to: '/settings',
+				value: 'settings',
 				children: [
 					{
 						label: 'Store Profile',
