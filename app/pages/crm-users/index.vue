@@ -20,13 +20,7 @@
 				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
 					<div class="flex items-center gap-2">
 						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect
-							v-model="filter.page_size"
-							:items="options_page_size"
-							size="sm"
-							class="w-20"
-							@update:model-value="updatePageSize"
-						/>
+						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
 						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
 					</div>
 				</div>
@@ -36,6 +30,9 @@
 					:data="rows"
 					:columns="crm_user_columns"
 					:loading="loading"
+					:ui="{
+						tr: 'cursor-pointer',
+					}"
 					@select="selectCrmUser"
 				>
 					<template #empty>
@@ -49,12 +46,7 @@
 
 				<!-- Pagination -->
 				<div v-if="crm_users.length > 0" class="section-pagination">
-					<UPagination
-						v-model="filter.current_page"
-						:items-per-page="filter.page_size"
-						:total="total_count"
-						@update:page="updatePage"
-					/>
+					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_count" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>

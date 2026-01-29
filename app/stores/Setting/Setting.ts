@@ -1,3 +1,4 @@
+import { GROUP_CODE } from 'wemotoo-common';
 import { defineStore } from 'pinia';
 import { Setting } from '~/utils/types/setting';
 import type { SettingSegment } from '~/utils/types/setting-segment';
@@ -68,6 +69,11 @@ export const useSettingStore = defineStore('settingStore', {
 				if (data.settings) {
 					successNotification(`Settings Updated !`);
 					this.settings = data.settings.map((setting) => new Setting(setting));
+					const merchantInfoStore = useMerchantInfoStore();
+					merchantInfoStore.updateFromSettings(
+						data.settings.map((s) => ({ group_code: s.group_code, set_code: s.set_code, set_value: s.set_value })),
+						GROUP_CODE.INFO,
+					);
 				}
 			} catch (err: any) {
 				console.error(err);

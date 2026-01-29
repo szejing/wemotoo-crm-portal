@@ -33,10 +33,6 @@ const navigations = [
 				to: '/products',
 				children: [
 					{
-						label: 'Overview',
-						to: '/products',
-					},
-					{
 						label: 'Products/Services',
 						to: '/products/listing',
 					},
@@ -79,10 +75,6 @@ const navigations = [
 				to: '/payment',
 				children: [
 					{
-						label: 'Overview',
-						to: '/payment',
-					},
-					{
 						label: 'Payment Methods',
 						to: '/payment/methods',
 					},
@@ -98,10 +90,6 @@ const navigations = [
 				to: '/taxes',
 				children: [
 					{
-						label: 'Overview',
-						to: '/taxes',
-					},
-					{
 						label: 'Tax Codes',
 						to: '/taxes/codes',
 					},
@@ -115,6 +103,16 @@ const navigations = [
 				label: 'Settings',
 				icon: ICONS.SETTINGS_ROUNDED,
 				to: '/settings',
+				children: [
+					{
+						label: 'Store Profile',
+						to: '/settings/store-profile',
+					},
+					{
+						label: 'Configuration',
+						to: '/settings/configuration',
+					},
+				],
 			},
 		],
 	},

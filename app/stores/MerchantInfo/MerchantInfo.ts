@@ -24,6 +24,19 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 			return info || null;
 		},
 
+		updateFromSettings(settings: Array<{ group_code: string; set_code: string; set_value: string }>, infoGroupCode: string) {
+			settings
+				.filter((s) => s.group_code === infoGroupCode)
+				.forEach((s) => {
+					const existing = this.merchant.find((m) => m.group_code === s.group_code && m.set_code === s.set_code);
+					if (existing) {
+						existing.set_value = s.set_value;
+					} else {
+						this.merchant.push(new MerchantInfo(s as MerchantInfo));
+					}
+				});
+		},
+
 		async getCurrencies() {
 			this.loading = true;
 			const { $api } = useNuxtApp();

@@ -17,7 +17,7 @@
 				</div>
 
 				<!-- Tax Configuration Section -->
-				<ZMenu title="Tax Configuration" :icon="ICONS.TAX" description="Set up and manage tax settings" color="emerald" :navigations="tax_navigations" />
+				<ZMenu title="Tax Configuration" :icon="ICONS.TAX" description="Set up and manage tax settings" color="red" :navigations="tax_navigations" />
 			</div>
 		</template>
 	</UDashboardPanel>

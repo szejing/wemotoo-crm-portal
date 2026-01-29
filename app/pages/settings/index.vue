@@ -5,32 +5,25 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<UButton color="success" @click="settingsStore.updateSettings">
-						<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-						Save
-					</UButton>
-				</template>
 			</UDashboardNavbar>
 		</template>
 
 		<template #body>
-			<div class="space-y-6">
+			<div class="p-6 space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Settings</h2>
-					<p class="text-gray-600 dark:text-gray-400">Manage your system configuration and preferences. Changes will take effect immediately.</p>
+					<p class="text-gray-600 dark:text-gray-400">Manage your store profile and system configuration</p>
 				</div>
 
-				<!-- Settings Sections -->
-				<UTabs :items="tabItems" class="w-full">
-					<template v-for="segment in segments" :key="segment.segment_code" #[segment.segment_code]>
-						<UCard>
-							<ZSettingSegment :segment="segment" />
-						</UCard>
-					</template>
-				</UTabs>
+				<!-- Settings Options -->
+				<ZMenu
+					title="Settings"
+					:icon="ICONS.SETTINGS_ROUNDED"
+					description="Store profile and system configuration"
+					color="slate"
+					:navigations="settings_navigations"
+				/>
 			</div>
 		</template>
 	</UDashboardPanel>
@@ -38,26 +31,23 @@
 
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
-import type { TabsItem } from '@nuxt/ui';
 
 useHead({ title: 'Wemotoo CRM - Settings' });
 
-const settingsStore = useSettingStore();
-const { segments } = storeToRefs(settingsStore);
-
-// Load settings on mount
-onMounted(async () => {
-	await settingsStore.getSettings();
-});
-
-// Transform segments into TabsItem format
-const tabItems = computed<TabsItem[]>(() =>
-	segments.value.map((segment) => ({
-		label: segment.segment_desc,
+const settings_navigations = [
+	{
+		title: 'Store Profile',
+		icon: ICONS.OUTLET,
+		to: '/settings/store-profile',
+		description: 'Manage your merchant info, address, and contact details',
+	},
+	{
+		title: 'Configuration',
 		icon: ICONS.SETTINGS_ROUNDED,
-		slot: segment.segment_code,
-	})),
-);
+		to: '/settings/configuration',
+		description: 'Configure system settings and preferences',
+	},
+];
 </script>
 
 <style scoped></style>
