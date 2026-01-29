@@ -1,9 +1,15 @@
+export type MerchantInfoInput = {
+	group_code: string;
+	set_code: string;
+	set_value: string;
+};
+
 export class MerchantInfo {
 	group_code: string;
 	set_code: string;
 	set_value: string;
 
-	constructor(merchantInfo: MerchantInfo) {
+	constructor(merchantInfo: MerchantInfoInput) {
 		this.group_code = merchantInfo.group_code;
 		this.set_code = merchantInfo.set_code;
 		this.set_value = merchantInfo.set_value;

@@ -41,29 +41,13 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				await $api.setting.saveMany({
-					settings: this.updatedInfo.map((s) => ({
-						group_code: s.group_code,
-						set_code: s.set_code,
-						set_value: s.set_value,
-					})),
+				const { data } = await $api.merchantInfo.saveMany({
+					merchant_info: this.updatedInfo.map((info) => new MerchantInfo(info)),
 				});
 
-				// Apply saved values to local merchant state
-				for (const u of this.updatedInfo) {
-					const idx = this.merchant.findIndex((m) => m.group_code === u.group_code && m.set_code === u.set_code);
-					const m = idx >= 0 ? this.merchant[idx] : null;
-					if (m) {
-						this.merchant[idx] = new MerchantInfo({
-							group_code: m.group_code,
-							set_code: m.set_code,
-							set_value: u.set_value,
-						} as MerchantInfo);
-					} else {
-						this.merchant.push(new MerchantInfo(u as MerchantInfo));
-					}
+				if (data) {
+					this.merchant = data.map((info) => new MerchantInfo(info));
 				}
-				this.updatedInfo = [];
 				successNotification('Merchant information updated');
 			} catch (err: any) {
 				failedNotification(err?.message ?? 'Failed to update merchant information');
@@ -78,6 +62,7 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 			try {
 				const { data } = await $api.merchantInfo.getMany({
 					$count: true,
+					$top: 100,
 				});
 
 				if (data) {

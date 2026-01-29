@@ -59,8 +59,8 @@
 								@click="triggerThumbnailInput()"
 							>
 								<img
-									v-if="getMerchantValue(MERCHANT.THUMBNAIL)"
-									:src="getMerchantValue(MERCHANT.THUMBNAIL)"
+									v-if="getMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)"
+									:src="getMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)"
 									alt="Merchant thumbnail"
 									class="h-full w-full rounded-lg object-cover"
 								/>
@@ -78,23 +78,35 @@
 						<!-- Name, Company email, website, contact -->
 						<div class="grid gap-4 sm:grid-cols-2">
 							<UFormField label="Name">
-								<UInput :model-value="getMerchantValue(MERCHANT.NAME)" @update:model-value="(v) => setMerchantValue(MERCHANT.NAME, v)" />
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME, v)"
+								/>
 							</UFormField>
 							<UFormField label="Company email">
 								<UInput
 									type="email"
-									:model-value="getMerchantValue(MERCHANT.COMPANY_EMAIL_ADDRESS)"
-									@update:model-value="(v) => setMerchantValue(MERCHANT.COMPANY_EMAIL_ADDRESS, v)"
+									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS, v)"
 								/>
 							</UFormField>
 							<UFormField label="Company website" class="sm:col-span-2">
-								<UInput :model-value="getMerchantValue(MERCHANT.COMPANY_WEBSITE)" @update:model-value="(v) => setMerchantValue(MERCHANT.COMPANY_WEBSITE, v)" />
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE, v)"
+								/>
 							</UFormField>
 							<UFormField label="Contact person">
-								<UInput :model-value="getMerchantValue(MERCHANT.CONTACT_PERSON)" @update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_PERSON, v)" />
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON, v)"
+								/>
 							</UFormField>
 							<UFormField label="Contact no">
-								<UInput :model-value="getMerchantValue(MERCHANT.CONTACT_NO)" @update:model-value="(v) => setMerchantValue(MERCHANT.CONTACT_NO, v)" />
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
+								/>
 							</UFormField>
 						</div>
 
@@ -103,30 +115,45 @@
 							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Address</h4>
 							<div class="grid gap-4 sm:grid-cols-2">
 								<UFormField label="Address line 1">
-									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS1)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS1, v)" />
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1, v)"
+									/>
 								</UFormField>
 								<UFormField label="Address line 2">
-									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS2)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS2, v)" />
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2, v)"
+									/>
 								</UFormField>
 								<UFormField label="Address line 3">
-									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS3)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS3, v)" />
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3, v)"
+									/>
 								</UFormField>
 								<UFormField label="City">
-									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS_CITY)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_CITY, v)" />
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
+									/>
 								</UFormField>
 								<UFormField label="State">
-									<UInput :model-value="getMerchantValue(MERCHANT.ADDRESS_STATE)" @update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_STATE, v)" />
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
+									/>
 								</UFormField>
 								<UFormField label="Postal code">
 									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS_POSTAL_CODE)"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_POSTAL_CODE, v)"
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
 									/>
 								</UFormField>
 								<UFormField label="Country">
 									<UInput
-										:model-value="getMerchantValue(MERCHANT.ADDRESS_COUNTRY)"
-										@update:model-value="(v) => setMerchantValue(MERCHANT.ADDRESS_COUNTRY, v)"
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, v)"
 									/>
 								</UFormField>
 							</div>
@@ -193,15 +220,15 @@ const onSave = async () => {
 	await merchantInfoStore.updateMerchantInfo();
 };
 
-const getMerchantValue = (setCode: string): string => {
-	const updated = updatedInfo.value.find((s) => s.group_code === GROUP_CODE.INFO && s.set_code === setCode);
+const getMerchantValue = (groupCode: string, setCode: string): string => {
+	const updated = updatedInfo.value.find((s) => s.group_code === groupCode && s.set_code === setCode);
 	if (updated) return updated.set_value ?? '';
-	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, setCode)?.getString() ?? '';
+	return merchantInfoStore.getMerchantInfo(groupCode, setCode)?.getString() ?? '';
 };
 
-const setMerchantValue = (setCode: string, value: string) => {
+const setMerchantValue = (groupCode: string, setCode: string, value: string) => {
 	merchantInfoStore.addToUpdatedInfo({
-		group_code: GROUP_CODE.INFO,
+		group_code: groupCode,
 		set_code: setCode,
 		set_value: value ?? '',
 	});
@@ -220,7 +247,7 @@ const onThumbnailFileChange = async (event: Event) => {
 	try {
 		const { image } = await $api.image.upload(file, dir.merchant);
 		if (image?.url) {
-			setMerchantValue(MERCHANT.THUMBNAIL, image.url);
+			setMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL, image.url);
 		}
 	} catch (err: any) {
 		failedNotification(err?.message ?? 'Thumbnail upload failed');
@@ -231,7 +258,6 @@ const onThumbnailFileChange = async (event: Event) => {
 };
 
 const merchantId = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '—');
-
 const accountTypeRaw = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.PACKAGE)?.getString()?.toLowerCase() ?? '');
 const accountTypeLabel = computed(() => {
 	const v = accountTypeRaw.value;

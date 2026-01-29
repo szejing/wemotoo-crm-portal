@@ -4,7 +4,6 @@ import HttpFactory from '~/repository/factory';
 import MerchantRoutes from '~/repository/routes.client';
 import type { UpdateMerchantInfoReq } from './request/update-info.req';
 import type { MerchantInfo } from '~/utils/types/merchant-info';
-import type { MerchantInfoResp } from './response/merchant-info.resp';
 
 class MerchantInfoModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.MerchantInfo;
@@ -17,11 +16,11 @@ class MerchantInfoModule extends HttpFactory {
 		});
 	}
 
-	async saveMany(MerchantInfos: UpdateMerchantInfoReq): Promise<MerchantInfoResp[]> {
-		return await this.call<MerchantInfoResp[]>({
+	async saveMany(merchantInfos: UpdateMerchantInfoReq): Promise<BaseODataResp<MerchantInfo>> {
+		return await this.call<BaseODataResp<MerchantInfo>>({
 			method: 'POST',
 			url: `${this.RESOURCE.SaveMany()}`,
-			body: MerchantInfos,
+			body: merchantInfos,
 		});
 	}
 }
