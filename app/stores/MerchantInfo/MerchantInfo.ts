@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { MerchantInfo } from '~/utils/types/merchant-info';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { Currency } from '~/utils/types/currency';
+import { dir } from '~/utils/constants/dir';
+import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 
 const initial: MerchantInfo[] = [];
 
@@ -38,7 +40,9 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 
 		async updateMerchantInfo() {
 			if (this.updatedInfo.length === 0) return;
+
 			this.loading = true;
+
 			const { $api } = useNuxtApp();
 			try {
 				const { data } = await $api.merchantInfo.saveMany({
@@ -51,6 +55,34 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 				successNotification('Merchant information updated');
 			} catch (err: any) {
 				failedNotification(err?.message ?? 'Failed to update merchant information');
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async updateMerchantThumbnail(file: File) {
+			this.loading = true;
+
+			const { $api } = useNuxtApp();
+			try {
+				const { image } = await $api.image.upload(file, dir.merchant);
+				if (image?.url) {
+					const { data } = await $api.merchantInfo.saveMany({
+						merchant_info: [
+							new MerchantInfo({
+								group_code: GROUP_CODE.INFO,
+								set_code: MERCHANT.THUMBNAIL,
+								set_value: image.url,
+							}),
+						],
+					});
+
+					if (data) {
+						this.merchant = data.map((info) => new MerchantInfo(info));
+					}
+				}
+			} catch (err: any) {
+				failedNotification(err?.message ?? 'Failed to update merchant thumbnail');
 			} finally {
 				this.loading = false;
 			}

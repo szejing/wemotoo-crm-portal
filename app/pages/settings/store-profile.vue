@@ -103,10 +103,31 @@
 								/>
 							</UFormField>
 							<UFormField label="Contact no">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
-								/>
+								<div class="flex gap-2">
+									<USelect
+										:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE)"
+										:items="dialCodeOptions"
+										value-key="value"
+										class="w-24 shrink-0"
+										@update:model-value="(v: string | undefined) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE, v ?? '')"
+									>
+										<template #default="{ modelValue }">
+											<span class="text-sm">{{ dialCodeOptions.find((d) => d.value === modelValue)?.flag ?? '' }}</span>
+											<span class="text-sm">{{ modelValue }}</span>
+										</template>
+
+										<template #item="{ item }">
+											<div class="flex items-center gap-2">
+												<span class="text-sm">{{ item.flag }}</span>
+												<span class="text-sm">{{ item.value }}</span>
+											</div>
+										</template>
+									</USelect>
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
+									/>
+								</div>
 							</UFormField>
 						</div>
 
@@ -180,15 +201,17 @@ import { getFormattedDate, GROUP_CODE, MERCHANT } from 'wemotoo-common';
 import { dir } from '~/utils/constants/dir';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 import { ICONS } from '~/utils/icons';
+import { DIAL_CODES } from '~/utils/data/dial-codes';
 
 useHead({ title: 'Wemotoo CRM - Store Profile' });
 
 const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
+const dialCodeOptions = DIAL_CODES;
 
 const { updatedInfo } = storeToRefs(merchantInfoStore);
 
-const isDirty = computed(() => updatedInfo.value.some((s) => s.group_code === GROUP_CODE.INFO));
+const isDirty = computed(() => updatedInfo.value.length > 0);
 
 const thumbnailInputEl = ref<HTMLInputElement | null>(null);
 const thumbnailUploading = ref(false);
@@ -241,20 +264,13 @@ const triggerThumbnailInput = () => {
 const onThumbnailFileChange = async (event: Event) => {
 	const target = event.target as HTMLInputElement;
 	const file = target.files?.[0];
+
 	if (!file) return;
+
 	thumbnailUploading.value = true;
-	const { $api } = useNuxtApp();
-	try {
-		const { image } = await $api.image.upload(file, dir.merchant);
-		if (image?.url) {
-			setMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL, image.url);
-		}
-	} catch (err: any) {
-		failedNotification(err?.message ?? 'Thumbnail upload failed');
-	} finally {
-		thumbnailUploading.value = false;
-		target.value = '';
-	}
+	await merchantInfoStore.updateMerchantThumbnail(file);
+	thumbnailUploading.value = false;
+	target.value = '';
 };
 
 const merchantId = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '—');

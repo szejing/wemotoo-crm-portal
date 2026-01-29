@@ -11,11 +11,22 @@
 				<USelect
 					:model-value="state.dial_code"
 					:items="dialCodeOptions"
-					value-attribute="value"
-					placeholder="Code"
-					class="w-48 shrink-0"
+					value-key="value"
+					class="w-24 shrink-0"
 					@update:model-value="(v: string | undefined) => set('dial_code', v ?? '')"
-				/>
+				>
+					<template #default="{ modelValue }">
+						<span class="text-sm">{{ dialCodeOptions.find((d) => d.value === modelValue)?.flag ?? '' }}</span>
+						<span class="text-sm">{{ modelValue }}</span>
+					</template>
+
+					<template #item="{ item }">
+						<div class="flex items-center gap-2">
+							<span class="text-sm">{{ item.flag }}</span>
+							<span class="text-sm">{{ item.value }}</span>
+						</div>
+					</template>
+				</USelect>
 				<UInput
 					:model-value="state.phone_number"
 					placeholder="Phone number"
