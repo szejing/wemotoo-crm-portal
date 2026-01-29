@@ -5,20 +5,25 @@
 				<SidebarHeader :collapsed="collapsed" />
 			</template>
 
-			<!-- Grouped Navigation Sections -->
+			<!-- Grouped Navigation Sections: render on client to avoid hydration mismatch and initial flash -->
 			<template #default="{ collapsed }">
-				<template v-for="nav in navigations" :key="`${nav.label}-${route.path}`">
-					<UNavigationMenu :collapsed="collapsed" :items="navItemsWithOpen(nav.links)" orientation="vertical" type="multiple" @update:model-value="() => {}">
-						<template #item-label="{ item }">
-							<ULink v-if="item.to && Array.isArray(item.children) && item.children.length" :to="item.to" class="block size-full" @click.stop>
-								{{ item?.label }}
-							</ULink>
-							<template v-else>
-								{{ item?.label }}
+				<ClientOnly>
+					<template v-for="nav in navigations" :key="nav.label">
+						<UNavigationMenu :collapsed="collapsed" :items="navItemsWithOpen(nav.links)" orientation="vertical" type="multiple" @update:model-value="() => {}">
+							<template #item-label="{ item }">
+								<ULink v-if="item.to && Array.isArray(item.children) && item.children.length" :to="item.to" class="block size-full" @click.stop>
+									{{ item?.label }}
+								</ULink>
+								<template v-else>
+									{{ item?.label }}
+								</template>
 							</template>
-						</template>
-					</UNavigationMenu>
-				</template>
+						</UNavigationMenu>
+					</template>
+					<template #fallback>
+						<div class="min-h-[200px] animate-pulse rounded-md bg-default/50" aria-hidden="true" />
+					</template>
+				</ClientOnly>
 			</template>
 
 			<template #footer="{ collapsed }">
@@ -40,10 +45,6 @@ const pathMatchesLink = (path: string, link: { to?: string; children?: unknown[]
 	return path === to || (to !== '/' && path.startsWith(to + '/'));
 };
 
-// In vertical mode Nuxt UI uses AccordionRoot with defaultValue from item.defaultOpen only (not modelValue).
-// Pass items with defaultOpen: true for the parent that contains the current route; key by route.path so the menu
-// re-mounts on route change and the correct section is expanded. Parent items use #item-label slot with ULink
-// so click navigates to parent route; @click.stop prevents accordion toggle.
 const navItemsWithOpen = (links: Array<Record<string, unknown>>): Array<Record<string, unknown>> => {
 	const path = route.path;
 	return links.map((link) => ({
