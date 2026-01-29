@@ -1,0 +1,48 @@
+---
+description: Vue pages and components structure and conventions
+globs: app/pages/**/*.vue, app/components/**/*.vue
+alwaysApply: false
+---
+
+# Vue Pages and Components
+
+## Pages (app/pages/)
+
+### File-Based Routing
+- Paths follow file structure: `pages/orders/index.vue` → `/orders`, `pages/orders/detail/[order_no].vue` → `/orders/detail/:order_no`.
+- Use `[param].vue` for dynamic segments; access via `route.params.param` or `useRoute().params.param`.
+- Use `index.vue` for directory default route.
+
+### Naming and Layout
+- File names: kebab-case (e.g. `detail-listing.vue`, `merchant-info.vue`).
+- Use layouts via `definePageMetadata` or `<NuxtLayout>`; layouts live in `app/layouts/` (e.g. `default.vue`, `auth.vue`).
+
+### Data Loading
+- Prefer `useAsyncData` or `useFetch` for route-level data, with a unique key (e.g. `useAsyncData(\`order-${orderNo}\`, () => ...)`).
+- Call repository modules or `$fetch` inside the loader; keep pages thin and delegate to composables when logic grows.
+
+## Components (app/components/)
+
+### Structure
+- Feature or domain groups can use subfolders: `Form/`, `Chart/`, `Dashboard/`, `Sidebar/`, `Z/` (primitives).
+- One component per file; name file after the component (PascalCase.vue for multi-word, e.g. `DateRangePicker.vue`).
+
+### Conventions
+- Use `<script setup lang="ts">` and TypeScript.
+- Props: define with `defineProps<{ ... }>()` or `withDefaults(defineProps<{ ... }>(), { ... })`; use clear names and types.
+- Emits: define with `defineEmits<{ (e: 'eventName', payload?: Type): void }>()`.
+- Prefer composition: call composables and repository modules inside the component; avoid large inline logic.
+
+### Naming
+- Component name in PascalCase (from filename or `name` option if needed).
+- Emit and prop names: camelCase in script, kebab-case in templates.
+
+### Primitives / Z
+- Shared UI building blocks (inputs, modals, loaders, sections) live under `components/Z/`; keep them generic and reusable.
+
+## Anti-Patterns
+
+- ❌ Large inline logic in pages – extract to composables or repository
+- ❌ Direct `$fetch` in many components without a shared wrapper (use repository or a composable)
+- ❌ Prop/emit typo or inconsistent naming (camelCase vs kebab-case)
+- ❌ Skipping layout or auth when the route should be protected (rely on middleware)

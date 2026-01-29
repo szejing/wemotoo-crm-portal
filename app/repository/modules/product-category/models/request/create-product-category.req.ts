@@ -1,0 +1,11 @@
+import type { ImageReq } from '../../../image/models/request/image.req';
+
+export type CreateProductCategoryReq = {
+	code: string;
+	description: string | undefined;
+	is_internal: boolean | undefined;
+	is_active: boolean | undefined;
+	images: ImageReq[] | undefined;
+	thumbnail: ImageReq | undefined;
+	parent_category_code: string | undefined;
+};

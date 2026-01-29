@@ -1,0 +1,52 @@
+<template>
+	<UCard :ui="cardUi">
+		<template #header>
+			<div class="w-full flex-between items-center">
+				<h2>Inventory</h2>
+				<div class="w-[50%] flex-jend items-center gap-4">
+					<UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="success" />
+				</div>
+			</div>
+		</template>
+
+		<div v-if="variantDetail.manage_inventory" class="section-grid-basic-details">
+			<UFormField v-slot="{ error }" label="Sku" name="sku">
+				<UInput v-model="variantDetail.sku" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
+			</UFormField>
+
+			<UFormField v-slot="{ error }" label="Quantity" name="quantity">
+				<UInput v-model="variantDetail.inventory_quantity" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" type="number" />
+			</UFormField>
+		</div>
+	</UCard>
+</template>
+
+<script lang="ts" setup>
+import type { ProductVariant } from '~/utils/types/product-variant';
+
+const props = defineProps({
+	details: {
+		type: Object as PropType<ProductVariant>,
+		required: true,
+	},
+	cardUi: Object,
+});
+const emit = defineEmits(['update:variantDetail']);
+
+const variantDetail = computed({
+	get() {
+		return props.details ?? [];
+	},
+	set(value) {
+		emit('update:variantDetail', value);
+	},
+});
+</script>
+
+<style scoped>
+.section-grid-basic-details {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+}
+</style>

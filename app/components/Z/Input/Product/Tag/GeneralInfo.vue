@@ -1,0 +1,32 @@
+<template>
+	<div class="section-grid-basic-details">
+		<UFormField v-slot="{ error }" label="Tag Name" name="value" required>
+			<UInput v-model="value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Tag Name (e.g. 'Electronics', 'Clothing', 'Books')" />
+		</UFormField>
+	</div>
+</template>
+
+<script lang="ts" setup>
+const props = defineProps({
+	value: String,
+});
+
+const emit = defineEmits(['update:value']);
+
+const value = computed({
+	get() {
+		return props.value;
+	},
+	set(value) {
+		emit('update:value', value);
+	},
+});
+</script>
+
+<style scoped>
+.section-grid-basic-details {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 0.75rem;
+}
+</style>

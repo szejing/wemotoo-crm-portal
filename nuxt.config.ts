@@ -1,13 +1,9 @@
+import { fileURLToPath } from 'node:url';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
-		// https://devtools.nuxtjs.org/
-		// https://motion.vueuse.org/nuxt.html
-		// https://vueuse.org/
-		// https://github.com/nuxt-modules/icon
-		// https://nuxtseo.com/sitemap/getting-started/how-it-works
 		'@pinia/nuxt',
-		// '@nuxt/devtools', // Temporarily removed to fix UnoCSS style conflicts
 		'@nuxt/image',
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
@@ -26,10 +22,7 @@ export default defineNuxtConfig({
 				preload: true,
 			},
 		],
-		'@samk-dev/nuxt-vcalendar',
 	],
-
-	// devtools: { enabled: false }, // Temporarily disabled to fix UnoCSS style conflicts
 
 	app: {
 		head: {
@@ -42,7 +35,11 @@ export default defineNuxtConfig({
 		baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
 	},
 
-	css: ['~/assets/css/tailwind.css'],
+	css: ['~/assets/css/main.css'],
+
+	future: {
+		compatibilityVersion: 4,
+	},
 
 	colorMode: {
 		preference: 'light',
@@ -95,6 +92,10 @@ export default defineNuxtConfig({
 
 	compatibilityDate: '2024-04-03',
 
+	alias: {
+		'#root': fileURLToPath(new URL('.', import.meta.url)),
+	},
+
 	nitro: {
 		compressPublicAssets: true,
 	},
@@ -130,12 +131,5 @@ export default defineNuxtConfig({
 				braceStyle: '1tbs',
 			},
 		},
-	},
-
-	tailwindcss: {
-		viewer: false,
-		exposeConfig: true,
-		configPath: './tailwind.config.js',
-		cssPath: '~/assets/css/tailwind.css',
 	},
 });

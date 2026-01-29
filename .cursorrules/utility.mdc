@@ -1,0 +1,57 @@
+---
+description: Pure utils, types, table-columns, constants
+globs: app/utils/**/*.ts
+alwaysApply: false
+---
+
+# Utility Rules
+
+## Layout
+
+```
+app/utils/
+├── api.ts              # BaseApiService or shared fetch helpers
+├── utils.ts            # General pure helpers
+├── constants/          # dir.ts, filename.ts, etc.
+├── interface/          # Shared interfaces (e.g. data-stat, range)
+├── models/             # Domain models used in tables/forms (appointment, customer, item, payment, tax)
+├── schema/             # Zod schemas – see schema.mdc
+├── table-columns/      # Column definitions for tables (brand, categories, order, product, tax, etc.)
+├── types/              # TS types and interfaces (product, order, customer, tax, etc.)
+└── options/            # Option lists (e.g. order-item-status)
+```
+
+## Pure Utilities
+
+### What Belongs Here
+- Pure functions: string/number/date helpers, formatters, simple predicates.
+- Table column builders (e.g. in `table-columns/`) that return column configs.
+- Option arrays (e.g. status options) used by selectors/forms.
+- Shared interfaces and types that represent domain or UI state.
+
+### What Does Not
+- API calls (use repository or composables).
+- Zod schemas (use `utils/schema/` and schema.mdc).
+- Vue reactivity or composables (use `composables/`).
+
+## Types (app/utils/types/)
+
+- One file per domain or concept (e.g. `product.ts`, `order.ts`, `api-error-model.ts`).
+- Prefer `type`/`interface` that match backend DTOs and repository request/response where they are shared.
+- Re-export or group in `utils/types/index.ts` if many files import from types.
+
+## Table Columns (app/utils/table-columns/)
+
+- Export functions or arrays that define column configs (field, label, sortable, formatter, etc.) for use in table components.
+- Keep definitions data-only; no API or store calls inside column definitions.
+
+## Constants
+
+- Use `utils/constants/` for app-specific constants (e.g. dir names, file names).
+- Use `wemotoo-common` for API paths, cookie keys, enums, and shared constants.
+
+## Anti-Patterns
+
+- ❌ Side effects or I/O in utility functions
+- ❌ Business rules that belong in the backend or in schema/composables
+- ❌ Duplicating types that already exist in repository models or wemotoo-common

@@ -1,5 +1,5 @@
 // @ts-check
-import withNuxt from './.nuxt/eslint.config.mjs';
+import withNuxt from '.nuxt/eslint.config.mjs';
 
 export default withNuxt({
 	files: ['**/*.vue', '**/*.ts', '**/*.js'],
@@ -21,7 +21,7 @@ export default withNuxt({
 			},
 		],
 		// enforce tabs in template
-		'indent': ['error', 'tab'], // enforce tabs in script and js files
+		indent: ['error', 'tab'], // enforce tabs in script and js files
 		'vue/operator-linebreak': 'off',
 	},
 }).override('nuxt/stylistic', {

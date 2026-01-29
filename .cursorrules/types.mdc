@@ -1,0 +1,39 @@
+---
+description: Shared TypeScript types and domain models
+globs: app/utils/types/**/*.ts, app/repository/**/models/**/*.ts
+alwaysApply: false
+---
+
+# Types and Request/Response Models
+
+## Where Types Live
+
+- **app/utils/types/** – Domain and UI types (Product, Order, Customer, Tax, etc.) used across components, tables, and forms.
+- **app/repository/.../models/request/** – Request body/query types for API calls (`*.req.ts`).
+- **app/repository/.../models/response/** – Response types for API calls (`*.resp.ts`).
+- **app/utils/interface/** – Shared UI/data interfaces (e.g. range, data-stat).
+
+## Conventions
+
+### Naming
+- Types/interfaces: PascalCase (`Product`, `OrderItem`, `CreateProductReq`).
+- Use a short suffix when helpful: `*Req` / `*Resp` for API, `*Model` when it’s a view/table model.
+
+### Shapes
+- Align with backend DTOs and API responses so repository and server proxying stay type-safe.
+- Prefer `type` for unions and mapped shapes; use `interface` when you need declaration merging or default exports.
+- Use optional `?` and `| null` where the API or form can omit or null the field.
+
+### Reuse
+- Put shared fields (ids, codes, dates) in a base type or reuse types from `utils/types` in repository models.
+- Avoid duplicating the same shape in both `utils/types` and `repository/.../models`; import from one place when they represent the same thing.
+
+### Enums and Constants
+- Prefer enums and constants from `wemotoo-common` for status, role, and shared codes.
+- Define app-only enums or const objects in `utils/types` or `utils/constants` when they don’t belong in the shared package.
+
+## Anti-Patterns
+
+- ❌ Duplicate type definitions for the same API shape in multiple files
+- ❌ Using `any` for request/response or domain types
+- ❌ Putting request/response types in `utils/types` when they are only used by one repository module – keep them in that module’s `models/`
