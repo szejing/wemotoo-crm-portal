@@ -39,6 +39,12 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 		errors: [] as string[],
 		filter: initialEmptyAppointmentFilter,
 	}),
+	getters: {
+		isListingView: (state) => state.filter.view === 'listing',
+		isDailyView: (state) => state.filter.view === 'daily',
+		isWeeklyView: (state) => state.filter.view === 'weekly',
+		isMonthlyView: (state) => state.filter.view === 'monthly',
+	},
 	actions: {
 		async getAppointments() {
 			this.loading = true;

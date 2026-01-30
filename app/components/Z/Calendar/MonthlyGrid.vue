@@ -11,22 +11,22 @@
 			<div
 				v-for="cell in gridCells"
 				:key="cell.key"
-				class="min-h-[100px] border-b border-r border-gray-100 dark:border-gray-800 last:border-r-0 flex flex-col transition-colors"
+				class="min-h-[100px] border-b border-r border-gray-100 dark:border-gray-800 last:border-r-0 flex flex-col transition-colors cursor-pointer"
 				:class="[
-					cell.isCurrentMonth ? 'bg-default' : 'bg-gray-50/80 dark:bg-gray-900/50',
-					cell.isToday ? 'ring-2 ring-primary ring-inset' : '',
+					cell.isToday ? 'bg-primary/5 dark:bg-primary/10' : cell.isCurrentMonth ? 'bg-default' : 'bg-gray-50/80 dark:bg-gray-900/50',
 					cell.isSelected ? 'ring-2 ring-primary ring-inset bg-primary/5 dark:bg-primary/10' : '',
 					!(cell.isToday || cell.isSelected) && 'overflow-hidden',
 				]"
+				@click="$emit('selectDay', cell.date as Date)"
 			>
 				<!-- Date number -->
 				<div class="shrink-0 flex items-center justify-between px-2 py-1">
 					<UButton
 						v-if="cell.date"
-						:color="cell.isSelected ? 'primary' : cell.isToday ? 'primary' : 'neutral'"
-						:variant="cell.isSelected || cell.isToday ? 'solid' : 'ghost'"
+						:color="cell.isSelected ? 'primary' : 'neutral'"
+						:variant="cell.isSelected ? 'solid' : 'ghost'"
 						size="xs"
-						class="w-7 h-7 min-w-7 rounded-full p-0 text-sm font-medium"
+						class="w-7 h-7 min-w-7 rounded-full p-0 text-sm font-medium flex items-center justify-center"
 						:class="!cell.isCurrentMonth && 'text-gray-400 dark:text-gray-500'"
 						@click="$emit('selectDay', cell.date)"
 					>

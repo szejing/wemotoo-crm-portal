@@ -6,28 +6,9 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
-
-				<template #right>
-					<!-- <UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportAppointments">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton> -->
-					<div class="flex flex-wrap gap-2">
-						<UButton
-							v-for="(tab, index) in viewTabs"
-							:key="tab.value"
-							:variant="filter.view === tab.value ? 'solid' : 'soft'"
-							:color="filter.view === tab.value ? 'primary' : 'neutral'"
-							:icon="tab.icon"
-							@click="selectView(tab.value)"
-						>
-							<span class="hidden sm:inline">{{ tab.label }}</span>
-						</UButton>
-					</div>
-				</template>
 			</UDashboardNavbar>
 
-			<UDashboardToolbar>
+			<UDashboardToolbar :ui="{ left: 'w-full', right: 'items-start justify-start' }">
 				<template #left>
 					<ZSectionFilterAppointments />
 				</template>
@@ -36,8 +17,23 @@
 
 		<template #body>
 			<div class="space-y-6">
+				<!-- Status Filter -->
+				<div class="flex flex-col gap-1.5">
+					<div class="flex flex-wrap gap-2">
+						<UButton
+							v-for="(tab, index) in appointmentTabs"
+							:key="tab.value"
+							:variant="selectedTab === index ? 'solid' : 'soft'"
+							:color="selectedTab === index ? 'primary' : 'neutral'"
+							@click="selectTab(index)"
+						>
+							{{ capitalizeFirstLetter(tab.label) }}
+						</UButton>
+					</div>
+				</div>
+
 				<!-- Listing view (default) -->
-				<template v-if="isListingView">
+				<template v-if="appointmentStore.isListingView">
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<div :class="selectedAppointment ? 'lg:col-span-1' : 'lg:col-span-3'">
 							<UCard>
@@ -77,7 +73,7 @@
 													<UIcon name="i-heroicons-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
 													<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.order_no }} </span>
 												</div>
-												<UBadge :color="getStatusColor(appointment.status)" variant="subtle" size="sm">
+												<UBadge :color="getAppointmentStatusColor(appointment.status)" variant="subtle" size="sm">
 													{{ appointment.status.toUpperCase() }}
 												</UBadge>
 											</div>
@@ -131,7 +127,7 @@
 										</div>
 									</div>
 									<div class="flex items-center gap-2">
-										<UBadge :color="getStatusColor(selectedAppointment.status)" variant="subtle" size="md">
+										<UBadge :color="getAppointmentStatusColor(selectedAppointment.status)" variant="subtle" size="md">
 											{{ selectedAppointment.status.toUpperCase() }}
 										</UBadge>
 										<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
@@ -201,7 +197,7 @@
 				</template>
 
 				<!-- Daily view (UCalendar + timeslots, macOS Calendar style) -->
-				<template v-else-if="isDailyView">
+				<template v-else-if="appointmentStore.isDailyView">
 					<UCard>
 						<div class="flex items-center justify-between mb-4">
 							<h3 class="font-semibold">Daily view</h3>
@@ -225,7 +221,7 @@
 									:date="calendarFocusDate"
 									:appointments="dailyAppointments"
 									:selected-code="selectedAppointment?.code ?? null"
-									:get-status-color="(s: string) => getStatusColor(s as AppointmentStatus)"
+									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 									@select="selectAppointment"
 								/>
 							</div>
@@ -250,7 +246,7 @@
 				</template>
 
 				<!-- Weekly view (timeslots, macOS Calendar style) -->
-				<template v-else-if="isWeeklyView">
+				<template v-else-if="appointmentStore.isWeeklyView">
 					<UCard>
 						<div class="flex items-center justify-between mb-4">
 							<h3 class="font-semibold">Weekly view</h3>
@@ -268,7 +264,7 @@
 								:week-start="weekStartDate"
 								:appointments="appointments"
 								:selected-code="selectedAppointment?.code ?? null"
-								:get-status-color="(s: string) => getStatusColor(s as AppointmentStatus)"
+								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 								@select="selectAppointment"
 							/>
 						</div>
@@ -292,7 +288,7 @@
 				</template>
 
 				<!-- Monthly view (full calendar grid with appointments in each day) -->
-				<template v-else-if="isMonthlyView">
+				<template v-else-if="appointmentStore.isMonthlyView">
 					<UCard>
 						<div class="flex items-center justify-between mb-4">
 							<h3 class="font-semibold">Monthly view</h3>
@@ -310,7 +306,7 @@
 								:appointments="appointments"
 								:selected-code="selectedAppointment?.code ?? null"
 								:selected-day="selectedCalendarDay"
-								:get-status-color="(s: string) => getStatusColor(s as AppointmentStatus)"
+								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 								@select-day="selectDayInCalendarFromDate"
 								@select-appointment="selectAppointment"
 							/>
@@ -342,8 +338,8 @@ import { add, endOfDay, endOfMonth, endOfWeek, startOfDay, startOfWeek, sub } fr
 import { format } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
-import { formatAppointmentDateRange } from '~/utils/utils';
-import type { AppointmentView } from '~/stores/Appointment/Appointment';
+import { capitalizeFirstLetter, formatAppointmentDateRange } from '~/utils/utils';
+import { getAppointmentStatusColor } from '~/utils/ui-utils';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
@@ -355,16 +351,20 @@ const today = new Date();
 const calendarPlaceholder = ref(new CalendarDate(today.getFullYear(), today.getMonth() + 1, 1));
 const calendarFocusDate = ref(new Date());
 const selectedCalendarDay = ref<Date | null>(null);
+const selectedTab = ref(0);
 
 useHead({ title: 'Appointments' });
 
 const dateKey = (d: Date) => format(d, 'yyyy-MM-dd');
-const viewTabs: { label: string; value: AppointmentView; icon: string }[] = [
-	{ label: 'Listing', value: 'listing', icon: 'i-heroicons-list-bullet' },
-	{ label: 'Daily', value: 'daily', icon: 'i-heroicons-calendar-days' },
-	{ label: 'Weekly', value: 'weekly', icon: 'i-heroicons-calendar' },
-	{ label: 'Monthly', value: 'monthly', icon: 'i-heroicons-square-3-stack-3d' },
-];
+
+const appointmentTabs = computed(() => [
+	{ label: 'All', value: 'All' },
+	{ label: 'Pending', value: AppointmentStatus.PENDING },
+	{ label: 'Confirmed', value: AppointmentStatus.CONFIRMED },
+	{ label: 'Completed', value: AppointmentStatus.COMPLETED },
+	{ label: 'Cancelled', value: AppointmentStatus.CANCELLED },
+]);
+
 // Appointments grouped by date (YYYY-MM-DD)
 const appointmentsByDate = computed(() => {
 	const map: Record<string, Appointment[]> = {};
@@ -402,16 +402,10 @@ const selectedDayAppointments = computed(() => {
 	return appointmentsByDate.value[dateKey(selectedCalendarDay.value)] ?? [];
 });
 
-// Helper to get status badge color
-const getStatusColor = (status: AppointmentStatus): 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral' => {
-	const colorMap: Record<string, string> = {
-		[AppointmentStatus.PENDING]: 'warning',
-		[AppointmentStatus.CONFIRMED]: 'success',
-		[AppointmentStatus.COMPLETED]: 'info',
-		[AppointmentStatus.CANCELLED]: 'error',
-	};
-	return colorMap[status] as 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
-};
+// Daily view: CalendarDate for UCalendar (single-day picker)
+const dailyCalendarDate = computed(
+	() => new CalendarDate(calendarFocusDate.value.getFullYear(), calendarFocusDate.value.getMonth() + 1, calendarFocusDate.value.getDate()),
+);
 
 // Display appointments based on filter state (listing view)
 const displayedAppointments = computed(() => {
@@ -419,16 +413,19 @@ const displayedAppointments = computed(() => {
 	return result.sort((a, b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
 });
 
-const isListingView = computed(() => filter.value.view === 'listing');
-const isDailyView = computed(() => filter.value.view === 'daily');
-const isWeeklyView = computed(() => filter.value.view === 'weekly');
-const isMonthlyView = computed(() => filter.value.view === 'monthly');
+const monthDate = computed(() => new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1));
 
-// Daily view: CalendarDate for UCalendar (single-day picker)
-const dailyCalendarDate = computed(
-	() => new CalendarDate(calendarFocusDate.value.getFullYear(), calendarFocusDate.value.getMonth() + 1, calendarFocusDate.value.getDate()),
-);
+const selectTab = async (index: number) => {
+	selectedTab.value = index;
+	filter.value.current_page = 1;
+	filter.value.status = appointmentTabs.value[index]?.value as AppointmentStatus | string;
+	await search();
+};
 
+// Emit events to parent
+const search = async () => {
+	await appointmentStore.getAppointments();
+};
 const onDailyCalendarDateSelect = async (value: DateValue | DateValue[] | { start?: DateValue; end?: DateValue } | null | undefined) => {
 	const dateValue =
 		value == null ? null : Array.isArray(value) ? value[0] : 'start' in (value as object) ? (value as { start?: DateValue }).start : (value as DateValue);
@@ -466,8 +463,6 @@ const goNextWeek = async () => {
 	filter.value.date_range = { start, end };
 	await appointmentStore.getAppointments();
 };
-
-const monthDate = computed(() => new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1));
 
 const goPrevMonth = async () => {
 	const prev = sub(monthDate.value, { months: 1 });
@@ -584,10 +579,6 @@ const openEditModal = async (appointment: Appointment) => {
 	});
 
 	appointmentModal.open();
-};
-
-const selectView = (view: AppointmentView) => {
-	filter.value.view = view;
 };
 
 const exportAppointments = async () => {

@@ -1,26 +1,24 @@
 <template>
 	<div class="w-full py-4 space-y-4">
-		<!-- Status Filter -->
-		<div class="flex flex-col gap-1.5">
-			<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Status</label>
-			<div class="flex flex-wrap gap-2">
+		<!-- Search + View Tabs: stacked on mobile, side-by-side on desktop -->
+		<div class="flex flex-col sm:flex-row gap-4 sm:items-end sm:justify-between">
+			<div class="flex flex-col gap-1.5 flex-1 min-w-0 sm:min-w-0">
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
+				<UInput v-model="filter.query" placeholder="Search by name, phone..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+			</div>
+			<div class="flex flex-wrap gap-2 shrink-0">
 				<UButton
-					v-for="(tab, index) in appointmentTabs"
+					v-for="(tab, index) in viewTabs"
 					:key="tab.value"
-					:variant="selectedTab === index ? 'solid' : 'soft'"
-					:color="selectedTab === index ? 'primary' : 'neutral'"
-					@click="selectTab(index)"
+					:variant="filter.view === tab.value ? 'solid' : 'soft'"
+					:color="filter.view === tab.value ? 'primary' : 'neutral'"
+					:icon="tab.icon"
+					@click="selectView(tab.value)"
 				>
-					{{ capitalizeFirstLetter(tab.label) }}
+					<span class="hidden sm:inline">{{ tab.label }}</span>
 				</UButton>
 			</div>
 		</div>
-		<!-- Search Filter -->
-		<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
-			<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
-			<UInput v-model="filter.query" placeholder="Search by name, phone..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
-		</div>
-
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
 			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
@@ -36,23 +34,20 @@
 </template>
 
 <script lang="ts" setup>
-import { AppointmentStatus } from 'wemotoo-common';
-import { capitalizeFirstLetter } from '~/utils/utils';
+import type { AppointmentView } from '~/stores/Appointment/Appointment';
+
+const viewTabs: { label: string; value: AppointmentView; icon: string }[] = [
+	{ label: 'Listing', value: 'listing', icon: 'i-heroicons-list-bullet' },
+	{ label: 'Daily', value: 'daily', icon: 'i-heroicons-calendar-days' },
+	{ label: 'Weekly', value: 'weekly', icon: 'i-heroicons-calendar' },
+	{ label: 'Monthly', value: 'monthly', icon: 'i-heroicons-square-3-stack-3d' },
+];
 
 const appointmentStore = useAppointmentStore();
 const { filter } = storeToRefs(appointmentStore);
 
 const searchTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
-const selectedTab = ref(0);
 const selectedDateRangeTab = ref<number | null>(null);
-
-const appointmentTabs = computed(() => [
-	{ label: 'All', value: 'All' },
-	{ label: 'Pending', value: AppointmentStatus.PENDING },
-	{ label: 'Confirmed', value: AppointmentStatus.CONFIRMED },
-	{ label: 'Completed', value: AppointmentStatus.COMPLETED },
-	{ label: 'Cancelled', value: AppointmentStatus.CANCELLED },
-]);
 
 // Check if any filters are active
 const hasActiveFilters = computed(() => {
@@ -74,15 +69,7 @@ const debouncedSearch = () => {
 	}, 500);
 };
 
-const selectTab = async (index: number) => {
-	selectedTab.value = index;
-	filter.value.current_page = 1;
-	filter.value.status = appointmentTabs.value[index]?.value as AppointmentStatus | string;
-	await search();
-};
-
 const clearFilters = async () => {
-	selectedTab.value = 0;
 	selectedDateRangeTab.value = null;
 	filter.value.date_range = {};
 	filter.value.query = '';
@@ -95,10 +82,13 @@ const clearFilter = async (filterKey: string) => {
 		filter.value.query = '';
 		await search();
 	} else if (filterKey === 'status') {
-		selectedTab.value = 0;
 		filter.value.status = 'All';
 		await search();
 	}
+};
+
+const selectView = (view: AppointmentView) => {
+	filter.value.view = view;
 };
 
 onUnmounted(() => {
