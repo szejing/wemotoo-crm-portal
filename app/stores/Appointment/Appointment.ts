@@ -6,12 +6,15 @@ import type { Range } from '~/utils/interface';
 import { add, sub } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
 
+export type AppointmentView = 'listing' | 'daily' | 'weekly' | 'monthly';
+
 type AppointmentFilter = {
 	query: string;
 	status: AppointmentStatus | string;
 	date_range: Range;
 	page_size: number;
 	current_page: number;
+	view: AppointmentView;
 };
 
 const initialEmptyAppointmentFilter: AppointmentFilter = {
@@ -23,6 +26,7 @@ const initialEmptyAppointmentFilter: AppointmentFilter = {
 	},
 	page_size: options_page_size[0] as number,
 	current_page: 1,
+	view: 'listing',
 };
 
 export const useAppointmentStore = defineStore('appointmentStore', {
