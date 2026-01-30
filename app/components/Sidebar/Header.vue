@@ -1,13 +1,15 @@
 <template>
-	<UUser
-		:name="collapsed ? undefined : merchantId"
-		:description="collapsed ? undefined : merchantName"
-		:avatar="{
-			src: thumbnail,
-			alt: merchantName,
-			ui: { image: 'rounded-md' },
-		}"
-	/>
+	<div class="cursor-pointer" @click="navigateTo('/settings/store-profile')">
+		<UUser
+			:name="collapsed ? undefined : merchantId"
+			:description="collapsed ? undefined : merchantName"
+			:avatar="{
+				src: thumbnail,
+				alt: merchantName,
+				ui: { image: 'rounded-md' },
+			}"
+		/>
+	</div>
 </template>
 
 <script lang="ts" setup>

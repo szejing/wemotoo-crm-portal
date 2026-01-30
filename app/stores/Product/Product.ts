@@ -1,10 +1,12 @@
 import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
+import { transformProductToUpdate } from '~/utils/product-transform';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
+import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 
 type ProductFilter = {
 	query: string;
@@ -218,6 +220,12 @@ export const useProductStore = defineStore('productStore', {
 				this.adding = false;
 				this.loading = false;
 			}
+		},
+
+		async toggleProductActive(product: Product) {
+			const payload = transformProductToUpdate(product);
+			payload.is_active = !product.is_active;
+			await this.updateProduct(payload);
 		},
 
 		async updateProduct(product: ProductUpdate) {

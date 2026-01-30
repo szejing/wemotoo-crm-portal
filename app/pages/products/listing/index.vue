@@ -72,18 +72,47 @@ import { options_page_size } from '~/utils/options';
 import { product_columns } from '~/utils/table-columns';
 import type { Product } from '~/utils/types/product';
 import type { TableRow } from '@nuxt/ui';
+import { ZModalLoading } from '#components';
 
 const productStore = useProductStore();
+const overlay = useOverlay();
+const loadingModal = overlay.create(ZModalLoading, {
+	props: {
+		key: 'loading',
+	},
+});
 
 useHead({ title: 'Wemotoo CRM - Products' });
 
 onMounted(() => productStore.getProducts());
 
-const { products, loading, filter, total_products, exporting } = storeToRefs(productStore);
+const { products, loading, filter, total_products, exporting, updating } = storeToRefs(productStore);
 
 const rows = computed(() => {
 	return products.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
+
+watch(
+	() => exporting.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 const selectProduct = async (e: Event, row: TableRow<Product>) => {
 	const product = row.original;

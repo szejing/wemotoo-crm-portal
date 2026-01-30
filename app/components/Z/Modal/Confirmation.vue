@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
 	title: {
 		type: String,
 		default: 'Confirmation',
@@ -40,6 +40,8 @@ defineProps({
 		type: String,
 		default: 'confirm',
 	},
+	onConfirm: { type: Function, default: undefined },
+	onCancel: { type: Function, default: undefined },
 });
 
 const loading = ref(false);
@@ -48,10 +50,12 @@ const emit = defineEmits(['confirm', 'cancel']);
 const onConfirm = async () => {
 	loading.value = true;
 	emit('confirm');
+	await props.onConfirm?.();
 };
 
 const onCancel = () => {
 	emit('cancel');
+	props.onCancel?.();
 };
 </script>
 
