@@ -6,6 +6,13 @@
 				<template #leading>
 					<UDashboardSidebarCollapse />
 				</template>
+
+				<template #right>
+					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportAppointments">
+						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
+						Export
+					</UButton>
+				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>
@@ -17,30 +24,6 @@
 
 		<template #body>
 			<div class="space-y-6">
-				<div class="flex flex-col sm:flex-row sm:items-center justify-end sm:justify-between gap-4">
-					<!-- Status Filter Tabs -->
-					<div class="hidden sm:flex gap-2 overflow-x-auto">
-						<UButton
-							v-for="(tab, index) in appointmentTabs"
-							:key="tab.value"
-							:variant="selectedTab === index ? 'solid' : 'soft'"
-							:color="selectedTab === index ? 'primary' : 'neutral'"
-							size="sm"
-							@click="selectTab(index)"
-						>
-							{{ capitalizeFirstLetter(tab.label) }}
-						</UButton>
-					</div>
-
-					<!-- Table Actions -->
-					<div class="flex items-center gap-3 justify-end">
-						<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportAppointments">
-							<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-							Export
-						</UButton>
-					</div>
-				</div>
-
 				<!-- Main Content Grid -->
 				<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					<!-- Appointments List -->
@@ -239,39 +222,15 @@
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
-import { capitalizeFirstLetter, formatAppointmentDateRange } from '~/utils/utils';
+import { formatAppointmentDateRange } from '~/utils/utils';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
 const { appointments, filter, exporting } = storeToRefs(appointmentStore);
 const filteredAppointments = ref<Appointment[]>([]);
 const selectedAppointment = ref<Appointment | null>(null);
-const selectedTab = ref(0);
 
 useHead({ title: 'Appointments' });
-
-const appointmentTabs = computed(() => [
-	{
-		label: 'All',
-		value: 'All',
-	},
-	{
-		label: 'Pending',
-		value: AppointmentStatus.PENDING,
-	},
-	{
-		label: 'Confirmed',
-		value: AppointmentStatus.CONFIRMED,
-	},
-	{
-		label: 'Completed',
-		value: AppointmentStatus.COMPLETED,
-	},
-	{
-		label: 'Cancelled',
-		value: AppointmentStatus.CANCELLED,
-	},
-]);
 
 // Helper to get status badge color
 const getStatusColor = (status: AppointmentStatus): 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral' => {
@@ -317,13 +276,6 @@ const deleteAppointment = async (code: string) => {
 onMounted(async () => {
 	await appointmentStore.getAppointments();
 });
-
-const selectTab = async (index: number) => {
-	selectedTab.value = index;
-	filter.value.current_page = 1;
-	filter.value.status = appointmentTabs.value[index]?.value as AppointmentStatus;
-	await appointmentStore.getAppointments();
-};
 
 const selectAppointment = (appointment: Appointment) => {
 	if (!appointment) return;

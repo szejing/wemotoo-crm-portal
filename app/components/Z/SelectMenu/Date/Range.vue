@@ -1,6 +1,12 @@
 <template>
 	<UPopover :content="{ align: 'start' }" :modal="true">
-		<UButton color="neutral" variant="ghost" icon="i-lucide-calendar" class="data-[state=open]:bg-elevated group">
+		<UButton
+			:color="props.buttonColor"
+			:variant="props.buttonVariant"
+			icon="i-lucide-calendar"
+			class="data-[state=open]:bg-wemotooPrimary group"
+			v-bind="props.buttonProps"
+		>
 			<span class="truncate">
 				<template v-if="selected.start">
 					<template v-if="selected.end"> {{ df.format(selected.start) }} - {{ df.format(selected.end) }} </template>
@@ -12,7 +18,11 @@
 			</span>
 
 			<template #trailing>
-				<UIcon name="i-lucide-chevron-down" class="shrink-0 text-dimmed size-5 group-data-[state=open]:rotate-180 transition-transform duration-200" />
+				<UIcon
+					name="i-lucide-chevron-down"
+					class="shrink-0 text-dimmed size-5 group-data-[state=open]:rotate-180 transition-transform duration-200"
+					:class="[props.buttonColor === 'neutral' ? 'text-default' : 'text-inverted']"
+				/>
 			</template>
 		</UButton>
 
@@ -47,6 +57,19 @@ const df = new DateFormatter('en-US', {
 });
 
 const selected = defineModel<Range>({ required: true });
+
+const props = withDefaults(
+	defineProps<{
+		buttonVariant?: 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link';
+		buttonColor?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
+		buttonProps?: Record<string, unknown>;
+	}>(),
+	{
+		buttonVariant: 'soft',
+		buttonColor: 'neutral',
+		buttonProps: () => ({}),
+	},
+);
 
 const ranges = [
 	{ label: 'Last 7 days', days: 7 },
