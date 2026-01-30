@@ -1,19 +1,22 @@
 <template>
-	<div class="flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
-		<!-- Time axis -->
-		<div class="shrink-0 w-14 sm:w-16 py-2 text-right text-xs text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700">
-			<div v-for="hour in hourLabels" :key="hour.value" class="h-12 leading-4 pr-2 -mt-2" :style="{ height: `${slotHeightPx}px` }">
-				{{ hour.label }}
-			</div>
-		</div>
-		<!-- Day column with time grid -->
-		<div class="flex-1 min-w-0 relative">
-			<!-- Grid lines (hour slots) -->
+	<div class="flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default items-stretch">
+		<ZCalendarTimeAxis
+			:start-hour="startHour"
+			:end-hour="endHour"
+			:slot-height-px="slotHeightPx"
+		/>
+		<!-- Day column with time grid: hour = stronger solid, 30-min = dotted -->
+		<div class="flex-1 min-w-0 relative" :style="{ minHeight: `${totalHeightPx}px` }">
 			<div class="absolute inset-0 flex flex-col">
 				<div
 					v-for="h in totalSlots"
 					:key="h"
-					class="border-b border-gray-100 dark:border-gray-800"
+					:class="[
+						'shrink-0',
+						(h - 1) % 2 === 0
+							? 'border-b-2 border-gray-200 dark:border-gray-600'
+							: 'border-b border-dotted border-gray-100 dark:border-gray-800',
+					]"
 					:style="{ height: `${slotHeightPx}px`, minHeight: `${slotHeightPx}px` }"
 				/>
 			</div>
@@ -47,6 +50,7 @@
 
 <script lang="ts" setup>
 import { format } from 'date-fns';
+import { useCalendarTimeSlots } from '~/composables/useCalendarTimeSlots';
 import type { Appointment } from '~/utils/types/appointment';
 
 const props = withDefaults(
@@ -62,7 +66,7 @@ const props = withDefaults(
 	{
 		startHour: 6,
 		endHour: 22,
-		slotHeightPx: 48,
+		slotHeightPx: 24,
 		getStatusColor: () => 'primary',
 	},
 );
@@ -71,20 +75,11 @@ defineEmits<{
 	select: [appointment: Appointment];
 }>();
 
-const totalSlots = computed(() => Math.max(0, props.endHour - props.startHour));
-const totalHeightPx = computed(() => totalSlots.value * props.slotHeightPx);
-const minutesInRange = computed(() => totalSlots.value * 60);
-
-const hourLabels = computed(() => {
-	const labels: { value: number; label: string }[] = [];
-	for (let h = props.startHour; h < props.endHour; h++) {
-		labels.push({
-			value: h,
-			label: h === 0 ? '12 AM' : h === 12 ? '12 PM' : h < 12 ? `${h} AM` : `${h - 12} PM`,
-		});
-	}
-	return labels;
-});
+const { totalSlots, totalHeightPx, slotHeightPx } = useCalendarTimeSlots(() => ({
+	startHour: props.startHour,
+	endHour: props.endHour,
+	slotHeightPx: props.slotHeightPx,
+}));
 
 const dayStart = computed(() => {
 	const d = new Date(props.date);

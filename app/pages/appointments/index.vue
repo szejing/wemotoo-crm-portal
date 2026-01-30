@@ -205,6 +205,7 @@
 								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevDay" />
 								<span class="min-w-[180px] text-center font-medium">{{ format(calendarFocusDate, 'EEEE, d MMM yyyy') }}</span>
 								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextDay" />
+								<UButton color="primary" variant="soft" size="sm" label="Today" @click="goToTodayMonth" />
 							</div>
 						</div>
 						<ZLoading v-if="appointmentStore.loading" />
@@ -256,6 +257,7 @@
 									{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
 								</span>
 								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextWeek" />
+								<UButton color="primary" variant="soft" size="sm" label="Today" @click="goToTodayMonth" />
 							</div>
 						</div>
 						<ZLoading v-if="appointmentStore.loading" />
