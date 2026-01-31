@@ -61,7 +61,7 @@ const navigations = [
 				to: '/customers',
 			},
 			{
-				label: 'Users',
+				label: 'Staffs',
 				icon: ICONS.USER_GROUP_ROUNDED,
 				to: '/crm-users',
 			},
