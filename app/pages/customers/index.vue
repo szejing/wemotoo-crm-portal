@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar title="Customers" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 			</UDashboardNavbar>
 

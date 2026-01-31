@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar :title="`Product Detail #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 			</UDashboardNavbar>
 		</template>

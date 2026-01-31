@@ -4,7 +4,7 @@
 		<template #header>
 			<UDashboardNavbar title="Appointments" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 			</UDashboardNavbar>
 

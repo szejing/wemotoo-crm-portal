@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar title="Analytics Sales Payments" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 			</UDashboardNavbar>
 			<UDashboardToolbar>

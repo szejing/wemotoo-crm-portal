@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar title="Order Detail">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 			</UDashboardNavbar>
 		</template>
