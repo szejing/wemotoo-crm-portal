@@ -30,7 +30,14 @@
 						</UNavigationMenu>
 					</template>
 					<template #fallback>
-						<div class="min-h-[200px] animate-pulse rounded-md bg-default/50" aria-hidden="true" />
+						<div class="min-h-[200px] space-y-2 px-2 py-2" aria-hidden="true">
+							<template v-for="i in 8" :key="i">
+								<div class="flex items-center gap-3 rounded-md px-2 py-2.5">
+									<USkeleton class="h-5 w-5 shrink-0 rounded" />
+									<USkeleton class="h-4 flex-1 max-w-[140px]" />
+								</div>
+							</template>
+						</div>
 					</template>
 				</ClientOnly>
 			</template>
