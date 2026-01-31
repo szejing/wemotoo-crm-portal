@@ -12,7 +12,7 @@
 
 			<div class="flex flex-col gap-2">
 				<UFormField label="Merchant Id" name="merchant_id" required>
-					<UInput v-model="state.merchant_id" />
+					<UInput :model-value="state.merchant_id" @update:model-value="setMerchantId" />
 				</UFormField>
 
 				<UFormField label="Email" name="email_address" required>
@@ -62,22 +62,20 @@ const state = reactive({
 	show: false as boolean,
 });
 
+const setMerchantId = (value: string | undefined) => {
+	state.merchant_id = value ? value.toUpperCase() : undefined;
+};
+
 const authStore = useAuthStore();
 const { loading } = storeToRefs(authStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	try {
-		const { merchant_id, email_address, password } = event.data;
+	const { merchant_id, email_address, password } = event.data;
 
-		await authStore.login(merchant_id, email_address, password);
+	const success = await authStore.login(merchant_id, email_address, password);
 
+	if (success) {
 		navigateTo('/');
-	} catch (error: any) {
-		toast.add({
-			title: 'Login Failed',
-			description: error?.message || 'An error occurred during login',
-			color: 'error',
-		});
 	}
 };
 

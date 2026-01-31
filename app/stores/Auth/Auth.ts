@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('authStore', {
 	}),
 	actions: {
 		// login
-		async login(merchant_id: string, email_address: string, password: string) {
+		async login(merchant_id: string, email_address: string, password: string): Promise<boolean> {
 			const { $api } = useNuxtApp();
 
 			this.loading = true;
@@ -46,6 +46,8 @@ export const useAuthStore = defineStore('authStore', {
 					title: 'Login Successful',
 					description: 'Welcome back!',
 				});
+
+				return true;
 			} catch (err: any) {
 				this.clearCookies();
 
@@ -54,10 +56,13 @@ export const useAuthStore = defineStore('authStore', {
 					icon: ICONS.ERROR_OUTLINE,
 					title: err.message,
 				});
+
+				return false;
 			} finally {
 				this.loading = false;
 			}
 		},
+
 		// refresh session
 		// async refreshToken() {
 		// 	const { $api } = useNuxtApp();
@@ -73,6 +78,7 @@ export const useAuthStore = defineStore('authStore', {
 		// 	}
 		// },
 		// logout
+
 		async logout(): Promise<boolean> {
 			const { $api } = useNuxtApp();
 			this.loading = true;
