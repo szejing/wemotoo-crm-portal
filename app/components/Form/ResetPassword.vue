@@ -12,22 +12,60 @@
 			</template>
 
 			<div class="flex flex-col gap-2">
-				<UFormField label="New password" name="password" required>
-					<UInput v-model="state.password" :type="state.showPassword ? 'text' : 'password'" autocomplete="new-password">
-						<template v-if="state.password?.length" #trailing>
-							<UButton
-								color="neutral"
-								variant="link"
-								size="sm"
-								:icon="state.showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-								:aria-label="state.showPassword ? 'Hide password' : 'Show password'"
-								@click="state.showPassword = !state.showPassword"
-							/>
-						</template>
-					</UInput>
-				</UFormField>
+				<div class="space-y-2">
+					<UFormField label="New password" name="password" required>
+						<UInput
+							id="password"
+							v-model="state.password"
+							placeholder="Password"
+							:color="passwordStrengthColor"
+							:type="state.showPassword ? 'text' : 'password'"
+							:aria-invalid="passwordStrengthScore < 4"
+							aria-describedby="password-strength"
+							autocomplete="new-password"
+							:ui="{ trailing: 'pe-1' }"
+						>
+							<template #trailing>
+								<UButton
+									color="neutral"
+									variant="link"
+									size="sm"
+									:icon="state.showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+									:aria-label="state.showPassword ? 'Hide password' : 'Show password'"
+									:aria-pressed="state.showPassword"
+									aria-controls="password"
+									@click="state.showPassword = !state.showPassword"
+								/>
+							</template>
+						</UInput>
+					</UFormField>
+					<UProgress
+						:color="passwordStrengthColor"
+						:indicator="passwordStrengthText"
+						:model-value="passwordStrengthScore"
+						:max="4"
+						size="sm"
+					/>
+					<p id="password-strength" class="text-sm font-medium">
+						{{ passwordStrengthText }}. Must contain:
+					</p>
+					<ul class="space-y-1" aria-label="Password requirements">
+						<li
+							v-for="(req, index) in passwordStrength"
+							:key="index"
+							class="flex items-center gap-0.5"
+							:class="req.met ? 'text-success' : 'text-muted'"
+						>
+							<UIcon :name="req.met ? 'i-lucide-circle-check' : 'i-lucide-circle-x'" class="size-4 shrink-0" />
+							<span class="text-xs font-light">
+								{{ req.text }}
+								<span class="sr-only">{{ req.met ? ' - Requirement met' : ' - Requirement not met' }}</span>
+							</span>
+						</li>
+					</ul>
+				</div>
 				<UFormField label="Confirm password" name="confirmPassword" required>
-					<UInput v-model="state.confirmPassword" :type="state.showConfirm ? 'text' : 'password'" autocomplete="new-password">
+					<UInput v-model="state.confirmPassword" :type="state.showConfirm ? 'text' : 'password'" autocomplete="new-password" :ui="{ trailing: 'pe-1' }">
 						<template v-if="state.confirmPassword?.length" #trailing>
 							<UButton
 								color="neutral"
@@ -69,12 +107,43 @@ const state = reactive({
 });
 const loading = ref(false);
 
+const PASSWORD_REQUIREMENTS = [
+	{ regex: /.{8,}/, text: 'At least 8 characters' },
+	{ regex: /\d/, text: 'At least 1 number' },
+	{ regex: /[a-z]/, text: 'At least 1 lowercase letter' },
+	{ regex: /[A-Z]/, text: 'At least 1 uppercase letter' },
+];
+
+function checkPasswordStrength(str: string) {
+	return PASSWORD_REQUIREMENTS.map((req) => ({ met: req.regex.test(str), text: req.text }));
+}
+
+const passwordStrength = computed(() => checkPasswordStrength(state.password));
+const passwordStrengthScore = computed(() => passwordStrength.value.filter((r) => r.met).length);
+const passwordStrengthColor = computed(() => {
+	const score = passwordStrengthScore.value;
+	if (score === 0) return 'neutral';
+	if (score <= 1) return 'error';
+	if (score <= 2) return 'warning';
+	if (score === 3) return 'warning';
+	return 'success';
+});
+const passwordStrengthText = computed(() => {
+	const score = passwordStrengthScore.value;
+	if (score === 0) return 'Enter a password';
+	if (score <= 2) return 'Weak password';
+	if (score === 3) return 'Medium password';
+	return 'Strong password';
+});
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	loading.value = true;
 	try {
 		const authStore = useAuthStore();
-		await authStore.confirmResetPassword(props.token, event.data.password);
-		navigateTo('/login');
+		const success = await authStore.confirmResetPassword(props.token, event.data.password);
+		if (success) {
+			navigateTo('/login');
+		}
 	} catch (err: any) {
 		console.error(err);
 	} finally {

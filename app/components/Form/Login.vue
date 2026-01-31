@@ -11,12 +11,12 @@
 			</template>
 
 			<div class="flex flex-col gap-2">
-				<UFormField label="Merchant Id" name="merchant_id" required>
-					<UInput v-model="state.merchant_id" />
+				<UFormField label="Merchant Id" name="section_merchant_id" required>
+					<UInput :model-value="state.merchant_id" autocomplete="section-login organization" @update:model-value="setMerchantId" />
 				</UFormField>
 
 				<UFormField label="Email" name="email_address" required>
-					<UInput v-model="state.email_address" />
+					<UInput v-model="state.email_address" autocomplete="section-login email" />
 				</UFormField>
 
 				<UFormField label="Password" name="password" required>
@@ -54,7 +54,6 @@ import type { z } from 'zod';
 
 type Schema = z.output<typeof LoginValidation>;
 
-const toast = useToast();
 const state = reactive({
 	merchant_id: undefined as string | undefined,
 	email_address: undefined as string | undefined,
@@ -62,22 +61,20 @@ const state = reactive({
 	show: false as boolean,
 });
 
+const setMerchantId = (value: string | undefined) => {
+	state.merchant_id = value ? value.toUpperCase() : undefined;
+};
+
 const authStore = useAuthStore();
 const { loading } = storeToRefs(authStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	try {
-		const { merchant_id, email_address, password } = event.data;
+	const { merchant_id, email_address, password } = event.data;
 
-		await authStore.login(merchant_id, email_address, password);
+	const success = await authStore.login(merchant_id, email_address, password);
 
+	if (success) {
 		navigateTo('/');
-	} catch (error: any) {
-		toast.add({
-			title: 'Login Failed',
-			description: error?.message || 'An error occurred during login',
-			color: 'error',
-		});
 	}
 };
 
