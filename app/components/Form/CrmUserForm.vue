@@ -7,33 +7,13 @@
 			<UInput :model-value="state.email_address" type="email" placeholder="Email" @update:model-value="(v: string) => set('email_address', v)" />
 		</UFormField>
 		<UFormField label="Phone">
-			<div class="flex gap-2">
-				<USelect
-					:model-value="state.dial_code"
-					:items="dialCodeOptions"
-					value-key="value"
-					class="w-24 shrink-0"
-					@update:model-value="(v: string | undefined) => set('dial_code', v ?? '')"
-				>
-					<template #default="{ modelValue }">
-						<span class="text-sm">{{ dialCodeOptions.find((d) => d.value === modelValue)?.flag ?? '' }}</span>
-						<span class="text-sm">{{ modelValue }}</span>
-					</template>
-
-					<template #item="{ item }">
-						<div class="flex items-center gap-2">
-							<span class="text-sm">{{ item.flag }}</span>
-							<span class="text-sm">{{ item.value }}</span>
-						</div>
-					</template>
-				</USelect>
-				<UInput
-					:model-value="state.phone_number"
-					placeholder="Phone number"
-					class="min-w-0 flex-1"
-					@update:model-value="(v: string) => set('phone_number', v)"
-				/>
-			</div>
+			<ZPhoneInput
+				:dial-code="state.dial_code"
+				:phone-number="state.phone_number"
+				placeholder="Phone number"
+				@update:dial-code="(v: string) => set('dial_code', v)"
+				@update:phone-number="(v: string) => set('phone_number', v)"
+			/>
 		</UFormField>
 		<UFormField label="Role">
 			<USelect
@@ -50,7 +30,6 @@
 <script lang="ts" setup>
 import { UserRoles } from 'wemotoo-common';
 import type { CrmUserFormValue } from '~/utils/types/crm-user';
-import { DIAL_CODES } from '~/utils/data/dial-codes';
 
 const props = withDefaults(
 	defineProps<{
@@ -71,8 +50,6 @@ const roleOptions = [
 	{ value: UserRoles.MERCHANT_ADMIN, label: 'Merchant Admin' },
 	{ value: UserRoles.MERCHANT_STAFF, label: 'Merchant Staff' },
 ];
-
-const dialCodeOptions = DIAL_CODES;
 
 const state = reactive<CrmUserFormValue>({
 	name: props.modelValue?.name ?? '',

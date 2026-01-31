@@ -103,31 +103,12 @@
 								/>
 							</UFormField>
 							<UFormField label="Contact no">
-								<div class="flex gap-2">
-									<USelect
-										:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE)"
-										:items="dialCodeOptions"
-										value-key="value"
-										class="w-24 shrink-0"
-										@update:model-value="(v: string | undefined) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE, v ?? '')"
-									>
-										<template #default="{ modelValue }">
-											<span class="text-sm">{{ dialCodeOptions.find((d) => d.value === modelValue)?.flag ?? '' }}</span>
-											<span class="text-sm">{{ modelValue }}</span>
-										</template>
-
-										<template #item="{ item }">
-											<div class="flex items-center gap-2">
-												<span class="text-sm">{{ item.flag }}</span>
-												<span class="text-sm">{{ item.value }}</span>
-											</div>
-										</template>
-									</USelect>
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
-									/>
-								</div>
+								<ZPhoneInput
+									:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE)"
+									:phone-number="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
+									@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE, v)"
+									@update:phone-number="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
+								/>
 							</UFormField>
 						</div>
 
@@ -201,13 +182,11 @@ import { getFormattedDate, GROUP_CODE, MERCHANT } from 'wemotoo-common';
 import { dir } from '~/utils/constants/dir';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 import { ICONS } from '~/utils/icons';
-import { DIAL_CODES } from '~/utils/data/dial-codes';
 
 useHead({ title: 'Wemotoo CRM - Store Profile' });
 
 const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
-const dialCodeOptions = DIAL_CODES;
 
 const { updatedInfo } = storeToRefs(merchantInfoStore);
 
