@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 
 				<template #right>

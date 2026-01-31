@@ -46,7 +46,12 @@
 				<ZUserMenu :collapsed="collapsed" />
 			</template>
 		</UDashboardSidebar>
-		<slot />
+		<div class="flex flex-1 flex-col min-w-0">
+			<header class="flex shrink-0 items-center gap-2 border-b border-default px-4 py-2">
+				<UDashboardSidebarCollapse />
+			</header>
+			<slot />
+		</div>
 	</UDashboardGroup>
 </template>
 

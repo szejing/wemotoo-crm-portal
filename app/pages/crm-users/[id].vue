@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar :title="pageTitle">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 				<template #right>
 					<UButton variant="ghost" color="neutral" :icon="ICONS.ARROW_LEFT" @click="navigateTo('/crm-users')"> Back to list </UButton>

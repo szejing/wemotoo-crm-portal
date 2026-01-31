@@ -3,7 +3,7 @@
 		<template #header>
 			<UDashboardNavbar title="Categories" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<UDashboardSidebarCollapse />
+					<ZBackButton />
 				</template>
 				<template #right>
 					<div class="flex items-center gap-3">
