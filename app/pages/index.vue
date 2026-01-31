@@ -26,6 +26,8 @@
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 
+useHead({ title: 'Wemotoo CRM' });
+
 const range = shallowRef<Range>({
 	start: sub(new Date(), { days: 14 }),
 	end: new Date(),

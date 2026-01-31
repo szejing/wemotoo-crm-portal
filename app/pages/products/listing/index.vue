@@ -118,7 +118,7 @@ const selectProduct = async (e: Event, row: TableRow<Product>) => {
 	const product = row.original;
 	if (!product) return;
 
-	navigateTo(`/products/listing/${product.code}/detail`);
+	navigateTo(`/products/${product.code}`);
 };
 
 const updatePage = async (page: number) => {
