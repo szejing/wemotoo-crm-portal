@@ -6,19 +6,19 @@ import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/prod
 
 export type CreateProductReq = {
 	code?: string;
-	name: string;
+	name?: string;
 	short_desc?: string;
 	long_desc?: string;
-	is_discountable: boolean;
-	is_giftcard: boolean;
-	is_active: boolean;
-	status: ProductStatus;
+	is_discountable?: boolean;
+	is_giftcard?: boolean;
+	is_active?: boolean;
+	status?: ProductStatus;
 
 	// Relations (using codes/IDs)
 	brand_codes?: string[];
-	category_codes: string[];
+	category_codes?: string[];
 	tag_ids?: number[];
-	type_id: number;
+	type_id?: number;
 
 	// Images
 	thumbnail?: ImageReq;
