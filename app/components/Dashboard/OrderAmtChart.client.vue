@@ -2,8 +2,11 @@
 	<UCard ref="cardRef" :ui="{ root: 'overflow-visible', body: '!px-0 !pt-0 !pb-3' }">
 		<template #header>
 			<div>
-				<p class="text-xs text-muted uppercase mb-1.5">Revenue</p>
-				<p class="text-3xl text-highlighted font-semibold">
+				<div class="flex flex-col sm:flex-row justify-between gap-2 items-center">
+					<p class="text-xs text-muted uppercase">Revenue</p>
+					<ZSelectMenuDateRange v-model="range" class="-ms-1" @update:model-value="updateRange" />
+				</div>
+				<p class="mt-2 sm:mt-0 text-3xl text-center sm:text-left text-highlighted font-semibold">
 					{{ formatCurrency(total, 'MYR') }}
 				</p>
 			</div>
@@ -26,6 +29,8 @@
 import { VisXYContainer, VisLine, VisAxis, VisArea, VisCrosshair, VisTooltip } from '@unovis/vue';
 import { getFormattedDate, parseDate, formatCurrency } from 'wemotoo-common';
 import type { DataRecord } from '~/utils/types/chart-data';
+import { sub } from 'date-fns';
+import type { Range } from '~/utils/interface';
 
 const cardRef = useTemplateRef<HTMLElement | null>('cardRef');
 const { width } = useElementSize(cardRef);
@@ -54,6 +59,17 @@ const xTicks = (i: number) => {
 };
 
 const template = (d: DataRecord) => `${getFormattedDate(d.date)}: ${formatCurrency(d.amount)}`;
+
+const range = shallowRef<Range>({
+	start: sub(new Date(), { days: 14 }),
+	end: new Date(),
+});
+
+const updateRange = async (newValue: Range) => {
+	range.value = newValue;
+	const summOrderStore = useSummOrderStore();
+	await summOrderStore.getDashboardSummary(newValue);
+};
 </script>
 
 <style scoped>

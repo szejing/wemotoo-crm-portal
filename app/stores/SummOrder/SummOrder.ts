@@ -21,6 +21,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		new_orders: 0 as number,
 		new_customers: 0 as number,
 		total_sales_amt: [] as TotalSalesAmt[],
+		new_appointments: 0 as number,
+		pending_payments: 0 as number,
+		pending_actions: 0 as number,
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
 		order_summ_customer: initialEmptyOrderSummCustomer,
@@ -69,6 +72,18 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 				if (data.total_sales_amt) {
 					this.total_sales_amt = data.total_sales_amt;
+				}
+
+				if (data.new_appointments) {
+					this.new_appointments = data.new_appointments;
+				}
+
+				if (data.pending_payments) {
+					this.pending_payments = data.pending_payments;
+				}
+
+				if (data.pending_actions) {
+					this.pending_actions = data.pending_actions;
 				}
 			} catch (err: any) {
 				console.error(err);

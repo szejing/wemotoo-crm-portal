@@ -26,52 +26,35 @@
 </template>
 
 <script setup lang="ts">
-import { GROUP_CODE, MERCHANT, getFormattedDate, formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'wemotoo-common';
 
-const merchantInfoStore = useMerchantInfoStore();
 const summOrderStore = useSummOrderStore();
-const { new_customers, new_orders, total_sales_amt } = storeToRefs(summOrderStore);
-
-const expiredDate = computed(() => {
-	const date = merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.EXPIRED_DATE)?.getString() ?? '';
-
-	if (date) {
-		return getFormattedDate(new Date(date), 'MMM dd, yyyy');
-	}
-
-	return '-';
-});
+const { new_appointments, new_orders, pending_payments, pending_actions } = storeToRefs(summOrderStore);
 
 const baseStats = computed(() => [
 	{
-		title: 'Customers',
-		icon: 'i-lucide-users',
-		value: new_customers.value ?? 0,
-		to: '/customers',
+		title: 'Appointments',
+		icon: 'i-heroicons-calendar-days',
+		value: new_appointments.value ?? 0,
+		to: '/appointments',
 	},
 	{
 		title: 'Orders',
-		icon: 'i-lucide-shopping-cart',
+		icon: 'i-heroicons-shopping-cart',
 		value: new_orders.value ?? 0,
 		to: '/orders',
 	},
 	{
-		title: 'Revenue',
-		icon: 'i-lucide-dollar-sign',
-		formatter: formatCurrency,
-		value:
-			total_sales_amt.value.length > 0
-				? formatCurrency(
-						total_sales_amt.value.reduce((acc: number, { total_sales_amt: amount }) => acc + amount, 0),
-						total_sales_amt.value[0]?.currency_code,
-					)
-				: 0,
-		to: '/analytics',
+		title: 'Pending Payments',
+		icon: 'i-heroicons-credit-card',
+		value: pending_payments.value ?? 0,
 	},
 	{
-		title: 'Expiry',
-		icon: 'i-lucide-calendar',
-		value: expiredDate.value ?? '-',
+		title: 'Pending Actions',
+		icon: 'i-heroicons-bell',
+		formatter: formatCurrency,
+		value: pending_actions.value ?? 0,
+		to: '/analytics',
 	},
 ]);
 </script>

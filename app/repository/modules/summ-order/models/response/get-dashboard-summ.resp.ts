@@ -48,4 +48,7 @@ export type GetDashboardSummResp = {
 	new_orders: number;
 	new_customers: number;
 	total_sales_amt: TotalSalesAmt_[];
+	new_appointments: number;
+	pending_payments: number;
+	pending_actions: number;
 };
