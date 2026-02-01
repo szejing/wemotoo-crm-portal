@@ -62,7 +62,7 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<UCheckbox color="success" model="formState.is_active" label="Active" />
+									<UCheckbox color="success" v-model="formState.is_active" label="Active" />
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
