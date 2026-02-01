@@ -3,7 +3,8 @@
 		<template #header>
 			<UDashboardNavbar title="Order Detail">
 				<template #leading>
-					<ZBackButton />
+					<ZBackButton class="lg:hidden" />
+					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 			</UDashboardNavbar>
 		</template>
