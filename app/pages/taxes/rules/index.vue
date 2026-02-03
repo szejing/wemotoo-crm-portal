@@ -8,12 +8,7 @@
 				</template>
 
 				<template #right>
-					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/products/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
-							Create
-						</UButton>
-					</div>
+					<ZCreateButton to="/taxes/rules/create" />
 				</template>
 			</UDashboardNavbar>
 

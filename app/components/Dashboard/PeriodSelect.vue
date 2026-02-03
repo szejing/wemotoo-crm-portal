@@ -9,7 +9,11 @@ const props = defineProps<{ range: Range }>();
 
 const { t } = useI18n();
 
-const days = computed(() => eachDayOfInterval({ start: props.range.start, end: props.range.end }));
+const days = computed(() => {
+	const { start, end } = props.range;
+	if (!start || !end) return [];
+	return eachDayOfInterval({ start, end });
+});
 
 const periodValues = computed<Period[]>(() => {
 	if (days.value.length <= 8) {

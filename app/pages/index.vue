@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="home">
 		<template #header>
-			<UDashboardNavbar title="Home" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.home')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
