@@ -43,14 +43,14 @@
 
 <script lang="ts" setup>
 import { onUnmounted } from 'vue';
-import { createForgotPasswordValidation } from '~/utils/schema';
+import { ForgotPasswordValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
 const { t } = useI18n();
-const forgotPasswordSchema = computed(() => createForgotPasswordValidation(t));
+const forgotPasswordSchema = computed(() => ForgotPasswordValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createForgotPasswordValidation>>;
+type Schema = z.infer<ReturnType<typeof ForgotPasswordValidation>>;
 
 const state = reactive({
 	merchant_id: undefined as string | undefined,

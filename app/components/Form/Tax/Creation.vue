@@ -20,12 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateTaxValidation } from '~/utils/schema';
+import { CreateTaxValidation } from '~/utils/schema';
 
 const { t } = useI18n();
-const taxSchema = computed(() => createCreateTaxValidation(t));
+const taxSchema = computed(() => CreateTaxValidation(t));
 
-type Schema = z.output<ReturnType<typeof createCreateTaxValidation>>;
+type Schema = z.output<ReturnType<typeof CreateTaxValidation>>;
 
 const taxStore = useTaxStore();
 const { adding, new_tax } = storeToRefs(taxStore);

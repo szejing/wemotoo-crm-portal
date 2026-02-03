@@ -1,5 +1,5 @@
 <template>
-	<UForm :schema="CreateOutletValidation" :state="new_outlet" class="space-y-6" @submit="onSubmit">
+	<UForm :schema="outletSchema" :state="new_outlet" class="space-y-6" @submit="onSubmit">
 		<div class="space-y-6">
 			<!-- General Information Section -->
 			<div class="space-y-3">
@@ -62,7 +62,10 @@ import type { z } from 'zod';
 import { CreateOutletValidation } from '~/utils/schema';
 import { ICONS } from '~/utils/icons';
 
-type Schema = z.output<typeof CreateOutletValidation>;
+const { t } = useI18n();
+const outletSchema = computed(() => CreateOutletValidation(t));
+
+type Schema = z.infer<ReturnType<typeof CreateOutletValidation>>;
 
 const outletStore = useOutletStore();
 const { adding, new_outlet } = storeToRefs(outletStore);

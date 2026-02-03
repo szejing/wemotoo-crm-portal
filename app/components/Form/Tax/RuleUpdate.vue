@@ -74,13 +74,13 @@ import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { AmountType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
-import { createUpdateTaxRuleValidation } from '~/utils/schema';
+import { UpdateTaxRuleValidation } from '~/utils/schema';
 import type { TaxRule } from '~/utils/types/tax-rule';
 
 const { t } = useI18n();
-const taxRuleSchema = computed(() => createUpdateTaxRuleValidation(t));
+const taxRuleSchema = computed(() => UpdateTaxRuleValidation(t));
 
-type Schema = z.output<ReturnType<typeof createUpdateTaxRuleValidation>>;
+type Schema = z.output<ReturnType<typeof UpdateTaxRuleValidation>>;
 
 const taxRuleStore = useTaxRuleStore();
 const { updating } = storeToRefs(taxRuleStore);

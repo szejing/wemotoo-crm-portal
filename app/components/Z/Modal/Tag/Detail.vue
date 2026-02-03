@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="tagSchema" :state="state.tag" class="space-y-4" @submit="onSubmit">
 				<ZInputProductTagGeneralInfo v-model:value="state.tag.value" />
 			</UForm>
 		</template>
@@ -30,7 +30,10 @@ import type { z } from 'zod';
 import { UpdateTagValidation } from '~/utils/schema';
 import type { Tag } from '~/utils/types/tag';
 
-type Schema = z.output<typeof UpdateTagValidation>;
+const { t } = useI18n();
+const tagSchema = computed(() => UpdateTagValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateTagValidation>>;
 
 const props = defineProps({
 	tag: {

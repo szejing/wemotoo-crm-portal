@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateBrandValidation" :state="state.brand" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="brandSchema" :state="state.brand" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
 					<UCheckbox v-model="state.brand.is_active" name="isActive" :label="$t('common.active')" color="success" />
 				</div>
@@ -36,7 +36,10 @@ import type { z } from 'zod';
 import { UpdateBrandValidation } from '~/utils/schema';
 import type { Brand } from '~/utils/types/brand';
 
-type Schema = z.output<typeof UpdateBrandValidation>;
+const { t } = useI18n();
+const brandSchema = computed(() => UpdateBrandValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateBrandValidation>>;
 
 const props = defineProps({
 	brand: {

@@ -34,13 +34,13 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createUpdateTaxValidation } from '~/utils/schema';
+import { UpdateTaxValidation } from '~/utils/schema';
 import type { Tax } from '~/utils/types/tax';
 
 const { t } = useI18n();
-const taxSchema = computed(() => createUpdateTaxValidation(t));
+const taxSchema = computed(() => UpdateTaxValidation(t));
 
-type Schema = z.output<ReturnType<typeof createUpdateTaxValidation>>;
+type Schema = z.output<ReturnType<typeof UpdateTaxValidation>>;
 
 const props = defineProps({
 	tax: {

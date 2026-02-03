@@ -42,12 +42,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateCategoryValidation } from '~/utils/schema';
+import { CreateCategoryValidation } from '~/utils/schema';
 
 const { t } = useI18n();
-const categorySchema = computed(() => createCreateCategoryValidation(t));
+const categorySchema = computed(() => CreateCategoryValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createCreateCategoryValidation>>;
+type Schema = z.infer<ReturnType<typeof CreateCategoryValidation>>;
 
 const categoryStore = useProductCategoryStore();
 const { adding, new_category } = storeToRefs(categoryStore);

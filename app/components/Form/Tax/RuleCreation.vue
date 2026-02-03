@@ -73,14 +73,14 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateTaxRuleValidation } from '~/utils/schema';
+import { CreateTaxRuleValidation } from '~/utils/schema';
 import { getFormattedDate } from 'wemotoo-common';
 import type { TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 
 const { t } = useI18n();
-const taxRuleSchema = computed(() => createCreateTaxRuleValidation(t));
+const taxRuleSchema = computed(() => CreateTaxRuleValidation(t));
 
-type Schema = z.output<ReturnType<typeof createCreateTaxRuleValidation>>;
+type Schema = z.output<ReturnType<typeof CreateTaxRuleValidation>>;
 
 const props = defineProps<{
 	adding: boolean;

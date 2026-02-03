@@ -20,12 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateTagValidation } from '~/utils/schema';
+import { CreateTagValidation } from '~/utils/schema';
 
 const { t } = useI18n();
-const tagSchema = computed(() => createCreateTagValidation(t));
+const tagSchema = computed(() => CreateTagValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createCreateTagValidation>>;
+type Schema = z.infer<ReturnType<typeof CreateTagValidation>>;
 
 const tagStore = useProductTagStore();
 const { adding, new_tag } = storeToRefs(tagStore);

@@ -19,7 +19,7 @@ export const TaxConditionValidation = z.object({
 	filters: z.array(TaxFilterValidation).optional(),
 });
 
-export function createTaxDetailValidation(t: TranslateFn) {
+export function TaxDetailValidation(t: TranslateFn) {
 	return z.object({
 		id: z.number().optional(),
 		description: z.string({ message: t('validation.tax.taxRuleDescriptionRequired') }),
@@ -28,26 +28,11 @@ export function createTaxDetailValidation(t: TranslateFn) {
 	});
 }
 
-export function createCreateTaxRuleValidation(t: TranslateFn) {
-	const TaxDetailValidation = createTaxDetailValidation(t);
+export function CreateTaxRuleValidation(t: TranslateFn) {
+	const DetailSchema = TaxDetailValidation(t);
 	return z.object({
 		code: z.string({ message: t('validation.tax.taxRuleCodeRequired') }),
 		description: z.string({ message: t('validation.tax.taxRuleDescriptionRequired') }),
-		details: z.array(TaxDetailValidation),
+		details: z.array(DetailSchema),
 	});
 }
-
-/** @deprecated Use createCreateTaxRuleValidation(t) for i18n. */
-export const TaxDetailValidation = z.object({
-	id: z.number().optional(),
-	description: z.string({ message: 'Tax rule description is required' }),
-	tax_code: z.string().optional(),
-	tax_condition: TaxConditionValidation.optional(),
-});
-
-/** @deprecated Use createCreateTaxRuleValidation(t) for i18n. */
-export const CreateTaxRuleValidation = z.object({
-	code: z.string({ message: 'Tax rule code is required' }),
-	description: z.string({ message: 'Tax rule description is required' }),
-	details: z.array(TaxDetailValidation),
-});

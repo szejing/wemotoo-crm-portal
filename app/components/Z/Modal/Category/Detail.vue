@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm ref="formRef" :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
+			<UForm ref="formRef" :schema="categorySchema" :state="state.category" class="space-y-4" @submit="onSubmit">
 				<div class="w-full">
 					<ZDropzone class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
 				</div>
@@ -49,7 +49,10 @@ import type { z } from 'zod';
 import { UpdateCategoryValidation } from '~/utils/schema';
 import type { Category } from '~/utils/types/category';
 
-type Schema = z.output<typeof UpdateCategoryValidation>;
+const { t } = useI18n();
+const categorySchema = computed(() => UpdateCategoryValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateCategoryValidation>>;
 
 const props = defineProps({
 	category: {

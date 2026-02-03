@@ -78,14 +78,14 @@
 </template>
 
 <script lang="ts" setup>
-import { createResetPasswordValidation } from '~/utils/schema';
+import { ResetPasswordValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
 const { t } = useI18n();
-const resetPasswordSchema = computed(() => createResetPasswordValidation(t));
+const resetPasswordSchema = computed(() => ResetPasswordValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createResetPasswordValidation>>;
+type Schema = z.infer<ReturnType<typeof ResetPasswordValidation>>;
 
 const props = defineProps<{ token: string }>();
 

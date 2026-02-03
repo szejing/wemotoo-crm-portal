@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="paymentSchema" :state="state.payment" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
 					v-model:payment-date-time="state.payment.payment_date_time"
@@ -32,9 +32,12 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { PaymentModel } from '~/utils/models/index';
-import { UpdateOrderPaymentValidation } from '~/utils/schema/index';
+import { UpdateOrderPaymentValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof UpdateOrderPaymentValidation>;
+const { t } = useI18n();
+const paymentSchema = computed(() => UpdateOrderPaymentValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateOrderPaymentValidation>>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);

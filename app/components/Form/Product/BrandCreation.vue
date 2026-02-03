@@ -20,12 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateBrandValidation } from '~/utils/schema';
+import { CreateBrandValidation } from '~/utils/schema';
 
 const { t } = useI18n();
-const brandSchema = computed(() => createCreateBrandValidation(t));
+const brandSchema = computed(() => CreateBrandValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createCreateBrandValidation>>;
+type Schema = z.infer<ReturnType<typeof CreateBrandValidation>>;
 
 const brandStore = useBrandStore();
 const { adding, new_brand } = storeToRefs(brandStore);

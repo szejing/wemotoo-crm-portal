@@ -14,7 +14,7 @@
 		</template>
 
 		<template #body>
-			<UForm :schema="UpdateAppointmentValidation" :state="state.appointment" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="appointmentSchema" :state="state.appointment" class="space-y-4" @submit="onSubmit">
 				<div class="flex flex-col gap-4">
 					<div class="flex-jbetween-icenter">
 						<div>
@@ -60,7 +60,10 @@ import type { z } from 'zod';
 import type { AppointmentModel } from '~/utils/models';
 import { UpdateAppointmentValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof UpdateAppointmentValidation>;
+const { t } = useI18n();
+const appointmentSchema = computed(() => UpdateAppointmentValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateAppointmentValidation>>;
 
 const props = defineProps({
 	appointment: {

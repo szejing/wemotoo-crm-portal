@@ -48,14 +48,14 @@
 </template>
 
 <script lang="ts" setup>
-import { createLoginValidation } from '~/utils/schema';
+import { LoginValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
 const { t } = useI18n();
-const loginSchema = computed(() => createLoginValidation(t));
+const loginSchema = computed(() => LoginValidation(t));
 
-type Schema = z.infer<ReturnType<typeof createLoginValidation>>;
+type Schema = z.infer<ReturnType<typeof LoginValidation>>;
 
 const state = reactive({
 	merchant_id: undefined as string | undefined,

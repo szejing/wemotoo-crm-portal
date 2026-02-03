@@ -19,12 +19,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { createCreateTaxGroupValidation } from '~/utils/schema';
+import { CreateTaxGroupValidation } from '~/utils/schema';
 
 const { t } = useI18n();
-const taxGroupSchema = computed(() => createCreateTaxGroupValidation(t));
+const taxGroupSchema = computed(() => CreateTaxGroupValidation(t));
 
-type Schema = z.output<ReturnType<typeof createCreateTaxGroupValidation>>;
+type Schema = z.output<ReturnType<typeof CreateTaxGroupValidation>>;
 
 const taxGroupStore = useTaxGroupStore();
 const { adding, new_tax_group } = storeToRefs(taxGroupStore);

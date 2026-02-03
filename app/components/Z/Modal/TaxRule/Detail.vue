@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="TaxDetailValidation" :state="state.detail" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="detailSchema" :state="state.detail" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** Tax Detail *********************** -->
 				<div class="space-y-4">
 					<div class="flex-jbetween-icenter">
@@ -58,7 +58,10 @@ import { TaxDetailValidation } from '~/utils/schema';
 import type { Tax } from '~/utils/types/tax';
 import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
 
-type Schema = z.output<typeof TaxDetailValidation>;
+const { t } = useI18n();
+const detailSchema = computed(() => TaxDetailValidation(t));
+
+type Schema = z.infer<ReturnType<typeof TaxDetailValidation>>;
 
 const props = defineProps({
 	detail: {

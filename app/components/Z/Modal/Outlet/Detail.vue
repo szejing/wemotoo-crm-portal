@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOutletValidation" :state="state.outlet" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="outletSchema" :state="state.outlet" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOutletGeneralInfo v-model:code="state.outlet.code" v-model:description="state.outlet.description" is-update />
 				<ZInputAddress
@@ -49,7 +49,10 @@ import type { z } from 'zod';
 import { UpdateOutletValidation } from '~/utils/schema';
 import type { Outlet } from '~/utils/types/outlet';
 
-type Schema = z.output<typeof UpdateOutletValidation>;
+const { t } = useI18n();
+const outletSchema = computed(() => UpdateOutletValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateOutletValidation>>;
 
 const props = defineProps({
 	outlet: {

@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOrderItemValidation" :state="state.item" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="itemSchema" :state="state.item" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailItem
 					v-model:status="state.item.status"
@@ -35,9 +35,13 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { ItemModel } from '~/utils/models/item.model';
-import { UpdateOrderItemValidation } from '~/utils/schema/index';
+import { UpdateOrderItemValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof UpdateOrderItemValidation>;
+const { t } = useI18n();
+const itemSchema = computed(() => UpdateOrderItemValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateOrderItemValidation>>;
+
 const orderStore = useOrderStore();
 const is_loading = ref(false);
 const { detail } = storeToRefs(orderStore);
