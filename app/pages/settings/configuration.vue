@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="settings-configuration">
 		<template #header>
-			<UDashboardNavbar title="Configuration" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.configuration')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -10,7 +10,7 @@
 				<template #right>
 					<UButton color="success" @click="settingsStore.updateSettings">
 						<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-						Save
+						{{ $t('common.save') }}
 					</UButton>
 				</template>
 			</UDashboardNavbar>
@@ -19,8 +19,8 @@
 		<template #body>
 			<div class="p-6 space-y-6">
 				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Configuration</h2>
-					<p class="text-gray-600 dark:text-gray-400">Manage your system configuration and preferences. Changes will take effect after saving.</p>
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.configuration') }}</h2>
+					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.configurationPageDesc') }}</p>
 				</div>
 
 				<UTabs :items="tabItems" class="w-full">
@@ -39,7 +39,8 @@
 import { ICONS } from '~/utils/icons';
 import type { TabsItem } from '@nuxt/ui';
 
-useHead({ title: 'Wemotoo CRM - Configuration' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.configurationTitle') });
 
 const settingsStore = useSettingStore();
 const { segments } = storeToRefs(settingsStore);

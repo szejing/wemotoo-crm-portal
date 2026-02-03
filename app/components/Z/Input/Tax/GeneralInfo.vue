@@ -1,20 +1,25 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormField v-slot="{ error }" label="Code" name="code" :required="!isUpdate">
-			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Code" :disabled="isUpdate" />
+		<UFormField v-slot="{ error }" :label="$t('common.code')" name="code" :required="!isUpdate">
+			<UInput
+				v-model="code"
+				:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+				:placeholder="$t('components.zInput.codePlaceholder')"
+				:disabled="isUpdate"
+			/>
 		</UFormField>
 
-		<UFormField v-slot="{ error }" label="Description" name="description" required>
-			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
+		<UFormField v-slot="{ error }" :label="$t('common.description')" name="description" required>
+			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.descriptionPlaceholder')" />
 		</UFormField>
 
 		<div class="grid grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" label="Inclusive" name="isInclusive" required>
-				<UCheckbox v-model="isInclusive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Is Inclusive" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.inclusive')" name="isInclusive" required>
+				<UCheckbox v-model="isInclusive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Active" name="isActive" required>
-				<USwitch v-model="isActive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Is Active" />
+			<UFormField v-slot="{ error }" :label="$t('common.active')" name="isActive" required>
+				<USwitch v-model="isActive" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" />
 			</UFormField>
 		</div>
 	</div>

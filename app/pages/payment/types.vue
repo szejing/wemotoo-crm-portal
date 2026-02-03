@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="payment-types">
 		<template #header>
-			<UDashboardNavbar title="Payment Types" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.paymentTypes')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -53,9 +53,11 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { payment_type_group_columns } from '~/utils/table-columns';
+import { getPaymentTypeGroupColumns } from '~/utils/table-columns';
 
-useHead({ title: 'Wemotoo CRM - Payment Types' });
+const { t } = useI18n();
+const payment_type_group_columns = computed(() => getPaymentTypeGroupColumns(t));
+useHead({ title: () => t('pages.paymentTypesTitle') });
 
 onMounted(() => paymentTypeStore.getPaymentTypeGroups());
 

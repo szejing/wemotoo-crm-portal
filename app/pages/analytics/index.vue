@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics">
 		<template #header>
-			<UDashboardNavbar title="Analytics" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.analytics')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -13,24 +13,24 @@
 			<div class="p-6 space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h2>
-					<p class="text-gray-600 dark:text-gray-400">View detailed reports and insights for your business</p>
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.analyticsDashboard') }}</h2>
+					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.analyticsDashboardDesc') }}</p>
 				</div>
 
 				<!-- Order Analytics Section -->
 				<ZMenu
-					title="Order Analytics"
+					:title="$t('pages.orderAnalytics')"
 					:icon="ICONS.REPORT_ORDER"
-					description="Track and analyze order performance"
+					:description="$t('pages.orderAnalyticsDesc')"
 					color="primary"
 					:navigations="order_navigations"
 				/>
 
 				<!-- Sales Analytics Section -->
 				<ZMenu
-					title="Sales Analytics"
+					:title="$t('pages.salesAnalytics')"
 					:icon="ICONS.REPORT_SALES"
-					description="Monitor sales trends and revenue data"
+					:description="$t('pages.salesAnalyticsDesc')"
 					color="green"
 					:navigations="sales_navigations"
 				/>
@@ -40,61 +40,56 @@
 </template>
 
 <script lang="ts" setup>
-useHead({ title: 'Wemotoo CRM - Analytics' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.analyticsTitle') });
 
-const order_navigations = [
+const order_navigations = computed(() => [
 	{
-		title: 'Order Summary',
+		title: t('pages.orderSummary'),
 		icon: ICONS.REPORT_ORDER,
 		to: '/analytics/orders/summary',
-		description: 'Overview of all orders with key metrics and trends',
+		description: t('pages.orderSummaryDesc'),
 	},
 	{
-		title: 'Order Item',
+		title: t('pages.orderItem'),
 		icon: ICONS.REPORT_ORDER,
 		to: '/analytics/orders/items',
-		description: 'Detailed breakdown of items in orders',
+		description: t('pages.orderItemDesc'),
 	},
 	{
-		title: 'Order Customer',
+		title: t('pages.orderCustomer'),
 		icon: ICONS.REPORT_ORDER,
 		to: '/analytics/orders/customers',
-		description: 'Customer order history and behavior analysis',
+		description: t('pages.orderCustomerDesc'),
 	},
-];
+]);
 
-const sales_navigations = [
+const sales_navigations = computed(() => [
 	{
-		title: 'Sales Summary',
+		title: t('pages.salesSummary'),
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/summary',
-		description: 'Comprehensive sales overview and revenue insights',
+		description: t('pages.salesSummaryDesc'),
 	},
-	// {
-	// 	title: 'Sales Detail Listing',
-	// 	icon: ICONS.REPORT_SALES,
-	// 	to: '/analytics/sales/detail-listing',
-	// 	description: 'Detailed transaction listing',
-	// },
 	{
-		title: 'Sales Items',
+		title: t('pages.salesItems'),
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/items',
-		description: 'Product performance and sales by item',
+		description: t('pages.salesItemsDesc'),
 	},
 	{
-		title: 'Sales Payment',
+		title: t('pages.salesPayment'),
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/payments',
-		description: 'Payment methods and transaction analysis',
+		description: t('pages.salesPaymentDesc'),
 	},
 	{
-		title: 'Sales Customer',
+		title: t('pages.salesCustomer'),
 		icon: ICONS.REPORT_SALES,
 		to: '/analytics/sales/customers',
-		description: 'Customer purchase patterns and loyalty metrics',
+		description: t('pages.salesCustomerDesc'),
 	},
-];
+]);
 </script>
 
 <style scoped></style>

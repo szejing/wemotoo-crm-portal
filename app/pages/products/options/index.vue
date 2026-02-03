@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-options">
 		<template #header>
-			<UDashboardNavbar title="Options" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.options')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -62,13 +62,15 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOptionDetail } from '#components';
-import { product_option_columns } from '~/utils/table-columns';
+import { getProductOptionColumns } from '~/utils/table-columns';
 import type { ProductOption } from '~/utils/types/product-option';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
-useHead({ title: 'Wemotoo CRM - Options' });
+const { t } = useI18n();
+const product_option_columns = computed(() => getProductOptionColumns(t));
+useHead({ title: () => t('pages.optionsTitle') });
 
 const overlay = useOverlay();
 const productOptionsStore = useProductOptionStore();

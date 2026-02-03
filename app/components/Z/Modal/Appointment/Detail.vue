@@ -1,15 +1,15 @@
 <template>
 	<UModal
-		title="Update Appointment"
+		:title="$t('components.zModal.updateAppointment')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #header>
-			<h2 class="text-main">Appointment</h2>
+			<h2 class="text-main">{{ $t('components.zModal.appointment') }}</h2>
 			<div class="mt-2">
 				<h4 class="font-bold text-neutral-400">#{{ appointment!.code }}</h4>
-				<h4 class="font-bold text-neutral-700">Order No. #{{ appointment!.order_no }}</h4>
+				<h4 class="font-bold text-neutral-700">{{ $t('components.zModal.orderNo') }} #{{ appointment!.order_no }}</h4>
 			</div>
 		</template>
 
@@ -29,10 +29,10 @@
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<h4 class="text-neutral-400 font-light">Appointment Date</h4>
+						<h4 class="text-neutral-400 font-light">{{ $t('components.zModal.appointmentDate') }}</h4>
 						<ZSelectMenuDateTime
 							v-model:date-time="state.appointment.date_time"
-							placeholder="Appointment Date"
+							:placeholder="$t('components.zModal.appointmentDate')"
 							:min-date="new Date()"
 							:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
 						/>
@@ -43,11 +43,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>

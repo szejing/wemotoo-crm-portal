@@ -5,23 +5,25 @@
 		}"
 	>
 		<template #header>
-			<h3 class="text-lg font-bold">{{ title }}</h3>
+			<h3 class="text-lg font-bold">{{ title ?? t('modal.leavePage') }}</h3>
 		</template>
 
 		<template #body>
-			<p>{{ message }}</p>
+			<p>{{ message ?? t('modal.leavePageMessage') }}</p>
 		</template>
 
 		<template #footer>
 			<div class="flex justify-between gap-4 w-full">
-				<UButton color="primary" variant="outline" @click="onStay">Stay</UButton>
-				<UButton color="neutral" variant="outline" @click="onLeave">Leave</UButton>
+				<UButton color="primary" variant="outline" @click="onStay">{{ $t('modal.stay') }}</UButton>
+				<UButton color="neutral" variant="outline" @click="onLeave">{{ $t('modal.leave') }}</UButton>
 			</div>
 		</template>
 	</UModal>
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
+
 const props = withDefaults(
 	defineProps<{
 		title?: string;
@@ -30,8 +32,8 @@ const props = withDefaults(
 		onLeave?: () => void;
 	}>(),
 	{
-		title: 'Leave page?',
-		message: 'You have unsaved changes. Are you sure you want to leave?',
+		title: undefined,
+		message: undefined,
 	},
 );
 

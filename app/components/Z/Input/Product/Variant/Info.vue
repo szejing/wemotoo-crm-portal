@@ -2,10 +2,10 @@
 	<UCard :ui="cardUi">
 		<template #header>
 			<div class="w-full flex-between items-center">
-				<h2>General Info</h2>
+				<h2>{{ $t('components.zInput.generalInfo') }}</h2>
 				<div class="w-[50%] flex-jend items-center gap-4">
-					<!-- <UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" label="Manage Inventory" color="success" /> -->
-					<UCheckbox v-model="variantDetail.allow_backorder" name="allowBackorder" label="Allow Backorder" color="success" />
+					<!-- <UCheckbox v-model="variantDetail.manage_inventory" name="manageInventory" :label="$t('components.zInput.manageInventory')" color="success" /> -->
+					<UCheckbox v-model="variantDetail.allow_backorder" name="allowBackorder" :label="$t('components.zInput.allowBackorder')" color="success" />
 
 					<!-- <UCheckbox v-model="is_discountable" name="isDiscountable" label="Discountable" color="success" />
 					<UCheckbox v-model="is_giftcard" name="isGiftCard" label="Giftcard" color="success" /> -->

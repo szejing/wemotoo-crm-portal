@@ -3,64 +3,63 @@ import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { UBadge } from '#components';
 import type { Bill } from '~/utils/types/bill';
+import type { TableColumnsTranslate } from '../brand';
 
-export const sale_columns: TableColumn<Bill>[] = [
-	{
-		accessorKey: 'bill_no',
-		header: 'Bill No',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('bill_no'))]);
+export function getSaleColumns(t: TableColumnsTranslate): TableColumn<Bill>[] {
+	return [
+		{
+			accessorKey: 'bill_no',
+			header: t('table.billNo'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('bill_no'))]);
+			},
 		},
-	},
-	{
-		accessorKey: 'status',
-		header: 'Status',
-		cell: ({ row }) => {
-			const color = {
-				[SaleStatus.COMPLETED]: 'success' as const,
-				[SaleStatus.CANCELLED]: 'neutral' as const,
-				[SaleStatus.REFUNDED]: 'error' as const,
-			}[row.getValue('status') as SaleStatus];
-			return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.getValue('status'));
+		{
+			accessorKey: 'status',
+			header: t('table.status'),
+			cell: ({ row }) => {
+				const color = {
+					[SaleStatus.COMPLETED]: 'success' as const,
+					[SaleStatus.CANCELLED]: 'neutral' as const,
+					[SaleStatus.REFUNDED]: 'error' as const,
+				}[row.getValue('status') as SaleStatus];
+				return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.getValue('status'));
+			},
 		},
-	},
-	// {
-	// 	accessorKey: 'currency_code',
-	// 	header: 'Currency',
-	// },
-	{
-		accessorKey: 'gross_amt',
-		header: 'Gross Amt',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+		{
+			accessorKey: 'gross_amt',
+			header: t('table.grossAmt'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('gross_amt'))]);
+			},
 		},
-	},
-	{
-		accessorKey: 'net_amt',
-		header: 'Net Amt',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+		{
+			accessorKey: 'net_amt',
+			header: t('table.netAmt'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('net_amt'))]);
+			},
 		},
-	},
-	{
-		accessorKey: 'disc_amt',
-		header: 'Discount Amt',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('disc_amt'))]);
+		{
+			accessorKey: 'disc_amt',
+			header: t('table.discountAmt'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('disc_amt'))]);
+			},
 		},
-	},
-	{
-		accessorKey: 'void_amt',
-		header: 'Void Amt',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('void_amt'))]);
+		{
+			accessorKey: 'void_amt',
+			header: t('table.voidAmt'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('void_amt'))]);
+			},
 		},
-	},
-	{
-		accessorKey: 'total_item_qty',
-		header: 'Total Qty',
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_item_qty'))]);
+		{
+			accessorKey: 'total_item_qty',
+			header: t('table.totalQty'),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_item_qty'))]);
+			},
 		},
-	},
-];
+	];
+}

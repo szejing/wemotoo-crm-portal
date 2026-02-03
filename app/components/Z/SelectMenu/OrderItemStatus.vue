@@ -1,17 +1,17 @@
 <template>
-	<USelectMenu v-model="status" :items="items" value-key="label" size="md" placeholder="Select Order Item Status">
+	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :placeholder="$t('components.selectMenu.selectOrderItemStatus')">
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getOrderItemStatusColor(status)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(status) }}
+					{{ selectedLabel }}
 				</UBadge>
 			</span>
-			<span v-else class="text-neutral-400">Select Order Item Status</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectOrderItemStatus') }}</span>
 		</template>
 
 		<template #item="{ item }">
-			<UBadge :color="getOrderItemStatusColor(item.label)" variant="subtle" class="truncate">
-				{{ capitalizeFirstLetter(item.label) }}
+			<UBadge :color="getOrderItemStatusColor(item.value)" variant="subtle" class="truncate">
+				{{ item.label }}
 			</UBadge>
 		</template>
 	</USelectMenu>
@@ -19,14 +19,14 @@
 
 <script lang="ts" setup>
 import type { OrderItemStatus } from 'wemotoo-common';
-import { options_order_item_status, getOrderItemStatusColor } from '~/utils/options';
+import { getOrderItemStatusOptions, getOrderItemStatusColor } from '~/utils/options';
+
+const { t } = useI18n();
 
 const props = defineProps<{ status: OrderItemStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
-const items = computed(() => {
-	return options_order_item_status.map((status) => ({ label: status }));
-});
+const items = computed(() => getOrderItemStatusOptions(t));
 
 const status = computed({
 	get() {
@@ -40,6 +40,8 @@ const status = computed({
 		}
 	},
 });
+
+const selectedLabel = computed(() => items.value.find((i) => i.value === status.value)?.label ?? status.value ?? '');
 </script>
 
 <style scoped></style>

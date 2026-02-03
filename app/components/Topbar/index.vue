@@ -1,6 +1,6 @@
 <template>
 	<div class="topbar-bg">
-		<div class="merchant-info" @click="toggleSidebarModal">
+		<div class="merchant-info" @click="toggleSidebar">
 			<ZTile :thumbnail-url="thumbnail" :title="merchantName" :subtitle="merchantId" />
 		</div>
 
@@ -16,7 +16,7 @@ import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();
 
-const { toggleSidebarModal } = appUiStore;
+const { toggleSidebar } = appUiStore;
 
 const merchantName = computed(() => {
 	return merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.NAME)?.getString() ?? '';

@@ -1,13 +1,15 @@
 <template>
 	<UForm :schema="CreateProductOptionValidation" :state="new_prod_option" class="space-y-4" @submit="onSubmit">
-		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
-		<p class="text-sm text-neutral-400">Enter the essential information about your product option including name and values. (e.g. Color, Size, etc.)</p>
+		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
+		<p class="text-sm text-neutral-400">{{ $t('components.productForm.optionGeneralDesc') }}</p>
 		<!-- *********************** General Info *********************** -->
 		<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
 		<!-- *********************** General Info *********************** -->
 
 		<div class="flex-center text-center mt-3">
-			<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
+			<UButton class="w-full sm:w-[50%]" size="md" color="success" variant="solid" type="submit" block :loading="adding">{{
+				$t('pages.createOption')
+			}}</UButton>
 		</div>
 	</UForm>
 </template>

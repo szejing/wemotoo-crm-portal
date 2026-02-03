@@ -1,61 +1,64 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import type { SummOrderCustomer } from '~/utils/types/summ-orders';
-import { OrderStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
+import type { TableColumnsTranslate } from '../brand';
 
-export const order_summ_customer_columns: TableColumn<SummOrderCustomer>[] = [
-	{
-		accessorKey: 'customer',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Customer'),
-		cell: ({ row }) => {
-			return h('div', [
-				h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
-				h('div', { class: 'text-neutral-600' }, row.original.customer_name),
-			]);
+export function getOrderSummCustomerColumns(t: TableColumnsTranslate): TableColumn<SummOrderCustomer>[] {
+	return [
+		{
+			accessorKey: 'customer',
+			header: () => h('h1', { class: 'text-neutral-400' }, t('table.customer')),
+			cell: ({ row }) => {
+				return h('div', [
+					h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
+					h('div', { class: 'text-neutral-600' }, row.original.customer_name),
+				]);
+			},
 		},
-	},
-	{
-		accessorKey: 'status',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Order Status'),
-		cell: ({ row }) => {
-			const color = {
-				[OrderStatus.COMPLETED]: 'success' as const,
-				[OrderStatus.CANCELLED]: 'neutral' as const,
-				[OrderStatus.REFUNDED]: 'error' as const,
-				[OrderStatus.PENDING_PAYMENT]: 'info' as const,
-				[OrderStatus.PROCESSING]: 'info' as const,
-				[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
-			}[row.original.status as OrderStatus];
+		{
+			accessorKey: 'status',
+			header: () => h('h1', { class: 'text-neutral-400' }, t('table.orderStatus')),
+			cell: ({ row }) => {
+				const color = {
+					[OrderStatus.COMPLETED]: 'success' as const,
+					[OrderStatus.CANCELLED]: 'neutral' as const,
+					[OrderStatus.REFUNDED]: 'error' as const,
+					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
+					[OrderStatus.PROCESSING]: 'info' as const,
+					[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
+				}[row.original.status as OrderStatus];
 
-			const value = {
-				[OrderStatus.COMPLETED]: 'COMPLETED',
-				[OrderStatus.CANCELLED]: 'CANCELLED',
-				[OrderStatus.REFUNDED]: 'REFUNDED',
-				[OrderStatus.PENDING_PAYMENT]: 'PENDING PAYMENT',
-				[OrderStatus.PROCESSING]: 'PROCESSING',
-				[OrderStatus.REQUIRES_ACTION]: 'REQUIRES ACTION',
-			}[row.original.status as OrderStatus];
+				const value = {
+					[OrderStatus.COMPLETED]: t('options.completed'),
+					[OrderStatus.CANCELLED]: t('options.cancelled'),
+					[OrderStatus.REFUNDED]: t('options.refunded'),
+					[OrderStatus.PENDING_PAYMENT]: t('options.pendingPayment'),
+					[OrderStatus.PROCESSING]: t('options.processing'),
+					[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
+				}[row.original.status as OrderStatus];
 
-			return h(UBadge, { variant: 'subtle', color }, () => value);
+				return h(UBadge, { variant: 'subtle', color }, () => value);
+			},
 		},
-	},
-	{
-		accessorKey: 'gross_amt',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Gross Amt'),
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
-			]);
+		{
+			accessorKey: 'gross_amt',
+			header: () => h('h1', { class: 'text-neutral-400' }, t('table.grossAmt')),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+				]);
+			},
 		},
-	},
-	{
-		accessorKey: 'net_amt',
-		header: () => h('h1', { class: 'text-neutral-400' }, 'Net Amt'),
-		cell: ({ row }) => {
-			return h('div', { class: 'flex items-center gap-2' }, [
-				h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
-			]);
+		{
+			accessorKey: 'net_amt',
+			header: () => h('h1', { class: 'text-neutral-400' }, t('table.netAmt')),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+				]);
+			},
 		},
-	},
-];
+	];
+}

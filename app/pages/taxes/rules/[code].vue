@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-rules">
 		<template #header>
-			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -55,7 +55,8 @@ onMounted(async () => {
 	}
 });
 
-useHead({ title: 'Wemotoo CRM - Tax Rule #' + current_tax_rule.value?.code });
+const { t } = useI18n();
+useHead({ title: () => t('pages.taxRuleDetailTitle') + (current_tax_rule.value?.code ?? '') });
 
 const overlay = useOverlay();
 

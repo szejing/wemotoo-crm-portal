@@ -4,14 +4,14 @@
 		<div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Date Range Filter -->
 			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Joined Date</label>
-				<ZSelectMenuDateRange v-model="filter.joined_date" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.joinedDate') }}</label>
+				<ZSelectMenuDateRange v-model="filter.joined_date" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Customer Search -->
 			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
-				<UInput v-model="filter.query" placeholder="Search by Name / Phone No / Email..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.searchLabel') }}</label>
+				<UInput v-model="filter.query" :placeholder="$t('components.filter.searchByNamePhoneEmail')" :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Actions -->
@@ -19,11 +19,11 @@
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-						Clear
+						{{ $t('components.filter.clear') }}
 					</UButton>
 					<UButton color="primary" :disabled="loading" :loading="loading" @click="search">
 						<UIcon :name="ICONS.SEARCH_ROUNDED" class="w-4 h-4" />
-						Search
+						{{ $t('components.filter.search') }}
 					</UButton>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
-			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<span class="text-xs text-gray-600 dark:text-gray-400">{{ $t('components.filter.activeFilters') }}</span>
 			<UBadge
 				v-if="filter.joined_date && (filter.joined_date.start || filter.joined_date.end)"
 				color="primary"
@@ -39,11 +39,11 @@
 				size="sm"
 				@click="clearFilter('date')"
 			>
-				Joined Date: {{ formatDateRange(filter.joined_date) }}
+				{{ $t('components.filter.joinedDate') }}: {{ formatDateRange(filter.joined_date) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm" @click="clearFilter('query')">
-				Search: {{ filter.query }}
+				{{ $t('components.filter.search') }}: {{ filter.query }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 		</div>

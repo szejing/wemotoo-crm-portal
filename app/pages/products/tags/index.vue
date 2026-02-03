@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-tags">
 		<template #header>
-			<UDashboardNavbar title="Tags" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.tags')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -61,7 +61,7 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
-import { tag_columns } from '~/utils/table-columns';
+import { getTagColumns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
@@ -70,7 +70,9 @@ const overlay = useOverlay();
 const tagsStore = useProductTagStore();
 await tagsStore.getTags();
 
-useHead({ title: 'Wemotoo CRM - Tags' });
+const { t } = useI18n();
+const tag_columns = computed(() => getTagColumns(t));
+useHead({ title: () => t('pages.tagsTitle') });
 
 const { loading, tags, total_tags, filter, exporting } = storeToRefs(tagsStore);
 

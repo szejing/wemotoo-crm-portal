@@ -54,24 +54,24 @@ export type ProductVariantInput = {
 // ============================================
 
 export type Product = {
-	code: string;
-	name: string;
+	code?: string;
+	name?: string;
 	short_desc?: string;
 	long_desc?: string;
-	is_discountable: boolean;
-	is_giftcard: boolean;
-	is_active: boolean;
-	status: ProductStatus;
+	is_discountable?: boolean;
+	is_giftcard?: boolean;
+	is_active?: boolean;
+	status?: ProductStatus;
 
 	// Relations (populated objects)
 	brands?: Brand[];
 	categories?: Category[];
 	tags?: Tag[];
-	type: number;
+	type?: number;
 
 	// Images (URLs from backend)
-	thumbnail?: Image;
-	images?: Image[];
+	thumbnail?: Image | undefined;
+	images?: Image[] | undefined;
 
 	// Nested models
 	price_types?: Price[];

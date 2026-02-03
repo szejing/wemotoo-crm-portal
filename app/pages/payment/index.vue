@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="payment">
 		<template #header>
-			<UDashboardNavbar title="Payment Management" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.paymentManagement')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -13,15 +13,15 @@
 			<div class="p-6 space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Payment Management</h2>
-					<p class="text-gray-600 dark:text-gray-400">Configure payment types and methods for your business</p>
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.paymentManagement') }}</h2>
+					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.paymentManagementDesc') }}</p>
 				</div>
 
 				<!-- Payment Configuration Section -->
 				<ZMenu
-					title="Payment Configuration"
+					:title="$t('pages.paymentConfiguration')"
 					:icon="ICONS.PAYMENT_METHODS"
-					description="Configure payment types and methods for your business"
+					:description="$t('pages.paymentConfigurationDesc')"
 					color="green"
 					:navigations="payment_navigations"
 				/>
@@ -31,22 +31,23 @@
 </template>
 
 <script lang="ts" setup>
-useHead({ title: 'Wemotoo CRM - Payment' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.paymentTitle') });
 
-const payment_navigations = [
+const payment_navigations = computed(() => [
 	{
-		title: 'Payment Type',
+		title: t('pages.paymentType'),
 		icon: ICONS.PAYMENT_METHODS,
 		to: '/payment/types',
-		description: 'Define payment types like cash, credit card, digital wallet',
+		description: t('pages.paymentTypeDesc'),
 	},
 	{
-		title: 'Payment Method',
+		title: t('pages.paymentMethod'),
 		icon: ICONS.PAYMENT_METHODS,
 		to: '/payment/methods',
-		description: 'Configure specific payment methods and providers',
+		description: t('pages.paymentMethodDesc'),
 	},
-];
+]);
 </script>
 
 <style scoped></style>

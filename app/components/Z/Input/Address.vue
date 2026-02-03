@@ -1,44 +1,44 @@
 <template>
 	<div class="space-y-4">
-		<UFormField v-slot="{ error }" label="Address 1" name="address1" required>
-			<UInput v-model="address1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Address 1" />
+		<UFormField v-slot="{ error }" :label="$t('components.zInput.address1')" name="address1" required>
+			<UInput v-model="address1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.address1')" />
 		</UFormField>
 
-		<UFormField label="Address 2" name="address2">
-			<UInput v-model="address2" placeholder="Address 2" />
+		<UFormField :label="$t('components.zInput.address2')" name="address2">
+			<UInput v-model="address2" :placeholder="$t('components.zInput.address2')" />
 		</UFormField>
 
-		<UFormField label="Address 3" name="address3">
-			<UInput v-model="address3" placeholder="Address 3" />
+		<UFormField :label="$t('components.zInput.address3')" name="address3">
+			<UInput v-model="address3" :placeholder="$t('components.zInput.address3')" />
 		</UFormField>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" label="Postal Code" name="postal_code" required>
-				<UInput v-model="postal_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Postal Code" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.postalCode')" name="postal_code" required>
+				<UInput v-model="postal_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.postalCode')" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="City" name="city" required>
-				<UInput v-model="city" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="City" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.city')" name="city" required>
+				<UInput v-model="city" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.city')" />
 			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" label="State" name="state_name" required>
-				<UInput v-model="state_name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="State" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.state')" name="state_name" required>
+				<UInput v-model="state_name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.state')" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Country Code" name="country_code" required>
-				<UInput v-model="country_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Country Code" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.countryCode')" name="country_code" required>
+				<UInput v-model="country_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.countryCode')" />
 			</UFormField>
 		</div>
 
 		<div v-if="requiredLatLng" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" label="Longitude" name="longitude">
-				<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Longitude" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.longitude')" name="longitude">
+				<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.longitude')" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Latitude" name="latitude">
-				<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Latitude" />
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.latitude')" name="latitude">
+				<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.latitude')" />
 			</UFormField>
 		</div>
 	</div>

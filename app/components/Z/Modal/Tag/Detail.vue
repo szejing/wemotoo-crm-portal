@@ -1,6 +1,6 @@
 <template>
 	<UModal
-		title="Update Tag"
+		:title="$t('components.zModal.updateTag')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
@@ -13,11 +13,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>

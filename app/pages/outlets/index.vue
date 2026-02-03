@@ -63,15 +63,17 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOutletDetail } from '#components';
-import { outlet_columns } from '~/utils/table-columns';
+import { getOutletColumns } from '~/utils/table-columns';
 import type { Outlet } from '~/utils/types/outlet';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const outletStore = useOutletStore();
+const { t } = useI18n();
+const outlet_columns = computed(() => getOutletColumns(t));
 
-useHead({ title: 'Wemotoo CRM - Outlets' });
+useHead({ title: () => t('pages.outletsTitle') });
 
 onMounted(async () => {
 	await outletStore.getOutlets();

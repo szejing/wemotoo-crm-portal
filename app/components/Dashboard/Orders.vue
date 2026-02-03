@@ -12,9 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-import { order_columns } from '~/utils/table-columns';
+import { getOrderColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
 import type { OrderHistory } from '~/utils/types/order-history';
+
+const { t } = useI18n();
+const order_columns = computed(() => getOrderColumns(t));
 
 const orderStore = useOrderStore();
 const { orders, filter, loading } = storeToRefs(orderStore);

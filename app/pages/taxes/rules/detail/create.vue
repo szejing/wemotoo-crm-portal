@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-rules-detail-create">
 		<template #header>
-			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />

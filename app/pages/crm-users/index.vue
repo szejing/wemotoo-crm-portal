@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="crm-users">
 		<template #header>
-			<UDashboardNavbar title="CRM Users" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.staffs')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -56,12 +56,14 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { crm_user_columns } from '~/utils/table-columns';
+import { getCrmUserColumns } from '~/utils/table-columns';
 import type { CRMUser } from '~/utils/types/crm-user';
 import type { TableRow } from '@nuxt/ui';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 
-useHead({ title: 'Wemotoo CRM - CRM Users' });
+const { t } = useI18n();
+const crm_user_columns = computed(() => getCrmUserColumns(t));
+useHead({ title: () => t('pages.crmUsersTitle') });
 
 const crmUserStore = useCRMUserStore();
 const { loading, crm_users, filter, total_count } = storeToRefs(crmUserStore);

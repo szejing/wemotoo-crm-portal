@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products">
 		<template #header>
-			<UDashboardNavbar title="Services/Products Management" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.servicesProductsManagement')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -13,8 +13,8 @@
 			<div class="p-6 space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Services & Products Management</h2>
-					<p class="text-gray-600 dark:text-gray-400">Manage your inventory, categories, and product attributes</p>
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.servicesProductsManagement') }}</h2>
+					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.servicesProductsManagementDesc') }}</p>
 				</div>
 
 				<!-- Main Products Section -->
@@ -44,56 +44,49 @@
 </template>
 
 <script lang="ts" setup>
-useHead({ title: 'Wemotoo CRM - Products' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.productsTitle') });
 
-// Main product listing
-const main_navigation = {
-	title: 'Services/Products',
+const main_navigation = computed(() => ({
+	title: t('pages.servicesProducts'),
 	icon: ICONS.LIST,
 	to: '/products/listing',
-	description: 'Browse, add, edit, and manage all your products and services in one place',
-};
+	description: t('pages.servicesProductsDesc'),
+}));
 
-// Product attributes and organizational tools
-const attribute_navigation = {
-	title: 'Product Attributes',
+const attribute_navigation = computed(() => ({
+	title: t('pages.productAttributes'),
 	icon: ICONS.ADDITIONAL,
 	to: '/products/attributes',
-	description: 'Organize and categorize your products',
-};
+	description: t('pages.productAttributesDesc'),
+}));
 
-const attribute_navigations = [
+const attribute_navigations = computed(() => [
 	{
-		title: 'Categories',
+		title: t('nav.categories'),
 		icon: ICONS.CATEGORY,
 		to: '/products/categories',
-		description: 'Organize products into categories and subcategories',
+		description: t('pages.categoriesDesc'),
 	},
 	{
-		title: 'Tags',
+		title: t('nav.tags'),
 		icon: ICONS.ADDITIONAL,
 		to: '/products/tags',
-		description: 'Create tags to label and filter products',
+		description: t('pages.tagsDesc'),
 	},
 	{
-		title: 'Brands',
+		title: t('nav.brands'),
 		icon: ICONS.ADDITIONAL,
 		to: '/products/brands',
-		description: 'Manage product brands and manufacturers',
+		description: t('pages.brandsManufacturersDesc'),
 	},
 	{
-		title: 'Options',
+		title: t('nav.options'),
 		icon: ICONS.ADDITIONAL,
 		to: '/products/options',
-		description: 'Define product variants like size, color, and more',
+		description: t('pages.optionsVariantsDesc'),
 	},
-	// {
-	// 	title: 'Types',
-	// 	icon: ICONS.ADDITIONAL,
-	// 	to: '/products/types',
-	// 	description: 'Manage product types and classifications',
-	// },
-];
+]);
 </script>
 
 <style scoped></style>

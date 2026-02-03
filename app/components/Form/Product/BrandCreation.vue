@@ -1,9 +1,9 @@
 <template>
-	<UForm :schema="CreateBrandValidation" :state="new_brand" class="space-y-4" @submit="onSubmit">
+	<UForm :schema="brandSchema" :state="new_brand" class="space-y-4" @submit="onSubmit">
 		<!-- *********************** General Info *********************** -->
 		<div class="space-y-2">
-			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
-			<p class="text-sm text-neutral-400">Enter the essential information about your product brand including code and description. (e.g. Nike, Adidas, etc.)</p>
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
+			<p class="text-sm text-neutral-400">{{ $t('components.productForm.brandGeneralDesc') }}</p>
 			<ZInputProductBrandGeneralInfo v-model:code="new_brand.code" v-model:description="new_brand.description" />
 		</div>
 
@@ -11,7 +11,7 @@
 		<div class="flex justify-center pt-4">
 			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
-				<span class="text-sm">Create Brand</span>
+				<span class="text-sm">{{ $t('pages.createBrand') }}</span>
 			</UButton>
 		</div>
 	</UForm>
@@ -20,9 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateBrandValidation } from '~/utils/schema';
+import { createCreateBrandValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateBrandValidation>;
+const { t } = useI18n();
+const brandSchema = computed(() => createCreateBrandValidation(t));
+
+type Schema = z.infer<ReturnType<typeof createCreateBrandValidation>>;
 
 const brandStore = useBrandStore();
 const { adding, new_brand } = storeToRefs(brandStore);

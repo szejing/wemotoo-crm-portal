@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-codes">
 		<template #header>
-			<UDashboardNavbar title="Tax Codes" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxCodes')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -63,12 +63,14 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTaxDetail } from '#components';
-import { tax_code_columns } from '~/utils/table-columns';
+import { getTaxCodeColumns } from '~/utils/table-columns';
 import type { Tax } from '~/utils/types/tax';
 import type { TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Tax Codes' });
+const { t } = useI18n();
+const tax_code_columns = computed(() => getTaxCodeColumns(t));
+useHead({ title: () => t('pages.taxCodesTitle') });
 
 onMounted(async () => {
 	await taxStore.getTaxes();

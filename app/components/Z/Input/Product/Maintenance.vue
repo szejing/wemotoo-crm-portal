@@ -5,15 +5,15 @@
 			<UCheckbox
 				v-model="prodMetadata.requires_booking"
 				name="requires_booking"
-				label="Requires Booking"
+				:label="$t('components.zInput.requiresBooking')"
 				color="success"
 				@update:model-value="updateRequiresBooking"
 			/>
 
 			<div class="flex flex-col sm:flex-row sm:justify-between w-full">
 				<div>
-					<h3>Duration</h3>
-					<p class="text-sm text-neutral-500">Select the maintenance duration.</p>
+					<h3>{{ $t('components.zInput.duration') }}</h3>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.durationDesc') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDuration :duration="prodMetadata.duration" @update:duration="updateDuration" />
@@ -22,9 +22,9 @@
 
 			<div class="flex flex-col sm:flex-row sm:justify-between w-full">
 				<div>
-					<h3>Off Day</h3>
-					<p class="text-sm text-neutral-500">Select your off days</p>
-					<p class="text-sm text-neutral-500">Note: If no off days are selected, the available days will follow the default off days.</p>
+					<h3>{{ $t('components.zInput.offDay') }}</h3>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayDesc') }}</p>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayNote') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
@@ -32,8 +32,8 @@
 			</div>
 
 			<div class="flex-col-start w-full md:w-full">
-				<h3>Operating Hours</h3>
-				<p class="text-sm text-neutral-500">Select the maintenance operating hours.</p>
+				<h3>{{ $t('components.zInput.operatingHours') }}</h3>
+				<p class="text-sm text-neutral-500">{{ $t('components.zInput.operatingHoursDesc') }}</p>
 				<div class="w-full flex flex-col md:flex-row md:justify-between md:items-center">
 					<div class="w-full max-w-[250px]">
 						<ZSelectMenuTime title="08.00 am" :time="prodMetadata.start_time" type="start" @update:time="updateStartTime" />
@@ -52,15 +52,15 @@
 			<UCheckbox
 				v-model="prodMetadata.requires_booking"
 				name="requires_booking"
-				label="Requires Booking"
+				:label="$t('components.zInput.requiresBooking')"
 				color="success"
 				@update:model-value="updateRequiresBooking"
 			/>
 
 			<div class="flex flex-col sm:flex-row sm:justify-between w-full">
 				<div>
-					<h3>Duration</h3>
-					<p class="text-sm text-neutral-500">Select the maintenance duration.</p>
+					<h3>{{ $t('components.zInput.duration') }}</h3>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.durationDesc') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDuration :duration="prodMetadata.duration" @update:duration="updateDuration" />
@@ -69,9 +69,9 @@
 
 			<div class="flex flex-col sm:flex-row sm:justify-between w-full">
 				<div>
-					<h3>Off Day</h3>
-					<p class="text-sm text-neutral-500">Select your off days</p>
-					<p class="text-sm text-neutral-500">Note: If no off days are selected, the available days will follow the default off days.</p>
+					<h3>{{ $t('components.zInput.offDay') }}</h3>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayDesc') }}</p>
+					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayNote') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
 					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
@@ -79,8 +79,8 @@
 			</div>
 
 			<div class="flex-col-start w-full md:w-full">
-				<h3>Operating Hours</h3>
-				<p class="text-sm text-neutral-500">Select the maintenance operating hours.</p>
+				<h3>{{ $t('components.zInput.operatingHours') }}</h3>
+				<p class="text-sm text-neutral-500">{{ $t('components.zInput.operatingHoursDesc') }}</p>
 				<div class="w-full flex flex-col md:flex-row md:justify-between md:items-center">
 					<div class="w-full max-w-[250px]">
 						<ZSelectMenuTime title="08.00 am" :time="prodMetadata.start_time" type="start" @update:time="updateStartTime" />

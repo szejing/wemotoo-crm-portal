@@ -6,7 +6,7 @@
 			:items="categoryItems"
 			:search-input="{}"
 			size="md"
-			placeholder="Select Category"
+			:placeholder="$t('components.selectMenu.selectCategory')"
 			value-key="code"
 		>
 			<template #default>
@@ -15,7 +15,7 @@
 						<p class="text-neutral-700 font-semibold">[{{ category.code }}] - {{ category.description }}</p>
 					</div>
 				</span>
-				<span v-else>Select Category</span>
+				<span v-else>{{ $t('components.selectMenu.selectCategory') }}</span>
 			</template>
 
 			<template #item="{ item: catg }">

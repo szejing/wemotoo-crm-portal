@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-brands">
 		<template #header>
-			<UDashboardNavbar title="Brands" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.brands')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import { ZModalBrandDetail, ZModalConfirmation } from '#components';
-import { brand_columns } from '~/utils/table-columns';
+import { getBrandColumns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
@@ -70,7 +70,9 @@ import type { TableRow } from '@nuxt/ui';
 const overlay = useOverlay();
 const brandStore = useBrandStore();
 
-useHead({ title: 'Wemotoo CRM - Brands' });
+const { t } = useI18n();
+const brand_columns = computed(() => getBrandColumns(t));
+useHead({ title: () => t('pages.brandsTitle') });
 
 onMounted(async () => {
 	await brandStore.getBrands();

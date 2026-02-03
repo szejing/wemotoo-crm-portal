@@ -1,9 +1,9 @@
 <template>
-	<UForm :schema="CreateTagValidation" :state="new_tag" class="space-y-4" @submit="onSubmit">
+	<UForm :schema="tagSchema" :state="new_tag" class="space-y-4" @submit="onSubmit">
 		<!-- *********************** General Info *********************** -->
 		<div class="space-y-2">
-			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
-			<p class="text-sm text-neutral-400">Enter the essential information about your product tag including value. (e.g. Red, Large, etc.)</p>
+			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
+			<p class="text-sm text-neutral-400">{{ $t('components.productForm.tagGeneralDesc') }}</p>
 			<ZInputProductTagGeneralInfo v-model:value="new_tag.value" />
 		</div>
 
@@ -11,7 +11,7 @@
 		<div class="flex justify-center pt-4">
 			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
-				<span class="text-sm">Create Tag</span>
+				<span class="text-sm">{{ $t('pages.createTag') }}</span>
 			</UButton>
 		</div>
 	</UForm>
@@ -20,9 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateTagValidation } from '~/utils/schema';
+import { createCreateTagValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateTagValidation>;
+const { t } = useI18n();
+const tagSchema = computed(() => createCreateTagValidation(t));
+
+type Schema = z.infer<ReturnType<typeof createCreateTagValidation>>;
 
 const tagStore = useProductTagStore();
 const { adding, new_tag } = storeToRefs(tagStore);

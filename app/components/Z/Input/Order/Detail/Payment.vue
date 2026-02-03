@@ -1,25 +1,30 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormField label="Payment Date" name="paymentDate">
-			<ZSelectMenuDateTime :date-time="paymentDateTime" placeholder="Payment Date" @update:date-time="paymentDateTime = $event" />
+		<UFormField :label="$t('components.orderInput.paymentDate')" name="paymentDate">
+			<ZSelectMenuDateTime :date-time="paymentDateTime" :placeholder="$t('components.orderInput.paymentDate')" @update:date-time="paymentDateTime = $event" />
 		</UFormField>
 
 		<!-- // Date selection -->
 		<div class="grid grid-cols-1 gap-4">
-			<UFormField label="Payment Type" name="paymentType">
+			<UFormField :label="$t('components.orderInput.paymentType')" name="paymentType">
 				<ZSelectMenuPaymentType v-model:payment-type-code="paymentTypeCode" v-model:currency-code="currencyCode" class="w-full" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" :label="`Payment Amount (${currencyCode})`" name="paymentAmount" required>
-				<UInput v-model="paymentAmount" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Payment Amount" disabled />
+			<UFormField v-slot="{ error }" :label="$t('components.orderInput.paymentAmountWithCurrency', { currency: currencyCode })" name="paymentAmount" required>
+				<UInput
+					v-model="paymentAmount"
+					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+					:placeholder="$t('components.orderInput.paymentAmountPlaceholder')"
+					disabled
+				/>
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Ref No. 1" name="refNo1">
-				<UInput v-model="refNo1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 1" />
+			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.refNo1')" name="refNo1">
+				<UInput v-model="refNo1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.refNo1Placeholder')" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Ref No. 2" name="refNo2">
-				<UInput v-model="refNo2" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Ref No. 2" />
+			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.refNo2')" name="refNo2">
+				<UInput v-model="refNo2" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.refNo2Placeholder')" />
 			</UFormField>
 		</div>
 

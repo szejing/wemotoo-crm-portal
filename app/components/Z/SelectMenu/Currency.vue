@@ -8,7 +8,7 @@
 		label-key="code"
 		description-key="name"
 		:disabled="items.length == 1"
-		placeholder="Select Currency"
+		:placeholder="$t('components.selectMenu.selectCurrency')"
 	/>
 </template>
 

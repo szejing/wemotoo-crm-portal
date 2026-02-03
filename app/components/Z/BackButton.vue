@@ -1,11 +1,5 @@
 <template>
-	<UButton
-		variant="ghost"
-		color="neutral"
-		:icon="ICONS.ARROW_LEFT"
-		aria-label="Back to previous page"
-		@click="goBack"
-	/>
+	<UButton variant="ghost" color="neutral" :icon="ICONS.ARROW_LEFT" :aria-label="$t('components.backButton.backToPreviousPage')" @click="goBack" />
 </template>
 
 <script lang="ts" setup>

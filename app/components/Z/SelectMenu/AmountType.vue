@@ -1,23 +1,26 @@
 <template>
-	<USelectMenu v-model="amountType" :items="items" size="md" :ui="{ base: 'min-w-[200px]' }">
+	<USelectMenu v-model="amountType" :items="items" value-key="value" size="md" :ui="{ base: 'min-w-[200px]' }">
 		<template #default>
-			<span v-if="amountType">{{ capitalizeFirstLetter(amountType) }}</span>
-			<span v-else class="text-neutral-400">Select Amount Type</span>
+			<span v-if="amountType">{{ selectedLabel }}</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectAmountType') }}</span>
 		</template>
 
 		<template #item="{ item }">
-			<span class="truncate">{{ capitalizeFirstLetter(item) }}</span>
+			<span class="truncate">{{ item.label }}</span>
 		</template>
 	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
 import type { AmountType } from 'wemotoo-common';
-import { options_amount_type as items } from '~/utils/options';
-import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
+import { getAmountTypeOptions } from '~/utils/options';
+
+const { t } = useI18n();
 
 const props = defineProps<{ amountType: AmountType | undefined }>();
 const emit = defineEmits(['update:amountType']);
+
+const items = computed(() => getAmountTypeOptions(t));
 
 const amountType = computed({
 	get() {
@@ -27,6 +30,8 @@ const amountType = computed({
 		emit('update:amountType', value);
 	},
 });
+
+const selectedLabel = computed(() => items.value.find((i) => i.value === amountType.value)?.label ?? amountType.value ?? '');
 </script>
 
 <style scoped></style>

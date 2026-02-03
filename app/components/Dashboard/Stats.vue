@@ -31,26 +31,28 @@ import { formatCurrency } from 'wemotoo-common';
 const summOrderStore = useSummOrderStore();
 const { new_appointments, new_orders, pending_payments, pending_actions } = storeToRefs(summOrderStore);
 
+const { t } = useI18n();
+
 const baseStats = computed(() => [
 	{
-		title: 'Appointments',
+		title: t('pages.dashboardStatsAppointments'),
 		icon: 'i-heroicons-calendar-days',
 		value: new_appointments.value ?? 0,
 		to: '/appointments',
 	},
 	{
-		title: 'Orders',
+		title: t('pages.dashboardStatsOrders'),
 		icon: 'i-heroicons-shopping-cart',
 		value: new_orders.value ?? 0,
 		to: '/orders',
 	},
 	{
-		title: 'Pending Payments',
+		title: t('pages.dashboardStatsPendingPayments'),
 		icon: 'i-heroicons-credit-card',
 		value: pending_payments.value ?? 0,
 	},
 	{
-		title: 'Pending Actions',
+		title: t('pages.dashboardStatsPendingActions'),
 		icon: 'i-heroicons-bell',
 		formatter: formatCurrency,
 		value: pending_actions.value ?? 0,

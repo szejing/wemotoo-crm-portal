@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="orders-detail">
 		<template #header>
-			<UDashboardNavbar title="Order Detail">
+			<UDashboardNavbar :title="$t('pages.orderDetail')">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -237,7 +237,8 @@ watch(
 	},
 );
 
-useHead({ title: 'Wemotoo CRM - Order Detail #' + order.value?.order_no });
+const { t } = useI18n();
+useHead({ title: () => t('pages.orderDetailTitle') + (order.value?.order_no ?? '') });
 
 onMounted(async () => {
 	const route = useRoute();

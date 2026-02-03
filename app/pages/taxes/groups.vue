@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-groups">
 		<template #header>
-			<UDashboardNavbar title="Tax Groups" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxGroups')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTaxGroupDetail } from '#components';
-import { tax_group_columns } from '~/utils/table-columns';
+import { getTaxGroupColumns } from '~/utils/table-columns';
 import type { TaxGroup } from '~/utils/types/tax-group';
 import type { TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
@@ -72,7 +72,9 @@ const overlay = useOverlay();
 const taxGroupStore = useTaxGroupStore();
 const { loading, tax_groups, filter, total_tax_groups, exporting } = storeToRefs(taxGroupStore);
 
-useHead({ title: 'Wemotoo CRM - Tax Groups' });
+const { t } = useI18n();
+const tax_group_columns = computed(() => getTaxGroupColumns(t));
+useHead({ title: () => t('pages.taxGroupsTitle') });
 
 onMounted(async () => {
 	await taxGroupStore.getTaxGroups();

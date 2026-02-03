@@ -8,7 +8,7 @@
 		multiple
 		label-key="code"
 		description-key="description"
-		placeholder="Select Taxes"
+		:placeholder="$t('components.selectMenu.selectTaxes')"
 	>
 		<template #default>
 			<div v-if="taxes && taxes.length > 0" class="flex flex-wrap gap-1.5">
@@ -25,7 +25,7 @@
 					/>
 				</div>
 			</div>
-			<span v-else class="text-neutral-400 text-sm">Select Taxes</span>
+			<span v-else class="text-neutral-400 text-sm">{{ $t('components.selectMenu.selectTaxes') }}</span>
 		</template>
 	</USelectMenu>
 </template>

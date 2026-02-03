@@ -1,6 +1,6 @@
 <template>
 	<UModal
-		title="Update Outlet"
+		:title="$t('components.zModal.updateOutlet')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
@@ -24,7 +24,7 @@
 				/>
 				<!-- *********************** General Info *********************** -->
 				<div class="mt-4">
-					<h6 class="text-secondary-700 text-sm font-bold">Tax Rule</h6>
+					<h6 class="text-secondary-700 text-sm font-bold">{{ $t('components.zModal.taxRule') }}</h6>
 					<ZSelectMenuTaxRule v-model:tax-rule="state.outlet.tax_rule" @update:tax-rule="updateTaxRule" />
 				</div>
 			</UForm>
@@ -32,11 +32,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>

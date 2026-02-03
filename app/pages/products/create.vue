@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="product-create" grow>
 		<template #header>
-			<UDashboardNavbar title="Add New Product" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.addNewProduct')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -65,7 +65,8 @@ const productStore = useProductStore();
 const { adding } = storeToRefs(productStore);
 const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
 
-useHead({ title: 'Wemotoo CRM - Create Product' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.createProductTitle') });
 
 onBeforeRouteLeave(() => {
 	productStore.resetNewProduct();

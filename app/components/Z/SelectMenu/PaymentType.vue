@@ -1,8 +1,8 @@
 <template>
-	<USelectMenu v-model="paymentTypeCode" :items="paymentTypeItems" size="md" value-key="code" placeholder="Select Payment Type">
+	<USelectMenu v-model="paymentTypeCode" :items="paymentTypeItems" size="md" value-key="code" :placeholder="$t('components.selectMenu.selectPaymentType')">
 		<template #default>
 			<span v-if="paymentTypeCode" class="truncate">{{ paymentTypes.find((type: any) => type.code === paymentTypeCode)?.code?.toUpperCase() }}</span>
-			<span v-else class="text-neutral-400">Select Payment Type</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectPaymentType') }}</span>
 		</template>
 	</USelectMenu>
 </template>

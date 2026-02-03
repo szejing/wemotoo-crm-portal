@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="orders">
 		<template #header>
-			<UDashboardNavbar title="Orders" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.orders')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -94,11 +94,13 @@
 <script lang="ts" setup>
 import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import { order_columns } from '~/utils/table-columns';
+import { getOrderColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
 import type { OrderHistory } from '~/utils/types/order-history';
 
-useHead({ title: 'Wemotoo CRM - Orders' });
+const { t } = useI18n();
+const order_columns = computed(() => getOrderColumns(t));
+useHead({ title: () => t('pages.ordersTitle') });
 
 const orderStore = useOrderStore();
 const { orders, filter, loading, exporting } = storeToRefs(orderStore);

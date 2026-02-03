@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-sales-payments">
 		<template #header>
-			<UDashboardNavbar title="Analytics Sales Payments" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsSalesPayments')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -74,10 +74,12 @@
 <script lang="ts" setup>
 import { getFormattedDate, formatCurrency } from 'wemotoo-common';
 import OrderStatus from '~/components/Z/SelectMenu/OrderStatus.vue';
-import { sale_summ_payment_columns } from '~/utils/table-columns';
+import { getSaleSummPaymentColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Sale Payment Summary' });
+const { t } = useI18n();
+const sale_summ_payment_columns = computed(() => getSaleSummPaymentColumns(t));
+useHead({ title: () => t('pages.salePaymentSummary') });
 
 onMounted(async () => {
 	await salesSummStore.getSalePaymentSummary();

@@ -1,12 +1,16 @@
 <template>
 	<div>
-		<UForm :schema="CreateTaxGroupValidation" :state="new_tax_group" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="taxGroupSchema" :state="new_tax_group" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
-			<ZInputTaxGroupGeneralInfo v-model:code="new_tax_group.code" v-model:description="new_tax_group.description" v-model:taxes="new_tax_group.taxes" />
+			<ZInputTaxGroupGeneralInfo
+				v-model:code="new_tax_group.code"
+				v-model:description="new_tax_group.description"
+				v-model:tax_codes="new_tax_group.tax_codes"
+			/>
 
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
-				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
+				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">{{ $t('components.taxForm.create') }}</UButton>
 			</div>
 		</UForm>
 	</div>
@@ -15,9 +19,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateTaxGroupValidation } from '~/utils/schema';
+import { createCreateTaxGroupValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateTaxGroupValidation>;
+const { t } = useI18n();
+const taxGroupSchema = computed(() => createCreateTaxGroupValidation(t));
+
+type Schema = z.output<ReturnType<typeof createCreateTaxGroupValidation>>;
 
 const taxGroupStore = useTaxGroupStore();
 const { adding, new_tax_group } = storeToRefs(taxGroupStore);

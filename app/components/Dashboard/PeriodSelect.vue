@@ -5,9 +5,7 @@ import type { Range } from '~/utils/interface';
 
 const model = defineModel<Period>({ required: true });
 
-const props = defineProps<{
-	range: Range;
-}>();
+const props = defineProps<{ range: Range }>();
 
 const days = computed(() => eachDayOfInterval({ start: props.range.start, end: props.range.end }));
 

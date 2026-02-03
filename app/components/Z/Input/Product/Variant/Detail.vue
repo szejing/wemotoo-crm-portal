@@ -33,11 +33,11 @@
 
 		<template #footer>
 			<div class="flex justify-between gap-4 w-full">
-				<UButton color="error" variant="ghost" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" @click="onDelete">{{ $t('components.zInput.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" @click="onUpdate">Confirm</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" @click="onUpdate">{{ $t('modal.confirm') }}</UButton>
 				</div>
 			</div>
 		</template>

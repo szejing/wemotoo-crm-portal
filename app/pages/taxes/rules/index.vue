@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-rules">
 		<template #header>
-			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -61,13 +61,15 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { tax_rule_columns } from '~/utils/table-columns';
+import { getTaxRuleColumns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TableRow } from '@nuxt/ui';
 
 const taxRuleStore = useTaxRuleStore();
 
-useHead({ title: 'Wemotoo CRM - Tax Rules' });
+const { t } = useI18n();
+const tax_rule_columns = computed(() => getTaxRuleColumns(t));
+useHead({ title: () => t('pages.taxRulesTitle') });
 
 onMounted(async () => {
 	await taxRuleStore.getTaxRules();

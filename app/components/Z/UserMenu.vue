@@ -36,14 +36,27 @@
 
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
+import { LOCALE_STORAGE_KEY } from '~/utils/constants/i18n';
 
 defineProps<{
 	collapsed?: boolean;
 }>();
 
+const { t, locale, setLocale } = useI18n();
 const colorMode = useColorMode();
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
+
+const switchLocale = (newLocale: string) => {
+	if (import.meta.client) {
+		try {
+			localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+		} catch {
+			// ignore
+		}
+		setLocale(newLocale);
+	}
+};
 
 const items = computed<DropdownMenuItem[][]>(() => [
 	[
@@ -52,18 +65,18 @@ const items = computed<DropdownMenuItem[][]>(() => [
 			label: user.value?.name,
 		},
 		{
-			label: 'Settings',
+			label: t('nav.settings'),
 			icon: 'i-lucide-settings',
 			to: '/settings',
 		},
 	],
 	[
 		{
-			label: 'Appearance',
+			label: t('nav.appearance'),
 			icon: 'i-lucide-sun-moon',
 			children: [
 				{
-					label: 'Light',
+					label: t('nav.light'),
 					icon: 'i-lucide-sun',
 					type: 'checkbox',
 					checked: colorMode.value === 'light',
@@ -74,7 +87,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
 					},
 				},
 				{
-					label: 'Dark',
+					label: t('nav.dark'),
 					icon: 'i-lucide-moon',
 					type: 'checkbox',
 					checked: colorMode.value === 'dark',
@@ -92,7 +105,31 @@ const items = computed<DropdownMenuItem[][]>(() => [
 	],
 	[
 		{
-			label: 'Log out',
+			label: t('common.language'),
+			icon: 'i-lucide-languages',
+			children: [
+				{
+					label: t('common.english'),
+					icon: locale === 'en' ? 'i-lucide-check' : undefined,
+					onSelect(e: Event) {
+						e.preventDefault();
+						switchLocale('en');
+					},
+				},
+				{
+					label: t('common.bahasaMelayu'),
+					icon: locale === 'ms' ? 'i-lucide-check' : undefined,
+					onSelect(e: Event) {
+						e.preventDefault();
+						switchLocale('ms');
+					},
+				},
+			],
+		},
+	],
+	[
+		{
+			label: t('nav.logOut'),
 			icon: 'i-lucide-log-out',
 			onSelect: async () => {
 				await authStore.logout();

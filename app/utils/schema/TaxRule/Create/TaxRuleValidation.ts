@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { TranslateFn } from '../../Auth/LoginValidation';
 
 export const TaxFilterValidation = z.object({
 	filter_operator: z.string(),
@@ -18,6 +19,25 @@ export const TaxConditionValidation = z.object({
 	filters: z.array(TaxFilterValidation).optional(),
 });
 
+export function createTaxDetailValidation(t: TranslateFn) {
+	return z.object({
+		id: z.number().optional(),
+		description: z.string({ message: t('validation.tax.taxRuleDescriptionRequired') }),
+		tax_code: z.string().optional(),
+		tax_condition: TaxConditionValidation.optional(),
+	});
+}
+
+export function createCreateTaxRuleValidation(t: TranslateFn) {
+	const TaxDetailValidation = createTaxDetailValidation(t);
+	return z.object({
+		code: z.string({ message: t('validation.tax.taxRuleCodeRequired') }),
+		description: z.string({ message: t('validation.tax.taxRuleDescriptionRequired') }),
+		details: z.array(TaxDetailValidation),
+	});
+}
+
+/** @deprecated Use createCreateTaxRuleValidation(t) for i18n. */
 export const TaxDetailValidation = z.object({
 	id: z.number().optional(),
 	description: z.string({ message: 'Tax rule description is required' }),
@@ -25,6 +45,7 @@ export const TaxDetailValidation = z.object({
 	tax_condition: TaxConditionValidation.optional(),
 });
 
+/** @deprecated Use createCreateTaxRuleValidation(t) for i18n. */
 export const CreateTaxRuleValidation = z.object({
 	code: z.string({ message: 'Tax rule code is required' }),
 	description: z.string({ message: 'Tax rule description is required' }),

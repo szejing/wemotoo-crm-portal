@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-categories">
 		<template #header>
-			<UDashboardNavbar title="Categories" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.categories')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -61,12 +61,14 @@
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
-import { category_columns } from '~/utils/table-columns';
+import { getCategoryColumns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
-useHead({ title: 'Wemotoo CRM - Categories' });
+const { t } = useI18n();
+const category_columns = computed(() => getCategoryColumns(t));
+useHead({ title: () => t('pages.categoriesTitle') });
 
 const overlay = useOverlay();
 const categoryStore = useProductCategoryStore();

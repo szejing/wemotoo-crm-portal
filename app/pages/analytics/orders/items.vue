@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-orders-items">
 		<template #header>
-			<UDashboardNavbar title="Analytics Orders Items" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsOrdersItems')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -96,10 +96,12 @@
 
 <script lang="ts" setup>
 import { OrderItemStatus, getFormattedDate, formatCurrency } from 'wemotoo-common';
-import { order_summ_item_columns } from '~/utils/table-columns';
+import { getOrderSummItemColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Order Item Summary' });
+const { t } = useI18n();
+const order_summ_item_columns = computed(() => getOrderSummItemColumns(t));
+useHead({ title: () => t('pages.orderItemSummary') });
 
 onMounted(async () => {
 	await orderSummStore.getOrderItemSummary();

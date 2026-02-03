@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-sales-detail-listing">
 		<template #header>
-			<UDashboardNavbar title="Analytics Sales Detail Listing" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsSalesDetailListing')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -79,12 +79,14 @@
 
 <script lang="ts" setup>
 import { getFormattedDate, formatCurrency } from 'wemotoo-common';
-import { sale_columns } from '~/utils/table-columns';
+import { getSaleColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 import type { Bill } from '~/utils/types/bill';
 
-useHead({ title: 'Wemotoo CRM - Sale Detail Listing' });
+const { t } = useI18n();
+const sale_columns = computed(() => getSaleColumns(t));
+useHead({ title: () => t('pages.analyticsSalesDetailListing') });
 
 onMounted(async () => {
 	await saleStore.getBills();

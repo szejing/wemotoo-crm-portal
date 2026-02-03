@@ -1,26 +1,17 @@
 <template>
-	<USelectMenu v-model="status" :items="items" size="md" :ui="{ base: 'min-w-[150px]' }">
-		<!-- <template #default>
-			<span v-if="status">{{ capitalizeFirstLetter(status) }}</span>
-			<span v-else class="text-neutral-400">Select Status</span>
-		</template>
-
-		<template #item="{ item }">
-			<span class="truncate">{{ capitalizeFirstLetter(item) }}</span>
-		</template> -->
-
+	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :ui="{ base: 'min-w-[150px]' }">
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getAppointmentStatusColor(status)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(status) }}
+					{{ selectedLabel }}
 				</UBadge>
 			</span>
-			<span v-else class="text-neutral-400">Select Appointment Status</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectAppointmentStatus') }}</span>
 		</template>
 
 		<template #item="{ item }">
-			<UBadge :color="getAppointmentStatusColor(item)" variant="subtle" class="truncate">
-				{{ capitalizeFirstLetter(item) }}
+			<UBadge :color="getAppointmentStatusColor(item.value)" variant="subtle" class="truncate">
+				{{ item.label }}
 			</UBadge>
 		</template>
 	</USelectMenu>
@@ -28,11 +19,14 @@
 
 <script lang="ts" setup>
 import type { AppointmentStatus } from 'wemotoo-common';
-import { options_appointment_status as items, getAppointmentStatusColor } from '~/utils/options';
-import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
+import { getAppointmentStatusOptions, getAppointmentStatusColor } from '~/utils/options';
+
+const { t } = useI18n();
 
 const props = defineProps<{ status: AppointmentStatus | undefined }>();
 const emit = defineEmits(['update:status']);
+
+const items = computed(() => getAppointmentStatusOptions(t));
 
 const status = computed({
 	get() {
@@ -42,6 +36,8 @@ const status = computed({
 		emit('update:status', value);
 	},
 });
+
+const selectedLabel = computed(() => items.value.find((i) => i.value === status.value)?.label ?? status.value ?? '');
 </script>
 
 <style scoped></style>

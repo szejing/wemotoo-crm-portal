@@ -1,17 +1,17 @@
 <template>
-	<UForm :schema="CreateCategoryValidation" :state="new_category" class="space-y-6" @submit="onSubmit">
+	<UForm :schema="categorySchema" :state="new_category" class="space-y-6" @submit="onSubmit">
 		<div class="space-y-6">
 			<!-- Thumbnail Upload Section -->
 			<div class="space-y-2">
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Category Thumbnail</h3>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.categoryThumbnail') }}</h3>
 				<ZDropzone @files-selected="updateThumbnail" />
 			</div>
 
 			<!-- *********************** General Info *********************** -->
 			<div class="space-y-2">
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
 				<p class="text-sm text-neutral-400">
-					Enter the essential information about your product category including code and description. (e.g. Electronics, Clothing, etc.)
+					{{ $t('components.productForm.categoryGeneralDesc') }}
 				</p>
 				<ZInputProductCategoryGeneralInfo v-model:code="new_category.code" v-model:description="new_category.description" />
 			</div>
@@ -19,11 +19,11 @@
 
 			<!-- Parent Category Section -->
 			<div class="space-y-2">
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Parent Category</h3>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.parentCategory') }}</h3>
 				<ZSelectMenuCategory
 					v-model:category="new_category.parent_category"
 					:ignore-codes="[new_category.code]"
-					placeholder="Select parent category..."
+					:placeholder="$t('components.productForm.selectParentCategory')"
 					class="sm:w-[50%] w-full"
 				/>
 			</div>
@@ -33,7 +33,7 @@
 		<div class="flex justify-center pt-4">
 			<UButton color="success" size="md" :loading="adding" type="submit">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
-				<span class="text-sm">Create Category</span>
+				<span class="text-sm">{{ $t('pages.createCategory') }}</span>
 			</UButton>
 		</div>
 	</UForm>
@@ -42,9 +42,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateCategoryValidation } from '~/utils/schema';
+import { createCreateCategoryValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateCategoryValidation>;
+const { t } = useI18n();
+const categorySchema = computed(() => createCreateCategoryValidation(t));
+
+type Schema = z.infer<ReturnType<typeof createCreateCategoryValidation>>;
 
 const categoryStore = useProductCategoryStore();
 const { adding, new_category } = storeToRefs(categoryStore);

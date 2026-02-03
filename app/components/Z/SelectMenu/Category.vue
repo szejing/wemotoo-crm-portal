@@ -7,7 +7,7 @@
 		size="md"
 		label-key="code"
 		description-key="description"
-		placeholder="Select Category"
+		:placeholder="$t('components.selectMenu.selectCategory')"
 	>
 		<template #default>
 			<div v-if="category" class="flex items-center">
@@ -22,7 +22,7 @@
 					/>
 				</div>
 			</div>
-			<span v-else class="text-neutral-400 text-sm">Select Category</span>
+			<span v-else class="text-neutral-400 text-sm">{{ $t('components.selectMenu.selectCategory') }}</span>
 		</template>
 	</USelectMenu>
 </template>

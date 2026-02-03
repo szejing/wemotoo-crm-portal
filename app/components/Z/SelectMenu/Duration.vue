@@ -1,5 +1,5 @@
 <template>
-	<USelectMenu v-model="duration" :items="items" value-key="label" size="md" label-key="label" description-key="label" placeholder="Select Duration" />
+	<USelectMenu v-model="duration" :items="items" value-key="label" size="md" label-key="label" description-key="label" :placeholder="$t('components.selectMenu.selectDuration')" />
 </template>
 
 <script lang="ts" setup>

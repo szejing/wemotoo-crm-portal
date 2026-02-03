@@ -10,8 +10,8 @@ export type Category = {
 	description?: string | undefined;
 	slug?: string | undefined;
 
-	is_active: boolean;
-	is_internal: boolean;
+	is_active?: boolean;
+	is_internal?: boolean;
 
 	images?: Image[] | undefined;
 	thumbnail?: Image | undefined;

@@ -1,6 +1,6 @@
 <template>
 	<UModal
-		title="Update Tax Rule Detail"
+		:title="$t('components.zModal.updateTaxRuleDetail')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
@@ -10,7 +10,7 @@
 				<!-- *********************** Tax Detail *********************** -->
 				<div class="space-y-4">
 					<div class="flex-jbetween-icenter">
-						<h4 class="text-neutral-700 text-sm">Code <span class="text-red-500">*</span></h4>
+						<h4 class="text-neutral-700 text-sm">{{ $t('common.code') }} <span class="text-red-500">*</span></h4>
 
 						<UFormField name="code" required>
 							<ZSelectMenuTax :tax="state.detail.tax_code" @update:tax="updateTax" />
@@ -18,10 +18,10 @@
 					</div>
 
 					<div class="flex-jbetween-icenter">
-						<h4 class="text-neutral-700 text-sm">Description <span class="text-red-500">*</span></h4>
+						<h4 class="text-neutral-700 text-sm">{{ $t('common.description') }} <span class="text-red-500">*</span></h4>
 
 						<UFormField v-slot="{ error }" name="description" required>
-							<UInput v-model="state.detail.description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Description" />
+							<UInput v-model="state.detail.description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('common.description')" />
 						</UFormField>
 					</div>
 				</div>
@@ -40,11 +40,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>

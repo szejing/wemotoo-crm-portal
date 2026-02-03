@@ -1,17 +1,17 @@
 <template>
-	<USelectMenu v-model="status" :items="items" value-key="label" size="md" placeholder="Select Payment Status">
+	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :placeholder="$t('components.selectMenu.selectPaymentStatus')">
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getPaymentStatusColor(status)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(status) }}
+					{{ selectedLabel }}
 				</UBadge>
 			</span>
-			<span v-else class="text-neutral-400">Select Payment Status</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectPaymentStatus') }}</span>
 		</template>
 
 		<template #item="{ item }">
-			<UBadge :color="getPaymentStatusColor(item.label)" variant="subtle" class="truncate">
-				{{ capitalizeFirstLetter(item.label) }}
+			<UBadge :color="getPaymentStatusColor(item.value)" variant="subtle" class="truncate">
+				{{ item.label }}
 			</UBadge>
 		</template>
 	</USelectMenu>
@@ -19,15 +19,14 @@
 
 <script lang="ts" setup>
 import type { PaymentStatus } from 'wemotoo-common';
-import { options_payment_status, getPaymentStatusColor } from '~/utils/options';
-import { capitalizeFirstLetter } from '~/utils/utils'; // Adjust the path as necessary
+import { getPaymentStatusOptions, getPaymentStatusColor } from '~/utils/options';
+
+const { t } = useI18n();
 
 const props = defineProps<{ paymentStatus: PaymentStatus | undefined }>();
 const emit = defineEmits(['update:paymentStatus']);
 
-const items = computed(() => {
-	return options_payment_status.map((status) => ({ label: status }));
-});
+const items = computed(() => getPaymentStatusOptions(t));
 
 const status = computed({
 	get() {
@@ -37,6 +36,8 @@ const status = computed({
 		emit('update:paymentStatus', value);
 	},
 });
+
+const selectedLabel = computed(() => items.value.find((i) => i.value === status.value)?.label ?? status.value ?? '');
 </script>
 
 <style scoped></style>

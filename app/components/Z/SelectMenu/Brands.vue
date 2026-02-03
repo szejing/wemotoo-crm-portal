@@ -8,7 +8,7 @@
 		multiple
 		label-key="code"
 		description-key="description"
-		placeholder="Select Brands"
+		:placeholder="$t('components.selectMenu.selectBrands')"
 	>
 		<template #default>
 			<div v-if="brands && brands.length > 0" class="flex flex-wrap gap-1.5">
@@ -25,11 +25,11 @@
 					/>
 				</div>
 			</div>
-			<span v-else class="text-neutral-400 text-sm">Select Brands</span>
+			<span v-else class="text-neutral-400 text-sm">{{ $t('components.selectMenu.selectBrands') }}</span>
 		</template>
 
 		<template #empty>
-			<UButton color="success" variant="ghost">Create "{{ searchTerm }}"</UButton>
+			<UButton color="success" variant="ghost">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
 		</template>
 	</USelectMenu>
 </template>

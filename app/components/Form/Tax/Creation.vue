@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UForm :schema="CreateTaxValidation" :state="new_tax" class="space-y-4" @submit="onSubmit">
+		<UForm :schema="taxSchema" :state="new_tax" class="space-y-4" @submit="onSubmit">
 			<!-- *********************** General Info *********************** -->
 			<ZInputTaxGeneralInfo
 				v-model:code="new_tax.code"
@@ -11,7 +11,7 @@
 
 			<!-- *********************** General Info *********************** -->
 			<div class="flex-center text-center mt-3">
-				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">Create</UButton>
+				<UButton size="md" color="success" variant="solid" type="submit" block :loading="adding">{{ $t('components.taxForm.create') }}</UButton>
 			</div>
 		</UForm>
 	</div>
@@ -20,9 +20,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateTaxValidation } from '~/utils/schema';
+import { createCreateTaxValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof CreateTaxValidation>;
+const { t } = useI18n();
+const taxSchema = computed(() => createCreateTaxValidation(t));
+
+type Schema = z.output<ReturnType<typeof createCreateTaxValidation>>;
 
 const taxStore = useTaxStore();
 const { adding, new_tax } = storeToRefs(taxStore);

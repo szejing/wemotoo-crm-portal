@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-listing">
 		<template #header>
-			<UDashboardNavbar title="Products" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.products')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -70,7 +70,7 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { product_columns } from '~/utils/table-columns';
+import { getProductColumns } from '~/utils/table-columns';
 import type { Product } from '~/utils/types/product';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalLoading } from '#components';
@@ -83,7 +83,9 @@ const loadingModal = overlay.create(ZModalLoading, {
 	},
 });
 
-useHead({ title: 'Wemotoo CRM - Products' });
+const { t } = useI18n();
+const product_columns = computed(() => getProductColumns(t));
+useHead({ title: () => t('pages.productsTitle') });
 
 onMounted(() => productStore.getProducts());
 

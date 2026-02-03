@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-sales-customers">
 		<template #header>
-			<UDashboardNavbar title="Analytics Sales Customers" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsSalesCustomers')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -56,10 +56,12 @@
 </template>
 
 <script lang="ts" setup>
-import { sale_summ_customer_columns } from '~/utils/table-columns';
+import { getSaleSummCustomerColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Sale Customer Summary' });
+const { t } = useI18n();
+const sale_summ_customer_columns = computed(() => getSaleSummCustomerColumns(t));
+useHead({ title: () => t('pages.saleCustomerSummary') });
 
 onMounted(async () => {
 	await saleSummStore.getSaleCustomerSummary();

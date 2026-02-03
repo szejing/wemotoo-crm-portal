@@ -1,17 +1,17 @@
 <template>
-	<USelectMenu v-model="status" :items="items" value-key="label" size="md" placeholder="Select Order Status">
+	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :placeholder="$t('components.selectMenu.selectOrderStatus')">
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getOrderStatusColor(status)" variant="subtle" class="truncate">
-					{{ capitalizeFirstLetter(status) }}
+					{{ selectedLabel }}
 				</UBadge>
 			</span>
-			<span v-else class="text-neutral-400">Select Order Status</span>
+			<span v-else class="text-neutral-400">{{ $t('components.selectMenu.selectOrderStatus') }}</span>
 		</template>
 
 		<template #item="{ item }">
-			<UBadge :color="getOrderStatusColor(item.label)" variant="subtle" class="truncate">
-				{{ capitalizeFirstLetter(item.label) }}
+			<UBadge :color="getOrderStatusColor(item.value)" variant="subtle" class="truncate">
+				{{ item.label }}
 			</UBadge>
 		</template>
 	</USelectMenu>
@@ -19,19 +19,14 @@
 
 <script lang="ts" setup>
 import { OrderStatus } from 'wemotoo-common';
-import { options_order_status, getOrderStatusColor } from '~/utils/options';
+import { getOrderStatusOptions, getOrderStatusColor } from '~/utils/options';
+
+const { t } = useI18n();
 
 const props = defineProps<{ status: OrderStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
-const statuses = computed(() => {
-	return options_order_status.filter((status) => status !== OrderStatus.REQUIRES_ACTION && status !== OrderStatus.REFUNDED);
-});
-
-const items = computed(() => {
-	return statuses.value.map((status) => ({ label: status }));
-});
-
+const items = computed(() => getOrderStatusOptions(t).filter((o) => o.value !== OrderStatus.REQUIRES_ACTION && o.value !== OrderStatus.REFUNDED));
 const status = computed({
 	get() {
 		return props.status ?? 'All';
@@ -44,6 +39,8 @@ const status = computed({
 		}
 	},
 });
+
+const selectedLabel = computed(() => items.value.find((i) => i.value === status.value)?.label ?? status.value);
 </script>
 
 <style scoped></style>
