@@ -19,8 +19,8 @@
 			<!-- Empty State -->
 			<div v-if="!loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
 				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-				<p class="text-sm text-gray-600 dark:text-gray-400">No order summary data found.</p>
-				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+				<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderSummaryFound') }}</p>
+				<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 			</div>
 
 			<!-- Grouped by Date -->
@@ -35,22 +35,22 @@
 									<div class="flex items-center gap-3 text-sm">
 										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-shopping-cart" class="text-base" />
-											<span class="font-medium">{{ group.total_orders }} orders</span>
+											<span class="font-medium">{{ group.total_orders }} {{ $t('pages.ordersLabel') }}</span>
 										</div>
 										<div class="h-4 w-px bg-neutral-300"></div>
 										<div class="flex items-center gap-1.5 text-green-600">
 											<Icon name="i-heroicons-cube" class="text-base" />
-											<span class="font-medium">{{ group.active_qty }} items</span>
+											<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
 										</div>
 										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
 										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
 											<Icon name="i-heroicons-x-circle" class="text-base" />
-											<span class="font-medium">{{ group.voided_qty }} voided</span>
+											<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
 										</div>
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
+									<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>

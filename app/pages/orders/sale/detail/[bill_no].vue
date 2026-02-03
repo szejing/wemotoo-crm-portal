@@ -27,7 +27,7 @@
 								<p class="text-sm text-neutral-400 italic">{{ bill?.trace_no }}</p>
 							</div>
 							<div v-if="bill?.ref_no" class="metadata-item">
-								<p>Ref: {{ bill?.ref_no }}</p>
+								<p>{{ $t('components.orderDetail.refLabel') }}: {{ bill?.ref_no }}</p>
 							</div>
 						</div>
 					</div>
@@ -46,9 +46,9 @@
 							</UButton>
 
 							<div class="status-group">
-								<UBadge v-if="bill?.status === SaleStatus.COMPLETED" color="success" size="lg"> COMPLETED </UBadge>
-								<UBadge v-else-if="bill?.status === SaleStatus.REFUNDED" color="error" size="lg"> REFUNDED </UBadge>
-								<UBadge v-else color="error" size="lg"> CANCELLED </UBadge>
+								<UBadge v-if="bill?.status === SaleStatus.COMPLETED" color="success" size="lg">{{ $t('options.completed') }}</UBadge>
+								<UBadge v-else-if="bill?.status === SaleStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
+								<UBadge v-else color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 							</div>
 						</div>
 					</div>
@@ -63,9 +63,9 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
-										Customer Information
+										{{ $t('components.orderDetail.customerInformation') }}
 									</h2>
-									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">Edit</UButton>
+									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">{{ $t('components.orderDetail.edit') }}</UButton>
 								</div>
 							</template>
 							<ZSectionOrderDetailCustomer :customer="customer" />
@@ -77,20 +77,20 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon :name="ICONS.PRODUCT" class="w-5 h-5" />
-										Order Items
+										{{ $t('components.orderDetail.orderItems') }}
 									</h2>
 									<div class="flex items-center gap-2">
 										<span v-if="bill?.status === SaleStatus.COMPLETED" class="text-xs text-green-600 font-medium">
 											<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
-											Editable
+											{{ $t('components.orderDetail.editable') }}
 										</span>
 										<UPopover v-else overlay>
 											<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
 											<template #content>
 												<div class="p-4 max-w-xs">
 													<p class="text-sm">
-														This bill is no longer editable.<br />
-														<b class="text-primary">Change Order Status to "Pending Payment"</b> to edit items.
+														{{ $t('components.orderDetail.billNotEditableMessage') }}<br />
+														<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
 													</p>
 												</div>
 											</template>
@@ -116,7 +116,7 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
-										Remarks
+										{{ $t('components.orderDetail.remarks') }}
 									</h2>
 								</div>
 							</template>
@@ -130,13 +130,13 @@
 							<!-- Status Management -->
 							<UCard class="status-management-card">
 								<template #header>
-									<h3 class="sidebar-title">Order Status</h3>
+									<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
 								</template>
 
 								<div class="status-section">
 									<ZSelectMenuSaleStatus v-model:status="new_sale_status" />
 									<UButton block color="primary" :icon="ICONS.SAVE" :disabled="new_sale_status === bill?.status" @click="handleUpdateOrderStatus">
-										Update Order Status
+										{{ $t('components.orderDetail.updateOrderStatus') }}
 									</UButton>
 								</div>
 							</UCard>
@@ -145,12 +145,12 @@
 							<UCard class="payment-info-card">
 								<template #header>
 									<div class="card-header-sidebar">
-										<h3 class="sidebar-title">Payment Information</h3>
+										<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
 										<UButton v-if="bill.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
 										<div v-if="bill?.payment_status === PaymentStatus.PAID" class="status-group">
 											<UBadge color="success" size="lg">
 												<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
-												PAID
+												{{ $t('components.orderDetail.paid') }}
 											</UBadge>
 										</div>
 									</div>
@@ -163,7 +163,7 @@
 											<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
 										</div>
 										<div v-if="payment.ref_no1" class="payment-ref">
-											<span class="payment-ref-label">Ref:</span>
+											<span class="payment-ref-label">{{ $t('components.orderDetail.refLabel') }}:</span>
 											<span class="payment-ref-value">{{ payment.ref_no1 }}</span>
 										</div>
 										<div class="payment-date">
@@ -174,8 +174,8 @@
 								</div>
 								<div v-else class="payment-empty">
 									<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
-									<p class="payment-empty-text">No payment recorded yet</p>
-									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">Add Payment</UButton>
+									<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
+									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">{{ $t('components.orderDetail.addPayment') }}</UButton>
 								</div>
 							</UCard>
 						</div>
@@ -272,7 +272,7 @@ const refreshOrder = async () => {
 
 	try {
 		await getBillDetailsByBillNo();
-		successNotification('Order refreshed successfully');
+		successNotification(t('components.orderDetail.refreshSuccess'));
 
 		// Start cooldown timer
 		refresh_cooldown.value = REFRESH_COOLDOWN_SECONDS;
@@ -306,9 +306,9 @@ const refresh_button_text = computed(() => {
 	}
 
 	if (refresh_cooldown.value > 0) {
-		return `Wait ${refresh_cooldown.value}s`;
+		return t('components.orderDetail.waitSeconds', { n: refresh_cooldown.value });
 	}
-	return 'Refresh';
+	return t('components.orderDetail.refresh');
 });
 
 /* Handle Update Order Status */
@@ -321,9 +321,9 @@ const handleUpdateOrderStatus = async () => {
 const updateSaleStatus = async (_new_status: SaleStatus) => {
 	try {
 		// await saleStore.updateSaleStatus(bill.value.bill_no, _new_status, PaymentStatus.PENDING);
-		successNotification('Order status updated successfully');
+		successNotification(t('components.orderDetail.statusUpdateSuccess'));
 	} catch {
-		failedModal('Failed to update order status', 'Error');
+		failedModal(t('components.orderDetail.statusUpdateFailed'), t('components.orderDetail.error'));
 	}
 };
 

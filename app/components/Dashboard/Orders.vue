@@ -1,10 +1,10 @@
 <template>
 	<div class="mt-4 p-4 rounded-lg">
-		<h1 class="text-lg font-bold">Orders</h1>
+		<h1 class="text-lg font-bold">{{ $t('nav.orders') }}</h1>
 		<UTable :data="rows" :columns="order_columns" :loading="loading" @select="selectOrder">
 			<template #empty-state>
 				<div class="flex flex-col items-center justify-center py-6 gap-3">
-					<span class="italic text-sm">No Orders !</span>
+					<span class="italic text-sm">{{ $t('pages.noOrdersFound') }}</span>
 				</div>
 			</template>
 		</UTable>

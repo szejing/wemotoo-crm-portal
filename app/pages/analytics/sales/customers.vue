@@ -20,28 +20,28 @@
 				<div v-if="!loading && data.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
 						<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">No sales customer summary data found.</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesCustomerSummaryFound') }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 					</div>
 				</div>
 
 				<div v-else>
 					<!-- Table Controls -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
-						<!-- Page Size -->
-						<div class="flex items-center gap-2">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-							<USelect v-model="sale_summ_customer.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-						</div>
-					</div>
+					<ZTableToolbar
+						v-model="sale_summ_customer.page_size"
+						:page-size-options="options_page_size"
+						:export-enabled="true"
+						:exporting="sale_summ_customer.exporting"
+						@update:model-value="updatePageSize"
+						@export="saleSummStore.exportSaleCustomerSummary"
+					/>
 
 					<UTable :data="data" :columns="sale_summ_customer_columns" :loading="loading" class="mt-4">
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-6">
 								<UIcon name="i-heroicons-inbox" class="w-12 h-12 text-gray-400" />
-								<p class="text-sm text-gray-600 dark:text-gray-400">No sales customer summary data found.</p>
-								<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+								<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesCustomerSummaryFound') }}</p>
+								<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 							</div>
 						</template>
 					</UTable>

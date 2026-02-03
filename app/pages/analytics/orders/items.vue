@@ -19,25 +19,20 @@
 			<!-- Empty State -->
 			<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
 				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-				<p class="text-sm text-gray-600 dark:text-gray-400">No order item summary data found.</p>
-				<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+				<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderItemSummaryFound') }}</p>
+				<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 			</div>
 
 			<!-- Grouped by Date -->
 			<div v-else class="mt-4 space-y-6">
-				<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="order_summ_item.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="order_summ_item.exporting" :loading="order_summ_item.exporting" @click="exportToCsv">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="order_summ_item.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="order_summ_item.exporting"
+					@update:model-value="updatePageSize"
+					@export="exportToCsv"
+				/>
 
 				<UCard class="overflow-hidden">
 					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
@@ -49,22 +44,22 @@
 									<div class="flex items-center gap-3 text-sm">
 										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-shopping-cart" class="text-base" />
-											<span class="font-medium">{{ group.total_orders }} orders</span>
+											<span class="font-medium">{{ group.total_orders }} {{ $t('pages.ordersLabel') }}</span>
 										</div>
 										<div class="h-4 w-px bg-neutral-300"></div>
 										<div class="flex items-center gap-1.5 text-green-600">
 											<Icon name="i-heroicons-cube" class="text-base" />
-											<span class="font-medium">{{ group.active_qty }} items</span>
+											<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
 										</div>
 										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
 										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
 											<Icon name="i-heroicons-x-circle" class="text-base" />
-											<span class="font-medium">{{ group.voided_qty }} voided</span>
+											<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
 										</div>
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
+									<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>

@@ -25,19 +25,14 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportCategories">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="updatePageSize"
+					@export="exportCategories"
+				/>
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="category_columns" :loading="loading" @select="selectCategory">

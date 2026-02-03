@@ -18,13 +18,7 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table controls: page size -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-				</div>
+				<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
 
 				<!-- Table -->
 				<UTable
