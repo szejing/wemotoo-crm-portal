@@ -7,9 +7,11 @@ const model = defineModel<Period>({ required: true });
 
 const props = defineProps<{ range: Range }>();
 
+const { t } = useI18n();
+
 const days = computed(() => eachDayOfInterval({ start: props.range.start, end: props.range.end }));
 
-const periods = computed<Period[]>(() => {
+const periodValues = computed<Period[]>(() => {
 	if (days.value.length <= 8) {
 		return ['daily'];
 	}
@@ -21,10 +23,17 @@ const periods = computed<Period[]>(() => {
 	return ['weekly', 'monthly'];
 });
 
+const periods = computed(() =>
+	periodValues.value.map((value) => ({
+		value,
+		label: t('components.filter.' + value),
+	})),
+);
+
 // Ensure the model value is always a valid period
-watch(periods, () => {
-	if (!periods.value.includes(model.value)) {
-		model.value = periods.value[0]!;
+watch(periodValues, () => {
+	if (!periodValues.value.includes(model.value)) {
+		model.value = periodValues.value[0]!;
 	}
 });
 </script>
@@ -33,8 +42,9 @@ watch(periods, () => {
 	<USelect
 		v-model="model"
 		:items="periods"
+		value-attribute="value"
 		variant="ghost"
 		class="data-[state=open]:bg-elevated"
-		:ui="{ value: 'capitalize', itemLabel: 'capitalize', trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
+		:ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
 	/>
 </template>
