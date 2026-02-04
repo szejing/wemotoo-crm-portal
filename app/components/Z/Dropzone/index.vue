@@ -1,23 +1,24 @@
 <template>
-	<UFileUpload
-		v-model="files"
-		:multiple="multiple"
-		accept="image/*"
-		:disabled="multiple && totalImageCount >= maxImages"
-		:icon="ICONS.UPLOAD"
-		:label="multiple ? 'Drop files here or click to upload' : 'Drop a file here or click to upload'"
-		description="Square images are recommended"
-		class="dropzone-upload"
-		:ui="{
-			base: 'border-2 border-dashed border-neutral-300 rounded-xl p-4 min-h-[120px] transition-all duration-200 hover:bg-main-50 hover:border-main-500 data-[dragging=true]:bg-main-100 data-[dragging=true]:border-main-500',
-			wrapper: 'flex flex-col items-center justify-center text-center gap-2',
-			icon: 'w-6 h-6 text-neutral-600',
-			label: 'text-neutral-600 font-normal',
-			description: 'text-xs text-neutral-400',
-		}"
-		@update:model-value="handleFilesUpdate"
-	>
-		<template #default="{ open, files }">
+	<div class="dropzone-wrapper relative">
+		<UFileUpload
+			v-model="files"
+			:multiple="multiple"
+			accept="image/*"
+			:disabled="(multiple && totalImageCount >= maxImages) || isCompressing"
+			:icon="ICONS.UPLOAD"
+			:label="multiple ? 'Drop files here or click to upload' : 'Drop a file here or click to upload'"
+			description="Square images are recommended"
+			class="dropzone-upload"
+			:ui="{
+				base: 'border-2 border-dashed border-neutral-300 rounded-xl p-4 min-h-[120px] transition-all duration-200 hover:bg-main-50 hover:border-main-500 data-[dragging=true]:bg-main-100 data-[dragging=true]:border-main-500',
+				wrapper: 'flex flex-col items-center justify-center text-center gap-2',
+				icon: 'w-6 h-6 text-neutral-600',
+				label: 'text-neutral-600 font-normal',
+				description: 'text-xs text-neutral-400',
+			}"
+			@update:model-value="handleFilesUpdate"
+		>
+			<template #default="{ open, files }">
 			<div v-if="previews.length > 0 || (currentImages != null && currentImages.length > 0)" class="custom-dropzone has-content" @click="open()">
 				<!-- Previews section for new files -->
 				<div v-if="previews.length > 0" class="preview-section">
@@ -48,10 +49,24 @@
 				</div>
 			</div>
 		</template>
-	</UFileUpload>
+		</UFileUpload>
+		<div
+			v-if="isCompressing"
+			class="compressing-overlay"
+			aria-busy="true"
+			aria-label="Compressing images"
+		>
+			<UIcon name="i-heroicons-arrow-path" class="h-8 w-8 text-white animate-spin" />
+			<span class="compressing-text">Compressing images...</span>
+		</div>
+	</div>
 </template>
 
 <script setup>
+const MAX_FILE_SIZE_BYTES = 1 * 1024 * 1024; // 1 MB - server limit
+const MAX_DIMENSION = 1920; // Max width/height to keep quality reasonable
+const DEFAULT_QUALITY = 0.85;
+
 const props = defineProps({
 	multiple: {
 		type: Boolean,
@@ -73,6 +88,107 @@ const previews = ref([]);
 const files = ref(props.multiple ? [] : null);
 const currentImages = ref([]);
 const isUpdatingProgrammatically = ref(false);
+const isCompressing = ref(false);
+
+/**
+ * Compress an image file to stay under MAX_FILE_SIZE_BYTES.
+ * Uses canvas resize + JPEG quality; returns original if not an image or already small enough.
+ */
+async function compressImage(file) {
+	if (!file.type.startsWith('image/')) return file;
+	if (file.size <= MAX_FILE_SIZE_BYTES) return file;
+
+	return new Promise((resolve, reject) => {
+		const img = new Image();
+		const url = URL.createObjectURL(file);
+
+		img.onload = () => {
+			URL.revokeObjectURL(url);
+
+			let width = img.naturalWidth;
+			let height = img.naturalHeight;
+			if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+				if (width > height) {
+					height = Math.round((height * MAX_DIMENSION) / width);
+					width = MAX_DIMENSION;
+				} else {
+					width = Math.round((width * MAX_DIMENSION) / height);
+					height = MAX_DIMENSION;
+				}
+			}
+
+			const canvas = document.createElement('canvas');
+			canvas.width = width;
+			canvas.height = height;
+			const ctx = canvas.getContext('2d');
+			if (!ctx) {
+				resolve(file);
+				return;
+			}
+			ctx.drawImage(img, 0, 0, width, height);
+
+			const tryQuality = (quality) => {
+				return new Promise((res) => {
+					canvas.toBlob(
+						(blob) => {
+							if (!blob) {
+								res({ blob: null, quality });
+								return;
+							}
+							res({ blob, size: blob.size, quality });
+						},
+						'image/jpeg',
+						quality,
+					);
+				});
+			};
+
+			// Binary-search quality to get under 1 MB
+			(async () => {
+				let lo = 0.5;
+				let hi = DEFAULT_QUALITY;
+				let best = null;
+
+				for (let i = 0; i < 8; i++) {
+					const q = (lo + hi) / 2;
+					const { blob, size } = await tryQuality(q);
+					if (!blob) {
+						resolve(file);
+						return;
+					}
+					if (size <= MAX_FILE_SIZE_BYTES) {
+						best = blob;
+						lo = q;
+					} else {
+						hi = q;
+					}
+				}
+
+				if (best && best.size <= MAX_FILE_SIZE_BYTES) {
+					const name = file.name.replace(/\.[^.]+$/, '') || 'image';
+					const compressed = new File([best], `${name}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+					resolve(compressed);
+				} else {
+					// Last resort: use lowest quality that fits
+					const { blob } = await tryQuality(0.5);
+					if (blob && blob.size <= MAX_FILE_SIZE_BYTES) {
+						const name = file.name.replace(/\.[^.]+$/, '') || 'image';
+						resolve(new File([blob], `${name}.jpg`, { type: 'image/jpeg', lastModified: Date.now() }));
+					} else {
+						resolve(file);
+					}
+				}
+			})().then(resolve).catch(reject);
+		};
+
+		img.onerror = () => {
+			URL.revokeObjectURL(url);
+			resolve(file);
+		};
+
+		img.src = url;
+	});
+}
 
 onMounted(() => {
 	// Check if existingImages contains File objects or URL strings
@@ -127,7 +243,7 @@ const totalImageCount = computed(() => {
 	return previews.value.length + (currentImages.value?.length || 0);
 });
 
-const handleFilesUpdate = (selectedFiles) => {
+const handleFilesUpdate = async (selectedFiles) => {
 	// Ignore updates if we're programmatically updating files
 	if (isUpdatingProgrammatically.value) {
 		return;
@@ -143,24 +259,37 @@ const handleFilesUpdate = (selectedFiles) => {
 	// Convert to array for consistent handling
 	const filesArray = Array.isArray(selectedFiles) ? selectedFiles : [selectedFiles];
 
-	// Filter only image files
+	// Filter only image files and compress to stay under 1 MB
 	const imageFiles = filesArray.filter((file) => file.type.startsWith('image/'));
+	if (imageFiles.length === 0) {
+		files.value = props.multiple ? [] : null;
+		previews.value = [];
+		emit('files-selected', []);
+		return;
+	}
 
-	if (!props.multiple) {
-		// Single file mode - take only the first file
-		if (imageFiles.length > 0) {
-			files.value = imageFiles[0];
-			previewFiles([imageFiles[0]]);
-			emit('files-selected', [imageFiles[0]]);
+	isCompressing.value = true;
+	try {
+		const compressed = await Promise.all(imageFiles.map((file) => compressImage(file)));
+
+		if (!props.multiple) {
+			// Single file mode - take only the first file
+			if (compressed.length > 0) {
+				files.value = compressed[0];
+				previewFiles([compressed[0]]);
+				emit('files-selected', [compressed[0]]);
+			}
+		} else {
+			// Multiple file mode - respect max limit
+			const availableSlots = props.maxImages - (currentImages.value?.length || 0);
+			const filesToAdd = compressed.slice(0, availableSlots);
+
+			files.value = filesToAdd;
+			previewFiles(filesToAdd);
+			emit('files-selected', filesToAdd);
 		}
-	} else {
-		// Multiple file mode - respect max limit
-		const availableSlots = props.maxImages - (currentImages.value?.length || 0);
-		const filesToAdd = imageFiles.slice(0, availableSlots);
-
-		files.value = filesToAdd;
-		previewFiles(filesToAdd);
-		emit('files-selected', filesToAdd);
+	} finally {
+		isCompressing.value = false;
 	}
 };
 
@@ -273,6 +402,31 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.dropzone-wrapper {
+	width: 100%;
+}
+
+.compressing-overlay {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	background-color: rgb(0 0 0 / 0.4);
+	border-radius: 0.75rem;
+	pointer-events: all;
+	z-index: 10;
+}
+
+.compressing-text {
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: white;
+	text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+}
+
 .dropzone-container {
 	display: flex;
 	flex-direction: column;
