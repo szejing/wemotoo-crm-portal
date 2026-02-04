@@ -22,7 +22,7 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 
 ### UI and Client Logic
 
-- **`vue-pages-components.mdc`** – Pages (`app/pages/`) and components (`app/components/`). File-based routing, layouts, data loading, and component conventions.
+- **`vue-pages-components.mdc`** – Pages (`app/pages/`) and components (`app/components/`). File-based routing, layouts, data loading, shared components, and component conventions.
 
 - **`composables.mdc`** – Composables in `app/composables/`. Naming (`useXxx`), structure, and when to use them.
 
@@ -50,3 +50,7 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 | Composables        | `app/composables/*`         | composables.mdc        |
 | Middleware         | `app/middleware/*`, `server/middleware/*` | middleware.mdc |
 | Utils, constants   | `app/utils/*`               | utility.mdc            |
+
+## Agent skills
+
+Project-specific skills in `.cursor/skills/` (use when relevant): **vue-component-development** (pages/components, shared components), **crm-portal-deployment** (Docker/DO), **i18n-translation** (locales, multi-language).

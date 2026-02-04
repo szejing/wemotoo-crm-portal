@@ -16,9 +16,11 @@ Use the registry and tag that match your pipeline. App port in container: **3000
 
 ## Build and Push
 
+Use **linux/amd64** for production (matches parent repo `docker-compose.yml` frontend platform).
+
 **Build and push CRM portal:**
 ```bash
-docker build -t registry.digitalocean.com/wemotoo/crm-portal:latest .
+docker build --platform linux/amd64 -t registry.digitalocean.com/wemotoo/crm-portal:latest .
 docker push registry.digitalocean.com/wemotoo/crm-portal:latest
 ```
 
@@ -72,4 +74,4 @@ From `package.json`:
 - **User:** runs as non-root user `nuxt`.
 - **Healthcheck:** wget to `http://127.0.0.1:3000` every 30s.
 
-For production deploys (e.g. Digital Ocean), use linux/amd64. Optionally copy `.env.prod` into the image if your setup expects it in the container.
+For production deploys (e.g. Digital Ocean), always use **linux/amd64** so the image matches the parent repo (`wemotoo-crm/docker-compose.yml` frontend `platform: linux/amd64`). Optionally copy `.env.prod` into the image if your setup expects it in the container.

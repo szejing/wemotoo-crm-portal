@@ -105,5 +105,6 @@ function load() {
 ## Code Quality
 
 - Prefer small, single-purpose functions and components.
+- **Consider creating a shared component** when the same UI or logic is used in multiple places; put reusable primitives under `app/components/Z/` and domain-specific shared pieces in appropriate `app/components/` subfolders (e.g. `Form/`, `Dashboard/`).
 - Keep composables and utils pure where possible; avoid hidden global state.
 - Use existing patterns from `repository/`, `utils/schema/`, and `server/routes/` when adding features.

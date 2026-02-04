@@ -40,6 +40,11 @@ alwaysApply: false
 ### Primitives / Z
 - Shared UI building blocks (inputs, modals, loaders, sections) live under `components/Z/`; keep them generic and reusable.
 
+### Shared components
+- **Consider creating a shared component** when the same UI or behaviour is used in multiple places (e.g. same form field, table toolbar, or modal pattern in 2+ pages or components).
+- Put generic/reusable pieces in `components/Z/` (or `Z/` subfolders like `Z/Modal/`, `Z/Input/`). Put feature-specific shared components in the relevant domain folder (e.g. `Form/`, `Dashboard/`, `Sidebar/`).
+- Prefer one component per file; name the file after the component (PascalCase).
+
 ## Anti-Patterns
 
 - ❌ Large inline logic in pages – extract to composables or repository
