@@ -1,12 +1,12 @@
 <template>
 	<UModal
-		title="Update Item"
+		:title="$t('components.zModal.updateItem')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOrderItemValidation" :state="state.item" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="itemSchema" :state="state.item" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailItem
 					v-model:status="state.item.status"
@@ -23,8 +23,8 @@
 				<!-- *********************** General Info *********************** -->
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
+					<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</UForm>
 		</template>
@@ -35,9 +35,13 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { ItemModel } from '~/utils/models/item.model';
-import { UpdateOrderItemValidation } from '~/utils/schema/index';
+import { UpdateOrderItemValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof UpdateOrderItemValidation>;
+const { t } = useI18n();
+const itemSchema = computed(() => UpdateOrderItemValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateOrderItemValidation>>;
+
 const orderStore = useOrderStore();
 const is_loading = ref(false);
 const { detail } = storeToRefs(orderStore);

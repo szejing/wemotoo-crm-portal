@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-tags-create">
 		<template #header>
-			<UDashboardNavbar title="Create Tag" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.createTag')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />

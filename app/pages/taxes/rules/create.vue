@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="taxes-rules-create">
 		<template #header>
-			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -41,7 +41,8 @@ const overlay = useOverlay();
 const taxRuleStore = useTaxRuleStore();
 const { new_tax_rule, adding } = storeToRefs(taxRuleStore);
 
-useHead({ title: 'Wemotoo CRM - Create Tax Rule' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.createTaxRuleTitle') });
 
 onMounted(() => {
 	taxRuleStore.resetNewTaxRule();

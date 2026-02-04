@@ -1,12 +1,12 @@
 <template>
 	<UModal
-		title="Update Category"
+		:title="$t('components.zModal.updateCategory')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm ref="formRef" :schema="UpdateCategoryValidation" :state="state.category" class="space-y-4" @submit="onSubmit">
+			<UForm ref="formRef" :schema="categorySchema" :state="state.category" class="space-y-4" @submit="onSubmit">
 				<div class="w-full">
 					<ZDropzone class="mt-2" :existing-images="[state.category.thumbnail]" @files-selected="updateThumbnail" />
 				</div>
@@ -16,7 +16,7 @@
 				</div>
 
 				<div class="flex justify-end">
-					<UCheckbox v-model="state.category.is_active" name="isActive" label="Active" color="success" />
+					<UCheckbox v-model="state.category.is_active" name="isActive" :label="$t('common.active')" color="success" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
@@ -24,7 +24,7 @@
 				<!-- *********************** General Info *********************** -->
 
 				<div class="w-full">
-					<h4 class="text-sm font-medium text-neutral-900 dark:text-neutral-100">Parent Category</h4>
+					<h4 class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ $t('components.zModal.parentCategory') }}</h4>
 					<ZSelectMenuCategory v-model:category="state.category.parent_category" :ignore-codes="[state.category.code]" class="mt-2 w-full" />
 				</div>
 			</UForm>
@@ -32,11 +32,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" @click="submitForm">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="submitForm">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -49,7 +49,10 @@ import type { z } from 'zod';
 import { UpdateCategoryValidation } from '~/utils/schema';
 import type { Category } from '~/utils/types/category';
 
-type Schema = z.output<typeof UpdateCategoryValidation>;
+const { t } = useI18n();
+const categorySchema = computed(() => UpdateCategoryValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateCategoryValidation>>;
 
 const props = defineProps({
 	category: {

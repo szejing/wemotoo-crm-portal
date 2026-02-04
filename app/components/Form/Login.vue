@@ -1,25 +1,25 @@
 <template>
-	<UForm :schema="LoginValidation" :state="state" class="space-y-4" @submit="onSubmit" @error="onError">
-		<UCard variant="outline">
+	<UForm :schema="loginSchema" :state="state" class="w-full space-y-4" @submit="onSubmit" @error="onError">
+		<UCard variant="outline" class="w-full">
 			<template #header>
 				<div>
 					<div class="flex sm:hidden w-full">
 						<NuxtImg class="my-2 mx-auto w-full cursor-pointer rounded-sm" src="/logo/logo.png" alt="logo" />
 					</div>
-					<h1 class="text-center">CRM Merchant Login</h1>
+					<h1 class="text-center">{{ $t('auth.loginTitle') }}</h1>
 				</div>
 			</template>
 
 			<div class="flex flex-col gap-2">
-				<UFormField label="Merchant Id" name="section_merchant_id" required>
+				<UFormField :label="$t('auth.merchantId')" name="section_merchant_id" required>
 					<UInput :model-value="state.merchant_id" autocomplete="section-login organization" @update:model-value="setMerchantId" />
 				</UFormField>
 
-				<UFormField label="Email" name="email_address" required>
+				<UFormField :label="$t('auth.email')" name="email_address" required>
 					<UInput v-model="state.email_address" autocomplete="section-login email" />
 				</UFormField>
 
-				<UFormField label="Password" name="password" required>
+				<UFormField :label="$t('auth.password')" name="password" required>
 					<UInput v-model="state.password" :type="state.show ? 'text' : 'password'">
 						<template v-if="state.password?.length" #trailing>
 							<UButton
@@ -27,7 +27,7 @@
 								variant="link"
 								size="sm"
 								:icon="state.show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-								:aria-label="state.show ? 'Hide password' : 'Show password'"
+								:aria-label="state.show ? $t('common.hidePassword') : $t('common.showPassword')"
 								:aria-pressed="state.show"
 								aria-controls="password"
 								@click="state.show = !state.show"
@@ -39,8 +39,8 @@
 
 			<template #footer>
 				<div class="flex flex-col gap-2">
-					<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">Submit</UButton>
-					<NuxtLink to="/forgot-password" class="text-center text-sm text-muted hover:underline">Forgot password?</NuxtLink>
+					<UButton block size="md" color="primary" variant="outline" type="submit" :loading="loading">{{ $t('common.submit') }}</UButton>
+					<NuxtLink to="/forgot-password" class="text-center text-sm text-muted hover:underline">{{ $t('auth.forgotPassword') }}</NuxtLink>
 				</div>
 			</template>
 		</UCard>
@@ -52,7 +52,10 @@ import { LoginValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
-type Schema = z.output<typeof LoginValidation>;
+const { t } = useI18n();
+const loginSchema = computed(() => LoginValidation(t));
+
+type Schema = z.infer<ReturnType<typeof LoginValidation>>;
 
 const state = reactive({
 	merchant_id: undefined as string | undefined,

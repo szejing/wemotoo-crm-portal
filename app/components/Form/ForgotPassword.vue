@@ -1,30 +1,30 @@
 <template>
-	<UForm :schema="ForgotPasswordValidation" :state="state" class="space-y-4" @submit="onSubmit" @error="onError">
+	<UForm :schema="forgotPasswordSchema" :state="state" class="space-y-4" @submit="onSubmit" @error="onError">
 		<UCard variant="outline">
 			<template #header>
 				<div>
 					<div class="flex sm:hidden w-full">
 						<NuxtImg class="my-2 mx-auto w-full cursor-pointer rounded-sm" src="/logo/logo.png" alt="logo" />
 					</div>
-					<h1 class="text-center">Forgot Password</h1>
-					<p class="text-center text-sm text-muted mt-1">Enter your email and we’ll send you a reset link.</p>
+					<h1 class="text-center">{{ $t('auth.forgotPasswordTitle') }}</h1>
+					<p class="text-center text-sm text-muted mt-1">{{ $t('auth.forgotPasswordDesc') }}</p>
 				</div>
 			</template>
 
 			<div v-if="success" class="rounded-md bg-success/10 text-success px-3 py-3 text-sm">
-				We have successfully sent you a reset link to your email {{ state.email_address }}. Please check your inbox.
+				{{ $t('auth.resetLinkSent', { email: state.email_address }) }}
 			</div>
 
 			<div v-else-if="success === false" class="rounded-md bg-error/10 text-error px-3 py-3 text-sm">{{ errorMessage }}</div>
 
 			<template v-else>
 				<div class="flex flex-col gap-2">
-					<UFormField label="Merchant Id" name="merchant_id" required>
+					<UFormField :label="$t('auth.merchantId')" name="merchant_id" required>
 						<UInput v-model="state.merchant_id" autocomplete="merchant_id" />
 					</UFormField>
 
-					<UFormField label="Email" name="email_address" required>
-						<UInput v-model="state.email_address" placeholder="you@example.com" autocomplete="email" />
+					<UFormField :label="$t('auth.email')" name="email_address" required>
+						<UInput v-model="state.email_address" :placeholder="$t('auth.emailPlaceholder')" autocomplete="email" />
 					</UFormField>
 				</div>
 			</template>
@@ -32,9 +32,9 @@
 			<template #footer>
 				<div class="flex flex-col gap-2">
 					<UButton v-if="!success" block size="md" color="primary" variant="outline" type="submit" :loading="loading" :disabled="countdown > 0">
-						{{ countdown > 0 ? `Resend in ${countdown}s` : 'Send reset link' }}
+						{{ countdown > 0 ? $t('auth.resendIn', { n: countdown }) : $t('auth.sendResetLink') }}
 					</UButton>
-					<NuxtLink to="/login" class="text-center text-sm text-muted hover:underline">Back to login</NuxtLink>
+					<NuxtLink to="/login" class="text-center text-sm text-muted hover:underline">{{ $t('auth.backToLogin') }}</NuxtLink>
 				</div>
 			</template>
 		</UCard>
@@ -47,7 +47,10 @@ import { ForgotPasswordValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
-type Schema = z.output<typeof ForgotPasswordValidation>;
+const { t } = useI18n();
+const forgotPasswordSchema = computed(() => ForgotPasswordValidation(t));
+
+type Schema = z.infer<ReturnType<typeof ForgotPasswordValidation>>;
 
 const state = reactive({
 	merchant_id: undefined as string | undefined,

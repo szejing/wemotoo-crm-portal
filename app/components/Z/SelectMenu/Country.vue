@@ -5,7 +5,7 @@
 		:items="countryItems"
 		:search-input="{}"
 		size="md"
-		placeholder="Select Country"
+		:placeholder="$t('components.selectMenu.selectCountry')"
 		value-key="code"
 	/>
 </template>

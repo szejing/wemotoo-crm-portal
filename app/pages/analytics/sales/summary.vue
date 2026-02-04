@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-sales-summary">
 		<template #header>
-			<UDashboardNavbar title="Analytics Sales Summary" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsSalesSummary')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -20,21 +20,21 @@
 				<div v-if="!loading && groupedByDate.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
 						<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">No sales summary data found.</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesSummaryFound') }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 					</div>
 				</div>
 
 				<div v-else>
 					<!-- Table Controls -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
-						<!-- Page Size -->
-						<div class="flex items-center gap-2">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-							<USelect v-model="sale_summ.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-						</div>
-					</div>
+					<ZTableToolbar
+						v-model="sale_summ.page_size"
+						:page-size-options="options_page_size"
+						:export-enabled="true"
+						:exporting="sale_summ.exporting"
+						@update:model-value="updatePageSize"
+						@export="salesSummStore.exportSalesSummary"
+					/>
 
 					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
 						<!-- Date Header -->
@@ -45,12 +45,12 @@
 									<div class="flex items-center gap-3 text-sm">
 										<div class="flex items-center gap-1.5 text-neutral-600">
 											<Icon name="i-heroicons-banknotes" class="text-base" />
-											<span class="font-medium">{{ group.total_txns }} transactions</span>
+											<span class="font-medium">{{ group.total_txns }} {{ $t('pages.transactionsLabel') }}</span>
 										</div>
 									</div>
 								</div>
 								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>Total: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
+									<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 								</div>
 							</div>
 						</div>
@@ -73,10 +73,12 @@
 
 <script lang="ts" setup>
 import { getFormattedDate, formatCurrency } from 'wemotoo-common';
-import { sale_summ_columns } from '~/utils/table-columns';
+import { getSaleSummColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Sale Summary' });
+const { t } = useI18n();
+const sale_summ_columns = computed(() => getSaleSummColumns(t));
+useHead({ title: () => t('pages.saleSummaryTitle') });
 
 onMounted(async () => {
 	await salesSummStore.getSaleSummary();

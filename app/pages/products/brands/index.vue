@@ -1,19 +1,14 @@
 <template>
 	<UDashboardPanel id="products-brands">
 		<template #header>
-			<UDashboardNavbar title="Brands" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.brands')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 
 				<template #right>
-					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/products/brands/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
-							Create
-						</UButton>
-					</div>
+					<ZCreateButton to="/products/brands/create" />
 				</template>
 			</UDashboardNavbar>
 
@@ -26,27 +21,21 @@
 
 		<template #body>
 			<div class="space-y-6">
-				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="brandStore.updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportBrands">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="brandStore.updatePageSize"
+					@export="exportBrands"
+				/>
 
 				<UTable :data="rows" :columns="brand_columns" :loading="loading" @select="selectBrand">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No brands found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noBrandsFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -62,7 +51,7 @@
 
 <script lang="ts" setup>
 import { ZModalBrandDetail, ZModalConfirmation } from '#components';
-import { brand_columns } from '~/utils/table-columns';
+import { getBrandColumns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
@@ -70,7 +59,9 @@ import type { TableRow } from '@nuxt/ui';
 const overlay = useOverlay();
 const brandStore = useBrandStore();
 
-useHead({ title: 'Wemotoo CRM - Brands' });
+const { t } = useI18n();
+const brand_columns = computed(() => getBrandColumns(t));
+useHead({ title: () => t('pages.brandsTitle') });
 
 onMounted(async () => {
 	await brandStore.getBrands();

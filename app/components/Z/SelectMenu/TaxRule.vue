@@ -7,7 +7,7 @@
 		size="md"
 		label-key="code"
 		description-key="description"
-		placeholder="Select Tax Rule"
+		:placeholder="$t('components.selectMenu.selectTaxRule')"
 	>
 		<template #default>
 			<div v-if="tax_rule" class="flex items-center">
@@ -22,7 +22,7 @@
 					/>
 				</div>
 			</div>
-			<span v-else class="text-neutral-400 text-sm">Select Tax Rule</span>
+			<span v-else class="text-neutral-400 text-sm">{{ $t('components.selectMenu.selectTaxRule') }}</span>
 		</template>
 	</USelectMenu>
 </template>

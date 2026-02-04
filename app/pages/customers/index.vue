@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="customers">
 		<template #header>
-			<UDashboardNavbar title="Customers" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.customers')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -18,26 +18,22 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportCustomers">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="false"
+					:exporting="customerStore.exporting"
+					@update:model-value="updatePageSize"
+					@export="exportCustomers"
+				/>
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select="selectCustomer">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No customers found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCustomersFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -52,11 +48,13 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { customer_columns } from '~/utils/table-columns';
+import { getCustomerColumns } from '~/utils/table-columns';
 import type { Customer } from '~/utils/types/customer';
 import type { TableRow } from '@nuxt/ui';
 
-useHead({ title: 'Wemotoo CRM - Customers' });
+const { t } = useI18n();
+const customer_columns = computed(() => getCustomerColumns(t));
+useHead({ title: () => t('pages.customersTitle') });
 
 const customerStore = useCustomerStore();
 const { loading, customers, filter, total_customers, exporting } = storeToRefs(customerStore);

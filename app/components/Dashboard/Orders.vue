@@ -1,10 +1,10 @@
 <template>
 	<div class="mt-4 p-4 rounded-lg">
-		<h1 class="text-lg font-bold">Orders</h1>
+		<h1 class="text-lg font-bold">{{ $t('nav.orders') }}</h1>
 		<UTable :data="rows" :columns="order_columns" :loading="loading" @select="selectOrder">
-			<template #empty-state>
+			<template #empty>
 				<div class="flex flex-col items-center justify-center py-6 gap-3">
-					<span class="italic text-sm">No Orders !</span>
+					<span class="italic text-sm">{{ $t('pages.noOrdersFound') }}</span>
 				</div>
 			</template>
 		</UTable>
@@ -12,9 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-import { order_columns } from '~/utils/table-columns';
+import { getOrderColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
 import type { OrderHistory } from '~/utils/types/order-history';
+
+const { t } = useI18n();
+const order_columns = computed(() => getOrderColumns(t));
 
 const orderStore = useOrderStore();
 const { orders, filter, loading } = storeToRefs(orderStore);

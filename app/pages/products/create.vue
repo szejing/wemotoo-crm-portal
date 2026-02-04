@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="product-create" grow>
 		<template #header>
-			<UDashboardNavbar title="Add New Product" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.addNewProduct')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -23,15 +23,15 @@
 					<div class="hidden md:flex justify-between items-center gap-3">
 						<UButton color="neutral" variant="ghost" size="lg" :loading="adding" @click="() => saveDraft()">
 							<UIcon :name="ICONS.SAVE" />
-							Save Draft
+							{{ $t('pages.saveDraft') }}
 						</UButton>
 
 						<div class="flex gap-3">
-							<UButton color="neutral" variant="outline" size="lg" @click="goBack"> Cancel </UButton>
+							<UButton color="neutral" variant="outline" size="lg" @click="goBack">{{ $t('common.cancel') }}</UButton>
 
 							<UButton color="success" variant="solid" size="lg" :loading="adding" @click="() => onSubmit()">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
-								Create Product
+								{{ $t('pages.createProductButton') }}
 							</UButton>
 						</div>
 					</div>
@@ -40,15 +40,15 @@
 					<div class="md:hidden flex flex-col gap-2">
 						<UButton color="success" size="md" class="w-full" :loading="adding" @click="() => onSubmit()">
 							<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
-							<span class="text-sm">Create Product</span>
+							<span class="text-sm">{{ $t('pages.createProductButton') }}</span>
 						</UButton>
 						<div class="flex gap-2">
 							<UButton color="neutral" variant="soft" size="sm" class="flex-1" :loading="adding" @click="() => saveDraft()">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-								<span class="text-xs">Save Draft</span>
+								<span class="text-xs">{{ $t('pages.saveDraft') }}</span>
 							</UButton>
 							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="goBack">
-								<span class="text-xs">Cancel</span>
+								<span class="text-xs">{{ $t('common.cancel') }}</span>
 							</UButton>
 						</div>
 					</div>
@@ -65,7 +65,8 @@ const productStore = useProductStore();
 const { adding } = storeToRefs(productStore);
 const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
 
-useHead({ title: 'Wemotoo CRM - Create Product' });
+const { t } = useI18n();
+useHead({ title: () => t('pages.createProductTitle') });
 
 onBeforeRouteLeave(() => {
 	productStore.resetNewProduct();

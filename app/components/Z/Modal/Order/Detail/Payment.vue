@@ -1,12 +1,12 @@
 <template>
 	<UModal
-		title="Update Payment Info"
+		:title="$t('components.zModal.updatePaymentInfo')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateOrderPaymentValidation" :state="state.payment" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="paymentSchema" :state="state.payment" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOrderDetailPayment
 					v-model:payment-date-time="state.payment.payment_date_time"
@@ -20,8 +20,8 @@
 				<!-- *********************** General Info *********************** -->
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="ghost" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">Update</UButton>
+					<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="is_loading" :disabled="is_loading" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</UForm>
 		</template>
@@ -32,9 +32,12 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { PaymentModel } from '~/utils/models/index';
-import { UpdateOrderPaymentValidation } from '~/utils/schema/index';
+import { UpdateOrderPaymentValidation } from '~/utils/schema';
 
-type Schema = z.output<typeof UpdateOrderPaymentValidation>;
+const { t } = useI18n();
+const paymentSchema = computed(() => UpdateOrderPaymentValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateOrderPaymentValidation>>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);

@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="crm-users">
 		<template #header>
-			<UDashboardNavbar title="CRM Users" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.staffs')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -18,13 +18,7 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table controls: page size -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-				</div>
+				<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
 
 				<!-- Table -->
 				<UTable
@@ -39,8 +33,8 @@
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No CRM users found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your search to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCrmUsersFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingSearch') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -56,12 +50,14 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { crm_user_columns } from '~/utils/table-columns';
+import { getCrmUserColumns } from '~/utils/table-columns';
 import type { CRMUser } from '~/utils/types/crm-user';
 import type { TableRow } from '@nuxt/ui';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 
-useHead({ title: 'Wemotoo CRM - CRM Users' });
+const { t } = useI18n();
+const crm_user_columns = computed(() => getCrmUserColumns(t));
+useHead({ title: () => t('pages.crmUsersTitle') });
 
 const crmUserStore = useCRMUserStore();
 const { loading, crm_users, filter, total_count } = storeToRefs(crmUserStore);

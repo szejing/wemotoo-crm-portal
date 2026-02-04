@@ -9,24 +9,24 @@
 		</div> -->
 
 		<div class="flex-jbetween-icenter">
-			<h4 class="text-neutral-700 text-sm">Amount Type<span class="text-red-500">*</span></h4>
+			<h4 class="text-neutral-700 text-sm">{{ $t('components.zInput.amountType') }}<span class="text-red-500">*</span></h4>
 			<ZSelectMenuAmountType :amount-type="amountType" @update:amount-type="amountType = $event" />
 		</div>
 
 		<div class="flex-jbetween-icenter">
-			<h4 class="text-neutral-700 text-sm">Rate (%) <span class="text-red-500">*</span></h4>
+			<h4 class="text-neutral-700 text-sm">{{ $t('components.zInput.rate') }} <span class="text-red-500">*</span></h4>
 			<UFormField v-slot="{ error }" name="rate" required>
-				<UInput v-model="rate" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Rate" />
+				<UInput v-model="rate" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.ratePlaceholder')" />
 			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-2 gap-4">
-			<UFormField label="Start Date" name="startDate">
-				<ZSelectMenuDate :date="startDate" placeholder="Start Date" @update:date="startDate = $event" />
+			<UFormField :label="$t('components.zInput.startDate')" name="startDate">
+				<ZSelectMenuDate :date="startDate" :placeholder="$t('components.zInput.startDate')" @update:date="startDate = $event" />
 			</UFormField>
 
-			<UFormField label="End Date" name="endDate">
-				<ZSelectMenuDate :date="endDate" placeholder="End Date" @update:date="endDate = $event" />
+			<UFormField :label="$t('components.zInput.endDate')" name="endDate">
+				<ZSelectMenuDate :date="endDate" :placeholder="$t('components.zInput.endDate')" @update:date="endDate = $event" />
 			</UFormField>
 		</div>
 
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { FilterCondition, FilterOperator } from 'wemotoo-common';
+import type { AmountType, FilterCondition, FilterOperator } from 'wemotoo-common';
 
 const props = defineProps<{
 	// taxCode?: string;
@@ -101,7 +101,7 @@ const endDate = computed({
 
 const amountType = computed({
 	get() {
-		return props.amountType;
+		return props.amountType as AmountType | undefined;
 	},
 	set(value) {
 		emit('update:amount-type', value);

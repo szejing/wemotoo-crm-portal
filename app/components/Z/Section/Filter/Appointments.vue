@@ -3,8 +3,8 @@
 		<!-- Search + View Tabs: stacked on mobile, side-by-side on desktop -->
 		<div class="flex flex-col sm:flex-row gap-4 sm:items-end sm:justify-between">
 			<div class="flex flex-col gap-1.5 flex-1 min-w-0 sm:min-w-0">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Search</label>
-				<UInput v-model="filter.query" placeholder="Search by name, phone..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.searchLabel') }}</label>
+				<UInput v-model="filter.query" :placeholder="$t('components.filter.searchByNamePhone')" :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 			<div class="flex flex-wrap gap-2 shrink-0">
 				<UButton
@@ -21,13 +21,13 @@
 		</div>
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
-			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<span class="text-xs text-gray-600 dark:text-gray-400">{{ $t('components.filter.activeFilters') }}</span>
 
 			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm">
-				Search: {{ filter.query }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+				{{ $t('components.filter.search') }}: {{ filter.query }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.status && filter.status !== 'All'" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
-				Status: {{ filter.status }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+				{{ $t('components.filter.status') }}: {{ filter.status }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 		</div>
 	</div>
@@ -36,12 +36,13 @@
 <script lang="ts" setup>
 import type { AppointmentView } from '~/stores/Appointment/Appointment';
 
-const viewTabs: { label: string; value: AppointmentView; icon: string }[] = [
-	{ label: 'Listing', value: 'listing', icon: 'i-heroicons-list-bullet' },
-	{ label: 'Daily', value: 'daily', icon: 'i-heroicons-calendar-days' },
-	{ label: 'Weekly', value: 'weekly', icon: 'i-heroicons-calendar' },
-	{ label: 'Monthly', value: 'monthly', icon: 'i-heroicons-square-3-stack-3d' },
-];
+const { t } = useI18n();
+const viewTabs = computed(() => [
+	{ label: t('components.filter.listing'), value: 'listing' as const, icon: 'i-heroicons-list-bullet' },
+	{ label: t('components.filter.daily'), value: 'daily' as const, icon: 'i-heroicons-calendar-days' },
+	{ label: t('components.filter.weekly'), value: 'weekly' as const, icon: 'i-heroicons-calendar' },
+	{ label: t('components.filter.monthly'), value: 'monthly' as const, icon: 'i-heroicons-square-3-stack-3d' },
+]);
 
 const appointmentStore = useAppointmentStore();
 const { filter } = storeToRefs(appointmentStore);

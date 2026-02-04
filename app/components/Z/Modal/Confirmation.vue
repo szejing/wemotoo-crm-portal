@@ -5,37 +5,33 @@
 		}"
 	>
 		<template #header>
-			<h3 class="text-lg font-bold">{{ title }}</h3>
+			<h3 class="text-lg font-bold">{{ title ?? t('modal.confirmationTitle') }}</h3>
 		</template>
 
 		<template #body>
-			<p>{{ message }}</p>
+			<p>{{ message ?? t('modal.confirmationMessage') }}</p>
 		</template>
 
 		<template #footer>
 			<div v-if="action == 'delete'" class="flex justify-between gap-4 w-full">
-				<UButton color="neutral" variant="outline" @click="onCancel">Cancel</UButton>
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" :loading="loading" @click="onConfirm">Confirm</UButton>
+				<UButton color="neutral" variant="outline" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" :loading="loading" @click="onConfirm">{{ $t('modal.confirm') }}</UButton>
 			</div>
 
 			<div v-else class="flex justify-between gap-4 w-full">
-				<UButton color="neutral" variant="outline" @click="onCancel">Cancel</UButton>
-				<UButton color="success" :loading="loading" @click="onConfirm">Confirm</UButton>
+				<UButton color="neutral" variant="outline" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+				<UButton color="success" :loading="loading" @click="onConfirm">{{ $t('modal.confirm') }}</UButton>
 			</div>
 		</template>
 	</UModal>
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
+
 const props = defineProps({
-	title: {
-		type: String,
-		default: 'Confirmation',
-	},
-	message: {
-		type: String,
-		default: 'Are you sure you want to proceed?',
-	},
+	title: { type: String, default: undefined },
+	message: { type: String, default: undefined },
 	action: {
 		type: String,
 		default: 'confirm',

@@ -1,5 +1,7 @@
 import { OrderStatus } from 'wemotoo-common';
 
+export type TranslateFn = (key: string) => string;
+
 export const options_order_status = [
 	'All',
 	OrderStatus.PENDING_PAYMENT,
@@ -8,6 +10,17 @@ export const options_order_status = [
 	OrderStatus.COMPLETED,
 	OrderStatus.REQUIRES_ACTION,
 ];
+
+export function getOrderStatusOptions(t: TranslateFn) {
+	return [
+		{ value: 'All', label: t('options.all') },
+		{ value: OrderStatus.PENDING_PAYMENT, label: t('options.pendingPayment') },
+		{ value: OrderStatus.CANCELLED, label: t('options.cancelled') },
+		{ value: OrderStatus.REFUNDED, label: t('options.refunded') },
+		{ value: OrderStatus.COMPLETED, label: t('options.completed') },
+		{ value: OrderStatus.REQUIRES_ACTION, label: t('options.requiresAction') },
+	];
+}
 
 export const getOrderStatusColor = (status: string): 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral' | undefined => {
 	const color: Record<string, 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral' | undefined> = {

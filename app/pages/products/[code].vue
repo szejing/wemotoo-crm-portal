@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="product-detail" grow>
 		<template #header>
-			<UDashboardNavbar :title="`Product Detail #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -74,7 +74,8 @@ const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
 
 const isLoading = ref(!current_product.value);
 
-useHead({ title: 'Wemotoo CRM - Product Detail #' + (current_product.value?.code ?? code) });
+const { t } = useI18n();
+useHead({ title: () => t('pages.productDetailTitle') + (current_product.value?.code ?? code) });
 
 onBeforeRouteLeave(() => {
 	current_product.value = undefined;

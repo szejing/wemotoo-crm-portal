@@ -2,10 +2,10 @@
 	<table class="w-full">
 		<thead>
 			<tr class="border-b">
-				<th class="cell-header text-left">Item</th>
-				<th class="cell-header">Unit Sell Price</th>
-				<th class="cell-header">Qty</th>
-				<th class="cell-header">Price</th>
+				<th class="cell-header text-left">{{ $t('components.orderDetail.item') }}</th>
+				<th class="cell-header">{{ $t('components.orderDetail.unitSellPrice') }}</th>
+				<th class="cell-header">{{ $t('components.orderDetail.qty') }}</th>
+				<th class="cell-header">{{ $t('components.orderDetail.price') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -67,7 +67,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header border-b">Sub Total</td>
+				<td class="cell-header border-b">{{ $t('components.orderDetail.subTotal') }}</td>
 				<td class="cell-center font-bold text-lg italic border-b">{{ formatCurrency(totalGrossAmt ?? 0, currencyCode) }}</td>
 			</tr>
 			<tr v-for="tax in taxes" :key="tax.tax_code">
@@ -77,7 +77,7 @@
 			</tr>
 			<tr>
 				<td colspan="2"></td>
-				<td class="cell-header border-b-4 border-double">Net Total</td>
+				<td class="cell-header border-b-4 border-double">{{ $t('components.orderDetail.netTotal') }}</td>
 				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ formatCurrency(totalNetAmt ?? 0, currencyCode) }}</td>
 			</tr>
 		</tfoot>

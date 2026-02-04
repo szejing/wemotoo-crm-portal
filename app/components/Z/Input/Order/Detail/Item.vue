@@ -8,19 +8,19 @@
 				</div>
 				<div class="ml-4">
 					<UBadge v-if="status == OrderItemStatus.VOIDED" size="md" color="primary">
-						VOIDED
+						{{ $t('components.orderInput.voided') }}
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
 						</template>
 					</UBadge>
 					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="error">
-						REFUNDED
+						{{ $t('components.orderInput.refunded') }}
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
 						</template>
 					</UBadge>
 					<UBadge v-else size="md" color="success">
-						ACTIVE
+						{{ $t('components.orderInput.active') }}
 						<template #trailing>
 							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
 						</template>
@@ -34,22 +34,22 @@
 		<hr class="my-2" />
 
 		<div v-if="appointment">
-			<h2 class="text-main">Appointment</h2>
+			<h2 class="text-main">{{ $t('components.orderInput.appointment') }}</h2>
 			<h4 class="text-neutral-700">#{{ appointment!.code }}</h4>
 
 			<div class="grid grid-cols-1 gap-4 mt-2">
 				<div class="flex-jbetween-icenter">
-					<h4 class="text-neutral-400">Date</h4>
+					<h4 class="text-neutral-400">{{ $t('components.orderInput.date') }}</h4>
 					<ZSelectMenuDateTime
 						v-model:date-time="appointmentDate"
-						placeholder="Appointment Date"
+						:placeholder="$t('components.orderInput.appointmentDate')"
 						:min-date="new Date()"
 						:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
 					/>
 				</div>
 
 				<div class="flex-jbetween-icenter">
-					<h4 class="text-neutral-400">Status</h4>
+					<h4 class="text-neutral-400">{{ $t('common.status') }}</h4>
 					<ZSelectMenuAppointmentStatus v-model:status="appointmentStatus" />
 				</div>
 			</div>
@@ -58,18 +58,18 @@
 		<hr v-if="appointment" class="my-2" />
 
 		<div>
-			<h2 class="text-main">Pricing</h2>
+			<h2 class="text-main">{{ $t('components.orderInput.pricing') }}</h2>
 
 			<div class="grid grid-cols-2 gap-4 mt-2">
-				<UFormField label="Currency" name="currency" disabled>
+				<UFormField :label="$t('components.orderInput.currency')" name="currency" disabled>
 					<ZSelectMenuCurrency :currency-code="currencyCode" class="mt-2" />
 				</UFormField>
 
-				<UFormField v-slot="{ error }" label="Unit Sell Price" name="unit_sell_price" disabled>
+				<UFormField v-slot="{ error }" :label="$t('components.orderDetail.unitSellPrice')" name="unit_sell_price" disabled>
 					<UInput
 						:model-value="unitSellPrice.toFixed(2)"
 						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
-						placeholder="Unit Sell Price"
+						:placeholder="$t('components.orderInput.unitSellPricePlaceholder')"
 						class="mt-2"
 						disabled
 					/>
@@ -95,7 +95,7 @@
 		</div> -->
 
 		<div class="mt-4 text-end">
-			<h3 class="text-main">Total Price : {{ currencyCode }} {{ netTotal.toFixed(2) }}</h3>
+			<h3 class="text-main">{{ $t('components.orderInput.totalPrice') }} : {{ currencyCode }} {{ netTotal.toFixed(2) }}</h3>
 		</div>
 	</div>
 </template>

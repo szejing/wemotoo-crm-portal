@@ -14,7 +14,7 @@
 						{{ df.format(selected.start) }}
 					</template>
 				</template>
-				<template v-else> Pick a date </template>
+				<template v-else> {{ $t('components.selectMenu.pickADate') }} </template>
 			</span>
 
 			<template #trailing>
@@ -71,14 +71,15 @@ const props = withDefaults(
 	},
 );
 
-const ranges = [
-	{ label: 'Last 7 days', days: 7 },
-	{ label: 'Last 14 days', days: 14 },
-	{ label: 'Last 30 days', days: 30 },
-	{ label: 'Last 3 months', months: 3 },
-	{ label: 'Last 6 months', months: 6 },
-	{ label: 'Last year', years: 1 },
-];
+const { t } = useI18n();
+const ranges = computed(() => [
+	{ label: t('components.dateRange.last7Days'), days: 7 },
+	{ label: t('components.dateRange.last14Days'), days: 14 },
+	{ label: t('components.dateRange.last30Days'), days: 30 },
+	{ label: t('components.dateRange.last3Months'), months: 3 },
+	{ label: t('components.dateRange.last6Months'), months: 6 },
+	{ label: t('components.dateRange.lastYear'), years: 1 },
+]);
 
 const toCalendarDate = (date: Date) => {
 	return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
@@ -97,7 +98,7 @@ const calendarRange = computed({
 	},
 });
 
-const isRangeSelected = (range: { days?: number; months?: number; years?: number }) => {
+const isRangeSelected = (range: { days?: number; months?: number; years?: number; label?: string }) => {
 	if (!selected.value.start || !selected.value.end) return false;
 
 	const currentDate = today(getLocalTimeZone());

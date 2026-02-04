@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="products-brands-create">
 		<template #header>
-			<UDashboardNavbar title="Create Brand" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.createBrand')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />

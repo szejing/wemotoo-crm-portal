@@ -1,7 +1,7 @@
 <template>
 	<div class="section-grid-basic-details">
-		<UFormField v-slot="{ error }" label="Tag Name" name="value" required>
-			<UInput v-model="value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Tag Name (e.g. 'Electronics', 'Clothing', 'Books')" />
+		<UFormField v-slot="{ error }" :label="$t('table.value')" name="value" required>
+			<UInput v-model="value" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.tagNamePlaceholder')" />
 		</UFormField>
 	</div>
 </template>

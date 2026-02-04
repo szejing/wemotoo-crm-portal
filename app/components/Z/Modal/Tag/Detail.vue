@@ -1,23 +1,23 @@
 <template>
 	<UModal
-		title="Update Tag"
+		:title="$t('components.zModal.updateTag')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateTagValidation" :state="state.tag" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="tagSchema" :state="state.tag" class="space-y-4" @submit="onSubmit">
 				<ZInputProductTagGeneralInfo v-model:value="state.tag.value" />
 			</UForm>
 		</template>
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -30,7 +30,10 @@ import type { z } from 'zod';
 import { UpdateTagValidation } from '~/utils/schema';
 import type { Tag } from '~/utils/types/tag';
 
-type Schema = z.output<typeof UpdateTagValidation>;
+const { t } = useI18n();
+const tagSchema = computed(() => UpdateTagValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateTagValidation>>;
 
 const props = defineProps({
 	tag: {

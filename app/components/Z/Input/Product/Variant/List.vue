@@ -5,9 +5,9 @@
 			<div class="flex-1">
 				<div class="flex items-center gap-2">
 					<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-sm">2</div>
-					<h3 class="text-base font-semibold text-neutral-900">Generate Product Variants</h3>
+					<h3 class="text-base font-semibold text-neutral-900">{{ $t('components.zInput.generateProductVariants') }}</h3>
 				</div>
-				<p class="text-xs text-neutral-500 mt-1 ml-10">Combine your options to create all possible product variations</p>
+				<p class="text-xs text-neutral-500 mt-1 ml-10">{{ $t('components.zInput.combineOptionsDesc') }}</p>
 			</div>
 		</div>
 
@@ -16,8 +16,8 @@
 			<div class="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-3">
 				<UIcon :name="ICONS.ALERT" class="w-6 h-6 text-neutral-400" />
 			</div>
-			<p class="text-sm font-medium text-neutral-900 mb-1">Define options first</p>
-			<p class="text-xs text-neutral-500">Add product options above before generating variants</p>
+			<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.defineOptionsFirst') }}</p>
+			<p class="text-xs text-neutral-500">{{ $t('components.zInput.addOptionsAbove') }}</p>
 		</div>
 
 		<!-- Has Options -->
@@ -31,14 +31,19 @@
 					<div class="flex-1 min-w-0">
 						<div class="flex items-center justify-between mb-2">
 							<div>
-								<h4 class="text-sm font-semibold text-neutral-900">Possible Combinations</h4>
+								<h4 class="text-sm font-semibold text-neutral-900">{{ $t('components.zInput.possibleCombinations') }}</h4>
 								<p class="text-xs text-neutral-600 mt-0.5">
-									Based on {{ selectedOptions.length }} selected {{ selectedOptions.length === 1 ? 'option' : 'options' }}
+									{{
+										$t('components.zInput.basedOnSelectedOptions', {
+											count: selectedOptions.length,
+											optionLabel: selectedOptions.length === 1 ? $t('components.zInput.option') : $t('components.zInput.options'),
+										})
+									}}
 								</p>
 							</div>
 							<div class="text-right">
 								<div class="text-2xl font-bold text-primary-600">{{ totalPossibleVariants }}</div>
-								<p class="text-xs text-neutral-500">variants</p>
+								<p class="text-xs text-neutral-500">{{ $t('components.zInput.variantsLabel') }}</p>
 							</div>
 						</div>
 
@@ -57,7 +62,7 @@
 						<div v-else class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
 							<div class="flex items-center gap-2 text-xs text-amber-700">
 								<UIcon :name="ICONS.ALERT" class="w-4 h-4" />
-								<span>No options selected. Please select at least one option above to generate variants.</span>
+								<span>{{ $t('components.zInput.noOptionsSelected') }}</span>
 							</div>
 						</div>
 
@@ -135,11 +140,11 @@
 								<div class="flex items-center gap-1 mt-1">
 									<UIcon :name="ICONS.CURRENCY" class="text-main" />
 
-									<p v-if="variant.price_types?.[0].sale_price" class="text-sm font-medium text-main">
+									<p v-if="variant.price_types?.[0]?.sale_price" class="text-sm font-medium text-main">
 										{{ formatCurrency(variant.price_types?.[0].sale_price ?? 0) }}
 									</p>
 									<p v-else class="text-sm font-medium text-main">
-										{{ formatCurrency(variant.price_types?.[0].orig_sell_price ?? 0) }}
+										{{ formatCurrency(variant.price_types?.[0]?.orig_sell_price ?? 0) }}
 									</p>
 								</div>
 							</div>
@@ -153,8 +158,8 @@
 				<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
 					<UIcon :name="ICONS.SPARKLES" class="w-6 h-6 text-purple-600" />
 				</div>
-				<p class="text-sm font-medium text-neutral-900 mb-1">Ready to create {{ totalPossibleVariants }} variants</p>
-				<p class="text-xs text-neutral-500 mb-4">Click "Auto Generate" to create all possible combinations automatically</p>
+				<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.readyToCreateVariants', { count: totalPossibleVariants }) }}</p>
+				<p class="text-xs text-neutral-500 mb-4">{{ $t('components.zInput.autoGenerateHint') }}</p>
 			</div>
 		</div>
 	</div>

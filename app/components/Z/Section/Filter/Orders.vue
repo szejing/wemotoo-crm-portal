@@ -4,39 +4,39 @@
 		<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Date Range Filter -->
 			<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Date Range</label>
-				<ZSelectMenuDateRange v-model="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.dateRange') }}</label>
+				<ZSelectMenuDateRange v-model="filter.date_range" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Order Number Search -->
 			<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Order No.</label>
-				<UInput v-model="filter.query" placeholder="Search order no..." :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderNo') }}</label>
+				<UInput v-model="filter.query" :placeholder="$t('components.filter.searchOrderNo')" :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Currency Filter -->
 			<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Currency</label>
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.currency') }}</label>
 				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
 			</div>
 
 			<!-- Status Filter - Mobile Only -->
 			<div class="flex flex-col gap-1.5 sm:hidden">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">Status</label>
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.status') }}</label>
 				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
 			</div>
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 justify-end">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">Actions</label>
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">{{ $t('components.filter.actions') }}</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-						Clear
+						{{ $t('components.filter.clear') }}
 					</UButton>
 					<UButton color="primary" :disabled="is_loading" :loading="is_loading" @click="search">
 						<UIcon :name="ICONS.SEARCH_ROUNDED" class="w-4 h-4" />
-						Search
+						{{ $t('components.filter.search') }}
 					</UButton>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 
 		<!-- Active Filters Display -->
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
-			<span class="text-xs text-gray-600 dark:text-gray-400">Active filters:</span>
+			<span class="text-xs text-gray-600 dark:text-gray-400">{{ $t('components.filter.activeFilters') }}</span>
 			<UBadge
 				v-if="filter.date_range && (filter.date_range.start || filter.date_range.end)"
 				color="primary"
@@ -52,19 +52,19 @@
 				size="sm"
 				@click="clearFilter('date')"
 			>
-				Date: {{ formatDateRange(filter.date_range) }}
+				{{ $t('components.filter.date') }}: {{ formatDateRange(filter.date_range) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm" @click="clearFilter('query')">
-				Order: {{ filter.query }}
+				{{ $t('components.filter.order') }}: {{ filter.query }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
-				Status: {{ capitalizeFirstLetter(filter.status) }}
+				{{ $t('components.filter.status') }}: {{ capitalizeFirstLetter(filter.status) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
 			<UBadge v-if="filter.currency_code && filter.currency_code !== 'MYR'" color="warning" variant="subtle" size="sm">
-				Currency: {{ filter.currency_code }}
+				{{ $t('components.filter.currency') }}: {{ filter.currency_code }}
 			</UBadge>
 		</div>
 	</div>

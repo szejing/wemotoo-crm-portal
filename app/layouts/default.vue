@@ -21,10 +21,10 @@
 						>
 							<template #item-label="{ item }">
 								<ULink v-if="item.to && Array.isArray(item.children) && item.children.length" :to="item.to" class="block size-full" @click.stop>
-									{{ item?.label }}
+									{{ $t(item?.label) }}
 								</ULink>
 								<template v-else>
-									{{ item?.label }}
+									{{ $t(item?.label) }}
 								</template>
 							</template>
 						</UNavigationMenu>

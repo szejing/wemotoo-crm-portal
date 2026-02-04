@@ -1,53 +1,55 @@
-import { order_columns } from './order/order';
-import { customer_columns } from './customer';
-import { category_columns } from './categories';
-import { product_option_columns } from './product-option';
-import { selectable_product_option_columns } from './selectable-product-option';
-import { tag_columns } from './tags';
-import { product_columns } from './product';
-import { order_summ_columns } from './order-summ/order-summ';
-import { order_summ_item_columns } from './order-summ/order-summ-item';
-import { order_item_columns } from './order/order-item';
-import { payment_type_group_columns } from './payment/payment-type-group';
-import { payment_type_columns } from './payment/payment-type';
-import { payment_method_columns } from './payment/payment-method';
-import { sale_summ_columns } from './sale-summ/sale-summ';
-import { sale_summ_payment_columns } from './sale-summ/sale-summ-payment';
-import { sale_summ_item_columns } from './sale-summ/sale-summ-item';
-import { sale_columns } from './sale/sale';
-import { brand_columns } from './brand';
-import { order_summ_customer_columns } from './order-summ/order-summ-customer';
-import { sale_summ_customer_columns } from './sale-summ/sale-summ-customer';
-import { outlet_columns } from './outlet';
-import { tax_code_columns } from './tax/tax-code';
-import { tax_group_columns } from './tax/tax-group';
-import { tax_rule_columns } from './tax/tax-rule';
-import { crm_user_columns } from './crm-user';
+import { getOrderColumns } from './order/order';
+import { getCustomerColumns } from './customer';
+import { getCategoryColumns } from './categories';
+import { getProductOptionColumns } from './product-option';
+import { getSelectableProductOptionColumns } from './selectable-product-option';
+import { getTagColumns } from './tags';
+import { getProductColumns } from './product';
+import { getOrderSummColumns } from './order-summ/order-summ';
+import { getOrderSummItemColumns } from './order-summ/order-summ-item';
+import { getOrderItemColumns } from './order/order-item';
+import { getPaymentTypeGroupColumns } from './payment/payment-type-group';
+import { getPaymentTypeColumns } from './payment/payment-type';
+import { getPaymentMethodColumns } from './payment/payment-method';
+import { getSaleSummColumns } from './sale-summ/sale-summ';
+import { getSaleSummPaymentColumns } from './sale-summ/sale-summ-payment';
+import { getSaleSummItemColumns } from './sale-summ/sale-summ-item';
+import { getSaleColumns } from './sale/sale';
+import { getBrandColumns } from './brand';
+import { getOrderSummCustomerColumns } from './order-summ/order-summ-customer';
+import { getSaleSummCustomerColumns } from './sale-summ/sale-summ-customer';
+import { getOutletColumns } from './outlet';
+import { getTaxCodeColumns } from './tax/tax-code';
+import { getTaxGroupColumns } from './tax/tax-group';
+import { getTaxRuleColumns } from './tax/tax-rule';
+import { getCrmUserColumns } from './crm-user';
+
+export type { TableColumnsTranslate } from './brand';
 
 export {
-	customer_columns,
-	tag_columns,
-	category_columns,
-	product_option_columns,
-	selectable_product_option_columns,
-	order_columns,
-	product_columns,
-	order_summ_columns,
-	order_summ_item_columns,
-	order_item_columns,
-	order_summ_customer_columns,
-	payment_type_group_columns,
-	payment_type_columns,
-	payment_method_columns,
-	sale_summ_columns,
-	sale_summ_payment_columns,
-	sale_summ_item_columns,
-	sale_summ_customer_columns,
-	sale_columns,
-	brand_columns,
-	outlet_columns,
-	tax_code_columns,
-	tax_group_columns,
-	tax_rule_columns,
-	crm_user_columns,
+	getCustomerColumns,
+	getTagColumns,
+	getCategoryColumns,
+	getProductOptionColumns,
+	getSelectableProductOptionColumns,
+	getOrderColumns,
+	getProductColumns,
+	getOrderSummColumns,
+	getOrderSummItemColumns,
+	getOrderItemColumns,
+	getOrderSummCustomerColumns,
+	getPaymentTypeGroupColumns,
+	getPaymentTypeColumns,
+	getPaymentMethodColumns,
+	getSaleSummColumns,
+	getSaleSummPaymentColumns,
+	getSaleSummItemColumns,
+	getSaleSummCustomerColumns,
+	getSaleColumns,
+	getBrandColumns,
+	getOutletColumns,
+	getTaxCodeColumns,
+	getTaxGroupColumns,
+	getTaxRuleColumns,
+	getCrmUserColumns,
 };

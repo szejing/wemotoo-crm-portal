@@ -12,11 +12,11 @@
 					<div class="flex-1">
 						<div class="flex items-center gap-2">
 							<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">Maintenance Settings</h3>
+							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.maintenanceSettings') }}</h3>
 						</div>
-						<p class="text-sm text-neutral-500 mt-1">Configure booking requirements, duration, and operating hours for this service.</p>
+						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.configureBookingRequirements') }}</p>
 					</div>
-					<UTooltip text="Set up maintenance-specific details like booking requirements and operating hours." :popper="{ placement: 'left' }">
+					<UTooltip :text="$t('components.productUpdate.setUpMaintenanceTooltip')" :popper="{ placement: 'left' }">
 						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
 					</UTooltip>
 				</div>
@@ -25,9 +25,9 @@
 					<div class="flex items-start gap-3">
 						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
 						<div>
-							<h4 class="text-sm font-medium text-orange-900">Maintenance Information</h4>
+							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.maintenanceInformation') }}</h4>
 							<p class="text-xs text-orange-700 mt-1">
-								Add maintenance information such as booking requirements, duration, working hours, and off days for this service.
+								{{ $t('components.productUpdate.addMaintenanceInformation') }}
 							</p>
 						</div>
 					</div>
@@ -44,12 +44,12 @@
 					<div class="flex-1">
 						<div class="flex items-center gap-2">
 							<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">Product Variants</h3>
+							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.productVariants') }}</h3>
 						</div>
-						<p class="text-sm text-neutral-500 mt-1">Create variations of this product with different options like color, size, or format.</p>
+						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.createVariationsOfProduct') }}</p>
 					</div>
 					<UTooltip
-						text="Create product variants by defining options and their values. Each combination creates a unique variant."
+						:text="$t('components.productUpdate.variantsTooltip')"
 						:popper="{ placement: 'left' }"
 					>
 						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
@@ -63,23 +63,22 @@
 							<UIcon :name="ICONS.LIGHTBULB" class="text-primary-600 w-5 h-5" />
 						</div>
 						<div class="flex-1">
-							<h4 class="text-sm font-semibold text-neutral-900 mb-1">How Product Variants Work</h4>
+							<h4 class="text-sm font-semibold text-neutral-900 mb-1">{{ $t('components.productUpdate.howProductVariantsWork') }}</h4>
 							<p class="text-xs text-neutral-700 leading-relaxed mb-3">
-								Create product variants in two simple steps: First, define your product options (like Size, Color, Material). Then, automatically generate all
-								possible combinations or add custom variants.
+								{{ $t('components.productUpdate.createProductVariantsTwoSteps') }}
 							</p>
 							<div class="flex flex-wrap gap-3 text-xs">
 								<div class="flex items-center gap-1.5 text-neutral-600">
 									<span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold">1</span>
-									<span>Define options & values</span>
+									<span>{{ $t('components.productUpdate.defineOptionsAndValues') }}</span>
 								</div>
 								<div class="flex items-center gap-1.5 text-neutral-600">
 									<span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-semibold">2</span>
-									<span>Generate combinations</span>
+									<span>{{ $t('components.productUpdate.generateCombinations') }}</span>
 								</div>
 								<div class="flex items-center gap-1.5 text-neutral-600">
 									<span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">3</span>
-									<span>Customize each variant</span>
+									<span>{{ $t('components.productUpdate.customizeEachVariant') }}</span>
 								</div>
 							</div>
 						</div>
@@ -92,24 +91,24 @@
 						<div class="flex-1">
 							<h5 class="text-sm font-semibold text-neutral-900 mb-3 flex items-center gap-2">
 								<UIcon :name="ICONS.SPARKLES" class="w-4 h-4 text-amber-500" />
-								Example: T-Shirt Variants
+								{{ $t('components.productUpdate.exampleTShirtVariants') }}
 							</h5>
 							<div class="space-y-3 text-xs">
 								<div>
-									<p class="font-medium text-neutral-700 mb-1.5">Options you might define:</p>
+									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.optionsYouMightDefine') }}</p>
 									<div class="flex flex-wrap gap-2">
 										<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-200">Size: S, M, L, XL</span>
 										<span class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">Color: Red, Blue, Black</span>
 									</div>
 								</div>
 								<div>
-									<p class="font-medium text-neutral-700 mb-1.5">Results in variants like:</p>
+									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.resultsInVariantsLike') }}</p>
 									<div class="flex flex-wrap gap-2">
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / S</span>
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / M</span>
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Blue / S</span>
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">...</span>
-										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium">12 total variants</span>
+										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium">12 {{ $t('components.productUpdate.totalVariants') }}</span>
 									</div>
 								</div>
 							</div>
@@ -154,11 +153,11 @@
 					<div class="flex-1">
 						<div class="flex items-center gap-2">
 							<UIcon :name="ICONS.TAX" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">Tax Settings</h3>
+							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.taxSettings') }}</h3>
 						</div>
-						<p class="text-sm text-neutral-500 mt-1">Configure tax rules and rates for this product.</p>
+						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.configureTaxRulesProduct') }}</p>
 					</div>
-					<UTooltip text="Set up tax configurations specific to this product." :popper="{ placement: 'left' }">
+					<UTooltip :text="$t('components.productUpdate.setUpTaxTooltipProduct')" :popper="{ placement: 'left' }">
 						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
 					</UTooltip>
 				</div>
@@ -167,9 +166,9 @@
 					<div class="flex items-start gap-3">
 						<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
 						<div>
-							<h4 class="text-sm font-medium text-blue-900">Tax Information</h4>
+							<h4 class="text-sm font-medium text-blue-900">{{ $t('components.productUpdate.taxInformation') }}</h4>
 							<p class="text-xs text-blue-700 mt-1">
-								Configure tax settings for this product. Tax rules can be applied based on your location and regulations.
+								{{ $t('components.productUpdate.configureTaxSettingsProduct') }}
 							</p>
 						</div>
 					</div>
@@ -177,7 +176,7 @@
 
 				<div class="text-center py-12 text-neutral-500">
 					<UIcon :name="ICONS.SETTINGS_ROUNDED" class="w-12 h-12 mx-auto mb-3 text-neutral-300" />
-					<p class="text-sm">Tax configuration coming soon</p>
+					<p class="text-sm">{{ $t('components.productUpdate.taxConfigurationComingSoon') }}</p>
 				</div>
 			</div>
 		</template>
@@ -196,6 +195,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:options', 'update:variants', 'delete:variant', 'update:metadata']);
+const { t } = useI18n();
 
 const product = computed({
 	get() {
@@ -217,7 +217,7 @@ const product_additional_info = computed(() => {
 	// Conditionally add maintenance for type 2 (Services)
 	if (shouldShowMaintenance.value) {
 		tabs.push({
-			label: 'Maintenance',
+			label: t('components.productUpdate.maintenanceTab'),
 			slot: 'maintenance',
 			icon: ICONS.SETTINGS_ROUNDED,
 		});
@@ -225,14 +225,14 @@ const product_additional_info = computed(() => {
 
 	// Always add variants
 	tabs.push({
-		label: 'Variants',
+		label: t('components.productUpdate.variantsTab'),
 		slot: 'variants',
 		icon: ICONS.LAYERS,
 	});
 
 	// Always add tax
 	tabs.push({
-		label: 'Tax',
+		label: t('nav.tax'),
 		slot: 'tax',
 		icon: ICONS.TAX,
 	});

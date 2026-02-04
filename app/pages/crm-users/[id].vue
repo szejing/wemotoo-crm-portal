@@ -119,10 +119,11 @@ function roleLabel(role: UserRoles): string {
 	return roleLabels[role] ?? String(role);
 }
 
+const { t } = useI18n();
 const pageTitle = computed(() => {
-	if (!user.value) return 'CRM User';
+	if (!user.value) return t('pages.crmUser');
 	const u = user.value;
-	return u.name || u.email_address || 'CRM User';
+	return u.name || u.email_address || t('pages.crmUser');
 });
 
 function syncEditFormFromUser() {

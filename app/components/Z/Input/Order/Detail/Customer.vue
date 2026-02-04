@@ -1,12 +1,16 @@
 <template>
 	<div class="section-grid-basic-details">
 		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormField v-slot="{ error }" label="Customer Name" name="customer_name" required>
-				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Customer Name" />
+			<UFormField v-slot="{ error }" :label="$t('components.orderInput.customerName')" name="customer_name" required>
+				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.customerNamePlaceholder')" />
 			</UFormField>
 
-			<UFormField v-slot="{ error }" label="Email Address" name="email_address" required>
-				<UInput v-model="email_address" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Email Address" />
+			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.emailAddress')" name="email_address" required>
+				<UInput
+					v-model="email_address"
+					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+					:placeholder="$t('components.orderInput.emailAddressPlaceholder')"
+				/>
 			</UFormField>
 		</div>
 
@@ -14,14 +18,14 @@
 			<!-- todo: add country code -->
 			<!-- <ZSelectMenuCountry v-model:country-code="dial_code" /> -->
 
-			<UFormField v-slot="{ error }" label="Phone Number" name="phone_no" required>
-				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Phone Number" />
+			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.phoneNo')" name="phone_no" required>
+				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.phoneNoPlaceholder')" />
 			</UFormField>
 		</div>
 
 		<div v-if="shipping_address || billing_address" class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
 			<div v-if="shipping_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
-				<h3>Shipping Address</h3>
+				<h3>{{ $t('components.orderInput.shippingAddress') }}</h3>
 				<ZInputAddress
 					v-if="shipping_address"
 					v-model:address1="shipping_address.address1"
@@ -37,11 +41,11 @@
 
 			<div v-if="billing_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
 				<div class="flex-between">
-					<h3>Billing Address</h3>
+					<h3>{{ $t('components.orderInput.billingAddress') }}</h3>
 					<UCheckbox
 						v-model="same_as_shipping_address"
 						:ui="{ label: 'text-xs font-normal text-neutral-500' }"
-						label="Same as Shipping Address"
+						:label="$t('components.orderInput.sameAsShippingAddress')"
 						@change="onChangeSameAsShippingAddress"
 					/>
 				</div>

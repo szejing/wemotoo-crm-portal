@@ -7,7 +7,7 @@
 			content: 'w-50 max-h-40 overflow-y-auto scrollbar-hide',
 		}"
 	>
-		<UButton icon="i-heroicons-view-columns" color="neutral" size="xs"> Show Columns </UButton>
+		<UButton icon="i-heroicons-view-columns" color="neutral" size="xs">{{ $t('components.selectMenu.showColumns') }}</UButton>
 	</USelectMenu>
 </template>
 

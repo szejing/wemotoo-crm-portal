@@ -3,7 +3,7 @@
 		<!-- ***** Status ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Status</h3>
+				<h3>{{ $t('components.zInput.productSidebarStatus') }}</h3>
 				<ZSelectMenuProductStatus v-model:status="status" class="mt-2" />
 			</template>
 		</UCard>
@@ -11,7 +11,7 @@
 		<!-- ***** Brands ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Brands</h3>
+				<h3>{{ $t('components.zInput.productSidebarBrands') }}</h3>
 				<ZSelectMenuBrands v-model:brands="brands" />
 			</template>
 		</UCard>
@@ -19,7 +19,7 @@
 		<!-- ***** Categories ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Category</h3>
+				<h3>{{ $t('components.zInput.productSidebarCategory') }}</h3>
 				<ZSelectMenuCategories v-model:categories="categories" />
 			</template>
 		</UCard>
@@ -27,7 +27,7 @@
 		<!-- ***** Tags ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Tags</h3>
+				<h3>{{ $t('components.zInput.productSidebarTags') }}</h3>
 				<ZSelectMenuTags v-model:tags="tags" />
 			</template>
 		</UCard>
@@ -35,7 +35,7 @@
 		<!-- ***** Image Thumbnails ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Thumbnail</h3>
+				<h3>{{ $t('components.zInput.productSidebarThumbnail') }}</h3>
 			</template>
 
 			<ZDropzone :existing-images="[product.thumbnail]" @files-selected="updateThumbnail" />
@@ -43,7 +43,7 @@
 		<!-- ***** Images ***** -->
 		<UCard :ui="cardBg">
 			<template #header>
-				<h3>Images</h3>
+				<h3>{{ $t('components.zInput.productSidebarImages') }}</h3>
 			</template>
 
 			<ZDropzone multiple :existing-images="product.images" @files-selected="updateImages" />

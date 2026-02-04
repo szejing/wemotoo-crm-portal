@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="orders-detail">
 		<template #header>
-			<UDashboardNavbar title="Order Detail">
+			<UDashboardNavbar :title="$t('pages.orderDetail')">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -27,7 +27,7 @@
 								<p class="text-sm text-neutral-400 italic">{{ order?.trace_no }}</p>
 							</div>
 							<div v-if="order?.ref_no" class="metadata-item">
-								<p>Ref: {{ order?.ref_no }}</p>
+								<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
 							</div>
 						</div>
 					</div>
@@ -46,12 +46,12 @@
 							</UButton>
 
 							<div class="status-group">
-								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg"> PENDING PAYMENT </UBadge>
-								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg"> PROCESSING </UBadge>
-								<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success" size="lg"> COMPLETED </UBadge>
-								<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning" size="lg"> REQUIRES ACTION </UBadge>
-								<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error" size="lg"> REFUNDED </UBadge>
-								<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error" size="lg"> CANCELLED </UBadge>
+								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg">{{ $t('options.pendingPayment') }}</UBadge>
+								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg">{{ $t('options.processing') }}</UBadge>
+								<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success" size="lg">{{ $t('options.completed') }}</UBadge>
+								<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning" size="lg">{{ $t('options.requiresAction') }}</UBadge>
+								<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
+								<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 							</div>
 						</div>
 					</div>
@@ -66,9 +66,9 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
-										Customer Information
+										{{ $t('components.orderDetail.customerInformation') }}
 									</h2>
-									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">Edit</UButton>
+									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">{{ $t('components.orderDetail.edit') }}</UButton>
 								</div>
 							</template>
 							<ZSectionOrderDetailCustomer :customer="customer" />
@@ -80,20 +80,20 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon :name="ICONS.PRODUCT" class="w-5 h-5" />
-										Order Items
+										{{ $t('components.orderDetail.orderItems') }}
 									</h2>
 									<div class="flex items-center gap-2">
 										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="text-xs text-green-600 font-medium">
 											<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
-											Editable
+											{{ $t('components.orderDetail.editable') }}
 										</span>
 										<UPopover v-else overlay>
 											<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
 											<template #content>
 												<div class="p-4 max-w-xs">
 													<p class="text-sm">
-														This order is no longer editable.<br />
-														<b class="text-primary">Change Order Status to "Pending Payment"</b> to edit items.
+														{{ $t('components.orderDetail.orderNotEditableMessage') }}<br />
+														<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
 													</p>
 												</div>
 											</template>
@@ -119,7 +119,7 @@
 								<div class="card-header">
 									<h2 class="card-title">
 										<UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
-										Remarks
+										{{ $t('components.orderDetail.remarks') }}
 									</h2>
 								</div>
 							</template>
@@ -133,7 +133,7 @@
 							<!-- Status Management -->
 							<UCard class="status-management-card">
 								<template #header>
-									<h3 class="sidebar-title">Order Status</h3>
+									<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
 								</template>
 
 								<div class="status-section">
@@ -146,7 +146,7 @@
 										:loading="updating"
 										@click="handleUpdateOrderStatus"
 									>
-										Update Order Status
+										{{ $t('components.orderDetail.updateOrderStatus') }}
 									</UButton>
 								</div>
 							</UCard>
@@ -155,12 +155,12 @@
 							<UCard class="payment-info-card">
 								<template #header>
 									<div class="card-header-sidebar">
-										<h3 class="sidebar-title">Payment Information</h3>
+										<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
 										<UButton v-if="order.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
 										<div v-if="order?.payment_status === PaymentStatus.PAID" class="status-group">
 											<UBadge color="success" size="lg">
 												<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
-												PAID
+												{{ $t('components.orderDetail.paid') }}
 											</UBadge>
 										</div>
 									</div>
@@ -173,7 +173,7 @@
 											<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
 										</div>
 										<div v-if="payment.ref_no1" class="payment-ref">
-											<span class="payment-ref-label">Ref:</span>
+											<span class="payment-ref-label">{{ $t('components.orderDetail.refLabel') }}:</span>
 											<span class="payment-ref-value">{{ payment.ref_no1 }}</span>
 										</div>
 										<div class="payment-date">
@@ -184,8 +184,8 @@
 								</div>
 								<div v-else class="payment-empty">
 									<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
-									<p class="payment-empty-text">No payment recorded yet</p>
-									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">Add Payment</UButton>
+									<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
+									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">{{ $t('components.orderDetail.addPayment') }}</UButton>
 								</div>
 							</UCard>
 						</div>
@@ -237,7 +237,8 @@ watch(
 	},
 );
 
-useHead({ title: 'Wemotoo CRM - Order Detail #' + order.value?.order_no });
+const { t } = useI18n();
+useHead({ title: () => t('pages.orderDetailTitle') + (order.value?.order_no ?? '') });
 
 onMounted(async () => {
 	const route = useRoute();
@@ -281,7 +282,7 @@ const refreshOrder = async () => {
 
 	try {
 		await getOrderByTransactionNo();
-		successNotification('Order refreshed successfully');
+		successNotification(t('components.orderDetail.refreshSuccess'));
 
 		// Start cooldown timer
 		refresh_cooldown.value = REFRESH_COOLDOWN_SECONDS;
@@ -315,9 +316,9 @@ const refresh_button_text = computed(() => {
 	}
 
 	if (refresh_cooldown.value > 0) {
-		return `Wait ${refresh_cooldown.value}s`;
+		return t('components.orderDetail.waitSeconds', { n: refresh_cooldown.value });
 	}
-	return 'Refresh';
+	return t('components.orderDetail.refresh');
 });
 
 /* Handle Update Order Status */
@@ -332,20 +333,20 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	}
 
 	if (new_status == OrderStatus.CANCELLED) {
-		failedModal('Are you sure you want to cancel this order?');
+		failedModal(t('components.orderDetail.confirmCancelOrder'));
 		return;
 	}
 
 	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
-		failedModal('Please fill in the payment information before completing the order.', 'Payment Info Required');
+		failedModal(t('components.orderDetail.paymentRequiredMessage'), t('components.orderDetail.paymentInfoRequired'));
 		return;
 	}
 
 	try {
 		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
-		successNotification('Order status updated successfully');
+		successNotification(t('components.orderDetail.statusUpdateSuccess'));
 	} catch {
-		failedModal('Failed to update order status', 'Error');
+		failedModal(t('components.orderDetail.statusUpdateFailed'), t('components.orderDetail.error'));
 	}
 };
 

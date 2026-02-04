@@ -6,14 +6,14 @@
 	>
 		<template #body>
 			<div class="space-y-2">
-				<h3>{{ title }}</h3>
-				<p>{{ message }}</p>
+				<h3>{{ title ?? $t('components.zModal.confirmationTitle') }}</h3>
+				<p>{{ message ?? $t('components.zModal.confirmationMessage') }}</p>
 			</div>
 		</template>
 
 		<template #footer>
 			<div class="flex-jend gap-4">
-				<UButton @click="onConfirm">Ok</UButton>
+				<UButton @click="onConfirm">{{ $t('common.ok') }}</UButton>
 			</div>
 		</template>
 	</UModal>
@@ -23,11 +23,11 @@
 defineProps({
 	title: {
 		type: String,
-		default: 'Confirmation',
+		default: undefined,
 	},
 	message: {
 		type: String,
-		default: 'Are you sure you want to proceed?',
+		default: undefined,
 	},
 	action: {
 		type: String,

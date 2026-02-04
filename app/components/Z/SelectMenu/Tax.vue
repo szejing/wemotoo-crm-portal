@@ -7,7 +7,7 @@
 		size="md"
 		label-key="code"
 		description-key="description"
-		placeholder="Select Tax"
+		:placeholder="$t('components.selectMenu.selectTax')"
 	>
 	</USelectMenu>
 </template>

@@ -1,19 +1,14 @@
 <template>
 	<UDashboardPanel id="taxes-codes">
 		<template #header>
-			<UDashboardNavbar title="Tax Codes" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxCodes')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 
 				<template #right>
-					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/products/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
-							Create
-						</UButton>
-					</div>
+					<ZCreateButton to="/products/create" />
 				</template>
 			</UDashboardNavbar>
 
@@ -27,27 +22,22 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTaxes">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="updatePageSize"
+					@export="exportTaxes"
+				/>
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select="selectTax">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No tax codes found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noTaxCodesFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -63,12 +53,14 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTaxDetail } from '#components';
-import { tax_code_columns } from '~/utils/table-columns';
+import { getTaxCodeColumns } from '~/utils/table-columns';
 import type { Tax } from '~/utils/types/tax';
 import type { TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Tax Codes' });
+const { t } = useI18n();
+const tax_code_columns = computed(() => getTaxCodeColumns(t));
+useHead({ title: () => t('pages.taxCodesTitle') });
 
 onMounted(async () => {
 	await taxStore.getTaxes();

@@ -1,16 +1,19 @@
 import type { ColumnDef } from '@tanstack/vue-table';
+import type { TableColumnsTranslate } from '../brand';
 
-export const payment_type_columns: ColumnDef<any>[] = [
-	{
-		accessorKey: 'code',
-		header: 'Code',
-	},
-	{
-		accessorKey: 'desc',
-		header: 'Description',
-	},
-	{
-		accessorKey: 'short_desc',
-		header: 'Short Description',
-	},
-];
+export function getPaymentTypeColumns(t: TableColumnsTranslate): ColumnDef<any>[] {
+	return [
+		{
+			accessorKey: 'code',
+			header: t('table.code'),
+		},
+		{
+			accessorKey: 'desc',
+			header: t('table.description'),
+		},
+		{
+			accessorKey: 'short_desc',
+			header: t('table.shortDescription'),
+		},
+	];
+}

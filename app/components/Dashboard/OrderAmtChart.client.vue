@@ -3,7 +3,7 @@
 		<template #header>
 			<div>
 				<div class="flex flex-col sm:flex-row justify-between gap-2 items-center">
-					<p class="text-xs text-muted uppercase">Revenue</p>
+					<p class="text-xs text-muted uppercase">{{ $t('components.dashboard.revenue') }}</p>
 					<ZSelectMenuDateRange v-model="range" class="-ms-1" @update:model-value="updateRange" />
 				</div>
 				<p class="mt-2 sm:mt-0 text-3xl text-center sm:text-left text-highlighted font-semibold">

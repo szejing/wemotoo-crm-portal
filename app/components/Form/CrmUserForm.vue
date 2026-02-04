@@ -1,26 +1,31 @@
 <template>
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-		<UFormField label="Name">
-			<UInput :model-value="state.name" placeholder="Name" @update:model-value="(v: string) => set('name', v)" />
+		<UFormField :label="$t('components.crmUserForm.name')">
+			<UInput :model-value="state.name" :placeholder="$t('components.crmUserForm.name')" @update:model-value="(v: string) => set('name', v)" />
 		</UFormField>
-		<UFormField label="Email" class="sm:col-span-2">
-			<UInput :model-value="state.email_address" type="email" placeholder="Email" @update:model-value="(v: string) => set('email_address', v)" />
+		<UFormField :label="$t('components.crmUserForm.email')" class="sm:col-span-2">
+			<UInput
+				:model-value="state.email_address"
+				type="email"
+				:placeholder="$t('components.crmUserForm.email')"
+				@update:model-value="(v: string) => set('email_address', v)"
+			/>
 		</UFormField>
-		<UFormField label="Phone">
+		<UFormField :label="$t('components.crmUserForm.phone')">
 			<ZPhoneInput
 				:dial-code="state.dial_code"
 				:phone-number="state.phone_number"
-				placeholder="Phone number"
+				:placeholder="$t('components.crmUserForm.phone')"
 				@update:dial-code="(v: string) => set('dial_code', v)"
 				@update:phone-number="(v: string) => set('phone_number', v)"
 			/>
 		</UFormField>
-		<UFormField label="Role">
+		<UFormField :label="$t('components.crmUserForm.role')">
 			<USelect
 				:model-value="state.role"
 				:items="roleOptions"
 				value-attribute="value"
-				placeholder="Role"
+				:placeholder="$t('components.crmUserForm.role')"
 				@update:model-value="(v: UserRoles | undefined) => set('role', v)"
 			/>
 		</UFormField>
@@ -30,6 +35,8 @@
 <script lang="ts" setup>
 import { UserRoles } from 'wemotoo-common';
 import type { CrmUserFormValue } from '~/utils/types/crm-user';
+
+const { t } = useI18n();
 
 const props = withDefaults(
 	defineProps<{
@@ -44,12 +51,12 @@ const emit = defineEmits<{
 	'update:modelValue': [value: CrmUserFormValue];
 }>();
 
-const roleOptions = [
-	{ value: UserRoles.SUPER_ADMIN, label: 'Super Admin' },
-	{ value: UserRoles.SUPER_STAFF, label: 'Super Staff' },
-	{ value: UserRoles.MERCHANT_ADMIN, label: 'Merchant Admin' },
-	{ value: UserRoles.MERCHANT_STAFF, label: 'Merchant Staff' },
-];
+const roleOptions = computed(() => [
+	{ value: UserRoles.SUPER_ADMIN, label: t('components.crmUserForm.roleSuperAdmin') },
+	{ value: UserRoles.SUPER_STAFF, label: t('components.crmUserForm.roleSuperStaff') },
+	{ value: UserRoles.MERCHANT_ADMIN, label: t('components.crmUserForm.roleMerchantAdmin') },
+	{ value: UserRoles.MERCHANT_STAFF, label: t('components.crmUserForm.roleMerchantStaff') },
+]);
 
 const state = reactive<CrmUserFormValue>({
 	name: props.modelValue?.name ?? '',

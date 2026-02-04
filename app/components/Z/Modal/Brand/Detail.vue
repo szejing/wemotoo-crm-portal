@@ -1,14 +1,14 @@
 <template>
 	<UModal
-		title="Update Brand"
+		:title="$t('components.zModal.updateBrand')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateBrandValidation" :state="state.brand" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="brandSchema" :state="state.brand" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
-					<UCheckbox v-model="state.brand.is_active" name="isActive" label="Active" color="success" />
+					<UCheckbox v-model="state.brand.is_active" name="isActive" :label="$t('common.active')" color="success" />
 				</div>
 
 				<!-- *********************** General Info *********************** -->
@@ -19,11 +19,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -36,7 +36,10 @@ import type { z } from 'zod';
 import { UpdateBrandValidation } from '~/utils/schema';
 import type { Brand } from '~/utils/types/brand';
 
-type Schema = z.output<typeof UpdateBrandValidation>;
+const { t } = useI18n();
+const brandSchema = computed(() => UpdateBrandValidation(t));
+
+type Schema = z.infer<ReturnType<typeof UpdateBrandValidation>>;
 
 const props = defineProps({
 	brand: {

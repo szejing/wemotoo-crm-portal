@@ -1,11 +1,11 @@
 <template>
-	<UForm :schema="CreateOutletValidation" :state="new_outlet" class="space-y-6" @submit="onSubmit">
+	<UForm :schema="outletSchema" :state="new_outlet" class="space-y-6" @submit="onSubmit">
 		<div class="space-y-6">
 			<!-- General Information Section -->
 			<div class="space-y-3">
 				<div class="flex items-center gap-2">
 					<UIcon :name="ICONS.OUTLET" class="w-5 h-5 text-primary-500" />
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">General Information</h3>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
 				</div>
 				<div class="pl-7">
 					<ZInputOutletGeneralInfo v-model:code="new_outlet.code" v-model:description="new_outlet.description" />
@@ -16,7 +16,7 @@
 			<div class="space-y-3">
 				<div class="flex items-center gap-2">
 					<UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-primary-500" />
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Address & Location</h3>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.outletForm.addressAndLocation') }}</h3>
 				</div>
 				<div class="pl-7">
 					<ZInputAddress
@@ -38,7 +38,7 @@
 			<div class="space-y-3">
 				<div class="flex items-center gap-2">
 					<UIcon :name="ICONS.TAX" class="w-5 h-5 text-primary-500" />
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Tax Configuration</h3>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.outletForm.taxConfiguration') }}</h3>
 				</div>
 				<div class="pl-7">
 					<ZSelectMenuTaxRule v-model:tax-rule="new_outlet.tax_rule_code" class="sm:w-[50%] w-full" @update:tax-rule="updateTaxRule" />
@@ -50,7 +50,7 @@
 		<div class="flex justify-center pt-4 border-t border-gray-200 dark:border-gray-700 mt-8">
 			<UButton color="success" size="lg" type="submit" :loading="adding" class="w-full sm:w-auto sm:min-w-[200px]">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-5 h-5" />
-				<span>Create Outlet</span>
+				<span>{{ $t('components.outletForm.createOutlet') }}</span>
 			</UButton>
 		</div>
 	</UForm>
@@ -62,7 +62,10 @@ import type { z } from 'zod';
 import { CreateOutletValidation } from '~/utils/schema';
 import { ICONS } from '~/utils/icons';
 
-type Schema = z.output<typeof CreateOutletValidation>;
+const { t } = useI18n();
+const outletSchema = computed(() => CreateOutletValidation(t));
+
+type Schema = z.infer<ReturnType<typeof CreateOutletValidation>>;
 
 const outletStore = useOutletStore();
 const { adding, new_outlet } = storeToRefs(outletStore);

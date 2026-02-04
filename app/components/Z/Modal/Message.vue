@@ -14,7 +14,7 @@
 
 		<template #footer>
 			<div class="mx-auto w-[50%] sm:w-[25%]">
-				<UButton variant="soft" block color="neutral" @click="onConfirm">{{ action }}</UButton>
+				<UButton variant="soft" block color="neutral" @click="onConfirm">{{ action || $t('modal.ok') }}</UButton>
 			</div>
 		</template>
 	</UModal>
@@ -30,7 +30,7 @@ defineProps({
 	},
 	action: {
 		type: String,
-		default: 'Ok',
+		default: undefined,
 	},
 });
 

@@ -1,11 +1,15 @@
 <template>
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-		<UFormField v-slot="{ error }" label="Code" name="code" required>
-			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Brand Code" />
+		<UFormField v-slot="{ error }" :label="$t('common.code')" name="code" required>
+			<UInput v-model="code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.brandCodePlaceholder')" />
 		</UFormField>
 
-		<UFormField v-slot="{ error }" label="Description" name="description" required>
-			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" placeholder="Brand Description" />
+		<UFormField v-slot="{ error }" :label="$t('common.description')" name="description" required>
+			<UInput
+				v-model="description"
+				:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+				:placeholder="$t('components.zInput.brandDescriptionPlaceholder')"
+			/>
 		</UFormField>
 	</div>
 </template>

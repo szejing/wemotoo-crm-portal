@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="analytics-orders-customers">
 		<template #header>
-			<UDashboardNavbar title="Analytics Orders Customers" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('pages.analyticsOrdersCustomers')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -20,39 +20,29 @@
 				<div v-if="!is_loading && data.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
 						<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">No customer summary data found.</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 					</div>
 				</div>
 
 				<div v-else>
 					<!-- Table Controls -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-end gap-4">
-						<!-- Page Size -->
-						<div class="flex items-center gap-2">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-							<USelect v-model="order_summ_customer.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-
-							<UButton
-								variant="outline"
-								:disabled="order_summ_customer.exporting"
-								:loading="order_summ_customer.exporting"
-								@click="exportOrderCustomerSummaryToCsv"
-							>
-								<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-								Export
-							</UButton>
-						</div>
-					</div>
+					<ZTableToolbar
+						v-model="order_summ_customer.page_size"
+						:page-size-options="options_page_size"
+						:export-enabled="true"
+						:exporting="order_summ_customer.exporting"
+						@update:model-value="updatePageSize"
+						@export="exportOrderCustomerSummaryToCsv"
+					/>
 
 					<!-- Table -->
 					<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" class="mt-4">
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-12 gap-3">
 								<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-								<p class="text-sm text-gray-600 dark:text-gray-400">No customer summary data found.</p>
-								<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+								<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
+								<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 							</div>
 						</template>
 					</UTable>
@@ -72,10 +62,12 @@
 </template>
 
 <script lang="ts" setup>
-import { order_summ_customer_columns } from '~/utils/table-columns';
+import { getOrderSummCustomerColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
-useHead({ title: 'Wemotoo CRM - Order Customer Summary' });
+const { t } = useI18n();
+const order_summ_customer_columns = computed(() => getOrderSummCustomerColumns(t));
+useHead({ title: () => t('pages.orderCustomerSummary') });
 
 onMounted(async () => {
 	await orderSummStore.getOrderCustomerSummary();

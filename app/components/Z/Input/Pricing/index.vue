@@ -4,48 +4,50 @@
 			<div class="flex items-start gap-3">
 				<UIcon :name="ICONS.INFO" class="text-green-600 w-5 h-5 mt-0.5 shrink-0" />
 				<div>
-					<h4 class="text-sm font-medium text-green-900">Pricing Information</h4>
-					<p class="text-xs text-green-700 mt-1">Set your prices. Sale price is optional and will be displayed as a discount.</p>
+					<h4 class="text-sm font-medium text-green-900">{{ $t('components.productUpdate.pricingInformation') }}</h4>
+					<p class="text-xs text-green-700 mt-1">{{ $t('components.productUpdate.setPricesOptional') }}</p>
 				</div>
 			</div>
 		</div>
 
 		<div class="grid grid-cols-2 gap-6">
-			<UFormField label="Currency">
-				<p class="text-xs text-neutral-500 my-1">Currency</p>
+			<UFormField :label="$t('components.productUpdate.currency')">
+				<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.currency') }}</p>
 				<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
 			</UFormField>
 
-			<UFormField label="Original Selling Price" required>
-				<p class="text-xs text-neutral-500 my-1">Your selling price for this product</p>
-				<UInput v-model.number="orig_sell_price" type="number" placeholder="e.g., 15.00" :min="0" :step="0.01" />
+			<UFormField :label="$t('components.productUpdate.originalSellingPrice')" required>
+				<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.sellingPrice') }}</p>
+				<UInput v-model.number="orig_sell_price" type="number" :placeholder="$t('components.productUpdate.pricePlaceholder')" :min="0" :step="0.01" />
 			</UFormField>
 
-			<UFormField label="Cost Price (Optional)">
-				<p class="text-xs text-neutral-500 my-1">Your cost for this product (for profit tracking)</p>
-				<UInput v-model.number="cost_price" type="number" placeholder="e.g., 10.00" :min="0" :step="0.01" />
+			<UFormField :label="$t('components.productUpdate.costPriceOptional')">
+				<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.costForProfit') }}</p>
+				<UInput v-model.number="cost_price" type="number" :placeholder="$t('components.productUpdate.costPricePlaceholder')" :min="0" :step="0.01" />
 			</UFormField>
 
-			<UFormField label="Sale Price (Optional)">
-				<p class="text-xs text-neutral-500 my-1">Discounted price (leave empty if no discount)</p>
-				<UInput v-model.number="sale_price" type="number" placeholder="e.g., 12.00" :min="0" :step="0.01" />
+			<UFormField :label="$t('components.productUpdate.salePriceOptional')">
+				<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.discountedPrice') }}</p>
+				<UInput v-model.number="sale_price" type="number" :placeholder="$t('components.productUpdate.salePricePlaceholder')" :min="0" :step="0.01" />
 			</UFormField>
 		</div>
 
 		<!-- Price Preview -->
 		<div v-if="orig_sell_price" class="p-4 bg-neutral-50 rounded-lg">
-			<h4 class="text-sm font-medium mb-3">Price Preview</h4>
+			<h4 class="text-sm font-medium mb-3">{{ $t('components.productUpdate.pricePreview') }}</h4>
 			<div class="flex flex-wrap items-center gap-3">
 				<div v-if="sale_price && sale_price < orig_sell_price" class="text-2xl font-bold text-green-600">{{ currency_code }} {{ sale_price }}</div>
 				<div class="text-lg" :class="sale_price && sale_price < orig_sell_price ? 'line-through text-neutral-500' : 'font-bold text-neutral-900'">
 					{{ currency_code }} {{ orig_sell_price }}
 				</div>
 				<div v-if="sale_price && sale_price < orig_sell_price" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-					{{ Math.round(((orig_sell_price - sale_price) / orig_sell_price) * 100) }}% OFF
+					{{ Math.round(((Number(orig_sell_price) - Number(sale_price)) / Number(orig_sell_price)) * 100) }}% {{ $t('components.productUpdate.percentOff') }}
 				</div>
 			</div>
 			<div v-if="cost_price && orig_sell_price" class="text-xs text-neutral-600 mt-2">
-				Profit Margin: {{ currency_code }} {{ orig_sell_price - cost_price }} ({{ Math.round(((orig_sell_price - cost_price) / orig_sell_price) * 100) }}%)
+				{{ $t('components.productUpdate.profitMargin') }}: {{ currency_code }} {{ Number(orig_sell_price) - Number(cost_price) }} ({{
+					Math.round(((Number(orig_sell_price) - Number(cost_price)) / Number(orig_sell_price)) * 100)
+				}}%)
 			</div>
 		</div>
 	</div>

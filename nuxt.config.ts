@@ -5,6 +5,7 @@ export default defineNuxtConfig({
 	modules: [
 		'@pinia/nuxt',
 		'@nuxt/image',
+		'@nuxtjs/i18n',
 		'@vueuse/motion/nuxt',
 		'@vueuse/nuxt',
 		'@nuxt/eslint',
@@ -24,9 +25,20 @@ export default defineNuxtConfig({
 		],
 	],
 
+	i18n: {
+		locales: [
+			{ code: 'en', name: 'English', file: 'en.json' },
+			{ code: 'ms', name: 'Bahasa Melayu', file: 'ms.json' },
+		],
+		defaultLocale: 'en',
+		lazy: true,
+		langDir: 'locales',
+		strategy: 'no_prefix',
+	},
+
 	app: {
 		head: {
-			title: 'Wemotoo CRM', // default fallback title
+			title: 'Wemotoo CRM', // default fallback; use $t('common.appName') in app
 			link: [
 				{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
 				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

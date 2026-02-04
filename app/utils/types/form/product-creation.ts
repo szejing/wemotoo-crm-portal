@@ -5,13 +5,13 @@ import type { Image } from '../image';
 
 export type ProductCreate = {
 	code?: string;
-	name: string;
+	name?: string;
 	short_desc?: string;
 	long_desc?: string;
-	is_discountable: boolean;
-	is_giftcard: boolean;
-	is_active: boolean;
-	status: ProductStatus;
+	is_discountable?: boolean;
+	is_giftcard?: boolean;
+	is_active?: boolean;
+	status?: ProductStatus;
 
 	// Relations (using codes/IDs)
 	brand_codes?: string[]; // optional
@@ -32,24 +32,24 @@ export type ProductCreate = {
 };
 
 export type ProductUpdate = {
-	code: string;
-	name: string;
+	code?: string;
+	name?: string;
 	short_desc?: string;
 	long_desc?: string;
-	is_discountable: boolean;
-	is_giftcard: boolean;
-	is_active: boolean;
-	status: ProductStatus;
+	is_discountable?: boolean;
+	is_giftcard?: boolean;
+	is_active?: boolean;
+	status?: ProductStatus;
 
 	// Relations (using codes/IDs)
 	brand_codes?: string[]; // optional
-	category_codes: string[]; // optional
+	category_codes?: string[]; // optional
 	tag_ids?: number[]; // optional
-	type_id: number; // item or services
+	type_id?: number; // item or services
 
 	// File uploads
-	thumbnail?: File | Image; // optional
-	images?: File[] | Image[]; // optional
+	thumbnail?: File | Image | undefined; // optional
+	images?: File[] | Image[] | undefined; // optional
 
 	// Nested inputs
 	price_types?: PriceInput[]; // required

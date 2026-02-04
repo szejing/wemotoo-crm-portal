@@ -1,20 +1,12 @@
 <template>
-	<UCard
-		:ui="{
-			body: {
-				base: '',
-				background: '',
-				padding: 'px-4 py-1',
-			},
-		}"
-	>
+	<UCard>
 		<div class="flex-jbetween-icenter">
 			<!-- <h4>{{ prodVariant.id }}</h4> -->
 
 			<div>
 				<h4>{{ values }}</h4>
 				<h5 v-if="prodVariant.price_types && prodVariant.price_types.length > 0">
-					{{ prodVariant.price_types[0].currency_code }} {{ formatCurrency((prodVariant.price_types[0].orig_sell_price ?? 0) * 100) }}
+					{{ prodVariant?.price_types?.[0]?.currency_code }} {{ formatCurrency((prodVariant?.price_types?.[0]?.orig_sell_price ?? 0) * 100) }}
 				</h5>
 			</div>
 

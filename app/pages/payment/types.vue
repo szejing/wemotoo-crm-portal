@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="payment-types">
 		<template #header>
-			<UDashboardNavbar title="Payment Types" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.paymentTypes')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -18,27 +18,22 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportPaymentTypes">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="updatePageSize"
+					@export="exportPaymentTypes"
+				/>
 
 				<!-- Table -->
 				<UTable :data="rows" :columns="payment_type_group_columns" :loading="loading">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No payment types found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noPaymentTypesFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -53,9 +48,11 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { payment_type_group_columns } from '~/utils/table-columns';
+import { getPaymentTypeGroupColumns } from '~/utils/table-columns';
 
-useHead({ title: 'Wemotoo CRM - Payment Types' });
+const { t } = useI18n();
+const payment_type_group_columns = computed(() => getPaymentTypeGroupColumns(t));
+useHead({ title: () => t('pages.paymentTypesTitle') });
 
 onMounted(() => paymentTypeStore.getPaymentTypeGroups());
 

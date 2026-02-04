@@ -1,121 +1,88 @@
 import { defineStore } from 'pinia';
 import type { ToastNotification } from '~/utils/types/event-notification';
 
-// Grouped navigation structure for UDashboardGroup
+// Grouped navigation structure for UDashboardGroup (labels are i18n keys)
 const navigations = [
 	// Main section
 	{
-		label: 'Main',
+		label: 'nav.main',
 		links: [
 			{
-				label: 'Dashboard',
+				label: 'nav.dashboard',
 				icon: ICONS.DASHBOARD_ROUNDED,
 				to: '/',
 			},
 			{
-				label: 'Analytics',
+				label: 'nav.analytics',
 				icon: ICONS.ANALYTICS,
 				to: '/analytics',
 			},
 			{
-				label: 'Appointments',
+				label: 'nav.appointments',
 				icon: ICONS.CALENDAR,
 				to: '/appointments',
 			},
 			{
-				label: 'Orders',
+				label: 'nav.orders',
 				icon: ICONS.ORDER,
 				to: '/orders',
 			},
 			{
-				label: 'Products',
+				label: 'nav.products',
 				icon: ICONS.PRODUCT,
 				to: '/products',
 				value: 'products',
 				children: [
-					{
-						label: 'Products',
-						to: '/products/listing',
-					},
-					{
-						label: 'Categories',
-						to: '/products/categories',
-					},
-					{
-						label: 'Brands',
-						to: '/products/brands',
-					},
-					{
-						label: 'Tags',
-						to: '/products/tags',
-					},
-					{
-						label: 'Options',
-						to: '/products/options',
-					},
+					{ label: 'nav.products', to: '/products/listing' },
+					{ label: 'nav.categories', to: '/products/categories' },
+					{ label: 'nav.brands', to: '/products/brands' },
+					{ label: 'nav.tags', to: '/products/tags' },
+					{ label: 'nav.options', to: '/products/options' },
 				],
 			},
 			{
-				label: 'Customers',
+				label: 'nav.customers',
 				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 				to: '/customers',
 			},
 			{
-				label: 'Staffs',
+				label: 'nav.staffs',
 				icon: ICONS.USER_GROUP_ROUNDED,
 				to: '/crm-users',
 			},
 			{
-				label: 'Outlets',
+				label: 'nav.outlets',
 				icon: ICONS.OUTLET,
 				to: '/outlets',
 			},
 			{
-				label: 'Payment',
+				label: 'nav.payment',
 				icon: ICONS.PAYMENT_METHODS,
 				to: '/payment',
 				value: 'payment',
 				children: [
-					{
-						label: 'Payment Methods',
-						to: '/payment/methods',
-					},
-					{
-						label: 'Payment Types',
-						to: '/payment/types',
-					},
+					{ label: 'nav.paymentMethods', to: '/payment/methods' },
+					{ label: 'nav.paymentTypes', to: '/payment/types' },
 				],
 			},
 			{
-				label: 'Tax',
+				label: 'nav.tax',
 				icon: ICONS.TAX,
 				to: '/taxes',
 				value: 'taxes',
 				children: [
-					{
-						label: 'Tax Codes',
-						to: '/taxes/codes',
-					},
-					{
-						label: 'Tax Rules',
-						to: '/taxes/rules',
-					},
+					{ label: 'nav.taxCodes', to: '/taxes/codes' },
+					{ label: 'nav.taxRules', to: '/taxes/rules' },
 				],
 			},
 			{
-				label: 'Settings',
+				label: 'nav.settings',
 				icon: ICONS.SETTINGS_ROUNDED,
 				to: '/settings',
 				value: 'settings',
 				children: [
-					{
-						label: 'Store Profile',
-						to: '/settings/store-profile',
-					},
-					{
-						label: 'Configuration',
-						to: '/settings/configuration',
-					},
+					{ label: 'nav.storeProfile', to: '/settings/store-profile' },
+					{ label: 'nav.configuration', to: '/settings/configuration' },
 				],
 			},
 		],

@@ -1,6 +1,9 @@
 import { z } from 'zod';
+import type { TranslateFn } from '../../Auth/LoginValidation';
 
-export const CreateTagValidation = z.object({
-	value: z.string({ message: 'Tag is required' }),
-	metadata: z.record(z.string(), z.unknown()).optional(),
-});
+export function CreateTagValidation(t: TranslateFn) {
+	return z.object({
+		value: z.string({ message: t('validation.tag.valueRequired') }),
+		metadata: z.record(z.string(), z.unknown()).optional(),
+	});
+}

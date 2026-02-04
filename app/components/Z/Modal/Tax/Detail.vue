@@ -1,12 +1,12 @@
 <template>
 	<UModal
-		title="Update Tax"
+		:title="$t('components.zModal.updateTax')"
 		:ui="{
 			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
 		}"
 	>
 		<template #body>
-			<UForm :schema="UpdateTaxValidation" :state="state.tax" class="space-y-4" @submit="onSubmit">
+			<UForm :schema="taxSchema" :state="state.tax" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputTaxGeneralInfo
 					v-model:code="state.tax.code"
@@ -20,11 +20,11 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">Delete</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">Cancel</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">Update</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -37,7 +37,10 @@ import type { z } from 'zod';
 import { UpdateTaxValidation } from '~/utils/schema';
 import type { Tax } from '~/utils/types/tax';
 
-type Schema = z.output<typeof UpdateTaxValidation>;
+const { t } = useI18n();
+const taxSchema = computed(() => UpdateTaxValidation(t));
+
+type Schema = z.output<ReturnType<typeof UpdateTaxValidation>>;
 
 const props = defineProps({
 	tax: {

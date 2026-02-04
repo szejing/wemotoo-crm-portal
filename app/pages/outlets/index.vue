@@ -1,19 +1,14 @@
 <template>
 	<UDashboardPanel id="outlets">
 		<template #header>
-			<UDashboardNavbar title="Outlets" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.outlets')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 
 				<template #right>
-					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/outlets/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
-							Create
-						</UButton>
-					</div>
+					<ZCreateButton to="/outlets/create" />
 				</template>
 			</UDashboardNavbar>
 
@@ -27,27 +22,22 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportOutlets">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="updatePageSize"
+					@export="exportOutlets"
+				/>
 
 				<!-- Table  -->
 				<UTable :data="rows" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">No outlets found.</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOutletsFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
@@ -63,15 +53,17 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOutletDetail } from '#components';
-import { outlet_columns } from '~/utils/table-columns';
+import { getOutletColumns } from '~/utils/table-columns';
 import type { Outlet } from '~/utils/types/outlet';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const outletStore = useOutletStore();
+const { t } = useI18n();
+const outlet_columns = computed(() => getOutletColumns(t));
 
-useHead({ title: 'Wemotoo CRM - Outlets' });
+useHead({ title: () => t('pages.outletsTitle') });
 
 onMounted(async () => {
 	await outletStore.getOutlets();

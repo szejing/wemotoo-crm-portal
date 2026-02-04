@@ -6,7 +6,7 @@
 		value-key="id"
 		label-key="value"
 		description-key="value"
-		placeholder="Select Type"
+		:placeholder="$t('components.selectMenu.selectType')"
 		:ui="{
 			item: 'font-semibold text-highlighted capitalize',
 			value: 'capitalize',

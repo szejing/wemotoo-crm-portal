@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="settings">
 		<template #header>
-			<UDashboardNavbar title="Settings" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.settings')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -13,15 +13,15 @@
 			<div class="p-6 space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Settings</h2>
-					<p class="text-gray-600 dark:text-gray-400">Manage your store profile and system configuration</p>
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.settings') }}</h2>
+					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.settingsDesc') }}</p>
 				</div>
 
 				<!-- Settings Options -->
 				<ZMenu
-					title="Settings"
+					:title="$t('nav.settings')"
 					:icon="ICONS.SETTINGS_ROUNDED"
-					description="Store profile and system configuration"
+					:description="$t('pages.settingsMenuDesc')"
 					color="slate"
 					:navigations="settings_navigations"
 				/>
@@ -33,22 +33,24 @@
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
 
-useHead({ title: 'Wemotoo CRM - Settings' });
+const { t } = useI18n();
 
-const settings_navigations = [
+useHead({ title: () => t('pages.settingsTitle') });
+
+const settings_navigations = computed(() => [
 	{
-		title: 'Store Profile',
+		title: t('nav.storeProfile'),
 		icon: ICONS.OUTLET,
 		to: '/settings/store-profile',
-		description: 'Manage your merchant info, address, and contact details',
+		description: t('pages.storeProfileDesc'),
 	},
 	{
-		title: 'Configuration',
+		title: t('nav.configuration'),
 		icon: ICONS.SETTINGS_ROUNDED,
 		to: '/settings/configuration',
-		description: 'Configure system settings and preferences',
+		description: t('pages.configurationMenuDesc'),
 	},
-];
+]);
 </script>
 
 <style scoped></style>

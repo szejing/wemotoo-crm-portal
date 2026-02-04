@@ -3,7 +3,7 @@
 		<!-- Auto-save indicator -->
 		<div v-if="lastSaved" class="text-sm text-neutral-600 text-right mb-4 px-2">
 			<UIcon :name="ICONS.CHECK_ROUNDED" class="inline-block w-4 h-4 text-green-500" />
-			Draft saved at {{ lastSaved }}
+			{{ $t('components.productForm.draftSavedAt', { time: lastSaved }) }}
 		</div>
 
 		<!-- Two Column Layout: Sidebar + Form -->
@@ -52,12 +52,12 @@
 								<div class="flex-1">
 									<div class="flex items-center gap-2">
 										<UIcon :name="ICONS.INFO" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">Basic Information</h2>
+										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.basicInformation') }}</h2>
 										<span class="text-red-500 text-sm">*</span>
 									</div>
-									<p class="text-sm text-neutral-500 mt-1">Essential product details, images, and settings</p>
+									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.essentialProductDetails') }}</p>
 								</div>
-								<UTooltip text="Enter the essential information about your product including name, description, and images." :popper="{ placement: 'bottom' }">
+								<UTooltip :text="$t('pages.essentialInfoTooltip')" :popper="{ placement: 'bottom' }">
 									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
 								</UTooltip>
 							</div>
@@ -67,31 +67,31 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<UCheckbox v-model="new_product.is_active" color="success" label="Active" />
+									<UCheckbox v-model="new_product.is_active" color="success" :label="$t('common.active')" />
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField label="Product Code">
-										<p class="text-xs text-neutral-500 my-1">Unique identifier for your product</p>
+									<UFormField :label="$t('components.productUpdate.productCode')">
+										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.uniqueIdentifier') }}</p>
 										<UInput
 											v-model="new_product.code"
-											placeholder="e.g., PROD-001 (auto-generated if empty)"
+											:placeholder="$t('components.productUpdate.productCodePlaceholder')"
 											@update:model-value="new_product.code = $event.toUpperCase()"
 										/>
 									</UFormField>
-									<UFormField label="Product Name" required>
-										<p class="text-xs text-neutral-500 my-1">The name customers will see</p>
-										<UInput v-model="new_product.name" placeholder="e.g., Chicken Rice Set" />
+									<UFormField :label="$t('components.productUpdate.productName')" required>
+										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.nameCustomersSee') }}</p>
+										<UInput v-model="new_product.name" :placeholder="$t('components.productUpdate.productNamePlaceholder')" />
 									</UFormField>
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField label="Short Description">
-										<p class="text-xs text-neutral-500 my-1">Brief description for product listings</p>
-										<UInput v-model="new_product.short_desc" placeholder="e.g., Delicious chicken rice with soup" />
+									<UFormField :label="$t('components.productUpdate.shortDescription')">
+										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
+										<UInput v-model="new_product.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
 									</UFormField>
-									<UFormField label="Product Type" required>
-										<p class="text-xs text-neutral-500 my-1">Choose 'Item' for physical products, 'Service' for services</p>
+									<UFormField :label="$t('components.productUpdate.productType')" required>
+										<p class="text-xs text-neutral-500 my-1">{{ $t('pages.chooseItemOrService') }}</p>
 										<ZSelectMenuProductType v-model:type-id="new_product.type_id" class="w-full" />
 									</UFormField>
 								</div>
@@ -101,16 +101,16 @@
 
 							<!-- Product Images -->
 							<div class="space-y-4">
-								<h3 class="text-lg font-semibold">Product Images</h3>
+								<h3 class="text-lg font-semibold">{{ $t('components.productUpdate.productImages') }}</h3>
 								<div class="flex flex-col gap-6 sm:flex-row sm:justify-between">
 									<div class="flex flex-col w-full">
 										<div class="flex items-center gap-2 mb-2">
-											<h4 class="text-md font-medium">Thumbnail</h4>
-											<UTooltip text="Main image shown in product listings (square format recommended)" :popper="{ placement: 'right' }">
+											<h4 class="text-md font-medium">{{ $t('components.productUpdate.thumbnail') }}</h4>
+											<UTooltip :text="$t('pages.mainImageTooltip')" :popper="{ placement: 'right' }">
 												<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
 											</UTooltip>
 										</div>
-										<p class="text-xs text-neutral-500 mb-3">Recommended: 1:1 ratio (e.g., 800x800px)</p>
+										<p class="text-xs text-neutral-500 mb-3">{{ $t('components.productUpdate.recommendedRatio') }}</p>
 										<ZDropzone
 											class="max-w-full sm:max-w-[250px]"
 											:existing-images="new_product.thumbnail ? [new_product.thumbnail] : []"
@@ -120,12 +120,12 @@
 
 									<div class="flex flex-col w-full">
 										<div class="flex items-center gap-2 mb-2">
-											<h4 class="text-md font-medium">Additional Images</h4>
-											<UTooltip text="More images shown on the product detail page (max 3)" :popper="{ placement: 'right' }">
+											<h4 class="text-md font-medium">{{ $t('components.productUpdate.additionalImages') }}</h4>
+											<UTooltip :text="$t('pages.moreImagesTooltip')" :popper="{ placement: 'right' }">
 												<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
 											</UTooltip>
 										</div>
-										<p class="text-xs text-neutral-500 mb-3">Max 3 images, 1:1 ratio recommended</p>
+										<p class="text-xs text-neutral-500 mb-3">{{ $t('components.productUpdate.max3Images') }}</p>
 										<ZDropzone
 											multiple
 											:max-images="3"
@@ -146,12 +146,12 @@
 								<div class="flex-1">
 									<div class="flex items-center gap-2">
 										<UIcon :name="ICONS.TAG" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">Classification</h2>
-										<span class="text-xs text-neutral-500 ml-2">(Optional)</span>
+										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.classification') }}</h2>
+										<span class="text-xs text-neutral-500 ml-2">({{ $t('components.productUpdate.optional') }})</span>
 									</div>
-									<p class="text-sm text-neutral-500 mt-1">Organize your product with categories, tags, and brands</p>
+									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.organizeWithCategories') }}</p>
 								</div>
-								<UTooltip text="Add categories, tags, and brands to help customers find your product easily." :popper="{ placement: 'bottom' }">
+								<UTooltip :text="$t('pages.categoriesTagsTooltip')" :popper="{ placement: 'bottom' }">
 									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
 								</UTooltip>
 							</div>
@@ -162,9 +162,9 @@
 								<div class="flex items-start gap-3">
 									<UIcon :name="ICONS.INFO" class="text-blue-500 w-5 h-5 mt-0.5 shrink-0" />
 									<div>
-										<h4 class="text-sm font-medium text-blue-900">About Classification</h4>
+										<h4 class="text-sm font-medium text-blue-900">{{ $t('components.productUpdate.aboutClassification') }}</h4>
 										<p class="text-xs text-blue-700 mt-1">
-											Organize your product with categories, tags, and brands. This helps customers find your products easily.
+											{{ $t('components.productUpdate.classificationAboutDesc') }}
 										</p>
 									</div>
 								</div>
@@ -173,32 +173,32 @@
 							<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
 								<div>
 									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">Categories</h3>
-										<UTooltip text="Main product categories (e.g., Food, Beverages)" :popper="{ placement: 'top' }">
+										<h3 class="text-base font-medium">{{ $t('components.productUpdate.categories') }}</h3>
+										<UTooltip :text="$t('components.productUpdate.mainCategories')" :popper="{ placement: 'top' }">
 											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
 										</UTooltip>
 									</div>
-									<ZSelectMenuCategories v-model:categories="categories" class="w-full" placeholder="Select categories..." />
+									<ZSelectMenuCategories v-model:categories="categories" class="w-full" :placeholder="$t('components.selectMenu.selectCategories')" />
 								</div>
 
 								<div>
 									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">Tags</h3>
-										<UTooltip text="Keywords for filtering (e.g., Spicy, Vegetarian)" :popper="{ placement: 'top' }">
+										<h3 class="text-base font-medium">{{ $t('components.productUpdate.tags') }}</h3>
+										<UTooltip :text="$t('components.productUpdate.keywordsFiltering')" :popper="{ placement: 'top' }">
 											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
 										</UTooltip>
 									</div>
-									<ZSelectMenuTags v-model:tags="tags" class="w-full" placeholder="Select tags..." />
+									<ZSelectMenuTags v-model:tags="tags" class="w-full" :placeholder="$t('components.selectMenu.selectTags')" />
 								</div>
 
 								<div>
 									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">Brands</h3>
-										<UTooltip text="Product brand or manufacturer" :popper="{ placement: 'top' }">
+										<h3 class="text-base font-medium">{{ $t('components.productUpdate.brands') }}</h3>
+										<UTooltip :text="$t('components.productUpdate.productBrand')" :popper="{ placement: 'top' }">
 											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
 										</UTooltip>
 									</div>
-									<ZSelectMenuBrands v-model:brands="brands" class="w-full" placeholder="Select brands..." />
+									<ZSelectMenuBrands v-model:brands="brands" class="w-full" :placeholder="$t('components.selectMenu.selectBrands')" />
 								</div>
 							</div>
 						</div>
@@ -211,12 +211,12 @@
 								<div class="flex-1">
 									<div class="flex items-center gap-2">
 										<UIcon :name="ICONS.CURRENCY" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">Pricing</h2>
+										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.pricing') }}</h2>
 										<span class="text-red-500 text-sm">*</span>
 									</div>
-									<p class="text-sm text-neutral-500 mt-1">Set your product prices and currency</p>
+									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.setPricesCurrency') }}</p>
 								</div>
-								<UTooltip text="Define the pricing for your product including regular price, cost, and optional sale price." :popper="{ placement: 'bottom' }">
+								<UTooltip :text="$t('pages.pricingTooltip')" :popper="{ placement: 'bottom' }">
 									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
 								</UTooltip>
 							</div>
@@ -227,37 +227,37 @@
 								<div class="flex items-start gap-3">
 									<UIcon :name="ICONS.INFO" class="text-green-600 w-5 h-5 mt-0.5 shrink-0" />
 									<div>
-										<h4 class="text-sm font-medium text-green-900">Pricing Information</h4>
-										<p class="text-xs text-green-700 mt-1">Set your prices. Sale price is optional and will be displayed as a discount.</p>
+										<h4 class="text-sm font-medium text-green-900">{{ $t('components.productUpdate.pricingInformation') }}</h4>
+										<p class="text-xs text-green-700 mt-1">{{ $t('components.productUpdate.setPricesOptional') }}</p>
 									</div>
 								</div>
 							</div>
 
 							<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-								<UFormField label="Original Selling Price" required>
-									<p class="text-xs text-neutral-500 my-1">Your selling price for this product</p>
-									<UInput v-model.number="orig_sell_price" type="number" placeholder="e.g., 15.00" :min="0" :step="0.01" />
+								<UFormField :label="$t('components.productUpdate.originalSellingPrice')" required>
+									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.sellingPrice') }}</p>
+									<UInput v-model.number="orig_sell_price" type="number" :placeholder="$t('components.productUpdate.pricePlaceholder')" :min="0" :step="0.01" />
 								</UFormField>
 
-								<UFormField label="Cost Price (Optional)">
-									<p class="text-xs text-neutral-500 my-1">Your cost for this product (for profit tracking)</p>
-									<UInput v-model.number="cost_price" type="number" placeholder="e.g., 10.00" :min="0" :step="0.01" />
+								<UFormField :label="$t('components.productUpdate.costPriceOptional')">
+									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.costForProfit') }}</p>
+									<UInput v-model.number="cost_price" type="number" :placeholder="$t('components.productUpdate.costPricePlaceholder')" :min="0" :step="0.01" />
 								</UFormField>
 
-								<UFormField label="Sale Price (Optional)">
-									<p class="text-xs text-neutral-500 my-1">Discounted price (leave empty if no discount)</p>
-									<UInput v-model.number="sale_price" type="number" placeholder="e.g., 12.00" :min="0" :step="0.01" />
+								<UFormField :label="$t('components.productUpdate.salePriceOptional')">
+									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.discountedPrice') }}</p>
+									<UInput v-model.number="sale_price" type="number" :placeholder="$t('components.productUpdate.salePricePlaceholder')" :min="0" :step="0.01" />
 								</UFormField>
 
-								<UFormField label="Currency">
-									<p class="text-xs text-neutral-500 my-1">Currency</p>
+								<UFormField :label="$t('components.productUpdate.currency')">
+									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.currency') }}</p>
 									<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
 								</UFormField>
 							</div>
 
 							<!-- Price Preview -->
 							<div v-if="orig_sell_price" class="p-4 bg-neutral-50 rounded-lg">
-								<h4 class="text-sm font-medium mb-3">Price Preview</h4>
+								<h4 class="text-sm font-medium mb-3">{{ $t('components.productUpdate.pricePreview') }}</h4>
 								<div class="flex flex-wrap items-center gap-3">
 									<div v-if="sale_price && sale_price < orig_sell_price" class="text-2xl font-bold text-green-600">
 										{{ currency_code }} {{ sale_price.toFixed(2) }}
@@ -266,11 +266,11 @@
 										{{ currency_code }} {{ orig_sell_price.toFixed(2) }}
 									</div>
 									<div v-if="sale_price && sale_price < orig_sell_price" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-										{{ Math.round(((orig_sell_price - sale_price) / orig_sell_price) * 100) }}% OFF
+										{{ Math.round(((orig_sell_price - sale_price) / orig_sell_price) * 100) }}% {{ $t('components.productUpdate.percentOff') }}
 									</div>
 								</div>
 								<div v-if="cost_price && orig_sell_price" class="text-xs text-neutral-600 mt-2">
-									Profit Margin: {{ currency_code }} {{ (orig_sell_price - cost_price).toFixed(2) }} ({{
+									{{ $t('components.productUpdate.profitMargin') }}: {{ currency_code }} {{ (orig_sell_price - cost_price).toFixed(2) }} ({{
 										Math.round(((orig_sell_price - cost_price) / orig_sell_price) * 100)
 									}}%)
 								</div>
@@ -285,15 +285,12 @@
 								<div class="flex-1">
 									<div class="flex items-center gap-2">
 										<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">Product Variants</h2>
-										<span class="text-xs text-neutral-500 ml-2">(Optional)</span>
+										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.productVariants') }}</h2>
+										<span class="text-xs text-neutral-500 ml-2">({{ $t('components.productUpdate.optional') }})</span>
 									</div>
-									<p class="text-sm text-neutral-500 mt-1">Add options like size, color, or other variations</p>
+									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.addOptionsVariations') }}</p>
 								</div>
-								<UTooltip
-									text="Add variants like sizes, colors, or other options. Each combination creates a unique variant."
-									:popper="{ placement: 'bottom' }"
-								>
+								<UTooltip :text="$t('components.productUpdate.variantsTooltip')" :popper="{ placement: 'bottom' }">
 									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
 								</UTooltip>
 							</div>
@@ -304,8 +301,8 @@
 								<div class="flex items-start gap-3">
 									<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
 									<div>
-										<h4 class="text-sm font-medium text-purple-900">Product Variants</h4>
-										<p class="text-xs text-purple-700 mt-1">Add options like size, color, or other variations. Each combination creates a unique variant.</p>
+										<h4 class="text-sm font-medium text-purple-900">{{ $t('components.productUpdate.productVariants') }}</h4>
+										<p class="text-xs text-purple-700 mt-1">{{ $t('components.productUpdate.variantsTooltip') }}</p>
 									</div>
 								</div>
 							</div>
@@ -326,9 +323,9 @@
 								<div class="flex-1">
 									<div class="flex items-center gap-2">
 										<UIcon :name="ICONS.CHECK_ROUNDED" class="text-primary-600 w-6 h-6" />
-										<h2 class="text-xl font-semibold">Review Your Product</h2>
+										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.reviewYourProduct') }}</h2>
 									</div>
-									<p class="text-sm text-neutral-500 mt-1">Review all information before creating the product</p>
+									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.reviewBeforeCreate') }}</p>
 								</div>
 							</div>
 						</template>
@@ -338,8 +335,8 @@
 								<div class="flex items-start gap-3">
 									<UIcon :name="ICONS.CHECK_ROUNDED" class="text-primary-600 w-5 h-5 mt-0.5 shrink-0" />
 									<div>
-										<h4 class="text-sm font-medium text-primary-900">Ready to Create?</h4>
-										<p class="text-xs text-primary-700 mt-1">Please review all information above before submitting. You can scroll up to edit any section.</p>
+										<h4 class="text-sm font-medium text-primary-900">{{ $t('components.productUpdate.readyToCreate') }}</h4>
+										<p class="text-xs text-primary-700 mt-1">{{ $t('components.productUpdate.reviewBeforeSubmit') }}</p>
 									</div>
 								</div>
 							</div>
@@ -350,18 +347,20 @@
 								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.INFO" class="text-primary-500 w-4 h-4" />
-										Basic Info
+										{{ $t('pages.basicInfo') }}
 									</h4>
 									<div class="text-sm space-y-1">
 										<p class="truncate">
-											<span class="text-neutral-500">Name:</span> <span class="font-medium">{{ new_product.name || 'Not set' }}</span>
+											<span class="text-neutral-500">{{ $t('common.name') }}:</span>
+											<span class="font-medium">{{ new_product.name || $t('common.notSet') }}</span>
 										</p>
 										<p class="truncate">
-											<span class="text-neutral-500">Code:</span> <span class="font-medium">{{ new_product.code || 'Auto' }}</span>
+											<span class="text-neutral-500">{{ $t('common.code') }}:</span>
+											<span class="font-medium">{{ new_product.code || $t('common.auto') }}</span>
 										</p>
 										<p>
 											<UBadge :color="new_product.is_active ? 'success' : 'error'" variant="soft" size="xs">
-												{{ new_product.is_active ? 'Active' : 'Inactive' }}
+												{{ new_product.is_active ? $t('common.active') : $t('common.inactive') }}
 											</UBadge>
 										</p>
 									</div>
@@ -371,18 +370,20 @@
 								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.CURRENCY" class="text-primary-500 w-4 h-4" />
-										Pricing
+										{{ $t('components.productUpdate.pricing') }}
 									</h4>
 									<div class="text-sm space-y-1">
 										<p>
-											<span class="text-neutral-500">Price:</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.priceLabel') }}:</span>
 											<span class="font-bold">{{ currency_code }} {{ orig_sell_price?.toFixed(2) || '0.00' }}</span>
 										</p>
 										<p v-if="sale_price">
-											<span class="text-neutral-500">Sale:</span> <span class="font-bold text-green-600">{{ currency_code }} {{ sale_price.toFixed(2) }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.sale') }}:</span>
+											<span class="font-bold text-green-600">{{ currency_code }} {{ sale_price.toFixed(2) }}</span>
 										</p>
 										<p v-if="cost_price">
-											<span class="text-neutral-500">Cost:</span> <span class="font-medium">{{ currency_code }} {{ cost_price.toFixed(2) }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.cost') }}:</span>
+											<span class="font-medium">{{ currency_code }} {{ cost_price.toFixed(2) }}</span>
 										</p>
 									</div>
 								</div>
@@ -391,17 +392,20 @@
 								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.TAG" class="text-primary-500 w-4 h-4" />
-										Classification
+										{{ $t('components.productUpdate.classification') }}
 									</h4>
 									<div class="text-sm space-y-1">
 										<p>
-											<span class="text-neutral-500">Categories:</span> <span class="font-medium">{{ categories?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.categoriesLabel') }}:</span>
+											<span class="font-medium">{{ categories?.length || 0 }}</span>
 										</p>
 										<p>
-											<span class="text-neutral-500">Tags:</span> <span class="font-medium">{{ tags?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.tagsLabel') }}:</span>
+											<span class="font-medium">{{ tags?.length || 0 }}</span>
 										</p>
 										<p>
-											<span class="text-neutral-500">Brands:</span> <span class="font-medium">{{ brands?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.brandsLabel') }}:</span>
+											<span class="font-medium">{{ brands?.length || 0 }}</span>
 										</p>
 									</div>
 								</div>
@@ -410,14 +414,16 @@
 								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-4 h-4" />
-										Variants
+										{{ $t('components.productUpdate.variantsSummaryTitle') }}
 									</h4>
 									<div class="text-sm">
 										<p>
-											<span class="text-neutral-500">Total:</span> <span class="font-medium">{{ new_product.variants?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.total') }}:</span>
+											<span class="font-medium">{{ new_product.variants?.length || 0 }}</span>
 										</p>
 										<p>
-											<span class="text-neutral-500">Options:</span> <span class="font-medium">{{ new_product.options?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.options') }}:</span>
+											<span class="font-medium">{{ new_product.options?.length || 0 }}</span>
 										</p>
 									</div>
 								</div>
@@ -426,14 +432,16 @@
 								<div class="bg-neutral-50 rounded-lg p-4">
 									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
 										<UIcon :name="ICONS.IMAGE" class="text-primary-500 w-4 h-4" />
-										Images
+										{{ $t('components.productUpdate.imagesSummaryTitle') }}
 									</h4>
 									<div class="text-sm">
 										<p>
-											<span class="text-neutral-500">Thumbnail:</span> <span class="font-medium">{{ new_product.thumbnail ? '✓' : '✗' }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.thumbnailLabel') }}:</span>
+											<span class="font-medium">{{ new_product.thumbnail ? '✓' : '✗' }}</span>
 										</p>
 										<p>
-											<span class="text-neutral-500">Gallery:</span> <span class="font-medium">{{ new_product.images?.length || 0 }}</span>
+											<span class="text-neutral-500">{{ $t('components.productUpdate.galleryLabel') }}:</span>
+											<span class="font-medium">{{ new_product.images?.length || 0 }}</span>
 										</p>
 									</div>
 								</div>
@@ -472,35 +480,37 @@ const categories = ref<Category[]>([]);
 const tags = ref<Tag[]>([]);
 const brands = ref<Brand[]>([]);
 
+const { t } = useI18n();
+
 // Section Navigation
 const sections = computed(() => [
 	{
 		id: 'section-basic-info',
 		number: 1,
-		name: 'Basic Info',
-		description: 'Product details & images',
+		name: t('pages.basicInfo'),
+		description: t('pages.basicInfoDesc'),
 		required: true,
 	},
 	{
 		id: 'section-classification',
 		number: 2,
-		name: 'Classification',
-		description: 'Categories & tags',
+		name: t('pages.classification'),
+		description: t('pages.classificationDesc'),
 		required: false,
 	},
 	{
 		id: 'section-pricing',
 		number: 3,
-		name: 'Pricing',
-		description: 'Set product prices',
+		name: t('pages.pricing'),
+		description: t('pages.pricingDesc'),
 		required: true,
 	},
-	{ id: 'section-variants', number: 4, name: 'Product Variants', description: 'Options & variations', required: false },
+	{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false },
 	{
 		id: 'section-review',
 		number: 5,
-		name: 'Review',
-		description: 'Final review',
+		name: t('pages.review'),
+		description: t('pages.reviewDesc'),
 		required: true,
 	},
 ]);
@@ -624,8 +634,8 @@ const saveDraft = async (silent = false) => {
 
 		if (!silent) {
 			toast.add({
-				title: 'Draft Saved',
-				description: `Draft saved at ${lastSaved.value}`,
+				title: t('components.productForm.draftSaved'),
+				description: t('components.productForm.draftSavedDescription', { time: lastSaved.value }),
 				icon: ICONS.CHECK_ROUNDED,
 				color: 'success',
 			});
@@ -634,8 +644,8 @@ const saveDraft = async (silent = false) => {
 		console.error('Error saving draft:', error);
 		if (!silent) {
 			toast.add({
-				title: 'Error',
-				description: 'Failed to save draft',
+				title: t('components.productForm.errorTitle'),
+				description: t('components.productForm.errorSavingDraft'),
 				color: 'error',
 			});
 		}

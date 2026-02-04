@@ -1,7 +1,7 @@
 <template>
 	<UDashboardPanel id="orders">
 		<template #header>
-			<UDashboardNavbar title="Orders" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.orders')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
@@ -34,18 +34,14 @@
 					</div>
 
 					<!-- Table Actions -->
-					<div class="flex items-center gap-3 justify-between sm:justify-end">
-						<div class="flex items-center gap-2">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-							<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-							<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-						</div>
-
-						<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportOrders">
-							<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-							Export
-						</UButton>
-					</div>
+					<ZTableToolbar
+						v-model="filter.page_size"
+						:page-size-options="options_page_size"
+						:export-enabled="true"
+						:exporting="exporting"
+						@update:model-value="updatePageSize"
+						@export="exportOrders"
+					/>
 				</div>
 
 				<!-- Orders Table -->
@@ -60,8 +56,8 @@
 						<template #empty>
 							<div class="flex flex-col items-center justify-center py-12 gap-3">
 								<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
-								<p class="text-sm text-gray-600 dark:text-gray-400">No orders found.</p>
-								<p class="text-xs text-gray-500 dark:text-gray-500">Try adjusting your filters to see more results.</p>
+								<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrdersFound') }}</p>
+								<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 							</div>
 						</template>
 					</UTable>
@@ -70,9 +66,13 @@
 					<div v-if="orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
 						<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 							<div class="text-sm text-gray-700 dark:text-gray-300">
-								Showing <span class="font-medium">{{ (current_page - 1) * filter.page_size + 1 }}</span> to
-								<span class="font-medium">{{ Math.min(current_page * filter.page_size, orderStore.total_orders) }}</span> of
-								<span class="font-medium">{{ orderStore.total_orders }}</span> results
+								{{
+									$t('pages.showingToOf', {
+										from: (current_page - 1) * filter.page_size + 1,
+										to: Math.min(current_page * filter.page_size, orderStore.total_orders),
+										total: orderStore.total_orders,
+									})
+								}}
 							</div>
 							<UPagination
 								v-model="current_page"
@@ -94,11 +94,13 @@
 <script lang="ts" setup>
 import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import { order_columns } from '~/utils/table-columns';
+import { getOrderColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
 import type { OrderHistory } from '~/utils/types/order-history';
 
-useHead({ title: 'Wemotoo CRM - Orders' });
+const { t } = useI18n();
+const order_columns = computed(() => getOrderColumns(t));
+useHead({ title: () => t('pages.ordersTitle') });
 
 const orderStore = useOrderStore();
 const { orders, filter, loading, exporting } = storeToRefs(orderStore);
@@ -106,22 +108,10 @@ const current_page = computed(() => filter.value.current_page);
 const selectedTab = ref(0);
 
 const tabItems = computed(() => [
-	{
-		label: 'All',
-		value: 'All',
-	},
-	{
-		label: 'Pending',
-		value: OrderStatus.PENDING_PAYMENT,
-	},
-	{
-		label: 'Completed',
-		value: OrderStatus.COMPLETED,
-	},
-	{
-		label: 'Cancelled',
-		value: OrderStatus.CANCELLED,
-	},
+	{ label: t('options.all'), value: 'All' },
+	{ label: t('options.pending'), value: OrderStatus.PENDING_PAYMENT },
+	{ label: t('options.completed'), value: OrderStatus.COMPLETED },
+	{ label: t('options.cancelled'), value: OrderStatus.CANCELLED },
 ]);
 
 // Load orders on mount

@@ -1,5 +1,5 @@
 <template>
-	<USelectMenu v-model="tags" v-model:search-term="searchTerm" :items="items" :search-input="{}" size="md" multiple label-key="value" placeholder="Select Tags">
+	<USelectMenu v-model="tags" v-model:search-term="searchTerm" :items="items" :search-input="{}" size="md" multiple label-key="value" :placeholder="$t('components.selectMenu.selectTags')">
 		<template #default>
 			<div v-if="tags && tags.length > 0" class="flex flex-wrap gap-1.5">
 				<div
@@ -15,11 +15,11 @@
 					/>
 				</div>
 			</div>
-			<span v-else class="text-neutral-400 text-sm">Select Tags</span>
+			<span v-else class="text-neutral-400 text-sm">{{ $t('components.selectMenu.selectTags') }}</span>
 		</template>
 
 		<template #empty>
-			<UButton color="success" variant="ghost">Create "{{ searchTerm }}"</UButton>
+			<UButton color="success" variant="ghost">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
 		</template>
 	</USelectMenu>
 </template>

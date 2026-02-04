@@ -1,19 +1,14 @@
 <template>
 	<UDashboardPanel id="taxes-rules">
 		<template #header>
-			<UDashboardNavbar title="Tax Rules" :ui="{ right: 'gap-3' }">
+			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 
 				<template #right>
-					<div class="flex items-center gap-3">
-						<UButton color="success" @click="navigateTo('/products/create')">
-							<UIcon :name="ICONS.ADD_OUTLINE" class="w-4 h-4" />
-							Create
-						</UButton>
-					</div>
+					<ZCreateButton to="/taxes/rules/create" />
 				</template>
 			</UDashboardNavbar>
 
@@ -27,19 +22,14 @@
 		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
-				<div class="flex flex-row sm:items-center justify-between sm:justify-end gap-4">
-					<!-- Page Size -->
-					<div class="flex items-center gap-2">
-						<span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
-						<USelect v-model="filter.page_size" :items="options_page_size" size="sm" class="w-20" @update:model-value="updatePageSize" />
-						<span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
-					</div>
-
-					<UButton variant="outline" :disabled="exporting" :loading="exporting" size="sm" @click="exportTaxes">
-						<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
-						Export
-					</UButton>
-				</div>
+				<ZTableToolbar
+					v-model="filter.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="exporting"
+					@update:model-value="updatePageSize"
+					@export="exportTaxes"
+				/>
 
 				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 					<template #empty-state>
@@ -61,13 +51,15 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { tax_rule_columns } from '~/utils/table-columns';
+import { getTaxRuleColumns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TableRow } from '@nuxt/ui';
 
 const taxRuleStore = useTaxRuleStore();
 
-useHead({ title: 'Wemotoo CRM - Tax Rules' });
+const { t } = useI18n();
+const tax_rule_columns = computed(() => getTaxRuleColumns(t));
+useHead({ title: () => t('pages.taxRulesTitle') });
 
 onMounted(async () => {
 	await taxRuleStore.getTaxRules();
