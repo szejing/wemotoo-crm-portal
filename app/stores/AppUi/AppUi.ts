@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { ToastNotification } from '~/utils/types/event-notification';
 
 // Grouped navigation structure for UDashboardGroup (labels are i18n keys)
-const navigations = [
+const default_navigations = [
 	// Main section
 	{
 		label: 'nav.main',
@@ -93,13 +93,33 @@ export const useAppUiStore = defineStore('appUiStore', {
 	state: () => ({
 		forcedShow: true as boolean,
 		showSidebar: false as boolean,
-		navigations: navigations,
+		navigations: default_navigations,
 		toastNotification: undefined as ToastNotification | undefined,
 		modal: undefined as ToastNotification | undefined,
+		excludeRoutes: [] as string[],
 	}),
 	actions: {
 		toggleSidebar() {
 			this.showSidebar = !this.showSidebar;
+		},
+
+		setExcludeRoutes(routes: string[]) {
+			this.excludeRoutes = routes;
+			const excluded = (value: string) => routes.includes(value);
+
+			this.navigations = default_navigations.map((group) => ({
+				...group,
+				links: group.links
+					.filter((link) => !excluded(link.label) && !excluded(link.to))
+					.map((link) => {
+						if (!link.children) return link;
+						const filteredChildren = link.children.filter((child) => !excluded(child.label) && !excluded(child.to));
+						return { ...link, children: filteredChildren };
+					})
+					.filter((link) => !link.children || link.children.length > 0),
+			}));
+
+			console.log(this.navigations);
 		},
 
 		showToast(notification: ToastNotification) {

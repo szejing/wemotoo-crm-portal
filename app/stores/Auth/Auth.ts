@@ -37,6 +37,7 @@ export const useAuthStore = defineStore('authStore', {
 
 				this.user = data.user;
 
+				appUiStore.setExcludeRoutes(data.exclude_routes);
 				const app = useAppStore();
 				await app.init();
 
@@ -102,6 +103,7 @@ export const useAuthStore = defineStore('authStore', {
 		async verify(): Promise<boolean> {
 			const { $api } = useNuxtApp();
 			this.loading = true;
+			const appUiStore = useAppUiStore();
 
 			try {
 				const data: VerifyResp = await $api.auth.verify();
@@ -111,10 +113,17 @@ export const useAuthStore = defineStore('authStore', {
 				}
 
 				this.user = data.user;
+				appUiStore.setExcludeRoutes(data.exclude_routes);
 
 				return true;
 			} catch (err: any) {
 				console.error(err);
+				appUiStore.showToast({
+					color: 'error',
+					icon: ICONS.ERROR_OUTLINE,
+					title: err.message,
+				});
+
 				return false;
 			} finally {
 				this.loading = false;
