@@ -1,4 +1,10 @@
 {
+	"error": {
+		"pageTitle": "Sesuatu tidak kena",
+		"goBackHome": "Kembali ke laman utama",
+		"genericMessage": "Ralat tidak dijangka berlaku. Sila cuba lagi atau kembali ke papan pemuka.",
+		"permissionRestricted": "Anda tidak mempunyai kebenaran untuk mengakses halaman ini."
+	},
 	"common": {
 		"appName": "Wemotoo CRM",
 		"submit": "Hantar",

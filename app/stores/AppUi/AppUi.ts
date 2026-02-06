@@ -118,8 +118,6 @@ export const useAppUiStore = defineStore('appUiStore', {
 					})
 					.filter((link) => !link.children || link.children.length > 0),
 			}));
-
-			console.log(this.navigations);
 		},
 
 		showToast(notification: ToastNotification) {

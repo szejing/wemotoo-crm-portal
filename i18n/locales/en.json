@@ -1,4 +1,10 @@
 {
+	"error": {
+		"pageTitle": "Something went wrong",
+		"goBackHome": "Go back home",
+		"genericMessage": "An unexpected error occurred. Please try again or go back to the dashboard.",
+		"permissionRestricted": "You do not have permission to access this page."
+	},
 	"common": {
 		"appName": "Wemotoo CRM",
 		"submit": "Submit",
