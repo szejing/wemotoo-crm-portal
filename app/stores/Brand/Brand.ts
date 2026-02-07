@@ -177,20 +177,18 @@ export const useBrandStore = defineStore('brandStore', {
 			}
 		},
 
-		async deleteBrand(code: string) {
+		async deleteBrand(brand: Brand) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.brand.delete({ code });
+				await $api.brand.delete({ code: brand.code });
 
-				if (data.brand) {
-					successNotification(`Brand #${data.brand.code} Deleted !`);
+				successNotification(`Brand #${brand.code} Deleted !`);
 
-					const index = this.brands.findIndex((t) => t.code === data.brand.code);
-					this.brands.splice(index, 1);
-				}
+				const index = this.brands.findIndex((t) => t.code === brand.code);
+				this.brands.splice(index, 1);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
 				failedNotification(message);

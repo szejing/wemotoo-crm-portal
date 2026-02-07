@@ -10,15 +10,14 @@
 		</template>
 
 		<template #body>
-			<div class="flex-jbetween-icenter">
-				<h2 class="my-6">Update Tax Rule</h2>
-			</div>
 			<div class="wrapper-grid">
 				<UCard>
 					<template #header>
-						<div class="flex-between">
+						<div class="flex items-center justify-between">
 							<h2>Tax Rule</h2>
-							<UButton color="error" variant="ghost" @click="deleteTaxRule">Delete</UButton>
+							<UButton size="sm" color="error" variant="ghost" class="opacity-50 hover:opacity-100" :icon="ICONS.TRASH" @click="deleteTaxRule">
+								{{ $t('common.delete') }}
+							</UButton>
 						</div>
 					</template>
 					<FormTaxRuleUpdate
@@ -28,7 +27,7 @@
 						@delete-detail="deleteDetail"
 						@update="onUpdate"
 					/>
-					<div v-else><ZLoading /></div>
+					<FormTaxRuleUpdateLoading v-else />
 				</UCard>
 			</div>
 		</template>

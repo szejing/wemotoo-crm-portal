@@ -73,13 +73,19 @@ const rows = computed(() => {
 	return brands.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const deleteBrand = async (code: string) => {
+const deleteBrand = async (row: TableRow<Brand>) => {
+	const brand = row.original;
+
+	const hasProducts = false;
+
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: 'Are you sure you want to delete this brand?',
+			message: hasProducts
+				? 'Are you sure you want to delete this brand? This brand has products and will be deleted along with all products.'
+				: 'Are you sure you want to delete this brand?',
 			action: 'delete',
 			onConfirm: async () => {
-				await brandStore.deleteBrand(code);
+				await brandStore.deleteBrand(brand);
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -103,7 +109,7 @@ const selectBrand = async (e: Event, row: TableRow<Brand>) => {
 			},
 			onDelete: async () => {
 				brandModal.close();
-				await deleteBrand(brand.code);
+				await deleteBrand(row);
 			},
 			onCancel: () => {
 				brandModal.close();

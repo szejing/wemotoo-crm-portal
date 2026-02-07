@@ -19,7 +19,7 @@
 				<UCard>
 					<template #header>
 						<div class="flex items-center justify-between">
-							<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+							<h2 class="flex items-center text-lg font-semibold text-neutral-900 dark:text-neutral-100">
 								<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
 								{{ $t('pages.crmUserDetailUserInformation') }}
 							</h2>

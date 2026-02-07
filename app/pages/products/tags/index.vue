@@ -72,13 +72,19 @@ const rows = computed(() => {
 	return tags.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const deleteTag = async (id: number) => {
+const deleteTag = async (row: TableRow<Tag>) => {
+	const tag = row.original;
+
+	const hasProducts = tag?.total_products && tag.total_products > 0;
+
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: 'Are you sure you want to delete this tag?',
+			message: hasProducts
+				? 'Are you sure you want to delete this tag? This tag has products and will be deleted along with all products.'
+				: 'Are you sure you want to delete this tag?',
 			action: 'delete',
 			onConfirm: async () => {
-				await tagsStore.deleteTag(id);
+				await tagsStore.deleteTag(tag);
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -103,7 +109,7 @@ const selectTag = async (e: Event, row: TableRow<Tag>) => {
 			},
 			onDelete: async () => {
 				tagModal.close();
-				await deleteTag(tag.id);
+				await deleteTag(row);
 			},
 			onCancel: () => {
 				tagModal.close();

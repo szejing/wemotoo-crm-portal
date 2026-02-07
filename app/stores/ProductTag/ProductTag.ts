@@ -143,20 +143,17 @@ export const useProductTagStore = defineStore('productTagStore', {
 			}
 		},
 
-		async deleteTag(id: number) {
+		async deleteTag(tag: Tag) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.tag.delete({ id });
+				await $api.tag.delete({ id: tag.id });
+				successNotification(`Tag #${tag.value} Deleted !`);
 
-				if (data.tag.id) {
-					successNotification(`Tag #${data.tag.value} Deleted !`);
-
-					const index = this.tags.findIndex((t) => t.id === data.tag.id);
-					this.tags.splice(index, 1);
-				}
+				const index = this.tags.findIndex((t) => t.id === tag.id);
+				this.tags.splice(index, 1);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
 				failedNotification(message);

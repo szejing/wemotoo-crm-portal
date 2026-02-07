@@ -75,13 +75,18 @@ const rows = computed(() => {
 	return prod_option.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const deleteProductOption = async (id: number) => {
+const deleteProductOption = async (row: TableRow<ProductOption>) => {
+	const option = row.original;
+
+	if (!option) return;
+
+	const hasProducts = false;
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
 			message: 'Are you sure you want to delete this option?',
 			action: 'delete',
 			onConfirm: async () => {
-				await productOptionsStore.deleteProductOption(id);
+				await productOptionsStore.deleteProductOption(option);
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -107,7 +112,7 @@ const selectProductOption = async (e: Event, row: TableRow<ProductOption>) => {
 			},
 			onDelete: async () => {
 				optionModal.close();
-				await deleteProductOption(option.id!);
+				await deleteProductOption(row);
 			},
 			onCancel: () => {
 				optionModal.close();

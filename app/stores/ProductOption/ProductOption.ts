@@ -150,20 +150,18 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 				this.updating = false;
 			}
 		},
-		async deleteProductOption(id: number) {
+		async deleteProductOption(option: ProductOption) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.productOption.delete({ id });
+				await $api.productOption.delete({ id: option.id });
 
-				if (data.productOption) {
-					successNotification(`Option #${data.productOption.name} Deleted !`);
+				successNotification(`Option #${option.name} Deleted !`);
 
-					const index = this.prod_option.findIndex((t) => t.id === data.productOption.id);
-					this.prod_option.splice(index, 1);
-				}
+				const index = this.prod_option.findIndex((t) => t.id === option.id);
+				this.prod_option.splice(index, 1);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product option';
 				failedNotification(message);
