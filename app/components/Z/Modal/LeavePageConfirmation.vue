@@ -37,15 +37,15 @@ const props = withDefaults(
 	},
 );
 
-const emit = defineEmits<{ stay: []; leave: [] }>();
+// const emit = defineEmits<{ stay: []; leave: [] }>();
 
 const onStay = () => {
 	props.onStay?.();
-	emit('stay');
+	// emit('stay');
 };
 
 const onLeave = () => {
 	props.onLeave?.();
-	emit('leave');
+	// emit('leave');
 };
 </script>

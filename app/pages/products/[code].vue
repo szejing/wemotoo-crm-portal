@@ -24,15 +24,15 @@
 					<div class="hidden md:flex justify-between items-center gap-3">
 						<UButton color="error" variant="ghost" size="lg" :loading="updating" class="opacity-50 hover:opacity-100" @click="() => deleteProduct()">
 							<UIcon :name="ICONS.TRASH" />
-							Delete
+							{{ $t('common.delete') }}
 						</UButton>
 
 						<div class="flex gap-3">
-							<UButton color="neutral" variant="outline" size="lg" @click="cancel"> Cancel </UButton>
+							<UButton color="neutral" variant="outline" size="lg" @click="cancel">{{ $t('common.cancel') }}</UButton>
 
 							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="() => updateProduct()">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
-								Update Product
+								{{ $t('pages.updateProduct') }}
 							</UButton>
 						</div>
 					</div>
@@ -41,15 +41,15 @@
 					<div class="md:hidden flex flex-col gap-2">
 						<UButton color="success" size="md" class="w-full opacity-50 hover:opacity-100" :loading="updating" @click="() => updateProduct()">
 							<UIcon :name="ICONS.CHECK_ROUNDED" />
-							<span class="text-sm">Update Product</span>
+							<span class="text-sm">{{ $t('pages.updateProduct') }}</span>
 						</UButton>
 						<div class="flex gap-2">
 							<UButton color="error" variant="ghost" size="sm" class="flex-1 opacity-50 hover:opacity-100" :loading="updating" @click="() => deleteProduct()">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-								<span class="text-xs">Delete</span>
+								<span class="text-xs">{{ $t('common.delete') }}</span>
 							</UButton>
 							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="cancel">
-								<span class="text-xs">Cancel</span>
+								<span class="text-xs">{{ $t('common.cancel') }}</span>
 							</UButton>
 						</div>
 					</div>
@@ -106,10 +106,10 @@ const cancel = () => {
 	useRouter().back();
 };
 
-const deleteProduct = async () => {
-	const confirmModal = overlay.create(ZModalConfirmation, {
+	const deleteProduct = async () => {
+		const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: 'Are you sure you want to delete this product ?',
+			message: t('pages.confirmDeleteProduct'),
 			action: 'delete',
 			onConfirm: async () => {
 				await productStore.deleteProduct(current_product.value!.code!);

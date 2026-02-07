@@ -242,6 +242,9 @@
 		"optionsTitle": "Wemotoo CRM - Options",
 		"productDetail": "Product Detail",
 		"productDetailTitle": "Wemotoo CRM - Product Detail #",
+		"confirmDeleteProduct": "Are you sure you want to delete this product?",
+		"confirmDeleteCrmUser": "Are you sure you want to delete this staff?",
+		"updateProduct": "Update Product",
 		"createProductTitle": "Wemotoo CRM - Create Product",
 		"addNewProduct": "Add New Product",
 		"saveDraft": "Save Draft",
@@ -492,7 +495,11 @@
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Merchant Admin",
 			"roleMerchantStaff": "Merchant Staff",
-			"createCrmUser": "Create CRM User"
+			"createCrmUser": "Create CRM User",
+			"status": "Status",
+			"currentStatusLabel": "User is currently {status}",
+			"statusActive": "active",
+			"statusDisabled": "disabled"
 		},
 		"changePassword": {
 			"currentPassword": "Current password",

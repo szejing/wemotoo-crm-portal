@@ -4,6 +4,17 @@
 			<UFormField name="name" :label="$t('components.crmUserForm.name')">
 				<UInput :model-value="state.name" :placeholder="$t('components.crmUserForm.name')" @update:model-value="(v: string) => set('name', v)" />
 			</UFormField>
+
+			<UFormField name="role" :label="$t('components.crmUserForm.role')">
+				<USelect
+					:model-value="state.role"
+					:items="roleOptions(t)"
+					value-attribute="value"
+					:placeholder="$t('components.crmUserForm.role')"
+					@update:model-value="(v: UserRoles) => set('role', v)"
+				/>
+			</UFormField>
+
 			<UFormField name="email_address" :label="$t('components.crmUserForm.email')" class="sm:col-span-2">
 				<UInput
 					:model-value="state.email_address"
@@ -12,22 +23,26 @@
 					@update:model-value="(v: string) => set('email_address', v)"
 				/>
 			</UFormField>
+
 			<UFormField name="dial_code" :label="$t('components.crmUserForm.phone')">
 				<ZPhoneInput
 					:dial-code="state.dial_code"
-					:phone-number="state.phone_number"
+					:phone-number="state.phone_no"
 					:placeholder="$t('components.crmUserForm.phone')"
 					@update:dial-code="(v: string) => set('dial_code', v)"
-					@update:phone-number="(v: string) => set('phone_number', v)"
+					@update:phone-number="(v: string) => set('phone_no', v)"
 				/>
 			</UFormField>
-			<UFormField name="role" :label="$t('components.crmUserForm.role')">
-				<USelect
-					:model-value="state.role"
-					:items="roleOptions(t)"
-					value-attribute="value"
-					:placeholder="$t('components.crmUserForm.role')"
-					@update:model-value="(v: UserRoles | undefined) => set('role', v)"
+
+			<UFormField :label="$t('components.crmUserForm.status')" name="is_active">
+				<USwitch
+					v-model="state.is_active"
+					class="mt-2"
+					:label="
+						$t('components.crmUserForm.currentStatusLabel', {
+							status: state.is_active ? $t('components.crmUserForm.statusActive') : $t('components.crmUserForm.statusDisabled'),
+						})
+					"
 				/>
 			</UFormField>
 		</div>
@@ -53,7 +68,7 @@ const props = withDefaults(
 		modelValue?: CrmUserUpdate | null;
 	}>(),
 	{
-		modelValue: () => ({ name: '', email_address: '', dial_code: '', phone_number: '', role: undefined }),
+		modelValue: () => ({ name: '', email_address: '', dial_code: '', phone_no: '', role: undefined, is_active: true }),
 	},
 );
 
@@ -76,8 +91,9 @@ const state = reactive<CrmUserUpdate>({
 	name: props.modelValue?.name ?? '',
 	email_address: props.modelValue?.email_address ?? '',
 	dial_code: props.modelValue?.dial_code ?? '',
-	phone_number: props.modelValue?.phone_number ?? '',
+	phone_no: props.modelValue?.phone_no ?? '',
 	role: props.modelValue?.role ?? undefined,
+	is_active: props.modelValue?.is_active ?? true,
 });
 
 watch(

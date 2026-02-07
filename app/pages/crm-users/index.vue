@@ -57,13 +57,27 @@ import { getCrmUserColumns } from '~/utils/table-columns';
 import type { CRMUser } from '~/utils/types/crm-user';
 import type { TableRow } from '@nuxt/ui';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+import { ZModalLoading } from '#components';
 
 const { t } = useI18n();
 const crm_user_columns = computed(() => getCrmUserColumns(t));
 useHead({ title: () => t('pages.crmUsersTitle') });
 
 const crmUserStore = useCRMUserStore();
-const { loading, crm_users, filter, total_count } = storeToRefs(crmUserStore);
+const overlay = useOverlay();
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+const { loading, updating, crm_users, filter, total_count } = storeToRefs(crmUserStore);
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 const rows = computed(() => {
 	const start = (filter.value.current_page - 1) * filter.value.page_size;

@@ -7,6 +7,8 @@ import type { CreateCrmUserReq } from './request/create-crm-user.req';
 import type { UpdateCrmUserReq } from './request/update-crm-user.req';
 import type { CrmUserResp } from './response/crm-user.resp';
 import type { CreateCrmUserResp } from './response/create-crm-user.resp';
+import type { CrmUserReq } from './request/crm-user.req';
+import type { ChangePasswordReq } from './request/change-password.req';
 
 class CrmUserModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.CrmUsers;
@@ -42,11 +44,18 @@ class CrmUserModule extends HttpFactory {
 		});
 	}
 
-	async updatePassword(id: string, body: Record<string, unknown>): Promise<CrmUserResp> {
+	async updatePassword(id: string, body: ChangePasswordReq): Promise<CrmUserResp> {
 		return await this.call<CrmUserResp>({
 			method: 'PATCH',
 			url: this.RESOURCE.UpdatePassword(id),
 			body,
+		});
+	}
+
+	async delete(crmUser: CrmUserReq): Promise<CrmUserResp> {
+		return await this.call<CrmUserResp>({
+			method: 'DELETE',
+			url: this.RESOURCE.Delete(crmUser.id),
 		});
 	}
 }

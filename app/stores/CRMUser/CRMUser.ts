@@ -4,6 +4,8 @@ import { options_page_size } from '~/utils/options';
 import type { CRMUser, CrmUserCreate } from '~/utils/types/crm-user';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { BaseODataReq } from '~/repository/base/base.req';
+import type { UpdateCrmUserReq } from '~/repository/modules/crm-user/request/update-crm-user.req';
+import type { ChangePasswordReq } from '~/repository/modules/crm-user/request/change-password.req';
 
 type CrmUserFilter = {
 	query: string;
@@ -21,8 +23,9 @@ const initialEmptyCrmUser: CrmUserCreate = {
 	name: undefined as string | undefined,
 	email_address: undefined as string | undefined,
 	dial_code: '+60',
-	phone_number: undefined as string | undefined,
+	phone_no: undefined as string | undefined,
 	role: UserRoles.MERCHANT_STAFF,
+	is_active: true,
 };
 
 export const useCRMUserStore = defineStore('crmUserStore', {
@@ -34,6 +37,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 		crm_users: [] as CRMUser[],
 		total_count: 0 as number,
 		errors: [] as string[],
+		current_crm_user: undefined as CRMUser | undefined,
 		filter: initialFilter,
 	}),
 	actions: {
@@ -92,7 +96,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			try {
 				const resp = await $api.crmUser.getSingle(id);
 
-				return resp;
+				return resp.user;
 			} catch (err: unknown) {
 				const message = err instanceof Error ? err.message : 'Failed to load CRM user';
 				console.error(err);
@@ -109,8 +113,9 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					name: this.new_crm_user.name!,
 					email_address: this.new_crm_user.email_address!,
 					dial_code: this.new_crm_user.dial_code!,
-					phone_number: this.new_crm_user.phone_number!,
+					phone_no: this.new_crm_user.phone_no!,
 					role: this.new_crm_user.role as UserRoles,
+					is_active: this.new_crm_user.is_active,
 				});
 
 				if (resp?.user) {
@@ -129,12 +134,23 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			}
 		},
 
-		async updateCrmUser(id: string, body: Record<string, unknown>) {
+		async updateStatus(crmUser: CRMUser, is_active: boolean) {
+			await this.updateCrmUser(crmUser.id, { is_active });
+		},
+
+		async updateCrmUser(id: string, body: UpdateCrmUserReq) {
 			const { $api } = useNuxtApp();
+			this.updating = true;
 			try {
 				const resp = await $api.crmUser.update(id, body);
 				if (resp?.user) {
-					return resp.user;
+					this.crm_users = this.crm_users.map((user) => {
+						if (user.id === id) {
+							return resp.user;
+						}
+						return user;
+					});
+					successNotification(`${resp.user.name} - CRM User Updated !`);
 				}
 				return null;
 			} catch (err: unknown) {
@@ -142,15 +158,19 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				console.error(err);
 				failedNotification(message);
 				return null;
+			} finally {
+				this.updating = false;
 			}
 		},
 
-		async updateCrmUserPassword(id: string, body: Record<string, unknown>) {
+		async updateCrmUserPassword(id: string, body: ChangePasswordReq) {
 			const { $api } = useNuxtApp();
+			this.updating = true;
 			try {
 				const resp = await $api.crmUser.updatePassword(id, body);
 				if (resp?.user) {
-					return resp.user;
+					successNotification(`${resp.user.name} - CRM User Password Updated !`);
+					return true;
 				}
 				return null;
 			} catch (err: unknown) {
@@ -158,6 +178,26 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				console.error(err);
 				failedNotification(message);
 				return null;
+			} finally {
+				this.updating = false;
+			}
+		},
+
+		async deleteCrmUser(crmUser: CRMUser) {
+			const { $api } = useNuxtApp();
+			this.updating = true;
+			try {
+				await $api.crmUser.delete(crmUser);
+				successNotification(`${crmUser.name} - CRM User Deleted !`);
+
+				const index = this.crm_users.findIndex((t) => t.id === crmUser.id);
+				this.crm_users.splice(index, 1);
+			} catch (err: unknown) {
+				const message = err instanceof Error ? err.message : 'Failed to delete CRM user';
+				console.error(err);
+				failedNotification(message);
+			} finally {
+				this.updating = false;
 			}
 		},
 

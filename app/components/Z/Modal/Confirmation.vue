@@ -41,16 +41,17 @@ const props = defineProps({
 });
 
 const loading = ref(false);
-const emit = defineEmits(['confirm', 'cancel']);
+// const emit = defineEmits(['confirm', 'cancel']);
 
 const onConfirm = async () => {
+	if (loading.value) return;
 	loading.value = true;
-	emit('confirm');
+	// emit('confirm');
 	await props.onConfirm?.();
 };
 
 const onCancel = () => {
-	emit('cancel');
+	// emit('cancel');
 	props.onCancel?.();
 };
 </script>

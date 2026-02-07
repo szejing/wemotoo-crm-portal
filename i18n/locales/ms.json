@@ -242,6 +242,9 @@
 		"optionsTitle": "Wemotoo CRM - Pilihan",
 		"productDetail": "Butiran Produk",
 		"productDetailTitle": "Wemotoo CRM - Butiran Produk #",
+		"confirmDeleteProduct": "Adakah anda pasti mahu padam produk ini?",
+		"confirmDeleteCrmUser": "Adakah anda pasti mahu padam staff ini?",
+		"updateProduct": "Kemas Kini Produk",
 		"createProductTitle": "Wemotoo CRM - Cipta Produk",
 		"addNewProduct": "Tambah Produk Baharu",
 		"saveDraft": "Simpan Draf",
@@ -492,7 +495,11 @@
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Admin Peniaga",
 			"roleMerchantStaff": "Kakitangan Peniaga",
-			"createCrmUser": "Cipta Pengguna CRM"
+			"createCrmUser": "Cipta Pengguna CRM",
+			"status": "Status",
+			"currentStatusLabel": "Pengguna kini {status}",
+			"statusActive": "aktif",
+			"statusDisabled": "tidak aktif"
 		},
 		"changePassword": {
 			"currentPassword": "Kata laluan semasa",

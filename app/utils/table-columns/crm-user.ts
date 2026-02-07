@@ -3,6 +3,8 @@ import type { CRMUser } from '~/utils/types/crm-user';
 import { UserRoles } from 'wemotoo-common';
 import { formatCrmUserPhone } from '../utils';
 import type { TableColumnsTranslate } from './brand';
+import { USwitch } from '#components';
+import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 
 function roleLabel(role: UserRoles, t: TableColumnsTranslate): string {
 	const keyMap: Record<UserRoles, string> = {
@@ -37,13 +39,6 @@ export function getCrmUserColumns(t: TableColumnsTranslate): ColumnDef<CRMUser>[
 			},
 		},
 		{
-			accessorKey: 'email_address',
-			header: t('table.email'),
-			cell: ({ row }) => {
-				return h('p', { class: 'text-neutral-700 dark:text-neutral-300' }, row.original.email_address);
-			},
-		},
-		{
 			accessorKey: 'phone_no',
 			header: t('table.phone'),
 			cell: ({ row }) => {
@@ -62,6 +57,28 @@ export function getCrmUserColumns(t: TableColumnsTranslate): ColumnDef<CRMUser>[
 							'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-200',
 					},
 					label,
+				);
+			},
+		},
+		{
+			accessorKey: 'is_active',
+			header: () => h('div', { class: 'text-center' }, t('table.active')),
+			cell: ({ row }) => {
+				const crmUserStore = useCRMUserStore();
+				return h(
+					'div',
+					{
+						class: 'flex justify-center',
+						onClick: (e: Event) => e.stopPropagation(),
+					},
+					[
+						h(USwitch, {
+							'class': 'size-5',
+							'modelValue': row.original.is_active,
+							'disabled': false,
+							'onUpdate:modelValue': (value: boolean) => crmUserStore.updateStatus(row.original, value),
+						}),
+					],
 				);
 			},
 		},

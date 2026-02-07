@@ -10,12 +10,8 @@
 		</template>
 
 		<template #body>
-			<ZLoading v-if="loading && !user" />
-			<div v-else-if="notFound" class="flex flex-col items-center justify-center py-16 gap-4">
-				<UIcon name="i-heroicons-user-circle" class="w-16 h-16 text-gray-400" />
-				<p class="text-neutral-600 dark:text-neutral-400">{{ $t('pages.crmUserNotFound') }}</p>
-				<UButton color="primary" variant="soft" @click="navigateTo('/crm-users')">{{ $t('pages.backToCrmUsers') }}</UButton>
-			</div>
+			<ZLoading v-if="loading && !current_crm_user" />
+
 			<div v-else class="space-y-6 max-w-3xl">
 				<!-- User info card: view / edit -->
 				<UCard>
@@ -25,43 +21,33 @@
 								<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
 								{{ $t('pages.crmUserDetailUserInformation') }}
 							</h2>
-							<UButton v-if="!isEditing" variant="outline" size="sm" :icon="ICONS.PENCIL" :disabled="saving" @click="startEdit">{{ $t('common.edit') }}</UButton>
-							<div v-else class="flex gap-2">
-								<UButton color="neutral" variant="soft" size="sm" :disabled="saving" @click="cancelEdit">{{ $t('common.cancel') }}</UButton>
-								<UButton color="primary" size="sm" :loading="saving" @click="editFormRef?.submit()">{{ $t('common.save') }}</UButton>
+							<div class="flex items-center gap-2">
+								<UButton color="success" :loading="updating" @click="editFormRef?.submit()">
+									<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+									{{ $t('common.save') }}
+								</UButton>
+								<UButton
+									size="sm"
+									color="error"
+									variant="ghost"
+									class="flex-1 opacity-50 hover:opacity-100"
+									:icon="ICONS.TRASH"
+									:disabled="updating"
+									@click="deleteUser"
+								>
+									{{ $t('common.delete') }}
+								</UButton>
 							</div>
 						</div>
 					</template>
 
-					<div v-if="user" class="space-y-4">
-						<template v-if="!isEditing">
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.name') }}</p>
-									<p class="text-neutral-900 dark:text-neutral-100">{{ user.name || '—' }}</p>
-								</div>
-								<div class="sm:col-span-2">
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.email') }}</p>
-									<p class="text-neutral-900 dark:text-neutral-100">{{ user.email_address || '—' }}</p>
-								</div>
-								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.phone') }}</p>
-									<p class="text-neutral-900 dark:text-neutral-100">({{ user.dial_code }}) {{ user.phone_no || '—' }}</p>
-								</div>
-								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.role') }}</p>
-									<p class="text-neutral-900 dark:text-neutral-100">{{ roleLabel(user.role, t) }}</p>
-								</div>
-							</div>
-						</template>
-						<template v-else>
-							<FormCrmUserUpdate
-								ref="editFormRef"
-								:model-value="editForm"
-								@update:model-value="(v: CrmUserUpdate) => Object.assign(editForm, v)"
-								@submit="onEditFormSubmit"
-							/>
-						</template>
+					<div v-if="current_crm_user" class="space-y-4">
+						<FormCrmUserUpdate
+							ref="editFormRef"
+							:model-value="current_crm_user"
+							@update:model-value="(v: CrmUserUpdate) => (crmUserStore.new_crm_user = v)"
+							@submit="onEditFormSubmit"
+						/>
 					</div>
 				</UCard>
 
@@ -74,8 +60,10 @@
 						</h2>
 					</template>
 
-					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{{ $t('pages.crmUserDetailChangePasswordDesc') }}</p>
-					<FormChangePassword :loading="changingPassword" @submit="submitPassword" />
+					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+						{{ $t('pages.crmUserDetailChangePasswordDesc') }}
+					</p>
+					<FormChangePassword :loading="updating" @submit="submitPassword" />
 				</UCard>
 			</div>
 		</template>
@@ -83,109 +71,93 @@
 </template>
 
 <script lang="ts" setup>
-import { type CRMUser, type CrmUserUpdate } from '~/utils/types/crm-user';
-import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
+import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
-import { roleLabel } from '~/utils/user-roles-utils';
+import { ZModalConfirmation, ZModalLoading } from '#components';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
 const crmUserStore = useCRMUserStore();
-
-// useHead({ title: () => `Wemotoo CRM - CRM User${user.value ? `: ${user.value.name}` : ''}` });
-
-const user = ref<CRMUser | null>(null);
-const loading = ref(true);
-const notFound = ref(false);
-const isEditing = ref(false);
-const saving = ref(false);
-const changingPassword = ref(false);
-
-const editForm = reactive<CrmUserUpdate>({
-	name: '',
-	email_address: '',
-	dial_code: '',
-	phone_number: '',
-	role: undefined,
-});
+const overlay = useOverlay();
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+const { updating, loading, current_crm_user } = storeToRefs(crmUserStore);
 
 const { t } = useI18n();
 const pageTitle = computed(() => {
-	if (!user.value) return t('pages.crmUser');
-	const u = user.value;
+	if (!current_crm_user.value) return t('pages.crmUser');
+	const u = current_crm_user.value;
 	return u.name || u.email_address || t('pages.crmUser');
 });
 
-const syncEditFormFromUser = () => {
-	if (!user.value) return;
-	editForm.name = user.value.name ?? '';
-	editForm.email_address = user.value.email_address ?? '';
-	editForm.dial_code = user.value.dial_code ?? '';
-	editForm.phone_number = user.value.phone_no ?? '';
-	editForm.role = user.value.role ?? undefined;
-};
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
-const startEdit = () => {
-	syncEditFormFromUser();
-	isEditing.value = true;
-};
+onBeforeRouteLeave(() => {
+	current_crm_user.value = undefined;
+});
 
-const cancelEdit = () => {
-	isEditing.value = false;
-};
+onBeforeMount(async () => {
+	if (!current_crm_user.value) {
+		const crmUser = await crmUserStore.getCrmUser(id.value);
+		if (crmUser) {
+			crmUserStore.current_crm_user = crmUser;
+		} else {
+			await navigateTo('/crm-users');
+		}
+	}
+});
 
 const editFormRef = ref<{ submit: () => void } | null>(null);
 
-const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_number: string; role: CrmUserUpdate['role'] }) => {
-	saving.value = true;
-	try {
-		await crmUserStore.updateCrmUser(id.value, {
-			name: payload.name || undefined,
-			email_address: payload.email_address || undefined,
-			dial_code: payload.dial_code || undefined,
-			phone_number: payload.phone_number || undefined,
-			role: payload.role || undefined,
-		});
-		successNotification(t('pages.crmUserUpdated'));
-		isEditing.value = false;
-		if (user.value) {
-			const resp = await crmUserStore.getCrmUser(id.value);
-			if (resp?.user) user.value = resp.user;
-		}
-	} catch (err: unknown) {
-		const msg = err instanceof Error ? err.message : t('pages.crmUserUpdateFailed');
-		failedNotification(msg);
-	} finally {
-		saving.value = false;
-	}
+const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role'] }) => {
+	await crmUserStore.updateCrmUser(id.value, {
+		name: payload.name || undefined,
+		email_address: payload.email_address || undefined,
+		dial_code: payload.dial_code || undefined,
+		phone_no: payload.phone_no || undefined,
+		role: payload.role || undefined,
+	});
 };
 
 const submitPassword = async (payload: { old_password: string; new_password: string; confirm_password: string }) => {
-	changingPassword.value = true;
-	try {
-		await crmUserStore.updateCrmUserPassword(id.value, payload);
-		successNotification(t('pages.crmUserPasswordUpdated'));
-	} catch (err: unknown) {
-		const msg = err instanceof Error ? err.message : t('pages.crmUserPasswordUpdateFailed');
-		failedNotification(msg);
-	} finally {
-		changingPassword.value = false;
-	}
+	await crmUserStore.updateCrmUserPassword(id.value, {
+		old_password: payload.old_password,
+		new_password: payload.new_password,
+		confirm_password: payload.confirm_password,
+	});
+};
+
+const deleteUser = async () => {
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: t('pages.confirmDeleteCrmUser'),
+			action: 'delete',
+			onConfirm: async () => {
+				await crmUserStore.deleteCrmUser(current_crm_user.value!);
+				confirmModal.close();
+				navigateTo(`/crm-users`);
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
+		},
+	});
+
+	confirmModal.open();
 };
 
 onMounted(async () => {
-	try {
-		const resp = await crmUserStore.getCrmUser(id.value);
-		if (resp?.user) {
-			user.value = resp.user;
-			syncEditFormFromUser();
-		} else {
-			notFound.value = true;
-		}
-	} catch {
-		notFound.value = true;
-	} finally {
-		loading.value = false;
+	const user = await crmUserStore.getCrmUser(id.value);
+	if (user) {
+		current_crm_user.value = user;
 	}
 });
 </script>
