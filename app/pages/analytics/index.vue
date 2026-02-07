@@ -10,7 +10,7 @@
 		</template>
 
 		<template #body>
-			<div class="p-6 space-y-8">
+			<div class="space-y-8">
 				<!-- Header Section -->
 				<div class="space-y-2">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.analyticsDashboard') }}</h2>

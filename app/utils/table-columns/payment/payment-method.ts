@@ -19,13 +19,13 @@ export function getPaymentMethodColumns(t: TableColumnsTranslate): TableColumn<P
 			accessorKey: 'active',
 			header: () => h('div', { class: 'text-neutral-400' }, t('table.active')),
 			cell: ({ row }) => {
+				const paymentMethodStore = usePaymentMethodStore();
+
 				return h(USwitch, {
 					'class': 'size-5',
 					'modelValue': row.original.is_active,
 					'disabled': false,
-					'onUpdate:modelValue': (value: boolean) => {
-						row.original.is_active = value;
-					},
+					'onUpdate:modelValue': (value: boolean) => paymentMethodStore.updateStatus(row.original, value),
 				});
 			},
 		},

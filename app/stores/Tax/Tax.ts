@@ -3,6 +3,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { Tax } from '~/utils/types/tax';
 import type { TaxCreate } from '~/utils/types/form/tax/tax-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
+import type { UpdateTaxReq } from '~/repository/modules/taxes/models/request/update-tax.req';
 
 type TaxFilter = {
 	query: string;
@@ -152,18 +153,24 @@ export const useTaxStore = defineStore('taxStore', {
 			}
 		},
 
-		async updateTax(code: string, tax: Tax) {
+		async updateStatus(tax: Tax, is_active: boolean) {
+			await this.updateTax(tax.code, { is_active });
+		},
+
+		async updateTax(code: string, tax: Partial<UpdateTaxReq>) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.tax.update(code, {
-					description: tax.description,
-					is_inclusive: tax.is_inclusive,
-					is_active: tax.is_active,
-					metadata: tax.metadata,
-				});
+				// Build payload with only defined fields (partial update: omit = no change)
+				const body: UpdateTaxReq = {};
+				if (tax.description !== undefined) body.description = tax.description;
+				if (tax.is_inclusive !== undefined) body.is_inclusive = tax.is_inclusive;
+				if (tax.is_active !== undefined) body.is_active = tax.is_active;
+				if (tax.metadata !== undefined) body.metadata = tax.metadata;
+
+				const data = await $api.tax.update(code, body);
 
 				if (data.tax) {
 					successNotification(`${data.tax.code} - Tax Updated !`);

@@ -222,9 +222,9 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async toggleProductActive(product: Product) {
+		async updateStatus(product: Product, is_active: boolean) {
 			// Partial update: only send is_active so backend leaves other fields unchanged
-			await this.updateProduct({ code: product.code, is_active: !product.is_active });
+			await this.updateProduct({ code: product.code as string, is_active });
 		},
 
 		async updateProduct(product: Partial<ProductUpdate> & { code: string }) {

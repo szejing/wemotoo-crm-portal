@@ -67,11 +67,7 @@ import { ZModalLoading } from '#components';
 
 const productStore = useProductStore();
 const overlay = useOverlay();
-const loadingModal = overlay.create(ZModalLoading, {
-	props: {
-		key: 'loading',
-	},
-});
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
 const { t } = useI18n();
 const product_columns = computed(() => getProductColumns(t));

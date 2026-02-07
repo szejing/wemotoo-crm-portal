@@ -2,7 +2,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
-import { UBadge, UCheckbox } from '#components';
+import { UBadge, UCheckbox, USwitch } from '#components';
 import { formatCurrency } from 'wemotoo-common';
 import type { TableColumnsTranslate } from './brand';
 
@@ -82,10 +82,11 @@ export function getProductColumns(t: TableColumnsTranslate): TableColumn<Product
 						onClick: (e: Event) => e.stopPropagation(),
 					},
 					[
-						h(UCheckbox, {
-							modelValue: row.original.is_active,
-							'onUpdate:modelValue': () => productStore.toggleProductActive(row.original),
-							'aria-label': t('table.active'),
+						h(USwitch, {
+							'class': 'size-5',
+							'modelValue': row.original.is_active,
+							'disabled': false,
+							'onUpdate:modelValue': (value: boolean) => productStore.updateStatus(row.original, value),
 						}),
 					],
 				);

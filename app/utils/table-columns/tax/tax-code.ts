@@ -26,13 +26,12 @@ export function getTaxCodeColumns(t: TableColumnsTranslate): TableColumn<Tax>[] 
 			accessorKey: 'is_active',
 			header: () => h('h1', { class: 'text-neutral-400' }, t('table.active')),
 			cell: ({ row }) => {
+				const taxStore = useTaxStore();
 				return h(USwitch, {
 					'class': 'size-5',
 					'modelValue': row.original.is_active,
 					'disabled': false,
-					'onUpdate:modelValue': (value: boolean) => {
-						row.original.is_active = value;
-					},
+					'onUpdate:modelValue': (value: boolean) => taxStore.updateStatus(row.original, value),
 				});
 			},
 		},

@@ -54,18 +54,31 @@ import { options_page_size } from '~/utils/options';
 import { getTaxRuleColumns } from '~/utils/table-columns';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TableRow } from '@nuxt/ui';
+import { ZModalLoading } from '#components';
 
 const taxRuleStore = useTaxRuleStore();
-
+const overlay = useOverlay();
 const { t } = useI18n();
 const tax_rule_columns = computed(() => getTaxRuleColumns(t));
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 useHead({ title: () => t('pages.taxRulesTitle') });
 
 onMounted(async () => {
 	await taxRuleStore.getTaxRules();
 });
 
-const { loading, exporting, tax_rules, filter, total_tax_rules } = storeToRefs(taxRuleStore);
+const { loading, updating, exporting, tax_rules, filter, total_tax_rules } = storeToRefs(taxRuleStore);
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 const rows = computed(() => {
 	return tax_rules.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);

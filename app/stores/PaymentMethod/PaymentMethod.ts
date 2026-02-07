@@ -1,6 +1,8 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import { options_page_size } from '~/utils/options';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { UpdatePaymentMethodBody, UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/update-payment-method.req';
 
 type PaymentMethodFilter = {
 	query: string;
@@ -22,6 +24,7 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 		total_payment_methods: 0 as number,
 		filter: initialEmptyPaymentMethodFilter,
 		loading: false as boolean,
+		updating: false as boolean,
 		exporting: false as boolean,
 	}),
 
@@ -97,15 +100,31 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 			}
 		},
 
-		async updateStatus(request: UpdatePaymentMethodReq) {
-			const { $api } = useNuxtApp();
-			try {
-				await $api.paymentMethod.updateStatus(request);
+		async updateStatus(request: PaymentMethod, is_active: boolean) {
+			await this.updatePaymentMethod(request.code, { is_active });
+		},
 
-				await this.getPaymentMethods();
+		async updatePaymentMethod(code: string, paymentMethod: Partial<UpdatePaymentMethodReq>) {
+			this.updating = true;
+
+			const { $api } = useNuxtApp();
+
+			try {
+				// Build payload with only defined fields (partial update: omit = no change)
+				const body: UpdatePaymentMethodBody = {};
+				if (paymentMethod.is_active !== undefined) body.is_active = paymentMethod.is_active;
+
+				const data = await $api.paymentMethod.update(code, body);
+
+				if (data.payment_method) {
+					successNotification(`${data.payment_method.code} - Payment method updated`);
+					await this.getPaymentMethods();
+				}
 			} catch (err: any) {
 				console.error(err);
 				failedNotification(err.message);
+			} finally {
+				this.updating = false;
 			}
 		},
 

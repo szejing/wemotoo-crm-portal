@@ -5,6 +5,6 @@ export type TaxRuleDetail = {
 	id: number;
 	description: string;
 	tax: Tax | undefined;
-	tax_code: string | undefined;
+	tax_code: string;
 	tax_condition: TaxCondition | undefined;
 };

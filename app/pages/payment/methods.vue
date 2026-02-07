@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ZModalLoading } from '#components';
 import { options_page_size } from '~/utils/options';
 import { getPaymentMethodColumns } from '~/utils/table-columns';
 
@@ -56,8 +57,21 @@ useHead({ title: () => t('pages.paymentMethodsTitle') });
 
 onMounted(() => paymentMethodStore.getPaymentMethods());
 
+const overlay = useOverlay();
 const paymentMethodStore = usePaymentMethodStore();
-const { payment_methods, filter, total_payment_methods, loading, exporting } = storeToRefs(paymentMethodStore);
+const { payment_methods, filter, total_payment_methods, loading, exporting, updating } = storeToRefs(paymentMethodStore);
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 const rows = computed(() => {
 	return payment_methods.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);

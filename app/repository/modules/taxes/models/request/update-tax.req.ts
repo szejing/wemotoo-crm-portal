@@ -1,6 +1,6 @@
 export type UpdateTaxReq = {
-	description: string | undefined;
-	is_inclusive: boolean | undefined;
-	is_active: boolean | undefined;
-	metadata: Record<string, unknown> | undefined;
+	description?: string;
+	is_inclusive?: boolean;
+	is_active?: boolean;
+	metadata?: Record<string, unknown>;
 };
