@@ -1,4 +1,6 @@
-import type { UserRoles } from 'wemotoo-common';
+import { UserRoles } from 'wemotoo-common';
+
+type TranslateFn = (key: string) => string;
 
 /** CRM / admin user as returned from the list and detail APIs */
 export type CRMUser = {
@@ -13,8 +15,16 @@ export type CRMUser = {
 	updated_at?: string;
 };
 
+export type CrmUserCreate = {
+	name: string | undefined;
+	email_address: string | undefined;
+	dial_code: string | undefined;
+	phone_number: string | undefined;
+	role: UserRoles | undefined;
+};
+
 /** Form value for CRM user create / edit */
-export type CrmUserFormValue = {
+export type CrmUserUpdate = {
 	name: string;
 	email_address: string;
 	dial_code: string;

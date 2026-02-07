@@ -1,4 +1,3 @@
-import type { ProductOption, ProductOptionInput } from './product-option';
 import type { ProductOptionValue, ProductOptionValueInput } from './product-option-value';
 import type { Price, PriceInput } from './price';
 

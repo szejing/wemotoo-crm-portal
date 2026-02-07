@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type TranslateFn = (key: string) => string;
+type TranslateFn = (key: string) => string;
 
 export function LoginValidation(t: TranslateFn) {
 	return z.object({

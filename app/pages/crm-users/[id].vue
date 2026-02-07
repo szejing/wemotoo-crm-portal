@@ -13,8 +13,8 @@
 			<ZLoading v-if="loading && !user" />
 			<div v-else-if="notFound" class="flex flex-col items-center justify-center py-16 gap-4">
 				<UIcon name="i-heroicons-user-circle" class="w-16 h-16 text-gray-400" />
-				<p class="text-neutral-600 dark:text-neutral-400">CRM user not found.</p>
-				<UButton color="primary" variant="soft" @click="navigateTo('/crm-users')">Back to CRM Users</UButton>
+				<p class="text-neutral-600 dark:text-neutral-400">{{ $t('pages.crmUserNotFound') }}</p>
+				<UButton color="primary" variant="soft" @click="navigateTo('/crm-users')">{{ $t('pages.backToCrmUsers') }}</UButton>
 			</div>
 			<div v-else class="space-y-6 max-w-3xl">
 				<!-- User info card: view / edit -->
@@ -23,12 +23,12 @@
 						<div class="flex items-center justify-between">
 							<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
 								<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
-								User information
+								{{ $t('pages.crmUserDetailUserInformation') }}
 							</h2>
-							<UButton v-if="!isEditing" variant="outline" size="sm" :icon="ICONS.PENCIL" :disabled="saving" @click="startEdit"> Edit </UButton>
+							<UButton v-if="!isEditing" variant="outline" size="sm" :icon="ICONS.PENCIL" :disabled="saving" @click="startEdit">{{ $t('common.edit') }}</UButton>
 							<div v-else class="flex gap-2">
-								<UButton color="neutral" variant="soft" size="sm" :disabled="saving" @click="cancelEdit"> Cancel </UButton>
-								<UButton color="primary" size="sm" :loading="saving" @click="saveUser"> Save </UButton>
+								<UButton color="neutral" variant="soft" size="sm" :disabled="saving" @click="cancelEdit">{{ $t('common.cancel') }}</UButton>
+								<UButton color="primary" size="sm" :loading="saving" @click="editFormRef?.submit()">{{ $t('common.save') }}</UButton>
 							</div>
 						</div>
 					</template>
@@ -37,25 +37,30 @@
 						<template v-if="!isEditing">
 							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Name</p>
+									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.name') }}</p>
 									<p class="text-neutral-900 dark:text-neutral-100">{{ user.name || '—' }}</p>
 								</div>
 								<div class="sm:col-span-2">
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Email</p>
+									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.email') }}</p>
 									<p class="text-neutral-900 dark:text-neutral-100">{{ user.email_address || '—' }}</p>
 								</div>
 								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Phone</p>
+									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.phone') }}</p>
 									<p class="text-neutral-900 dark:text-neutral-100">({{ user.dial_code }}) {{ user.phone_no || '—' }}</p>
 								</div>
 								<div>
-									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">Role</p>
-									<p class="text-neutral-900 dark:text-neutral-100">{{ roleLabel(user.role) }}</p>
+									<p class="text-xs font-medium text-neutral-500 dark:text-neutral-400">{{ $t('table.role') }}</p>
+									<p class="text-neutral-900 dark:text-neutral-100">{{ roleLabel(user.role, t) }}</p>
 								</div>
 							</div>
 						</template>
 						<template v-else>
-							<FormCrmUserForm :model-value="editForm" @update:model-value="(v: CrmUserFormValue) => Object.assign(editForm, v)" />
+							<FormCrmUserUpdate
+								ref="editFormRef"
+								:model-value="editForm"
+								@update:model-value="(v: CrmUserUpdate) => Object.assign(editForm, v)"
+								@submit="onEditFormSubmit"
+							/>
 						</template>
 					</div>
 				</UCard>
@@ -65,11 +70,11 @@
 					<template #header>
 						<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
 							<UIcon name="i-heroicons-key" class="w-5 h-5 inline-block mr-2" />
-							Change password
+							{{ $t('pages.crmUserDetailChangePasswordTitle') }}
 						</h2>
 					</template>
 
-					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">Use this form only when this user is you. You must enter the current password.</p>
+					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">{{ $t('pages.crmUserDetailChangePasswordDesc') }}</p>
 					<FormChangePassword :loading="changingPassword" @submit="submitPassword" />
 				</UCard>
 			</div>
@@ -78,11 +83,10 @@
 </template>
 
 <script lang="ts" setup>
-import { KEY } from 'wemotoo-common';
-import { UserRoles } from 'wemotoo-common';
-import type { CRMUser, CrmUserFormValue } from '~/utils/types/crm-user';
+import { type CRMUser, type CrmUserUpdate } from '~/utils/types/crm-user';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+import { roleLabel } from '~/utils/user-roles-utils';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
@@ -97,24 +101,13 @@ const isEditing = ref(false);
 const saving = ref(false);
 const changingPassword = ref(false);
 
-const editForm = reactive<CrmUserFormValue>({
+const editForm = reactive<CrmUserUpdate>({
 	name: '',
 	email_address: '',
 	dial_code: '',
 	phone_number: '',
 	role: undefined,
 });
-
-const roleLabels: Record<string, string> = {
-	[UserRoles.SUPER_ADMIN]: 'Super Admin',
-	[UserRoles.SUPER_STAFF]: 'Super Staff',
-	[UserRoles.MERCHANT_ADMIN]: 'Merchant Admin',
-	[UserRoles.MERCHANT_STAFF]: 'Merchant Staff',
-};
-
-function roleLabel(role: UserRoles): string {
-	return roleLabels[role] ?? String(role);
-}
 
 const { t } = useI18n();
 const pageTitle = computed(() => {
@@ -123,64 +116,62 @@ const pageTitle = computed(() => {
 	return u.name || u.email_address || t('pages.crmUser');
 });
 
-function syncEditFormFromUser() {
+const syncEditFormFromUser = () => {
 	if (!user.value) return;
 	editForm.name = user.value.name ?? '';
 	editForm.email_address = user.value.email_address ?? '';
 	editForm.dial_code = user.value.dial_code ?? '';
 	editForm.phone_number = user.value.phone_no ?? '';
 	editForm.role = user.value.role ?? undefined;
-}
+};
 
-function startEdit() {
+const startEdit = () => {
 	syncEditFormFromUser();
 	isEditing.value = true;
-}
+};
 
-function cancelEdit() {
+const cancelEdit = () => {
 	isEditing.value = false;
-}
+};
 
-function buildRequestContext(): { user: { id: string; email_address: string }; merchant_id: string } | null {
-	const authStore = useAuthStore();
-	const merchantId = useCookie(KEY.X_MERCHANT_ID).value;
-	const u = authStore.user as { id?: string; email_address?: string } | null;
-	if (!u?.id || !u?.email_address || !merchantId) return null;
-	return {
-		user: { id: u.id, email_address: u.email_address },
-		merchant_id: merchantId,
-	};
-}
+const editFormRef = ref<{ submit: () => void } | null>(null);
 
-async function saveUser() {
+const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_number: string; role: CrmUserUpdate['role'] }) => {
+	saving.value = true;
 	try {
 		await crmUserStore.updateCrmUser(id.value, {
-			name: editForm.name || undefined,
-			email_address: editForm.email_address || undefined,
-			dial_code: editForm.dial_code || undefined,
-			phone_number: editForm.phone_number || undefined,
-			role: editForm.role || undefined,
+			name: payload.name || undefined,
+			email_address: payload.email_address || undefined,
+			dial_code: payload.dial_code || undefined,
+			phone_number: payload.phone_number || undefined,
+			role: payload.role || undefined,
 		});
+		successNotification(t('pages.crmUserUpdated'));
+		isEditing.value = false;
+		if (user.value) {
+			const resp = await crmUserStore.getCrmUser(id.value);
+			if (resp?.user) user.value = resp.user;
+		}
 	} catch (err: unknown) {
-		const msg = err instanceof Error ? err.message : 'Update failed';
+		const msg = err instanceof Error ? err.message : t('pages.crmUserUpdateFailed');
 		failedNotification(msg);
 	} finally {
 		saving.value = false;
 	}
-}
+};
 
-async function submitPassword(payload: { old_password: string; new_password: string; confirm_password: string }) {
+const submitPassword = async (payload: { old_password: string; new_password: string; confirm_password: string }) => {
 	changingPassword.value = true;
 	try {
 		await crmUserStore.updateCrmUserPassword(id.value, payload);
-		successNotification('Password updated.');
+		successNotification(t('pages.crmUserPasswordUpdated'));
 	} catch (err: unknown) {
-		const msg = err instanceof Error ? err.message : 'Password update failed';
+		const msg = err instanceof Error ? err.message : t('pages.crmUserPasswordUpdateFailed');
 		failedNotification(msg);
 	} finally {
 		changingPassword.value = false;
 	}
-}
+};
 
 onMounted(async () => {
 	try {

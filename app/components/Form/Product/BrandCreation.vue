@@ -24,7 +24,6 @@ import { CreateBrandValidation } from '~/utils/schema';
 
 const { t } = useI18n();
 const brandSchema = computed(() => CreateBrandValidation(t));
-
 type Schema = z.infer<ReturnType<typeof CreateBrandValidation>>;
 
 const brandStore = useBrandStore();

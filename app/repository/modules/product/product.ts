@@ -28,7 +28,7 @@ class ProductModule extends HttpFactory {
 	}
 
 	async create(product: CreateProductReq): Promise<CreateProductResp> {
-		return await this.call<any>({
+		return await this.call<CreateProductResp>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
 			body: product,
@@ -36,7 +36,7 @@ class ProductModule extends HttpFactory {
 	}
 
 	async update(code: string, product: UpdateProductReq): Promise<ProductResp> {
-		return await this.call<any>({
+		return await this.call<ProductResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
 			body: product,
@@ -44,21 +44,21 @@ class ProductModule extends HttpFactory {
 	}
 
 	async delete(product: ProductReq): Promise<ProductResp> {
-		return await this.call<any>({
+		return await this.call<ProductResp>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(product.code)}`,
 		});
 	}
 
 	async deleteVariant(code: string, variant_code: string): Promise<ProductResp> {
-		return await this.call<any>({
+		return await this.call<ProductResp>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.DeleteVariant(code, variant_code)}`,
 		});
 	}
 
 	async restore(product: ProductReq): Promise<ProductResp> {
-		return await this.call<any>({
+		return await this.call<ProductResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Restore(product.code)}`,
 		});

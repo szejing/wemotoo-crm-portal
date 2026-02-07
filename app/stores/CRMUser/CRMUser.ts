@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
+import { KEY, UserRoles } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
-import type { CRMUser } from '~/utils/types/crm-user';
-import { failedNotification } from '../AppUi/AppUi';
+import type { CRMUser, CrmUserCreate } from '~/utils/types/crm-user';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
 type CrmUserFilter = {
@@ -16,9 +17,20 @@ const initialFilter: CrmUserFilter = {
 	current_page: 1,
 };
 
+const initialEmptyCrmUser: CrmUserCreate = {
+	name: undefined as string | undefined,
+	email_address: undefined as string | undefined,
+	dial_code: '+60',
+	phone_number: undefined as string | undefined,
+	role: UserRoles.MERCHANT_STAFF,
+};
+
 export const useCRMUserStore = defineStore('crmUserStore', {
 	state: () => ({
 		loading: false as boolean,
+		adding: false as boolean,
+		updating: false as boolean,
+		new_crm_user: structuredClone(initialEmptyCrmUser),
 		crm_users: [] as CRMUser[],
 		total_count: 0 as number,
 		errors: [] as string[],
@@ -89,6 +101,34 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			}
 		},
 
+		async createCrmUser() {
+			const { $api } = useNuxtApp();
+
+			try {
+				const resp = await $api.crmUser.create({
+					name: this.new_crm_user.name!,
+					email_address: this.new_crm_user.email_address!,
+					dial_code: this.new_crm_user.dial_code!,
+					phone_number: this.new_crm_user.phone_number!,
+					role: this.new_crm_user.role as UserRoles,
+				});
+
+				if (resp?.user) {
+					successNotification(`${resp.user.name} - CRM User Created !`);
+					return true;
+				}
+				return false;
+			} catch (err: unknown) {
+				const message = err instanceof Error ? err.message : 'Failed to create CRM user';
+				console.error(err);
+				failedNotification(message);
+				return false;
+			} finally {
+				this.adding = false;
+				this.loading = false;
+			}
+		},
+
 		async updateCrmUser(id: string, body: Record<string, unknown>) {
 			const { $api } = useNuxtApp();
 			try {
@@ -119,6 +159,10 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				failedNotification(message);
 				return null;
 			}
+		},
+
+		resetNewCrmUser() {
+			this.new_crm_user = structuredClone(initialEmptyCrmUser);
 		},
 	},
 });

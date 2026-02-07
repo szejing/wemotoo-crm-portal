@@ -1,7 +1,27 @@
 <template>
-	<div></div>
+	<UDashboardPanel id="crm-user-create">
+		<template #header>
+			<UDashboardNavbar :title="pageTitle">
+				<template #leading>
+					<ZBackButton fallbackTo="/crm-users" />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="mx-auto max-w-3xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+				<div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
+					<FormCrmUserCreation />
+				</div>
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { t } = useI18n();
 
-<style></style>
+const pageTitle = computed(() => t('pages.crmUserCreate'));
+</script>
+
+<style scoped></style>

@@ -50,7 +50,8 @@
 		"bahasaMelayu": "Bahasa Melayu",
 		"edit": "Edit",
 		"delete": "Padam",
-		"create": "Cipta"
+		"create": "Cipta",
+		"created": "Berjaya dicipta"
 	},
 	"nav": {
 		"main": "Utama",
@@ -171,6 +172,13 @@
 			"customerNameRequired": "Nama pelanggan wajib",
 			"customerPhoneRequired": "No. telefon pelanggan wajib",
 			"statusRequired": "Status temujanji wajib"
+		},
+		"crmUser": {
+			"nameRequired": "Nama wajib",
+			"emailAddressRequired": "Alamat e-mel wajib",
+			"dialCodeRequired": "Kod dail wajib",
+			"phoneNumberRequired": "Nombor telefon wajib",
+			"roleRequired": "Peranan wajib"
 		}
 	},
 	"pages": {
@@ -247,6 +255,7 @@
 		"customersTitle": "Wemotoo CRM - Pelanggan",
 		"crmUsersTitle": "Wemotoo CRM - Pengguna CRM",
 		"crmUser": "Pengguna CRM",
+		"crmUserCreate": "Cipta Pengguna CRM",
 		"outletsTitle": "Wemotoo CRM - Cawangan",
 		"paymentTitle": "Wemotoo CRM - Pembayaran",
 		"paymentManagement": "Pengurusan Pembayaran",
@@ -341,6 +350,15 @@
 		"noPaymentMethodsFound": "Tiada kaedah pembayaran dijumpai.",
 		"noCustomersFound": "Tiada pelanggan dijumpai.",
 		"noCrmUsersFound": "Tiada pengguna CRM dijumpai.",
+		"crmUserNotFound": "Pengguna CRM tidak dijumpai.",
+		"backToCrmUsers": "Kembali ke Pengguna CRM",
+		"crmUserDetailUserInformation": "Maklumat pengguna",
+		"crmUserDetailChangePasswordTitle": "Tukar kata laluan",
+		"crmUserDetailChangePasswordDesc": "Gunakan borang ini hanya apabila pengguna ini ialah anda. Anda mesti masukkan kata laluan semasa.",
+		"crmUserUpdated": "Pengguna dikemas kini.",
+		"crmUserUpdateFailed": "Gagal dikemas kini",
+		"crmUserPasswordUpdated": "Kata laluan dikemas kini.",
+		"crmUserPasswordUpdateFailed": "Gagal mengemas kini kata laluan",
 		"tryAdjustingSearch": "Cuba laraskan carian anda untuk lebih hasil.",
 		"showingToOf": "Menunjukkan {from} hingga {to} daripada {total} hasil",
 		"totalLabel": "Jumlah",
@@ -473,7 +491,8 @@
 			"roleSuperAdmin": "Super Admin",
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Admin Peniaga",
-			"roleMerchantStaff": "Kakitangan Peniaga"
+			"roleMerchantStaff": "Kakitangan Peniaga",
+			"createCrmUser": "Cipta Pengguna CRM"
 		},
 		"changePassword": {
 			"currentPassword": "Kata laluan semasa",

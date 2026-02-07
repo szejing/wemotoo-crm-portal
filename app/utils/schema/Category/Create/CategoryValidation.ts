@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 
+type TranslateFn = (key: string) => string;
 const Category = z.object({ code: z.string().optional(), name: z.string().optional() });
 
 export function CreateCategoryValidation(t: TranslateFn) {

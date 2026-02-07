@@ -1,7 +1,6 @@
 import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
-import { transformProductToUpdate } from '~/utils/product-transform';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import { dir } from '~/utils/constants/dir';

@@ -50,7 +50,8 @@
 		"bahasaMelayu": "Bahasa Melayu",
 		"edit": "Edit",
 		"delete": "Delete",
-		"create": "Create"
+		"create": "Create",
+		"created": "Created successfully"
 	},
 	"nav": {
 		"main": "Main",
@@ -171,6 +172,13 @@
 			"customerNameRequired": "Customer name is required",
 			"customerPhoneRequired": "Customer phone is required",
 			"statusRequired": "Appointment status is required"
+		},
+		"crmUser": {
+			"nameRequired": "Name is required",
+			"emailAddressRequired": "Email address is required",
+			"dialCodeRequired": "Dial code is required",
+			"phoneNumberRequired": "Phone number is required",
+			"roleRequired": "Role is required"
 		}
 	},
 	"pages": {
@@ -247,6 +255,7 @@
 		"customersTitle": "Wemotoo CRM - Customers",
 		"crmUsersTitle": "Wemotoo CRM - CRM Users",
 		"crmUser": "CRM User",
+		"crmUserCreate": "Create CRM User",
 		"outletsTitle": "Wemotoo CRM - Outlets",
 		"paymentTitle": "Wemotoo CRM - Payment",
 		"paymentManagement": "Payment Management",
@@ -341,6 +350,15 @@
 		"noPaymentMethodsFound": "No payment methods found.",
 		"noCustomersFound": "No customers found.",
 		"noCrmUsersFound": "No CRM users found.",
+		"crmUserNotFound": "CRM user not found.",
+		"backToCrmUsers": "Back to CRM Users",
+		"crmUserDetailUserInformation": "User information",
+		"crmUserDetailChangePasswordTitle": "Change password",
+		"crmUserDetailChangePasswordDesc": "Use this form only when this user is you. You must enter the current password.",
+		"crmUserUpdated": "User updated.",
+		"crmUserUpdateFailed": "Update failed",
+		"crmUserPasswordUpdated": "Password updated.",
+		"crmUserPasswordUpdateFailed": "Password update failed",
 		"tryAdjustingSearch": "Try adjusting your search to see more results.",
 		"showingToOf": "Showing {from} to {to} of {total} results",
 		"totalLabel": "Total",
@@ -473,7 +491,8 @@
 			"roleSuperAdmin": "Super Admin",
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Merchant Admin",
-			"roleMerchantStaff": "Merchant Staff"
+			"roleMerchantStaff": "Merchant Staff",
+			"createCrmUser": "Create CRM User"
 		},
 		"changePassword": {
 			"currentPassword": "Current password",
