@@ -57,13 +57,16 @@ import type { TableRow } from '@nuxt/ui';
 
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();
-await tagsStore.getTags();
 
 const { t } = useI18n();
 const tag_columns = computed(() => getTagColumns(t));
 useHead({ title: () => t('pages.tagsTitle') });
 
 const { loading, tags, total_tags, filter, exporting } = storeToRefs(tagsStore);
+
+onMounted(() => {
+	tagsStore.getTags();
+});
 
 const rows = computed(() => {
 	return tags.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);

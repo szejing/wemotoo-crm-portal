@@ -63,10 +63,13 @@ useHead({ title: () => t('pages.optionsTitle') });
 
 const overlay = useOverlay();
 const productOptionsStore = useProductOptionStore();
-await productOptionsStore.getOptions();
 
 const { loading, prod_option, filter, exporting } = storeToRefs(productOptionsStore);
 const { total_options } = storeToRefs(productOptionsStore);
+
+onMounted(() => {
+	productOptionsStore.getOptions();
+});
 
 const rows = computed(() => {
 	return prod_option.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);

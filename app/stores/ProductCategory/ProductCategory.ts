@@ -6,6 +6,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
+import type { ImageReq } from '~/repository/modules/image/models/request/image.req';
 
 type CategoryFilter = {
 	query: string;
@@ -219,16 +220,13 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.category.delete({ code });
+				await $api.category.delete({ code });
 
-				if (data.category.code) {
-					successNotification(`Category #${data.category.code} Deleted !`);
+				successNotification(`Category #${code} Deleted !`);
 
-					const index = this.categories.findIndex((catg) => catg.code === data.category.code);
-					this.categories.splice(index, 1);
-				}
+				const index = this.categories.findIndex((catg) => catg.code === code);
+				this.categories.splice(index, 1);
 			} catch (err: unknown | ErrorResponse) {
-				console.log(err);
 				const message = (err as ErrorResponse).message ?? 'Failed to process category';
 				failedNotification(message);
 			} finally {

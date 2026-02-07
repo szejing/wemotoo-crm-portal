@@ -244,6 +244,8 @@
 		"productDetailTitle": "Wemotoo CRM - Product Detail #",
 		"confirmDeleteProduct": "Are you sure you want to delete this product?",
 		"confirmDeleteCrmUser": "Are you sure you want to delete this staff?",
+		"confirmDeleteCategory": "Are you sure you want to delete this category?",
+		"confirmDeleteCategoryWithProducts": "Are you sure you want to delete this category? This category has products and will be deleted along with all products.",
 		"updateProduct": "Update Product",
 		"createProductTitle": "Wemotoo CRM - Create Product",
 		"addNewProduct": "Add New Product",

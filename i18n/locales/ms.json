@@ -244,6 +244,8 @@
 		"productDetailTitle": "Wemotoo CRM - Butiran Produk #",
 		"confirmDeleteProduct": "Adakah anda pasti mahu padam produk ini?",
 		"confirmDeleteCrmUser": "Adakah anda pasti mahu padam staff ini?",
+		"confirmDeleteCategory": "Adakah anda pasti mahu padam kategori ini?",
+		"confirmDeleteCategoryWithProducts": "Adakah anda pasti mahu padam kategori ini? Kategori ini mempunyai produk dan akan dipadam bersama semua produk.",
 		"updateProduct": "Kemas Kini Produk",
 		"createProductTitle": "Wemotoo CRM - Cipta Produk",
 		"addNewProduct": "Tambah Produk Baharu",

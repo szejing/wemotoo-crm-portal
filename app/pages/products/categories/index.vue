@@ -62,21 +62,28 @@ useHead({ title: () => t('pages.categoriesTitle') });
 
 const overlay = useOverlay();
 const categoryStore = useProductCategoryStore();
-await categoryStore.getCategories();
-
 const { loading, categories, total_categories, filter, exporting } = storeToRefs(categoryStore);
+
+// Defer initial fetch to client so Pinia is active (avoids "getActivePinia() was called but there was no active Pinia" on refresh)
+onMounted(() => {
+	categoryStore.getCategories();
+});
 
 const rows = computed(() => {
 	return categories.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
-const deleteCategory = async (code: string) => {
+const deleteCategory = async (row: TableRow<Category>) => {
+	const category = row.original;
+
+	const hasProducts = category.total_products && category.total_products > 0;
+
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: 'Are you sure you want to delete this category?',
+			message: hasProducts ? t('pages.confirmDeleteCategoryWithProducts') : t('pages.confirmDeleteCategory'),
 			action: 'delete',
 			onConfirm: async () => {
-				await categoryStore.deleteCategory(code);
+				await categoryStore.deleteCategory(category.code);
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -100,7 +107,7 @@ const selectCategory = async (e: Event, row: TableRow<Category>) => {
 			},
 			onDelete: async () => {
 				categoryModal.close();
-				await deleteCategory(category.code);
+				await deleteCategory(row);
 			},
 			onCancel: () => {
 				categoryModal.close();

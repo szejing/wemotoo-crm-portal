@@ -7,3 +7,7 @@ export type BaseODataResp<T> = {
 	count: number;
 	value: T[];
 };
+
+export type MessageResp = {
+	message: string;
+};

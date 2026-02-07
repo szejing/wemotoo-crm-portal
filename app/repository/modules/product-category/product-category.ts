@@ -19,15 +19,15 @@ class ProductCategoryModule extends HttpFactory {
 		});
 	}
 
-	async getSingle(code: string) {
-		return this.call<any>({
+	async getSingle(code: string): Promise<ProductCategoryResp> {
+		return this.call<ProductCategoryResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(code)}`,
 		});
 	}
 
 	async create(category: CreateProductCategoryReq): Promise<ProductCategoryResp> {
-		return await this.call<any>({
+		return await this.call<ProductCategoryResp>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
 			body: category,
@@ -35,7 +35,7 @@ class ProductCategoryModule extends HttpFactory {
 	}
 
 	async update(code: string, category: UpdateProductCategoryReq): Promise<ProductCategoryResp> {
-		return await this.call<any>({
+		return await this.call<ProductCategoryResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
 			body: category,
@@ -43,14 +43,14 @@ class ProductCategoryModule extends HttpFactory {
 	}
 
 	async delete(category: ProductCategoryReq): Promise<ProductCategoryResp> {
-		return await this.call<any>({
+		return await this.call<ProductCategoryResp>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(category.code)}`,
 		});
 	}
 
 	async restore(category: ProductCategoryReq): Promise<ProductCategoryResp> {
-		return await this.call<any>({
+		return await this.call<ProductCategoryResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Restore(category.code)}`,
 		});
