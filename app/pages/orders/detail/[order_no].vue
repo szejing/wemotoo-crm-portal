@@ -3,8 +3,8 @@
 		<template #header>
 			<UDashboardNavbar :title="$t('pages.orderDetail')">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+					<ZBackButton fallbackTo="/orders" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

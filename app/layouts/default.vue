@@ -1,8 +1,16 @@
 <template>
 	<UDashboardGroup>
-		<UDashboardSidebar id="default" v-model:open="showSidebar" collapsible resizable class="bg-elevated/25" :ui="{ footer: 'lg:border-t lg:border-default' }">
+		<UDashboardSidebar
+			id="default"
+			v-model:open="showSidebar"
+			collapsible
+			resizable
+			class="bg-elevated/25"
+			:ui="{ footer: 'px-2 lg:border-t lg:border-default' }"
+		>
 			<template #header="{ collapsed }">
 				<SidebarHeader :collapsed="collapsed" />
+				<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 			</template>
 
 			<!-- Grouped Navigation Sections: render on client to avoid hydration mismatch and initial flash -->
@@ -17,14 +25,13 @@
 							:ui="{
 								content: 'overflow-hidden data-[state=open]:animate-nav-accordion-down data-[state=closed]:animate-nav-accordion-up',
 							}"
-							@update:model-value="() => {}"
 						>
 							<template #item-label="{ item }">
-								<ULink v-if="item.to && Array.isArray(item.children) && item.children.length" :to="item.to" class="block size-full" @click.stop>
-									{{ $t(item?.label) }}
+								<ULink v-if="item.to" :to="item.to" class="block size-full" @click="(e: MouseEvent) => onNavItemLabelClick(e, item)">
+									{{ $t(String(item?.label ?? '')) }}
 								</ULink>
 								<template v-else>
-									{{ $t(item?.label) }}
+									{{ $t(String(item?.label ?? '')) }}
 								</template>
 							</template>
 						</UNavigationMenu>
@@ -72,5 +79,11 @@ const navItemsWithOpen = (links: Array<Record<string, unknown>>): Array<Record<s
 		...link,
 		defaultOpen: !!(Array.isArray(link.children) && link.children.length && pathMatchesLink(path, link as { to?: string; children?: unknown[] })),
 	}));
+};
+
+const onNavItemLabelClick = (e: MouseEvent, item: Record<string, unknown>) => {
+	if (Array.isArray(item.children) && item.children.length) {
+		e.stopPropagation();
+	}
 };
 </script>

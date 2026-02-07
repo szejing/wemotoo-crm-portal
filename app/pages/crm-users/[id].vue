@@ -3,11 +3,8 @@
 		<template #header>
 			<UDashboardNavbar :title="pageTitle">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-				<template #right>
-					<UButton variant="ghost" color="neutral" :icon="ICONS.ARROW_LEFT" @click="navigateTo('/crm-users')"> Back to list </UButton>
+					<ZBackButton fallbackTo="/crm-users" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

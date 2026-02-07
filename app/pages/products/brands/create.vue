@@ -3,8 +3,8 @@
 		<template #header>
 			<UDashboardNavbar :title="$t('pages.createBrand')" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+					<ZBackButton fallbackTo="/products/brands" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

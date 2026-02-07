@@ -3,7 +3,6 @@
 		<template #header>
 			<UDashboardNavbar :title="$t('nav.tags')" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 

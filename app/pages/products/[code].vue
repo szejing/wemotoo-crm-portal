@@ -3,8 +3,8 @@
 		<template #header>
 			<UDashboardNavbar :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+					<ZBackButton fallbackTo="/products" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

@@ -3,8 +3,8 @@
 		<template #header>
 			<UDashboardNavbar title="Create Outlet" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+					<ZBackButton fallbackTo="/outlets" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

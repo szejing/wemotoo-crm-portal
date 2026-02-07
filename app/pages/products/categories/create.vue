@@ -3,8 +3,8 @@
 		<template #header>
 			<UDashboardNavbar :title="$t('pages.createCategory')" :ui="{ right: 'gap-3' }">
 				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+					<ZBackButton fallbackTo="/products/categories" />
+					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>

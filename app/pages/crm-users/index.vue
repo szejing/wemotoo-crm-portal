@@ -6,6 +6,9 @@
 					<ZBackButton class="lg:hidden" />
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
+				<template #right>
+					<ZCreateButton to="/crm-users/create" />
+				</template>
 			</UDashboardNavbar>
 
 			<UDashboardToolbar>

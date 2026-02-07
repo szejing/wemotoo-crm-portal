@@ -7,17 +7,20 @@
 		<UButton
 			v-bind="{
 				...user,
-				label: collapsed ? undefined : user?.name,
+				label: collapsed ? (user?.name?.[0] ?? '') : user?.name,
 				trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
 			}"
 			color="neutral"
 			variant="ghost"
 			block
 			:square="collapsed"
-			class="data-[state=open]:bg-elevated"
-			:ui="{
-				trailingIcon: 'text-dimmed',
-			}"
+			:class="[
+				'data-[state=open]:bg-elevated',
+				{
+					'rounded-full size-11 min-w-11 min-h-11 text-lg font-medium': collapsed,
+				},
+			]"
+			:ui="{ trailingIcon: 'text-dimmed' }"
 		/>
 
 		<template #chip-leading="{ item }">
@@ -30,6 +33,10 @@
 					}"
 				/>
 			</div>
+		</template>
+
+		<template #item-trailing="{ item }">
+			<UIcon v-if="isItemSelected(item)" name="i-lucide-check" class="shrink-0 size-5 text-primary" />
 		</template>
 	</UDropdownMenu>
 </template>
@@ -47,7 +54,7 @@ const colorMode = useColorMode();
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 
-const switchLocale = (newLocale: string) => {
+const switchLocale = (newLocale: 'en' | 'ms') => {
 	if (import.meta.client) {
 		try {
 			localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
@@ -56,6 +63,16 @@ const switchLocale = (newLocale: string) => {
 		}
 		setLocale(newLocale);
 	}
+};
+
+type SelectableValue = 'light' | 'dark' | 'en' | 'ms';
+
+const isItemSelected = (item: DropdownMenuItem): boolean => {
+	const value = (item as DropdownMenuItem & { value?: SelectableValue }).value;
+	if (value === undefined) return false;
+	if (value === 'light' || value === 'dark') return colorMode.value === value;
+	if (value === 'en' || value === 'ms') return locale.value === value;
+	return false;
 };
 
 const items = computed<DropdownMenuItem[][]>(() => [
@@ -78,26 +95,19 @@ const items = computed<DropdownMenuItem[][]>(() => [
 				{
 					label: t('nav.light'),
 					icon: 'i-lucide-sun',
-					type: 'checkbox',
-					checked: colorMode.value === 'light',
+					value: 'light' as const,
 					onSelect(e: Event) {
 						e.preventDefault();
-
 						colorMode.preference = 'light';
 					},
 				},
 				{
 					label: t('nav.dark'),
 					icon: 'i-lucide-moon',
-					type: 'checkbox',
-					checked: colorMode.value === 'dark',
-					onUpdateChecked(checked: boolean) {
-						if (checked) {
-							colorMode.preference = 'dark';
-						}
-					},
+					value: 'dark' as const,
 					onSelect(e: Event) {
 						e.preventDefault();
+						colorMode.preference = 'dark';
 					},
 				},
 			],
@@ -110,7 +120,8 @@ const items = computed<DropdownMenuItem[][]>(() => [
 			children: [
 				{
 					label: t('common.english'),
-					icon: locale === 'en' ? 'i-lucide-check' : undefined,
+					icon: 'i-lucide-languages',
+					value: 'en' as const,
 					onSelect(e: Event) {
 						e.preventDefault();
 						switchLocale('en');
@@ -118,7 +129,8 @@ const items = computed<DropdownMenuItem[][]>(() => [
 				},
 				{
 					label: t('common.bahasaMelayu'),
-					icon: locale === 'ms' ? 'i-lucide-check' : undefined,
+					icon: 'i-lucide-languages',
+					value: 'ms' as const,
 					onSelect(e: Event) {
 						e.preventDefault();
 						switchLocale('ms');
