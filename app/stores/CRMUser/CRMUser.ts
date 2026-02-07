@@ -6,6 +6,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { UpdateCrmUserReq } from '~/repository/modules/crm-user/request/update-crm-user.req';
 import type { ChangePasswordReq } from '~/repository/modules/crm-user/request/change-password.req';
+import type { ErrorResponse } from '~/repository/base/error';
 
 type CrmUserFilter = {
 	query: string;
@@ -82,9 +83,8 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					this.crm_users = data;
 				}
 				this.total_count = total;
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to load CRM users';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load CRM users';
 				failedNotification(message);
 			} finally {
 				this.loading = false;
@@ -93,15 +93,17 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 
 		async getCrmUser(id: string) {
 			const { $api } = useNuxtApp();
+			this.loading = true;
 			try {
 				const resp = await $api.crmUser.getSingle(id);
 
 				return resp.user;
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to load CRM user';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load CRM user';
 				failedNotification(message);
 				return null;
+			} finally {
+				this.loading = false;
 			}
 		},
 
@@ -123,9 +125,8 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					return true;
 				}
 				return false;
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to create CRM user';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to create CRM user';
 				failedNotification(message);
 				return false;
 			} finally {
@@ -153,9 +154,8 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					successNotification(`${resp.user.name} - CRM User Updated !`);
 				}
 				return null;
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to update CRM user';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to update CRM user';
 				failedNotification(message);
 				return null;
 			} finally {
@@ -173,9 +173,8 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					return true;
 				}
 				return null;
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to update CRM user password';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to update CRM user password';
 				failedNotification(message);
 				return null;
 			} finally {
@@ -192,9 +191,8 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 
 				const index = this.crm_users.findIndex((t) => t.id === crmUser.id);
 				this.crm_users.splice(index, 1);
-			} catch (err: unknown) {
-				const message = err instanceof Error ? err.message : 'Failed to delete CRM user';
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to delete CRM user';
 				failedNotification(message);
 			} finally {
 				this.updating = false;

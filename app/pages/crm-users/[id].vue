@@ -10,7 +10,9 @@
 		</template>
 
 		<template #body>
-			<ZLoading v-if="loading && !current_crm_user" />
+			<div v-if="loading || !current_crm_user" class="w-full animate-in fade-in duration-200 space-y-6 max-w-3xl">
+				<FormCrmUserUpdateLoading />
+			</div>
 
 			<div v-else class="space-y-6 max-w-3xl">
 				<!-- User info card: view / edit -->
@@ -63,7 +65,7 @@
 					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
 						{{ $t('pages.crmUserDetailChangePasswordDesc') }}
 					</p>
-					<FormChangePassword :loading="updating" @submit="submitPassword" />
+					<FormCrmUserChangePassword :loading="updating" @submit="submitPassword" />
 				</UCard>
 			</div>
 		</template>
