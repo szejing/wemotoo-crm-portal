@@ -3,6 +3,7 @@ import { options_page_size } from '~/utils/options';
 import type { ProductOptionCreate } from '~/utils/types/form/product-option-creation';
 import type { ProductOption } from '~/utils/types/product-option';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import { defaultProductOptionRelations } from 'wemotoo-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -94,9 +95,9 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 
 					this.total_options = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product option';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -115,9 +116,9 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 					this.prod_option.push(data.productOption);
 				}
 				this.resetNewProductOption();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product option';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -142,9 +143,9 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 					successNotification(`Product Option Updated !`);
 					this.getOptions();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product option';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -163,9 +164,9 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 					const index = this.prod_option.findIndex((t) => t.id === data.productOption.id);
 					this.prod_option.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product option';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

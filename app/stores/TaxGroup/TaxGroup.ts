@@ -1,5 +1,6 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { TaxGroup } from '~/utils/types/tax-group';
 import type { TaxGroupCreate } from '~/utils/types/form/tax/tax-group-creation';
 
@@ -73,9 +74,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 					this.tax_groups = data;
 					this.total_tax_groups = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax group';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -88,9 +89,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 				const data = await $api.taxGroup.getSingle(code);
 
 				return data.tax_group;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax group';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -119,9 +120,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 					this.getTaxGroups();
 				}
 				this.resetNewTaxGroup();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax group';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -143,9 +144,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 					successNotification(`Tax Group Updated !`);
 					this.getTaxGroups();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax group';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -163,9 +164,9 @@ export const useTaxGroupStore = defineStore('taxGroupStore', {
 					successNotification(`Tax Group Deleted !`);
 					this.tax_groups = this.tax_groups.filter((t) => t.code !== code);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax group';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

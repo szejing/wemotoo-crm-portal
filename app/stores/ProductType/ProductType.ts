@@ -3,6 +3,7 @@ import { options_page_size } from '~/utils/options';
 
 import type { ProductType } from '~/utils/types/product-type';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { ProductTypeCreate } from '~/utils/types/form/product-type-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
@@ -88,9 +89,9 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 
 					this.total_prod_types = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product type';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -110,9 +111,9 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 					this.prod_types.push(data.productType);
 				}
 				this.resetNewProductType();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product type';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -133,9 +134,9 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 					successNotification(`Product Type Updated !`);
 					this.getProductTypes();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product type';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -155,9 +156,9 @@ export const useProductTypeStore = defineStore('productTypeStore', {
 					const index = this.prod_types.findIndex((t) => t.id === data.productType.id);
 					this.prod_types.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product type';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

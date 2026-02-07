@@ -1,5 +1,6 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { Tax } from '~/utils/types/tax';
 import type { TaxCreate } from '~/utils/types/form/tax/tax-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -96,9 +97,9 @@ export const useTaxStore = defineStore('taxStore', {
 
 					this.total_taxes = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -111,9 +112,9 @@ export const useTaxStore = defineStore('taxStore', {
 				const data = await $api.tax.getSingle(code);
 
 				return data.tax;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -144,9 +145,9 @@ export const useTaxStore = defineStore('taxStore', {
 					this.taxes.push(data.tax);
 				}
 				this.resetNewTax();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -176,9 +177,9 @@ export const useTaxStore = defineStore('taxStore', {
 					successNotification(`${data.tax.code} - Tax Updated !`);
 					this.getTaxes();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -198,9 +199,9 @@ export const useTaxStore = defineStore('taxStore', {
 					const index = this.taxes.findIndex((t) => t.code === data.tax.code);
 					this.taxes.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

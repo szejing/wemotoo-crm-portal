@@ -1,5 +1,6 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TaxDetailCreate, TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 import { defaultTaxRulesRelations } from 'wemotoo-common';
@@ -82,9 +83,9 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 
 					this.total_tax_rules = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax rule';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -97,9 +98,9 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 				const data = await $api.taxRule.getSingle(code);
 
 				return data.tax_rule;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax rule';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -147,9 +148,9 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 					this.tax_rules.push(data.tax_rule);
 				}
 				this.resetNewTaxRule();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax rule';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -189,9 +190,9 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 					this.tax_rules.push(data.tax_rule);
 				}
 				this.resetNewTaxRule();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax rule';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -212,9 +213,9 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 					const index = this.tax_rules.findIndex((t) => t.code === data.tax_rule.code);
 					this.tax_rules.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process tax rule';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

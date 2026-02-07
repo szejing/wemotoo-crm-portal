@@ -1,5 +1,6 @@
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { Brand } from '~/utils/types/brand';
 import type { BrandCreate } from '~/utils/types/form/brand-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -69,9 +70,9 @@ export const useBrandStore = defineStore('brandStore', {
 				if (data.brand) {
 					return data.brand;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
+				failedNotification(message);
 			}
 		},
 
@@ -108,9 +109,9 @@ export const useBrandStore = defineStore('brandStore', {
 
 					this.total_brands = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -134,9 +135,9 @@ export const useBrandStore = defineStore('brandStore', {
 
 				this.new_brand = structuredClone(initialEmptyBrand);
 				return true;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
+				failedNotification(message);
 				return false;
 			} finally {
 				this.adding = false;
@@ -168,9 +169,9 @@ export const useBrandStore = defineStore('brandStore', {
 						return brand;
 					});
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -190,9 +191,9 @@ export const useBrandStore = defineStore('brandStore', {
 					const index = this.brands.findIndex((t) => t.code === data.brand.code);
 					this.brands.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

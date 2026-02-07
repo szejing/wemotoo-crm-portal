@@ -3,6 +3,7 @@ import { options_page_size } from '~/utils/options';
 import type { CategoryCreate } from '~/utils/types/form/category-creation';
 import type { Category } from '~/utils/types/category';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
@@ -103,8 +104,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 
 					this.total_categories = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load categories';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -150,8 +152,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				}
 				this.resetNewCategory();
 				return true;
-			} catch (err: any) {
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to create category';
+				failedNotification(message);
 				return false;
 			} finally {
 				this.adding = false;
@@ -203,9 +206,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 					successNotification(`Category Updated !`);
 					this.getCategories();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process category';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -224,9 +227,10 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 					const index = this.categories.findIndex((catg) => catg.code === data.category.code);
 					this.categories.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				console.log(err);
+				const message = (err as ErrorResponse).message ?? 'Failed to process category';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

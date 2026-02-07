@@ -1,6 +1,7 @@
 import { options_page_size } from '~/utils/options';
 import { defineStore } from 'pinia';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
 import type { Range } from '~/utils/interface';
 import { add, sub } from 'date-fns';
@@ -93,9 +94,9 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 				if (data) {
 					this.appointments = data;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process appointment';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -111,9 +112,9 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					this.appointments = this.appointments.map((appointment) => (appointment.code === code ? updated.appointment : appointment));
 				}
 				successNotification('Appointment updated successfully');
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process appointment';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -125,9 +126,9 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			try {
 				await $api.appointment.delete(code);
 				successNotification('Appointment deleted successfully');
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process appointment';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

@@ -3,6 +3,7 @@ import { options_page_size } from '~/utils/options';
 import type { TagCreate } from '~/utils/types/form/tag-creation';
 import type { Tag } from '~/utils/types/tag';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
 type TagFilter = {
@@ -87,9 +88,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 
 					this.total_tags = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -110,9 +111,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 				}
 				this.resetNewTag();
 				return true;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
+				failedNotification(message);
 				return false;
 			} finally {
 				this.adding = false;
@@ -134,9 +135,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 					successNotification(`Tag Updated !`);
 					this.getTags();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -156,9 +157,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 					const index = this.tags.findIndex((t) => t.id === data.tag.id);
 					this.tags.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

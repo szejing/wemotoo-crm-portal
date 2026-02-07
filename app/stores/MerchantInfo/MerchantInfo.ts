@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { MerchantInfo } from '~/utils/types/merchant-info';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { Currency } from '~/utils/types/currency';
 import { dir } from '~/utils/constants/dir';
 import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
@@ -53,8 +54,9 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 					this.merchant = data.map((info) => new MerchantInfo(info));
 				}
 				successNotification('Merchant information updated');
-			} catch (err: any) {
-				failedNotification(err?.message ?? 'Failed to update merchant information');
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to update merchant information';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -81,8 +83,9 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 						this.merchant = data.map((info) => new MerchantInfo(info));
 					}
 				}
-			} catch (err: any) {
-				failedNotification(err?.message ?? 'Failed to update merchant thumbnail');
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to update merchant thumbnail';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -100,9 +103,9 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 				if (data) {
 					this.merchant = data.map((info) => new MerchantInfo(info));
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load merchant information';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -120,9 +123,9 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 				if (data) {
 					this.currencies = data;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load merchant information';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

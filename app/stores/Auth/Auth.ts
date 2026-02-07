@@ -6,6 +6,7 @@ import { useAppUiStore } from '~/stores/AppUi/AppUi';
 import type { User } from '~/utils/types/user';
 import type { LoginResp } from '~/repository/modules/auth/models/response/login.resp';
 import type { VerifyResp } from '~/repository/modules/auth/models/response/verify.resp';
+import type { ErrorResponse } from '~/repository/base/error';
 
 export const useAuthStore = defineStore('authStore', {
 	state: () => ({
@@ -49,13 +50,14 @@ export const useAuthStore = defineStore('authStore', {
 				});
 
 				return true;
-			} catch (err: any) {
+			} catch (err: unknown | ErrorResponse) {
 				this.clearCookies();
+				const message = (err as ErrorResponse).message ?? 'Failed to login';
 
 				appUiStore.showToast({
 					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
-					title: err.message,
+					title: message,
 				});
 
 				return false;
@@ -92,8 +94,7 @@ export const useAuthStore = defineStore('authStore', {
 				}
 
 				return response_code === 200;
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
 				return true;
 			} finally {
 				this.loading = false;
@@ -116,12 +117,12 @@ export const useAuthStore = defineStore('authStore', {
 				appUiStore.setExcludeRoutes(data.exclude_routes);
 
 				return true;
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to verify session';
 				appUiStore.showToast({
 					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
-					title: err.message,
+					title: message,
 				});
 
 				return false;
@@ -147,13 +148,13 @@ export const useAuthStore = defineStore('authStore', {
 				}
 
 				return true;
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to validate reset link';
 				appUiStore.showToast({
 					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
 					title: 'Failed to validate reset link',
-					description: err.message,
+					description: message,
 				});
 				return false;
 			}
@@ -174,17 +175,17 @@ export const useAuthStore = defineStore('authStore', {
 					description: 'We have successfully sent you a reset link to your email.',
 				});
 				return [true, ''];
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to send reset link';
 
 				appUiStore.showToast({
 					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
 					title: 'Failed to send reset link',
-					description: err.message,
+					description: message,
 				});
 
-				return [false, err.message];
+				return [false, message];
 			} finally {
 				this.loading = false;
 			}
@@ -205,14 +206,14 @@ export const useAuthStore = defineStore('authStore', {
 					description: 'Your password has been updated. You can now sign in with your new password.',
 				});
 				return true;
-			} catch (err: any) {
-				console.error(err);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to reset password';
 
 				appUiStore.showToast({
 					color: 'error',
 					icon: ICONS.ERROR_OUTLINE,
 					title: 'Failed to reset password',
-					description: err.message,
+					description: message,
 				});
 
 				return false;

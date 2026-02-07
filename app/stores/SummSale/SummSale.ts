@@ -1,5 +1,6 @@
 import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptySaleSumm } from './models/sale-summ.model';
 import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
@@ -53,9 +54,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				if (data.top_purchased_products) {
 					this.top_purchased_products = data.top_purchased_products;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -124,9 +125,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 
 					this.sale_summ.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ.loading = false;
 			}
@@ -180,9 +181,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				} else {
 					failedNotification('Failed to export sales summary');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ.loading = false;
 			}
@@ -251,9 +252,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 
 					this.sale_summ_items.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_items.loading = false;
 			}
@@ -306,9 +307,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				} else {
 					failedNotification('Failed to export sales items');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_items.exporting = false;
 			}
@@ -378,9 +379,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 
 					this.sale_summ_payments.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_payments.loading = false;
 			}
@@ -434,9 +435,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				} else {
 					failedNotification('Failed to export sales payments');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_payments.loading = false;
 			}
@@ -479,9 +480,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				if (data) {
 					this.sale_summ_customer.data = data;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_customer.loading = false;
 			}
@@ -529,9 +530,9 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				} else {
 					failedNotification('Failed to export sales customers');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
+				failedNotification(message);
 			} finally {
 				this.sale_summ_customer.exporting = false;
 			}

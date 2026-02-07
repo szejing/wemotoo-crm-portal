@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { CustomerModel } from '~/utils/models/customer.model';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { PaymentModel } from '~/utils/models/payment.model';
@@ -121,9 +122,9 @@ export const useOrderStore = defineStore('orderStore', {
 
 					this.total_orders = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.loading = false;
@@ -141,9 +142,9 @@ export const useOrderStore = defineStore('orderStore', {
 				if (data.order) {
 					this.detail = data.order;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.loading = false;
@@ -163,9 +164,9 @@ export const useOrderStore = defineStore('orderStore', {
 				} else {
 					useRouter().back();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.updating = false;
@@ -182,9 +183,9 @@ export const useOrderStore = defineStore('orderStore', {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Payment status updated successfully');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			}
 		},
@@ -208,9 +209,9 @@ export const useOrderStore = defineStore('orderStore', {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Payment Info Added successfully');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			}
 		},
@@ -225,9 +226,9 @@ export const useOrderStore = defineStore('orderStore', {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Customer updated successfully');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			}
 		},
@@ -249,9 +250,9 @@ export const useOrderStore = defineStore('orderStore', {
 					this.getOrderByOrderNo(order_no);
 					successNotification('Order item updated successfully');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			}
 		},
@@ -315,9 +316,9 @@ export const useOrderStore = defineStore('orderStore', {
 				} else {
 					failedNotification('Failed to export orders');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process order';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.exporting = false;

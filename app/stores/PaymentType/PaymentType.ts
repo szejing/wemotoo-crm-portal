@@ -1,5 +1,6 @@
 import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 import { failedNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { options_page_size } from '~/utils/options';
 import { defaultPaymentTypeGroupRelations } from 'wemotoo-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -92,9 +93,9 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 
 					this.total_payment_type_groups = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load payment types';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

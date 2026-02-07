@@ -1,6 +1,7 @@
 import { options_page_size } from '~/utils/options';
 import type { Outlet } from '~/utils/types/outlet';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { OutletCreate } from '~/utils/types/form/outlet-creation';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
@@ -102,9 +103,9 @@ export const useOutletStore = defineStore('outletStore', {
 
 					this.total_outlets = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -117,9 +118,9 @@ export const useOutletStore = defineStore('outletStore', {
 				const data = await $api.outlet.getSingle(code);
 
 				return data.outlet;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -139,9 +140,9 @@ export const useOutletStore = defineStore('outletStore', {
 					this.outlets.push(data.outlet);
 				}
 				this.resetNewOutlet();
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
+				failedNotification(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;
@@ -172,9 +173,9 @@ export const useOutletStore = defineStore('outletStore', {
 					successNotification(`Outlet Updated !`);
 					this.getOutlets();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -194,9 +195,9 @@ export const useOutletStore = defineStore('outletStore', {
 					const index = this.outlets.findIndex((t) => t.code === data.outlet.code);
 					this.outlets.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

@@ -5,6 +5,7 @@ import type { SaleStatus } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { Bill } from '~/utils/types/bill';
 
 type SaleFilter = {
@@ -109,9 +110,9 @@ export const useSaleStore = defineStore('saleStore', {
 
 					this.total_bills = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process sale';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.loading = false;
@@ -166,9 +167,9 @@ export const useSaleStore = defineStore('saleStore', {
 				} else {
 					failedNotification('Failed to export bills');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process sale';
+				failedNotification(message);
 			} finally {
 				this.exporting = false;
 			}
@@ -187,9 +188,9 @@ export const useSaleStore = defineStore('saleStore', {
 				if (data.bill) {
 					this.detail = data.bill;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process sale';
+				failedNotification(message);
 				throw err;
 			} finally {
 				this.loading = false;

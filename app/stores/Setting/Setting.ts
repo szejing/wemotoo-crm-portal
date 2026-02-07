@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { Setting } from '~/utils/types/setting';
 import type { SettingSegment } from '~/utils/types/setting-segment';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 
 export const useSettingStore = defineStore('settingStore', {
 	state: () => ({
@@ -31,8 +32,9 @@ export const useSettingStore = defineStore('settingStore', {
 					this.settings = data[0]?.settings.map((setting) => new Setting(setting)) ?? [];
 					// this.total_settings = data[0]['@odata.count'] ?? 0;
 				}
-			} catch (error) {
-				console.error(error);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load settings';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -70,9 +72,9 @@ export const useSettingStore = defineStore('settingStore', {
 				if (data.segments) {
 					this.segments = data.segments;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to update settings';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

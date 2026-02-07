@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { Customer } from '~/utils/types/customer';
 import { failedNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 import { getFormattedDate } from 'wemotoo-common';
@@ -97,9 +98,9 @@ export const useCustomerStore = defineStore('customerStore', {
 
 					this.total_customers = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load customers';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}

@@ -1,5 +1,6 @@
 import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { initialEmptyOrderSumm } from './model/order-summ.model';
 import { initialEmptyOrderSummItem } from './model/order-summ-item.model';
 import { getFormattedDate } from 'wemotoo-common';
@@ -85,9 +86,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				if (data.pending_actions) {
 					this.pending_actions = data.pending_actions;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -157,9 +158,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 					this.order_summ.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ.loading = false;
 			}
@@ -208,9 +209,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				} else {
 					failedNotification('Failed to export order summary');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ.loading = false;
 			}
@@ -279,9 +280,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 					this.order_summ_item.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ_item.loading = false;
 			}
@@ -330,9 +331,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				} else {
 					failedNotification('Failed to export order items');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ_item.exporting = false;
 			}
@@ -401,9 +402,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 
 					this.order_summ_customer.total_data = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ_customer.loading = false;
 			}
@@ -445,9 +446,9 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				} else {
 					failedNotification('Failed to export order customers');
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
+				failedNotification(message);
 			} finally {
 				this.order_summ_customer.exporting = false;
 			}

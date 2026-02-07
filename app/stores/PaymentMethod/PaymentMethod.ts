@@ -1,5 +1,6 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import { options_page_size } from '~/utils/options';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { UpdatePaymentMethodBody, UpdatePaymentMethodReq } from '~/repository/modules/payment-method/models/request/update-payment-method.req';
@@ -92,9 +93,9 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 
 					this.total_payment_methods = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process payment method';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -120,9 +121,9 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 					successNotification(`${data.payment_method.code} - Payment method updated`);
 					await this.getPaymentMethods();
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process payment method';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}

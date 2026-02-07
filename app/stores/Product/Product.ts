@@ -2,6 +2,7 @@ import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from '
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
+import type { ErrorResponse } from '~/repository/base/error';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import { dir } from '~/utils/constants/dir';
 import type { BaseODataReq } from '~/repository/base/base.req';
@@ -118,9 +119,9 @@ export const useProductStore = defineStore('productStore', {
 				if (data.product) {
 					return data.product;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 			}
 		},
 
@@ -167,9 +168,9 @@ export const useProductStore = defineStore('productStore', {
 
 					this.total_products = total ?? 0;
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -211,9 +212,9 @@ export const useProductStore = defineStore('productStore', {
 					return true;
 				}
 				return false;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 				return false;
 			} finally {
 				this.adding = false;
@@ -303,9 +304,9 @@ export const useProductStore = defineStore('productStore', {
 				}
 
 				return true;
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}
@@ -325,9 +326,9 @@ export const useProductStore = defineStore('productStore', {
 					const index = this.products.findIndex((t) => t.code === data.product.code);
 					this.products.splice(index, 1);
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
@@ -351,9 +352,9 @@ export const useProductStore = defineStore('productStore', {
 						return product;
 					});
 				}
-			} catch (err: any) {
-				console.error(err);
-				failedNotification(err.message);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product';
+				failedNotification(message);
 			} finally {
 				this.loading = false;
 			}
