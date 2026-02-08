@@ -30,7 +30,7 @@
 				/>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="category_columns" :loading="loading" @select="selectCategory">
+				<UTable :data="categories" :columns="category_columns" :loading="loading" @select="selectCategory">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -67,10 +67,6 @@ const { loading, categories, total_categories, filter, exporting } = storeToRefs
 // Defer initial fetch to client so Pinia is active (avoids "getActivePinia() was called but there was no active Pinia" on refresh)
 onMounted(() => {
 	categoryStore.getCategories();
-});
-
-const rows = computed(() => {
-	return categories.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteCategory = async (row: TableRow<Category>) => {

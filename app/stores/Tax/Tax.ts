@@ -89,12 +89,7 @@ export const useTaxStore = defineStore('taxStore', {
 				const { data, '@odata.count': total } = await $api.tax.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_taxes > this.taxes.length) {
-						this.taxes = [...this.taxes, ...data];
-					} else {
-						this.taxes = data;
-					}
-
+					this.taxes = data;
 					this.total_taxes = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

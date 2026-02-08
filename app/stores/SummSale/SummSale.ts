@@ -117,12 +117,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				});
 
 				if (data) {
-					if (this.sale_summ.current_page > 1 && this.sale_summ.total_data > this.sale_summ.data.length) {
-						this.sale_summ.data = [...this.sale_summ.data, ...data];
-					} else {
-						this.sale_summ.data = data;
-					}
-
+					this.sale_summ.data = data;
 					this.sale_summ.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -244,12 +239,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 					$skip: (this.sale_summ_items.current_page - 1) * this.sale_summ_items.page_size,
 				});
 				if (data) {
-					if (this.sale_summ_items.current_page > 1 && this.sale_summ_items.total_data > this.sale_summ_items.data.length) {
-						this.sale_summ_items.data = [...this.sale_summ_items.data, ...data];
-					} else {
-						this.sale_summ_items.data = data;
-					}
-
+					this.sale_summ_items.data = data;
 					this.sale_summ_items.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -371,12 +361,7 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				});
 
 				if (data) {
-					if (this.sale_summ_payments.current_page > 1 && this.sale_summ_payments.total_data > this.sale_summ_payments.data.length) {
-						this.sale_summ_payments.data = [...this.sale_summ_payments.data, ...data];
-					} else {
-						this.sale_summ_payments.data = data;
-					}
-
+					this.sale_summ_payments.data = data;
 					this.sale_summ_payments.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

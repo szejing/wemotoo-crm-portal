@@ -1,26 +1,27 @@
 <template>
 	<USelectMenu
-		v-model="country"
+		v-model="country?.iso2"
 		v-model:search-term="searchTerm"
 		:items="countryItems"
 		:search-input="{}"
 		size="md"
 		:placeholder="$t('components.selectMenu.selectCountry')"
-		value-key="code"
+		value-key="iso2"
 	/>
 </template>
 
 <script lang="ts" setup>
+import { useDataStore } from '~/stores/Data/Data';
 import type { Country } from '~/utils/types/country';
 
 const searchTerm = ref('');
-const countryStore = useCountryStore();
-const { countries } = storeToRefs(countryStore);
+const dataStore = useDataStore();
+const { countries } = storeToRefs(dataStore);
 
 const props = defineProps<{ country: Country | undefined }>();
 
 const countryItems = computed(() => {
-	return countries.value.map((country) => ({
+	return dataStore.countries.map((country) => ({
 		...country,
 		label: country.iso2,
 	}));

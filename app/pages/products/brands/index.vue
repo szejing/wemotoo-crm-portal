@@ -30,7 +30,7 @@
 					@export="exportBrands"
 				/>
 
-				<UTable :data="rows" :columns="brand_columns" :loading="loading" @select="selectBrand">
+				<UTable :data="brands" :columns="brand_columns" :loading="loading" @select="selectBrand">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -68,10 +68,6 @@ onMounted(async () => {
 });
 
 const { loading, brands, total_brands, filter, exporting } = storeToRefs(brandStore);
-
-const rows = computed(() => {
-	return brands.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const deleteBrand = async (row: TableRow<Brand>) => {
 	const brand = row.original;

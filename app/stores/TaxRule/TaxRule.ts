@@ -75,12 +75,7 @@ export const useTaxRuleStore = defineStore('taxRuleStore', {
 				});
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_tax_rules > this.tax_rules.length) {
-						this.tax_rules = [...this.tax_rules, ...data];
-					} else {
-						this.tax_rules = data;
-					}
-
+					this.tax_rules = data;
 					this.total_tax_rules = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

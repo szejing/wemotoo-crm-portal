@@ -160,12 +160,7 @@ export const useProductStore = defineStore('productStore', {
 				const { data, '@odata.count': total } = await $api.product.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_products > this.products.length) {
-						this.products = [...this.products, ...data];
-					} else {
-						this.products = data;
-					}
-
+					this.products = data;
 					this.total_products = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

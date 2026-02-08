@@ -25,7 +25,7 @@
 
 				<!-- Table -->
 				<UTable
-					:data="rows"
+					:data="crm_users"
 					:columns="crm_user_columns"
 					:loading="loading"
 					:ui="{
@@ -78,12 +78,6 @@ watch(
 		}
 	},
 );
-
-const rows = computed(() => {
-	const start = (filter.value.current_page - 1) * filter.value.page_size;
-	const end = filter.value.current_page * filter.value.page_size;
-	return crm_users.value.slice(start, end);
-});
 
 function selectCrmUser(_e: Event, row: TableRow<CRMUser>) {
 	const user = row.original;

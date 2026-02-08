@@ -95,12 +95,7 @@ export const useOutletStore = defineStore('outletStore', {
 				const { data, '@odata.count': total } = await $api.outlet.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_outlets > this.outlets.length) {
-						this.outlets = [...this.outlets, ...data];
-					} else {
-						this.outlets = data;
-					}
-
+					this.outlets = data;
 					this.total_outlets = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

@@ -150,12 +150,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				});
 
 				if (data) {
-					if (this.order_summ.current_page > 1 && this.order_summ.total_data > this.order_summ.data.length) {
-						this.order_summ.data = [...this.order_summ.data, ...data];
-					} else {
-						this.order_summ.data = data;
-					}
-
+					this.order_summ.data = data;
 					this.order_summ.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -272,12 +267,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				});
 
 				if (data) {
-					if (this.order_summ_item.current_page > 1 && this.order_summ_item.total_data > this.order_summ_item.data.length) {
-						this.order_summ_item.data = [...this.order_summ_item.data, ...data];
-					} else {
-						this.order_summ_item.data = data;
-					}
-
+					this.order_summ_item.data = data;
 					this.order_summ_item.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -394,12 +384,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				});
 
 				if (data) {
-					if (this.order_summ_customer.current_page > 1 && this.order_summ_customer.total_data > this.order_summ_customer.data.length) {
-						this.order_summ_customer.data = [...this.order_summ_customer.data, ...data];
-					} else {
-						this.order_summ_customer.data = data;
-					}
-
+					this.order_summ_customer.data = data;
 					this.order_summ_customer.total_data = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

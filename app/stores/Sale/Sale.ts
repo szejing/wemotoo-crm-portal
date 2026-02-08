@@ -102,12 +102,7 @@ export const useSaleStore = defineStore('saleStore', {
 				});
 
 				if (bills) {
-					if (this.filter.current_page > 1 && this.total_bills > this.bills.length) {
-						this.bills = [...this.bills, ...bills];
-					} else {
-						this.bills = bills;
-					}
-
+					this.bills = bills;
 					this.total_bills = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

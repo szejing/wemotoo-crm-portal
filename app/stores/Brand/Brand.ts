@@ -101,12 +101,7 @@ export const useBrandStore = defineStore('brandStore', {
 				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_brands > this.brands.length) {
-						this.brands = [...this.brands, ...data];
-					} else {
-						this.brands = data;
-					}
-
+					this.brands = data;
 					this.total_brands = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

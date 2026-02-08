@@ -32,7 +32,7 @@
 				/>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="tax_code_columns" :loading="loading" @select="selectTax">
+				<UTable :data="taxes" :columns="tax_code_columns" :loading="loading" @select="selectTax">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
@@ -69,10 +69,6 @@ onMounted(async () => {
 const overlay = useOverlay();
 const taxStore = useTaxStore();
 const { loading, taxes, filter, total_taxes, exporting } = storeToRefs(taxStore);
-
-const rows = computed(() => {
-	return taxes.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const deleteTax = async (code: string) => {
 	const confirmModal = overlay.create(ZModalConfirmation, {

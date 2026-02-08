@@ -28,7 +28,7 @@
 				/>
 
 				<!-- Table -->
-				<UTable :data="rows" :columns="payment_type_group_columns" :loading="loading">
+				<UTable :data="payment_type_groups" :columns="payment_type_group_columns" :loading="loading">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
@@ -58,10 +58,6 @@ onMounted(() => paymentTypeStore.getPaymentTypeGroups());
 
 const paymentTypeStore = usePaymentTypeStore();
 const { payment_type_groups, filter, total_payment_type_groups, loading, exporting } = storeToRefs(paymentTypeStore);
-
-const rows = computed(() => {
-	return payment_type_groups.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const updatePage = async (page: number) => {
 	await paymentTypeStore.updatePage(page);

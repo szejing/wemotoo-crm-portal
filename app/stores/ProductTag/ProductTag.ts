@@ -80,12 +80,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_tags > this.tags.length) {
-						this.tags = [...this.tags, ...data];
-					} else {
-						this.tags = data;
-					}
-
+					this.tags = data;
 					this.total_tags = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

@@ -77,11 +77,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				const data = (resp as { data?: CRMUser[] }).data ?? (resp as { value?: CRMUser[] }).value ?? [];
 				const total = (resp as { '@odata.count'?: number })['@odata.count'] ?? 0;
 
-				if (this.filter.current_page > 1 && this.total_count > this.crm_users.length) {
-					this.crm_users = [...this.crm_users, ...data];
-				} else {
-					this.crm_users = data;
-				}
+				this.crm_users = data;
 				this.total_count = total;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load CRM users';
@@ -96,7 +92,6 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			this.loading = true;
 			try {
 				const resp = await $api.crmUser.getSingle(id);
-
 				return resp.user;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load CRM user';

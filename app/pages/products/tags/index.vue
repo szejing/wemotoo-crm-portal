@@ -29,7 +29,7 @@
 					@export="exportTags"
 				/>
 
-				<UTable :data="rows" :columns="tag_columns" :loading="loading" @select="selectTag">
+				<UTable :data="tags" :columns="tag_columns" :loading="loading" @select="selectTag">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -66,10 +66,6 @@ const { loading, tags, total_tags, filter, exporting } = storeToRefs(tagsStore);
 
 onMounted(() => {
 	tagsStore.getTags();
-});
-
-const rows = computed(() => {
-	return tags.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteTag = async (row: TableRow<Tag>) => {

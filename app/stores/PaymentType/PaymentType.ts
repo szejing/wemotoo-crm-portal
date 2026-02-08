@@ -85,12 +85,7 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 				const { data, '@odata.count': total } = await $api.paymentTypeGroup.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_payment_type_groups > this.payment_type_groups.length) {
-						this.payment_type_groups = [...this.payment_type_groups, ...data];
-					} else {
-						this.payment_type_groups = data;
-					}
-
+					this.payment_type_groups = data;
 					this.total_payment_type_groups = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

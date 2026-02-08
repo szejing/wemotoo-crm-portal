@@ -32,7 +32,7 @@
 				/>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
+				<UTable :data="tax_groups" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
@@ -68,10 +68,6 @@ useHead({ title: () => t('pages.taxGroupsTitle') });
 
 onMounted(async () => {
 	await taxGroupStore.getTaxGroups();
-});
-
-const rows = computed(() => {
-	return tax_groups.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteTaxGroup = async (code: string) => {

@@ -31,7 +31,7 @@
 					@export="exportTaxes"
 				/>
 
-				<UTable :data="rows" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+				<UTable :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 					<template #empty-state>
 						<div class="flex-col-center section-empty">
 							<h2>No tax code Found</h2>
@@ -79,10 +79,6 @@ watch(
 		}
 	},
 );
-
-const rows = computed(() => {
-	return tax_rules.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const selectTaxRule = async (e: Event, row: TableRow<TaxRule>) => {
 	const taxRule = row.original;

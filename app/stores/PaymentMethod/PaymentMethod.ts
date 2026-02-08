@@ -85,12 +85,7 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 				const { data, '@odata.count': total } = await $api.paymentMethod.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_payment_methods > this.payment_methods.length) {
-						this.payment_methods = [...this.payment_methods, ...data];
-					} else {
-						this.payment_methods = data;
-					}
-
+					this.payment_methods = data;
 					this.total_payment_methods = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

@@ -90,12 +90,7 @@ export const useCustomerStore = defineStore('customerStore', {
 				const { data, '@odata.count': total } = await $api.customer.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_customers > this.customers.length) {
-						this.customers = [...this.customers, ...data];
-					} else {
-						this.customers = data;
-					}
-
+					this.customers = data;
 					this.total_customers = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

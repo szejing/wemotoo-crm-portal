@@ -28,7 +28,7 @@
 				/>
 
 				<!-- Table -->
-				<UTable :data="rows" :columns="payment_method_columns" :loading="loading">
+				<UTable :data="payment_methods" :columns="payment_method_columns" :loading="loading">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
@@ -72,10 +72,6 @@ watch(
 		}
 	},
 );
-
-const rows = computed(() => {
-	return payment_methods.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const updatePage = async (page: number) => {
 	await paymentMethodStore.updatePage(page);

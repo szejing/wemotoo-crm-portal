@@ -97,12 +97,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_categories > this.categories.length) {
-						this.categories = [...this.categories, ...data];
-					} else {
-						this.categories = data;
-					}
-
+					this.categories = data;
 					this.total_categories = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {

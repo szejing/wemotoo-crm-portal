@@ -47,7 +47,7 @@
 				<!-- Orders Table -->
 				<UCard class="[&>div]:p-0!">
 					<UTable
-						:data="rows"
+						:data="orders"
 						:columns="order_columns"
 						:loading="loading"
 						class="[&_tr]:hover:bg-gray-50 dark:[&_tr]:hover:bg-gray-800/50 [&_tr]:cursor-pointer [&_tr]:transition-colors"
@@ -117,10 +117,6 @@ const tabItems = computed(() => [
 // Load orders on mount
 onMounted(async () => {
 	await orderStore.getOrders();
-});
-
-const rows = computed(() => {
-	return orders.value.slice((current_page.value - 1) * filter.value.page_size, current_page.value * filter.value.page_size);
 });
 
 const selectTab = async (index: number) => {

@@ -33,7 +33,7 @@
 
 				<!-- Table -->
 				<UTable
-					:data="rows"
+					:data="products"
 					:columns="product_columns"
 					:loading="loading"
 					:ui="{
@@ -76,10 +76,6 @@ useHead({ title: () => t('pages.productsTitle') });
 onMounted(() => productStore.getProducts());
 
 const { products, loading, filter, total_products, exporting, updating } = storeToRefs(productStore);
-
-const rows = computed(() => {
-	return products.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 watch(
 	() => updating.value,

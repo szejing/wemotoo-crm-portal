@@ -114,12 +114,7 @@ export const useOrderStore = defineStore('orderStore', {
 				});
 
 				if (data) {
-					if (this.filter.current_page > 1 && this.total_orders > this.orders.length) {
-						this.orders = [...this.orders, ...data];
-					} else {
-						this.orders = data;
-					}
-
+					this.orders = data;
 					this.total_orders = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -140,7 +135,7 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.getOrderByTransactionNo(order_no);
 
 				if (data.order) {
-					this.detail = data.order;
+					this.detail = data.order as Order;
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';

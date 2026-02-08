@@ -30,7 +30,7 @@
 					@export="exportOptions"
 				/>
 
-				<UTable :data="rows" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
+				<UTable :data="prod_option" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -69,10 +69,6 @@ const { total_options } = storeToRefs(productOptionsStore);
 
 onMounted(() => {
 	productOptionsStore.getOptions();
-});
-
-const rows = computed(() => {
-	return prod_option.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
 });
 
 const deleteProductOption = async (row: TableRow<ProductOption>) => {

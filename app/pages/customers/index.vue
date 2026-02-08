@@ -28,7 +28,7 @@
 				/>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="customer_columns" :loading="loading" @select="selectCustomer">
+				<UTable :data="customers" :columns="customer_columns" :loading="loading" @select="selectCustomer">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -58,10 +58,6 @@ useHead({ title: () => t('pages.customersTitle') });
 
 const customerStore = useCustomerStore();
 const { loading, customers, filter, total_customers, exporting } = storeToRefs(customerStore);
-
-const rows = computed(() => {
-	return customers.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const selectCustomer = async (e: Event, row: TableRow<Customer>) => {
 	const customer = row.original;

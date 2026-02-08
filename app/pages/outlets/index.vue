@@ -32,7 +32,7 @@
 				/>
 
 				<!-- Table  -->
-				<UTable :data="rows" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
+				<UTable :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
@@ -70,10 +70,6 @@ onMounted(async () => {
 });
 
 const { loading, exporting, outlets, filter, total_outlets } = storeToRefs(outletStore);
-
-const rows = computed(() => {
-	return outlets.value.slice((filter.value.current_page - 1) * filter.value.page_size, filter.value.current_page * filter.value.page_size);
-});
 
 const deleteOutlet = async (code: string) => {
 	const confirmModal = overlay.create(ZModalConfirmation, {
