@@ -1,5 +1,6 @@
 import { PaymentStatus } from 'wemotoo-common';
-import type { TranslateFn } from './order-status';
+
+type TranslateFn = (key: string) => string;
 
 export const options_payment_status = [
 	PaymentStatus.PAID,

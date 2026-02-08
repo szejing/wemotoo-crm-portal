@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const MIN_PASSWORD_LENGTH = 8;
 
-export type TranslateFn = (key: string, params?: Record<string, unknown>) => string;
+type TranslateFn = (key: string, params?: Record<string, unknown>) => string;
 
 export function ResetPasswordValidation(t: TranslateFn) {
 	return z

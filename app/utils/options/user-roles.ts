@@ -1,5 +1,6 @@
 import { UserRoles } from 'wemotoo-common';
-import type { TranslateFn } from './schema/Auth/LoginValidation';
+
+type TranslateFn = (key: string) => string;
 
 const roleLabels: Record<string, string> = {
 	[UserRoles.SUPER_ADMIN]: 'Super Admin',

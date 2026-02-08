@@ -1,5 +1,6 @@
 import { AmountType } from 'wemotoo-common';
-import type { TranslateFn } from './order-status';
+
+type TranslateFn = (key: string) => string;
 
 export const options_amount_type = [AmountType.GROSS_AMOUNT, AmountType.NET_AMOUNT];
 

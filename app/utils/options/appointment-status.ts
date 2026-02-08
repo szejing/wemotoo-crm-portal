@@ -1,5 +1,6 @@
 import { AppointmentStatus } from 'wemotoo-common';
-import type { TranslateFn } from './order-status';
+
+type TranslateFn = (key: string) => string;
 
 export const options_appointment_status = [AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED, AppointmentStatus.CANCELLED, AppointmentStatus.COMPLETED];
 

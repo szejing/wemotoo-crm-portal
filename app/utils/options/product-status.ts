@@ -1,5 +1,6 @@
 import { ProductStatus } from 'wemotoo-common';
-import type { TranslateFn } from './order-status';
+
+type TranslateFn = (key: string) => string;
 
 export const options_product_status = [ProductStatus.DRAFT, ProductStatus.PUBLISHED];
 

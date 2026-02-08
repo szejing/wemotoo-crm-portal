@@ -1,5 +1,6 @@
 import { SaleStatus } from 'wemotoo-common';
-import type { TranslateFn } from './order-status';
+
+type TranslateFn = (key: string) => string;
 
 export const options_sale_status = ['All', SaleStatus.COMPLETED, SaleStatus.CANCELLED, SaleStatus.REFUNDED];
 

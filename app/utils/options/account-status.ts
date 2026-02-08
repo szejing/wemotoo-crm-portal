@@ -1,4 +1,4 @@
-import type { TranslateFn } from './order-status';
+type TranslateFn = (key: string) => string;
 
 export const options_account_status = [
 	{ name: 'New', value: 0 },

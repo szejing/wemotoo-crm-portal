@@ -44,7 +44,7 @@ import { CreateCRMUserValidation } from '~/utils/schema';
 import type { z } from 'zod';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { roleOptions } from '~/utils/user-roles-utils';
+import { roleOptions } from '~/utils/options/user-roles';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));

@@ -29,30 +29,30 @@
 					<div
 						class="flex min-w-0 flex-col gap-2.5 rounded-xl border border-primary-200/50 bg-primary-50/80 p-4 dark:border-primary-800/50 dark:bg-primary-950/40"
 					>
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">{{
-							$t('pages.storeProfilePage.merchantId')
-						}}</span>
+						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+							{{ $t('pages.storeProfilePage.merchantId') }}
+						</span>
 						<span class="text-lg font-semibold font-mono text-primary-700 dark:text-primary-300">{{ merchantId }}</span>
 					</div>
+					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountStatusCardBg">
+						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+							{{ $t('pages.storeProfilePage.accountStatus') }}
+						</span>
+						<span class="text-lg font-semibold capitalize" :class="accountStatusTextClass">{{ accountStatusLabel }}</span>
+					</div>
 					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountTypeCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">{{
-							$t('pages.storeProfilePage.accountType')
-						}}</span>
-						<span class="text-lg font-semibold capitalize" :class="accountTypeTextClass">{{ accountTypeLabel }}</span>
+						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+							{{ $t('pages.storeProfilePage.accountType') }}
+						</span>
+						<span class="text-lg font-semibold capitalize" :class="accountTypeTextClass">{{ accountType }}</span>
 					</div>
 					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="expiredDateCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">{{
-							$t('pages.storeProfilePage.expiredDate')
-						}}</span>
+						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+							{{ $t('pages.storeProfilePage.expiredDate') }}
+						</span>
 						<span class="text-lg font-semibold" :class="isExpiringSoon ? 'text-red-700 dark:text-red-300' : 'text-gray-700 dark:text-gray-300'">
 							{{ merchantExpiredDate }}
 						</span>
-					</div>
-					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountStatusCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">{{
-							$t('pages.storeProfilePage.accountStatus')
-						}}</span>
-						<span class="text-lg font-semibold capitalize" :class="accountStatusTextClass">{{ accountStatusLabel }}</span>
 					</div>
 				</div>
 
@@ -187,10 +187,9 @@
 
 <script lang="ts" setup>
 import { ZModalLeavePageConfirmation } from '#components';
-import { getFormattedDate, GROUP_CODE, MERCHANT } from 'wemotoo-common';
-import { dir } from '~/utils/constants/dir';
-import { failedNotification } from '~/stores/AppUi/AppUi';
+import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
+import { accountTypeLabel } from '~/utils/options/account-type';
 
 const { t } = useI18n();
 useHead({ title: () => `${t('common.appName')} - ${t('nav.storeProfile')}` });
@@ -264,28 +263,25 @@ const onThumbnailFileChange = async (event: Event) => {
 
 const merchantId = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '—');
 const accountTypeRaw = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.PACKAGE)?.getString()?.toLowerCase() ?? '');
-const accountTypeLabel = computed(() => {
-	const v = accountTypeRaw.value;
-	if (!v) return '—';
-	return v.charAt(0).toUpperCase() + v.slice(1);
-});
+const accountType = computed<string>(() => accountTypeLabel(accountTypeRaw.value as Package, t) ?? '—');
+
 const accountTypeBadgeColor = computed(() => {
 	const v = accountTypeRaw.value;
-	if (v === 'free') return 'neutral';
-	if (v === 'silver') return 'primary';
-	if (v === 'gold') return 'warning';
+	if (v === Package.SELLER) return 'neutral';
+	if (v === Package.ORGANIZER) return 'primary';
+	if (v === Package.VIP) return 'success';
 	return 'neutral';
 });
 const accountTypeCardBg = computed(() => {
 	const c = accountTypeBadgeColor.value;
 	if (c === 'primary') return 'border-primary-200/50 bg-primary-50/80 dark:border-primary-800/50 dark:bg-primary-950/40';
-	if (c === 'warning') return 'border-amber-200/50 bg-amber-50/80 dark:border-amber-800/50 dark:bg-amber-950/40';
+	if (c === 'success') return 'border-green-200/50 bg-green-50/80 dark:border-green-800/50 dark:bg-green-950/40';
 	return 'border-gray-200/60 bg-gray-50/80 dark:border-gray-700/50 dark:bg-gray-800/60';
 });
 const accountTypeTextClass = computed(() => {
 	const c = accountTypeBadgeColor.value;
 	if (c === 'primary') return 'text-primary-700 dark:text-primary-300';
-	if (c === 'warning') return 'text-amber-700 dark:text-amber-300';
+	if (c === 'success') return 'text-green-700 dark:text-green-300';
 	return 'text-gray-700 dark:text-gray-300';
 });
 

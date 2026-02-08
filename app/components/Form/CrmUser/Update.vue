@@ -55,7 +55,7 @@ import type { z } from 'zod';
 import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { CreateCRMUserValidation } from '~/utils/schema';
-import { roleOptions } from '~/utils/user-roles-utils';
+import { roleOptions } from '~/utils/options/user-roles';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));

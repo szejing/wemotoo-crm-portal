@@ -1,6 +1,6 @@
 import { OrderStatus } from 'wemotoo-common';
 
-export type TranslateFn = (key: string) => string;
+type TranslateFn = (key: string) => string;
 
 export const options_order_status = [
 	'All',
