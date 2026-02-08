@@ -16,7 +16,15 @@
 				</div>
 
 				<div class="flex justify-end">
-					<UCheckbox v-model="state.category.is_active" name="isActive" :label="$t('common.active')" color="success" />
+					<USwitch
+						v-model="state.category.is_active"
+						class="mt-2"
+						:label="
+							$t('components.zModal.categoryDetail.currentStatusLabel', {
+								status: state.category.is_active ? $t('components.zModal.categoryDetail.statusActive') : $t('components.zModal.categoryDetail.statusDisabled'),
+							})
+						"
+					/>
 				</div>
 
 				<!-- *********************** General Info *********************** -->

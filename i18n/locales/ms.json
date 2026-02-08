@@ -643,6 +643,10 @@
 			"basicInformation": "Maklumat Asas",
 			"essentialProductDetails": "Butiran produk, imej dan tetapan",
 			"productCode": "Kod Produk",
+			"status": "Status",
+			"currentStatusLabel": "Produk kini {status}",
+			"statusActive": "aktif",
+			"statusDisabled": "tidak aktif",
 			"uniqueIdentifier": "Pengenal unik untuk produk anda",
 			"productCodePlaceholder": "cth., PROD-001 (auto jika kosong)",
 			"productName": "Nama Produk",
@@ -856,6 +860,17 @@
 			"readyToCreateVariants": "Sedia untuk cipta {count} varian"
 		},
 		"zModal": {
+			"brandDetail": {
+				"status": "Status",
+				"currentStatusLabel": "Jenama kini {status}",
+				"statusActive": "aktif",
+				"statusDisabled": "tidak aktif"
+			},
+			"categoryDetail": {
+				"currentStatusLabel": "Kategori kini {status}",
+				"statusActive": "aktif",
+				"statusDisabled": "tidak aktif"
+			},
 			"updateBrand": "Kemas Kini Jenama",
 			"updateAppointment": "Kemas Kini Temujanji",
 			"updateCategory": "Kemas Kini Kategori",

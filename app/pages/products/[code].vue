@@ -106,15 +106,15 @@ const cancel = () => {
 	useRouter().back();
 };
 
-	const deleteProduct = async () => {
-		const confirmModal = overlay.create(ZModalConfirmation, {
+const deleteProduct = async () => {
+	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
 			message: t('pages.confirmDeleteProduct'),
 			action: 'delete',
 			onConfirm: async () => {
 				await productStore.deleteProduct(current_product.value!.code!);
 				confirmModal.close();
-				navigateTo(`/products`);
+				navigateTo(`/products/listing`);
 			},
 			onCancel: () => {
 				confirmModal.close();

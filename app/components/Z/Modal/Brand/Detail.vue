@@ -8,7 +8,17 @@
 		<template #body>
 			<UForm :schema="brandSchema" :state="state.brand" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
-					<UCheckbox v-model="state.brand.is_active" name="isActive" :label="$t('common.active')" color="success" />
+					<UFormField :label="$t('components.zModal.brandDetail.status')" name="is_active">
+						<USwitch
+							v-model="state.brand.is_active"
+							class="mt-2"
+							:label="
+								$t('components.zModal.brandDetail.currentStatusLabel', {
+									status: state.brand.is_active ? $t('components.zModal.brandDetail.statusActive') : $t('components.zModal.brandDetail.statusDisabled'),
+								})
+							"
+						/>
+					</UFormField>
 				</div>
 
 				<!-- *********************** General Info *********************** -->

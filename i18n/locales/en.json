@@ -643,6 +643,10 @@
 			"basicInformation": "Basic Information",
 			"essentialProductDetails": "Essential product details, images, and settings",
 			"productCode": "Product Code",
+			"status": "Status",
+			"currentStatusLabel": "Product is currently {status}",
+			"statusActive": "active",
+			"statusDisabled": "disabled",
 			"uniqueIdentifier": "Unique identifier for your product",
 			"productCodePlaceholder": "e.g., PROD-001 (auto-generated if empty)",
 			"productName": "Product Name",
@@ -856,6 +860,17 @@
 			"readyToCreateVariants": "Ready to create {count} variants"
 		},
 		"zModal": {
+			"brandDetail": {
+				"status": "Status",
+				"currentStatusLabel": "Brand is currently {status}",
+				"statusActive": "active",
+				"statusDisabled": "disabled"
+			},
+			"categoryDetail": {
+				"currentStatusLabel": "Category is currently {status}",
+				"statusActive": "active",
+				"statusDisabled": "disabled"
+			},
 			"updateBrand": "Update Brand",
 			"updateAppointment": "Update Appointment",
 			"updateCategory": "Update Category",

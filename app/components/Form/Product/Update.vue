@@ -62,7 +62,16 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<UCheckbox color="success" v-model="formState.is_active" :label="$t('common.active')" />
+									<UFormField :label="$t('components.productUpdate.status')">
+										<USwitch
+											v-model="formState.is_active"
+											:label="
+												$t('components.productUpdate.currentStatusLabel', {
+													status: formState.is_active ? $t('components.productUpdate.statusActive') : $t('components.productUpdate.statusDisabled'),
+												})
+											"
+										/>
+									</UFormField>
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
