@@ -699,6 +699,7 @@
 			"classificationAboutDesc": "Organize your product with categories, tags, and brands. This helps customers find your products easily.",
 			"profitMargin": "Profit Margin",
 			"percentOff": "OFF",
+			"salePriceHigherThanOriginal": "Sale price is higher than original price — please check.",
 			"costPricePlaceholder": "e.g., 10.00",
 			"salePricePlaceholder": "e.g., 12.00",
 			"priceLabel": "Price",

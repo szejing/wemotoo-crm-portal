@@ -699,6 +699,7 @@
 			"classificationAboutDesc": "Susun produk anda dengan kategori, tag dan jenama. Ini membantu pelanggan mencari produk anda dengan mudah.",
 			"profitMargin": "Margin Keuntungan",
 			"percentOff": "DISKAUN",
+			"salePriceHigherThanOriginal": "Harga jualan lebih tinggi daripada harga asal — sila semak.",
 			"costPricePlaceholder": "cth., 10.00",
 			"salePricePlaceholder": "cth., 12.00",
 			"priceLabel": "Harga",

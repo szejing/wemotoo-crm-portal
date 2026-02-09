@@ -207,78 +207,16 @@
 					</UCard>
 
 					<!-- Section 3: Pricing -->
-					<UCard id="section-pricing" class="shadow-md scroll-mt-4">
-						<template #header>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<div class="flex items-center gap-2">
-										<UIcon :name="ICONS.CURRENCY" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.pricing') }}</h2>
-										<span class="text-red-500 text-sm">*</span>
-									</div>
-									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.setPricesCurrency') }}</p>
-								</div>
-								<UTooltip :text="$t('pages.pricingTooltip')" :popper="{ placement: 'bottom' }">
-									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
-								</UTooltip>
-							</div>
-						</template>
-
-						<div class="p-4 sm:p-6 space-y-6">
-							<div class="bg-green-50 border border-green-200 rounded-lg p-4">
-								<div class="flex items-start gap-3">
-									<UIcon :name="ICONS.INFO" class="text-green-600 w-5 h-5 mt-0.5 shrink-0" />
-									<div>
-										<h4 class="text-sm font-medium text-green-900">{{ $t('components.productUpdate.pricingInformation') }}</h4>
-										<p class="text-xs text-green-700 mt-1">{{ $t('components.productUpdate.setPricesOptional') }}</p>
-									</div>
-								</div>
-							</div>
-
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-								<UFormField :label="$t('components.productUpdate.currency')">
-									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.currency') }}</p>
-									<ZSelectMenuCurrency :currency-code="currency_code" class="w-full" @update:currency="updateCurrency" />
-								</UFormField>
-
-								<UFormField :label="$t('components.productUpdate.originalSellingPrice')" required>
-									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.sellingPrice') }}</p>
-									<UInput v-model.number="orig_sell_price" type="number" :placeholder="$t('components.productUpdate.pricePlaceholder')" :min="0" :step="0.01" />
-								</UFormField>
-
-								<UFormField :label="$t('components.productUpdate.costPriceOptional')">
-									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.costForProfit') }}</p>
-									<UInput v-model.number="cost_price" type="number" :placeholder="$t('components.productUpdate.costPricePlaceholder')" :min="0" :step="0.01" />
-								</UFormField>
-
-								<UFormField :label="$t('components.productUpdate.salePriceOptional')">
-									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.discountedPrice') }}</p>
-									<UInput v-model.number="sale_price" type="number" :placeholder="$t('components.productUpdate.salePricePlaceholder')" :min="0" :step="0.01" />
-								</UFormField>
-							</div>
-
-							<!-- Price Preview -->
-							<div v-if="orig_sell_price" class="p-4 bg-neutral-50 rounded-lg">
-								<h4 class="text-sm font-medium mb-3">{{ $t('components.productUpdate.pricePreview') }}</h4>
-								<div class="flex flex-wrap items-center gap-3">
-									<div v-if="sale_price && sale_price < orig_sell_price" class="text-2xl font-bold text-green-600">
-										{{ currency_code }} {{ sale_price.toFixed(2) }}
-									</div>
-									<div class="text-lg" :class="sale_price && sale_price < orig_sell_price ? 'line-through text-neutral-500' : 'font-bold text-neutral-900'">
-										{{ currency_code }} {{ orig_sell_price.toFixed(2) }}
-									</div>
-									<div v-if="sale_price && sale_price < orig_sell_price" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-										{{ Math.round(((orig_sell_price - sale_price) / orig_sell_price) * 100) }}% {{ $t('components.productUpdate.percentOff') }}
-									</div>
-								</div>
-								<div v-if="cost_price && orig_sell_price" class="text-xs text-neutral-600 mt-2">
-									{{ $t('components.productUpdate.profitMargin') }}: {{ currency_code }} {{ (orig_sell_price - cost_price).toFixed(2) }} ({{
-										Math.round(((orig_sell_price - cost_price) / orig_sell_price) * 100)
-									}}%)
-								</div>
-							</div>
-						</div>
-					</UCard>
+					<ZInputProductPricingSection
+						:currency-code="currency_code"
+						:orig-sell-price="orig_sell_price"
+						:cost-price="cost_price"
+						:sale-price="sale_price"
+						@update:currency="updateCurrency"
+						@update:orig-sell-price="orig_sell_price = $event ?? 0"
+						@update:cost-price="cost_price = $event"
+						@update:sale-price="sale_price = $event"
+					/>
 
 					<!-- Section 4: Variants (only show for physical items) -->
 					<UCard id="section-variants" class="shadow-md scroll-mt-4">
