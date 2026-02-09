@@ -84,6 +84,7 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 					}
 				}
 			} catch (err: unknown | ErrorResponse) {
+				console.log(err);
 				const message = (err as ErrorResponse).message ?? 'Failed to update merchant thumbnail';
 				failedNotification(message);
 			} finally {
