@@ -142,69 +142,7 @@
 					</UCard>
 
 					<!-- Section 2: Classification -->
-					<UCard id="section-classification" class="shadow-md scroll-mt-4">
-						<template #header>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<div class="flex items-center gap-2">
-										<UIcon :name="ICONS.TAG" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.classification') }}</h2>
-										<span class="text-xs text-neutral-500 ml-2">({{ $t('components.productUpdate.optional') }})</span>
-									</div>
-									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.organizeWithCategories') }}</p>
-								</div>
-								<UTooltip :text="$t('pages.categoriesTagsTooltip')" :popper="{ placement: 'bottom' }">
-									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
-								</UTooltip>
-							</div>
-						</template>
-
-						<div class="p-4 sm:p-6">
-							<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-								<div class="flex items-start gap-3">
-									<UIcon :name="ICONS.INFO" class="text-blue-500 w-5 h-5 mt-0.5 shrink-0" />
-									<div>
-										<h4 class="text-sm font-medium text-blue-900">{{ $t('components.productUpdate.aboutClassification') }}</h4>
-										<p class="text-xs text-blue-700 mt-1">
-											{{ $t('components.productUpdate.classificationAboutDesc') }}
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-								<div>
-									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">{{ $t('components.productUpdate.categories') }}</h3>
-										<UTooltip :text="$t('components.productUpdate.mainCategories')" :popper="{ placement: 'top' }">
-											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
-										</UTooltip>
-									</div>
-									<ZSelectMenuCategories v-model:categories="categories" class="w-full" :placeholder="$t('components.selectMenu.selectCategories')" />
-								</div>
-
-								<div>
-									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">{{ $t('components.productUpdate.tags') }}</h3>
-										<UTooltip :text="$t('components.productUpdate.keywordsFiltering')" :popper="{ placement: 'top' }">
-											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
-										</UTooltip>
-									</div>
-									<ZSelectMenuTags v-model:tags="tags" class="w-full" :placeholder="$t('components.selectMenu.selectTags')" />
-								</div>
-
-								<div>
-									<div class="flex items-center gap-2">
-										<h3 class="text-base font-medium">{{ $t('components.productUpdate.brands') }}</h3>
-										<UTooltip :text="$t('components.productUpdate.productBrand')" :popper="{ placement: 'top' }">
-											<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
-										</UTooltip>
-									</div>
-									<ZSelectMenuBrands v-model:brands="brands" class="w-full" :placeholder="$t('components.selectMenu.selectBrands')" />
-								</div>
-							</div>
-						</div>
-					</UCard>
+					<ZInputProductClassificationSection v-model:categories="categories" v-model:tags="tags" v-model:brands="brands" />
 
 					<!-- Section 3: Pricing -->
 					<ZInputProductPricingSection

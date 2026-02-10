@@ -876,6 +876,14 @@
 			"updateBrand": "Update Brand",
 			"updateAppointment": "Update Appointment",
 			"updateCategory": "Update Category",
+			"editCategory": "Edit Category",
+			"categoryPicker": {
+				"searchPlaceholder": "Search categories...",
+				"noSubcategories": "No subcategories",
+				"selectParent": "Select a parent category",
+				"selectSubcategory": "Select a subcategory",
+				"currentlySelected": "The currently selected"
+			},
 			"updateProductOption": "Update Product Option",
 			"updateOutlet": "Update Outlet",
 			"updateTag": "Update Tag",

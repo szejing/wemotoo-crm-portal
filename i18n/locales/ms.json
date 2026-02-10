@@ -876,6 +876,14 @@
 			"updateBrand": "Kemas Kini Jenama",
 			"updateAppointment": "Kemas Kini Temujanji",
 			"updateCategory": "Kemas Kini Kategori",
+			"editCategory": "Sunting Kategori",
+			"categoryPicker": {
+				"searchPlaceholder": "Cari kategori...",
+				"noSubcategories": "Tiada subkategori",
+				"selectParent": "Pilih kategori induk",
+				"selectSubcategory": "Pilih subkategori",
+				"currentlySelected": "Yang dipilih sekarang"
+			},
 			"updateProductOption": "Kemas Kini Pilihan Produk",
 			"updateOutlet": "Kemas Kini Cawangan",
 			"updateTag": "Kemas Kini Tag",
