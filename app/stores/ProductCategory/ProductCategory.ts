@@ -107,6 +107,39 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				this.loading = false;
 			}
 		},
+
+		/** Fetches all categories (no pagination) for tree view. */
+		async getCategoriesForTree() {
+			this.loading = true;
+			const { $api } = useNuxtApp();
+
+			try {
+				const queryParams: BaseODataReq = {
+					$count: true,
+					$expand: 'thumbnail,images,parent_category,category_children($expand=category_children($expand=category_children($expand=category_children)))',
+					$filter: 'parent_category_code eq null',
+					$orderby: 'code asc',
+				};
+
+				if (this.filter.query) {
+					const searchFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
+					queryParams.$filter = `parent_category_code eq null and ${searchFilter}`;
+				}
+
+				const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
+
+				if (data) {
+					this.categories = data;
+					this.total_categories = total ?? 0;
+				}
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load categories';
+				failedNotification(message);
+			} finally {
+				this.loading = false;
+			}
+		},
+
 		async createCategory(): Promise<boolean> {
 			this.adding = true;
 			this.loading = true;

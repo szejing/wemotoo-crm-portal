@@ -7,4 +7,7 @@ export type Brand = {
 	description: string;
 	slug: string;
 	is_active: boolean;
+
+	// ignore
+	total_products?: number;
 };

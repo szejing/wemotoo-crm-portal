@@ -1,6 +1,6 @@
 import { getOrderColumns } from './order/order';
 import { getCustomerColumns } from './customer';
-import { getCategoryColumns } from './categories';
+import { getCategoryColumns, getCategoryTreeColumns } from './categories';
 import { getProductOptionColumns } from './product-option';
 import { getSelectableProductOptionColumns } from './selectable-product-option';
 import { getTagColumns } from './tags';
@@ -30,6 +30,7 @@ export {
 	getCustomerColumns,
 	getTagColumns,
 	getCategoryColumns,
+	getCategoryTreeColumns,
 	getProductOptionColumns,
 	getSelectableProductOptionColumns,
 	getOrderColumns,

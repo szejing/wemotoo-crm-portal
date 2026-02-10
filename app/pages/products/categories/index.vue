@@ -29,8 +29,22 @@
 					@export="exportCategories"
 				/>
 
-				<!-- Table  -->
-				<UTable :data="categories" :columns="category_columns" :loading="loading" @select="selectCategory">
+				<!-- Tree table (WooCommerce-style hierarchy) -->
+				<UTable
+					v-model:expanded="expanded"
+					:data="categories"
+					:columns="category_tree_columns"
+					:get-row-id="(row) => row.code"
+					:get-sub-rows="getSubRows"
+					:loading="loading"
+					:ui="{
+						base: 'border-separate border-spacing-0',
+						tbody: '[&>tr]:last:[&>td]:border-b-0',
+						tr: 'group data-[expanded=true]:bg-elevated/50',
+						td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default group-data-[expanded=true]:first:border-l-2 group-data-[expanded=true]:first:border-l-primary-400',
+					}"
+					@select="selectCategory"
+				>
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -40,9 +54,9 @@
 					</template>
 				</UTable>
 
-				<!-- Pagination  -->
-				<div v-if="categories.length > 0" class="section-pagination">
-					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_categories" @update:page="updatePage" />
+				<!-- Count (tree view shows all categories) -->
+				<div v-if="categories.length > 0" class="section-pagination text-sm text-muted">
+					{{ $t('pages.categoriesCount', { total: total_categories }) }}
 				</div>
 			</div>
 		</template>
@@ -51,22 +65,43 @@
 
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
-import { getCategoryColumns } from '~/utils/table-columns';
+import { getCategoryTreeColumns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
 const { t } = useI18n();
-const category_columns = computed(() => getCategoryColumns(t));
+const category_tree_columns = computed(() => getCategoryTreeColumns(t));
 useHead({ title: () => t('pages.categoriesTitle') });
 
 const overlay = useOverlay();
 const categoryStore = useProductCategoryStore();
 const { loading, categories, total_categories, filter, exporting } = storeToRefs(categoryStore);
 
+/** Expand only root (1st level) categories by default. */
+const expanded = ref<Record<string, boolean>>({});
+
+/** Return sub-rows from API's category_children so the table can expand. */
+function getSubRows(row: Category): Category[] | undefined {
+	const children = row.category_children;
+	return children?.length ? children : undefined;
+}
+
+/** After data loads, expand all root categories that have children. */
+function expandRootCategories() {
+	const map: Record<string, boolean> = {};
+	for (const cat of categories.value) {
+		if (cat.category_children?.length) {
+			map[cat.code] = true;
+		}
+	}
+	expanded.value = map;
+}
+
 // Defer initial fetch to client so Pinia is active (avoids "getActivePinia() was called but there was no active Pinia" on refresh)
-onMounted(() => {
-	categoryStore.getCategories();
+onMounted(async () => {
+	await categoryStore.getCategoriesForTree();
+	expandRootCategories();
 });
 
 const deleteCategory = async (row: TableRow<Category>) => {
@@ -80,6 +115,7 @@ const deleteCategory = async (row: TableRow<Category>) => {
 			action: 'delete',
 			onConfirm: async () => {
 				await categoryStore.deleteCategory(category.code);
+				await categoryStore.getCategoriesForTree();
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -99,6 +135,7 @@ const selectCategory = async (e: Event, row: TableRow<Category>) => {
 			category: JSON.parse(JSON.stringify(category)),
 			onUpdate: async ({ code, description, is_active, is_internal, parent_category, thumbnail, images }) => {
 				await categoryStore.updateCategory(code, description, is_active, is_internal, parent_category, thumbnail, images);
+				await categoryStore.getCategoriesForTree();
 				categoryModal.close();
 			},
 			onDelete: async () => {
@@ -114,12 +151,9 @@ const selectCategory = async (e: Event, row: TableRow<Category>) => {
 	categoryModal.open();
 };
 
-const updatePage = async (page: number) => {
-	await categoryStore.updatePage(page);
-};
-
 const updatePageSize = async (size: number) => {
-	await categoryStore.updatePageSize(size);
+	categoryStore.filter.page_size = size;
+	await categoryStore.getCategoriesForTree();
 };
 
 const exportCategories = async () => {

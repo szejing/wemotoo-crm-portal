@@ -16,8 +16,9 @@ export type Category = {
 	images?: Image[] | undefined;
 	thumbnail?: Image | undefined;
 
-	// parent_category_code?: string | undefined;
+	parent_category_code?: string | null;
 	parent_category?: Category | undefined;
+	children?: Category[] | undefined;
 	category_children?: Category[] | undefined;
 
 	products?: Product[] | undefined;

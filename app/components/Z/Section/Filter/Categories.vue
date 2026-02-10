@@ -46,7 +46,7 @@ const hasActiveFilters = computed(() => {
 });
 
 const search = async () => {
-	await categoryStore.getCategories();
+	await categoryStore.getCategoriesForTree();
 };
 
 const debouncedSearch = () => {

@@ -346,6 +346,7 @@
 		"noProductsFound": "No products found.",
 		"noBrandsFound": "No brands found.",
 		"noCategoriesFound": "No categories found.",
+		"categoriesCount": "Showing {total} categories",
 		"noOptionsFound": "No options found.",
 		"noTagsFound": "No tags found.",
 		"noOutletsFound": "No outlets found.",

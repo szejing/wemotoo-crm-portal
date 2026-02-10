@@ -1,5 +1,6 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Brand } from '~/utils/types/brand';
+import { UBadge } from '#components';
 
 export type TableColumnsTranslate = (key: string) => string;
 
@@ -16,12 +17,25 @@ export function getBrandColumns(t: TableColumnsTranslate): TableColumn<Brand>[] 
 			},
 		},
 		{
-			accessorKey: 'total_items',
-			header: () => h('h1', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			accessorKey: 'total_products',
+			header: () => h('div', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			meta: {
+				class: {
+					th: 'text-right',
+					td: 'text-right',
+				},
+			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex justify-end w-full' }, [
-					h('div', { class: 'text-center', style: 'min-width: 90px' }, [h('p', { class: 'text-neutral-900' }, row.original.total_products)]),
-				]);
+				const count = row.original.total_products ?? 0;
+				return h(
+					UBadge,
+					{
+						variant: 'subtle',
+						color: count > 0 ? 'primary' : 'neutral',
+						size: 'lg',
+					},
+					() => String(count),
+				);
 			},
 		},
 	];
