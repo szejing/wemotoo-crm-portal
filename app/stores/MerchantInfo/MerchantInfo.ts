@@ -40,12 +40,12 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 		},
 
 		async updateMerchantInfo() {
-			if (this.updatedInfo.length === 0) return;
-
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
 			try {
+				if (this.updatedInfo.length === 0) return;
+
 				const { data } = await $api.merchantInfo.saveMany({
 					merchant_info: this.updatedInfo.map((info) => new MerchantInfo(info)),
 				});

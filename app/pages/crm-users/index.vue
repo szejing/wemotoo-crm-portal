@@ -7,7 +7,7 @@
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 				<template #right>
-					<ZCreateButton to="/crm-users/create" />
+					<ZCreateButton to="/crm-users/create" :label="$t('pages.createCrmUser')" />
 				</template>
 			</UDashboardNavbar>
 
@@ -24,15 +24,7 @@
 				<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
 
 				<!-- Table -->
-				<UTable
-					:data="crm_users"
-					:columns="crm_user_columns"
-					:loading="loading"
-					:ui="{
-						tr: 'cursor-pointer',
-					}"
-					@select="selectCrmUser"
-				>
+				<UTable :data="crm_users" :columns="crm_user_columns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectCrmUser">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -79,19 +71,19 @@ watch(
 	},
 );
 
-function selectCrmUser(_e: Event, row: TableRow<CRMUser>) {
+const selectCrmUser = (_e: Event, row: TableRow<CRMUser>) => {
 	const user = row.original;
 	if (!user?.id) return;
 	navigateTo(`/crm-users/${encodeURIComponent(user.id)}`);
-}
+};
 
-async function updatePage(page: number) {
+const updatePage = async (page: number) => {
 	await crmUserStore.updatePage(page);
-}
+};
 
-async function updatePageSize(size: number) {
+const updatePageSize = async (size: number) => {
 	await crmUserStore.updatePageSize(size);
-}
+};
 
 onMounted(() => {
 	crmUserStore.getCrmUsers();

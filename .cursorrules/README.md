@@ -53,4 +53,9 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 
 ## Agent skills
 
-Project-specific skills in `.cursor/skills/` (use when relevant): **vue-component-development** (pages/components, shared components), **crm-portal-deployment** (Docker/DO), **i18n-translation** (locales, multi-language).
+Project-specific skills in `.cursor/skills/` (use when relevant):
+
+- **nuxt-ui-usage** — Build UIs with @nuxt/ui v4; project theming, components, forms, tables, modals, i18n integration.
+- **i18n-translation** — Locales (en, ms), translation patterns, validation schemas, options, table columns.
+
+For full Nuxt UI component reference, install the official skill: `npx skills add nuxt/ui` or add in Cursor Settings > Skills: `https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui`.
