@@ -1,0 +1,56 @@
+---
+description: Nuxt route middleware and server middleware
+globs: app/middleware/**/*.ts, server/middleware/**/*.ts
+alwaysApply: false
+---
+
+# Middleware Rules
+
+## Nuxt Route Middleware (app/middleware/)
+
+### File Naming
+- Global: `*.global.ts` (e.g. `auth.global.ts`) – runs on every client-side navigation.
+- Named: `name.ts` (e.g. `verify.ts`, `product-detail.ts`) – use with `definePageMetadata` or route meta.
+
+### Structure
+```typescript
+export default defineNuxtRouteMiddleware(async (to, _from) => {
+	if (import.meta.client) {
+		const accessToken = useCookie(KEY.ACCESS_TOKEN);
+
+		if (to.path === '/login' && accessToken.value) {
+			const authStore = useAuthStore();
+			authStore.clearCookies();
+		}
+
+		if (!accessToken.value && to.path !== '/login') {
+			return navigateTo('/login');
+		}
+	}
+});
+```
+
+### Conventions
+- Use `navigateTo('/path')` to redirect; return it from the middleware.
+- Prefer checking `import.meta.client` when logic is client-only (e.g. cookies, Pinia).
+- Use shared constants (e.g. `KEY` from `wemotoo-common` or `~/composables/useWemotooCommon`) for cookie keys and routes.
+- Keep middleware focused: auth, role checks, or redirects. No heavy data loading.
+
+## Server Middleware (server/middleware/)
+
+### Purpose
+- CORS, request logging, or global request/response tweaks before they hit `server/routes/`.
+
+### Structure
+- Export a default function that receives the H3 event and calls `next()` or handles the response.
+- Example: `server/middleware/cors.ts` – set CORS headers and handle preflight.
+
+### Conventions
+- Do not put auth or merchant resolution here if it is already handled in `base_api.generateHeaders` and route handlers.
+- Keep handlers small and avoid blocking I/O where possible.
+
+## Anti-Patterns
+
+- ❌ Business logic or API calls in route middleware beyond what’s needed for redirect/guard
+- ❌ Forgetting to return `navigateTo(...)` when redirecting
+- ❌ Relying on server-only APIs (e.g. Node `fs`) inside Nuxt route middleware without `import.meta.server` guards

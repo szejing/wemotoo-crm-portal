@@ -1,0 +1,55 @@
+---
+description: Nuxt composables (useXxx)
+globs: app/composables/**/*.ts
+alwaysApply: false
+---
+
+# Composables Rules
+
+## File Naming and Location
+
+- Place in `app/composables/`.
+- Name files as `usePascalCase.ts` or `useKebabCase.ts` (e.g. `useDetectClickOutside.ts`, `useWemotooCommon.ts`).
+- Export a function whose name matches the file (e.g. `useDetectClickOutside`, `useWemotooCommon`).
+
+## Structure
+
+### Typical Composable
+```typescript
+export function useExample(refOrOptions: MaybeRefOrGetter<Options>) {
+	const value = ref(initial);
+	const computed = computed(() => /* ... */);
+
+	function doSomething() {
+		// ...
+	}
+
+	return {
+		value,
+		computed,
+		doSomething,
+	};
+}
+```
+
+### Re-exports / Shared Keys
+- When encapsulating constants or keys (e.g. from wemotoo-common), expose them under a clear name (e.g. `KEY`, `API_PATH`) so pages and components import from one place.
+
+## Conventions
+
+### Auto-imports
+- Composables in `app/composables/` are auto-imported in the app; call them without importing (e.g. `useWemotooCommon()`, `useDetectClickOutside(...)`).
+
+### Vue reactivity
+- Use `ref`, `computed`, `watch`, `onMounted`, etc. from Vue when state or lifecycle is involved.
+- Prefer `MaybeRefOrGetter<T>` and `toValue()` when the composable accepts either a ref or a plain value.
+
+### Side effects
+- Keep side effects (e.g. DOM, cookies, API) explicit and minimal; avoid hidden globals.
+- For API calls, prefer using repository modules or `$fetch`/`useFetch` inside the composable rather than duplicating request logic.
+
+## Anti-Patterns
+
+- ❌ Business logic that belongs in the backend or in repository/server routes
+- ❌ Heavy initialisation on every call – use lazy init or call from a single place (e.g. plugin)
+- ❌ Returning bare refs without a clear return shape when the composable is used in many places

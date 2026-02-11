@@ -1,0 +1,104 @@
+---
+description: API client modules, route definitions, request/response models
+globs: app/repository/**/*.ts
+alwaysApply: false
+---
+
+# Repository (API Client) Rules
+
+## Layout
+
+```
+app/repository/
+├── base/
+│   ├── base.req.ts    # BaseODataReq, shared query types
+│   └── base.resp.ts   # BaseODataResp, shared response types
+├── factory.ts         # HttpFactory – base $fetch wrapper
+├── routes.client.ts   # MerchantRoutes – client-facing URL builders (prefix + API_PATH)
+└── modules/
+    └── {domain}/
+        ├── {domain}.ts           # Module class extending HttpFactory
+        └── models/
+            ├── request/
+            │   ├── *.req.ts      # request body/query types
+            │   └── create-*.req.ts, update-*.req.ts
+            └── response/
+                └── *.resp.ts    # response types
+```
+
+## Route Definitions
+
+### routes.client.ts (and server routes.server.ts)
+- Use `API_PATH` from `wemotoo-common` so paths stay in sync with the backend.
+- Client: add `prefix` when the app calls via a prefixed proxy (e.g. `/api`); use functions that return path strings, e.g. `Many()`, `Single(id)`, `Create()`, `Update(id)`, `Delete(id)`, `Restore(id)`.
+- Server: `server/routes.server.ts` uses the same path builders for `$fetch` in server routes; no extra prefix if calling backend directly.
+
+## Module Class
+
+### Extend HttpFactory
+```typescript
+import HttpFactory from '~/repository/factory';
+import MerchantRoutes from '~/repository/routes.client';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { CreateProductReq } from './models/request/create-product.req';
+import type { ProductResp } from './models/response/product.resp';
+
+class ProductModule extends HttpFactory {
+	private RESOURCE = MerchantRoutes.Products;
+
+	async getMany(query: BaseODataReq): Promise<BaseODataResp<Product>> {
+		return await this.call<BaseODataResp<Product>>({
+			method: 'GET',
+			url: `${this.RESOURCE.Many()}`,
+			query,
+		});
+	}
+
+	async getSingle(code: string): Promise<ProductResp> {
+		return await this.call<ProductResp>({
+			method: 'GET',
+			url: `${this.RESOURCE.Single(code)}`,
+		});
+	}
+
+	async create(product: CreateProductReq): Promise<CreateProductResp> {
+		return await this.call<CreateProductResp>({
+			method: 'POST',
+			url: `${this.RESOURCE.Create()}`,
+			body: product,
+		});
+	}
+}
+
+export default ProductModule;
+```
+
+### Conventions
+- Use `this.call<T>({ method, url, body?, query?, fetchOptions? })` from HttpFactory.
+- Type responses as `Promise<ResponseType>`; use shared types from `~/utils/types` when they match API responses.
+- Request types live in `models/request/`; response types in `models/response/`.
+
+## Request / Response Types
+
+### Naming
+- Req: `*.req.ts` or `create-*.req.ts`, `update-*.req.ts`; export types like `ProductReq`, `CreateProductReq`, `UpdateProductReq`.
+- Resp: `*.resp.ts`; export types like `ProductResp`, `CreateProductResp`.
+- Extend or align with `BaseODataReq` / `BaseODataResp` for list endpoints.
+
+### Shape
+- Use plain interfaces or types that match backend DTOs and the Zod schema used on the client where applicable.
+- Prefer `type` for request/response to avoid accidental mutation signatures.
+
+## Factory (HttpFactory)
+
+- Central place for base URL, default headers, and error mapping.
+- On failure, throw a consistent type (e.g. `ApiErrorModel`) so UI can show messages or trigger logout.
+- Do not put per-entity logic in the factory; keep it in each module.
+
+## Anti-Patterns
+
+- ❌ Hardcoded paths instead of `MerchantRoutes` / `Routes` and `API_PATH`
+- ❌ Business logic or validation inside repository methods – validate in UI/schema, then call repository
+- ❌ Duplicated request/response types – define once in `models/` and reuse
+- ❌ Mixing server-only route paths with client route definitions in the same object without a clear convention

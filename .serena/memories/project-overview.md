@@ -18,7 +18,7 @@ Admin frontend for Wemotoo CRM: merchant-facing portal for managing products, or
 
 - **app/** – Vue app: `pages/` (file-based routing), `components/`, `layouts/`, `composables/`, `middleware/`, `repository/` (API client modules), `stores/`, `utils/` (types, schema, table-columns, options), `plugins/` (01.api.ts injects `$api` with all modules)
 - **server/** – Nitro: `base_api.ts` (generateHeaders, generateImageHeaders), `routes/merchant/**` (proxy to backend; use `Routes` from `routes.server.ts` and `config.public.baseUrl`)
-- **.cursorrules/** – Project rules for repository, server-routes, vue-pages-components, composables, middleware, schema, types, etc.
+- **.agent/rules/** – Project rules (shared Cursor & Antigravity) for repository, server-routes, vue-pages-components, composables, middleware, schema, types, etc.
 
 ## Key Conventions
 

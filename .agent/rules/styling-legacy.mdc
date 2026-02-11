@@ -1,8 +1,13 @@
-# Project Rules
+---
+description: Legacy styling rules - may conflict with @nuxt/ui (Tailwind). Disable if using Nuxt UI components.
+alwaysApply: false
+---
 
-## Styling Guidelines
+# Legacy Styling Guidelines
 
-### CSS Only - No Tailwind Syntax
+> **Note:** This rule may conflict with @nuxt/ui which uses Tailwind. Enable only when working on non-Nuxt-UI components.
+
+## CSS Only - No Tailwind Syntax
 
 When creating styles for components, **do not use Tailwind syntax**. All styling must be written in **CSS** (either in `<style>` blocks or separate CSS files).
 
