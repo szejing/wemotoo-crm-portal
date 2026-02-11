@@ -11,8 +11,8 @@ export function getPaymentMethodColumns(t: TranslateFn): TableColumn<PaymentMeth
 			header: () => h('div', { class: 'text-neutral-400' }, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', [
-					h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
-					h('div', { class: 'text-neutral-600' }, row.original.short_desc),
+					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.short_desc),
+					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 				]);
 			},
 		},

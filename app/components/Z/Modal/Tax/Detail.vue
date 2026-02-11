@@ -1,7 +1,7 @@
 <template>
 	<UModal :title="$t('components.zModal.updateTax')" :ui="{ content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]' }">
 		<template #body>
-			<UForm :schema="taxSchema" :state="state.tax" class="space-y-4" @submit="onSubmit">
+			<UForm ref="form" :schema="taxSchema" :state="state.tax" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputTaxGeneralInfo
 					v-model:code="state.tax.code"
@@ -23,7 +23,7 @@
 					<UButton color="neutral" variant="soft" @click="onCancel">
 						{{ $t('common.cancel') }}
 					</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">
+					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">
 						{{ $t('components.zModal.update') }}
 					</UButton>
 				</div>
@@ -51,6 +51,8 @@ const props = defineProps({
 });
 const emit = defineEmits(['update', 'delete', 'cancel']);
 
+const form = ref();
+
 const state = reactive({
 	tax: {
 		code: props.tax.code,
@@ -64,10 +66,7 @@ const taxStore = useTaxStore();
 const { updating } = storeToRefs(taxStore);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { description, is_inclusive, is_active } = event.data;
-
-	console.log(description, is_inclusive, is_active);
-	// emit('update', { description, is_inclusive, is_active });
+	emit('update', event.data);
 };
 
 const onDelete = () => {

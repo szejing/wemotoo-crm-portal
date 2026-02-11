@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="brandSchema" :state="state.brand" class="space-y-4" @submit="onSubmit">
+			<UForm ref="form" :schema="brandSchema" :state="state.brand" class="space-y-4" @submit="onSubmit">
 				<div class="flex-jbetween-icenter gap-4">
 					<UFormField :label="$t('components.zModal.brandDetail.status')" name="is_active">
 						<USwitch
@@ -33,7 +33,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -58,6 +58,8 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(['update', 'delete', 'cancel']);
+
+const form = ref();
 
 const state = reactive({
 	brand: props.brand,

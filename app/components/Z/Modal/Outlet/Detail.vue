@@ -6,7 +6,7 @@
 		}"
 	>
 		<template #body>
-			<UForm :schema="outletSchema" :state="state.outlet" class="space-y-4" @submit="onSubmit">
+			<UForm ref="form" :schema="outletSchema" :state="state.outlet" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
 				<ZInputOutletGeneralInfo v-model:code="state.outlet.code" v-model:description="state.outlet.description" is-update />
 				<ZInputAddress
@@ -36,7 +36,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -62,6 +62,8 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(['update', 'delete', 'cancel']);
+
+const form = ref();
 
 const state = reactive({
 	outlet: {

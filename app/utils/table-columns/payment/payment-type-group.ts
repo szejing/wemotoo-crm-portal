@@ -15,9 +15,9 @@ export function getPaymentTypeGroupColumns(t: TranslateFn): TableColumn<any>[] {
 			accessorKey: 'code',
 			header: () => h('div', { class: 'text-neutral-400' }, t('table.groupCode')),
 			cell: ({ row }) => {
-				return h('div', { class: 'flex flex-col gap-1' }, [
-					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
-					h('h5', { class: 'text-neutral-400' }, row.original.short_desc),
+				return h('div', [
+					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.short_desc),
+					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 				]);
 			},
 		},

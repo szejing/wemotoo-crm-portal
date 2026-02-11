@@ -1,12 +1,7 @@
 <template>
-	<UModal
-		:title="$t('components.zModal.updateTag')"
-		:ui="{
-			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
-		}"
-	>
+	<UModal :title="$t('components.zModal.updateTag')" :ui="{ content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]' }">
 		<template #body>
-			<UForm :schema="tagSchema" :state="state.tag" class="space-y-4" @submit="onSubmit">
+			<UForm ref="form" :schema="tagSchema" :state="state.tag" class="space-y-4" @submit="onSubmit">
 				<ZInputProductTagGeneralInfo v-model:value="state.tag.value" />
 			</UForm>
 		</template>
@@ -17,7 +12,7 @@
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">{{ $t('components.zModal.update') }}</UButton>
 				</div>
 			</div>
 		</template>
@@ -42,6 +37,8 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(['update', 'delete', 'cancel']);
+
+const form = ref();
 
 const state = reactive({
 	tag: props.tag,
