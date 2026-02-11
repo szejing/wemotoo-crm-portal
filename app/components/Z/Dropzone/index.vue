@@ -1,5 +1,8 @@
 <template>
 	<div class="dropzone-wrapper relative">
+		<div v-if="isProcessing" class="processing-overlay" aria-hidden="true">
+			<UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-main-500 animate-spin" />
+		</div>
 		<UFileUpload
 			v-model="files"
 			:multiple="multiple"
@@ -87,6 +90,7 @@ const emit = defineEmits(['files-selected', 'delete-image']);
 const previews = ref([]);
 const files = ref(props.multiple ? [] : null);
 const currentImages = ref([]);
+const isProcessing = ref(false);
 const isUpdatingProgrammatically = ref(false);
 const rejectedMessage = ref('');
 
@@ -319,6 +323,8 @@ const previewFiles = async (filesList) => {
 		return;
 	}
 
+	isProcessing.value = true;
+	try {
 		// Revoke previous previews (blob URLs only; data URLs are not revokable)
 		previews.value.forEach((url) => {
 			if (typeof url === 'string' && url.startsWith('blob:')) {
@@ -326,8 +332,11 @@ const previewFiles = async (filesList) => {
 			}
 		});
 
-	const imageFiles = filesList.filter(isImageFile);
-	previews.value = await Promise.all(imageFiles.map((file) => createPreviewUrl(file)));
+		const imageFiles = filesList.filter(isImageFile);
+		previews.value = await Promise.all(imageFiles.map((file) => createPreviewUrl(file)));
+	} finally {
+		isProcessing.value = false;
+	}
 };
 
 // Cleanup on unmount
@@ -343,6 +352,18 @@ onBeforeUnmount(() => {
 <style scoped>
 .dropzone-wrapper {
 	width: 100%;
+}
+
+.processing-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.7);
+	border-radius: 0.75rem;
+	pointer-events: none;
 }
 
 .dropzone-container {
