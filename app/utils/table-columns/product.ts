@@ -29,8 +29,8 @@ export function getProductColumns(t: TableColumnsTranslate): TableColumn<Product
 								class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
 							}),
 					h('div', { class: 'flex-1 min-w-0' }, [
-						h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
-						h('div', { class: 'text-neutral-600' }, row.original.name),
+						h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.name),
+						h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 						variantBadge.length > 0 ? h('div', { class: 'mt-1 flex flex-wrap items-center gap-1' }, [...variantBadge]) : null,
 					]),
 				];
@@ -48,11 +48,15 @@ export function getProductColumns(t: TableColumnsTranslate): TableColumn<Product
 				const metadata = row.original.metadata as { duration?: string } | undefined;
 				const duration = metadata?.duration;
 				const isMaintenance = typeId === 2 || (typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('maintenance'));
-				const children: ReturnType<typeof h>[] = [h('div', { class: 'text-neutral-900 font-bold capitalize' }, typeLabel)];
+
+				const typeColors = ['primary', 'success', 'warning', 'error', 'info', 'secondary'] as const;
+				const badgeColor = typeId != null ? typeColors[typeId % typeColors.length] : 'neutral';
+
+				const children: ReturnType<typeof h>[] = [h(UBadge, { class: 'capitalize', variant: 'subtle', color: badgeColor }, () => typeLabel)];
 				if (isMaintenance && duration) {
-					children.push(h('div', { class: 'text-neutral-600 text-sm' }, `${t('table.duration')}: ${duration}`));
+					children.push(h(UBadge, { class: 'mt-1', variant: 'subtle', color: 'info', size: 'sm' }, () => `${t('table.duration')}: ${duration}`));
 				}
-				return h('div', { class: 'space-y-0.5' }, children);
+				return h('div', { class: 'flex flex-col items-start gap-1' }, children);
 			},
 		},
 		{
@@ -61,13 +65,20 @@ export function getProductColumns(t: TableColumnsTranslate): TableColumn<Product
 			cell: ({ row }) => {
 				const price_types: PriceInput[] | undefined = row.original.price_types;
 				const pt = price_types?.[0];
-				if (!pt) return null;
-				const selling = pt.orig_sell_price != null ? formatCurrency(pt.orig_sell_price, pt.currency_code) : 'N/A';
-				const sale = pt.sale_price != null ? formatCurrency(pt.sale_price, pt.currency_code) : 'N/A';
-				return h('div', { class: 'space-y-0.5' }, [
-					h('div', { class: 'text-neutral-900' }, [t('table.selling'), ' ', selling]),
-					h('div', { class: 'text-neutral-600 text-sm' }, [t('table.sale'), ' ', sale]),
-				]);
+				if (!pt) return h('span', { class: 'text-neutral-400 text-xs' }, '—');
+
+				const hasSalePrice = pt.sale_price != null && pt.sale_price > 0;
+				const sellingFormatted = pt.orig_sell_price != null ? formatCurrency(pt.orig_sell_price, pt.currency_code) : 'N/A';
+				const saleFormatted = hasSalePrice ? formatCurrency(pt.sale_price!, pt.currency_code) : null;
+
+				if (hasSalePrice && saleFormatted) {
+					return h('div', { class: 'flex flex-col gap-0.5' }, [
+						h('span', { class: 'text-sm font-semibold text-green-600 dark:text-green-400' }, saleFormatted),
+						h('span', { class: 'text-xs text-neutral-400 line-through' }, sellingFormatted),
+					]);
+				}
+
+				return h('div', { class: 'flex flex-col' }, [h('span', { class: 'text-sm font-semibold text-neutral-900 dark:text-neutral-100' }, sellingFormatted)]);
 			},
 		},
 		{
