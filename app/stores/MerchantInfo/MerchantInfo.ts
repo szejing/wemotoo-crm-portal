@@ -13,6 +13,7 @@ type MerchantInfoUpdate = { group_code: string; set_code: string; set_value: str
 export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 	state: () => ({
 		loading: false as boolean,
+		updating: false as boolean,
 		// merchant: undefined as MerchantInfo | undefined,
 		merchant: structuredClone(initial),
 		updatedInfo: [] as MerchantInfoUpdate[],
@@ -24,6 +25,16 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 			const info = this.merchant.find((info) => info.group_code === group_code && info.set_code === set_code);
 
 			return info || null;
+		},
+
+		updateMerchantInfoByGroupAndSet(group_code: string, set_code: string, set_value: string) {
+			const info = new MerchantInfo({ group_code, set_code, set_value });
+			const existingIdx = this.merchant.findIndex((m) => m.group_code === group_code && m.set_code === set_code);
+			if (existingIdx >= 0) {
+				this.merchant.splice(existingIdx, 1, info);
+			} else {
+				this.merchant.push(info);
+			}
 		},
 
 		addToUpdatedInfo(info: MerchantInfoUpdate) {
@@ -40,7 +51,7 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 		},
 
 		async updateMerchantInfo() {
-			this.loading = true;
+			this.updating = true;
 
 			const { $api } = useNuxtApp();
 			try {
@@ -58,18 +69,18 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 				const message = (err as ErrorResponse).message ?? 'Failed to update merchant information';
 				failedNotification(message);
 			} finally {
-				this.loading = false;
+				this.updating = false;
 			}
 		},
 
 		async updateMerchantThumbnail(file: File) {
-			this.loading = true;
+			this.updating = true;
 
 			const { $api } = useNuxtApp();
 			try {
 				const { image } = await $api.image.upload(file, dir.merchant);
 				if (image?.url) {
-					const { data } = await $api.merchantInfo.saveMany({
+					await $api.merchantInfo.saveMany({
 						merchant_info: [
 							new MerchantInfo({
 								group_code: GROUP_CODE.INFO,
@@ -79,16 +90,17 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 						],
 					});
 
-					if (data) {
-						this.merchant = data.map((info) => new MerchantInfo(info));
-					}
+					// Update local state directly with the new thumbnail URL
+					// instead of relying on the saveMany response, which may not
+					// return the full merchant info list
+					this.updateMerchantInfoByGroupAndSet(GROUP_CODE.INFO, MERCHANT.THUMBNAIL, image.url);
 				}
 			} catch (err: unknown | ErrorResponse) {
 				console.log(err);
 				const message = (err as ErrorResponse).message ?? 'Failed to update merchant thumbnail';
 				failedNotification(message);
 			} finally {
-				this.loading = false;
+				this.updating = false;
 			}
 		},
 

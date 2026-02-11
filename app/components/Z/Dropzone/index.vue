@@ -3,8 +3,8 @@
 		<UFileUpload
 			v-model="files"
 			:multiple="multiple"
-			accept="image/*"
-			:disabled="(multiple && totalImageCount >= maxImages) || isCompressing"
+			:accept="DROPZONE_ACCEPT"
+			:disabled="disabled || (multiple && totalImageCount >= maxImages)"
 			:icon="ICONS.UPLOAD"
 			:label="multiple ? 'Drop files here or click to upload' : 'Drop a file here or click to upload'"
 			description="Square images are recommended"
@@ -50,25 +50,25 @@
 			</div>
 		</template>
 		</UFileUpload>
-		<div
-			v-if="isCompressing"
-			class="compressing-overlay"
-			aria-busy="true"
-			aria-label="Compressing images"
-		>
-			<UIcon name="i-heroicons-arrow-path" class="h-8 w-8 text-white animate-spin" />
-			<span class="compressing-text">Compressing images...</span>
+		<div v-if="rejectedMessage" class="upload-limit-warning" role="alert">
+			<UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5 shrink-0" />
+			<span>{{ rejectedMessage }}</span>
 		</div>
 	</div>
 </template>
 
 <script setup>
-const MAX_FILE_SIZE_BYTES = 1 * 1024 * 1024; // 1 MB - server limit
-const MAX_DIMENSION = 1920; // Max width/height to keep quality reasonable
-const DEFAULT_QUALITY = 0.85;
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB - files over this are rejected
+const HEIC_EXTENSIONS_PATTERN = /\.(heic|heif)$/i;
+const HEIC_MIME_TYPES = ['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence'];
+const DROPZONE_ACCEPT = ['image/*', '.heic', '.heif', ...HEIC_MIME_TYPES].join(',');
 
 const props = defineProps({
 	multiple: {
+		type: Boolean,
+		default: false,
+	},
+	disabled: {
 		type: Boolean,
 		default: false,
 	},
@@ -88,109 +88,40 @@ const previews = ref([]);
 const files = ref(props.multiple ? [] : null);
 const currentImages = ref([]);
 const isUpdatingProgrammatically = ref(false);
-const isCompressing = ref(false);
+const rejectedMessage = ref('');
 
-/**
- * Compress an image file to stay under MAX_FILE_SIZE_BYTES.
- * Uses canvas resize + JPEG quality; returns original if not an image or already small enough.
- */
-async function compressImage(file) {
-	if (!file.type.startsWith('image/')) return file;
-	if (file.size <= MAX_FILE_SIZE_BYTES) return file;
-
-	return new Promise((resolve, reject) => {
-		const img = new Image();
-		const url = URL.createObjectURL(file);
-
-		img.onload = () => {
-			URL.revokeObjectURL(url);
-
-			let width = img.naturalWidth;
-			let height = img.naturalHeight;
-			if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-				if (width > height) {
-					height = Math.round((height * MAX_DIMENSION) / width);
-					width = MAX_DIMENSION;
-				} else {
-					width = Math.round((width * MAX_DIMENSION) / height);
-					height = MAX_DIMENSION;
-				}
-			}
-
-			const canvas = document.createElement('canvas');
-			canvas.width = width;
-			canvas.height = height;
-			const ctx = canvas.getContext('2d');
-			if (!ctx) {
-				resolve(file);
-				return;
-			}
-			ctx.drawImage(img, 0, 0, width, height);
-
-			const tryQuality = (quality) => {
-				return new Promise((res) => {
-					canvas.toBlob(
-						(blob) => {
-							if (!blob) {
-								res({ blob: null, quality });
-								return;
-							}
-							res({ blob, size: blob.size, quality });
-						},
-						'image/jpeg',
-						quality,
-					);
-				});
-			};
-
-			// Binary-search quality to get under 1 MB
-			(async () => {
-				let lo = 0.5;
-				let hi = DEFAULT_QUALITY;
-				let best = null;
-
-				for (let i = 0; i < 8; i++) {
-					const q = (lo + hi) / 2;
-					const { blob, size } = await tryQuality(q);
-					if (!blob) {
-						resolve(file);
-						return;
-					}
-					if (size <= MAX_FILE_SIZE_BYTES) {
-						best = blob;
-						lo = q;
-					} else {
-						hi = q;
-					}
-				}
-
-				if (best && best.size <= MAX_FILE_SIZE_BYTES) {
-					const name = file.name.replace(/\.[^.]+$/, '') || 'image';
-					const compressed = new File([best], `${name}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
-					resolve(compressed);
-				} else {
-					// Last resort: use lowest quality that fits
-					const { blob } = await tryQuality(0.5);
-					if (blob && blob.size <= MAX_FILE_SIZE_BYTES) {
-						const name = file.name.replace(/\.[^.]+$/, '') || 'image';
-						resolve(new File([blob], `${name}.jpg`, { type: 'image/jpeg', lastModified: Date.now() }));
-					} else {
-						resolve(file);
-					}
-				}
-			})().then(resolve).catch(reject);
-		};
-
-		img.onerror = () => {
-			URL.revokeObjectURL(url);
-			resolve(file);
-		};
-
-		img.src = url;
-	});
+/** Returns true if file is an image (including HEIC/HEIF). */
+function isImageFile(file) {
+	return file.type.startsWith('image/') || HEIC_EXTENSIONS_PATTERN.test(file.name);
 }
 
-onMounted(() => {
+/** Returns true if file is HEIC/HEIF format (browsers cannot display these natively). */
+function isHeicFile(file) {
+	return HEIC_MIME_TYPES.includes(file.type) || HEIC_EXTENSIONS_PATTERN.test(file.name);
+}
+
+const HEIC_PLACEHOLDER_DATA_URL =
+	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23e5e7eb' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' fill='%236b7280' font-size='12' text-anchor='middle' dy='.3em'%3EHEIC%3C/text%3E%3C/svg%3E";
+
+/** Converts HEIC to JPEG blob for preview; returns object URL. Browsers cannot display HEIC in img tags. */
+async function createPreviewUrl(file) {
+	if (isHeicFile(file)) {
+		if (import.meta.client) {
+			try {
+				const heic2any = (await import('heic2any')).default;
+				const result = await heic2any({ blob: file, toType: 'image/jpeg' });
+				const blob = Array.isArray(result) ? result[0] : result;
+				return blob ? URL.createObjectURL(blob) : HEIC_PLACEHOLDER_DATA_URL;
+			} catch {
+				return HEIC_PLACEHOLDER_DATA_URL;
+			}
+		}
+		return HEIC_PLACEHOLDER_DATA_URL;
+	}
+	return URL.createObjectURL(file);
+}
+
+onMounted(async () => {
 	// Check if existingImages contains File objects or URL strings
 	if (props.existingImages && props.existingImages.length > 0) {
 		const fileObjects = [];
@@ -209,7 +140,7 @@ onMounted(() => {
 		// Set File objects to files and previews
 		if (fileObjects.length > 0) {
 			files.value = props.multiple ? fileObjects : fileObjects[0];
-			previewFiles(fileObjects);
+			await previewFiles(fileObjects);
 		}
 
 		// Set URL strings/objects to currentImages
@@ -249,6 +180,8 @@ const handleFilesUpdate = async (selectedFiles) => {
 		return;
 	}
 
+	rejectedMessage.value = '';
+
 	if (!selectedFiles) {
 		files.value = props.multiple ? [] : null;
 		previews.value = [];
@@ -259,37 +192,33 @@ const handleFilesUpdate = async (selectedFiles) => {
 	// Convert to array for consistent handling
 	const filesArray = Array.isArray(selectedFiles) ? selectedFiles : [selectedFiles];
 
-	// Filter only image files and compress to stay under 1 MB
-	const imageFiles = filesArray.filter((file) => file.type.startsWith('image/'));
-	if (imageFiles.length === 0) {
+	// Filter image files (including HEIC/HEIF) and reject those over 5 MB
+	const oversized = filesArray.filter((f) => isImageFile(f) && f.size > MAX_FILE_SIZE_BYTES);
+	const validFiles = filesArray.filter((f) => isImageFile(f) && f.size <= MAX_FILE_SIZE_BYTES);
+
+	if (oversized.length > 0) {
+		const names = oversized.map((f) => f.name).join(', ');
+		rejectedMessage.value = `File(s) over 5 MB not allowed: ${names}`;
+	}
+
+	if (validFiles.length === 0) {
 		files.value = props.multiple ? [] : null;
 		previews.value = [];
 		emit('files-selected', []);
 		return;
 	}
 
-	isCompressing.value = true;
-	try {
-		const compressed = await Promise.all(imageFiles.map((file) => compressImage(file)));
+	if (!props.multiple) {
+		files.value = validFiles[0];
+		await previewFiles([validFiles[0]]);
+		emit('files-selected', [validFiles[0]]);
+	} else {
+		const availableSlots = props.maxImages - (currentImages.value?.length || 0);
+		const filesToAdd = validFiles.slice(0, availableSlots);
 
-		if (!props.multiple) {
-			// Single file mode - take only the first file
-			if (compressed.length > 0) {
-				files.value = compressed[0];
-				previewFiles([compressed[0]]);
-				emit('files-selected', [compressed[0]]);
-			}
-		} else {
-			// Multiple file mode - respect max limit
-			const availableSlots = props.maxImages - (currentImages.value?.length || 0);
-			const filesToAdd = compressed.slice(0, availableSlots);
-
-			files.value = filesToAdd;
-			previewFiles(filesToAdd);
-			emit('files-selected', filesToAdd);
-		}
-	} finally {
-		isCompressing.value = false;
+		files.value = filesToAdd;
+		await previewFiles(filesToAdd);
+		emit('files-selected', filesToAdd);
 	}
 };
 
@@ -303,9 +232,10 @@ const removePreview = (index) => {
 	isUpdatingProgrammatically.value = true;
 
 	try {
-		// Revoke the object URL to prevent memory leaks
-		if (previews.value[index]) {
-			URL.revokeObjectURL(previews.value[index]);
+		// Revoke the object URL to prevent memory leaks (blob URLs only)
+		const urlToRevoke = previews.value[index];
+		if (urlToRevoke && typeof urlToRevoke === 'string' && urlToRevoke.startsWith('blob:')) {
+			URL.revokeObjectURL(urlToRevoke);
 		}
 
 		// Remove the preview first
@@ -354,9 +284,10 @@ const removeExistingImage = (index) => {
 
 		// Also handle removing preview images by index if they exist (for consistency)
 		if (previews.value && previews.value.length > index) {
-			// Revoke the object URL to prevent memory leaks
-			if (previews.value[index]) {
-				URL.revokeObjectURL(previews.value[index]);
+			// Revoke the object URL to prevent memory leaks (blob URLs only)
+			const urlToRevoke = previews.value[index];
+			if (urlToRevoke && typeof urlToRevoke === 'string' && urlToRevoke.startsWith('blob:')) {
+				URL.revokeObjectURL(urlToRevoke);
 			}
 			previews.value.splice(index, 1);
 
@@ -382,49 +313,36 @@ const removeExistingImage = (index) => {
 	}
 };
 
-const previewFiles = (filesList) => {
+const previewFiles = async (filesList) => {
 	// Don't regenerate previews if we're programmatically updating
 	if (isUpdatingProgrammatically.value) {
 		return;
 	}
 
-	// Revoke previous previews
-	previews.value.forEach((url) => URL.revokeObjectURL(url));
+		// Revoke previous previews (blob URLs only; data URLs are not revokable)
+		previews.value.forEach((url) => {
+			if (typeof url === 'string' && url.startsWith('blob:')) {
+				URL.revokeObjectURL(url);
+			}
+		});
 
-	// Set new previews
-	previews.value = filesList.filter((file) => file.type.startsWith('image/')).map((file) => URL.createObjectURL(file));
+	const imageFiles = filesList.filter(isImageFile);
+	previews.value = await Promise.all(imageFiles.map((file) => createPreviewUrl(file)));
 };
 
 // Cleanup on unmount
 onBeforeUnmount(() => {
-	previews.value.forEach((url) => URL.revokeObjectURL(url));
+	previews.value.forEach((url) => {
+		if (typeof url === 'string' && url.startsWith('blob:')) {
+			URL.revokeObjectURL(url);
+		}
+	});
 });
 </script>
 
 <style scoped>
 .dropzone-wrapper {
 	width: 100%;
-}
-
-.compressing-overlay {
-	position: absolute;
-	inset: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 0.75rem;
-	background-color: rgb(0 0 0 / 0.4);
-	border-radius: 0.75rem;
-	pointer-events: all;
-	z-index: 10;
-}
-
-.compressing-text {
-	font-size: 0.875rem;
-	font-weight: 500;
-	color: white;
-	text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
 }
 
 .dropzone-container {

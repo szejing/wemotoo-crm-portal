@@ -61,28 +61,17 @@
 						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('pages.storeProfilePage.merchantInformation') }}</h3>
 
 						<!-- Thumbnail -->
-						<div class="flex flex-col gap-2">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $t('pages.storeProfilePage.thumbnail') }}</span>
-							<div
-								class="relative inline-flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
-								@click="triggerThumbnailInput()"
-							>
-								<img
-									v-if="getMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)"
-									:src="getMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL)"
-									:alt="$t('pages.storeProfilePage.merchantThumbnailAlt')"
-									class="h-full w-full rounded-lg object-cover"
-								/>
-								<UIcon v-else :name="ICONS.IMAGE" class="h-10 w-10 text-gray-400" />
-								<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/50 opacity-0 transition-opacity hover:opacity-100">
-									<UIcon :name="ICONS.PENCIL" class="h-6 w-6 text-white" />
-								</div>
-								<div v-if="thumbnailUploading" class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/40">
-									<UIcon name="i-heroicons-arrow-path" class="h-6 w-6 animate-spin text-white" />
-								</div>
-							</div>
-							<input ref="thumbnailInputEl" type="file" accept="image/*" class="hidden" @change="onThumbnailFileChange" />
-						</div>
+						<UFormField :label="$t('pages.storeProfilePage.thumbnail')">
+							<ZDropzone
+								class="max-w-full sm:max-w-[200px]"
+								:key="thumbnailDropzoneKey"
+								:existing-images="thumbnailExistingImages"
+								:multiple="false"
+								:disabled="merchantInfoStore.loading || merchantInfoStore.updating"
+								@files-selected="onThumbnailFilesSelected"
+								@delete-image="onThumbnailDelete"
+							/>
+						</UFormField>
 
 						<!-- Name, Company email, website, contact -->
 						<div class="grid gap-4 sm:grid-cols-2">
@@ -186,7 +175,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalLeavePageConfirmation } from '#components';
+import { ZModalLeavePageConfirmation, ZModalLoading } from '#components';
 import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
 import { accountTypeLabel } from '~/utils/options/account-type';
@@ -196,13 +185,24 @@ useHead({ title: () => `${t('common.appName')} - ${t('nav.storeProfile')}` });
 
 const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
-const { updatedInfo } = storeToRefs(merchantInfoStore);
+const { updatedInfo, updating, merchant } = storeToRefs(merchantInfoStore);
 
 const isDirty = computed(() => updatedInfo.value.length > 0);
 
-const thumbnailInputEl = ref<HTMLInputElement | null>(null);
-const thumbnailUploading = ref(false);
+const thumbnailDropzoneKey = ref(0);
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 onBeforeRouteLeave((to, from, next) => {
 	if (!isDirty.value) {
@@ -245,20 +245,22 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 	});
 };
 
-const triggerThumbnailInput = () => {
-	thumbnailInputEl.value?.click();
-};
+const thumbnailExistingImages = computed(() => {
+	const url = merchant.value.find((m) => m.group_code === GROUP_CODE.INFO && m.set_code === MERCHANT.THUMBNAIL)?.getString();
+	console.log(url);
+	return url ? [url] : [];
+});
 
-const onThumbnailFileChange = async (event: Event) => {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-
+const onThumbnailFilesSelected = async (selectedFiles: File[]) => {
+	const file = selectedFiles[0];
 	if (!file) return;
 
-	thumbnailUploading.value = true;
 	await merchantInfoStore.updateMerchantThumbnail(file);
-	thumbnailUploading.value = false;
-	target.value = '';
+	thumbnailDropzoneKey.value += 1;
+};
+
+const onThumbnailDelete = () => {
+	setMerchantValue(GROUP_CODE.INFO, MERCHANT.THUMBNAIL, '');
 };
 
 const merchantId = computed(() => merchantInfoStore.getMerchantInfo(GROUP_CODE.INFO, MERCHANT.ID)?.getString() ?? '—');

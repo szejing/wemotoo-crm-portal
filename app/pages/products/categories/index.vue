@@ -69,6 +69,7 @@ import { getCategoryTreeColumns } from '~/utils/table-columns';
 import type { Category } from '~/utils/types/category';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
+import { failedNotification } from '~/stores/AppUi/AppUi';
 
 const { t } = useI18n();
 const category_tree_columns = computed(() => getCategoryTreeColumns(t));
@@ -130,6 +131,12 @@ const deleteCategory = async (row: TableRow<Category>) => {
 const selectCategory = async (e: Event, row: TableRow<Category>) => {
 	const category = row.original;
 	if (!category) return;
+
+	if (category.is_internal) {
+		failedNotification('Internal categories cannot be edited');
+		return;
+	}
+
 	const categoryModal = overlay.create(ZModalCategoryDetail, {
 		props: {
 			category: JSON.parse(JSON.stringify(category)),
