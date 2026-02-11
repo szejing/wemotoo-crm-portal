@@ -11,8 +11,8 @@ export function getBrandColumns(t: TableColumnsTranslate): TableColumn<Brand>[] 
 			header: t('table.code'),
 			cell: ({ row }) => {
 				return h('div', [
-					h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
-					h('div', { class: 'text-neutral-600' }, row.original.description),
+					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),
+					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 				]);
 			},
 		},

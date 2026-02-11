@@ -26,7 +26,6 @@
 							:key="tab.value"
 							:variant="selectedTab === index ? 'solid' : 'soft'"
 							:color="selectedTab === index ? 'primary' : 'neutral'"
-							size="sm"
 							@click="selectTab(index)"
 						>
 							{{ tab.label }}

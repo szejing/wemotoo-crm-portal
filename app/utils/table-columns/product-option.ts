@@ -1,6 +1,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductOption } from '~/utils/types/product-option';
 import type { TableColumnsTranslate } from './brand';
+import { UBadge } from '#components';
 
 export function getProductOptionColumns(t: TableColumnsTranslate): TableColumn<ProductOption>[] {
 	return [
@@ -16,16 +17,14 @@ export function getProductOptionColumns(t: TableColumnsTranslate): TableColumn<P
 			header: () => h('h1', { class: 'flex justify-center w-full' }, [h('h1', t('table.values'))]),
 			cell: ({ row }) => {
 				if (row.original.values.length === 0) {
-					return h('div', { class: 'flex justify-center' }, [
-						h('div', { class: 'text-center w-[200px] text-start break-words' }, [h('p', { class: 'text-neutral-300' }, t('table.noValues'))]),
-					]);
+					return h('div', { class: 'flex justify-center' }, [h('p', { class: 'text-neutral-300' }, t('table.noValues'))]);
 				}
 
-				return h('div', { class: 'flex justify-center' }, [
-					h('div', { class: 'text-center w-[200px] text-start break-words' }, [
-						h('p', { class: 'text-neutral-900' }, row.original.values.map((value) => value.value).join(', ')),
-					]),
-				]);
+				return h(
+					'div',
+					{ class: 'flex justify-center flex-wrap gap-1' },
+					row.original.values.map((value) => h(UBadge, { variant: 'subtle', color: 'info' }, () => value.value)),
+				);
 			},
 		},
 	];

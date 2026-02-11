@@ -10,8 +10,8 @@ export function getCategoryColumns(t: TableColumnsTranslate): TableColumn<Catego
 			header: () => h('h1', t('table.code')),
 			cell: ({ row }) => {
 				return h('div', [
-					h('div', { class: 'font-bold text-neutral-900' }, row.original.code),
-					h('div', { class: 'text-neutral-600' }, row.original.description),
+					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),
+					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 				]);
 			},
 		},
@@ -39,10 +39,9 @@ export function getCategoryTreeColumns(t: TableColumnsTranslate): TableColumn<Ca
 				const isExpanded = row.getIsExpanded();
 				const isRoot = depth === 0;
 
-				// Typography weight/color by depth
-				const nameClass = isRoot ? 'font-bold text-highlighted' : depth === 1 ? 'font-semibold text-highlighted' : 'font-medium text-muted';
-
-				const descClass = isRoot ? 'text-muted text-sm' : 'text-dimmed text-xs';
+				// Typography weight/color
+				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
+				const descClass = 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic';
 
 				// Active/inactive dot
 				const statusDot = h('span', {
