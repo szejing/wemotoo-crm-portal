@@ -1,10 +1,5 @@
 <template>
-	<UModal
-		:title="$t('components.zModal.updateTax')"
-		:ui="{
-			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
-		}"
-	>
+	<UModal :title="$t('components.zModal.updateTax')" :ui="{ content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]' }">
 		<template #body>
 			<UForm :schema="taxSchema" :state="state.tax" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
@@ -20,11 +15,17 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">
+					{{ $t('components.zModal.delete') }}
+				</UButton>
 
 				<div class="flex-jend gap-4">
-					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" type="submit">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="neutral" variant="soft" @click="onCancel">
+						{{ $t('common.cancel') }}
+					</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" type="submit">
+						{{ $t('components.zModal.update') }}
+					</UButton>
 				</div>
 			</div>
 		</template>
@@ -65,7 +66,8 @@ const { updating } = storeToRefs(taxStore);
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { description, is_inclusive, is_active } = event.data;
 
-	emit('update', { description, is_inclusive, is_active });
+	console.log(description, is_inclusive, is_active);
+	// emit('update', { description, is_inclusive, is_active });
 };
 
 const onDelete = () => {

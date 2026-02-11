@@ -3,9 +3,10 @@ import { formatCurrency, OrderItemStatus, SaleStatus } from 'wemotoo-common';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { UBadge } from '#components';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getSaleSummItemColumns(t: TableColumnsTranslate): TableColumn<SummSaleItem>[] {
+type TranslateFn = (key: string) => string;
+
+export function getSaleSummItemColumns(t: TranslateFn): TableColumn<SummSaleItem>[] {
 	return [
 		{
 			accessorKey: 'prod_code',

@@ -1,9 +1,10 @@
 import { UCheckbox, UIcon } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductOption } from '~/utils/types/product-option';
-import type { TableColumnsTranslate } from './brand';
 
-export function getSelectableProductOptionColumns(t: TableColumnsTranslate): TableColumn<ProductOption>[] {
+type TranslateFn = (key: string) => string;
+
+export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<ProductOption>[] {
 	return [
 		{
 			id: 'select',

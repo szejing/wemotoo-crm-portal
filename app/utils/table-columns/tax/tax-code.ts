@@ -1,9 +1,10 @@
-import { USwitch } from '#components';
+import { UBadge, USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { Tax } from '~/utils/types/tax';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getTaxCodeColumns(t: TableColumnsTranslate): TableColumn<Tax>[] {
+type TranslateFn = (key: string) => string;
+
+export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 	return [
 		{
 			accessorKey: 'code',
@@ -19,7 +20,9 @@ export function getTaxCodeColumns(t: TableColumnsTranslate): TableColumn<Tax>[] 
 			accessorKey: 'type',
 			header: () => h('h1', { class: 'text-neutral-400' }, t('table.taxType')),
 			cell: ({ row }) => {
-				return h('div', { class: 'flex flex-col gap-1 text-neutral-900' }, [h('h5', row.original.is_inclusive ? t('table.inclusive') : t('table.exclusive'))]);
+				return h(UBadge, { color: row.original.is_inclusive ? 'primary' : 'warning', variant: 'subtle' }, () =>
+					row.original.is_inclusive ? t('table.inclusive') : t('table.exclusive'),
+				);
 			},
 		},
 		{

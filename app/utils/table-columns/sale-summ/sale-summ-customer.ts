@@ -3,9 +3,10 @@ import type { TableColumn, TableRow } from '@nuxt/ui';
 import { h } from 'vue';
 import { formatCurrency, SaleStatus } from 'wemotoo-common';
 import type { SummSaleCustomer } from '~/utils/types/summ-sales';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getSaleSummCustomerColumns(t: TableColumnsTranslate): TableColumn<SummSaleCustomer>[] {
+type TranslateFn = (key: string) => string;
+
+export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSaleCustomer>[] {
 	return [
 		{
 			accessorKey: 'customer',

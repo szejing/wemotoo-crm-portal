@@ -1,8 +1,9 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import type { Customer } from '~/utils/types/customer';
-import type { TableColumnsTranslate } from './brand';
 
-export function getCustomerColumns(t: TableColumnsTranslate): ColumnDef<Customer>[] {
+type TranslateFn = (key: string) => string;
+
+export function getCustomerColumns(t: TranslateFn): ColumnDef<Customer>[] {
 	return [
 		{
 			accessorKey: 'customer_no',

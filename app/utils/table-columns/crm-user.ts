@@ -1,23 +1,24 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import type { CRMUser } from '~/utils/types/crm-user';
-import { UserRoles } from 'wemotoo-common';
 import { formatCrmUserPhone } from '../utils';
-import type { TableColumnsTranslate } from './brand';
 import { USwitch } from '#components';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+import { roleLabel } from '../options/user-roles';
 
-function roleLabel(role: UserRoles, t: TableColumnsTranslate): string {
-	const keyMap: Record<UserRoles, string> = {
-		[UserRoles.SUPER_ADMIN]: 'components.crmUserForm.roleSuperAdmin',
-		[UserRoles.SUPER_STAFF]: 'components.crmUserForm.roleSuperStaff',
-		[UserRoles.MERCHANT_ADMIN]: 'components.crmUserForm.roleMerchantAdmin',
-		[UserRoles.MERCHANT_STAFF]: 'components.crmUserForm.roleMerchantStaff',
-		[UserRoles.CUSTOMER]: 'table.customer',
-	};
-	return keyMap[role] ? t(keyMap[role]) : role;
-}
+type TranslateFn = (key: string) => string;
 
-export function getCrmUserColumns(t: TableColumnsTranslate): ColumnDef<CRMUser>[] {
+// function roleLabel(role: UserRoles, t: TranslateFn): string {
+// 	const keyMap: Record<UserRoles, string> = {
+// 		[UserRoles.SUPER_ADMIN]: 'components.crmUserForm.roleSuperAdmin',
+// 		[UserRoles.SUPER_STAFF]: 'components.crmUserForm.roleSuperStaff',
+// 		[UserRoles.MERCHANT_ADMIN]: 'components.crmUserForm.roleMerchantAdmin',
+// 		[UserRoles.MERCHANT_STAFF]: 'components.crmUserForm.roleMerchantStaff',
+// 		[UserRoles.CUSTOMER]: 'table.customer',
+// 	};
+// 	return keyMap[role] ? t(keyMap[role]) : role;
+// }
+
+export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
 	return [
 		{
 			accessorKey: 'row_index',

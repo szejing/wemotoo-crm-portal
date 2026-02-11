@@ -24,8 +24,6 @@ import { getTaxGroupColumns } from './tax/tax-group';
 import { getTaxRuleColumns } from './tax/tax-rule';
 import { getCrmUserColumns } from './crm-user';
 
-export type { TableColumnsTranslate } from './brand';
-
 export {
 	getCustomerColumns,
 	getTagColumns,

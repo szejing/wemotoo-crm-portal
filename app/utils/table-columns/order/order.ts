@@ -3,9 +3,10 @@ import type { TableColumn } from '@nuxt/ui';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getOrderColumns(t: TableColumnsTranslate): TableColumn<OrderHistory>[] {
+type TranslateFn = (key: string) => string;
+
+export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 	return [
 		{
 			accessorKey: 'index',

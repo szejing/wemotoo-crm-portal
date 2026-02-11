@@ -1,7 +1,8 @@
 import type { ColumnDef } from '@tanstack/vue-table';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getPaymentTypeColumns(t: TableColumnsTranslate): ColumnDef<any>[] {
+type TranslateFn = (key: string) => string;
+
+export function getPaymentTypeColumns(t: TranslateFn): ColumnDef<any>[] {
 	return [
 		{
 			accessorKey: 'code',

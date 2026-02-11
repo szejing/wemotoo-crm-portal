@@ -3,9 +3,10 @@ import { UBadge } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
-import type { TableColumnsTranslate } from '../brand';
 
-function getAmountTypeLabel(amountType: string, t: TableColumnsTranslate): string {
+type TranslateFn = (key: string) => string;
+
+function getAmountTypeLabel(amountType: string, t: TranslateFn): string {
 	const keyMap: Record<string, string> = {
 		gross_amount: 'table.grossAmt',
 		net_amount: 'table.netAmt',
@@ -13,7 +14,7 @@ function getAmountTypeLabel(amountType: string, t: TableColumnsTranslate): strin
 	return keyMap[amountType] ? t(keyMap[amountType]) : amountType;
 }
 
-export function getTaxRuleColumns(t: TableColumnsTranslate): TableColumn<TaxRule>[] {
+export function getTaxRuleColumns(t: TranslateFn): TableColumn<TaxRule>[] {
 	return [
 		{
 			accessorKey: 'code',

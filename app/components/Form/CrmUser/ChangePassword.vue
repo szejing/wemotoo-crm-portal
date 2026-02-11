@@ -119,9 +119,9 @@ const passwordRequirements = computed(() => [
 	{ regex: /[A-Z]/, textKey: 'common.atLeast1Uppercase' },
 ]);
 
-function checkPasswordStrength(str: string) {
+const checkPasswordStrength = (str: string) => {
 	return passwordRequirements.value.map((req) => ({ met: req.regex.test(str), text: t(req.textKey) }));
-}
+};
 
 const passwordStrength = computed(() => checkPasswordStrength(state.new_password));
 const passwordStrengthScore = computed(() => passwordStrength.value.filter((r) => r.met).length);
@@ -149,14 +149,14 @@ const canSubmit = computed(
 		state.new_password === state.confirm_password,
 );
 
-function onSubmit() {
+const onSubmit = () => {
 	if (!canSubmit.value) return;
 	emit('submit', {
 		old_password: state.old_password,
 		new_password: state.new_password,
 		confirm_password: state.confirm_password,
 	});
-}
+};
 </script>
 
 <style scoped>

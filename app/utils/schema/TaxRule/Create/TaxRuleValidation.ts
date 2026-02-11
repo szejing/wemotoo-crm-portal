@@ -1,10 +1,13 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
+
+type TranslateFn = (key: string) => string;
 
 export const TaxFilterValidation = z.object({
-	filter_operator: z.string(),
-	filter_condition: z.string(),
-	filter_value: z.string(),
+	id: z.number().optional(),
+	filter_operator: z.string().optional(),
+	filter_type: z.string().optional(),
+	filter_condition: z.string().optional(),
+	filter_value: z.string().optional(),
 });
 
 export const TaxConditionValidation = z.object({
@@ -14,8 +17,8 @@ export const TaxConditionValidation = z.object({
 	ends_at: z.date().optional(),
 	amount_type: z.string().optional(),
 	rate: z.number().optional(),
-	min_amount: z.number().optional(),
-	max_amount: z.number().optional(),
+	min_amount: z.number().nullable().optional(),
+	max_amount: z.number().nullable().optional(),
 	filters: z.array(TaxFilterValidation).optional(),
 });
 

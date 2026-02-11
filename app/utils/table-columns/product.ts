@@ -2,11 +2,12 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
-import { UBadge, UCheckbox, USwitch } from '#components';
+import { UBadge, USwitch } from '#components';
 import { formatCurrency } from 'wemotoo-common';
-import type { TableColumnsTranslate } from './brand';
 
-export function getProductColumns(t: TableColumnsTranslate): TableColumn<Product>[] {
+type TranslateFn = (key: string) => string;
+
+export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 	return [
 		{
 			accessorKey: 'name',

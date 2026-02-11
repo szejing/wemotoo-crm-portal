@@ -2,9 +2,9 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Brand } from '~/utils/types/brand';
 import { UBadge } from '#components';
 
-export type TableColumnsTranslate = (key: string) => string;
+type TranslateFn = (key: string) => string;
 
-export function getBrandColumns(t: TableColumnsTranslate): TableColumn<Brand>[] {
+export function getBrandColumns(t: TranslateFn): TableColumn<Brand>[] {
 	return [
 		{
 			accessorKey: 'code',

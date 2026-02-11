@@ -1,9 +1,10 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductOption } from '~/utils/types/product-option';
-import type { TableColumnsTranslate } from './brand';
 import { UBadge } from '#components';
 
-export function getProductOptionColumns(t: TableColumnsTranslate): TableColumn<ProductOption>[] {
+type TranslateFn = (key: string) => string;
+
+export function getProductOptionColumns(t: TranslateFn): TableColumn<ProductOption>[] {
 	return [
 		{
 			accessorKey: 'name',

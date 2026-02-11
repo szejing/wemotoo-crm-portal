@@ -1,9 +1,10 @@
 import type { TableColumn } from '@nuxt/ui';
 import { UBadge, UButton } from '#components';
 import type { Category } from '~/utils/types/category';
-import type { TableColumnsTranslate } from './brand';
 
-export function getCategoryColumns(t: TableColumnsTranslate): TableColumn<Category>[] {
+type TranslateFn = (key: string) => string;
+
+export function getCategoryColumns(t: TranslateFn): TableColumn<Category>[] {
 	return [
 		{
 			accessorKey: 'code',
@@ -28,7 +29,7 @@ export function getCategoryColumns(t: TableColumnsTranslate): TableColumn<Catego
 }
 
 /** Columns for tree table: expand + indent, then code, then count. */
-export function getCategoryTreeColumns(t: TableColumnsTranslate): TableColumn<Category>[] {
+export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] {
 	return [
 		{
 			id: 'category',

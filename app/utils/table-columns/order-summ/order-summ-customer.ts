@@ -3,9 +3,10 @@ import type { TableColumn } from '@nuxt/ui';
 import type { SummOrderCustomer } from '~/utils/types/summ-orders';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getOrderSummCustomerColumns(t: TableColumnsTranslate): TableColumn<SummOrderCustomer>[] {
+type TranslateFn = (key: string) => string;
+
+export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrderCustomer>[] {
 	return [
 		{
 			accessorKey: 'customer',

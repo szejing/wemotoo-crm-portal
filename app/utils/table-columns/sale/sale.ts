@@ -3,9 +3,10 @@ import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { UBadge } from '#components';
 import type { Bill } from '~/utils/types/bill';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getSaleColumns(t: TableColumnsTranslate): TableColumn<Bill>[] {
+type TranslateFn = (key: string) => string;
+
+export function getSaleColumns(t: TranslateFn): TableColumn<Bill>[] {
 	return [
 		{
 			accessorKey: 'bill_no',

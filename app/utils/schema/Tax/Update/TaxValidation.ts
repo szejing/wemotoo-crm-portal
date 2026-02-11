@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
+
+type TranslateFn = (key: string) => string;
 
 export function UpdateTaxValidation(t: TranslateFn) {
 	return z.object({

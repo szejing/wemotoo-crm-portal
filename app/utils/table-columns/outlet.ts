@@ -1,8 +1,9 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Outlet } from '~/utils/types/outlet';
-import type { TableColumnsTranslate } from './brand';
 
-export function getOutletColumns(t: TableColumnsTranslate): TableColumn<Outlet>[] {
+type TranslateFn = (key: string) => string;
+
+export function getOutletColumns(t: TranslateFn): TableColumn<Outlet>[] {
 	return [
 		{
 			accessorKey: 'code',

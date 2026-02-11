@@ -1,8 +1,9 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { TaxGroup } from '~/utils/types/tax-group';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getTaxGroupColumns(t: TableColumnsTranslate): TableColumn<TaxGroup>[] {
+type TranslateFn = (key: string) => string;
+
+export function getTaxGroupColumns(t: TranslateFn): TableColumn<TaxGroup>[] {
 	return [
 		{
 			accessorKey: 'code',

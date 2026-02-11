@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation, ZModalTaxDetail } from '#components';
+import { ZModalConfirmation, ZModalLoading, ZModalTaxDetail } from '#components';
 import { getTaxCodeColumns } from '~/utils/table-columns';
 import type { Tax } from '~/utils/types/tax';
 import type { TableRow } from '@nuxt/ui';
@@ -68,7 +68,19 @@ onMounted(async () => {
 
 const overlay = useOverlay();
 const taxStore = useTaxStore();
-const { loading, taxes, filter, total_taxes, exporting } = storeToRefs(taxStore);
+const { loading, taxes, filter, total_taxes, updating, exporting } = storeToRefs(taxStore);
+const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+
+watch(
+	() => updating.value,
+	(value: boolean) => {
+		if (value) {
+			loadingModal.open();
+		} else {
+			loadingModal.close();
+		}
+	},
+);
 
 const deleteTax = async (code: string) => {
 	const confirmModal = overlay.create(ZModalConfirmation, {

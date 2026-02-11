@@ -25,7 +25,7 @@
 				<!-- *********************** General Info *********************** -->
 				<div class="mt-4">
 					<h6 class="text-secondary-700 text-sm font-bold">{{ $t('components.zModal.taxRule') }}</h6>
-					<ZSelectMenuTaxRule v-model:tax-rule="state.outlet.tax_rule" @update:tax-rule="updateTaxRule" />
+					<ZSelectMenuTaxRule :tax-rule="state.outlet.tax_rule" @update:tax-rule="updateTaxRule" />
 				</div>
 			</UForm>
 		</template>
@@ -48,6 +48,7 @@ import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { UpdateOutletValidation } from '~/utils/schema';
 import type { Outlet } from '~/utils/types/outlet';
+import type { TaxRule } from '~/utils/types/tax-rule';
 
 const { t } = useI18n();
 const outletSchema = computed(() => UpdateOutletValidation(t));
@@ -75,15 +76,15 @@ const state = reactive({
 		postal_code: props.outlet.postal_code,
 		longitude: props.outlet.longitude,
 		latitude: props.outlet.latitude,
-		tax_rule: props.outlet.tax_rule,
+		tax_rule: props.outlet.tax_rule?.code,
 	},
 });
 
 const tagStore = useProductTagStore();
 const { updating } = storeToRefs(tagStore);
 
-const updateTaxRule = (tax_rule: any) => {
-	state.outlet.tax_rule = tax_rule.code;
+const updateTaxRule = (tax_rule: TaxRule | undefined) => {
+	state.outlet.tax_rule = tax_rule?.code;
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

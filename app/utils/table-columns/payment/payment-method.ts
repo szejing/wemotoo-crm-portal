@@ -1,9 +1,10 @@
 import { USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { PaymentMethod } from '~/utils/types/payment-method';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getPaymentMethodColumns(t: TableColumnsTranslate): TableColumn<PaymentMethod>[] {
+type TranslateFn = (key: string) => string;
+
+export function getPaymentMethodColumns(t: TranslateFn): TableColumn<PaymentMethod>[] {
 	return [
 		{
 			accessorKey: 'code',

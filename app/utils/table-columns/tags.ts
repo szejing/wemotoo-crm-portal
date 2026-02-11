@@ -1,9 +1,10 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Tag } from '~/utils/types/tag';
-import type { TableColumnsTranslate } from './brand';
 import { UBadge } from '#components';
 
-export function getTagColumns(t: TableColumnsTranslate): TableColumn<Tag>[] {
+type TranslateFn = (key: string) => string;
+
+export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 	return [
 		{
 			accessorKey: 'value',

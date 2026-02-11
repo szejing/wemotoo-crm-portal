@@ -1,7 +1,8 @@
 import type { TableColumn } from '@nuxt/ui';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getPaymentTypeGroupColumns(t: TableColumnsTranslate): TableColumn<any>[] {
+type TranslateFn = (key: string) => string;
+
+export function getPaymentTypeGroupColumns(t: TranslateFn): TableColumn<any>[] {
 	return [
 		{
 			accessorKey: 'index',

@@ -2,9 +2,10 @@ import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummOrderBill } from '~/utils/types/summ-orders';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getOrderSummColumns(t: TableColumnsTranslate): TableColumn<SummOrderBill>[] {
+type TranslateFn = (key: string) => string;
+
+export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[] {
 	return [
 		{
 			accessorKey: 'currency_code',

@@ -1,8 +1,9 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import { formatCurrency } from 'wemotoo-common';
-import type { TableColumnsTranslate } from '../brand';
 
-export function getOrderItemColumns(t: TableColumnsTranslate): ColumnDef<any>[] {
+type TranslateFn = (key: string) => string;
+
+export function getOrderItemColumns(t: TranslateFn): ColumnDef<any>[] {
 	return [
 		{
 			accessorKey: 'prod_code',
