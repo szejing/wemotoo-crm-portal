@@ -133,7 +133,7 @@ const selectCategory = async (e: Event, row: TableRow<Category>) => {
 	if (!category) return;
 
 	if (category.is_internal) {
-		failedNotification('Internal categories cannot be edited');
+		failedNotification(t('pages.internalCategoriesCannotBeEdited'));
 		return;
 	}
 

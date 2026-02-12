@@ -55,6 +55,7 @@ import { getBrandColumns } from '~/utils/table-columns';
 import type { Brand } from '~/utils/types/brand';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
+import { failedNotification } from '~/stores/AppUi/AppUi';
 
 const overlay = useOverlay();
 const brandStore = useBrandStore();
@@ -96,6 +97,12 @@ const deleteBrand = async (row: TableRow<Brand>) => {
 const selectBrand = async (e: Event, row: TableRow<Brand>) => {
 	const brand = row.original;
 	if (!brand) return;
+
+	if (brand.is_internal) {
+		failedNotification(t('pages.internalBrandsCannotBeEdited'));
+		return;
+	}
+
 	const brandModal = overlay.create(ZModalBrandDetail, {
 		props: {
 			brand: JSON.parse(JSON.stringify(brand)),

@@ -54,6 +54,7 @@ import { getTagColumns } from '~/utils/table-columns';
 import type { Tag } from '~/utils/types/tag';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
+import { failedNotification } from '~/stores/AppUi/AppUi';
 
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();
@@ -95,6 +96,11 @@ const deleteTag = async (row: TableRow<Tag>) => {
 const selectTag = async (e: Event, row: TableRow<Tag>) => {
 	const tag = row.original;
 	if (!tag) return;
+
+	if (tag.is_internal) {
+		failedNotification(t('pages.internalTagsCannotBeEdited'));
+		return;
+	}
 
 	const tagModal = overlay.create(ZModalTagDetail, {
 		props: {
