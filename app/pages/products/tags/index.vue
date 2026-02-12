@@ -76,9 +76,7 @@ const deleteTag = async (row: TableRow<Tag>) => {
 
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: hasProducts
-				? 'Are you sure you want to delete this tag? This tag has products and will be deleted along with all products.'
-				: 'Are you sure you want to delete this tag?',
+			message: hasProducts ? t('pages.confirmDeleteTagWithProducts') : t('pages.confirmDeleteTag'),
 			action: 'delete',
 			onConfirm: async () => {
 				await tagsStore.deleteTag(tag);

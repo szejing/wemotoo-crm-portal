@@ -77,9 +77,7 @@ const deleteBrand = async (row: TableRow<Brand>) => {
 
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
-			message: hasProducts
-				? 'Are you sure you want to delete this brand? This brand has products and will be deleted along with all products.'
-				: 'Are you sure you want to delete this brand?',
+			message: hasProducts ? t('pages.confirmDeleteBrandWithProducts') : t('pages.confirmDeleteBrand'),
 			action: 'delete',
 			onConfirm: async () => {
 				await brandStore.deleteBrand(brand);
