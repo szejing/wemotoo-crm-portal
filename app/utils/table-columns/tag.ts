@@ -10,7 +10,22 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 			accessorKey: 'value',
 			header: () => h('h1', t('table.description')),
 			cell: ({ row }) => {
-				return h('div', [h('div', { class: 'font-bold text-neutral-900' }, row.original.value)]);
+				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
+
+				const statusDot = h('span', {
+					class: ['inline-block size-2 rounded-full flex-shrink-0', row.original.is_active !== false ? 'bg-success-500' : 'bg-neutral-300 dark:bg-neutral-600'],
+					title: row.original.is_active !== false ? t('common.active') : t('common.inactive'),
+				});
+
+				const internalBadge = row.original.is_internal ? h(UBadge, { variant: 'subtle', color: 'warning', size: 'xs' }, () => 'Internal') : null;
+
+				return h('div', { class: 'flex-1 min-w-0' }, [
+					h('div', { class: 'flex items-center gap-1.5' }, [
+						statusDot,
+						h('span', { class: nameClass }, row.original.value),
+						internalBadge,
+					]),
+				]);
 			},
 		},
 		{

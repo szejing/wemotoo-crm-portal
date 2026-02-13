@@ -10,9 +10,23 @@ export function getBrandColumns(t: TranslateFn): TableColumn<Brand>[] {
 			accessorKey: 'code',
 			header: t('table.code'),
 			cell: ({ row }) => {
-				return h('div', [
-					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),
-					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
+				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
+				const descClass = 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic';
+
+				const statusDot = h('span', {
+					class: ['inline-block size-2 rounded-full flex-shrink-0', row.original.is_active !== false ? 'bg-success-500' : 'bg-neutral-300 dark:bg-neutral-600'],
+					title: row.original.is_active !== false ? t('common.active') : t('common.inactive'),
+				});
+
+				const internalBadge = row.original.is_internal ? h(UBadge, { variant: 'subtle', color: 'warning', size: 'xs' }, () => 'Internal') : null;
+
+				return h('div', { class: 'flex-1 min-w-0' }, [
+					h('div', { class: 'flex items-center gap-1.5' }, [
+						statusDot,
+						h('span', { class: nameClass }, row.original.description),
+						internalBadge,
+					]),
+					h('p', { class: `truncate ${descClass}` }, row.original.code),
 				]);
 			},
 		},

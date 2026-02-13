@@ -1,9 +1,9 @@
 import { getOrderColumns } from './order/order';
 import { getCustomerColumns } from './customer';
-import { getCategoryColumns, getCategoryTreeColumns } from './categories';
+import { getCategoryColumns, getCategoryTreeColumns } from './category';
 import { getProductOptionColumns } from './product-option';
 import { getSelectableProductOptionColumns } from './selectable-product-option';
-import { getTagColumns } from './tags';
+import { getTagColumns } from './tag';
 import { getProductColumns } from './product';
 import { getOrderSummColumns } from './order-summ/order-summ';
 import { getOrderSummItemColumns } from './order-summ/order-summ-item';

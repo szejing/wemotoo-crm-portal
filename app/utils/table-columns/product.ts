@@ -16,6 +16,11 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				const thumbnailUrl = row.original.thumbnail?.url;
 				const variants = row.original.variants;
 
+				const statusDot = h('span', {
+					class: ['inline-block size-2 rounded-full flex-shrink-0', row.original.is_active !== false ? 'bg-success-500' : 'bg-neutral-300 dark:bg-neutral-600'],
+					title: row.original.is_active !== false ? t('common.active') : t('common.inactive'),
+				});
+
 				const variantBadge =
 					variants && variants.length > 0
 						? variants.map((variant) => h(UBadge, { class: 'capitalize', variant: 'subtle', color: 'info' }, `${variant.name || variant.variant_code}`))
@@ -30,7 +35,10 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 								class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
 							}),
 					h('div', { class: 'flex-1 min-w-0' }, [
-						h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.name),
+						h('div', { class: 'flex items-center gap-1.5' }, [
+							statusDot,
+							h('span', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.name),
+						]),
 						h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
 						variantBadge.length > 0 ? h('div', { class: 'mt-1 flex flex-wrap items-center gap-1' }, [...variantBadge]) : null,
 					]),
