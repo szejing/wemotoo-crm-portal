@@ -29,7 +29,19 @@
 					@export="exportTags"
 				/>
 
-				<UTable :data="tags" :columns="tag_columns" :loading="loading" @select="selectTag">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-4 w-16" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-40" />
+							<USkeleton class="h-4 w-12" />
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="tags" :columns="tag_columns" :loading="loading" @select="selectTag">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -40,7 +52,7 @@
 				</UTable>
 
 				<!-- Pagination  -->
-				<div v-if="tags.length > 0" class="section-pagination">
+				<div v-if="!initialize && tags.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tags" @update:page="updatePage" />
 				</div>
 			</div>
@@ -64,9 +76,15 @@ const tag_columns = computed(() => getTagColumns(t));
 useHead({ title: () => t('pages.tagsTitle') });
 
 const { loading, tags, total_tags, filter, exporting } = storeToRefs(tagsStore);
+const initialize = ref(true);
 
-onMounted(() => {
-	tagsStore.getTags();
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await tagsStore.getTags();
+	} finally {
+		initialize.value = false;
+	}
 });
 
 const deleteTag = async (row: TableRow<Tag>) => {

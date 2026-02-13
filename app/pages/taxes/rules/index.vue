@@ -31,7 +31,19 @@
 					@export="exportTaxes"
 				/>
 
-				<UTable :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-4 w-16" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-40" />
+							<USkeleton class="h-4 w-12" />
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 					<template #empty-state>
 						<div class="flex-col-center section-empty">
 							<h2>No tax code Found</h2>
@@ -41,7 +53,7 @@
 				</UTable>
 
 				<!-- Pagination  -->
-				<div v-if="tax_rules.length > 0" class="section-pagination">
+				<div v-if="!initialize && tax_rules.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_rules" @update:page="updatePage" />
 				</div>
 			</div>
@@ -63,11 +75,17 @@ const tax_rule_columns = computed(() => getTaxRuleColumns(t));
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 useHead({ title: () => t('pages.taxRulesTitle') });
 
-onMounted(async () => {
-	await taxRuleStore.getTaxRules();
-});
-
 const { loading, updating, exporting, tax_rules, filter, total_tax_rules } = storeToRefs(taxRuleStore);
+const initialize = ref(true);
+
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await taxRuleStore.getTaxRules();
+	} finally {
+		initialize.value = false;
+	}
+});
 
 watch(
 	() => updating.value,

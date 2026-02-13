@@ -27,8 +27,19 @@
 					@export="exportPaymentMethods"
 				/>
 
-				<!-- Table -->
-				<UTable :data="payment_methods" :columns="payment_method_columns" :loading="loading">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-4 w-16" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-40" />
+							<USkeleton class="h-4 w-12" />
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="payment_methods" :columns="payment_method_columns" :loading="loading">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
@@ -38,7 +49,7 @@
 					</template>
 				</UTable>
 
-				<div v-if="payment_methods.length > 0" class="section-pagination">
+				<div v-if="!initialize && payment_methods.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_payment_methods" @update:page="updatePage" />
 				</div>
 			</div>
@@ -55,11 +66,19 @@ const { t } = useI18n();
 const payment_method_columns = computed(() => getPaymentMethodColumns(t));
 useHead({ title: () => t('pages.paymentMethodsTitle') });
 
-onMounted(() => paymentMethodStore.getPaymentMethods());
-
 const overlay = useOverlay();
 const paymentMethodStore = usePaymentMethodStore();
 const { payment_methods, filter, total_payment_methods, loading, exporting, updating } = storeToRefs(paymentMethodStore);
+const initialize = ref(true);
+
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await paymentMethodStore.getPaymentMethods();
+	} finally {
+		initialize.value = false;
+	}
+});
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
 watch(

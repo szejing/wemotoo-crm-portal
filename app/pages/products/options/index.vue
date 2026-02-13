@@ -30,7 +30,25 @@
 					@export="exportOptions"
 				/>
 
-				<UTable :data="prod_option" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<!-- Header: Name | Values -->
+						<div class="grid grid-cols-[1fr_1fr] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<div class="flex justify-center">
+								<USkeleton class="h-4 w-20" />
+							</div>
+						</div>
+						<!-- Rows: option name + pill-shaped value placeholders -->
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_1fr] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-32" />
+							<div class="flex justify-center flex-wrap gap-1">
+								<USkeleton v-for="j in 3" :key="j" class="h-6 w-14 rounded-full" />
+							</div>
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="prod_option" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -66,9 +84,15 @@ const productOptionsStore = useProductOptionStore();
 
 const { loading, prod_option, filter, exporting } = storeToRefs(productOptionsStore);
 const { total_options } = storeToRefs(productOptionsStore);
+const initialize = ref(true);
 
-onMounted(() => {
-	productOptionsStore.getOptions();
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await productOptionsStore.getOptions();
+	} finally {
+		initialize.value = false;
+	}
 });
 
 const deleteProductOption = async (row: TableRow<ProductOption>) => {

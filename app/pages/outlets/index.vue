@@ -31,8 +31,19 @@
 					@export="exportOutlets"
 				/>
 
-				<!-- Table  -->
-				<UTable :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-4 w-16" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-40" />
+							<USkeleton class="h-4 w-12" />
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
@@ -43,7 +54,7 @@
 				</UTable>
 
 				<!-- Pagination  -->
-				<div v-if="outlets.length > 0" class="section-pagination">
+				<div v-if="!initialize && outlets.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_outlets" @update:page="updatePage" />
 				</div>
 			</div>
@@ -65,11 +76,17 @@ const outlet_columns = computed(() => getOutletColumns(t));
 
 useHead({ title: () => t('pages.outletsTitle') });
 
-onMounted(async () => {
-	await outletStore.getOutlets();
-});
-
 const { loading, exporting, outlets, filter, total_outlets } = storeToRefs(outletStore);
+const initialize = ref(true);
+
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await outletStore.getOutlets();
+	} finally {
+		initialize.value = false;
+	}
+});
 
 const deleteOutlet = async (code: string) => {
 	const confirmModal = overlay.create(ZModalConfirmation, {

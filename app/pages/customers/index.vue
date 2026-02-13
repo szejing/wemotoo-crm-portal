@@ -27,8 +27,17 @@
 					@export="exportCustomers"
 				/>
 
-				<!-- Table  -->
-				<UTable :data="customers" :columns="customer_columns" :loading="loading" @select="selectCustomer">
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-4 gap-4 p-4">
+							<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-4 gap-4 p-4 items-center">
+							<USkeleton v-for="j in 4" :key="j" class="h-4 flex-1 min-w-0" />
+						</div>
+					</div>
+				</template>
+				<UTable v-else :data="customers" :columns="customer_columns" :loading="loading" @select="selectCustomer">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -38,7 +47,7 @@
 					</template>
 				</UTable>
 
-				<div v-if="customers.length > 0" class="section-pagination">
+				<div v-if="!initialize && customers.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_customers" @update:page="updatePage" />
 				</div>
 			</div>
@@ -58,6 +67,16 @@ useHead({ title: () => t('pages.customersTitle') });
 
 const customerStore = useCustomerStore();
 const { loading, customers, filter, total_customers, exporting } = storeToRefs(customerStore);
+const initialize = ref(true);
+
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await customerStore.getCustomers();
+	} finally {
+		initialize.value = false;
+	}
+});
 
 const selectCustomer = async (e: Event, row: TableRow<Customer>) => {
 	const customer = row.original;

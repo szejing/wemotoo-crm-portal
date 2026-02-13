@@ -43,8 +43,18 @@
 					/>
 				</div>
 
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-4 gap-4 p-4">
+							<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-4 gap-4 p-4 items-center">
+							<USkeleton v-for="j in 4" :key="j" class="h-4 flex-1 min-w-0" />
+						</div>
+					</div>
+				</template>
 				<!-- Orders Table -->
-				<UCard class="[&>div]:p-0!">
+				<UCard v-else class="[&>div]:p-0!">
 					<UTable
 						:data="orders"
 						:columns="order_columns"
@@ -62,7 +72,7 @@
 					</UTable>
 
 					<!-- Pagination -->
-					<div v-if="orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+					<div v-if="!initialize && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
 						<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 							<div class="text-sm text-gray-700 dark:text-gray-300">
 								{{
@@ -113,9 +123,15 @@ const tabItems = computed(() => [
 	{ label: t('options.cancelled'), value: OrderStatus.CANCELLED },
 ]);
 
-// Load orders on mount
+const initialize = ref(true);
+
 onMounted(async () => {
-	await orderStore.getOrders();
+	initialize.value = true;
+	try {
+		await orderStore.getOrders();
+	} finally {
+		initialize.value = false;
+	}
 });
 
 const selectTab = async (index: number) => {

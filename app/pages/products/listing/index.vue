@@ -31,8 +31,18 @@
 					@export="exportProducts"
 				/>
 
-				<!-- Table -->
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-4 gap-4 p-4">
+							<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-4 gap-4 p-4 items-center">
+							<USkeleton v-for="j in 4" :key="j" class="h-4 flex-1 min-w-0" />
+						</div>
+					</div>
+				</template>
 				<UTable
+					v-else
 					:data="products"
 					:columns="product_columns"
 					:loading="loading"
@@ -50,7 +60,7 @@
 					</template>
 				</UTable>
 
-				<div v-if="products.length > 0" class="section-pagination">
+				<div v-if="!initialize && products.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_products" @update:page="updatePage" />
 				</div>
 			</div>
@@ -73,9 +83,17 @@ const { t } = useI18n();
 const product_columns = computed(() => getProductColumns(t));
 useHead({ title: () => t('pages.productsTitle') });
 
-onMounted(() => productStore.getProducts());
-
 const { products, loading, filter, total_products, exporting, updating } = storeToRefs(productStore);
+const initialize = ref(true);
+
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await productStore.getProducts();
+	} finally {
+		initialize.value = false;
+	}
+});
 
 watch(
 	() => updating.value,

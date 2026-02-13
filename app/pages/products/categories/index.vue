@@ -29,8 +29,21 @@
 					@export="exportCategories"
 				/>
 
+				<template v-if="initialize">
+					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-4 w-16" />
+						</div>
+						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+							<USkeleton class="h-4 w-40" />
+							<USkeleton class="h-4 w-12" />
+						</div>
+					</div>
+				</template>
 				<!-- Tree table (WooCommerce-style hierarchy) -->
 				<UTable
+					v-else
 					v-model:expanded="expanded"
 					:data="categories"
 					:columns="category_tree_columns"
@@ -55,7 +68,7 @@
 				</UTable>
 
 				<!-- Count (tree view shows all categories) -->
-				<div v-if="categories.length > 0" class="section-pagination text-sm text-muted">
+				<div v-if="!initialize && categories.length > 0" class="section-pagination text-sm text-muted">
 					{{ $t('pages.categoriesCount', { total: total_categories }) }}
 				</div>
 			</div>
@@ -99,10 +112,17 @@ function expandRootCategories() {
 	expanded.value = map;
 }
 
+const initialize = ref(true);
+
 // Defer initial fetch to client so Pinia is active (avoids "getActivePinia() was called but there was no active Pinia" on refresh)
 onMounted(async () => {
-	await categoryStore.getCategoriesForTree();
-	expandRootCategories();
+	initialize.value = true;
+	try {
+		await categoryStore.getCategoriesForTree();
+		expandRootCategories();
+	} finally {
+		initialize.value = false;
+	}
 });
 
 const deleteCategory = async (row: TableRow<Category>) => {
