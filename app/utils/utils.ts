@@ -32,22 +32,14 @@ export const removeNullValues = (obj: any): any => {
 	return JSON.parse(JSON.stringify(obj, (_, value) => (value === null ? undefined : value)));
 };
 
-// Helper to adjust date from UTC to local timezone
-// Backend sends local time marked as UTC (e.g., "15:30:00.000Z" where 15:30 is already local time)
-// We need to add back the timezone offset to display the correct local time
-const adjustToLocalTimezone = (date: Date): Date => {
-	const offsetMinutes = date.getTimezoneOffset();
-	return new Date(date.getTime() + offsetMinutes * 60000);
-};
-
-// Helper to format appointment date range
+// Format appointment date range. API dates are UTC (ISO with Z); getFormattedDate uses local time for display.
 export const formatAppointmentDateRange = (startDate: string | Date, endDate: string | Date | undefined): string => {
-	const start = adjustToLocalTimezone(new Date(startDate));
+	const start = new Date(startDate);
 	if (endDate === undefined) {
 		return getFormattedDate(start, 'dd MMM yyyy, hh:mm aa');
 	}
 
-	const end = adjustToLocalTimezone(new Date(endDate));
+	const end = new Date(endDate);
 
 	if (isSameDate(start, end)) {
 		// Same day: show date once, then both times

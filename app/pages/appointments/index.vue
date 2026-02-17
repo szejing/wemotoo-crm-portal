@@ -72,7 +72,7 @@
 											<div class="flex items-center justify-between">
 												<div class="flex items-center gap-2">
 													<UIcon name="i-heroicons-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
-													<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.order_no }} </span>
+													<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.code }} </span>
 												</div>
 												<UBadge :color="getAppointmentStatusColor(appointment.status)" variant="subtle" size="sm">
 													{{ $t('options.' + appointment.status.toLowerCase()) }}
@@ -123,7 +123,7 @@
 									<div class="flex items-center gap-3">
 										<UIcon name="i-heroicons-document-text" class="w-6 h-6 text-primary-600 dark:text-primary-400" />
 										<div>
-											<h3 class="font-bold text-xl text-gray-900 dark:text-white">{{ selectedAppointment.order_no }}</h3>
+											<h3 class="font-bold text-xl text-gray-900 dark:text-white">{{ selectedAppointment.code }}</h3>
 											<p class="text-sm text-gray-500 dark:text-gray-400">{{ $t('pages.appointmentDetails') }}</p>
 										</div>
 									</div>
@@ -235,7 +235,7 @@
 							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
 						</div>
 						<div class="space-y-4">
-							<p class="font-bold text-gray-900 dark:text-white">{{ selectedAppointment.order_no }}</p>
+							<p class="font-bold text-gray-900 dark:text-white">{{ selectedAppointment.code }}</p>
 							<p>{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
 							<p>{{ selectedAppointment.appt_desc || $t('pages.noDescription') }}</p>
 							<p>{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
@@ -278,7 +278,7 @@
 							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
 						</div>
 						<div class="space-y-4">
-							<p class="font-bold">{{ selectedAppointment.order_no }}</p>
+							<p class="font-bold">{{ selectedAppointment.code }}</p>
 							<p>{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
 							<p>{{ selectedAppointment.appt_desc || $t('pages.noDescription') }}</p>
 							<p>{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
@@ -320,7 +320,7 @@
 							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
 							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
 						</div>
-						<p class="font-bold">{{ selectedAppointment.order_no }}</p>
+						<p class="font-bold">{{ selectedAppointment.code }}</p>
 						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
 						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
 						<div class="flex gap-2 mt-3">
@@ -536,7 +536,7 @@ watch(
 			calendarFocusDate.value = new Date();
 			filter.value.date_range = {
 				start: startOfDay(calendarFocusDate.value),
-				end: endOfDay(calendarFocusDate.value),
+				end: endOfDay(add(calendarFocusDate.value, { days: 1 })),
 			};
 			appointmentStore.getAppointments();
 		} else if (view === 'weekly') {
@@ -544,6 +544,12 @@ watch(
 			const end = endOfWeek(start, { weekStartsOn: 1 });
 			calendarFocusDate.value = start;
 			filter.value.date_range = { start, end };
+			appointmentStore.getAppointments();
+		} else {
+			filter.value.date_range = {
+				start: startOfDay(calendarFocusDate.value),
+				end: endOfDay(add(calendarFocusDate.value, { days: 14 })),
+			};
 			appointmentStore.getAppointments();
 		}
 	},

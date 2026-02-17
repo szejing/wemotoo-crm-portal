@@ -144,8 +144,9 @@ const blocksByDay = computed(() => {
 		const end = new Date(appointment.end_date_time).getTime();
 
 		for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-			const dayStartMs = dayStarts[dayIndex] ?? 0 + props.startHour * 60 * 60 * 1000;
-			const dayEndMs = dayStarts[dayIndex] ?? 0 + props.endHour * 60 * 60 * 1000;
+			const dayBaseMs = dayStarts[dayIndex] ?? 0;
+			const dayStartMs = dayBaseMs + props.startHour * 60 * 60 * 1000;
+			const dayEndMs = dayBaseMs + props.endHour * 60 * 60 * 1000;
 			if (end <= dayStartMs || start >= dayEndMs) continue;
 
 			const clipStart = Math.max(start, dayStartMs);
