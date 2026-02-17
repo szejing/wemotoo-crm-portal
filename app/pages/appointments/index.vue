@@ -230,19 +230,18 @@
 						</div>
 					</UCard>
 					<UCard v-if="selectedAppointment" class="mt-6">
-						<div class="flex items-center justify-between mb-4">
-							<h4 class="font-semibold">{{ $t('pages.appointmentDetails') }}</h4>
+						<div class="flex items-center justify-between mb-3">
+							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
 							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
 						</div>
-						<div class="space-y-4">
-							<p class="font-bold text-gray-900 dark:text-white">{{ selectedAppointment.code }}</p>
-							<p>{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
-							<p>{{ selectedAppointment.appt_desc || $t('pages.noDescription') }}</p>
-							<p>{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
-							<div class="flex gap-2">
-								<UButton color="primary" size="sm" @click="openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
-								<UButton color="error" variant="soft" size="sm" @click="deleteAppointment(selectedAppointment.code)">{{ $t('common.delete') }}</UButton>
-							</div>
+						<p class="font-bold">{{ selectedAppointment.code }}</p>
+						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
+						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
+						<div class="flex gap-2 mt-3">
+							<UButton color="primary" size="sm" @click="selectedAppointment && openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
+							<UButton color="error" variant="soft" size="sm" @click="selectedAppointment && deleteAppointment(selectedAppointment.code)">{{
+								$t('common.delete')
+							}}</UButton>
 						</div>
 					</UCard>
 				</template>
@@ -273,19 +272,18 @@
 						</div>
 					</UCard>
 					<UCard v-if="selectedAppointment" class="mt-6">
-						<div class="flex items-center justify-between mb-4">
-							<h4 class="font-semibold">{{ $t('pages.appointmentDetails') }}</h4>
+						<div class="flex items-center justify-between mb-3">
+							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
 							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
 						</div>
-						<div class="space-y-4">
-							<p class="font-bold">{{ selectedAppointment.code }}</p>
-							<p>{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
-							<p>{{ selectedAppointment.appt_desc || $t('pages.noDescription') }}</p>
-							<p>{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
-							<div class="flex gap-2">
-								<UButton color="primary" size="sm" @click="openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
-								<UButton color="error" variant="soft" size="sm" @click="deleteAppointment(selectedAppointment.code)">{{ $t('common.delete') }}</UButton>
-							</div>
+						<p class="font-bold">{{ selectedAppointment.code }}</p>
+						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
+						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
+						<div class="flex gap-2 mt-3">
+							<UButton color="primary" size="sm" @click="selectedAppointment && openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
+							<UButton color="error" variant="soft" size="sm" @click="selectedAppointment && deleteAppointment(selectedAppointment.code)">{{
+								$t('common.delete')
+							}}</UButton>
 						</div>
 					</UCard>
 				</template>
