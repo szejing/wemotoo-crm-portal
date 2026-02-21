@@ -17,11 +17,7 @@
 		</div>
 		<!-- Time grid: 30-min rows, time axis + 7 day columns (no padding so lines align) -->
 		<div class="flex flex-1 min-h-0 overflow-auto items-stretch">
-			<ZCalendarTimeAxis
-				:start-hour="startHour"
-				:end-hour="endHour"
-				:slot-height-px="slotHeightPx"
-			/>
+			<ZCalendarTimeAxis :start-hour="startHour" :end-hour="endHour" :slot-height-px="slotHeightPx" />
 			<!-- 7 day columns with appointment blocks -->
 			<div class="flex-1 grid min-w-0 min-h-0" :style="{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', minHeight: `${totalHeightPx}px` }">
 				<div
@@ -35,9 +31,7 @@
 						<div
 							:class="[
 								'absolute left-0 right-0',
-								(h - 1) % 2 === 0
-									? 'border-b-2 border-gray-200 dark:border-gray-600'
-									: 'border-b border-dotted border-gray-100 dark:border-gray-800',
+								(h - 1) % 2 === 0 ? 'border-b-2 border-gray-200 dark:border-gray-600' : 'border-b border-dotted border-gray-100 dark:border-gray-800',
 							]"
 							:style="{
 								top: `${(h - 1) * slotHeightPx}px`,
@@ -60,7 +54,7 @@
 					>
 						<div class="p-1 h-full overflow-hidden flex flex-col gap-0.5">
 							<div class="flex items-center justify-between gap-1 min-w-0">
-								<span class="font-semibold truncate">{{ block.appointment.order_no }}</span>
+								<span class="font-semibold truncate">{{ formatAppointmentCode(block.appointment.code) }}</span>
 								<UBadge
 									:color="block.statusColor as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral'"
 									variant="subtle"
@@ -121,6 +115,13 @@ const weekDays = computed(() => {
 
 const dayKey = (d: Date) => format(d, 'yyyy-MM-dd');
 const isToday = (d: Date) => dayKey(d) === dayKey(new Date());
+
+/** Display code as first 3 + .... + last 4 (after stripping APPT prefix). */
+function formatAppointmentCode(code: string): string {
+	const s = code.replace(/^APPT/i, '').trim();
+	if (s.length >= 7) return `${s.slice(0, 3)}....${s.slice(-4)}`;
+	return s || code;
+}
 
 const bgClassMap: Record<string, string> = {
 	primary: 'bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200',

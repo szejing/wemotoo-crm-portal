@@ -1,10 +1,6 @@
 <template>
 	<div class="flex border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default items-stretch">
-		<ZCalendarTimeAxis
-			:start-hour="startHour"
-			:end-hour="endHour"
-			:slot-height-px="slotHeightPx"
-		/>
+		<ZCalendarTimeAxis :start-hour="startHour" :end-hour="endHour" :slot-height-px="slotHeightPx" />
 		<!-- Day column with time grid: hour = stronger solid, 30-min = dotted -->
 		<div class="flex-1 min-w-0 relative" :style="{ minHeight: `${totalHeightPx}px` }">
 			<div class="absolute inset-0 flex flex-col">
@@ -13,9 +9,7 @@
 					:key="h"
 					:class="[
 						'shrink-0',
-						(h - 1) % 2 === 0
-							? 'border-b-2 border-gray-200 dark:border-gray-600'
-							: 'border-b border-dotted border-gray-100 dark:border-gray-800',
+						(h - 1) % 2 === 0 ? 'border-b-2 border-gray-200 dark:border-gray-600' : 'border-b border-dotted border-gray-100 dark:border-gray-800',
 					]"
 					:style="{ height: `${slotHeightPx}px`, minHeight: `${slotHeightPx}px` }"
 				/>
@@ -35,7 +29,7 @@
 			>
 				<div class="p-1.5 h-full overflow-hidden flex flex-col gap-0.5">
 					<div class="flex items-center justify-between gap-1 min-w-0">
-						<span class="text-xs font-semibold truncate">{{ block.appointment.order_no }}</span>
+						<span class="text-xs font-semibold truncate">{{ formatAppointmentCode(block.appointment.code) }}</span>
 						<UBadge :color="block.statusColor" variant="subtle" size="xs" class="shrink-0">
 							{{ block.appointment.status.toUpperCase() }}
 						</UBadge>
@@ -80,6 +74,13 @@ const { totalSlots, totalHeightPx, slotHeightPx } = useCalendarTimeSlots(() => (
 	endHour: props.endHour,
 	slotHeightPx: props.slotHeightPx,
 }));
+
+/** Display code as first 3 + .... + last 4 (after stripping APPT prefix). */
+function formatAppointmentCode(code: string): string {
+	const s = code.replace(/^APPT/i, '').trim();
+	if (s.length >= 7) return `${s.slice(0, 3)}....${s.slice(-4)}`;
+	return s || code;
+}
 
 const dayStart = computed(() => {
 	const d = new Date(props.date);

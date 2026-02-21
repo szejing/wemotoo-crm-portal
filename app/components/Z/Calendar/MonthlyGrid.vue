@@ -51,7 +51,7 @@
 					>
 						<div class="w-full text-left truncate space-y-0.5">
 							<div class="flex items-center justify-between gap-1 min-w-0">
-								<span class="font-medium truncate">{{ appointment.order_no }}</span>
+								<span class="font-medium truncate">{{ formatAppointmentCode(appointment.code) }}</span>
 								<UBadge
 									:color="(getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral') ?? 'neutral'"
 									variant="subtle"
@@ -161,6 +161,13 @@ const gridCells = computed(() => {
 });
 
 const formatTime = (d: string | Date) => format(new Date(d), 'h:mm a');
+
+/** Display code as first 3 + .... + last 4 (after stripping APPT prefix). */
+function formatAppointmentCode(code: string): string {
+	const s = code.replace(/^APPT/i, '').trim();
+	if (s.length >= 7) return `${s.slice(0, 3)}....${s.slice(-4)}`;
+	return s || code;
+}
 
 const getStatusColor = (status: string) => props.getStatusColor(status);
 </script>

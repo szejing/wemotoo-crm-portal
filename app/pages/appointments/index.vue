@@ -118,216 +118,151 @@
 							</UCard>
 						</div>
 						<div v-if="selectedAppointment" class="lg:col-span-2">
-							<UCard>
-								<div class="flex items-center justify-between mb-6">
-									<div class="flex items-center gap-3">
-										<UIcon name="i-heroicons-document-text" class="w-6 h-6 text-primary-600 dark:text-primary-400" />
-										<div>
-											<h3 class="font-bold text-xl text-gray-900 dark:text-white">{{ selectedAppointment.code }}</h3>
-											<p class="text-sm text-gray-500 dark:text-gray-400">{{ $t('pages.appointmentDetails') }}</p>
-										</div>
-									</div>
-									<div class="flex items-center gap-2">
-										<UBadge :color="getAppointmentStatusColor(selectedAppointment.status)" variant="subtle" size="md">
-											{{ $t('options.' + selectedAppointment.status.toLowerCase()) }}
-										</UBadge>
-										<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
-									</div>
-								</div>
-								<div class="space-y-6">
-									<div class="p-4 bg-primary-50 dark:bg-primary-900/10 rounded-lg border border-primary-200 dark:border-primary-800">
-										<div class="flex items-center gap-4">
-											<div class="p-3 bg-primary-100 dark:bg-primary-900/20 rounded-lg">
-												<UIcon name="i-heroicons-calendar-days" class="w-7 h-7 text-primary-600 dark:text-primary-400" />
-											</div>
-											<div class="flex-1">
-												<p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ $t('pages.appointmentDateTime') }}</p>
-												<p class="text-lg font-bold text-gray-900 dark:text-white">
-													{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}
-												</p>
-												<p v-if="selectedAppointment.duration" class="text-sm text-gray-600 dark:text-gray-400 mt-1 flex items-center gap-1">
-													<UIcon name="i-heroicons-clock" class="w-4 h-4" />
-													{{ $t('pages.durationMinutes', { n: selectedAppointment.duration }) }}
-												</p>
-											</div>
-										</div>
-									</div>
-									<div>
-										<h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">{{ $t('pages.serviceDetails') }}</h4>
-										<div :class="['flex gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg', selectedAppointment.ref_no ? 'items-start' : 'items-center']">
-											<div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-												<UIcon name="i-heroicons-wrench" class="w-6 h-6 text-gray-600 dark:text-gray-400" />
-											</div>
-											<div class="flex-1">
-												<p class="font-semibold text-gray-900 dark:text-white mb-1">{{ selectedAppointment.appt_desc || $t('pages.noDescription') }}</p>
-												<p v-if="selectedAppointment.ref_no" class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-													<UIcon name="i-heroicons-hashtag" class="w-4 h-4" />
-													{{ $t('pages.reference') }}: {{ selectedAppointment.ref_no }}
-												</p>
-											</div>
-										</div>
-									</div>
-									<div>
-										<h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">{{ $t('components.orderDetail.customerInformation') }}</h4>
-										<div class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-											<div class="p-3 bg-primary-100 dark:bg-primary-900/20 rounded-lg">
-												<UIcon name="i-heroicons-user" class="w-6 h-6 text-primary-600 dark:text-primary-400" />
-											</div>
-											<div class="flex-1">
-												<p class="font-semibold text-gray-900 dark:text-white">{{ selectedAppointment.customer_name }}</p>
-												<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
-													<UIcon name="i-heroicons-phone" class="w-4 h-4" />
-													{{ selectedAppointment.customer_phone }}
-												</p>
-											</div>
-										</div>
-									</div>
-									<div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-										<UButton color="primary" variant="solid" @click="openEditModal(selectedAppointment)">
-											<UIcon name="i-heroicons-pencil-square" class="w-4 h-4 mr-2" />
-											{{ $t('pages.editAppointment') }}
-										</UButton>
-										<UButton color="error" variant="soft" @click="deleteAppointment(selectedAppointment.code)">
-											<UIcon name="i-heroicons-trash" class="w-4 h-4" />
-										</UButton>
-									</div>
-								</div>
-							</UCard>
+							<ZCalendarAppointmentDetail
+								:appointment="selectedAppointment"
+								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+								@close="selectedAppointment = null"
+								@edit="openEditModal"
+								@delete="deleteAppointment"
+							/>
 						</div>
 					</div>
 				</template>
 
 				<!-- Daily view (UCalendar + timeslots, macOS Calendar style) -->
 				<template v-else-if="appointmentStore.isDailyView">
-					<UCard>
-						<div class="flex items-center justify-between mb-4">
-							<h3 class="font-semibold">{{ $t('pages.dailyView') }}</h3>
-							<div class="flex items-center gap-2">
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevDay" />
-								<span class="min-w-[180px] text-center font-medium">{{ format(calendarFocusDate, 'EEEE, d MMM yyyy') }}</span>
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextDay" />
-								<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
-							</div>
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
+							<UCard>
+								<div class="flex items-center justify-between mb-4">
+									<h3 class="font-semibold">{{ $t('pages.dailyView') }}</h3>
+									<div class="flex items-center gap-2">
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevDay" />
+										<span class="min-w-[180px] text-center font-medium">{{ format(calendarFocusDate, 'EEEE, d MMM yyyy') }}</span>
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextDay" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+									</div>
+								</div>
+								<ZLoading v-if="appointmentStore.loading" />
+								<div v-else class="flex flex-col lg:flex-row gap-6">
+									<div class="shrink-0">
+										<UCard class="p-2">
+											<UCalendar
+												:model-value="dailyCalendarDate"
+												@update:model-value="onDailyCalendarDateSelect"
+												:month-controls="true"
+												:year-controls="true"
+											/>
+										</UCard>
+									</div>
+									<div class="flex-1 min-w-0 min-h-[400px]">
+										<ZCalendarDailySlots
+											:date="calendarFocusDate"
+											:appointments="dailyAppointments"
+											:selected-code="selectedAppointment?.code ?? null"
+											:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+											@select="selectAppointment"
+										/>
+									</div>
+								</div>
+							</UCard>
 						</div>
-						<ZLoading v-if="appointmentStore.loading" />
-						<div v-else class="flex flex-col lg:flex-row gap-6">
-							<!-- UCalendar: select day to navigate daily view -->
-							<div class="shrink-0">
-								<UCard class="p-2">
-									<UCalendar :model-value="dailyCalendarDate" @update:model-value="onDailyCalendarDateSelect" :month-controls="true" :year-controls="true" />
-								</UCard>
-							</div>
-							<!-- Daily timeslots for selected day -->
-							<div class="flex-1 min-w-0 min-h-[400px]">
-								<ZCalendarDailySlots
-									:date="calendarFocusDate"
-									:appointments="dailyAppointments"
-									:selected-code="selectedAppointment?.code ?? null"
+						<div v-if="selectedAppointment" class="lg:col-span-1">
+							<div class="lg:sticky lg:top-4">
+								<ZCalendarAppointmentDetail
+									:appointment="selectedAppointment"
 									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
-									@select="selectAppointment"
+									@close="selectedAppointment = null"
+									@edit="openEditModal"
+									@delete="deleteAppointment"
 								/>
 							</div>
 						</div>
-					</UCard>
-					<UCard v-if="selectedAppointment" class="mt-6">
-						<div class="flex items-center justify-between mb-3">
-							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
-							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
-						</div>
-						<p class="font-bold">{{ selectedAppointment.code }}</p>
-						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
-						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
-						<div class="flex gap-2 mt-3">
-							<UButton color="primary" size="sm" @click="selectedAppointment && openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
-							<UButton color="error" variant="soft" size="sm" @click="selectedAppointment && deleteAppointment(selectedAppointment.code)">{{
-								$t('common.delete')
-							}}</UButton>
-						</div>
-					</UCard>
+					</div>
 				</template>
 
 				<!-- Weekly view (timeslots, macOS Calendar style) -->
 				<template v-else-if="appointmentStore.isWeeklyView">
-					<UCard>
-						<div class="flex items-center justify-between mb-4">
-							<h3 class="font-semibold">{{ $t('pages.weeklyView') }}</h3>
-							<div class="flex items-center gap-2">
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevWeek" />
-								<span class="min-w-[200px] text-center font-medium">
-									{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
-								</span>
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextWeek" />
-								<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
+							<UCard>
+								<div class="flex items-center justify-between mb-4">
+									<h3 class="font-semibold">{{ $t('pages.weeklyView') }}</h3>
+									<div class="flex items-center gap-2">
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevWeek" />
+										<span class="min-w-[200px] text-center font-medium">
+											{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
+										</span>
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextWeek" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+									</div>
+								</div>
+								<ZLoading v-if="appointmentStore.loading" />
+								<div v-else class="min-h-[500px]">
+									<ZCalendarWeeklySlots
+										:week-start="weekStartDate"
+										:appointments="appointments"
+										:selected-code="selectedAppointment?.code ?? null"
+										:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+										@select="selectAppointment"
+									/>
+								</div>
+							</UCard>
+						</div>
+						<div v-if="selectedAppointment" class="lg:col-span-1">
+							<div class="lg:sticky lg:top-4">
+								<ZCalendarAppointmentDetail
+									:appointment="selectedAppointment"
+									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+									@close="selectedAppointment = null"
+									@edit="openEditModal"
+									@delete="deleteAppointment"
+								/>
 							</div>
 						</div>
-						<ZLoading v-if="appointmentStore.loading" />
-						<div v-else class="min-h-[500px]">
-							<ZCalendarWeeklySlots
-								:week-start="weekStartDate"
-								:appointments="appointments"
-								:selected-code="selectedAppointment?.code ?? null"
-								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
-								@select="selectAppointment"
-							/>
-						</div>
-					</UCard>
-					<UCard v-if="selectedAppointment" class="mt-6">
-						<div class="flex items-center justify-between mb-3">
-							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
-							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
-						</div>
-						<p class="font-bold">{{ selectedAppointment.code }}</p>
-						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
-						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
-						<div class="flex gap-2 mt-3">
-							<UButton color="primary" size="sm" @click="selectedAppointment && openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
-							<UButton color="error" variant="soft" size="sm" @click="selectedAppointment && deleteAppointment(selectedAppointment.code)">{{
-								$t('common.delete')
-							}}</UButton>
-						</div>
-					</UCard>
+					</div>
 				</template>
 
 				<!-- Monthly view (full calendar grid with appointments in each day) -->
 				<template v-else-if="appointmentStore.isMonthlyView">
-					<UCard>
-						<div class="flex items-center justify-between mb-4">
-							<h3 class="font-semibold">{{ $t('pages.monthlyView') }}</h3>
-							<div class="flex items-center gap-2">
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevMonth" />
-								<span class="min-w-[160px] text-center font-medium">{{ format(monthDate, 'MMMM yyyy') }}</span>
-								<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextMonth" />
-								<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
+							<UCard>
+								<div class="flex items-center justify-between mb-4">
+									<h3 class="font-semibold">{{ $t('pages.monthlyView') }}</h3>
+									<div class="flex items-center gap-2">
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevMonth" />
+										<span class="min-w-[160px] text-center font-medium">{{ format(monthDate, 'MMMM yyyy') }}</span>
+										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextMonth" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+									</div>
+								</div>
+								<ZLoading v-if="appointmentStore.loading" />
+								<div v-else class="min-h-[480px]">
+									<ZCalendarMonthlyGrid
+										:month="monthDate"
+										:appointments="appointments"
+										:selected-code="selectedAppointment?.code ?? null"
+										:selected-day="selectedCalendarDay"
+										:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+										@select-day="selectDayInCalendarFromDate"
+										@select-appointment="selectAppointment"
+									/>
+								</div>
+							</UCard>
+						</div>
+						<div v-if="selectedAppointment" class="lg:col-span-1">
+							<div class="lg:sticky lg:top-4">
+								<ZCalendarAppointmentDetail
+									:appointment="selectedAppointment"
+									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
+									@close="selectedAppointment = null"
+									@edit="openEditModal"
+									@delete="deleteAppointment"
+								/>
 							</div>
 						</div>
-						<ZLoading v-if="appointmentStore.loading" />
-						<div v-else class="min-h-[480px]">
-							<ZCalendarMonthlyGrid
-								:month="monthDate"
-								:appointments="appointments"
-								:selected-code="selectedAppointment?.code ?? null"
-								:selected-day="selectedCalendarDay"
-								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
-								@select-day="selectDayInCalendarFromDate"
-								@select-appointment="selectAppointment"
-							/>
-						</div>
-					</UCard>
-					<UCard v-if="selectedAppointment" class="mt-6">
-						<div class="flex items-center justify-between mb-3">
-							<h4 class="font-semibold">{{ $t('common.details') }}</h4>
-							<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="selectedAppointment = null" />
-						</div>
-						<p class="font-bold">{{ selectedAppointment.code }}</p>
-						<p class="text-sm">{{ formatAppointmentDateRange(selectedAppointment.start_date_time, selectedAppointment.end_date_time) }}</p>
-						<p class="text-sm">{{ selectedAppointment.customer_name }} · {{ selectedAppointment.customer_phone }}</p>
-						<div class="flex gap-2 mt-3">
-							<UButton color="primary" size="sm" @click="selectedAppointment && openEditModal(selectedAppointment)">{{ $t('common.edit') }}</UButton>
-							<UButton color="error" variant="soft" size="sm" @click="selectedAppointment && deleteAppointment(selectedAppointment.code)">{{
-								$t('common.delete')
-							}}</UButton>
-						</div>
-					</UCard>
+					</div>
 				</template>
 			</div>
 		</template>
@@ -436,19 +371,19 @@ const onDailyCalendarDateSelect = async (value: DateValue | DateValue[] | { star
 	if (!dateValue || !('year' in dateValue) || !('month' in dateValue) || !('day' in dateValue)) return;
 	const d = new Date(dateValue.year, dateValue.month - 1, dateValue.day);
 	calendarFocusDate.value = d;
-	filter.value.date_range = { start: startOfDay(d), end: endOfDay(d) };
+	filter.value.date_range = { start: startOfDay(d), end: endOfDay(add(d, { days: 1 })) };
 	await appointmentStore.getAppointments();
 };
 
 const goPrevDay = async () => {
 	calendarFocusDate.value = sub(calendarFocusDate.value, { days: 1 });
-	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(calendarFocusDate.value) };
+	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(add(calendarFocusDate.value, { days: 1 })) };
 	await appointmentStore.getAppointments();
 };
 
 const goNextDay = async () => {
 	calendarFocusDate.value = add(calendarFocusDate.value, { days: 1 });
-	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(calendarFocusDate.value) };
+	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(add(calendarFocusDate.value, { days: 1 })) };
 	await appointmentStore.getAppointments();
 };
 
@@ -525,6 +460,7 @@ const deleteAppointment = async (code: string) => {
 watch(
 	() => filter.value.view,
 	(view) => {
+		selectedAppointment.value = null;
 		if (view === 'monthly') {
 			const start = new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1);
 			const end = endOfMonth(start);
