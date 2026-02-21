@@ -23,6 +23,7 @@ import { getTaxCodeColumns } from './tax/tax-code';
 import { getTaxGroupColumns } from './tax/tax-group';
 import { getTaxRuleColumns } from './tax/tax-rule';
 import { getCrmUserColumns } from './crm-user';
+import { getAffiliateColumns } from './affiliate';
 
 export {
 	getCustomerColumns,
@@ -51,4 +52,5 @@ export {
 	getTaxGroupColumns,
 	getTaxRuleColumns,
 	getCrmUserColumns,
+	getAffiliateColumns,
 };

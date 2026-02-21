@@ -191,6 +191,17 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/restore/${code}`,
 	},
+	Affiliates: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}`,
+		BySlug: (slug: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/by-slug/${slug}`,
+		Single: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/${id}`,
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}`,
+		Tiers: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers`,
+		TierCreate: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers`,
+		TierUpdate: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers/${id}`,
+		TierDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers/${id}`,
+		MyReport: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/my-report`,
+	},
 };
 
 export default MerchantRoutes;

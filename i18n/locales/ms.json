@@ -66,6 +66,7 @@
 		"options": "Pilihan",
 		"customers": "Pelanggan",
 		"staffs": "Kakitangan",
+		"affiliates": "Ahli Gabungan",
 		"outlets": "Cawangan",
 		"payment": "Pembayaran",
 		"paymentMethods": "Kaedah Pembayaran",
@@ -81,6 +82,14 @@
 		"light": "Terang",
 		"dark": "Gelap",
 		"logOut": "Log keluar"
+	},
+	"affiliate": {
+		"slug": "Slug",
+		"tier": "Tier",
+		"tiers": "Tier",
+		"referrals": "Rujukan",
+		"balance": "Baki",
+		"createdAt": "Dicipta pada"
 	},
 	"auth": {
 		"loginTitle": "Log Masuk Peniaga CRM",
@@ -266,6 +275,7 @@
 		"optionsVariantsDesc": "Tentukan varian produk seperti saiz, warna dan lain-lain",
 		"customersTitle": "Wemotoo CRM - Pelanggan",
 		"crmUsersTitle": "Wemotoo CRM - Pengguna CRM",
+		"affiliatesTitle": "Wemotoo CRM - Ahli Gabungan",
 		"crmUser": "Pengguna CRM",
 		"crmUserCreate": "Cipta Pengguna CRM",
 		"outletsTitle": "Wemotoo CRM - Cawangan",
@@ -363,6 +373,7 @@
 		"noPaymentMethodsFound": "Tiada kaedah pembayaran dijumpai.",
 		"noCustomersFound": "Tiada pelanggan dijumpai.",
 		"noCrmUsersFound": "Tiada pengguna CRM dijumpai.",
+		"noAffiliatesFound": "Tiada ahli gabungan dijumpai.",
 		"crmUserNotFound": "Pengguna CRM tidak dijumpai.",
 		"backToCrmUsers": "Kembali ke Pengguna CRM",
 		"crmUserDetailUserInformation": "Maklumat pengguna",

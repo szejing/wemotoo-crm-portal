@@ -51,6 +51,11 @@ const default_navigations = [
 				to: '/crm-users',
 			},
 			{
+				label: 'nav.affiliates',
+				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
+				to: '/affiliates',
+			},
+			{
 				label: 'nav.outlets',
 				icon: ICONS.OUTLET,
 				to: '/outlets',

@@ -66,6 +66,7 @@
 		"options": "Options",
 		"customers": "Customers",
 		"staffs": "Staffs",
+		"affiliates": "Affiliates",
 		"outlets": "Outlets",
 		"payment": "Payment",
 		"paymentMethods": "Payment Methods",
@@ -81,6 +82,14 @@
 		"light": "Light",
 		"dark": "Dark",
 		"logOut": "Log out"
+	},
+	"affiliate": {
+		"slug": "Slug",
+		"tier": "Tier",
+		"tiers": "Tiers",
+		"referrals": "Referrals",
+		"balance": "Balance",
+		"createdAt": "Created at"
 	},
 	"auth": {
 		"loginTitle": "CRM Merchant Login",
@@ -266,6 +275,7 @@
 		"optionsVariantsDesc": "Define product variants like size, color, and more",
 		"customersTitle": "Wemotoo CRM - Customers",
 		"crmUsersTitle": "Wemotoo CRM - CRM Users",
+		"affiliatesTitle": "Wemotoo CRM - Affiliates",
 		"crmUser": "CRM User",
 		"crmUserCreate": "Create CRM User",
 		"outletsTitle": "Wemotoo CRM - Outlets",
@@ -363,6 +373,7 @@
 		"noPaymentMethodsFound": "No payment methods found.",
 		"noCustomersFound": "No customers found.",
 		"noCrmUsersFound": "No CRM users found.",
+		"noAffiliatesFound": "No affiliates found.",
 		"crmUserNotFound": "CRM user not found.",
 		"backToCrmUsers": "Back to CRM Users",
 		"crmUserDetailUserInformation": "User information",

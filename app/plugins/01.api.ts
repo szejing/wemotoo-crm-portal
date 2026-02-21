@@ -25,6 +25,7 @@ import {
 	TaxModule,
 	TaxRuleModule,
 	MerchantInfoModule,
+	AffiliateModule,
 } from '../repository/modules';
 
 interface IApiInstance {
@@ -54,6 +55,7 @@ interface IApiInstance {
 	tax: TaxModule;
 	taxGroup: TaxGroupModule;
 	outlet: OutletModule;
+	affiliate: AffiliateModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -94,6 +96,7 @@ export default defineNuxtPlugin((_) => {
 	const taxModule = new TaxModule();
 	const taxGroupModule = new TaxGroupModule();
 	const outletModule = new OutletModule();
+	const affiliateModule = new AffiliateModule();
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -122,6 +125,7 @@ export default defineNuxtPlugin((_) => {
 		tax: taxModule,
 		taxGroup: taxGroupModule,
 		outlet: outletModule,
+		affiliate: affiliateModule,
 	};
 
 	return {
