@@ -15,7 +15,7 @@ export type ProductCreate = {
 
 	// Relations (using codes/IDs)
 	brand_codes?: string[]; // optional
-	category_codes: string[]; // optional
+	category_codes: string[] | undefined; // optional
 	tag_ids?: number[]; // optional
 	type_id: number; // item or services
 

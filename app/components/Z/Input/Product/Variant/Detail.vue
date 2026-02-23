@@ -45,12 +45,13 @@
 </template>
 
 <script lang="ts" setup>
+import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { PriceInput } from '~/utils/types/price';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 
 const props = defineProps({
 	product: {
-		type: Object as PropType<Product>,
+		type: Object as PropType<Product | ProductCreate>,
 		required: true,
 	},
 	details: {

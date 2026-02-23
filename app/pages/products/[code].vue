@@ -4,7 +4,6 @@
 			<UDashboardNavbar :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
 				<template #leading>
 					<ZBackButton fallbackTo="/products" />
-					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
 				</template>
 			</UDashboardNavbar>
 		</template>
@@ -22,7 +21,7 @@
 				<div class="mx-auto px-4 sm:px-6 py-4">
 					<!-- Desktop Layout -->
 					<div class="hidden md:flex justify-between items-center gap-3">
-						<UButton color="error" variant="ghost" size="lg" :loading="updating" class="opacity-50 hover:opacity-100" @click="() => deleteProduct()">
+						<UButton color="error" variant="ghost" size="lg" :loading="updating" class="opacity-50 hover:opacity-100" @click="deleteProduct">
 							<UIcon :name="ICONS.TRASH" />
 							{{ $t('common.delete') }}
 						</UButton>
@@ -30,7 +29,7 @@
 						<div class="flex gap-3">
 							<UButton color="neutral" variant="outline" size="lg" @click="cancel">{{ $t('common.cancel') }}</UButton>
 
-							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="() => updateProduct()">
+							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="updateProduct">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
 								{{ $t('pages.updateProduct') }}
 							</UButton>
@@ -39,12 +38,12 @@
 
 					<!-- Mobile Layout -->
 					<div class="md:hidden flex flex-col gap-2">
-						<UButton color="success" size="md" class="w-full opacity-50 hover:opacity-100" :loading="updating" @click="() => updateProduct()">
+						<UButton color="success" size="md" class="w-full opacity-50 hover:opacity-100" :loading="updating" @click="updateProduct">
 							<UIcon :name="ICONS.CHECK_ROUNDED" />
 							<span class="text-sm">{{ $t('pages.updateProduct') }}</span>
 						</UButton>
 						<div class="flex gap-2">
-							<UButton color="error" variant="ghost" size="sm" class="flex-1 opacity-50 hover:opacity-100" :loading="updating" @click="() => deleteProduct()">
+							<UButton color="error" variant="ghost" size="sm" class="flex-1 opacity-50 hover:opacity-100" :loading="updating" @click="deleteProduct">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								<span class="text-xs">{{ $t('common.delete') }}</span>
 							</UButton>

@@ -62,7 +62,7 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<UFormField :label="$t('components.productUpdate.status')">
+									<UFormField>
 										<USwitch
 											v-model="formState.is_active"
 											:label="
@@ -73,6 +73,10 @@
 										/>
 									</UFormField>
 								</div>
+
+								<UFormField :label="$t('components.productUpdate.productType')" required>
+									<ZSelectMenuProductType v-model:type-id="formState.type_id" />
+								</UFormField>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<UFormField :label="$t('components.productUpdate.productCode')">
@@ -85,16 +89,10 @@
 									</UFormField>
 								</div>
 
-								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField :label="$t('components.productUpdate.shortDescription')">
-										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
-										<UInput v-model="formState.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
-									</UFormField>
-									<UFormField :label="$t('components.productUpdate.productType')" required>
-										<p class="text-xs text-neutral-500 my-1">{{ $t('pages.chooseItemOrService') }}</p>
-										<ZSelectMenuProductType v-model:type-id="formState.type_id" class="w-full" />
-									</UFormField>
-								</div>
+								<UFormField :label="$t('components.productUpdate.shortDescription')">
+									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
+									<UInput v-model="formState.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
+								</UFormField>
 							</div>
 
 							<hr class="my-6" />
@@ -337,7 +335,7 @@ import type { Category } from '~/utils/types/category';
 import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
 import type { Tag } from '~/utils/types/tag';
 import type { Brand } from '~/utils/types/brand';
-import type { ProductUpdate } from '~/utils/types/form/product-creation';
+import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import { UpdateProductValidation } from '~/utils/schema';
 import { ZModalLoading } from '#components';
 import type { Image } from '~/utils/types/image';
@@ -485,11 +483,16 @@ watch(
 );
 
 // Computed property for ZInputProductAdditionalInfo compatibility
-// It expects Product type with `type` property, but ProductUpdate has `type_id`
-const productForAdditionalInfo = computed(() => ({
-	...formState.value,
-	type: formState.value.type_id,
-}));
+// Pass shape compatible with ProductCreate | Product (category_codes present; type for child)
+const productForAdditionalInfo = computed(() => {
+	const state = formState.value;
+	return {
+		...state,
+		type: state.type_id,
+		category_codes: state.category_codes,
+		type_id: state.type_id ?? 0,
+	} as ProductCreate | Product;
+});
 
 // Icons
 const ICONS = {
@@ -718,7 +721,10 @@ const onSubmit = async () => {
 
 	try {
 		const productStore = useProductStore();
-		const success = await productStore.updateProduct(formState.value);
+		const success = await productStore.updateProduct({
+			code: formState.value.code!,
+			...formState.value,
+		});
 		if (success) {
 			useRouter().back();
 		}
