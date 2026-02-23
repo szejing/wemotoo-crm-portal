@@ -6,7 +6,7 @@
 			{{ $t('components.productForm.draftSavedAt', { time: lastSaved }) }}
 		</div>
 
-		<!-- Two Column Layout: Sidebar + Form -->
+		<!-- Three Column Layout: Sidebar + Form + Sticky Review (laptop) -->
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 			<!-- Left Sidebar Navigation (Sticky) -->
 			<div class="hidden lg:block lg:col-span-3">
@@ -41,8 +41,8 @@
 				</div>
 			</div>
 
-			<!-- Right Content Area (Scrollable) -->
-			<div class="lg:col-span-9">
+			<!-- Center: Form Content (Scrollable) -->
+			<div class="lg:col-span-6">
 				<!-- Single Form with all sections -->
 				<UForm :schema="CreateProductValidation" :state="new_product" class="space-y-6 mb-6" @submit="onSubmit">
 					<!-- Section 1: Basic Information -->
@@ -149,11 +149,7 @@
 					</UCard>
 
 					<!-- Section 2: Classification -->
-					<ZInputProductClassificationSection
-						v-model:categories="categories"
-						v-model:tags="tags"
-						v-model:brands="brands"
-					/>
+					<ZInputProductClassificationSection v-model:categories="categories" v-model:tags="tags" v-model:brands="brands" />
 
 					<!-- Section 3: Pricing -->
 					<ZInputProductPricingSection
@@ -204,140 +200,14 @@
 							/>
 						</div>
 					</UCard>
-
-					<!-- Section 5: Review Summary -->
-					<UCard id="section-review" class="shadow-md border-2 border-primary-200 scroll-mt-4">
-						<template #header>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<div class="flex items-center gap-2">
-										<UIcon :name="ICONS.CHECK_ROUNDED" class="text-primary-600 w-6 h-6" />
-										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.reviewYourProduct') }}</h2>
-									</div>
-									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.reviewBeforeCreate') }}</p>
-								</div>
-							</div>
-						</template>
-
-						<div class="p-4 sm:p-6 space-y-4">
-							<div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
-								<div class="flex items-start gap-3">
-									<UIcon :name="ICONS.CHECK_ROUNDED" class="text-primary-600 w-5 h-5 mt-0.5 shrink-0" />
-									<div>
-										<h4 class="text-sm font-medium text-primary-900">{{ $t('components.productUpdate.readyToCreate') }}</h4>
-										<p class="text-xs text-primary-700 mt-1">{{ $t('components.productUpdate.reviewBeforeSubmit') }}</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Quick Summary Cards -->
-							<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-								<!-- Basic Info Summary -->
-								<div class="bg-neutral-50 rounded-lg p-4">
-									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-										<UIcon :name="ICONS.INFO" class="text-primary-500 w-4 h-4" />
-										{{ $t('pages.basicInfo') }}
-									</h4>
-									<div class="text-sm space-y-1">
-										<p class="truncate">
-											<span class="text-neutral-500">{{ $t('common.name') }}:</span>
-											<span class="font-medium">{{ new_product.name || $t('common.notSet') }}</span>
-										</p>
-										<p class="truncate">
-											<span class="text-neutral-500">{{ $t('common.code') }}:</span>
-											<span class="font-medium">{{ new_product.code || $t('common.auto') }}</span>
-										</p>
-										<p>
-											<UBadge :color="new_product.is_active ? 'success' : 'error'" variant="soft" size="xs">
-												{{ new_product.is_active ? $t('common.active') : $t('common.inactive') }}
-											</UBadge>
-										</p>
-									</div>
-								</div>
-
-								<!-- Pricing Summary -->
-								<div class="bg-neutral-50 rounded-lg p-4">
-									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-										<UIcon :name="ICONS.CURRENCY" class="text-primary-500 w-4 h-4" />
-										{{ $t('components.productUpdate.pricing') }}
-									</h4>
-									<div class="text-sm space-y-1">
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.priceLabel') }}:</span>
-											<span class="font-bold">{{ currency_code }} {{ orig_sell_price?.toFixed(2) || '0.00' }}</span>
-										</p>
-										<p v-if="sale_price">
-											<span class="text-neutral-500">{{ $t('components.productUpdate.sale') }}:</span>
-											<span class="font-bold text-green-600">{{ currency_code }} {{ sale_price.toFixed(2) }}</span>
-										</p>
-										<p v-if="cost_price">
-											<span class="text-neutral-500">{{ $t('components.productUpdate.cost') }}:</span>
-											<span class="font-medium">{{ currency_code }} {{ cost_price.toFixed(2) }}</span>
-										</p>
-									</div>
-								</div>
-
-								<!-- Classification Summary -->
-								<div class="bg-neutral-50 rounded-lg p-4">
-									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-										<UIcon :name="ICONS.TAG" class="text-primary-500 w-4 h-4" />
-										{{ $t('components.productUpdate.classification') }}
-									</h4>
-									<div class="text-sm space-y-1">
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.categoriesLabel') }}:</span>
-											<span class="font-medium">{{ categories?.length || 0 }}</span>
-										</p>
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.tagsLabel') }}:</span>
-											<span class="font-medium">{{ tags?.length || 0 }}</span>
-										</p>
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.brandsLabel') }}:</span>
-											<span class="font-medium">{{ brands?.length || 0 }}</span>
-										</p>
-									</div>
-								</div>
-
-								<!-- Variants Summary -->
-								<div class="bg-neutral-50 rounded-lg p-4">
-									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-										<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-4 h-4" />
-										{{ $t('components.productUpdate.variantsSummaryTitle') }}
-									</h4>
-									<div class="text-sm">
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.total') }}:</span>
-											<span class="font-medium">{{ new_product.variants?.length || 0 }}</span>
-										</p>
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.options') }}:</span>
-											<span class="font-medium">{{ new_product.options?.length || 0 }}</span>
-										</p>
-									</div>
-								</div>
-
-								<!-- Images Summary -->
-								<div class="bg-neutral-50 rounded-lg p-4">
-									<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-										<UIcon :name="ICONS.IMAGE" class="text-primary-500 w-4 h-4" />
-										{{ $t('components.productUpdate.imagesSummaryTitle') }}
-									</h4>
-									<div class="text-sm">
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.thumbnailLabel') }}:</span>
-											<span class="font-medium">{{ new_product.thumbnail ? '✓' : '✗' }}</span>
-										</p>
-										<p>
-											<span class="text-neutral-500">{{ $t('components.productUpdate.galleryLabel') }}:</span>
-											<span class="font-medium">{{ new_product.images?.length || 0 }}</span>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</UCard>
 				</UForm>
+			</div>
+
+			<!-- Right: Review Summary (Sticky on laptop) -->
+			<div class="lg:col-span-3">
+				<div class="lg:sticky lg:top-4">
+					<FormProductReviewSummary :summary="reviewSummary" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -395,13 +265,6 @@ const sections = computed(() => [
 		required: true,
 	},
 	{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false },
-	{
-		id: 'section-review',
-		number: 5,
-		name: t('pages.review'),
-		description: t('pages.reviewDesc'),
-		required: true,
-	},
 ]);
 
 // Scroll to section
@@ -499,6 +362,24 @@ const sale_price = computed({
 		}
 	},
 });
+
+// Computed: Review summary for shared ReviewSummary component
+const reviewSummary = computed(() => ({
+	name: new_product.value.name ?? '',
+	code: new_product.value.code,
+	isActive: new_product.value.is_active ?? true,
+	currencyCode: currency_code.value,
+	origSellPrice: orig_sell_price.value,
+	salePrice: sale_price.value,
+	costPrice: cost_price.value,
+	categoriesCount: categories.value?.length ?? 0,
+	tagsCount: tags.value?.length ?? 0,
+	brandsCount: brands.value?.length ?? 0,
+	variantsCount: new_product.value.variants?.length ?? 0,
+	optionsCount: new_product.value.options?.length ?? 0,
+	hasThumbnail: !!new_product.value.thumbnail,
+	imagesCount: new_product.value.images?.length ?? 0,
+}));
 
 // Methods: Auto-save
 const triggerAutoSave = async () => {
