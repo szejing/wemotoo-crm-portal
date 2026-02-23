@@ -17,14 +17,8 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 					title: row.original.is_active !== false ? t('common.active') : t('common.inactive'),
 				});
 
-				const internalBadge = row.original.is_internal ? h(UBadge, { variant: 'subtle', color: 'warning', size: 'xs' }, () => 'Internal') : null;
-
 				return h('div', { class: 'flex-1 min-w-0' }, [
-					h('div', { class: 'flex items-center gap-1.5' }, [
-						statusDot,
-						h('span', { class: nameClass }, row.original.value),
-						internalBadge,
-					]),
+					h('div', { class: 'flex items-center gap-1.5' }, [statusDot, h('span', { class: nameClass }, row.original.value)]),
 				]);
 			},
 		},

@@ -50,9 +50,6 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 					title: row.original.is_active !== false ? t('common.active') : t('common.inactive'),
 				});
 
-				// Internal badge
-				const internalBadge = row.original.is_internal ? h(UBadge, { variant: 'subtle', color: 'warning', size: 'xs' }, () => 'Internal') : null;
-
 				return h(
 					'div',
 					{
@@ -89,11 +86,7 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 
 						// Description (primary), code (secondary), badges
 						h('div', { class: 'flex-1 min-w-0' }, [
-							h('div', { class: 'flex items-center gap-1.5' }, [
-								statusDot,
-								h('span', { class: nameClass }, row.original.description || row.original.code),
-								internalBadge,
-							]),
+							h('div', { class: 'flex items-center gap-1.5' }, [statusDot, h('span', { class: nameClass }, row.original.description || row.original.code)]),
 							h('p', { class: `truncate ${descClass}` }, row.original.code),
 						]),
 					],
