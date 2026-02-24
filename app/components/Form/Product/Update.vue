@@ -612,7 +612,7 @@ const onSubmit = async () => {
 			...formState.value,
 		});
 		if (success) {
-			useRouter().back();
+			productStore.getProduct(formState.value.code!);
 		}
 	} catch (error) {
 		console.error(error);

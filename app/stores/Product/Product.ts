@@ -203,7 +203,7 @@ export const useProductStore = defineStore('productStore', {
 				});
 
 				if (data.product) {
-					successNotification(`${this.new_product.code} - Product Created !`);
+					successNotification(`${data.product.code} - Product Created !`);
 					return true;
 				}
 				return false;

@@ -70,11 +70,12 @@ export const useProductTagStore = defineStore('productTagStore', {
 					$expand: 'products',
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$orderby: 'updated_at desc',
+					$filter: 'is_internal eq false',
 				};
 
 				if (this.filter.query) {
 					const queryFilter = `(value contains '${this.filter.query}')`;
-					queryParams.$filter = queryFilter;
+					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);

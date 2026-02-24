@@ -63,6 +63,7 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 
 				if (data) {
 					this.merchant = data.map((info) => new MerchantInfo(info));
+					this.clearUpdatedInfo();
 				}
 				successNotification('Merchant information updated');
 			} catch (err: unknown | ErrorResponse) {
@@ -90,10 +91,12 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 						],
 					});
 
-					// Update local state directly with the new thumbnail URL
-					// instead of relying on the saveMany response, which may not
-					// return the full merchant info list
 					this.updateMerchantInfoByGroupAndSet(GROUP_CODE.INFO, MERCHANT.THUMBNAIL, image.url);
+					this.addToUpdatedInfo({
+						group_code: GROUP_CODE.INFO,
+						set_code: MERCHANT.THUMBNAIL,
+						set_value: image.url,
+					});
 				}
 			} catch (err: unknown | ErrorResponse) {
 				console.log(err);

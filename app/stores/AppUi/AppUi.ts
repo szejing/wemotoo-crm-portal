@@ -37,7 +37,7 @@ const default_navigations = [
 					{ label: 'nav.categories', to: '/products/categories' },
 					{ label: 'nav.brands', to: '/products/brands' },
 					{ label: 'nav.tags', to: '/products/tags' },
-					{ label: 'nav.options', to: '/products/options' },
+					// { label: 'nav.options', to: '/products/options' },
 				],
 			},
 			{

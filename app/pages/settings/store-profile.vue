@@ -9,7 +9,7 @@
 
 				<template #right>
 					<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave">
+					<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave" :disabled="!isDirty">
 						<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 						{{ $t('common.save') }}
 					</UButton>
@@ -159,15 +159,6 @@
 							</div>
 						</div>
 					</div>
-
-					<template #footer>
-						<div class="flex justify-center">
-							<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave">
-								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-								{{ $t('common.save') }}
-							</UButton>
-						</div>
-					</template>
 				</UCard>
 			</div>
 		</template>
@@ -247,7 +238,6 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 
 const thumbnailExistingImages = computed(() => {
 	const url = merchant.value.find((m) => m.group_code === GROUP_CODE.INFO && m.set_code === MERCHANT.THUMBNAIL)?.getString();
-	console.log(url);
 	return url ? [url] : [];
 });
 

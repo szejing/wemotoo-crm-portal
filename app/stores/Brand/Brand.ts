@@ -82,20 +82,16 @@ export const useBrandStore = defineStore('brandStore', {
 			try {
 				const { query } = this.filter;
 
-				let filter = '';
-
-				if (query) {
-					filter = `(code contains '${query}' or description contains '${query}')`;
-				}
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$filter: 'is_internal eq false',
 				};
 
-				if (filter) {
-					queryParams.$filter = filter;
+				if (query) {
+					const queryFilter = `(code contains '${query}' or description contains '${query}')`;
+					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
 				}
 
 				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);

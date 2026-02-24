@@ -28,7 +28,7 @@ export const useAppStore = defineStore('appStore', {
 			await Promise.all([
 				productOptionsStore.getOptions(),
 				productTagsStore.getTags(),
-				categoryStore.getCategories(),
+				categoryStore.getCategoriesForTree(),
 				brandStore.getBrands(),
 				merchantInfo.getCurrencies(),
 				settingsStore.getSettings(),

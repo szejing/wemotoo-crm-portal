@@ -63,7 +63,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				return;
 			}
 
-			this.getCategories();
+			this.getCategoriesForTree();
 		},
 
 		async updatePage(page: number) {
@@ -73,40 +73,42 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				return;
 			}
 
-			this.getCategories();
+			this.getCategoriesForTree();
 		},
 
-		async getCategories() {
-			this.loading = true;
-			const { $api } = useNuxtApp();
+		// async getCategories() {
+		// 	this.loading = true;
+		// 	const { $api } = useNuxtApp();
 
-			try {
-				const queryParams: BaseODataReq = {
-					$top: this.filter.page_size,
-					$count: true,
-					$expand: 'products,thumbnail,images,parent_category',
-					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$orderby: 'updated_at desc',
-				};
+		// 	try {
+		// 		const queryParams: BaseODataReq = {
+		// 			$top: this.filter.page_size,
+		// 			$count: true,
+		// 			$expand: 'products,thumbnail,images,parent_category',
+		// 			$skip: (this.filter.current_page - 1) * this.filter.page_size,
+		// 			$orderby: 'updated_at desc',
+		// 		};
 
-				if (this.filter.query) {
-					const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
-					queryParams.$filter = queryFilter;
-				}
+		// 		if (this.filter.query) {
+		// 			const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}') `;
+		// 			queryParams.$filter = queryFilter;
+		// 		}
 
-				const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
+		// 		queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and is_internal eq false` : `is_internal eq false`;
 
-				if (data) {
-					this.categories = data;
-					this.total_categories = total ?? 0;
-				}
-			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to load categories';
-				failedNotification(message);
-			} finally {
-				this.loading = false;
-			}
-		},
+		// 		const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
+
+		// 		if (data) {
+		// 			this.categories = data;
+		// 			this.total_categories = total ?? 0;
+		// 		}
+		// 	} catch (err: unknown | ErrorResponse) {
+		// 		const message = (err as ErrorResponse).message ?? 'Failed to load categories';
+		// 		failedNotification(message);
+		// 	} finally {
+		// 		this.loading = false;
+		// 	}
+		// },
 
 		/** Fetches all categories (no pagination) for tree view. */
 		async getCategoriesForTree() {
@@ -117,7 +119,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				const queryParams: BaseODataReq = {
 					$count: true,
 					$expand: 'thumbnail,images,parent_category,category_children($expand=category_children($expand=category_children($expand=category_children)))',
-					$filter: 'parent_category_code eq null',
+					$filter: 'parent_category_code eq null and is_internal eq false',
 					$orderby: 'code asc',
 				};
 
@@ -233,7 +235,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 
 				if (data.category) {
 					successNotification(`Category Updated !`);
-					this.getCategories();
+					this.getCategoriesForTree();
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process category';
