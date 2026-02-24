@@ -164,7 +164,7 @@
 					/>
 
 					<!-- Section 4: Variants (only show for physical items) -->
-					<UCard id="section-variants" class="shadow-md scroll-mt-4">
+					<!-- <UCard id="section-variants" class="shadow-md scroll-mt-4">
 						<template #header>
 							<div class="flex items-start justify-between">
 								<div class="flex-1">
@@ -199,7 +199,7 @@
 								@update:metadata="updateProductMetadata"
 							/>
 						</div>
-					</UCard>
+					</UCard> -->
 				</UForm>
 			</div>
 
@@ -264,7 +264,7 @@ const sections = computed(() => [
 		description: t('pages.pricingDesc'),
 		required: true,
 	},
-	{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false },
+	// { id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false },
 ]);
 
 // Scroll to section
