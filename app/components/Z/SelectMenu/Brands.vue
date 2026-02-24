@@ -29,7 +29,7 @@
 		</template>
 
 		<template #empty>
-			<UButton color="success" variant="ghost">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
+			<UButton color="success" variant="ghost" @click="createBrand">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
 		</template>
 	</USelectMenu>
 </template>
@@ -39,7 +39,7 @@ import type { Brand } from '~/utils/types/brand';
 
 const searchTerm = ref('');
 const brandStore = useBrandStore();
-const { brands: items } = storeToRefs(brandStore);
+const { brands: items, new_brand } = storeToRefs(brandStore);
 
 const props = defineProps<{ brands: Brand[] | undefined }>();
 
@@ -56,6 +56,19 @@ const brands = computed<Brand[]>({
 
 const remove = (brand: Brand) => {
 	brands.value = brands.value.filter((b) => b.code !== brand.code);
+};
+
+const createBrand = async () => {
+	new_brand.value = {
+		code: searchTerm.value,
+		description: searchTerm.value,
+		is_active: true,
+	};
+	const brand = await brandStore.createBrand();
+	if (brand) {
+		searchTerm.value = '';
+		brands.value = [...brands.value, brand];
+	}
 };
 </script>
 

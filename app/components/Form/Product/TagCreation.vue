@@ -36,9 +36,9 @@ onMounted(() => {
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { value } = event.data;
-	const success = await tagStore.addTag(value);
+	const tag = await tagStore.addTag(value);
 
-	if (success) {
+	if (tag) {
 		useRouter().back();
 	}
 };

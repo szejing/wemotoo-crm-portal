@@ -1,5 +1,14 @@
 <template>
-	<USelectMenu v-model="tags" v-model:search-term="searchTerm" :items="items" :search-input="{}" size="md" multiple label-key="value" :placeholder="$t('components.selectMenu.selectTags')">
+	<USelectMenu
+		v-model="tags"
+		v-model:search-term="searchTerm"
+		:items="items"
+		:search-input="{}"
+		size="md"
+		multiple
+		label-key="value"
+		:placeholder="$t('components.selectMenu.selectTags')"
+	>
 		<template #default>
 			<div v-if="tags && tags.length > 0" class="flex flex-wrap gap-1.5">
 				<div
@@ -19,7 +28,7 @@
 		</template>
 
 		<template #empty>
-			<UButton color="success" variant="ghost">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
+			<UButton color="success" variant="ghost" @click="createTag">{{ $t('components.selectMenu.createLabel', { term: searchTerm }) }}</UButton>
 		</template>
 	</USelectMenu>
 </template>
@@ -29,7 +38,7 @@ import type { Tag } from '~/utils/types/tag';
 
 const searchTerm = ref('');
 const tagStore = useProductTagStore();
-const { tags: items } = storeToRefs(tagStore);
+const { tags: items, new_tag } = storeToRefs(tagStore);
 
 const props = defineProps<{ tags: Tag[] | undefined }>();
 
@@ -46,6 +55,17 @@ const tags = computed({
 
 const remove = (tag: Tag) => {
 	tags.value = tags.value.filter((t) => t.value !== tag.value);
+};
+
+const createTag = async () => {
+	new_tag.value = {
+		value: searchTerm.value,
+	};
+	const tag = await tagStore.addTag(searchTerm.value);
+	if (tag) {
+		searchTerm.value = '';
+		tags.value = [...tags.value, tag];
+	}
 };
 </script>
 

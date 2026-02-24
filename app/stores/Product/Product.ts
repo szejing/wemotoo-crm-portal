@@ -171,7 +171,7 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async createProduct(): Promise<boolean> {
+		async createProduct(): Promise<Product> {
 			this.adding = true;
 			this.loading = true;
 
@@ -204,13 +204,13 @@ export const useProductStore = defineStore('productStore', {
 
 				if (data.product) {
 					successNotification(`${data.product.code} - Product Created !`);
-					return true;
 				}
-				return false;
+
+				return data.product;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product';
 				failedNotification(message);
-				return false;
+				throw new Error(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;

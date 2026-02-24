@@ -9,7 +9,7 @@
 		<!-- Three Column Layout: Sidebar + Form + Sticky Review (laptop) -->
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 			<!-- Left Sidebar Navigation (Sticky) -->
-			<div class="hidden lg:block lg:col-span-3">
+			<div class="hidden lg:block lg:col-span-2">
 				<div class="sticky top-4">
 					<nav class="space-y-2">
 						<div
@@ -42,7 +42,7 @@
 			</div>
 
 			<!-- Center: Form Content (Scrollable) -->
-			<div class="lg:col-span-6">
+			<div class="lg:col-span-7">
 				<!-- Single Form with all sections -->
 				<UForm :schema="CreateProductValidation" :state="new_product" class="space-y-6 mb-6" @submit="onSubmit">
 					<!-- Section 1: Basic Information -->
@@ -79,6 +79,10 @@
 									</UFormField>
 								</div>
 
+								<UFormField :label="$t('components.productUpdate.productType')" required>
+									<ZSelectMenuProductType v-model:type-id="new_product.type_id" />
+								</UFormField>
+
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<UFormField :label="$t('components.productUpdate.productCode')">
 										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.uniqueIdentifier') }}</p>
@@ -98,10 +102,6 @@
 									<UFormField :label="$t('components.productUpdate.shortDescription')">
 										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
 										<UInput v-model="new_product.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
-									</UFormField>
-									<UFormField :label="$t('components.productUpdate.productType')" required>
-										<p class="text-xs text-neutral-500 my-1">{{ $t('pages.chooseItemOrService') }}</p>
-										<ZSelectMenuProductType v-model:type-id="new_product.type_id" class="w-full" />
 									</UFormField>
 								</div>
 							</div>
@@ -379,6 +379,8 @@ const reviewSummary = computed(() => ({
 	optionsCount: new_product.value.options?.length ?? 0,
 	hasThumbnail: !!new_product.value.thumbnail,
 	imagesCount: new_product.value.images?.length ?? 0,
+	thumbnail: new_product.value.thumbnail,
+	images: new_product.value.images ?? [],
 }));
 
 // Methods: Auto-save
@@ -544,10 +546,10 @@ const onSubmit = async () => {
 
 	loadingModal.open();
 
-	const success = await productStore.createProduct();
+	const product = await productStore.createProduct();
 
 	loadingModal.close();
-	if (success) {
+	if (product) {
 		useRouter().back();
 	}
 };

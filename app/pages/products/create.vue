@@ -10,7 +10,7 @@
 		</template>
 
 		<template #body>
-			<div class="container w-full mx-auto px-4 sm:px-6 py-4">
+			<div class="container w-full mx-auto py-4">
 				<FormProductCreation ref="formRef" />
 			</div>
 		</template>

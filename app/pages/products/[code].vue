@@ -9,7 +9,7 @@
 		</template>
 
 		<template #body>
-			<div class="container w-full mx-auto px-4 sm:px-6 py-4">
+			<div class="container w-full mx-auto py-4">
 				<FormProductUpdateLoading v-if="isLoading" />
 				<FormProductUpdate v-else-if="current_product" ref="formRef" :product="current_product" />
 			</div>

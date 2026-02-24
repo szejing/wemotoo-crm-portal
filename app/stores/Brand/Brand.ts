@@ -108,7 +108,7 @@ export const useBrandStore = defineStore('brandStore', {
 			}
 		},
 
-		async createBrand(): Promise<boolean> {
+		async createBrand(): Promise<Brand> {
 			this.adding = true;
 			this.loading = true;
 
@@ -125,11 +125,11 @@ export const useBrandStore = defineStore('brandStore', {
 				}
 
 				this.new_brand = structuredClone(initialEmptyBrand);
-				return true;
+				return data.brand;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
 				failedNotification(message);
-				return false;
+				throw new Error(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;

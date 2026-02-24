@@ -92,7 +92,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 			}
 		},
 
-		async addTag(value: string): Promise<boolean> {
+		async addTag(value: string): Promise<Tag> {
 			this.adding = true;
 			this.loading = true;
 
@@ -106,11 +106,11 @@ export const useProductTagStore = defineStore('productTagStore', {
 					this.tags.push(data.tag);
 				}
 				this.resetNewTag();
-				return true;
+				return data.tag;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
 				failedNotification(message);
-				return false;
+				throw new Error(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;

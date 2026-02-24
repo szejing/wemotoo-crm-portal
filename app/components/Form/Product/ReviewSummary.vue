@@ -24,6 +24,39 @@
 			</div>
 
 			<div class="grid grid-cols-1 gap-4">
+				<!-- Thumbnail & Images -->
+				<div v-if="summary.hasThumbnail || (summary.images && summary.images.length > 0)" class="bg-neutral-50 rounded-lg p-4">
+					<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
+						<UIcon :name="ICONS.IMAGE" class="text-primary-500 w-4 h-4" />
+						{{ $t('components.productUpdate.imagesSummaryTitle') }}
+					</h4>
+					<div class="space-y-3">
+						<div v-if="thumbnailUrl" class="space-y-1">
+							<p class="text-xs text-neutral-500">{{ $t('components.productUpdate.thumbnailLabel') }}</p>
+							<img
+								:src="thumbnailUrl"
+								:alt="$t('components.productUpdate.thumbnailLabel')"
+								class="rounded-lg border border-neutral-200 object-cover w-20 h-20"
+							/>
+						</div>
+						<div v-if="imageUrls.length > 0" class="space-y-1">
+							<p class="text-xs text-neutral-500">{{ $t('components.productUpdate.galleryLabel') }} ({{ imageUrls.length }})</p>
+							<div class="flex flex-wrap gap-2">
+								<img
+									v-for="(url, i) in imageUrls"
+									:key="i"
+									:src="url"
+									:alt="`${$t('components.productUpdate.galleryLabel')} ${i + 1}`"
+									class="rounded-lg border border-neutral-200 object-cover w-16 h-16"
+								/>
+							</div>
+						</div>
+						<p v-if="!thumbnailUrl && imageUrls.length === 0" class="text-sm text-neutral-500">
+							{{ $t('common.notSet') }}
+						</p>
+					</div>
+				</div>
+
 				<!-- Basic Info Summary -->
 				<div class="bg-neutral-50 rounded-lg p-4">
 					<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
@@ -108,24 +141,6 @@
 						</p>
 					</div>
 				</div>
-
-				<!-- Images Summary -->
-				<div class="bg-neutral-50 rounded-lg p-4">
-					<h4 class="text-sm font-semibold text-neutral-700 mb-2 flex items-center gap-2">
-						<UIcon :name="ICONS.IMAGE" class="text-primary-500 w-4 h-4" />
-						{{ $t('components.productUpdate.imagesSummaryTitle') }}
-					</h4>
-					<div class="text-sm">
-						<p>
-							<span class="text-neutral-500">{{ $t('components.productUpdate.thumbnailLabel') }}:</span>
-							<span class="font-medium">{{ summary.hasThumbnail ? '✓' : '✗' }}</span>
-						</p>
-						<p>
-							<span class="text-neutral-500">{{ $t('components.productUpdate.galleryLabel') }}:</span>
-							<span class="font-medium">{{ summary.imagesCount ?? 0 }}</span>
-						</p>
-					</div>
-				</div>
 			</div>
 		</div>
 	</UCard>
@@ -147,11 +162,51 @@ export interface ProductReviewSummary {
 	optionsCount?: number;
 	hasThumbnail: boolean;
 	imagesCount?: number;
+	/** Thumbnail file or image for preview. */
+	thumbnail?: File | { url: string };
+	/** Gallery images for preview. */
+	images?: (File | { url: string })[];
 }
 
 const props = defineProps<{
 	summary: ProductReviewSummary;
 }>();
+
+function isImageLike(item: File | { url: string }): item is { url: string } {
+	return !!item && typeof item === 'object' && 'url' in item && typeof (item as { url: string }).url === 'string';
+}
+
+function getUrl(item: File | { url: string }): string {
+	return isImageLike(item) ? item.url : URL.createObjectURL(item);
+}
+
+const thumbnailUrl = ref<string | null>(null);
+const imageUrls = ref<string[]>([]);
+const objectUrlsToRevoke = ref<string[]>([]);
+
+watch(
+	() => [props.summary.thumbnail, props.summary.images],
+	() => {
+		objectUrlsToRevoke.value.forEach((u) => URL.revokeObjectURL(u));
+		objectUrlsToRevoke.value = [];
+
+		const t = props.summary.thumbnail;
+		thumbnailUrl.value = t ? getUrl(t) : null;
+		if (t && !isImageLike(t) && thumbnailUrl.value) objectUrlsToRevoke.value.push(thumbnailUrl.value);
+
+		const list = props.summary.images ?? [];
+		imageUrls.value = list.map((item) => getUrl(item));
+		list.forEach((item, i) => {
+			if (!isImageLike(item) && imageUrls.value[i]) objectUrlsToRevoke.value.push(imageUrls.value[i]);
+		});
+	},
+	{ immediate: true, deep: true },
+);
+
+onUnmounted(() => {
+	objectUrlsToRevoke.value.forEach((u) => URL.revokeObjectURL(u));
+	objectUrlsToRevoke.value = [];
+});
 
 const ICONS = {
 	CHECK_ROUNDED: 'i-heroicons-check-circle-20-solid',

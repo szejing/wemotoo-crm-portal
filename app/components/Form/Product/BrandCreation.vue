@@ -42,9 +42,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		is_active,
 	};
 
-	const success = await brandStore.createBrand();
+	const brand = await brandStore.createBrand();
 
-	if (success) {
+	if (brand) {
 		useRouter().back();
 	}
 };

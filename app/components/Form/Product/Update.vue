@@ -3,7 +3,7 @@
 		<!-- Three Column Layout: Sidebar + Form + Sticky Review (laptop) -->
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 			<!-- Left Sidebar Navigation (Sticky) -->
-			<div class="hidden lg:block lg:col-span-3">
+			<div class="hidden lg:block lg:col-span-2">
 				<div class="sticky top-4">
 					<nav class="space-y-2">
 						<div
@@ -37,7 +37,7 @@
 			</div>
 
 			<!-- Center: Form Content (Scrollable) -->
-			<div class="lg:col-span-6">
+			<div class="lg:col-span-7">
 				<!-- Single Form with all sections -->
 				<UForm :schema="UpdateProductValidation" :state="formState" class="space-y-6 mb-6" @submit="onSubmit">
 					<!-- Section 1: Basic Information -->
@@ -544,6 +544,8 @@ const reviewSummary = computed(() => ({
 	optionsCount: formState.value.options?.length ?? 0,
 	hasThumbnail: !!formState.value.thumbnail,
 	imagesCount: formState.value.images?.length ?? 0,
+	thumbnail: formState.value.thumbnail,
+	images: formState.value.images ?? [],
 }));
 
 // Methods: Images
