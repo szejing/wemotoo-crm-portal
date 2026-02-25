@@ -8,7 +8,13 @@
 		<template #body>
 			<UForm ref="form" :schema="outletSchema" :state="state.outlet" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->
-				<ZInputOutletGeneralInfo v-model:code="state.outlet.code" v-model:description="state.outlet.description" is-update />
+				<ZInputOutletGeneralInfo
+					v-model:code="state.outlet.code"
+					v-model:description="state.outlet.description"
+					v-model:dial-code="state.outlet.dial_code"
+					v-model:phone-no="state.outlet.phone_no"
+					is-update
+				/>
 				<ZInputAddress
 					v-model:address1="state.outlet.address1"
 					v-model:address2="state.outlet.address2"
@@ -69,6 +75,8 @@ const state = reactive({
 	outlet: {
 		code: props.outlet.code,
 		description: props.outlet.description,
+		dial_code: props.outlet.dial_code,
+		phone_no: props.outlet.phone_no,
 		address1: props.outlet.address1,
 		address2: props.outlet.address2,
 		address3: props.outlet.address3,

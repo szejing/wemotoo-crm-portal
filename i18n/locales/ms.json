@@ -51,7 +51,9 @@
 		"edit": "Edit",
 		"delete": "Padam",
 		"create": "Cipta",
-		"created": "Berjaya dicipta"
+		"created": "Berjaya dicipta",
+		"confirm": "Konfirmasi",
+		"phoneNo": "No. telefon"
 	},
 	"nav": {
 		"main": "Utama",
