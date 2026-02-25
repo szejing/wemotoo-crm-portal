@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 import { TaxDetailValidation } from '../Create/TaxRuleValidation';
+
+type TranslateFn = (key: string) => string;
 
 export function UpdateTaxRuleValidation(t: TranslateFn) {
 	const DetailSchema = TaxDetailValidation(t);

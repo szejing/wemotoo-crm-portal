@@ -7,7 +7,7 @@
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 				<template #right>
-					<ZCreateButton to="/crm-users/create" :label="$t('pages.createCrmUser')" />
+					<ZCreateButton to="/crm-users/create" :label="$t('common.create')" />
 				</template>
 			</UDashboardNavbar>
 

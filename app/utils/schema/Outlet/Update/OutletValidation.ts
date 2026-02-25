@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 
+type TranslateFn = (key: string) => string;
 export function UpdateOutletValidation(t: TranslateFn) {
 	return z.object({
 		description: z.string({ message: t('validation.outlet.descriptionRequired') }),

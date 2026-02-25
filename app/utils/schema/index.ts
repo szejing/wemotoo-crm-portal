@@ -14,7 +14,7 @@ import { CreateTagValidation } from './Tag/Create/TagValidation';
 import { UpdateTagValidation } from './Tag/Update/TagValidation';
 import { UpdateCategoryValidation } from './Category/Update/CategoryValidation';
 import { UpdateProductOptionValidation } from './Product/Update/ProductOptionValidation';
-import { UpdateProductValidation } from './Product/Update/ProductValidation';
+import { UpdateProductValidation, createUpdateProductValidation } from './Product/Update/ProductValidation';
 import { UpdateOrderCustomerValidation } from './Order/Update/CustomerValidation';
 import { UpdateOrderItemValidation } from './Order/Update/ItemValidation';
 import { UpdateOrderPaymentValidation } from './Order/Update/PaymentValidation';
@@ -53,6 +53,7 @@ export {
 	UpdateCategoryValidation,
 	UpdateProductOptionValidation,
 	UpdateProductValidation,
+	createUpdateProductValidation,
 	UpdateOrderCustomerValidation,
 	UpdateOrderItemValidation,
 	FilterPaymentTypeGroupValidation,

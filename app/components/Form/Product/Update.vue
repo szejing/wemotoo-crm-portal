@@ -39,7 +39,7 @@
 			<!-- Center: Form Content (Scrollable) -->
 			<div class="lg:col-span-7">
 				<!-- Single Form with all sections -->
-				<UForm :schema="UpdateProductValidation" :state="formState" class="space-y-6 mb-6" @submit="onSubmit">
+				<UForm :schema="updateProductSchema" :state="formState" class="space-y-6 mb-6" @submit="onSubmit">
 					<!-- Section 1: Basic Information -->
 					<UCard id="section-basic-info" class="shadow-md scroll-mt-4">
 						<template #header>
@@ -211,11 +211,12 @@ import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/t
 import type { Tag } from '~/utils/types/tag';
 import type { Brand } from '~/utils/types/brand';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
-import { UpdateProductValidation } from '~/utils/schema';
+import { createUpdateProductValidation } from '~/utils/schema';
 import { ZModalLoading } from '#components';
 import type { Image } from '~/utils/types/image';
 
 const { t } = useI18n();
+const updateProductSchema = computed(() => createUpdateProductValidation(t));
 
 const props = defineProps({
 	product: {

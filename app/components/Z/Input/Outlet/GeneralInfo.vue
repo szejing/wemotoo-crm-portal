@@ -1,5 +1,5 @@
 <template>
-	<div class="section-grid-basic-details">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 		<UFormField v-slot="{ error }" :label="$t('common.code')" name="code" :required="!isUpdate">
 			<UInput
 				v-model="code"
@@ -9,8 +9,17 @@
 			/>
 		</UFormField>
 
-		<UFormField v-slot="{ error }" :label="$t('common.description')" name="description" required>
+		<UFormField v-slot="{ error }" :label="$t('common.description')" name="description" class="lg:col-span-2" required>
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.descriptionPlaceholder')" />
+		</UFormField>
+
+		<UFormField :label="$t('common.contactNo')" :class="['col-span-2', isUpdate ? 'lg:col-span-3' : 'lg:col-span-2']" required>
+			<ZPhoneInput
+				:dial-code="dialCode"
+				:phone-number="contactNo"
+				@update:dial-code="(v: string) => emit('update:dialCode', v)"
+				@update:phone-number="(v: string) => emit('update:contactNo', v)"
+			/>
 		</UFormField>
 	</div>
 </template>
@@ -19,10 +28,12 @@
 const props = defineProps({
 	code: String,
 	description: String,
+	dialCode: String,
+	contactNo: String,
 	isUpdate: Boolean,
 });
 
-const emit = defineEmits(['update:code', 'update:description']);
+const emit = defineEmits(['update:code', 'update:description', 'update:dialCode', 'update:contactNo']);
 
 const code = computed({
 	get() {
@@ -42,11 +53,3 @@ const description = computed({
 	},
 });
 </script>
-
-<style scoped>
-.section-grid-basic-details {
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 0.75rem;
-}
-</style>

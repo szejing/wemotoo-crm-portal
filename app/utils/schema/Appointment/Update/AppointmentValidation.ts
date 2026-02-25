@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 
+type TranslateFn = (key: string) => string;
 export function UpdateAppointmentValidation(t: TranslateFn) {
 	return z.object({
 		code: z.string({ message: t('validation.appointment.codeRequired') }),

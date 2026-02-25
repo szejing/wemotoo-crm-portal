@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 import { UpdateAppointmentValidation } from '../../Appointment/Update/AppointmentValidation';
+
+type TranslateFn = (key: string) => string;
 
 export function UpdateOrderItemValidation(t: TranslateFn) {
 	const AppointmentSchema = UpdateAppointmentValidation(t);

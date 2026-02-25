@@ -13,9 +13,11 @@ type OutletFilter = {
 const initialEmptyOutlet: OutletCreate = {
 	code: '',
 	description: '',
+	dial_code: '+60',
+	contact_no: '',
 	address1: '',
 	address2: '',
-	address3: '',
+	address3: undefined,
 	city: '',
 	country_code: '',
 	state: '',
@@ -121,7 +123,7 @@ export const useOutletStore = defineStore('outletStore', {
 			}
 		},
 
-		async createOutlet() {
+		async createOutlet(): Promise<Outlet> {
 			this.adding = true;
 			this.loading = true;
 
@@ -135,9 +137,12 @@ export const useOutletStore = defineStore('outletStore', {
 					this.outlets.push(data.outlet);
 				}
 				this.resetNewOutlet();
+
+				return data.outlet;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
+				throw new Error(message);
 			} finally {
 				this.adding = false;
 				this.loading = false;

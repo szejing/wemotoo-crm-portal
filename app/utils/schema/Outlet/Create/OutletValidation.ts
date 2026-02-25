@@ -1,9 +1,11 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 
+type TranslateFn = (key: string) => string;
 export function CreateOutletValidation(t: TranslateFn) {
 	return z.object({
 		code: z.string({ message: t('validation.outlet.outletCodeRequired') }),
+		dial_code: z.string({ message: t('validation.outlet.dialCodeRequired') }),
+		contact_no: z.string({ message: t('validation.outlet.contactNoRequired') }),
 		description: z.string({ message: t('validation.outlet.descriptionRequired') }),
 		address1: z.string({ message: t('validation.outlet.address1Required') }),
 		address2: z.string().optional(),

@@ -8,7 +8,12 @@
 					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
 				</div>
 				<div class="pl-7">
-					<ZInputOutletGeneralInfo v-model:code="new_outlet.code" v-model:description="new_outlet.description" />
+					<ZInputOutletGeneralInfo
+						v-model:code="new_outlet.code"
+						v-model:description="new_outlet.description"
+						v-model:dial-code="new_outlet.dial_code"
+						v-model:contact-no="new_outlet.contact_no"
+					/>
 				</div>
 			</div>
 
@@ -48,7 +53,7 @@
 
 		<!-- Submit Button -->
 		<div class="flex justify-center pt-4 border-t border-gray-200 dark:border-gray-700 mt-8">
-			<UButton color="success" size="lg" type="submit" :loading="adding" class="w-full sm:w-auto sm:min-w-[200px]">
+			<UButton color="success" size="lg" type="submit" :loading="adding" class="w-full sm:w-auto">
 				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-5 h-5" />
 				<span>{{ $t('components.outletForm.createOutlet') }}</span>
 			</UButton>
@@ -79,28 +84,30 @@ const updateTaxRule = (tax_rule: any) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } = event.data;
+	const { code, description, dial_code, contact_no, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } =
+		event.data;
 
 	new_outlet.value = {
 		code,
 		description,
+		dial_code,
+		contact_no,
 		address1,
-		address2,
-		address3,
+		address2: address2 || undefined,
+		address3: address3 || undefined,
 		city,
 		country_code,
 		state,
 		postal_code,
-		longitude: longitude ?? undefined,
-		latitude: latitude ?? undefined,
-		tax_rule_code: tax_rule ?? undefined,
+		longitude: longitude || undefined,
+		latitude: latitude || undefined,
+		tax_rule_code: tax_rule || undefined,
 	};
 
-	await outletStore.createOutlet();
+	const outlet = await outletStore.createOutlet();
 
-	// Navigate back to outlets list after successful creation
-	if (!outletStore.errors || outletStore.errors.length === 0) {
-		await navigateTo('/outlets');
+	if (outlet) {
+		useRouter().back();
 	}
 };
 </script>

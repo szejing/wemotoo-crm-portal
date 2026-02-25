@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { TranslateFn } from '../../Auth/LoginValidation';
 
+type TranslateFn = (key: string) => string;
 function AddressValidation(t: TranslateFn) {
 	return z
 		.object({

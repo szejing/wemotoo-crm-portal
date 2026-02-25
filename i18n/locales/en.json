@@ -51,7 +51,9 @@
 		"edit": "Edit",
 		"delete": "Delete",
 		"create": "Create",
-		"created": "Created successfully"
+		"created": "Created successfully",
+		"confirm": "Confirm",
+		"contactNo": "Contact No"
 	},
 	"nav": {
 		"main": "Main",
