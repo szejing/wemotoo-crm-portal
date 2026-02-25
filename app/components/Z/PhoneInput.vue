@@ -19,7 +19,7 @@
 				</div>
 			</template>
 		</USelectMenu>
-		<UInput :model-value="phoneNumber" :placeholder="placeholder" class="min-w-0 flex-1" @update:model-value="(v: string) => emit('update:phoneNumber', v)" />
+		<UInput :model-value="phoneNo" :placeholder="placeholder" class="min-w-0 flex-1" @update:model-value="(v: string) => emit('update:phoneNo', v)" />
 	</div>
 </template>
 
@@ -28,7 +28,7 @@ import { DIAL_CODES } from '~/utils/data/dial-codes';
 
 defineProps<{
 	dialCode?: string | undefined;
-	phoneNumber?: string | undefined;
+	phoneNo?: string | undefined;
 	placeholder?: string;
 }>();
 

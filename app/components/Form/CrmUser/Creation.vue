@@ -8,11 +8,7 @@
 				<UInput v-model="new_crm_user.email_address" type="email" :placeholder="$t('components.crmUserForm.email')" />
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.phone')" name="phone_number" required>
-				<ZPhoneInput
-					v-model:dial-code="new_crm_user.dial_code"
-					v-model:phone-number="new_crm_user.phone_no"
-					:placeholder="$t('components.crmUserForm.phone')"
-				/>
+				<ZPhoneInput v-model:dial-code="new_crm_user.dial_code" v-model:phone-no="new_crm_user.phone_no" :placeholder="$t('components.crmUserForm.phone')" />
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.role')">
 				<USelect :model-value="new_crm_user.role" :items="roleOptions(t)" value-attribute="value" :placeholder="$t('components.crmUserForm.role')" />

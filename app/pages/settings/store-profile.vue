@@ -73,7 +73,7 @@
 							/>
 						</UFormField>
 
-						<!-- Name, Company email, website, contact -->
+						<!-- Name, Company email, website, phone no -->
 						<div class="grid gap-4 sm:grid-cols-2">
 							<UFormField :label="$t('common.name')">
 								<UInput
@@ -102,10 +102,10 @@
 							</UFormField>
 							<UFormField :label="$t('pages.storeProfilePage.contactNo')">
 								<ZPhoneInput
-									:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE)"
-									:phone-number="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO)"
-									@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_DIAL_CODE, v)"
-									@update:phone-number="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_NO, v)"
+									:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE)"
+									:phone-no="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO)"
+									@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE, v)"
+									@update:phone-number="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO, v)"
 								/>
 							</UFormField>
 						</div>

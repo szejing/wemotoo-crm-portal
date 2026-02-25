@@ -28,7 +28,7 @@ export type Outlet = {
 	code: string;
 	description: string;
 	dial_code: string;
-	contact_no: string;
+	phone_no: string;
 	address1: string;
 	address2?: string;
 	address3?: string;

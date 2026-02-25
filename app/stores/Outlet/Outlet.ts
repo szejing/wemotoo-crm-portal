@@ -14,7 +14,7 @@ const initialEmptyOutlet: OutletCreate = {
 	code: '',
 	description: '',
 	dial_code: '+60',
-	contact_no: '',
+	phone_no: '',
 	address1: '',
 	address2: '',
 	address3: undefined,

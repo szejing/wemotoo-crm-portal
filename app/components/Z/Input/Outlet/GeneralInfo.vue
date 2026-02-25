@@ -13,12 +13,12 @@
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.descriptionPlaceholder')" />
 		</UFormField>
 
-		<UFormField :label="$t('common.contactNo')" :class="['col-span-2', isUpdate ? 'lg:col-span-3' : 'lg:col-span-2']" required>
+		<UFormField :label="$t('common.phoneNo')" :class="['col-span-2', isUpdate ? 'lg:col-span-3' : 'lg:col-span-2']" required>
 			<ZPhoneInput
 				:dial-code="dialCode"
-				:phone-number="contactNo"
+				:phone-no="phoneNo"
 				@update:dial-code="(v: string) => emit('update:dialCode', v)"
-				@update:phone-number="(v: string) => emit('update:contactNo', v)"
+				@update:phone-no="(v: string) => emit('update:phoneNo', v)"
 			/>
 		</UFormField>
 	</div>
@@ -29,11 +29,11 @@ const props = defineProps({
 	code: String,
 	description: String,
 	dialCode: String,
-	contactNo: String,
+	phoneNo: String,
 	isUpdate: Boolean,
 });
 
-const emit = defineEmits(['update:code', 'update:description', 'update:dialCode', 'update:contactNo']);
+const emit = defineEmits(['update:code', 'update:description', 'update:dialCode', 'update:phoneNo']);
 
 const code = computed({
 	get() {

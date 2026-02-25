@@ -12,7 +12,7 @@
 						v-model:code="new_outlet.code"
 						v-model:description="new_outlet.description"
 						v-model:dial-code="new_outlet.dial_code"
-						v-model:contact-no="new_outlet.contact_no"
+						v-model:phone-no="new_outlet.phone_no"
 					/>
 				</div>
 			</div>
@@ -84,14 +84,14 @@ const updateTaxRule = (tax_rule: any) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, description, dial_code, contact_no, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } =
+	const { code, description, dial_code, phone_no, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } =
 		event.data;
 
 	new_outlet.value = {
 		code,
 		description,
 		dial_code,
-		contact_no,
+		phone_no,
 		address1,
 		address2: address2 || undefined,
 		address3: address3 || undefined,

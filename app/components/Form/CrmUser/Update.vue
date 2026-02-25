@@ -27,7 +27,7 @@
 			<UFormField name="dial_code" :label="$t('components.crmUserForm.phone')">
 				<ZPhoneInput
 					:dial-code="state.dial_code"
-					:phone-number="state.phone_no"
+					:phone-no="state.phone_no"
 					:placeholder="$t('components.crmUserForm.phone')"
 					@update:dial-code="(v: string) => set('dial_code', v)"
 					@update:phone-number="(v: string) => set('phone_no', v)"
