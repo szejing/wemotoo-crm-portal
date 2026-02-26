@@ -67,7 +67,7 @@
 							<!-- Product Basic Fields -->
 							<div class="space-y-4">
 								<div class="w-full flex justify-end">
-									<UFormField :label="$t('components.productUpdate.productCode')">
+									<UFormField>
 										<USwitch
 											v-model="new_product.is_active"
 											:label="
