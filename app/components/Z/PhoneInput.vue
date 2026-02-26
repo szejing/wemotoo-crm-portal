@@ -15,7 +15,7 @@
 			<template #item="{ item }">
 				<div class="flex items-center gap-2">
 					<span class="text-sm">{{ item.flag }}</span>
-					<span class="text-sm">{{ item.value }}</span>
+					<span class="text-sm">{{ item.country }} ({{ item.value }})</span>
 				</div>
 			</template>
 		</USelectMenu>
@@ -34,7 +34,7 @@ defineProps<{
 
 const emit = defineEmits<{
 	'update:dialCode': [value: string];
-	'update:phoneNumber': [value: string];
+	'update:phoneNo': [value: string];
 }>();
 
 const dialCodeOptions = DIAL_CODES;

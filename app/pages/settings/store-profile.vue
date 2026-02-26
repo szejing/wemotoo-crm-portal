@@ -105,7 +105,7 @@
 									:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE)"
 									:phone-no="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO)"
 									@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE, v)"
-									@update:phone-number="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO, v)"
+									@update:phone-no="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO, v)"
 								/>
 							</UFormField>
 						</div>

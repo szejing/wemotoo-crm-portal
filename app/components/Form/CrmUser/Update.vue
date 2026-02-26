@@ -30,7 +30,7 @@
 					:phone-no="state.phone_no"
 					:placeholder="$t('components.crmUserForm.phone')"
 					@update:dial-code="(v: string) => set('dial_code', v)"
-					@update:phone-number="(v: string) => set('phone_no', v)"
+					@update:phone-no="(v: string) => set('phone_no', v)"
 				/>
 			</UFormField>
 
