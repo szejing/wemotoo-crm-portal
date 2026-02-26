@@ -15,6 +15,7 @@ export const getProductStatusColor = (status: string): 'primary' | 'error' | 'su
 	const color: Record<string, 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral' | undefined> = {
 		[ProductStatus.DRAFT]: 'warning',
 		[ProductStatus.PUBLISHED]: 'success',
+		[ProductStatus.REJECTED]: 'error',
 		All: 'neutral',
 	};
 

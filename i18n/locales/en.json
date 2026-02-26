@@ -470,7 +470,8 @@
 		"inclusive": "Inclusive",
 		"exclusive": "Exclusive",
 		"productThumbnail": "Product thumbnail",
-		"duration": "Duration"
+		"duration": "Duration",
+		"visible": "Show in store"
 	},
 	"options": {
 		"all": "All",
@@ -484,6 +485,7 @@
 		"confirmed": "Confirmed",
 		"draft": "Draft",
 		"published": "Published",
+		"rejected": "Rejected",
 		"new": "New",
 		"active": "Active",
 		"inactive": "Inactive",

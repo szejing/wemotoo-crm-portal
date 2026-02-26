@@ -4,6 +4,7 @@ import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
 import { formatCurrency } from 'wemotoo-common';
+import { getProductStatusColor } from '~/utils/options/product-status';
 
 type TranslateFn = (key: string) => string;
 
@@ -69,6 +70,35 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			},
 		},
 		{
+			accessorKey: 'status',
+			header: () => h('div', t('table.status')),
+			cell: ({ row }) => {
+				const productStore = useProductStore();
+				const status = row.original.status;
+				const statusBadge =
+					status != null
+						? h(UBadge, { class: 'capitalize', variant: 'subtle', color: getProductStatusColor(status) ?? 'neutral' }, () => t(`options.${status}`))
+						: h('span', { class: 'text-neutral-400 text-xs' }, '—');
+				const visibleRow = h(
+					'div',
+					{
+						class: 'flex items-center gap-2 mt-1.5 leading-none',
+						onClick: (e: Event) => e.stopPropagation(),
+					},
+					[
+						h('span', { class: 'text-xs text-neutral-500 dark:text-neutral-400 leading-none' }, t('table.visible')),
+						h(USwitch, {
+							'class': 'size-4',
+							'modelValue': row.original.is_active,
+							'disabled': false,
+							'onUpdate:modelValue': (value: boolean) => productStore.updateStatus(row.original, value),
+						}),
+					],
+				);
+				return h('div', { class: 'flex flex-col items-start justify-center min-h-[3.5rem]' }, [statusBadge, visibleRow]);
+			},
+		},
+		{
 			accessorKey: 'price_types',
 			header: () => h('div', t('table.price')),
 			cell: ({ row }) => {
@@ -88,28 +118,6 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				}
 
 				return h('div', { class: 'flex flex-col' }, [h('span', { class: 'text-sm font-semibold text-neutral-900 dark:text-neutral-100' }, sellingFormatted)]);
-			},
-		},
-		{
-			accessorKey: 'is_active',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
-			cell: ({ row }) => {
-				const productStore = useProductStore();
-				return h(
-					'div',
-					{
-						class: 'flex justify-center',
-						onClick: (e: Event) => e.stopPropagation(),
-					},
-					[
-						h(USwitch, {
-							'class': 'size-5',
-							'modelValue': row.original.is_active,
-							'disabled': false,
-							'onUpdate:modelValue': (value: boolean) => productStore.updateStatus(row.original, value),
-						}),
-					],
-				);
 			},
 		},
 	];

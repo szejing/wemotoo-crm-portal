@@ -470,7 +470,8 @@
 		"inclusive": "Termasuk",
 		"exclusive": "Tidak termasuk",
 		"productThumbnail": "Imej produk",
-		"duration": "Tempoh"
+		"duration": "Tempoh",
+		"visible": "Tunjukkan di kedai"
 	},
 	"options": {
 		"all": "Semua",
@@ -484,6 +485,7 @@
 		"confirmed": "Disahkan",
 		"draft": "Draf",
 		"published": "Diterbitkan",
+		"rejected": "Ditolak",
 		"new": "Baharu",
 		"active": "Aktif",
 		"inactive": "Tidak aktif",
