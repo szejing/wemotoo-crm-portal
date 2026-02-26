@@ -27,7 +27,7 @@
 					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayNote') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
-					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
+					<ZSelectMenuDays :days="offDayArray" @update:days="updateOffDay" />
 				</div>
 			</div>
 
@@ -74,7 +74,7 @@
 					<p class="text-sm text-neutral-500">{{ $t('components.zInput.offDayNote') }}</p>
 				</div>
 				<div class="w-full max-w-[250px]">
-					<ZSelectMenuDays :days="prodMetadata.off_day" @update:days="updateOffDay" />
+					<ZSelectMenuDays :days="offDayArray" @update:days="updateOffDay" />
 				</div>
 			</div>
 
@@ -131,8 +131,23 @@ const prodMetadata = computed({
 	},
 });
 
-const updateRequiresBooking = (value: boolean) => {
-	prodMetadata.value.requires_booking = value;
+/** Normalize off_day (string | null from API) to string[] for ZSelectMenuDays. */
+const offDayArray = computed({
+	get(): string[] | null {
+		const raw = prodMetadata.value.off_day;
+		if (raw == null || raw === '') return null;
+		if (Array.isArray(raw)) return raw as string[];
+		return raw.split(',').map((s) => s.trim()).filter(Boolean);
+	},
+	set(value: string[] | null) {
+		const next = value?.length ? value.join(',') : null;
+		(prodMetadata.value as { off_day: string | null }).off_day = next;
+		prodMetadata.value = JSON.parse(JSON.stringify(prodMetadata.value));
+	},
+});
+
+const updateRequiresBooking = (value: boolean | 'indeterminate') => {
+	prodMetadata.value.requires_booking = value === true;
 	prodMetadata.value = JSON.parse(JSON.stringify(prodMetadata.value));
 };
 
@@ -142,8 +157,7 @@ const updateDuration = (value: string) => {
 };
 
 const updateOffDay = (value: string[]) => {
-	prodMetadata.value.off_day = value;
-	prodMetadata.value = JSON.parse(JSON.stringify(prodMetadata.value));
+	offDayArray.value = value.length ? value : null;
 };
 
 const updateStartTime = (value: string) => {
