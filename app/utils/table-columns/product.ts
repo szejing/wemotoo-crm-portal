@@ -57,13 +57,13 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				const typeLabel = productTypeStore.prod_types.find((pt) => pt.id === typeId)?.value ?? (typeId != null ? `Type ${typeId}` : '—');
 				const metadata = row.original.metadata as { duration?: string } | undefined;
 				const duration = metadata?.duration;
-				const isMaintenance = typeId === 2 || (typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('maintenance'));
+				const isService = typeId === 2 || (typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('service'));
 
 				const typeColors = ['primary', 'success', 'warning', 'error', 'info', 'secondary'] as const;
 				const badgeColor = typeId != null ? typeColors[typeId % typeColors.length] : 'neutral';
 
 				const children: ReturnType<typeof h>[] = [h(UBadge, { class: 'capitalize', variant: 'subtle', color: badgeColor }, () => typeLabel)];
-				if (isMaintenance && duration) {
+				if (isService && duration) {
 					children.push(h(UBadge, { class: 'mt-1', variant: 'subtle', color: 'info', size: 'sm' }, () => `${t('table.duration')}: ${duration}`));
 				}
 				return h('div', { class: 'flex flex-col items-start gap-1' }, children);

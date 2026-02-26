@@ -18,11 +18,7 @@
 			>
 				<div
 					class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-					:class="
-						productTypeId === type.id
-							? 'bg-primary-500 text-white'
-							: 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'
-					"
+					:class="productTypeId === type.id ? 'bg-primary-500 text-white' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400'"
 				>
 					<UIcon :name="iconForType(type)" class="w-5 h-5" />
 				</div>
@@ -30,20 +26,12 @@
 					<span class="block font-semibold capitalize">{{ type.value }}</span>
 					<span
 						class="mt-0.5 block text-xs"
-						:class="
-							productTypeId === type.id
-								? 'text-primary-600 dark:text-primary-300'
-								: 'text-neutral-500 dark:text-neutral-400'
-						"
+						:class="productTypeId === type.id ? 'text-primary-600 dark:text-primary-300' : 'text-neutral-500 dark:text-neutral-400'"
 					>
 						{{ descriptionForType(type) }}
 					</span>
 				</div>
-				<div
-					v-show="productTypeId === type.id"
-					class="shrink-0 text-primary-500"
-					aria-hidden="true"
-				>
+				<div v-show="productTypeId === type.id" class="shrink-0 text-primary-500" aria-hidden="true">
 					<UIcon name="i-heroicons-check-circle-20-solid" class="w-5 h-5" />
 				</div>
 			</button>
@@ -81,7 +69,7 @@ function selectType(id: number) {
 function iconForType(type: ProductType): string {
 	const v = type.value.toLowerCase();
 	if (v.includes('item') || v.includes('product') || v.includes('physical')) return ICONS.CUBE;
-	if (v.includes('service') || v.includes('maintenance')) return 'i-heroicons-wrench-screwdriver';
+	if (v.includes('service')) return 'i-heroicons-wrench-screwdriver';
 	return ICONS.CUBE;
 }
 
@@ -90,7 +78,7 @@ const { t } = useI18n();
 function descriptionForType(type: ProductType): string {
 	const v = type.value.toLowerCase();
 	if (v.includes('item') || v.includes('product') || v.includes('physical')) return t('components.selectMenu.productTypeItemDesc');
-	if (v.includes('service') || v.includes('maintenance')) return t('components.selectMenu.productTypeServiceDesc');
+	if (v.includes('service')) return t('components.selectMenu.productTypeServiceDesc');
 	return type.value;
 }
 </script>

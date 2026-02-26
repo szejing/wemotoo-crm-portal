@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { MaintenanceMetadata } from 'wemotoo-common';
+import type { ServiceMetadata } from 'wemotoo-common';
 
 const props = defineProps({
 	metadata: {
@@ -115,15 +115,15 @@ const emit = defineEmits(['update:productMetadata']);
 const prodMetadata = computed({
 	get() {
 		if (props.metadata) {
-			return props.metadata as MaintenanceMetadata;
+			return props.metadata as ServiceMetadata;
 		} else {
 			return {
 				requires_booking: false,
 				duration: '',
 				start_time: '',
 				end_time: '',
-				off_day: [],
-			} as MaintenanceMetadata;
+				off_day: null,
+			} as ServiceMetadata;
 		}
 	},
 	set(value) {

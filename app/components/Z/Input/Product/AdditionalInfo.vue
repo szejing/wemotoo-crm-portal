@@ -6,17 +6,17 @@
 			</div>
 		</template>
 
-		<template #maintenance>
+		<template #service>
 			<div class="space-y-4 pt-4">
 				<div class="flex items-start justify-between mb-4">
 					<div class="flex-1">
 						<div class="flex items-center gap-2">
 							<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.maintenanceSettings') }}</h3>
+							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.serviceSettings') }}</h3>
 						</div>
 						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.configureBookingRequirements') }}</p>
 					</div>
-					<UTooltip :text="$t('components.productUpdate.setUpMaintenanceTooltip')" :popper="{ placement: 'left' }">
+					<UTooltip :text="$t('components.productUpdate.setUpServiceTooltip')" :popper="{ placement: 'left' }">
 						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
 					</UTooltip>
 				</div>
@@ -25,15 +25,15 @@
 					<div class="flex items-start gap-3">
 						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
 						<div>
-							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.maintenanceInformation') }}</h4>
+							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.serviceInformation') }}</h4>
 							<p class="text-xs text-orange-700 mt-1">
-								{{ $t('components.productUpdate.addMaintenanceInformation') }}
+								{{ $t('components.productUpdate.addServiceInformation') }}
 							</p>
 						</div>
 					</div>
 				</div>
 
-				<ZInputProductMaintenance v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+				<ZInputProductService v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
 			</div>
 		</template>
 
@@ -48,10 +48,7 @@
 						</div>
 						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.createVariationsOfProduct') }}</p>
 					</div>
-					<UTooltip
-						:text="$t('components.productUpdate.variantsTooltip')"
-						:popper="{ placement: 'left' }"
-					>
+					<UTooltip :text="$t('components.productUpdate.variantsTooltip')" :popper="{ placement: 'left' }">
 						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
 					</UTooltip>
 				</div>
@@ -108,7 +105,9 @@
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / M</span>
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Blue / S</span>
 										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">...</span>
-										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium">12 {{ $t('components.productUpdate.totalVariants') }}</span>
+										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium"
+											>12 {{ $t('components.productUpdate.totalVariants') }}</span
+										>
 									</div>
 								</div>
 							</div>
@@ -204,8 +203,8 @@ const product = computed({
 	set(_) {},
 });
 
-// Check if maintenance section should be shown (only for services, type_id/type === 2)
-const shouldShowMaintenance = computed(() => {
+// Check if service section should be shown (only for services, type_id/type === 2)
+const shouldShowService = computed(() => {
 	const typeId = 'type_id' in product.value ? product.value.type_id : product.value.type;
 	return typeId === 2;
 });
@@ -214,21 +213,14 @@ const shouldShowMaintenance = computed(() => {
 const product_additional_info = computed(() => {
 	const tabs = [];
 
-	// Conditionally add maintenance for type 2 (Services)
-	if (shouldShowMaintenance.value) {
+	// Conditionally add service for type 2 (Services)
+	if (shouldShowService.value) {
 		tabs.push({
-			label: t('components.productUpdate.maintenanceTab'),
-			slot: 'maintenance',
+			label: t('components.productUpdate.serviceTab'),
+			slot: 'service',
 			icon: ICONS.SETTINGS_ROUNDED,
 		});
 	}
-
-	// Always add variants
-	tabs.push({
-		label: t('components.productUpdate.variantsTab'),
-		slot: 'variants',
-		icon: ICONS.LAYERS,
-	});
 
 	// Always add tax
 	tabs.push({
