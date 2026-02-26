@@ -45,7 +45,7 @@
 				<UTable
 					v-else
 					v-model:expanded="expanded"
-					:data="categories"
+					:data="getDisplayCategories"
 					:columns="category_tree_columns"
 					:get-row-id="(row) => row.code"
 					:get-sub-rows="getSubRows"
@@ -68,7 +68,7 @@
 				</UTable>
 
 				<!-- Count (tree view shows all categories) -->
-				<div v-if="!initialize && categories.length > 0" class="section-pagination text-sm text-muted">
+				<div v-if="!initialize && getDisplayCategories.length > 0" class="section-pagination text-sm text-muted">
 					{{ $t('pages.categoriesCount', { total: total_categories }) }}
 				</div>
 			</div>
@@ -90,7 +90,7 @@ useHead({ title: () => t('pages.categoriesTitle') });
 
 const overlay = useOverlay();
 const categoryStore = useProductCategoryStore();
-const { loading, categories, total_categories, filter, exporting } = storeToRefs(categoryStore);
+const { loading, getDisplayCategories, total_categories, filter, exporting } = storeToRefs(categoryStore);
 
 /** Expand only root (1st level) categories by default. */
 const expanded = ref<Record<string, boolean>>({});
@@ -104,7 +104,7 @@ function getSubRows(row: Category): Category[] | undefined {
 /** After data loads, expand all root categories that have children. */
 function expandRootCategories() {
 	const map: Record<string, boolean> = {};
-	for (const cat of categories.value) {
+	for (const cat of getDisplayCategories.value) {
 		if (cat.category_children?.length) {
 			map[cat.code] = true;
 		}

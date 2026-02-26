@@ -34,6 +34,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 		filter: initialEmptyTagFilter,
 		errors: [] as string[],
 	}),
+	getters: {
+		getDisplayTags: (state) => state.tags.filter((tag) => tag.is_internal === false),
+	},
 	actions: {
 		resetNewTag() {
 			this.new_tag = structuredClone(initialEmptyTag);
@@ -70,7 +73,6 @@ export const useProductTagStore = defineStore('productTagStore', {
 					$expand: 'products',
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$orderby: 'updated_at desc',
-					$filter: 'is_internal eq false',
 				};
 
 				if (this.filter.query) {
@@ -93,6 +95,11 @@ export const useProductTagStore = defineStore('productTagStore', {
 		},
 
 		async addTag(value: string): Promise<Tag> {
+			if (value.trim() === '') {
+				failedNotification('Tag value is required');
+				throw new Error('Tag value is required');
+			}
+
 			this.adding = true;
 			this.loading = true;
 

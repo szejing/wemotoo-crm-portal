@@ -50,6 +50,9 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 		errors: [] as string[],
 		filter: initialEmptyCategoryFilter,
 	}),
+	getters: {
+		getDisplayCategories: (state) => state.categories.filter((category) => category.is_internal === false),
+	},
 	actions: {
 		resetNewCategory() {
 			this.new_category = structuredClone(initialEmptyCategory);
@@ -76,40 +79,6 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 			this.getCategoriesForTree();
 		},
 
-		// async getCategories() {
-		// 	this.loading = true;
-		// 	const { $api } = useNuxtApp();
-
-		// 	try {
-		// 		const queryParams: BaseODataReq = {
-		// 			$top: this.filter.page_size,
-		// 			$count: true,
-		// 			$expand: 'products,thumbnail,images,parent_category',
-		// 			$skip: (this.filter.current_page - 1) * this.filter.page_size,
-		// 			$orderby: 'updated_at desc',
-		// 		};
-
-		// 		if (this.filter.query) {
-		// 			const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}') `;
-		// 			queryParams.$filter = queryFilter;
-		// 		}
-
-		// 		queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and is_internal eq false` : `is_internal eq false`;
-
-		// 		const { data, '@odata.count': total } = await $api.category.getMany(queryParams);
-
-		// 		if (data) {
-		// 			this.categories = data;
-		// 			this.total_categories = total ?? 0;
-		// 		}
-		// 	} catch (err: unknown | ErrorResponse) {
-		// 		const message = (err as ErrorResponse).message ?? 'Failed to load categories';
-		// 		failedNotification(message);
-		// 	} finally {
-		// 		this.loading = false;
-		// 	}
-		// },
-
 		/** Fetches all categories (no pagination) for tree view. */
 		async getCategoriesForTree() {
 			this.loading = true;
@@ -119,7 +88,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				const queryParams: BaseODataReq = {
 					$count: true,
 					$expand: 'thumbnail,images,parent_category,category_children($expand=category_children($expand=category_children($expand=category_children)))',
-					$filter: 'parent_category_code eq null and is_internal eq false',
+					$filter: 'parent_category_code eq null',
 					$orderby: 'code asc',
 				};
 

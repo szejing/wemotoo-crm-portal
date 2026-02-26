@@ -42,7 +42,7 @@
 						</div>
 					</div>
 				</template>
-				<UTable v-else :data="brands" :columns="brand_columns" :loading="loading" @select="selectBrand">
+				<UTable v-else :data="getDisplayBrands" :columns="brand_columns" :loading="loading" @select="selectBrand">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -53,7 +53,7 @@
 				</UTable>
 
 				<!-- Pagination  -->
-				<div v-if="!initialize && brands.length > 0" class="section-pagination">
+				<div v-if="!initialize && getDisplayBrands.length > 0" class="section-pagination">
 					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_brands" @update:page="updatePage" />
 				</div>
 			</div>
@@ -76,7 +76,7 @@ const { t } = useI18n();
 const brand_columns = computed(() => getBrandColumns(t));
 useHead({ title: () => t('pages.brandsTitle') });
 
-const { loading, brands, total_brands, filter, exporting } = storeToRefs(brandStore);
+const { loading, getDisplayBrands, total_brands, filter, exporting } = storeToRefs(brandStore);
 const initialize = ref(true);
 
 onMounted(async () => {

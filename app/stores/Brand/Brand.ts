@@ -35,6 +35,9 @@ export const useBrandStore = defineStore('brandStore', {
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
+	getters: {
+		getDisplayBrands: (state) => state.brands.filter((brand) => brand.is_internal === false),
+	},
 	actions: {
 		resetNewProductBrand() {
 			this.new_brand = structuredClone(initialEmptyBrand);
@@ -86,7 +89,6 @@ export const useBrandStore = defineStore('brandStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$filter: 'is_internal eq false',
 				};
 
 				if (query) {
