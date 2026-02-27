@@ -4,7 +4,12 @@
 			:model-value="dialCode"
 			:items="dialCodeOptions"
 			value-key="value"
+			:filter-fields="['country', 'value']"
 			class="w-24 shrink-0"
+			:search-input="{
+				placeholder: 'Search...',
+				icon: 'i-lucide-search',
+			}"
 			@update:model-value="(v: string | undefined) => emit('update:dialCode', v ?? '')"
 		>
 			<template #default="{ modelValue }">
