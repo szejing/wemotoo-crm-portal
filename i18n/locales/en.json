@@ -134,6 +134,8 @@
 			"nameRequired": "Name is required",
 			"statusRequired": "Status is required",
 			"productOptionNameRequired": "Product option name is required",
+			"shortDescRequired": "Short description is required",
+			"priceRequired": "At least one price is required",
 			"optionNameRequired": "Option name is required (eg: Size)",
 			"optionValuesRequired": "Value is required (eg: Small, Medium, Large)"
 		},

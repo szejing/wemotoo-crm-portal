@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const Price = z.object({
 	currency_code: z.string({ message: 'Currency code is required' }),
-	orig_sell_price: z.number({ message: 'Original sell price is required' }),
+	orig_sell_price: z.number().min(0, { message: 'Original sell price is required' }),
 	cost_price: z.number().optional().nullable(),
 	sale_price: z.number().optional().nullable(),
 });
@@ -38,9 +38,9 @@ const Variant = z.object({
 });
 
 export const CreateProductValidation = z.object({
-	code: z.string({ message: 'Code is required' }).max(16, 'Max. 16 characters'),
-	name: z.string({ message: 'Name is required' }),
-	short_desc: z.string().optional(),
+	code: z.string({ message: 'Code is required' }).min(1, 'Code is required').max(16, 'Max. 16 characters'),
+	name: z.string({ message: 'Name is required' }).min(1, 'Name is required'),
+	short_desc: z.string({ message: 'Short description is required' }).min(1, 'Short description is required'),
 	long_desc: z.string().optional(),
 	is_active: z.boolean().default(true),
 	status: z.string({ message: 'Status is required' }),
@@ -49,7 +49,7 @@ export const CreateProductValidation = z.object({
 	// tags
 	tags: z.array(Tag).optional(),
 	// prices
-	price_types: z.array(Price).optional(),
+	price_types: z.array(Price).min(1, 'At least one price is required'),
 	// options
 	options: z.array(Option).optional(),
 	// variants

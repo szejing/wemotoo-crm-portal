@@ -40,7 +40,7 @@
 						type="number"
 						:placeholder="$t('components.productUpdate.pricePlaceholder')"
 						:min="0"
-						:step="0.01"
+						:step="0.1"
 						@update:model-value="emit('update:origSellPrice', $event != null ? Number($event) : undefined)"
 					/>
 				</UFormField>
@@ -52,7 +52,7 @@
 						type="number"
 						:placeholder="$t('components.productUpdate.costPricePlaceholder')"
 						:min="0"
-						:step="0.01"
+						:step="0.1"
 						@update:model-value="emit('update:costPrice', $event != null ? Number($event) : undefined)"
 					/>
 				</UFormField>
@@ -64,7 +64,7 @@
 						type="number"
 						:placeholder="$t('components.productUpdate.salePricePlaceholder')"
 						:min="0"
-						:step="0.01"
+						:step="0.1"
 						@update:model-value="onSalePriceInput($event)"
 					/>
 				</UFormField>
@@ -93,8 +93,9 @@
 					</div>
 				</div>
 				<div v-if="costPrice != null && origSellPrice" class="text-xs text-neutral-600 mt-2">
-					{{ $t('components.productUpdate.profitMargin') }}: {{ currencyCode }} {{ (origSellPrice - costPrice).toFixed(2) }}
-					({{ Math.round(((origSellPrice - costPrice) / origSellPrice) * 100) }}%)
+					{{ $t('components.productUpdate.profitMargin') }}: {{ currencyCode }} {{ (origSellPrice - costPrice).toFixed(2) }} ({{
+						Math.round(((origSellPrice - costPrice) / origSellPrice) * 100)
+					}}%)
 				</div>
 			</div>
 		</div>
@@ -106,7 +107,7 @@ import { ICONS } from '~/utils/icons';
 
 const props = defineProps<{
 	currencyCode: string;
-	origSellPrice?: number;
+	origSellPrice?: number | null;
 	costPrice?: number | null;
 	salePrice?: number | null;
 }>();
@@ -124,8 +125,8 @@ const effectiveSalePrice = computed(() => {
 	return p != null && Number(p) > 0 ? Number(p) : undefined;
 });
 
-function onSalePriceInput(event: number | string | null | undefined) {
+const onSalePriceInput = (event: number | string | null | undefined) => {
 	const num = event != null && event !== '' ? Number(event) : undefined;
 	emit('update:salePrice', num === 0 ? undefined : num);
-}
+};
 </script>

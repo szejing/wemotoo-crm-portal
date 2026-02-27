@@ -63,7 +63,7 @@ import { ICONS } from '~/utils/icons';
 
 const productStore = useProductStore();
 const { adding } = storeToRefs(productStore);
-const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
+const formRef = ref<{ submit: () => void } | null>(null);
 
 const { t } = useI18n();
 useHead({ title: () => t('pages.createProductTitle') });
@@ -76,10 +76,8 @@ const saveDraft = async () => {
 	await productStore.createProduct();
 };
 
-const onSubmit = async () => {
-	if (formRef.value) {
-		await formRef.value.onSubmit();
-	}
+const onSubmit = () => {
+	formRef.value?.submit();
 };
 
 const goBack = () => {

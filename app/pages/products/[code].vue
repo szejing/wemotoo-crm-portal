@@ -69,7 +69,7 @@ const code = route.params.code as string;
 const overlay = useOverlay();
 const productStore = useProductStore();
 const { updating, current_product } = storeToRefs(productStore);
-const formRef = ref<{ onSubmit: () => Promise<void> } | null>(null);
+const formRef = ref<{ submit: () => void } | null>(null);
 
 const isLoading = ref(!current_product.value);
 
@@ -95,10 +95,8 @@ onBeforeMount(async () => {
 	}
 });
 
-const updateProduct = async () => {
-	if (formRef.value) {
-		await formRef.value.onSubmit();
-	}
+const updateProduct = () => {
+	formRef.value?.submit();
 };
 
 const cancel = () => {

@@ -44,7 +44,7 @@
 			<!-- Center: Form Content (Scrollable) -->
 			<div class="lg:col-span-7">
 				<!-- Single Form with all sections -->
-				<UForm :schema="CreateProductValidation" :state="new_product" class="space-y-6 mb-6" @submit="onSubmit">
+				<UForm ref="formRef" :schema="CreateProductValidation" :state="new_product" class="space-y-6 mb-6" @submit="onSubmit" @error="onError">
 					<!-- Section 1: Basic Information -->
 					<UCard id="section-basic-info" class="shadow-md scroll-mt-4">
 						<template #header>
@@ -79,12 +79,12 @@
 									</UFormField>
 								</div>
 
-								<UFormField :label="$t('components.productUpdate.productType')" required>
+								<UFormField name="type_id" :label="$t('components.productUpdate.productType')" required>
 									<ZSelectMenuProductType v-model:type-id="new_product.type_id" />
 								</UFormField>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField :label="$t('components.productUpdate.productCode')">
+									<UFormField name="code" :label="$t('components.productUpdate.productCode')">
 										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.uniqueIdentifier') }}</p>
 										<UInput
 											v-model="new_product.code"
@@ -92,14 +92,14 @@
 											@update:model-value="new_product.code = $event.toUpperCase()"
 										/>
 									</UFormField>
-									<UFormField :label="$t('components.productUpdate.productName')" required>
+									<UFormField name="name" :label="$t('components.productUpdate.productName')" required>
 										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.nameCustomersSee') }}</p>
 										<UInput v-model="new_product.name" :placeholder="$t('components.productUpdate.productNamePlaceholder')" />
 									</UFormField>
 								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField :label="$t('components.productUpdate.shortDescription')">
+									<UFormField name="short_desc" :label="$t('components.productUpdate.shortDescription')" required>
 										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
 										<UInput v-model="new_product.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
 									</UFormField>
@@ -222,8 +222,10 @@ import type { TagInput, Tag } from '~/utils/types/tag';
 import type { BrandInput, Brand } from '~/utils/types/brand';
 import { CreateProductValidation } from '~/utils/schema';
 import { ZModalLoading } from '#components';
+import type { FormErrorEvent } from '#ui/types';
 
 const overlay = useOverlay();
+const formRef = ref();
 
 // Store
 const productStore = useProductStore();
@@ -338,7 +340,7 @@ const currency_code = computed({
 
 const orig_sell_price = computed({
 	get() {
-		return new_product.value.price_types?.[0]?.orig_sell_price ?? 0;
+		return new_product.value.price_types?.[0]?.orig_sell_price;
 	},
 	set(value) {
 		if (new_product.value.price_types?.[0]) {
@@ -468,6 +470,42 @@ const updateProductVariants = (value: ProductVariantInput[]) => {
 const updateProductMetadata = (value: any) => {
 	new_product.value.metadata = value;
 	triggerAutoSave();
+};
+
+// Field-to-section mapping for scroll-to-error
+const fieldSectionMap: Record<string, string> = {
+	code: 'section-basic-info',
+	name: 'section-basic-info',
+	short_desc: 'section-basic-info',
+	long_desc: 'section-basic-info',
+	status: 'section-basic-info',
+	is_active: 'section-basic-info',
+	type_id: 'section-basic-info',
+	categories: 'section-classification',
+	tags: 'section-classification',
+	price_types: 'section-pricing',
+};
+
+const onError = (event: FormErrorEvent) => {
+	const firstError = event.errors[0];
+	const errorName = firstError?.name;
+	if (!errorName) return;
+
+	const fieldName = errorName.split('.')[0] ?? errorName;
+	const sectionId = fieldSectionMap[fieldName];
+
+	if (sectionId) {
+		const sectionEl = document.getElementById(sectionId);
+		if (sectionEl) {
+			sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			activeSection.value = sectionId;
+		}
+	}
+
+	nextTick(() => {
+		const errorEl = document.getElementById(errorName);
+		errorEl?.focus();
+	});
 };
 
 // Methods: Form Submission
@@ -610,8 +648,11 @@ onMounted(() => {
 	});
 });
 
-// Expose methods to parent component
-defineExpose({ onSubmit });
+// Expose submit method that triggers UForm validation
+const submit = () => {
+	formRef.value?.submit();
+};
+defineExpose({ submit });
 
 // Lifecycle: Cleanup
 onUnmounted(() => {
