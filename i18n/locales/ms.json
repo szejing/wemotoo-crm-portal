@@ -144,7 +144,9 @@
 			"cityRequired": "Bandar wajib",
 			"countryCodeRequired": "Kod negara wajib",
 			"stateRequired": "Negeri wajib",
-			"postalCodeRequired": "Poskod wajib"
+			"postalCodeRequired": "Poskod wajib",
+			"latitudeMustBeNumeric": "Latitud mesti nombor yang sah",
+			"longitudeMustBeNumeric": "Longitud mesti nombor yang sah"
 		},
 		"order": {
 			"paymentTypeCodeRequired": "Kod jenis pembayaran wajib",

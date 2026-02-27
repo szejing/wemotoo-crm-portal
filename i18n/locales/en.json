@@ -144,7 +144,9 @@
 			"cityRequired": "City is required",
 			"countryCodeRequired": "Country code is required",
 			"stateRequired": "State is required",
-			"postalCodeRequired": "Postal code is required"
+			"postalCodeRequired": "Postal code is required",
+			"latitudeMustBeNumeric": "Latitude must be a valid number",
+			"longitudeMustBeNumeric": "Longitude must be a valid number"
 		},
 		"order": {
 			"paymentTypeCodeRequired": "Payment type code is required",

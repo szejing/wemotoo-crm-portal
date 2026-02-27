@@ -38,11 +38,15 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
+				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">
+					{{ $t('components.zModal.delete') }}
+				</UButton>
 
 				<div class="flex-jend gap-4">
 					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="form.submit()">
+						{{ $t('components.zModal.update') }}
+					</UButton>
 				</div>
 			</div>
 		</template>

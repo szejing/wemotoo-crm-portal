@@ -155,6 +155,8 @@ export const useOutletStore = defineStore('outletStore', {
 			const { $api } = useNuxtApp();
 
 			try {
+				const lon = outlet.longitude as number | string | null | undefined;
+				const lat = outlet.latitude as number | string | null | undefined;
 				const data = await $api.outlet.update(code, {
 					description: outlet.description,
 					address1: outlet.address1,
@@ -164,8 +166,8 @@ export const useOutletStore = defineStore('outletStore', {
 					country_code: outlet.country_code,
 					state: outlet.state,
 					postal_code: outlet.postal_code,
-					longitude: outlet.longitude || undefined,
-					latitude: outlet.latitude || undefined,
+					longitude: lon === '' || lon == null ? null : (typeof lon === 'string' ? Number(lon) : lon),
+					latitude: lat === '' || lat == null ? null : (typeof lat === 'string' ? Number(lat) : lat),
 					tax_rule: outlet.tax_rule as string | undefined,
 				});
 

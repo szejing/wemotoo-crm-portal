@@ -7,7 +7,7 @@ export type UpdateOutletReq = {
 	country_code: string | undefined;
 	state: string | undefined;
 	postal_code: string | undefined;
-	longitude: number | undefined;
-	latitude: number | undefined;
+	longitude: number | null | undefined;
+	latitude: number | null | undefined;
 	tax_rule: string | undefined;
 };
