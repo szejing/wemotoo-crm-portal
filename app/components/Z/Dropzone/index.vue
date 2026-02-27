@@ -22,36 +22,36 @@
 			@update:model-value="handleFilesUpdate"
 		>
 			<template #default="{ open, files }">
-			<div v-if="previews.length > 0 || (currentImages != null && currentImages.length > 0)" class="custom-dropzone has-content" @click="open()">
-				<!-- Previews section for new files -->
-				<div v-if="previews.length > 0" class="preview-section">
-					<div class="preview-grid">
-						<div v-for="(preview, index) in previews" :key="`preview-${index}`" class="preview-item">
-							<div class="preview-item-container group">
-								<img :src="preview" alt="Preview image" class="preview-image" />
-								<button class="delete-button" type="button" @click.stop="removePreview(index)">
-									<UIcon name="i-heroicons-trash" class="w-4 h-4 text-white" />
-								</button>
+				<div v-if="previews.length > 0 || (currentImages != null && currentImages.length > 0)" class="custom-dropzone has-content" @click="open()">
+					<!-- Previews section for new files -->
+					<div v-if="previews.length > 0" class="preview-section">
+						<div class="preview-grid">
+							<div v-for="(preview, index) in previews" :key="`preview-${index}`" class="preview-item">
+								<div class="preview-item-container group">
+									<img :src="preview" alt="Preview image" class="preview-image" />
+									<button class="delete-button" type="button" @click.stop="removePreview(index)">
+										<UIcon name="i-heroicons-trash" class="w-4 h-4 text-white" />
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- Previews section for existing images -->
-				<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
-					<div class="preview-grid">
-						<div v-for="(preview, index) in currentImages" :key="`existing-${index}`" class="preview-item">
-							<div class="preview-item-container group">
-								<img v-if="preview != null" :src="preview.url || preview" alt="Preview image" class="preview-image" />
-								<button class="delete-button" type="button" @click.stop="removeExistingImage(index)">
-									<UIcon name="i-heroicons-trash" class="w-4 h-4 text-white" />
-								</button>
+					<!-- Previews section for existing images -->
+					<div v-else-if="currentImages != null && currentImages.length > 0" class="preview-section">
+						<div class="preview-grid">
+							<div v-for="(preview, index) in currentImages" :key="`existing-${index}`" class="preview-item">
+								<div class="preview-item-container group">
+									<img v-if="preview != null" :src="preview.url || preview" alt="Preview image" class="preview-image" />
+									<button class="delete-button" type="button" @click.stop="removeExistingImage(index)">
+										<UIcon name="i-heroicons-trash" class="w-4 h-4 text-white" />
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</template>
+			</template>
 		</UFileUpload>
 		<div v-if="rejectedMessage" class="upload-limit-warning" role="alert">
 			<UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5 shrink-0" />
@@ -434,7 +434,6 @@ onBeforeUnmount(() => {
 
 .preview-section {
 	width: 100%;
-	padding: 0.5rem;
 }
 
 .preview-header {
@@ -457,7 +456,6 @@ onBeforeUnmount(() => {
 	gap: 1rem;
 	overflow-x: auto;
 	overflow-y: hidden;
-	padding: 0.5rem 0.25rem;
 	scrollbar-width: thin;
 	scrollbar-color: rgb(209 213 219) transparent;
 	/* Ensure smooth scrolling on mobile */
