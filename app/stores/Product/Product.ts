@@ -173,7 +173,6 @@ export const useProductStore = defineStore('productStore', {
 
 		async createProduct(): Promise<Product> {
 			this.adding = true;
-			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
@@ -213,7 +212,6 @@ export const useProductStore = defineStore('productStore', {
 				throw new Error(message);
 			} finally {
 				this.adding = false;
-				this.loading = false;
 			}
 		},
 

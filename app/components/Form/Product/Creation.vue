@@ -223,9 +223,11 @@ import type { BrandInput, Brand } from '~/utils/types/brand';
 import { CreateProductValidation } from '~/utils/schema';
 import { ZModalLoading } from '#components';
 
+const overlay = useOverlay();
+
 // Store
 const productStore = useProductStore();
-const { new_product } = storeToRefs(productStore);
+const { new_product, adding } = storeToRefs(productStore);
 const toast = useToast();
 
 // State
@@ -240,6 +242,18 @@ const tags = ref<Tag[]>([]);
 const brands = ref<Brand[]>([]);
 
 const { t } = useI18n();
+
+const loadingModal = overlay.create(ZModalLoading, {
+	props: { key: 'loading' },
+});
+
+watch(adding, (newVal) => {
+	if (newVal) {
+		loadingModal.open();
+	} else {
+		loadingModal.close();
+	}
+});
 
 // Section Navigation
 const sections = computed(() => [
@@ -537,18 +551,8 @@ const onSubmit = async () => {
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 
-	const overlay = useOverlay();
-	const loadingModal = overlay.create(ZModalLoading, {
-		props: {
-			key: 'loading',
-		},
-	});
-
-	loadingModal.open();
-
 	const product = await productStore.createProduct();
 
-	loadingModal.close();
 	if (product) {
 		useRouter().back();
 	}
@@ -607,9 +611,7 @@ onMounted(() => {
 });
 
 // Expose methods to parent component
-defineExpose({
-	onSubmit,
-});
+defineExpose({ onSubmit });
 
 // Lifecycle: Cleanup
 onUnmounted(() => {
