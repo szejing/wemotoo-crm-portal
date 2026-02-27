@@ -1,5 +1,15 @@
 <template>
-	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :placeholder="$t('components.selectMenu.selectProductStatus')">
+	<USelectMenu
+		v-model="status"
+		:items="items"
+		value-key="value"
+		size="md"
+		:placeholder="$t('components.selectMenu.selectProductStatus')"
+		:search-input="{
+			placeholder: 'Search product status…',
+			icon: 'i-lucide-search',
+		}"
+	>
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getProductStatusColor(status)" variant="subtle" class="truncate">

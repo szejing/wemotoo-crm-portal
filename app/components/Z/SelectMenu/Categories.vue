@@ -3,6 +3,10 @@
 		v-model="categories"
 		v-model:search-term="searchTerm"
 		:items="items"
+		:search-input="{
+			placeholder: 'Search or add categories…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		label-key="code"
 		description-key="description"

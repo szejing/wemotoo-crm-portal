@@ -3,7 +3,10 @@
 		v-model="taxes"
 		v-model:search-term="searchTerm"
 		:items="items"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search...',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		multiple
 		label-key="code"

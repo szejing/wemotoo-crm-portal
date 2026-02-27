@@ -1,10 +1,12 @@
 <template>
 	<UFormField name="categories" class="mt-2">
 		<USelectMenu
-			v-model="category"
 			v-model:search-term="searchTerm"
 			:items="categoryItems"
-			:search-input="{}"
+			:search-input="{
+				placeholder: 'Search state…',
+				icon: 'i-lucide-search',
+			}"
 			size="md"
 			:placeholder="$t('components.selectMenu.selectCategory')"
 			value-key="code"
@@ -21,7 +23,7 @@
 			<template #item="{ item: catg }">
 				<div class="flex items-center gap-2">
 					<p class="text-neutral-300 font-light">[{{ catg.code }}]</p>
-					<p class="text-neutral-700 font-semibold">{{ catg.name }}</p>
+					<p class="text-neutral-700 font-semibold">{{ catg.description }}</p>
 				</div>
 			</template>
 		</USelectMenu>

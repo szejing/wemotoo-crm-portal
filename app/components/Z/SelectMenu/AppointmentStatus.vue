@@ -1,5 +1,15 @@
 <template>
-	<USelectMenu v-model="status" :items="items" value-key="value" size="md" :ui="{ base: 'min-w-[150px]' }">
+	<USelectMenu
+		v-model="status"
+		:items="items"
+		value-key="value"
+		size="md"
+		:ui="{ base: 'min-w-[150px]' }"
+		:search-input="{
+			placeholder: 'Search appointment status…',
+			icon: 'i-lucide-search',
+		}"
+	>
 		<template #default>
 			<span v-if="status">
 				<UBadge :color="getAppointmentStatusColor(status)" variant="subtle" class="truncate">

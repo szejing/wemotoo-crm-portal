@@ -1,5 +1,15 @@
 <template>
-	<USelectMenu v-model="days" :items="daysItems" size="md" multiple value-key="short">
+	<USelectMenu
+		v-model="days"
+		:items="daysItems"
+		size="md"
+		multiple
+		value-key="short"
+		:search-input="{
+			placeholder: 'Search days…',
+			icon: 'i-lucide-search',
+		}"
+	>
 		<template #default>
 			<span v-if="days.length > 0" class="truncate">{{ days?.map((day) => days_options.find((d) => d.short === day)?.short).join(', ') }}</span>
 			<span v-else class="text-neutral-400">Mon, Tue, Wed...</span>

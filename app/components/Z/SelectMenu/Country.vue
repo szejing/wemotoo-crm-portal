@@ -3,7 +3,10 @@
 		v-model="country?.iso2"
 		v-model:search-term="searchTerm"
 		:items="countryItems"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search country…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		:placeholder="$t('components.selectMenu.selectCountry')"
 		value-key="iso2"

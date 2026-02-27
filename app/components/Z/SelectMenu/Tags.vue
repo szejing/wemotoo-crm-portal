@@ -3,7 +3,10 @@
 		v-model="tags"
 		v-model:search-term="searchTerm"
 		:items="items"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search or add tags…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		multiple
 		label-key="value"

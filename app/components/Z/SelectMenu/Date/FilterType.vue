@@ -6,6 +6,10 @@
 			size="md"
 			value-key="value"
 			:ui="{ base: 'min-w-[200px]' }"
+			:search-input="{
+				placeholder: 'Search filter type…',
+				icon: 'i-lucide-search',
+			}"
 		/>
 	</UFormField>
 </template>

@@ -3,7 +3,10 @@
 		v-model="currency"
 		v-model:search-term="searchTerm"
 		:items="items"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search currency…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		label-key="code"
 		description-key="name"

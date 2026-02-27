@@ -3,7 +3,10 @@
 		v-model="brands"
 		v-model:search-term="searchTerm"
 		:items="items"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search or add brands…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		multiple
 		label-key="code"

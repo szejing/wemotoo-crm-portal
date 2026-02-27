@@ -1,5 +1,14 @@
 <template>
-	<USelectMenu v-model="time" :items="items" value-key="label" size="md">
+	<USelectMenu
+		v-model="time"
+		:items="items"
+		value-key="label"
+		size="md"
+		:search-input="{
+			placeholder: 'Search time…',
+			icon: 'i-lucide-search',
+		}"
+	>
 		<template #default>
 			<span v-if="time" class="truncate">
 				{{ props.type === 'start' ? 'Start : ' : 'End : ' }}

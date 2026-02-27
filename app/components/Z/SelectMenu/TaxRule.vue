@@ -3,7 +3,10 @@
 		v-model="tax_rule"
 		v-model:search-term="searchTerm"
 		:items="items"
-		:search-input="{}"
+		:search-input="{
+			placeholder: 'Search tax rule…',
+			icon: 'i-lucide-search',
+		}"
 		size="md"
 		label-key="code"
 		description-key="description"
