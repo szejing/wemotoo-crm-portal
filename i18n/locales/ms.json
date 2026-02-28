@@ -2,8 +2,13 @@
 	"error": {
 		"pageTitle": "Sesuatu tidak kena",
 		"goBackHome": "Kembali ke laman utama",
+		"tryAgain": "Cuba lagi",
 		"genericMessage": "Ralat tidak dijangka berlaku. Sila cuba lagi atau kembali ke papan pemuka.",
-		"permissionRestricted": "Anda tidak mempunyai kebenaran untuk mengakses halaman ini."
+		"permissionRestricted": "Anda tidak mempunyai kebenaran untuk mengakses halaman ini.",
+		"notFoundTitle": "Halaman tidak dijumpai",
+		"notFoundMessage": "Halaman yang anda cari tidak wujud atau mungkin telah dipindahkan.",
+		"serverErrorTitle": "Sesuatu tidak kena",
+		"serverErrorMessage": "Maaf, berlaku ralat di pihak kami. Sila cuba lagi atau kembali ke papan pemuka."
 	},
 	"common": {
 		"appName": "Wemotoo CRM",
