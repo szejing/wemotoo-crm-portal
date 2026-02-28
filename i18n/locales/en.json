@@ -243,6 +243,7 @@
 		"orderSummaryTitle": "Wemotoo CRM - Order Summary",
 		"orderItemSummary": "Wemotoo CRM - Order Item Summary",
 		"orderDashboardTotalSales": "Total Sales",
+		"orderDashboardTotalOrdersAmt": "Total orders amt",
 		"orderDashboardNewOrders": "New Orders",
 		"orderDashboardNewCustomers": "New Customers",
 		"orderDashboardPendingPayments": "Pending Payments",

@@ -36,9 +36,9 @@ type SummProduct_ = {
 	total_net_amt: number;
 };
 
-type TotalSalesAmt_ = {
+type TotalOrderAmt_ = {
 	currency_code: string;
-	total_sales_amt: number;
+	total_order_amt: number;
 };
 
 export type GetDashboardSummResp = {
@@ -47,7 +47,7 @@ export type GetDashboardSummResp = {
 	top_purchased_products: SummProduct_[];
 	new_orders: number;
 	new_customers: number;
-	total_sales_amt: TotalSalesAmt_[];
+	total_order_amt: TotalOrderAmt_[];
 	new_appointments: number;
 	pending_payments: number;
 	pending_actions: number;

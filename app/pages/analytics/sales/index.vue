@@ -19,46 +19,11 @@
 
 				<!-- Date range -->
 				<div class="flex flex-wrap items-center gap-3">
-					<ZSelectMenuDateRange
-						v-model="range"
-						:placeholder="$t('components.filter.selectDateRange')"
-						@update:model-value="onRangeChange"
-					/>
+					<ZSelectMenuDateRange v-model="range" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="onRangeChange" />
 				</div>
 
 				<!-- Stats row -->
-				<UPageGrid class="lg:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-					<UCard
-						v-for="(stat, index) in salesStats"
-						:key="index"
-						:ui="{
-							root: 'overflow-hidden',
-							body: 'p-4',
-						}"
-					>
-						<div class="flex items-start gap-3">
-							<div
-								class="p-2.5 rounded-full shrink-0"
-								:class="stat.iconBg"
-							>
-								<UIcon :name="stat.icon" class="w-5 h-5" :class="stat.iconColor" />
-							</div>
-							<div class="min-w-0 flex-1">
-								<p class="text-xs font-medium uppercase text-muted">{{ stat.title }}</p>
-								<p class="mt-1 text-2xl font-semibold text-highlighted">
-									{{ stat.value }}
-								</p>
-								<NuxtLink
-									v-if="stat.to"
-									:to="stat.to"
-									class="mt-1 text-xs text-primary hover:underline"
-								>
-									{{ $t('common.details') }}
-								</NuxtLink>
-							</div>
-						</div>
-					</UCard>
-				</UPageGrid>
+				<ZDashboardStats :stats="salesStats" />
 
 				<!-- Revenue chart -->
 				<UCard ref="chartCardRef" :ui="{ root: 'overflow-visible', body: '!px-0 !pt-0 !pb-3' }">
@@ -73,12 +38,7 @@
 						</div>
 					</template>
 					<ClientOnly>
-						<VisXYContainer
-							:data="chartData"
-							:padding="{ top: 40 }"
-							class="h-80"
-							:width="chartWidth"
-						>
+						<VisXYContainer :data="chartData" :padding="{ top: 40 }" class="h-80" :width="chartWidth">
 							<VisLine :x="chartX" :y="chartY" color="var(--ui-primary)" />
 							<VisArea :x="chartX" :y="chartY" color="var(--ui-primary)" :opacity="0.1" />
 							<VisAxis type="x" :x="chartX" :tick-format="chartXTicks" />
@@ -141,7 +101,7 @@
 							>
 								<div class="flex items-center gap-3 min-w-0">
 									<span class="shrink-0 w-6 text-xs font-medium text-muted">{{ i + 1 }}</span>
-									<span class="truncate font-medium text-highlighted">{{ customer.customer_name ?? customer.customer_no }}</span>
+									<span class="truncate font-medium text-highlighted">{{ customer.customer_no }}</span>
 								</div>
 								<div class="flex shrink-0 items-center gap-2 text-sm">
 									<span class="text-muted">{{ customer.total_orders }} {{ $t('pages.ordersLabel') }}</span>
@@ -194,11 +154,7 @@ function getDailyChartPoint(s: (typeof daily_summaries.value)[number]) {
 		summ_sale_item?: { total_net_amt: number; currency_code?: string };
 	};
 	const date = rec.biz_date ?? rec.summ_order?.biz_date ?? rec.summ_sale?.biz_date ?? '';
-	const amount =
-		rec.summ_order?.total_net_amt ??
-		rec.summ_sale?.total_net_amt ??
-		rec.summ_sale_item?.total_net_amt ??
-		0;
+	const amount = rec.summ_order?.total_net_amt ?? rec.summ_sale?.total_net_amt ?? rec.summ_sale_item?.total_net_amt ?? 0;
 	return { date, amount };
 }
 
@@ -217,14 +173,6 @@ const primaryCurrency = computed(() => {
 
 const chartTotal = computed(() => chartData.value.reduce((acc, d) => acc + d.amount, 0));
 
-const totalOrdersSum = computed(() =>
-	daily_summaries.value.reduce((acc, s) => {
-		const rec = s as { summ_order?: { total_orders: number }; summ_sale?: { total_orders: number } };
-		const n = rec.summ_order?.total_orders ?? rec.summ_sale?.total_orders ?? 0;
-		return acc + n;
-	}, 0),
-);
-
 const totalQtySum = computed(() =>
 	daily_summaries.value.reduce((acc, s) => {
 		const rec = s as { summ_order?: { total_qty: number }; summ_sale?: { total_qty: number }; summ_sale_item?: { total_qty: number } };
@@ -240,14 +188,6 @@ const salesStats = computed(() => [
 		icon: 'i-heroicons-banknotes',
 		iconBg: 'bg-green-500/10',
 		iconColor: 'text-green-600 dark:text-green-400',
-		to: '/analytics/sales/summary',
-	},
-	{
-		title: t('pages.salesDashboardTotalOrders'),
-		value: totalOrdersSum.value,
-		icon: 'i-heroicons-shopping-cart',
-		iconBg: 'bg-primary/10',
-		iconColor: 'text-primary',
 		to: '/analytics/sales/summary',
 	},
 	{

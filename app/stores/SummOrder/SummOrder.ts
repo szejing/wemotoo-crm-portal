@@ -7,9 +7,9 @@ import { getFormattedDate } from 'wemotoo-common';
 import { initialEmptyOrderSummCustomer } from './model/order-summ-customer.model';
 import type { Range } from '~/utils/interface';
 
-type TotalSalesAmt = {
+type TotalOrderAmt = {
 	currency_code: string;
-	total_sales_amt: number;
+	total_order_amt: number;
 };
 
 export const useSummOrderStore = defineStore('summOrderStore', {
@@ -21,7 +21,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		top_purchased_products: [] as SummProduct[],
 		new_orders: 0 as number,
 		new_customers: 0 as number,
-		total_sales_amt: [] as TotalSalesAmt[],
+		total_order_amt: [] as TotalOrderAmt[],
 		new_appointments: 0 as number,
 		pending_payments: 0 as number,
 		pending_actions: 0 as number,
@@ -71,8 +71,8 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					this.new_customers = data.new_customers;
 				}
 
-				if (data.total_sales_amt) {
-					this.total_sales_amt = data.total_sales_amt;
+				if (data.total_order_amt) {
+					this.total_order_amt = data.total_order_amt;
 				}
 
 				if (data.new_appointments) {

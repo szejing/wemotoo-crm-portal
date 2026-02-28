@@ -19,46 +19,11 @@
 
 				<!-- Date range + load -->
 				<div class="flex flex-wrap items-center gap-3">
-					<ZSelectMenuDateRange
-						v-model="range"
-						:placeholder="$t('components.filter.selectDateRange')"
-						@update:model-value="onRangeChange"
-					/>
+					<ZSelectMenuDateRange v-model="range" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="onRangeChange" />
 				</div>
 
 				<!-- Stats row -->
-				<UPageGrid class="lg:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-					<UCard
-						v-for="(stat, index) in orderStats"
-						:key="index"
-						:ui="{
-							root: 'overflow-hidden',
-							body: 'p-4',
-						}"
-					>
-						<div class="flex items-start gap-3">
-							<div
-								class="p-2.5 rounded-full shrink-0"
-								:class="stat.iconBg"
-							>
-								<UIcon :name="stat.icon" class="w-5 h-5" :class="stat.iconColor" />
-							</div>
-							<div class="min-w-0 flex-1">
-								<p class="text-xs font-medium uppercase text-muted">{{ stat.title }}</p>
-								<p class="mt-1 text-2xl font-semibold text-highlighted">
-									{{ stat.value }}
-								</p>
-								<NuxtLink
-									v-if="stat.to"
-									:to="stat.to"
-									class="mt-1 text-xs text-primary hover:underline"
-								>
-									{{ $t('common.details') }}
-								</NuxtLink>
-							</div>
-						</div>
-					</UCard>
-				</UPageGrid>
+				<ZDashboardStats :stats="orderStats" />
 
 				<!-- Revenue chart -->
 				<UCard ref="chartCardRef" :ui="{ root: 'overflow-visible', body: '!px-0 !pt-0 !pb-3' }">
@@ -73,12 +38,7 @@
 						</div>
 					</template>
 					<ClientOnly>
-						<VisXYContainer
-							:data="chartData"
-							:padding="{ top: 40 }"
-							class="h-80"
-							:width="chartWidth"
-						>
+						<VisXYContainer :data="chartData" :padding="{ top: 40 }" class="h-80" :width="chartWidth">
 							<VisLine :x="chartX" :y="chartY" color="var(--ui-primary)" />
 							<VisArea :x="chartX" :y="chartY" color="var(--ui-primary)" :opacity="0.1" />
 							<VisAxis type="x" :x="chartX" :tick-format="chartXTicks" />
@@ -175,16 +135,8 @@ const { t } = useI18n();
 useHead({ title: () => t('pages.analyticsTitle') });
 
 const summOrderStore = useSummOrderStore();
-const {
-	daily_summaries,
-	top_purchased_customers,
-	top_purchased_products,
-	new_orders,
-	new_customers,
-	total_sales_amt,
-	pending_payments,
-	pending_actions,
-} = storeToRefs(summOrderStore);
+const { daily_summaries, top_purchased_customers, top_purchased_products, new_orders, new_customers, total_order_amt, pending_payments, pending_actions } =
+	storeToRefs(summOrderStore);
 
 const range = shallowRef<Range>({
 	start: sub(new Date(), { days: 7 }),
@@ -194,15 +146,17 @@ const range = shallowRef<Range>({
 const chartCardRef = useTemplateRef<HTMLElement | null>('chartCardRef');
 const { width: chartWidth } = useElementSize(chartCardRef);
 
-const primaryCurrency = computed(() => total_sales_amt.value[0]?.currency_code ?? 'MYR');
-
-const totalSalesDisplay = computed(() => {
-	const sum = total_sales_amt.value.reduce((acc, item) => acc + item.total_sales_amt, 0);
-	const first = total_sales_amt.value[0];
-	return first ? formatCurrency(sum, first.currency_code) : formatCurrency(0, 'MYR');
-});
+const primaryCurrency = computed(() => total_order_amt.value[0]?.currency_code ?? 'MYR');
 
 const orderStats = computed(() => [
+	{
+		title: t('pages.orderDashboardTotalOrdersAmt'),
+		value: formatCurrency(total_order_amt.value[0]?.total_order_amt ?? 0, primaryCurrency.value),
+		icon: 'i-heroicons-banknotes',
+		iconBg: 'bg-green-500/10',
+		iconColor: 'text-green-600 dark:text-green-400',
+		to: '/analytics/orders/summary',
+	},
 	{
 		title: t('pages.orderDashboardNewOrders'),
 		value: new_orders.value ?? 0,
@@ -218,14 +172,6 @@ const orderStats = computed(() => [
 		iconBg: 'bg-secondary/10',
 		iconColor: 'text-secondary',
 		to: '/customers',
-	},
-	{
-		title: t('pages.orderDashboardTotalSales'),
-		value: totalSalesDisplay.value,
-		icon: 'i-heroicons-banknotes',
-		iconBg: 'bg-green-500/10',
-		iconColor: 'text-green-600 dark:text-green-400',
-		to: '/analytics/orders/summary',
 	},
 	{
 		title: t('pages.orderDashboardPendingPayments'),

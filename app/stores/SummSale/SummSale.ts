@@ -1,4 +1,3 @@
-import type { SummDaily, SummCustomer, SummProduct } from '~/utils/types/summ-orders';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { getFormattedDate } from 'wemotoo-common';
@@ -7,14 +6,21 @@ import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
 import { initialEmptySaleSummPayment } from './models/sale-summ-payments.model';
 import { initialEmptySaleSummCustomer } from './models/sale-summ-customer.model';
 import type { Range } from '~/utils/interface';
+import type {
+	SummDaily_,
+	SummCustomer_,
+	SummProduct_,
+	TotalSaleAmt_,
+} from '~/repository/modules/summ-sale/models/response/get-dashboard-summ.resp';
 
 export const useSummSaleStore = defineStore('summSaleStore', {
 	state: () => ({
 		loading: false as boolean,
 		errors: [] as string[],
-		daily_summaries: [] as SummDaily[],
-		top_purchased_customers: [] as SummCustomer[],
-		top_purchased_products: [] as SummProduct[],
+		daily_summaries: [] as SummDaily_[],
+		top_purchased_customers: [] as SummCustomer_[],
+		top_purchased_products: [] as SummProduct_[],
+		total_sale_amt: [] as TotalSaleAmt_[],
 		sale_summ: initialEmptySaleSumm,
 		sale_summ_items: initialEmptySaleSummItem,
 		sale_summ_payments: initialEmptySaleSummPayment,
@@ -44,15 +50,19 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 				});
 
 				if (data.daily_summaries) {
-					this.daily_summaries = data.daily_summaries as unknown as SummDaily[];
+					this.daily_summaries = data.daily_summaries;
 				}
 
 				if (data.top_purchased_customers) {
-					this.top_purchased_customers = data.top_purchased_customers as unknown as SummCustomer[];
+					this.top_purchased_customers = data.top_purchased_customers;
 				}
 
 				if (data.top_purchased_products) {
-					this.top_purchased_products = data.top_purchased_products as unknown as SummProduct[];
+					this.top_purchased_products = data.top_purchased_products;
+				}
+
+				if (data.total_sale_amt) {
+					this.total_sale_amt = data.total_sale_amt;
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
