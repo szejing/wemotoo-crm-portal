@@ -43,7 +43,17 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 					end_date: getFormattedDate(end!),
 				});
 
-				console.log('sum sales summary', data);
+				if (data.daily_summaries) {
+					this.daily_summaries = data.daily_summaries as unknown as SummDaily[];
+				}
+
+				if (data.top_purchased_customers) {
+					this.top_purchased_customers = data.top_purchased_customers as unknown as SummCustomer[];
+				}
+
+				if (data.top_purchased_products) {
+					this.top_purchased_products = data.top_purchased_products as unknown as SummProduct[];
+				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
 				failedNotification(message);
