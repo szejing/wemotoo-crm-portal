@@ -221,7 +221,7 @@ import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/prod
 import type { TagInput, Tag } from '~/utils/types/tag';
 import type { BrandInput, Brand } from '~/utils/types/brand';
 import { CreateProductValidation } from '~/utils/schema';
-import { ZModalLoading } from '#components';
+import { ZModalConfirmation, ZModalLoading } from '#components';
 import type { FormErrorEvent } from '#ui/types';
 
 const overlay = useOverlay();
@@ -509,7 +509,14 @@ const onError = (event: FormErrorEvent) => {
 };
 
 // Methods: Form Submission
-const onSubmit = async () => {
+const hasZeroOrigSellPrice = () => {
+	const productPrices = new_product.value.price_types ?? [];
+	if (productPrices.some((p) => Number(p.orig_sell_price) === 0)) return true;
+	const variants = new_product.value.variants ?? [];
+	return variants.some((v) => v.price_types?.some((p) => Number(p.orig_sell_price) === 0));
+};
+
+const doCreateProduct = async () => {
 	// Process the data
 	const prodPrice: PriceInput[] = [];
 	new_product.value.price_types?.forEach((price) => {
@@ -594,6 +601,29 @@ const onSubmit = async () => {
 	if (product) {
 		useRouter().back();
 	}
+};
+
+const onSubmit = async () => {
+	if (hasZeroOrigSellPrice()) {
+		const confirmModal = overlay.create(ZModalConfirmation, {
+			props: {
+				title: t('modal.confirmOrigSellPriceZeroTitle'),
+				message: t('modal.confirmOrigSellPriceZeroMessage'),
+				titleVariant: 'danger',
+				action: 'confirm',
+				onConfirm: async () => {
+					await doCreateProduct();
+					confirmModal.close();
+				},
+				onCancel: () => {
+					confirmModal.close();
+				},
+			},
+		});
+		confirmModal.open();
+		return;
+	}
+	await doCreateProduct();
 };
 
 // Lifecycle: Auto-save on product changes

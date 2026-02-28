@@ -509,7 +509,9 @@
 		"leave": "Tinggalkan",
 		"confirm": "Sahkan",
 		"confirmationTitle": "Pengesahan",
-		"confirmationMessage": "Adakah anda pasti mahu meneruskan?"
+		"confirmationMessage": "Adakah anda pasti mahu meneruskan?",
+		"confirmOrigSellPriceZeroTitle": "Harga jual ialah sifar",
+		"confirmOrigSellPriceZeroMessage": "Anda telah menetapkan harga jual kepada 0 untuk produk ini. Adakah anda mahu menyimpannya?"
 	},
 	"components": {
 		"backButton": {

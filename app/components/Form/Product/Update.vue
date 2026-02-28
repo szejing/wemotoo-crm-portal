@@ -212,7 +212,7 @@ import type { Tag } from '~/utils/types/tag';
 import type { Brand } from '~/utils/types/brand';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
 import { createUpdateProductValidation } from '~/utils/schema';
-import { ZModalLoading } from '#components';
+import { ZModalConfirmation, ZModalLoading } from '#components';
 import type { Image } from '~/utils/types/image';
 import type { FormErrorEvent } from '#ui/types';
 
@@ -627,18 +627,14 @@ const onError = (event: FormErrorEvent) => {
 };
 
 // Methods: Form Submission
-const onSubmit = async () => {
-	// Update category_codes, tag_ids, brand_codes from UI state
-	formState.value.category_codes = categories.value?.map((cat) => cat.code!).filter(Boolean) ?? [];
-	formState.value.tag_ids = tags.value?.map((tag) => tag.id!).filter(Boolean);
-	formState.value.brand_codes = brands.value?.map((brand) => brand.code!).filter(Boolean);
-	formState.value.status = ProductStatus.PUBLISHED;
+const hasZeroOrigSellPrice = () => {
+	const productPrices = formState.value.price_types ?? [];
+	if (productPrices.some((p) => Number(p.orig_sell_price) === 0)) return true;
+	const variants = formState.value.variants ?? [];
+	return variants.some((v) => v.price_types?.some((p) => Number(p.orig_sell_price) === 0));
+};
 
-	// Deep clone metadata to avoid reference issues
-	if (formState.value.metadata) {
-		formState.value.metadata = JSON.parse(JSON.stringify(formState.value.metadata));
-	}
-
+const doUpdateProduct = async () => {
 	const overlay = useOverlay();
 	const loadingModal = overlay.create(ZModalLoading, {
 		props: { key: 'loading' },
@@ -660,6 +656,42 @@ const onSubmit = async () => {
 	} finally {
 		loadingModal.close();
 	}
+};
+
+const onSubmit = async () => {
+	// Update category_codes, tag_ids, brand_codes from UI state
+	formState.value.category_codes = categories.value?.map((cat) => cat.code!).filter(Boolean) ?? [];
+	formState.value.tag_ids = tags.value?.map((tag) => tag.id!).filter(Boolean);
+	formState.value.brand_codes = brands.value?.map((brand) => brand.code!).filter(Boolean);
+	formState.value.status = ProductStatus.PUBLISHED;
+
+	// Deep clone metadata to avoid reference issues
+	if (formState.value.metadata) {
+		formState.value.metadata = JSON.parse(JSON.stringify(formState.value.metadata));
+	}
+
+	if (hasZeroOrigSellPrice()) {
+		const overlay = useOverlay();
+		const confirmModal = overlay.create(ZModalConfirmation, {
+			props: {
+				title: t('modal.confirmOrigSellPriceZeroTitle'),
+				message: t('modal.confirmOrigSellPriceZeroMessage'),
+				titleVariant: 'danger',
+				action: 'confirm',
+				onConfirm: async () => {
+					await doUpdateProduct();
+					confirmModal.close();
+				},
+				onCancel: () => {
+					confirmModal.close();
+				},
+			},
+		});
+		confirmModal.open();
+		return;
+	}
+
+	await doUpdateProduct();
 };
 
 // Lifecycle: Setup scroll spy

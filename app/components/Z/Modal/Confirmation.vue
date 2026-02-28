@@ -5,7 +5,14 @@
 		}"
 	>
 		<template #header>
-			<h3 class="text-lg font-bold">{{ title ?? t('modal.confirmationTitle') }}</h3>
+			<h3
+				class="text-lg font-bold"
+				:class="{
+					'text-error': titleVariant === 'danger',
+				}"
+			>
+				{{ title ?? t('modal.confirmationTitle') }}
+			</h3>
 		</template>
 
 		<template #body>
@@ -32,6 +39,10 @@ const { t } = useI18n();
 const props = defineProps({
 	title: { type: String, default: undefined },
 	message: { type: String, default: undefined },
+	titleVariant: {
+		type: String as () => 'default' | 'danger',
+		default: 'default',
+	},
 	action: {
 		type: String,
 		default: 'confirm',

@@ -509,7 +509,9 @@
 		"leave": "Leave",
 		"confirm": "Confirm",
 		"confirmationTitle": "Confirmation",
-		"confirmationMessage": "Are you sure you want to proceed?"
+		"confirmationMessage": "Are you sure you want to proceed?",
+		"confirmOrigSellPriceZeroTitle": "Selling price is zero",
+		"confirmOrigSellPriceZeroMessage": "You've set the selling price to 0 for this product. Do you want to save it anyway?"
 	},
 	"components": {
 		"backButton": {
