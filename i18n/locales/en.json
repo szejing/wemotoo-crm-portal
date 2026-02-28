@@ -59,6 +59,8 @@
 		"main": "Main",
 		"dashboard": "Dashboard",
 		"analytics": "Analytics",
+		"orderAnalytics": "Order Analytics",
+		"salesAnalytics": "Sales Analytics",
 		"appointments": "Appointments",
 		"orders": "Orders",
 		"products": "Products",

@@ -16,6 +16,11 @@ const default_navigations = [
 				label: 'nav.analytics',
 				icon: ICONS.ANALYTICS,
 				to: '/analytics',
+				value: 'analytics',
+				children: [
+					{ label: 'nav.orderAnalytics', to: '/analytics/orders' },
+					{ label: 'nav.salesAnalytics', to: '/analytics/sales' },
+				],
 			},
 			{
 				label: 'nav.appointments',

@@ -59,6 +59,8 @@
 		"main": "Utama",
 		"dashboard": "Papan Pemuka",
 		"analytics": "Analitik",
+		"orderAnalytics": "Analitik Pesanan",
+		"salesAnalytics": "Analitik Jualan",
 		"appointments": "Temujanji",
 		"orders": "Pesanan",
 		"products": "Produk",
