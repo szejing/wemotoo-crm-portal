@@ -38,22 +38,12 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			}
 
 			try {
-				const data = await $api.summOrder.getDashboardOrderSummary({
+				const data = await $api.summSales.getDashboardSalesSummary({
 					start_date: getFormattedDate(start!),
 					end_date: getFormattedDate(end!),
 				});
 
-				if (data.daily_summaries) {
-					this.daily_summaries = data.daily_summaries;
-				}
-
-				if (data.top_purchased_customers) {
-					this.top_purchased_customers = data.top_purchased_customers;
-				}
-
-				if (data.top_purchased_products) {
-					this.top_purchased_products = data.top_purchased_products;
-				}
+				console.log('sum sales summary', data);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load sales summary';
 				failedNotification(message);
