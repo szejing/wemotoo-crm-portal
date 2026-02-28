@@ -56,7 +56,7 @@ const initialEmptyProduct: ProductCreate = {
 		{
 			id: undefined,
 			currency_code: 'MYR',
-			orig_sell_price: undefined,
+			orig_sell_price: 0,
 			cost_price: undefined,
 			sale_price: undefined,
 		},

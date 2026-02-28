@@ -2,7 +2,7 @@
 export type PriceInput = {
 	id?: number;
 	currency_code: string;
-	orig_sell_price?: number;
+	orig_sell_price: number;
 	cost_price?: number;
 	sale_price?: number;
 };
