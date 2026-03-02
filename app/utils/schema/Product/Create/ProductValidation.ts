@@ -38,11 +38,12 @@ const Variant = z.object({
 });
 
 export const CreateProductValidation = z.object({
-	code: z.string({ message: 'Code is required' }).min(1, 'Code is required').max(16, 'Max. 16 characters'),
+	code: z.string().optional(),
 	name: z.string({ message: 'Name is required' }).min(1, 'Name is required'),
 	short_desc: z.string({ message: 'Short description is required' }).min(1, 'Short description is required'),
 	long_desc: z.string().optional(),
 	is_active: z.boolean().default(true),
+
 	status: z.string({ message: 'Status is required' }),
 	// categories
 	categories: z.array(Category).optional(),

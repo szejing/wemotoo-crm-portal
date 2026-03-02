@@ -31,7 +31,7 @@ const initialEmptyProduct: ProductCreate = {
 	is_discountable: true,
 	is_giftcard: false,
 
-	status: ProductStatus.PUBLISHED,
+	status: ProductStatus.DRAFT,
 
 	// product types
 	type_id: 1,
