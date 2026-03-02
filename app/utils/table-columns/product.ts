@@ -88,7 +88,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 					[
 						h('span', { class: 'text-xs text-neutral-500 dark:text-neutral-400 leading-none' }, t('table.visible')),
 						h(USwitch, {
-							'class': 'size-4',
+							'class': 'size-4 cursor-pointer',
 							'modelValue': row.original.is_active,
 							'disabled': false,
 							'onUpdate:modelValue': (value: boolean) => productStore.updateStatus(row.original, value),

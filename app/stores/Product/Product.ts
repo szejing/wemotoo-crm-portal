@@ -216,6 +216,11 @@ export const useProductStore = defineStore('productStore', {
 		},
 
 		async updateStatus(product: Product, is_active: boolean) {
+			if (is_active && product.status === ProductStatus.DRAFT) {
+				const message = 'Product is not active, please publish it first';
+				failedNotification(message);
+				return;
+			}
 			// Partial update: only send is_active so backend leaves other fields unchanged
 			await this.updateProduct({ code: product.code as string, is_active });
 		},
