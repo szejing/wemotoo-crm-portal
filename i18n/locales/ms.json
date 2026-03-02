@@ -544,7 +544,8 @@
 		},
 		"calendar": {
 			"view": "Lihat",
-			"edit": "Edit"
+			"edit": "Edit",
+			"more": "lagi"
 		},
 		"crmUserForm": {
 			"name": "Nama",

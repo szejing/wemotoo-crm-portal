@@ -134,28 +134,36 @@
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
 							<UCard>
-								<div class="flex items-center justify-between mb-4">
-									<h3 class="font-semibold">{{ $t('pages.dailyView') }}</h3>
-									<div class="flex items-center gap-2">
+								<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+									<h3 class="font-semibold hidden sm:block">{{ $t('pages.dailyView') }}</h3>
+									<div class="flex items-center gap-2 justify-between sm:justify-end w-full sm:w-auto">
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevDay" />
-										<span class="min-w-[180px] text-center font-medium">{{ format(calendarFocusDate, 'EEEE, d MMM yyyy') }}</span>
+										<span class="text-center font-medium text-sm sm:text-base min-w-0 truncate">{{ format(calendarFocusDate, 'EEE, d MMM yyyy') }}</span>
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextDay" />
-										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" class="hidden sm:flex" @click="goToTodayMonth" />
 									</div>
 								</div>
 								<ZLoading v-if="appointmentStore.loading" />
 								<div v-else class="flex flex-col lg:flex-row gap-6">
-									<div class="shrink-0">
+									<!-- Mini calendar: hidden on mobile, shown on desktop -->
+									<div class="shrink-0 hidden lg:block">
 										<UCard class="p-2">
 											<UCalendar
 												:model-value="dailyCalendarDate"
 												@update:model-value="onDailyCalendarDateSelect"
 												:month-controls="true"
 												:year-controls="true"
-											/>
+												:weekStartsOn="1"
+											>
+												<template #day="{ day }">
+													<UChip :show="hasAppointmentsOnDate(day)" color="primary" size="2xs">
+														{{ day.day }}
+													</UChip>
+												</template>
+											</UCalendar>
 										</UCard>
 									</div>
-									<div class="flex-1 min-w-0 min-h-[400px]">
+									<div class="flex-1 min-w-0">
 										<ZCalendarDailySlots
 											:date="calendarFocusDate"
 											:appointments="dailyAppointments"
@@ -186,22 +194,24 @@
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
 							<UCard>
-								<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-									<h3 class="font-semibold">{{ $t('pages.weeklyView') }}</h3>
-									<div class="flex items-center gap-2 flex-wrap">
+								<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+									<h3 class="font-semibold hidden sm:block">{{ $t('pages.weeklyView') }}</h3>
+									<div class="flex items-center gap-2 justify-between sm:justify-end w-full sm:w-auto">
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevWeek" />
-										<span class="min-w-[200px] text-center font-medium">
-											{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
-											<span class="text-gray-500 dark:text-gray-400 font-normal text-sm ml-1"
-												>{{ $t('pages.weekNumber', { n: getISOWeek(weekStartDate) }) }}</span
-											>
-										</span>
+										<div class="text-center min-w-0">
+											<span class="font-medium text-sm sm:text-base">
+												{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
+											</span>
+											<span class="text-gray-500 dark:text-gray-400 font-normal text-xs sm:text-sm ml-1 hidden sm:inline">{{
+												$t('pages.weekNumber', { n: getISOWeek(weekStartDate) })
+											}}</span>
+										</div>
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextWeek" />
-										<UButton color="primary" variant="solid" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" class="hidden sm:flex" @click="goToTodayMonth" />
 									</div>
 								</div>
 								<ZLoading v-if="appointmentStore.loading" />
-								<div v-else class="min-h-[500px]">
+								<div v-else>
 									<ZCalendarWeeklySlots
 										:week-start="weekStartDate"
 										:appointments="appointments"
@@ -232,17 +242,17 @@
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
 							<UCard>
-								<div class="flex items-center justify-between mb-4">
-									<h3 class="font-semibold">{{ $t('pages.monthlyView') }}</h3>
-									<div class="flex items-center gap-2">
+								<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+									<h3 class="font-semibold hidden sm:block">{{ $t('pages.monthlyView') }}</h3>
+									<div class="flex items-center gap-2 justify-between sm:justify-end w-full sm:w-auto">
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevMonth" />
-										<span class="min-w-[160px] text-center font-medium">{{ format(monthDate, 'MMMM yyyy') }}</span>
+										<span class="text-center font-medium text-sm sm:text-base">{{ format(monthDate, 'MMMM yyyy') }}</span>
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextMonth" />
-										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" class="hidden sm:flex" @click="goToTodayMonth" />
 									</div>
 								</div>
 								<ZLoading v-if="appointmentStore.loading" />
-								<div v-else class="min-h-[480px]">
+								<div v-else>
 									<ZCalendarMonthlyGrid
 										:month="monthDate"
 										:appointments="appointments"
@@ -322,6 +332,12 @@ const appointmentsByDate = computed(() => {
 	return map;
 });
 
+// For the UCalendar #day slot: check if a DateValue has appointments
+const hasAppointmentsOnDate = (day: DateValue): boolean => {
+	const key = `${day.year}-${String(day.month).padStart(2, '0')}-${String(day.day).padStart(2, '0')}`;
+	return (appointmentsByDate.value[key]?.length ?? 0) > 0;
+};
+
 // For daily view: appointments on the focused day
 const dailyAppointments = computed(() => {
 	const key = dateKey(calendarFocusDate.value);
@@ -374,19 +390,25 @@ const onDailyCalendarDateSelect = async (value: DateValue | DateValue[] | { star
 	if (!dateValue || !('year' in dateValue) || !('month' in dateValue) || !('day' in dateValue)) return;
 	const d = new Date(dateValue.year, dateValue.month - 1, dateValue.day);
 	calendarFocusDate.value = d;
-	filter.value.date_range = { start: startOfDay(d), end: endOfDay(add(d, { days: 1 })) };
+	// Fetch full month so mini calendar indicators work
+	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
+	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 	await appointmentStore.getAppointments();
 };
 
 const goPrevDay = async () => {
 	calendarFocusDate.value = sub(calendarFocusDate.value, { days: 1 });
-	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(add(calendarFocusDate.value, { days: 1 })) };
+	const d = calendarFocusDate.value;
+	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
+	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 	await appointmentStore.getAppointments();
 };
 
 const goNextDay = async () => {
 	calendarFocusDate.value = add(calendarFocusDate.value, { days: 1 });
-	filter.value.date_range = { start: startOfDay(calendarFocusDate.value), end: endOfDay(add(calendarFocusDate.value, { days: 1 })) };
+	const d = calendarFocusDate.value;
+	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
+	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 	await appointmentStore.getAppointments();
 };
 
@@ -434,7 +456,8 @@ const goToTodayMonth = async () => {
 		filter.value.date_range = { start, end };
 	} else if (appointmentStore.isDailyView) {
 		calendarFocusDate.value = now;
-		filter.value.date_range = { start: startOfDay(now), end: endOfDay(add(now, { days: 1 })) };
+		const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+		filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 	} else {
 		const start = new Date(now.getFullYear(), now.getMonth(), 1);
 		const end = endOfMonth(start);
@@ -481,10 +504,9 @@ watch(
 			appointmentStore.getAppointments();
 		} else if (view === 'daily') {
 			calendarFocusDate.value = new Date();
-			filter.value.date_range = {
-				start: startOfDay(calendarFocusDate.value),
-				end: endOfDay(add(calendarFocusDate.value, { days: 1 })),
-			};
+			const d = calendarFocusDate.value;
+			const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
+			filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 			appointmentStore.getAppointments();
 		} else if (view === 'weekly') {
 			const start = startOfWeek(new Date(), { weekStartsOn: 1 });

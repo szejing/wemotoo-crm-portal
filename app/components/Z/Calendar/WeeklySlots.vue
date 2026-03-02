@@ -1,115 +1,194 @@
 <template>
-	<div class="flex flex-col border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
-		<!-- Day headers: first column width matches time axis (w-14 sm:w-16) -->
-		<div
-			class="grid shrink-0 border-b border-gray-200 dark:border-gray-700 grid-cols-[3.5rem_repeat(7,minmax(0,1fr))] sm:grid-cols-[4rem_repeat(7,minmax(0,1fr))]"
-		>
-			<div class="py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700 min-w-0"></div>
+	<div>
+		<!-- Desktop: 7-column time grid (hidden on mobile) -->
+		<div class="hidden lg:flex flex-col border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
+			<!-- Day headers -->
 			<div
-				v-for="day in weekDays"
-				:key="dayKey(day)"
-				class="py-2 px-1 text-center text-xs font-medium border-r border-gray-200 dark:border-gray-700 last:border-r-0 transition-colors"
-				:class="[isToday(day) ? 'text-primary-600 dark:text-primary-400 bg-primary-50/60 dark:bg-primary-950/30' : 'text-gray-700 dark:text-gray-300']"
+				class="grid shrink-0 border-b border-gray-200 dark:border-gray-700 grid-cols-[3.5rem_repeat(7,minmax(0,1fr))] sm:grid-cols-[4rem_repeat(7,minmax(0,1fr))]"
 			>
-				<div>{{ format(day, 'EEE') }}</div>
-				<div class="text-lg font-semibold">{{ format(day, 'd') }}</div>
-			</div>
-		</div>
-		<!-- Time grid: 30-min rows, time axis + 7 day columns -->
-		<div class="flex flex-1 min-h-0 overflow-auto items-stretch">
-			<ZCalendarTimeAxis :start-hour="startHour" :end-hour="endHour" :slot-height-px="slotHeightPx" />
-			<div class="flex-1 grid min-w-0 min-h-0" :style="{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', minHeight: `${totalHeightPx}px` }">
+				<div class="py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700 min-w-0"></div>
 				<div
-					v-for="(day, dayIndex) in weekDays"
+					v-for="day in weekDays"
 					:key="dayKey(day)"
-					class="relative border-r border-gray-100 dark:border-gray-800 last:border-r-0 min-h-0"
-					:class="[isToday(day) ? 'bg-primary-50/40 dark:bg-primary-950/20' : '']"
-					:style="{ minHeight: `${totalHeightPx}px` }"
+					class="py-2 px-1 text-center text-xs font-medium border-r border-gray-200 dark:border-gray-700 last:border-r-0 transition-colors"
+					:class="[isToday(day) ? 'text-primary-600 dark:text-primary-400 bg-primary-50/60 dark:bg-primary-950/30' : 'text-gray-700 dark:text-gray-300']"
 				>
-					<!-- Grid lines: full-hour = thicker, half-hour = dotted (background layer) -->
-					<div class="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-						<template v-for="h in totalSlots" :key="h">
-							<div
-								:class="[
-									'absolute left-0 right-0',
-									(h - 1) % 2 === 0 ? 'border-b-2 border-gray-200 dark:border-gray-600' : 'border-b border-dotted border-gray-100/80 dark:border-gray-700/60',
-								]"
-								:style="{
-									top: `${(h - 1) * slotHeightPx}px`,
-									height: `${slotHeightPx}px`,
-								}"
-							/>
-						</template>
+					<div>{{ format(day, 'EEE') }}</div>
+					<div
+						class="text-lg font-semibold mt-0.5"
+						:class="[isToday(day) ? 'bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto' : '']"
+					>
+						{{ format(day, 'd') }}
 					</div>
-					<!-- Appointments layer (above grid) -->
-					<div class="absolute inset-0 z-10 overflow-visible">
-						<template v-for="block in blocksByDay.get(dayIndex) ?? []" :key="block.appointment.code">
-							<UPopover :open="hoveredCode === block.appointment.code" :popper="{ placement: 'right', strategy: 'fixed' }">
+				</div>
+			</div>
+			<!-- Time grid: 30-min rows, time axis + 7 day columns -->
+			<div class="flex flex-1 min-h-0 overflow-auto items-stretch max-h-[calc(100vh-380px)]">
+				<ZCalendarTimeAxis :start-hour="startHour" :end-hour="endHour" :slot-height-px="slotHeightPx" />
+				<div class="flex-1 grid min-w-0 min-h-0 relative" :style="{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', minHeight: `${totalHeightPx}px` }">
+					<div
+						v-for="(day, dayIndex) in weekDays"
+						:key="dayKey(day)"
+						class="relative border-r border-gray-100 dark:border-gray-800 last:border-r-0 min-h-0"
+						:class="[isToday(day) ? 'bg-primary-50/30 dark:bg-primary-950/15' : '']"
+						:style="{ minHeight: `${totalHeightPx}px` }"
+					>
+						<!-- Grid lines -->
+						<div class="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
+							<template v-for="h in totalSlots" :key="h">
 								<div
-									class="absolute rounded-md cursor-pointer transition-all overflow-hidden flex flex-col"
 									:class="[
-										'border-l-[5px] shadow-sm hover:shadow-md',
-										block.borderClass,
-										selectedCode === block.appointment.code
-											? 'ring-2 ring-primary ring-inset border border-primary-300 dark:border-primary-600'
-											: 'bg-elevated border border-gray-200 dark:border-gray-600',
+										'absolute left-0 right-0',
+										(h - 1) % 2 === 0 ? 'border-b-2 border-gray-200 dark:border-gray-600' : 'border-b border-dotted border-gray-100/80 dark:border-gray-700/60',
 									]"
 									:style="{
-										top: `${block.topPx}px`,
-										left: `${block.leftPct}%`,
-										width: `calc(${block.widthPct}% - 2px)`,
-										marginLeft: '1px',
-										height: `${block.heightPx}px`,
-										minHeight: block.heightPx < 24 ? '24px' : undefined,
+										top: `${(h - 1) * slotHeightPx}px`,
+										height: `${slotHeightPx}px`,
 									}"
-									@click="$emit('select', block.appointment)"
-									@mouseenter="hoveredCode = block.appointment.code"
-									@mouseleave="hoveredCode = null"
-								>
-									<div class="p-1.5 h-full overflow-hidden flex flex-col gap-0.5 min-w-0">
-										<div class="flex items-start justify-between gap-1 min-w-0">
-											<span class="font-semibold truncate text-gray-900 dark:text-gray-100">{{ formatAppointmentCode(block.appointment.code) }}</span>
-											<UBadge
-												:color="block.statusColor as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral'"
-												variant="subtle"
-												size="xs"
-												class="shrink-0"
-											>
-												{{ block.appointment.status }}
-											</UBadge>
+								/>
+							</template>
+						</div>
+
+						<!-- Current-time indicator -->
+						<div
+							v-if="isToday(day) && nowLinePx !== null"
+							class="absolute left-0 right-0 z-30 pointer-events-none flex items-center"
+							:style="{ top: `${nowLinePx}px` }"
+						>
+							<div class="w-2 h-2 rounded-full bg-red-500 dark:bg-red-400 -ml-0.5 shrink-0" />
+							<div class="flex-1 h-0.5 bg-red-500 dark:bg-red-400" />
+						</div>
+
+						<!-- Appointments layer -->
+						<div class="absolute inset-0 z-10 overflow-visible">
+							<template v-for="block in blocksByDay.get(dayIndex) ?? []" :key="block.appointment.code">
+								<UPopover :open="hoveredCode === block.appointment.code" :popper="{ placement: 'right', strategy: 'fixed' }">
+									<div
+										class="absolute rounded-md cursor-pointer transition-all overflow-hidden flex flex-col"
+										:class="[
+											'border-l-[5px] shadow-sm hover:shadow-md',
+											block.borderClass,
+											selectedCode === block.appointment.code
+												? 'ring-2 ring-primary ring-inset border border-primary-300 dark:border-primary-600'
+												: 'bg-elevated border border-gray-200 dark:border-gray-600',
+										]"
+										:style="{
+											top: `${block.topPx}px`,
+											left: `${block.leftPct}%`,
+											width: `calc(${block.widthPct}% - 2px)`,
+											marginLeft: '1px',
+											height: `${block.heightPx}px`,
+											minHeight: block.heightPx < 24 ? '24px' : undefined,
+										}"
+										@click="$emit('select', block.appointment)"
+										@mouseenter="hoveredCode = block.appointment.code"
+										@mouseleave="hoveredCode = null"
+									>
+										<div class="p-1.5 h-full overflow-hidden flex flex-col gap-0.5 min-w-0">
+											<span class="font-semibold truncate text-xs text-gray-900 dark:text-gray-100">{{ block.appointment.customer_name }}</span>
+											<span class="text-[10px] text-gray-600 dark:text-gray-400 truncate">{{ block.timeText }}</span>
 										</div>
-										<span class="text-gray-600 dark:text-gray-400 truncate">{{ block.timeText }}</span>
-										<span class="text-gray-500 dark:text-gray-500 truncate">{{ block.appointment.customer_name }}</span>
 									</div>
-								</div>
-								<template #content>
-									<div class="p-3 w-72 space-y-3" @mouseenter="hoveredCode = block.appointment.code" @mouseleave="hoveredCode = null">
-										<div class="space-y-1.5">
-											<div class="flex items-center justify-between gap-2">
-												<span class="font-semibold text-gray-900 dark:text-white">{{ block.appointment.code }}</span>
-												<UBadge :color="block.statusColor" variant="subtle" size="sm">
-													{{ $t('options.' + block.appointment.status.toLowerCase()) }}
-												</UBadge>
+									<template #content>
+										<div class="p-3 w-72 space-y-3" @mouseenter="hoveredCode = block.appointment.code" @mouseleave="hoveredCode = null">
+											<div class="space-y-1.5">
+												<div class="flex items-center justify-between gap-2">
+													<span class="font-semibold text-gray-900 dark:text-white">{{ block.appointment.code }}</span>
+													<UBadge :color="block.statusColor" variant="subtle" size="sm">
+														{{ $t('options.' + block.appointment.status.toLowerCase()) }}
+													</UBadge>
+												</div>
+												<div class="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
+													<UIcon name="i-heroicons-clock" class="w-4 h-4 shrink-0" />
+													<span>{{ block.timeText }}</span>
+												</div>
+												<div class="flex items-center gap-1.5 text-sm font-medium text-gray-900 dark:text-white">
+													<UIcon name="i-heroicons-user" class="w-4 h-4 shrink-0" />
+													<span>{{ block.appointment.customer_name }}</span>
+												</div>
+												<p class="text-xs text-gray-500 dark:text-gray-500">{{ block.appointment.customer_phone }}</p>
+												<p v-if="block.appointment.appt_desc" class="text-xs text-gray-600 dark:text-gray-400">
+													{{ block.appointment.appt_desc }}
+												</p>
+												<p v-if="block.appointment.duration" class="text-xs text-gray-500 flex items-center gap-1">
+													<UIcon name="i-heroicons-clock" class="w-3.5 h-3.5" />
+													{{ $t('pages.durationMinutes', { n: block.appointment.duration }) }}
+												</p>
 											</div>
-											<p class="text-sm text-gray-600 dark:text-gray-400">{{ block.timeText }}</p>
-											<p class="text-sm font-medium text-gray-900 dark:text-white">{{ block.appointment.customer_name }}</p>
-											<p class="text-xs text-gray-500 dark:text-gray-500">{{ block.appointment.customer_phone }}</p>
-											<p v-if="block.appointment.appt_desc" class="text-xs text-gray-600 dark:text-gray-400">
-												{{ block.appointment.appt_desc }}
-											</p>
-											<p v-if="block.appointment.duration" class="text-xs text-gray-500">
-												{{ $t('pages.durationMinutes', { n: block.appointment.duration }) }}
-											</p>
+											<div class="flex gap-2 pt-1 border-t border-gray-200 dark:border-gray-700">
+												<UButton size="xs" color="primary" variant="soft" :label="$t('components.calendar.view')" @click="$emit('select', block.appointment)" />
+												<UButton
+													size="xs"
+													color="neutral"
+													variant="outline"
+													:label="$t('components.calendar.edit')"
+													@click="$emit('edit', block.appointment)"
+												/>
+											</div>
 										</div>
-										<div class="flex gap-2 pt-1 border-t border-gray-200 dark:border-gray-700">
-											<UButton size="xs" color="primary" variant="soft" :label="$t('components.calendar.view')" @click="$emit('select', block.appointment)" />
-											<UButton size="xs" color="neutral" variant="outline" :label="$t('components.calendar.edit')" @click="$emit('edit', block.appointment)" />
-										</div>
-									</div>
-								</template>
-							</UPopover>
-						</template>
+									</template>
+								</UPopover>
+							</template>
+						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Mobile: Agenda-style stacked day cards -->
+		<div class="lg:hidden space-y-3">
+			<div v-for="(day, dayIndex) in weekDays" :key="dayKey(day)" class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
+				<!-- Day header -->
+				<div
+					class="flex items-center gap-3 px-3 py-2.5 border-b border-gray-100 dark:border-gray-800"
+					:class="[isToday(day) ? 'bg-primary-50/80 dark:bg-primary-950/40' : 'bg-gray-50/50 dark:bg-gray-800/30']"
+				>
+					<div
+						class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-lg"
+						:class="[isToday(day) ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300']"
+					>
+						{{ format(day, 'd') }}
+					</div>
+					<div class="flex-1 min-w-0">
+						<p class="font-semibold text-sm" :class="[isToday(day) ? 'text-primary-700 dark:text-primary-400' : 'text-gray-900 dark:text-white']">
+							{{ format(day, 'EEEE') }}
+						</p>
+						<p class="text-xs text-gray-500 dark:text-gray-400">{{ format(day, 'd MMM yyyy') }}</p>
+					</div>
+					<UBadge v-if="(blocksByDay.get(dayIndex) ?? []).length > 0" color="primary" variant="subtle" size="sm">
+						{{ (blocksByDay.get(dayIndex) ?? []).length }}
+					</UBadge>
+				</div>
+				<!-- Appointments -->
+				<div v-if="(blocksByDay.get(dayIndex) ?? []).length > 0" class="divide-y divide-gray-100 dark:divide-gray-800">
+					<div
+						v-for="block in blocksByDay.get(dayIndex) ?? []"
+						:key="block.appointment.code"
+						class="flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+						:class="[selectedCode === block.appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
+						@click="$emit('select', block.appointment)"
+					>
+						<div class="w-1 self-stretch rounded-full shrink-0 mt-0.5" :class="block.borderClass.replace('border-l-', 'bg-')" />
+						<div class="flex-1 min-w-0">
+							<div class="flex items-center justify-between gap-2">
+								<p class="font-medium text-sm text-gray-900 dark:text-white truncate">{{ block.appointment.customer_name }}</p>
+								<UBadge :color="block.statusColor" variant="subtle" size="xs" class="shrink-0">
+									{{ $t('options.' + block.appointment.status.toLowerCase()) }}
+								</UBadge>
+							</div>
+							<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
+								<UIcon name="i-heroicons-clock" class="w-3 h-3 shrink-0" />
+								{{ block.timeText }}
+							</p>
+							<p v-if="block.appointment.appt_desc" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
+								{{ block.appointment.appt_desc }}
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- Empty day -->
+				<div v-else class="px-3 py-4 text-center">
+					<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
 				</div>
 			</div>
 		</div>
@@ -117,16 +196,18 @@
 </template>
 
 <script lang="ts" setup>
-import { add, format, startOfDay, startOfWeek } from 'date-fns';
+import { add, format, isToday as isTodayFn, startOfDay, startOfWeek } from 'date-fns';
 import { useCalendarTimeSlots } from '~/composables/useCalendarTimeSlots';
 import type { Appointment } from '~/utils/types/appointment';
+
+type BadgeColor = 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
 
 export type CalendarBlock = {
 	appointment: Appointment;
 	topPx: number;
 	heightPx: number;
 	timeText: string;
-	statusColor: string;
+	statusColor: BadgeColor;
 	borderClass: string;
 	clipStartMs: number;
 	clipEndMs: number;
@@ -149,7 +230,7 @@ const props = withDefaults(
 	{
 		startHour: 6,
 		endHour: 22,
-		slotHeightPx: 24,
+		slotHeightPx: 28,
 		getStatusColor: () => 'primary',
 	},
 );
@@ -168,6 +249,27 @@ const { totalSlots, totalHeightPx, slotHeightPx } = useCalendarTimeSlots(() => (
 	slotHeightPx: props.slotHeightPx,
 }));
 
+// Current-time indicator
+const now = ref(new Date());
+let timer: ReturnType<typeof setInterval> | null = null;
+onMounted(() => {
+	timer = setInterval(() => {
+		now.value = new Date();
+	}, 60_000);
+});
+onUnmounted(() => {
+	if (timer) clearInterval(timer);
+});
+
+const nowLinePx = computed(() => {
+	const h = now.value.getHours();
+	const m = now.value.getMinutes();
+	if (h < props.startHour || h >= props.endHour) return null;
+	const rangeMs = (props.endHour - props.startHour) * 60 * 60 * 1000;
+	const offsetMs = (h - props.startHour) * 60 * 60 * 1000 + m * 60 * 1000;
+	return (offsetMs / rangeMs) * totalHeightPx.value;
+});
+
 const weekStartsOn = 1;
 const weekDays = computed(() => {
 	const start = startOfWeek(props.weekStart, { weekStartsOn });
@@ -175,15 +277,9 @@ const weekDays = computed(() => {
 });
 
 const dayKey = (d: Date) => format(d, 'yyyy-MM-dd');
-const isToday = (d: Date) => dayKey(d) === dayKey(new Date());
+const isToday = (d: Date) => isTodayFn(d);
 
-function formatAppointmentCode(code: string): string {
-	const s = code.replace(/^APPT/i, '').trim();
-	if (s.length >= 7) return `${s.slice(0, 3)}....${s.slice(-4)}`;
-	return s || code;
-}
-
-/** Left border accent by status (no full background). */
+/** Left border accent by status. */
 const borderClassMap: Record<string, string> = {
 	primary: 'border-l-primary-500',
 	success: 'border-l-success-500',
@@ -193,18 +289,30 @@ const borderClassMap: Record<string, string> = {
 	neutral: 'border-l-gray-400 dark:border-l-gray-500',
 };
 
-/** Assign overlap columns: sort by start, assign column index so overlapping blocks get different columns. */
+/** Background class map for mobile color strip */
+const bgStripMap: Record<string, string> = {
+	primary: 'bg-primary-500',
+	success: 'bg-success-500',
+	warning: 'bg-warning-500',
+	error: 'bg-error-500',
+	info: 'bg-info-500',
+	neutral: 'bg-gray-400',
+};
+
+/** Assign overlap columns */
 function assignOverlapColumns(blocks: { clipStartMs: number; clipEndMs: number }[]): { columnIndex: number; totalColumns: number }[] {
 	if (blocks.length === 0) return [];
 	const sorted = [...blocks].sort((a, b) => a.clipStartMs - b.clipStartMs);
 	const columnIndex: number[] = [];
 	let totalColumns = 1;
 	for (let i = 0; i < sorted.length; i++) {
+		const current = sorted[i]!;
 		let col = 0;
 		while (col < totalColumns) {
 			let conflict = false;
 			for (let j = 0; j < i; j++) {
-				if (columnIndex[j] === col && sorted[j].clipEndMs > sorted[i].clipStartMs && sorted[j].clipStartMs < sorted[i].clipEndMs) {
+				const prev = sorted[j]!;
+				if (columnIndex[j] === col && prev.clipEndMs > current.clipStartMs && prev.clipStartMs < current.clipEndMs) {
 					conflict = true;
 					break;
 				}
@@ -240,16 +348,15 @@ const blocksByDay = computed(() => {
 			const topPx = ((clipStartMs - dayStartMs) / rangeMs) * totalHeightPx.value;
 			const heightPx = Math.max(4, ((clipEndMs - clipStartMs) / rangeMs) * totalHeightPx.value);
 			const timeText = `${format(clipStartMs, 'h:mm a')} – ${format(clipEndMs, 'h:mm a')}`;
-			const statusColor = props.getStatusColor(appointment.status);
-			const borderClass = borderClassMap[statusColor] ?? borderClassMap.primary;
-			const statusColorBadge = (statusColor as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral') ?? 'primary';
+			const statusColor = props.getStatusColor(appointment.status) as BadgeColor;
+			const borderClass = borderClassMap[statusColor] ?? borderClassMap.primary ?? '';
 
 			map.get(dayIndex)!.push({
 				appointment,
 				topPx,
 				heightPx,
 				timeText,
-				statusColor: statusColorBadge,
+				statusColor,
 				borderClass,
 				clipStartMs,
 				clipEndMs,
@@ -267,8 +374,8 @@ const blocksByDay = computed(() => {
 		if (blocks.length === 0) continue;
 		const layout = assignOverlapColumns(blocks);
 		for (let i = 0; i < blocks.length; i++) {
-			const b = blocks[i];
-			const l = layout[i];
+			const b = blocks[i]!;
+			const l = layout[i]!;
 			b.columnIndex = l.columnIndex;
 			b.totalColumns = l.totalColumns;
 			b.leftPct = (l.columnIndex / l.totalColumns) * 100;

@@ -544,7 +544,8 @@
 		},
 		"calendar": {
 			"view": "View",
-			"edit": "Edit"
+			"edit": "Edit",
+			"more": "more"
 		},
 		"crmUserForm": {
 			"name": "Name",

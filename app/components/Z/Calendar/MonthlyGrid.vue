@@ -1,69 +1,135 @@
 <template>
-	<div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
-		<!-- Weekday headers -->
-		<div class="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-			<div v-for="wd in weekdayLabels" :key="wd" class="py-2 text-center text-xs font-medium text-gray-600 dark:text-gray-400">
-				{{ wd }}
+	<div>
+		<!-- Desktop: Full calendar grid -->
+		<div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
+			<!-- Weekday headers -->
+			<div class="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+				<div v-for="wd in weekdayLabels" :key="wd.full" class="py-2 text-center text-xs font-medium text-gray-600 dark:text-gray-400">
+					<!-- Full name on desktop, short on mobile -->
+					<span class="hidden sm:inline">{{ wd.full }}</span>
+					<span class="sm:hidden">{{ wd.short }}</span>
+				</div>
+			</div>
+			<!-- Month grid: 6 rows × 7 days -->
+			<div class="grid grid-cols-7 auto-rows-fr" :style="{ gridTemplateRows: `repeat(${weeksInGrid}, minmax(0, 1fr))` }">
+				<div
+					v-for="cell in gridCells"
+					:key="cell.key"
+					class="border-b border-r border-gray-100 dark:border-gray-800 last:border-r-0 flex flex-col transition-colors cursor-pointer overflow-hidden"
+					:class="[
+						cell.isToday ? 'bg-primary/5 dark:bg-primary/10' : cell.isCurrentMonth ? 'bg-default' : 'bg-gray-50/80 dark:bg-gray-900/50',
+						cell.isSelected ? 'ring-2 ring-primary ring-inset bg-primary/5 dark:bg-primary/10' : '',
+					]"
+					:style="{ minHeight: isMobileView ? '56px' : '100px' }"
+					@click="$emit('selectDay', cell.date as Date)"
+				>
+					<!-- Date number -->
+					<div class="shrink-0 flex items-center justify-between px-1.5 sm:px-2 py-1">
+						<span
+							v-if="cell.date"
+							class="w-7 h-7 min-w-7 rounded-full text-xs sm:text-sm font-medium flex items-center justify-center transition-colors"
+							:class="[
+								cell.isToday ? 'bg-primary text-white font-bold' : '',
+								cell.isSelected && !cell.isToday ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : '',
+								!cell.isCurrentMonth && 'text-gray-400 dark:text-gray-500',
+							]"
+						>
+							{{ cell.dayNumber ?? '' }}
+						</span>
+						<!-- Appointment count dot for mobile -->
+						<span v-if="cell.appointments.length > 0" class="sm:hidden flex items-center gap-0.5">
+							<span
+								v-for="(dot, dotIdx) in Math.min(cell.appointments.length, 3)"
+								:key="dotIdx"
+								class="w-1.5 h-1.5 rounded-full"
+								:class="getDotColorClass(cell.appointments[dotIdx]?.status)"
+							/>
+						</span>
+					</div>
+					<!-- Appointments in this day (desktop only) -->
+					<div class="flex-1 overflow-hidden px-1 sm:px-1.5 pb-1 space-y-0.5 hidden sm:block">
+						<template v-for="(appointment, idx) in cell.appointments.slice(0, maxVisibleAppointments)" :key="appointment.code">
+							<div
+								class="flex items-center gap-1 py-0.5 px-1.5 rounded text-[10px] sm:text-xs cursor-pointer transition-all hover:bg-gray-100 dark:hover:bg-gray-700/50"
+								:class="[selectedCode === appointment.code ? 'ring-1 ring-primary bg-primary-50 dark:bg-primary-900/20' : '']"
+								@click.stop="$emit('selectAppointment', appointment)"
+							>
+								<span class="w-1.5 h-1.5 rounded-full shrink-0" :class="getDotColorClass(appointment.status)" />
+								<span class="font-medium truncate text-gray-900 dark:text-gray-100">
+									{{ formatTime(appointment.start_date_time) }}
+								</span>
+								<span class="truncate text-gray-600 dark:text-gray-400">
+									{{ appointment.customer_name }}
+								</span>
+							</div>
+						</template>
+						<!-- "+N more" overflow indicator -->
+						<button
+							v-if="cell.appointments.length > maxVisibleAppointments"
+							class="w-full text-[10px] sm:text-xs text-primary-600 dark:text-primary-400 font-medium text-left px-1.5 py-0.5 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded transition-colors"
+							@click.stop="$emit('selectDay', cell.date as Date)"
+						>
+							+{{ cell.appointments.length - maxVisibleAppointments }} {{ $t('components.calendar.more') }}
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
-		<!-- Month grid: 6 rows × 7 days -->
-		<div class="grid grid-cols-7 auto-rows-fr" :style="{ gridTemplateRows: `repeat(${weeksInGrid}, minmax(100px, 1fr))` }">
-			<div
-				v-for="cell in gridCells"
-				:key="cell.key"
-				class="min-h-[100px] border-b border-r border-gray-100 dark:border-gray-800 last:border-r-0 flex flex-col transition-colors cursor-pointer"
-				:class="[
-					cell.isToday ? 'bg-primary/5 dark:bg-primary/10' : cell.isCurrentMonth ? 'bg-default' : 'bg-gray-50/80 dark:bg-gray-900/50',
-					cell.isSelected ? 'ring-2 ring-primary ring-inset bg-primary/5 dark:bg-primary/10' : '',
-					!(cell.isToday || cell.isSelected) && 'overflow-hidden',
-				]"
-				@click="$emit('selectDay', cell.date as Date)"
-			>
-				<!-- Date number -->
-				<div class="shrink-0 flex items-center justify-between px-2 py-1">
-					<UButton
-						v-if="cell.date"
-						:color="cell.isSelected ? 'primary' : 'neutral'"
-						:variant="cell.isSelected ? 'solid' : 'ghost'"
-						size="xs"
-						class="w-7 h-7 min-w-7 rounded-full p-0 text-sm font-medium flex items-center justify-center"
-						:class="!cell.isCurrentMonth && 'text-gray-400 dark:text-gray-500'"
-						@click="$emit('selectDay', cell.date)"
+
+		<!-- Mobile: Selected day agenda panel (shown below calendar when a day is selected) -->
+		<div v-if="selectedDay && isMobileView" class="mt-3 lg:hidden">
+			<div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
+				<div class="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+					<div
+						class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm"
+						:class="[isSelectedDayToday ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300']"
 					>
-						{{ cell.dayNumber ?? '' }}
-					</UButton>
-					<span v-else class="w-7 h-7 flex items-center justify-center text-sm text-gray-400 dark:text-gray-500">
-						{{ cell.dayNumber ?? '' }}
-					</span>
+						{{ format(selectedDay, 'd') }}
+					</div>
+					<div class="flex-1 min-w-0">
+						<p class="font-semibold text-sm text-gray-900 dark:text-white">{{ format(selectedDay, 'EEEE, d MMMM') }}</p>
+					</div>
+					<UBadge v-if="selectedDayAppointments.length > 0" color="primary" variant="subtle" size="sm">
+						{{ selectedDayAppointments.length }}
+					</UBadge>
 				</div>
-				<!-- Appointments in this day (UChip / UBadge) -->
-				<div class="flex-1 overflow-y-auto px-1.5 pb-1.5 space-y-1">
-					<UButton
-						v-for="appointment in cell.appointments"
+				<div v-if="selectedDayAppointments.length > 0" class="divide-y divide-gray-100 dark:divide-gray-800">
+					<div
+						v-for="appointment in selectedDayAppointments"
 						:key="appointment.code"
-						block
-						variant="soft"
-						:color="(getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral') ?? 'primary'"
-						size="xs"
-						class="justify-start h-auto py-1.5 px-2 text-xs cursor-pointer"
-						:class="selectedCode === appointment.code ? 'ring-2 ring-primary ring-inset' : ''"
-						@click.stop="$emit('selectAppointment', appointment)"
+						class="flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+						:class="[selectedCode === appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
+						@click="$emit('selectAppointment', appointment)"
 					>
-						<div class="w-full text-left truncate space-y-0.5">
-							<div class="flex items-center justify-between gap-1 min-w-0">
-								<span class="font-medium truncate">{{ formatAppointmentCode(appointment.code) }}</span>
+						<div class="w-1 self-stretch rounded-full shrink-0 mt-0.5" :class="getDotColorClass(appointment.status)" />
+						<div class="flex-1 min-w-0">
+							<div class="flex items-center justify-between gap-2">
+								<p class="font-medium text-sm text-gray-900 dark:text-white truncate">{{ appointment.customer_name }}</p>
 								<UBadge
-									:color="(getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral') ?? 'neutral'"
+									:color="getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral'"
 									variant="subtle"
 									size="xs"
 									class="shrink-0"
 								>
-									{{ appointment.status.toUpperCase() }}
+									{{ $t('options.' + appointment.status.toLowerCase()) }}
 								</UBadge>
 							</div>
-							<span class="block text-[10px] opacity-90 truncate">{{ formatTime(appointment.start_date_time) }} · {{ appointment.customer_name }}</span>
+							<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
+								<UIcon name="i-heroicons-clock" class="w-3 h-3 shrink-0" />
+								{{ formatTime(appointment.start_date_time) }}
+								<span v-if="appointment.duration" class="text-gray-400 dark:text-gray-500">
+									· {{ $t('pages.durationMinutes', { n: appointment.duration }) }}
+								</span>
+							</p>
+							<p v-if="appointment.appt_desc" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
+								{{ appointment.appt_desc }}
+							</p>
 						</div>
-					</UButton>
+					</div>
+				</div>
+				<div v-else class="px-3 py-6 text-center">
+					<UIcon name="i-heroicons-calendar-days" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+					<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
 				</div>
 			</div>
 		</div>
@@ -71,7 +137,7 @@
 </template>
 
 <script lang="ts" setup>
-import { add, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
+import { add, endOfMonth, format, isToday as isTodayFn, startOfMonth, startOfWeek } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
 
 const props = withDefaults(
@@ -95,12 +161,31 @@ defineEmits<{
 	selectAppointment: [appointment: Appointment];
 }>();
 
-// Weekday headers: Monday first when weekStartsOn is 1
+const { t: $t } = useI18n();
+
+// Max visible appointments per cell in grid (desktop)
+const maxVisibleAppointments = 3;
+
+// Simple mobile detection
+const isMobileView = ref(false);
+onMounted(() => {
+	checkMobile();
+	window.addEventListener('resize', checkMobile);
+});
+onUnmounted(() => {
+	window.removeEventListener('resize', checkMobile);
+});
+function checkMobile() {
+	isMobileView.value = window.innerWidth < 640;
+}
+
+// Weekday headers with full & short labels
 const weekdayLabels = computed(() => {
 	const monday = new Date(2024, 0, 1); // Jan 1 2024 is Monday
-	const labels: string[] = [];
+	const labels: { full: string; short: string }[] = [];
 	for (let i = 0; i < 7; i++) {
-		labels.push(format(add(monday, { days: i }), 'EEE'));
+		const d = add(monday, { days: i });
+		labels.push({ full: format(d, 'EEE'), short: format(d, 'EEEEE') });
 	}
 	return labels;
 });
@@ -109,6 +194,11 @@ const weeksInGrid = 6;
 
 const dayKey = (d: Date) => format(d, 'yyyy-MM-dd');
 const todayKey = dayKey(new Date());
+
+const isSelectedDayToday = computed(() => {
+	if (!props.selectedDay) return false;
+	return dayKey(props.selectedDay) === todayKey;
+});
 
 const appointmentsByDate = computed(() => {
 	const map: Record<string, Appointment[]> = {};
@@ -160,13 +250,26 @@ const gridCells = computed(() => {
 	return cells;
 });
 
+const selectedDayAppointments = computed(() => {
+	if (!props.selectedDay) return [];
+	return appointmentsByDate.value[dayKey(props.selectedDay)] ?? [];
+});
+
 const formatTime = (d: string | Date) => format(new Date(d), 'h:mm a');
 
-/** Display code as first 3 + .... + last 4 (after stripping APPT prefix). */
-function formatAppointmentCode(code: string): string {
-	const s = code.replace(/^APPT/i, '').trim();
-	if (s.length >= 7) return `${s.slice(0, 3)}....${s.slice(-4)}`;
-	return s || code;
+/** Get the color dot class for a status */
+function getDotColorClass(status?: string): string {
+	if (!status) return 'bg-gray-400';
+	const color = props.getStatusColor(status);
+	const map: Record<string, string> = {
+		primary: 'bg-primary-500',
+		success: 'bg-success-500',
+		warning: 'bg-warning-500',
+		error: 'bg-error-500',
+		info: 'bg-info-500',
+		neutral: 'bg-gray-400',
+	};
+	return map[color] ?? 'bg-primary-500';
 }
 
 const getStatusColor = (status: string) => props.getStatusColor(status);

@@ -1,12 +1,12 @@
 <template>
 	<div
-		class="shrink-0 w-14 sm:w-16 text-right text-xs text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700"
+		class="shrink-0 w-14 sm:w-16 text-right text-xs text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700 flex flex-col"
 		:style="{ height: `${totalHeightPx}px`, minHeight: `${totalHeightPx}px` }"
 	>
 		<div
 			v-for="(slot, i) in slotRows"
 			:key="i"
-			class="flex w-full items-center justify-center pt-1 leading-tight"
+			class="flex w-full items-start justify-end pt-0.5 leading-tight box-border"
 			:style="{ height: `${slotHeightPx}px`, minHeight: `${slotHeightPx}px` }"
 		>
 			{{ slot.label }}
