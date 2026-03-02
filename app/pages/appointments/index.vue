@@ -186,15 +186,18 @@
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
 							<UCard>
-								<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
 									<h3 class="font-semibold">{{ $t('pages.weeklyView') }}</h3>
-									<div class="flex items-center gap-2">
+									<div class="flex items-center gap-2 flex-wrap">
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-left" @click="goPrevWeek" />
 										<span class="min-w-[200px] text-center font-medium">
 											{{ format(weekStartDate, 'd MMM') }} – {{ format(add(weekStartDate, { days: 6 }), 'd MMM yyyy') }}
+											<span class="text-gray-500 dark:text-gray-400 font-normal text-sm ml-1"
+												>{{ $t('pages.weekNumber', { n: getISOWeek(weekStartDate) }) }}</span
+											>
 										</span>
 										<UButton color="neutral" variant="outline" size="sm" icon="i-heroicons-chevron-right" @click="goNextWeek" />
-										<UButton color="primary" variant="soft" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
+										<UButton color="primary" variant="solid" size="sm" :label="$t('pages.today')" @click="goToTodayMonth" />
 									</div>
 								</div>
 								<ZLoading v-if="appointmentStore.loading" />
@@ -205,6 +208,7 @@
 										:selected-code="selectedAppointment?.code ?? null"
 										:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 										@select="selectAppointment"
+										@edit="openEditModal"
 									/>
 								</div>
 							</UCard>
@@ -272,8 +276,7 @@
 <script lang="ts" setup>
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { add, endOfDay, endOfMonth, endOfWeek, startOfDay, startOfWeek, sub } from 'date-fns';
-import { format } from 'date-fns';
+import { add, endOfDay, endOfMonth, endOfWeek, format, getISOWeek, startOfDay, startOfWeek, sub } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { formatAppointmentDateRange } from '~/utils/utils';
@@ -424,9 +427,19 @@ const goNextMonth = async () => {
 const goToTodayMonth = async () => {
 	const now = new Date();
 	calendarPlaceholder.value = new CalendarDate(now.getFullYear(), now.getMonth() + 1, 1);
-	const start = new Date(now.getFullYear(), now.getMonth(), 1);
-	const end = endOfMonth(start);
-	filter.value.date_range = { start, end };
+	if (appointmentStore.isWeeklyView) {
+		calendarFocusDate.value = now;
+		const start = startOfWeek(now, { weekStartsOn: 1 });
+		const end = endOfWeek(now, { weekStartsOn: 1 });
+		filter.value.date_range = { start, end };
+	} else if (appointmentStore.isDailyView) {
+		calendarFocusDate.value = now;
+		filter.value.date_range = { start: startOfDay(now), end: endOfDay(add(now, { days: 1 })) };
+	} else {
+		const start = new Date(now.getFullYear(), now.getMonth(), 1);
+		const end = endOfMonth(start);
+		filter.value.date_range = { start, end };
+	}
 	await appointmentStore.getAppointments();
 };
 

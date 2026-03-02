@@ -379,6 +379,7 @@
 		"weeklyView": "Paparan mingguan",
 		"monthlyView": "Paparan bulanan",
 		"today": "Hari ini",
+		"weekNumber": "Minggu {n}",
 		"confirmDeleteAppointment": "Adakah anda pasti mahu padam temujanji ini?",
 		"noDataFound": "Tiada data ringkasan pelanggan dijumpai.",
 		"noOrderSummaryFound": "Tiada data ringkasan pesanan dijumpai.",
@@ -540,6 +541,10 @@
 	"components": {
 		"backButton": {
 			"backToPreviousPage": "Kembali ke halaman sebelumnya"
+		},
+		"calendar": {
+			"view": "Lihat",
+			"edit": "Edit"
 		},
 		"crmUserForm": {
 			"name": "Nama",

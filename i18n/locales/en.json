@@ -379,6 +379,7 @@
 		"weeklyView": "Weekly view",
 		"monthlyView": "Monthly view",
 		"today": "Today",
+		"weekNumber": "Week {n}",
 		"confirmDeleteAppointment": "Are you sure you want to delete this appointment?",
 		"noDataFound": "No customer summary data found.",
 		"noOrderSummaryFound": "No order summary data found.",
@@ -540,6 +541,10 @@
 	"components": {
 		"backButton": {
 			"backToPreviousPage": "Back to previous page"
+		},
+		"calendar": {
+			"view": "View",
+			"edit": "Edit"
 		},
 		"crmUserForm": {
 			"name": "Name",
