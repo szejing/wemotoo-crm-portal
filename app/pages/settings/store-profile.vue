@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalLeavePageConfirmation, ZModalLoading } from '#components';
+import { ZModalLoading } from '#components';
 import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
 import { accountTypeLabel } from '~/utils/options/account-type';
@@ -195,23 +195,8 @@ watch(
 	},
 );
 
-onBeforeRouteLeave((to, from, next) => {
-	if (!isDirty.value) {
-		next();
-		return;
-	}
-	next(false);
-	const leaveModal = overlay.create(ZModalLeavePageConfirmation, {
-		props: {
-			onStay: () => leaveModal.close(),
-			onLeave: () => {
-				merchantInfoStore.clearUpdatedInfo();
-				leaveModal.close();
-				navigateTo(to.fullPath);
-			},
-		},
-	});
-	leaveModal.open();
+useLeavePageGuard(isDirty, {
+	onLeave: () => merchantInfoStore.clearUpdatedInfo(),
 });
 
 const onCancel = () => {

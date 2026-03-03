@@ -19,6 +19,16 @@
 	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const outletStore = useOutletStore();
+const { new_outlet } = storeToRefs(outletStore);
+
+const isDirty = computed(() => {
+	const o = new_outlet.value;
+	return !!(o.code || o.description || o.phone_no || o.address1 || o.city);
+});
+
+useLeavePageGuard(isDirty);
+</script>
 
 <style></style>

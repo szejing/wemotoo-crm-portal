@@ -19,6 +19,16 @@
 	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const brandStore = useBrandStore();
+const { new_brand } = storeToRefs(brandStore);
+
+const isDirty = computed(() => {
+	const b = new_brand.value;
+	return !!(b.code || b.description);
+});
+
+useLeavePageGuard(isDirty);
+</script>
 
 <style scoped></style>

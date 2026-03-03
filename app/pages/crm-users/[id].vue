@@ -80,7 +80,7 @@
 <script lang="ts" setup>
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
-import { ZModalConfirmation, ZModalLeavePageConfirmation, ZModalLoading } from '#components';
+import { ZModalConfirmation, ZModalLoading } from '#components';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
@@ -106,27 +106,6 @@ watch(
 		}
 	},
 );
-
-onBeforeRouteLeave((to, from, next) => {
-	if (!hasChanges.value) {
-		current_crm_user.value = undefined;
-		next();
-		return;
-	}
-	next(false);
-	const leaveModal = overlay.create(ZModalLeavePageConfirmation, {
-		props: {
-			onStay: () => leaveModal.close(),
-			onLeave: () => {
-				formTouched.value = false;
-				current_crm_user.value = undefined;
-				leaveModal.close();
-				navigateTo(to.fullPath);
-			},
-		},
-	});
-	leaveModal.open();
-});
 
 onBeforeMount(async () => {
 	if (!current_crm_user.value) {
@@ -154,6 +133,13 @@ const hasChanges = computed(() => {
 		edited.phone_no !== original.phone_no ||
 		edited.role !== original.role
 	);
+});
+
+useLeavePageGuard(hasChanges, {
+	onLeave: () => {
+		formTouched.value = false;
+		current_crm_user.value = undefined;
+	},
 });
 
 const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role'] }) => {

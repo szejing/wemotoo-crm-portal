@@ -19,6 +19,16 @@
 	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const categoryStore = useProductCategoryStore();
+const { new_category } = storeToRefs(categoryStore);
+
+const isDirty = computed(() => {
+	const c = new_category.value;
+	return !!(c.code || c.description || c.thumbnail || c.parent_category);
+});
+
+useLeavePageGuard(isDirty);
+</script>
 
 <style scoped></style>

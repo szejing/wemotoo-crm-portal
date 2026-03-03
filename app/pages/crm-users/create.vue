@@ -19,9 +19,20 @@
 </template>
 
 <script lang="ts" setup>
-const { t } = useI18n();
+import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 
+const { t } = useI18n();
 const pageTitle = computed(() => t('pages.crmUserCreate'));
+
+const crmUserStore = useCRMUserStore();
+const { new_crm_user } = storeToRefs(crmUserStore);
+
+const isDirty = computed(() => {
+	const u = new_crm_user.value;
+	return !!(u.name || u.email_address || u.phone_no);
+});
+
+useLeavePageGuard(isDirty);
 </script>
 
 <style scoped></style>

@@ -99,8 +99,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		country_code,
 		state,
 		postal_code,
-		longitude: longitude || undefined,
-		latitude: latitude || undefined,
+		longitude: Number(longitude) || undefined,
+		latitude: Number(latitude) || undefined,
 		tax_rule_code: tax_rule || undefined,
 	};
 

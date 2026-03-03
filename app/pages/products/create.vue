@@ -69,8 +69,13 @@ const formRef = ref<{ submit: () => void } | null>(null);
 const { t } = useI18n();
 useHead({ title: () => t('pages.createProductTitle') });
 
-onBeforeRouteLeave(() => {
-	productStore.resetNewProduct();
+const isDirty = computed(() => {
+	const p = new_product.value;
+	return !!(p.name || p.code || p.short_desc);
+});
+
+useLeavePageGuard(isDirty, {
+	onLeave: () => productStore.resetNewProduct(),
 });
 
 const saveDraft = async () => {

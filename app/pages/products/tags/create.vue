@@ -19,6 +19,13 @@
 	</UDashboardPanel>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const tagStore = useProductTagStore();
+const { new_tag } = storeToRefs(tagStore);
+
+const isDirty = computed(() => !!new_tag.value.value);
+
+useLeavePageGuard(isDirty);
+</script>
 
 <style scoped></style>
