@@ -416,7 +416,6 @@ const triggerAutoSave = async () => {
 const saveDraft = async (silent = false) => {
 	saving.value = true;
 	try {
-		new_product.value.status = ProductStatus.DRAFT;
 		// Simulate API call - replace with actual draft save logic
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
