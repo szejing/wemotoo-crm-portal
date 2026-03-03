@@ -24,7 +24,7 @@
 								{{ $t('pages.crmUserDetailUserInformation') }}
 							</h2>
 							<div class="flex items-center gap-2">
-								<UButton color="success" :loading="updating" @click="editFormRef?.submit()">
+								<UButton color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
 									<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 									{{ $t('common.save') }}
 								</UButton>
@@ -47,7 +47,12 @@
 						<FormCrmUserUpdate
 							ref="editFormRef"
 							:model-value="current_crm_user"
-							@update:model-value="(v: CrmUserUpdate) => (crmUserStore.new_crm_user = v)"
+							@update:model-value="
+							(v: CrmUserUpdate) => {
+								crmUserStore.new_crm_user = v;
+								formTouched = true;
+							}
+						"
 							@submit="onEditFormSubmit"
 						/>
 					</div>
@@ -75,7 +80,7 @@
 <script lang="ts" setup>
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
-import { ZModalConfirmation, ZModalLoading } from '#components';
+import { ZModalConfirmation, ZModalLeavePageConfirmation, ZModalLoading } from '#components';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
@@ -102,8 +107,25 @@ watch(
 	},
 );
 
-onBeforeRouteLeave(() => {
-	current_crm_user.value = undefined;
+onBeforeRouteLeave((to, from, next) => {
+	if (!hasChanges.value) {
+		current_crm_user.value = undefined;
+		next();
+		return;
+	}
+	next(false);
+	const leaveModal = overlay.create(ZModalLeavePageConfirmation, {
+		props: {
+			onStay: () => leaveModal.close(),
+			onLeave: () => {
+				formTouched.value = false;
+				current_crm_user.value = undefined;
+				leaveModal.close();
+				navigateTo(to.fullPath);
+			},
+		},
+	});
+	leaveModal.open();
 });
 
 onBeforeMount(async () => {
@@ -120,6 +142,20 @@ onBeforeMount(async () => {
 const editFormRef = ref<{ submit: () => void } | null>(null);
 const formRef = useTemplateRef<{ reset: () => void }>('formRef');
 
+const formTouched = ref(false);
+const hasChanges = computed(() => {
+	if (!formTouched.value || !current_crm_user.value) return false;
+	const original = current_crm_user.value;
+	const edited = crmUserStore.new_crm_user;
+	return (
+		edited.name !== original.name ||
+		edited.email_address !== original.email_address ||
+		edited.dial_code !== original.dial_code ||
+		edited.phone_no !== original.phone_no ||
+		edited.role !== original.role
+	);
+});
+
 const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role'] }) => {
 	await crmUserStore.updateCrmUser(id.value, {
 		name: payload.name || undefined,
@@ -128,6 +164,11 @@ const onEditFormSubmit = async (payload: { name: string; email_address: string; 
 		phone_no: payload.phone_no || undefined,
 		role: payload.role || undefined,
 	});
+	const refreshed = await crmUserStore.getCrmUser(id.value);
+	if (refreshed) {
+		current_crm_user.value = refreshed;
+		formTouched.value = false;
+	}
 };
 
 const submitPassword = async (payload: { old_password: string; new_password: string; confirm_password: string }) => {
