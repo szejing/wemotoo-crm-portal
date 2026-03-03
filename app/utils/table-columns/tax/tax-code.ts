@@ -8,7 +8,7 @@ export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.code')),
+			header: t('table.code'),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
 					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
@@ -18,7 +18,7 @@ export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 		},
 		{
 			accessorKey: 'type',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.taxType')),
+			header: t('table.taxType'),
 			cell: ({ row }) => {
 				return h(UBadge, { color: row.original.is_inclusive ? 'primary' : 'warning', variant: 'subtle' }, () =>
 					row.original.is_inclusive ? t('table.inclusive') : t('table.exclusive'),
@@ -27,7 +27,7 @@ export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 		},
 		{
 			accessorKey: 'is_active',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.active')),
+			header: () => h('div', { class: 'text-center' }, t('table.active')),
 			cell: ({ row }) => {
 				const taxStore = useTaxStore();
 				return h(USwitch, {
