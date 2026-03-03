@@ -158,9 +158,10 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			}
 		},
 
-		async updateCrmUserPassword(id: string, body: ChangePasswordReq): Promise<true | { success: false; error: { field: 'current' | 'new' | 'confirm' | null; message: string } }> {
-			const { $api } = useNuxtApp();
-			const { t } = useI18n();
+		async updateCrmUserPassword(id: string, body: ChangePasswordReq): Promise<true | undefined> {
+			const nuxtApp = useNuxtApp();
+			const { $api } = nuxtApp;
+			const t = nuxtApp.$i18n.t;
 			this.updating = true;
 			try {
 				const resp = await $api.crmUser.updatePassword(id, body);
@@ -168,24 +169,10 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					successNotification(`${resp.user.name} - CRM User Password Updated !`);
 					return true;
 				}
-				return { success: false, error: { field: null, message: t('validation.changePassword.genericError') } };
+				return undefined;
 			} catch (err: unknown | ErrorResponse) {
-				const raw = ((err as ErrorResponse).message ?? '').toLowerCase();
-				// Map backend messages to field-specific, user-friendly messages
-				if (
-					/current|incorrect|invalid|wrong|old password|previous password|does not match/.test(raw) &&
-					/password|credential/.test(raw)
-				) {
-					return { success: false, error: { field: 'current', message: t('validation.changePassword.currentPasswordIncorrect') } };
-				}
-				if (/at least|minimum|too short|length|8 character|must be.*character/.test(raw)) {
-					return { success: false, error: { field: 'new', message: t('validation.changePassword.newPasswordMinLength') } };
-				}
-				if (/confirm|match|do not match|mismatch|same/.test(raw)) {
-					return { success: false, error: { field: 'confirm', message: t('validation.changePassword.passwordConfirmationMismatch') } };
-				}
-				// Unmapped: show generic message on form (no toast to avoid duplicate)
-				return { success: false, error: { field: null, message: t('validation.changePassword.genericError') } };
+				const message = (err as ErrorResponse).message ?? 'Failed to delete CRM user';
+				failedNotification(message);
 			} finally {
 				this.updating = false;
 			}

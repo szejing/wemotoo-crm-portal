@@ -34,6 +34,7 @@ import { UpdateTaxGroupValidation } from './TaxGroup/Update/TaxGroupValidation';
 import { CreateTaxRuleValidation, TaxDetailValidation, TaxFilterValidation, TaxConditionValidation } from './TaxRule/Create/TaxRuleValidation';
 import { UpdateTaxRuleValidation } from './TaxRule/Update/TaxRuleValidation';
 import { CreateCRMUserValidation } from './CRMUser/Create/CRMUserValidation';
+import { ChangePasswordValidation } from './CRMUser/ChangePassword/ChangePasswordValidation';
 
 export {
 	LoginValidation,
@@ -76,4 +77,5 @@ export {
 	TaxFilterValidation,
 	TaxConditionValidation,
 	CreateCRMUserValidation,
+	ChangePasswordValidation,
 };
