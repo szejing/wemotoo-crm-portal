@@ -2,6 +2,7 @@
 	<USelectMenu
 		v-model="brands"
 		v-model:search-term="searchTerm"
+		by="code"
 		:items="items"
 		:search-input="{
 			placeholder: 'Search or add brands…',

@@ -2,6 +2,7 @@
 	<USelectMenu
 		v-model="tags"
 		v-model:search-term="searchTerm"
+		by="id"
 		:items="items"
 		:search-input="{
 			placeholder: 'Search or add tags…',
@@ -48,7 +49,7 @@ const props = defineProps<{ tags: Tag[] | undefined }>();
 
 const emit = defineEmits(['update:tags']);
 
-const tags = computed({
+const tags = computed<Tag[]>({
 	get() {
 		return props.tags ?? [];
 	},
