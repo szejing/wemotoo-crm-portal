@@ -59,10 +59,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ProductStatus } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
 
 const productStore = useProductStore();
-const { adding } = storeToRefs(productStore);
+const { adding, new_product } = storeToRefs(productStore);
 const formRef = ref<{ submit: () => void } | null>(null);
 
 const { t } = useI18n();
@@ -73,6 +74,7 @@ onBeforeRouteLeave(() => {
 });
 
 const saveDraft = async () => {
+	new_product.value.status = ProductStatus.DRAFT;
 	await productStore.createProduct();
 };
 
