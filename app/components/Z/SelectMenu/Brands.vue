@@ -12,6 +12,7 @@
 		label-key="code"
 		description-key="description"
 		:placeholder="$t('components.selectMenu.selectBrands')"
+		variant="formTrigger"
 	>
 		<template #default>
 			<div v-if="brands && brands.length > 0" class="flex flex-wrap gap-1.5">

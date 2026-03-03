@@ -11,6 +11,7 @@
 		multiple
 		label-key="value"
 		:placeholder="$t('components.selectMenu.selectTags')"
+		variant="formTrigger"
 	>
 		<template #default>
 			<div v-if="tags && tags.length > 0" class="flex flex-wrap gap-1.5">

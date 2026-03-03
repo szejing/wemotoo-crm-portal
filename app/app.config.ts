@@ -29,9 +29,16 @@ export default defineAppConfig({
 		// SelectMenu
 		selectMenu: {
 			slots: {
-				base: 'min-w-30 sm:min-w-40',
+				base: 'min-w-30 sm:min-w-40 cursor-pointer',
 				content: 'min-w-fit',
 				trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+			},
+			variants: {
+				variant: {
+					// Matches ClassificationSection category-picker-trigger (border, radius, bg, hover)
+					formTrigger:
+						'w-full min-h-[38px] py-[6px] px-[10px] border border-[var(--ui-border)] rounded-[var(--ui-radius)] bg-[var(--ui-bg)] ring-0 transition-[border-color_0.15s_ease] hover:border-[var(--ui-border-hover,var(--color-primary-400))]',
+				},
 			},
 		},
 	},

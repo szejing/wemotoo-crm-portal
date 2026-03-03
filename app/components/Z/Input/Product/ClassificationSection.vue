@@ -29,7 +29,7 @@
 				</div>
 			</div>
 
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+			<div class="grid grid-cols-1 sm:grid-cols-1 gap-6">
 				<UFormField :label="$t('components.productUpdate.categories')">
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.mainCategories') }}</p>
 					<!-- Category Picker Trigger -->
