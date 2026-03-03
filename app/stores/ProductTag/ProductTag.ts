@@ -94,6 +94,41 @@ export const useProductTagStore = defineStore('productTagStore', {
 			}
 		},
 
+		async loadMoreTags() {
+			if (this.loading || this.tags.length >= this.total_tags) return;
+
+			this.loading = true;
+			this.filter.current_page += 1;
+			const { $api } = useNuxtApp();
+
+			try {
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
+					$count: true,
+					$expand: 'products',
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
+				};
+
+				if (this.filter.query) {
+					const queryFilter = `(value contains '${this.filter.query}')`;
+					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
+				}
+
+				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);
+
+				if (data) {
+					this.tags = [...this.tags, ...data];
+					this.total_tags = total ?? 0;
+				}
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
+				failedNotification(message);
+			} finally {
+				this.loading = false;
+			}
+		},
+
 		async addTag(value: string): Promise<Tag> {
 			if (value.trim() === '') {
 				failedNotification('Tag value is required');

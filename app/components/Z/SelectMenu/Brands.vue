@@ -1,5 +1,6 @@
 <template>
 	<USelectMenu
+		ref="selectMenu"
 		v-model="brands"
 		v-model:search-term="searchTerm"
 		by="code"
@@ -14,6 +15,8 @@
 		description-key="description"
 		:placeholder="$t('components.selectMenu.selectBrands')"
 		variant="formTrigger"
+		:loading="brandStore.loading"
+		@update:open="onOpen"
 	>
 		<template #default>
 			<div v-if="brands && brands.length > 0" class="flex flex-wrap gap-1.5">
@@ -40,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useInfiniteScroll } from '@vueuse/core';
 import type { Brand } from '~/utils/types/brand';
 
 const searchTerm = ref('');
@@ -57,6 +61,29 @@ const brands = computed<Brand[]>({
 	set(value) {
 		emit('update:brands', JSON.parse(JSON.stringify(value)));
 	},
+});
+
+const selectMenu = useTemplateRef<{ viewportRef: HTMLElement }>('selectMenu');
+
+function onOpen(open: boolean) {
+	if (open && !items.value?.length) {
+		brandStore.filter.current_page = 1;
+		brandStore.getBrands();
+	}
+}
+
+onMounted(() => {
+	useInfiniteScroll(
+		() => selectMenu.value?.viewportRef,
+		() => {
+			brandStore.loadMoreBrands();
+		},
+		{
+			canLoadMore: () => {
+				return !brandStore.loading && brandStore.brands.length < brandStore.total_brands;
+			},
+		},
+	);
 });
 
 const remove = (brand: Brand) => {

@@ -1,5 +1,6 @@
 <template>
 	<USelectMenu
+		ref="selectMenu"
 		v-model="tags"
 		v-model:search-term="searchTerm"
 		by="id"
@@ -13,6 +14,8 @@
 		label-key="value"
 		:placeholder="$t('components.selectMenu.selectTags')"
 		variant="formTrigger"
+		:loading="tagStore.loading"
+		@update:open="onOpen"
 	>
 		<template #default>
 			<div v-if="tags && tags.length > 0" class="flex flex-wrap gap-1.5">
@@ -39,6 +42,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useInfiniteScroll } from '@vueuse/core';
 import type { Tag } from '~/utils/types/tag';
 
 const searchTerm = ref('');
@@ -56,6 +60,29 @@ const tags = computed<Tag[]>({
 	set(value) {
 		emit('update:tags', value);
 	},
+});
+
+const selectMenu = useTemplateRef<{ viewportRef: HTMLElement }>('selectMenu');
+
+function onOpen(open: boolean) {
+	if (open && !items.value?.length) {
+		tagStore.filter.current_page = 1;
+		tagStore.getTags();
+	}
+}
+
+onMounted(() => {
+	useInfiniteScroll(
+		() => selectMenu.value?.viewportRef,
+		() => {
+			tagStore.loadMoreTags();
+		},
+		{
+			canLoadMore: () => {
+				return !tagStore.loading && tagStore.tags.length < tagStore.total_tags;
+			},
+		},
+	);
 });
 
 const remove = (tag: Tag) => {
