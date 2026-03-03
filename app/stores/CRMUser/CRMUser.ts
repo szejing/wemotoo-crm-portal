@@ -158,8 +158,9 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			}
 		},
 
-		async updateCrmUserPassword(id: string, body: ChangePasswordReq) {
+		async updateCrmUserPassword(id: string, body: ChangePasswordReq): Promise<true | { success: false; error: { field: 'current' | 'new' | 'confirm' | null; message: string } }> {
 			const { $api } = useNuxtApp();
+			const { t } = useI18n();
 			this.updating = true;
 			try {
 				const resp = await $api.crmUser.updatePassword(id, body);
@@ -167,11 +168,24 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					successNotification(`${resp.user.name} - CRM User Password Updated !`);
 					return true;
 				}
-				return null;
+				return { success: false, error: { field: null, message: t('validation.changePassword.genericError') } };
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to update CRM user password';
-				failedNotification(message);
-				return null;
+				const raw = ((err as ErrorResponse).message ?? '').toLowerCase();
+				// Map backend messages to field-specific, user-friendly messages
+				if (
+					/current|incorrect|invalid|wrong|old password|previous password|does not match/.test(raw) &&
+					/password|credential/.test(raw)
+				) {
+					return { success: false, error: { field: 'current', message: t('validation.changePassword.currentPasswordIncorrect') } };
+				}
+				if (/at least|minimum|too short|length|8 character|must be.*character/.test(raw)) {
+					return { success: false, error: { field: 'new', message: t('validation.changePassword.newPasswordMinLength') } };
+				}
+				if (/confirm|match|do not match|mismatch|same/.test(raw)) {
+					return { success: false, error: { field: 'confirm', message: t('validation.changePassword.passwordConfirmationMismatch') } };
+				}
+				// Unmapped: show generic message on form (no toast to avoid duplicate)
+				return { success: false, error: { field: null, message: t('validation.changePassword.genericError') } };
 			} finally {
 				this.updating = false;
 			}

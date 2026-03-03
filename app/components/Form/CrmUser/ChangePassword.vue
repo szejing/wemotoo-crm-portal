@@ -1,12 +1,15 @@
 <template>
 	<div class="space-y-4 max-w-md">
+		<p v-if="serverErrorGeneral" class="text-sm text-error-500 dark:text-error-400" role="alert">{{ serverErrorGeneral }}</p>
 		<UFormField :label="$t('components.changePassword.currentPassword')">
 			<UInput
 				id="current-password"
 				v-model="state.old_password"
 				:type="state.show_old ? 'text' : 'password'"
 				:placeholder="$t('components.changePassword.currentPassword')"
+				:color="fieldErrorCurrent ? 'error' : undefined"
 				:ui="{ trailing: 'pe-1' }"
+				@update:model-value="onFieldInput('current')"
 			>
 				<template v-if="state.old_password?.length" #trailing>
 					<UButton
@@ -21,6 +24,7 @@
 					/>
 				</template>
 			</UInput>
+			<p v-if="fieldErrorCurrent" class="mt-1 text-sm text-error-500 dark:text-error-400" role="alert">{{ fieldErrorCurrent }}</p>
 		</UFormField>
 		<div class="space-y-2">
 			<UFormField :label="$t('components.changePassword.newPassword')">
@@ -28,11 +32,12 @@
 					id="new-password"
 					v-model="state.new_password"
 					:placeholder="$t('components.changePassword.newPassword')"
-					:color="passwordStrengthColor"
+					:color="passwordStrengthColor === 'error' || fieldErrorNew ? 'error' : passwordStrengthColor"
 					:type="state.show_new ? 'text' : 'password'"
-					:aria-invalid="passwordStrengthScore < 4"
+					:aria-invalid="passwordStrengthScore < 4 || !!fieldErrorNew"
 					aria-describedby="new-password-strength"
 					:ui="{ trailing: 'pe-1' }"
+					@update:model-value="onFieldInput('new')"
 				>
 					<template #trailing>
 						<UButton
@@ -47,6 +52,7 @@
 						/>
 					</template>
 				</UInput>
+				<p v-if="fieldErrorNew" class="mt-1 text-sm text-error-500 dark:text-error-400" role="alert">{{ fieldErrorNew }}</p>
 			</UFormField>
 			<UProgress :color="passwordStrengthColor" :indicator="passwordStrengthText" :model-value="passwordStrengthScore" :max="4" size="sm" />
 			<p id="new-password-strength" class="text-sm font-medium">{{ passwordStrengthText }}. {{ $t('auth.mustContain') }}</p>
@@ -66,7 +72,9 @@
 				v-model="state.confirm_password"
 				:type="state.show_confirm ? 'text' : 'password'"
 				:placeholder="$t('components.changePassword.confirmNewPassword')"
+				:color="fieldErrorConfirm ? 'error' : undefined"
 				:ui="{ trailing: 'pe-1' }"
+				@update:model-value="onFieldInput('confirm')"
 			>
 				<template v-if="state.confirm_password?.length" #trailing>
 					<UButton
@@ -81,6 +89,7 @@
 					/>
 				</template>
 			</UInput>
+			<p v-if="fieldErrorConfirm" class="mt-1 text-sm text-error-500 dark:text-error-400" role="alert">{{ fieldErrorConfirm }}</p>
 		</UFormField>
 		<UButton color="primary" :loading="loading" :disabled="!canSubmit" @click="onSubmit">{{ $t('components.changePassword.updatePassword') }}</UButton>
 	</div>
@@ -93,12 +102,24 @@ export interface ChangePasswordPayload {
 	confirm_password: string;
 }
 
-const props = defineProps<{
-	loading?: boolean;
-}>();
+export type ChangePasswordField = 'current' | 'new' | 'confirm';
+
+export interface ChangePasswordServerError {
+	field: ChangePasswordField | null;
+	message: string;
+}
+
+const props = withDefaults(
+	defineProps<{
+		loading?: boolean;
+		serverError?: ChangePasswordServerError | null;
+	}>(),
+	{ serverError: null },
+);
 
 const emit = defineEmits<{
 	submit: [payload: ChangePasswordPayload];
+	clearError: [];
 }>();
 
 const state = reactive({
@@ -108,6 +129,8 @@ const state = reactive({
 	show_new: false,
 	confirm_password: '',
 	show_confirm: false,
+	/** Client-side validation errors set on submit attempt */
+	errors: {} as Partial<Record<ChangePasswordField, string>>,
 });
 
 const { t } = useI18n();
@@ -141,16 +164,43 @@ const passwordStrengthText = computed(() => {
 	return t('common.strongPassword');
 });
 
+const getFieldError = (field: ChangePasswordField): string | undefined => {
+	return state.errors[field] ?? (props.serverError?.field === field ? props.serverError?.message : undefined);
+};
+
+const fieldErrorCurrent = computed(() => getFieldError('current'));
+const fieldErrorNew = computed(() => getFieldError('new'));
+const fieldErrorConfirm = computed(() => getFieldError('confirm'));
+
+const serverErrorGeneral = computed(() => (props.serverError?.field === null && props.serverError?.message ? props.serverError.message : undefined));
+
 const canSubmit = computed(
 	() =>
-		Boolean(state.old_password?.trim()) &&
-		Boolean(state.new_password?.trim()) &&
-		Boolean(state.confirm_password?.trim()) &&
-		state.new_password === state.confirm_password,
+		Boolean(state.old_password?.trim()) && Boolean(state.new_password?.trim()) && Boolean(state.confirm_password?.trim()) && passwordStrengthScore.value === 4,
 );
 
+const validate = (): boolean => {
+	state.errors = {};
+	if (!state.old_password?.trim()) {
+		state.errors.current = t('validation.changePassword.currentPasswordRequired');
+	}
+	const minLength = 8;
+	if (state.new_password.length > 0 && state.new_password.length < minLength) {
+		state.errors.new = t('validation.changePassword.newPasswordMinLength');
+	}
+	if (state.confirm_password.length > 0 && state.new_password !== state.confirm_password) {
+		state.errors.confirm = t('validation.changePassword.passwordConfirmationMismatch');
+	}
+	return Object.keys(state.errors).length === 0;
+};
+
+const onFieldInput = (_field: ChangePasswordField) => {
+	state.errors = {};
+	emit('clearError');
+};
+
 const onSubmit = () => {
-	if (!canSubmit.value) return;
+	if (!validate()) return;
 	emit('submit', {
 		old_password: state.old_password,
 		new_password: state.new_password,

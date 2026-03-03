@@ -65,7 +65,12 @@
 					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
 						{{ $t('pages.crmUserDetailChangePasswordDesc') }}
 					</p>
-					<FormCrmUserChangePassword :loading="updating" @submit="submitPassword" />
+					<FormCrmUserChangePassword
+						:loading="updating"
+						:server-error="changePasswordError"
+						@submit="submitPassword"
+						@clear-error="changePasswordError = null"
+					/>
 				</UCard>
 			</div>
 		</template>
@@ -118,6 +123,7 @@ onBeforeMount(async () => {
 });
 
 const editFormRef = ref<{ submit: () => void } | null>(null);
+const changePasswordError = ref<{ field: 'current' | 'new' | 'confirm' | null; message: string } | null>(null);
 
 const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role'] }) => {
 	await crmUserStore.updateCrmUser(id.value, {
@@ -130,11 +136,15 @@ const onEditFormSubmit = async (payload: { name: string; email_address: string; 
 };
 
 const submitPassword = async (payload: { old_password: string; new_password: string; confirm_password: string }) => {
-	await crmUserStore.updateCrmUserPassword(id.value, {
+	changePasswordError.value = null;
+	const result = await crmUserStore.updateCrmUserPassword(id.value, {
 		old_password: payload.old_password,
 		new_password: payload.new_password,
 		confirm_password: payload.confirm_password,
 	});
+	if (result !== true && result?.error) {
+		changePasswordError.value = result.error;
+	}
 };
 
 const deleteUser = async () => {

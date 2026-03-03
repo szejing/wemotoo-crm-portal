@@ -133,6 +133,13 @@
 			"confirmPasswordRequired": "Sila sahkan kata laluan anda.",
 			"passwordsDoNotMatch": "Kata laluan tidak sepadan."
 		},
+		"changePassword": {
+			"currentPasswordRequired": "Kata laluan semasa wajib.",
+			"currentPasswordIncorrect": "Kata laluan semasa tidak betul.",
+			"newPasswordMinLength": "Kata laluan mesti sekurang-kurangnya 8 aksara.",
+			"passwordConfirmationMismatch": "Pengesahan kata laluan tidak sepadan.",
+			"genericError": "Tidak dapat menukar kata laluan. Sila semak maklumat dan cuba lagi."
+		},
 		"product": {
 			"currencyCodeRequired": "Kod mata wang wajib",
 			"origSellPriceRequired": "Harga jual asal wajib",

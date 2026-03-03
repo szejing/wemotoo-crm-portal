@@ -133,6 +133,13 @@
 			"confirmPasswordRequired": "Please confirm your password.",
 			"passwordsDoNotMatch": "Passwords do not match."
 		},
+		"changePassword": {
+			"currentPasswordRequired": "Current password is required.",
+			"currentPasswordIncorrect": "Current password is incorrect.",
+			"newPasswordMinLength": "Password must be at least 8 characters.",
+			"passwordConfirmationMismatch": "Password confirmation does not match.",
+			"genericError": "Unable to update password. Please check your entries and try again."
+		},
 		"product": {
 			"currencyCodeRequired": "Currency code is required",
 			"origSellPriceRequired": "Original sell price is required",
