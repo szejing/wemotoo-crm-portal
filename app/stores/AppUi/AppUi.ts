@@ -72,7 +72,7 @@ const default_navigations = [
 				value: 'payment',
 				children: [
 					{ label: 'nav.paymentMethods', to: '/payment/methods' },
-					{ label: 'nav.paymentTypes', to: '/payment/types' },
+					// { label: 'nav.paymentTypes', to: '/payment/types' },// temporary hide
 				],
 			},
 			{
