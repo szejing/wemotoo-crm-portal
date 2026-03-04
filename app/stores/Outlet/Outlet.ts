@@ -100,6 +100,8 @@ export const useOutletStore = defineStore('outletStore', {
 					this.outlets = data;
 					this.total_outlets = total ?? 0;
 				}
+
+				console.log(data);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
@@ -166,8 +168,8 @@ export const useOutletStore = defineStore('outletStore', {
 					country_code: outlet.country_code,
 					state: outlet.state,
 					postal_code: outlet.postal_code,
-					longitude: lon === '' || lon == null ? null : (typeof lon === 'string' ? Number(lon) : lon),
-					latitude: lat === '' || lat == null ? null : (typeof lat === 'string' ? Number(lat) : lat),
+					longitude: lon === '' || lon == null ? null : typeof lon === 'string' ? Number(lon) : lon,
+					latitude: lat === '' || lat == null ? null : typeof lat === 'string' ? Number(lat) : lat,
 					tax_rule: outlet.tax_rule as string | undefined,
 				});
 
