@@ -35,12 +35,12 @@ const { t } = useI18n();
 useHead({ title: () => t('pages.paymentTitle') });
 
 const payment_navigations = computed(() => [
-	{
-		title: t('pages.paymentType'),
-		icon: ICONS.PAYMENT_METHODS,
-		to: '/payment/types',
-		description: t('pages.paymentTypeDesc'),
-	},
+	// {
+	// 	title: t('pages.paymentType'),
+	// 	icon: ICONS.PAYMENT_METHODS,
+	// 	to: '/payment/types',
+	// 	description: t('pages.paymentTypeDesc'),
+	// },
 	{
 		title: t('pages.paymentMethod'),
 		icon: ICONS.PAYMENT_METHODS,
