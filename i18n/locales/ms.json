@@ -937,6 +937,25 @@
 			"autoGenerateHint": "Klik \"Jana Auto\" untuk cipta semua kombinasi yang mungkin secara automatik",
 			"readyToCreateVariants": "Sedia untuk cipta {count} varian"
 		},
+		"variations": {
+			"variationLabel": "Variasi{index}",
+			"variationNamePlaceholder": "cth. Warna, Saiz",
+			"optionsLabel": "Pilihan",
+			"optionValuePlaceholder": "Input",
+			"addOptionPlaceholder": "Input",
+			"addVariation": "Tambah Variasi"
+		},
+		"variantList": {
+			"title": "Senarai Variasi",
+			"pricePlaceholder": "Harga",
+			"stockPlaceholder": "Stok",
+			"skuPlaceholder": "SKU",
+			"applyToAll": "Gunakan Untuk Semua",
+			"price": "Harga",
+			"stock": "Stok",
+			"stockTooltip": "Kuantiti inventori tersedia untuk varian ini",
+			"sku": "SKU"
+		},
 		"zModal": {
 			"brandDetail": {
 				"status": "Status",

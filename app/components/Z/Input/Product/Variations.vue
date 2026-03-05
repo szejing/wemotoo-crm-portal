@@ -1,112 +1,109 @@
 <template>
 	<div class="space-y-4">
-		<!-- Header Section -->
-		<div class="flex items-start justify-between">
-			<div class="flex-1">
-				<div class="flex items-center gap-2">
-					<div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold text-sm">1</div>
-					<h3 class="text-base font-semibold text-neutral-900">{{ $t('components.selectionOptions.defineProductOptions') }}</h3>
+		<div v-for="(variation, vIdx) in localVariations" :key="vIdx" class="border border-neutral-200 rounded-lg p-4 bg-white">
+			<div class="flex items-center justify-between mb-3">
+				<div class="flex items-center gap-3 flex-1">
+					<span class="text-sm font-medium text-neutral-700 whitespace-nowrap">
+						{{ $t('components.variations.variationLabel', { index: vIdx + 1 }) }}
+					</span>
+					<UInput
+						v-model="variation.name"
+						:placeholder="$t('components.variations.variationNamePlaceholder')"
+						:maxlength="14"
+						size="md"
+						class="max-w-48"
+						@update:model-value="emitUpdate"
+					/>
 				</div>
-				<p class="text-xs text-neutral-500 mt-1 ml-10">{{ $t('components.selectionOptions.selectWhichOptionsToUse') }}</p>
+
+				<UButton :icon="ICONS.CROSS" color="neutral" variant="ghost" size="md" @click="removeVariation(vIdx)" />
+			</div>
+
+			<!-- Options as tags -->
+			<div class="flex items-start gap-3">
+				<span class="text-sm text-neutral-500 whitespace-nowrap pt-1.5">
+					{{ $t('components.variations.optionsLabel') }}
+				</span>
+				<UInputTags
+					:model-value="getOptionValues(vIdx)"
+					:placeholder="$t('components.variations.optionValuePlaceholder')"
+					:max-length="20"
+					size="md"
+					class="flex-1"
+					@update:model-value="(tags: string[]) => setOptionValues(vIdx, tags)"
+				/>
 			</div>
 		</div>
 
-		<!-- Options Table -->
-		<div class="space-y-3">
-			<!-- Info Banner -->
-			<div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-				<div class="flex items-start gap-2">
-					<UIcon :name="ICONS.INFO" class="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
-					<p class="text-xs text-blue-700">
-						{{ $t('components.selectionOptions.tipMessage') }}
-					</p>
-				</div>
-			</div>
-
-			<!-- Table -->
-			<UTable v-model:row-selection="selectedVariations" :data="productVariations" :columns="selectable_product_variation_columns">
-				<template #empty-state>
-					<div class="flex flex-col items-center justify-center py-12">
-						<UIcon :name="ICONS.LAYERS" class="w-12 h-12 text-neutral-300 mb-3" />
-						<h3 class="text-sm font-semibold text-neutral-900 mb-1">{{ $t('components.selectionOptions.noOptionsFound') }}</h3>
-						<p class="text-xs text-neutral-500">{{ $t('components.selectionOptions.createNewOptionToGetStarted') }}</p>
-					</div>
-				</template>
-			</UTable>
-
-			<!-- Summary Card -->
-			<div class="bg-linear-to-r from-primary-50 to-purple-50 border border-primary-200 rounded-lg p-4">
-				<div class="flex items-center gap-3">
-					<UIcon :name="ICONS.CHECK_ROUNDED" class="w-5 h-5 text-primary-600 shrink-0" />
-					<div class="flex-1">
-						<p class="text-sm font-medium text-neutral-900">
-							{{ selectedCount }} of {{ productVariations.length }}
-							{{ productVariations.length === 1 ? $t('components.selectionOptions.optionSelected') : $t('components.selectionOptions.optionsSelected') }}
-							<span v-if="selectedCount > 0" class="text-neutral-600">
-								· {{ possibleCombinations }} {{ $t('components.selectionOptions.possible') }}
-								{{ possibleCombinations === 1 ? $t('components.selectionOptions.combination') : $t('components.selectionOptions.combinations') }}
-							</span>
-						</p>
-						<p class="text-xs text-neutral-600 mt-0.5">{{ $t('components.selectionOptions.selectedOptionsWillBeUsed') }}</p>
-					</div>
-				</div>
-			</div>
-		</div>
+		<!-- Add Variation Button -->
+		<UButton v-if="localVariations.length < MAX_VARIATIONS" :icon="ICONS.ADD" color="primary" variant="soft" size="sm" @click="addVariation">
+			{{ $t('components.variations.addVariation') }}
+		</UButton>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useProductVariationStore } from '~/stores/ProductVariation/ProductVariation';
-import { getSelectableProductVariationColumns } from '~/utils/table-columns';
 import type { ProductVariationInput } from '~/utils/types/product-variation';
 
-const { t } = useI18n();
-const selectable_product_variation_columns = computed(() => getSelectableProductVariationColumns(t));
-
-const productVariationsStore = useProductVariationStore();
-const productVariations = productVariationsStore.currentProdVariation();
+const MAX_VARIATIONS = 2;
 
 const props = defineProps({
 	variations: {
 		type: Array as PropType<ProductVariationInput[]>,
-		required: false,
+		default: () => [],
 	},
 });
 
 const emit = defineEmits(['update:variations']);
 
-const selectedVariations = computed({
-	get() {
-		const selected: Record<number, boolean> = {};
-		productVariations.forEach((variation: ProductVariationInput, index: number) => {
-			selected[index] = props.variations?.some((propVariation) => propVariation.id == variation.id) ?? false;
-		});
+const localVariations = ref<ProductVariationInput[]>(props.variations?.length ? JSON.parse(JSON.stringify(props.variations)) : []);
 
-		return selected;
+// Only sync from parent when external changes occur (e.g. loading saved data),
+// not when our own emit triggers a prop update.
+let emittedByUs = false;
+
+watch(
+	() => props.variations,
+	(val) => {
+		if (emittedByUs) {
+			emittedByUs = false;
+			return;
+		}
+		localVariations.value = val?.length ? JSON.parse(JSON.stringify(val)) : [];
 	},
-	set(value) {
-		const selected: ProductVariationInput[] = [];
-		productVariations.forEach((variation: ProductVariationInput, index: number) => {
-			if (value[index]) {
-				selected.push({ ...variation, options: variation.options });
-			}
-		});
-		emit('update:variations', JSON.parse(JSON.stringify(selected)));
-	},
-});
+	{ deep: true },
+);
 
-// Compute selected count
-const selectedCount = computed(() => {
-	return Object.values(selectedVariations.value).filter(Boolean).length;
-});
+const getOptionValues = (vIdx: number): string[] => {
+	return localVariations.value[vIdx]?.options.map((o) => o.value).filter((v) => v.trim() !== '') ?? [];
+};
 
-// Calculate possible combinations
-const possibleCombinations = computed(() => {
-	if (selectedCount.value === 0) return 0;
-	return Object.values(selectedVariations.value)
-		.filter(Boolean)
-		.reduce((acc, isSelected) => acc * (isSelected ? 1 : 0), 1);
-});
+const setOptionValues = (vIdx: number, tags: string[]) => {
+	const variation = localVariations.value[vIdx];
+	if (!variation) return;
+	variation.options = tags.map((tag) => ({ value: tag }));
+	emitUpdate();
+};
+
+const emitUpdate = () => {
+	emittedByUs = true;
+	// Emit all variations (including those with empty options) so the parent
+	// and variant list can see the full structure. The variant list will
+	// filter for valid ones on its own.
+	const output = localVariations.value.map((v) => ({
+		...v,
+		options: v.options.filter((o) => o.value.trim() !== ''),
+	}));
+	emit('update:variations', JSON.parse(JSON.stringify(output)));
+};
+
+const addVariation = () => {
+	if (localVariations.value.length >= MAX_VARIATIONS) return;
+	localVariations.value.push({ name: '', options: [] });
+};
+
+const removeVariation = (vIdx: number) => {
+	localVariations.value.splice(vIdx, 1);
+	emitUpdate();
+};
 </script>
-
-<style scoped></style>

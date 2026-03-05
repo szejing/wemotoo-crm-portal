@@ -937,6 +937,25 @@
 			"autoGenerateHint": "Click \"Auto Generate\" to create all possible combinations automatically",
 			"readyToCreateVariants": "Ready to create {count} variants"
 		},
+		"variations": {
+			"variationLabel": "Variation{index}",
+			"variationNamePlaceholder": "e.g. Color, Size",
+			"optionsLabel": "Options",
+			"optionValuePlaceholder": "Input",
+			"addOptionPlaceholder": "Input",
+			"addVariation": "Add Variation"
+		},
+		"variantList": {
+			"title": "Variation List",
+			"pricePlaceholder": "Price",
+			"stockPlaceholder": "Stock",
+			"skuPlaceholder": "SKU",
+			"applyToAll": "Apply To All",
+			"price": "Price",
+			"stock": "Stock",
+			"stockTooltip": "Available inventory quantity for this variant",
+			"sku": "SKU"
+		},
 		"zModal": {
 			"brandDetail": {
 				"status": "Status",

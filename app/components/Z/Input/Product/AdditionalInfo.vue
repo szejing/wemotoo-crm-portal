@@ -39,110 +39,23 @@
 
 		<template #variations>
 			<div class="space-y-6 pt-4">
-				<!-- Header Section -->
-				<div class="flex items-start justify-between">
-					<div class="flex-1">
-						<div class="flex items-center gap-2">
-							<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.productVariants') }}</h3>
-						</div>
-						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.createVariationsOfProduct') }}</p>
-					</div>
-					<UTooltip :text="$t('components.productUpdate.variantsTooltip')" :popper="{ placement: 'left' }">
-						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-					</UTooltip>
+				<!-- Header -->
+				<div class="flex items-center gap-2">
+					<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
+					<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.productVariants') }}</h3>
 				</div>
 
-				<!-- Info Banner -->
-				<div class="bg-linear-to-r from-primary-50 via-purple-50 to-blue-50 border-2 border-primary-200 rounded-xl p-5">
-					<div class="flex items-start gap-4">
-						<div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0">
-							<UIcon :name="ICONS.LIGHTBULB" class="text-primary-600 w-5 h-5" />
-						</div>
-						<div class="flex-1">
-							<h4 class="text-sm font-semibold text-neutral-900 mb-1">{{ $t('components.productUpdate.howProductVariantsWork') }}</h4>
-							<p class="text-xs text-neutral-700 leading-relaxed mb-3">
-								{{ $t('components.productUpdate.createProductVariantsTwoSteps') }}
-							</p>
-							<div class="flex flex-wrap gap-3 text-xs">
-								<div class="flex items-center gap-1.5 text-neutral-600">
-									<span class="w-5 h-5 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-semibold">1</span>
-									<span>{{ $t('components.productUpdate.defineOptionsAndValues') }}</span>
-								</div>
-								<div class="flex items-center gap-1.5 text-neutral-600">
-									<span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-semibold">2</span>
-									<span>{{ $t('components.productUpdate.generateCombinations') }}</span>
-								</div>
-								<div class="flex items-center gap-1.5 text-neutral-600">
-									<span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">3</span>
-									<span>{{ $t('components.productUpdate.customizeEachVariant') }}</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<!-- Variations Input -->
+				<ZInputProductVariations :variations="product.variations" @update:variations="updateProductVariations" />
 
-				<!-- Example Preview (if no options yet) -->
-				<div v-if="!product.variations || product.variations.length === 0" class="bg-white border-2 border-dashed border-neutral-300 rounded-xl p-6">
-					<div class="flex flex-col sm:flex-row gap-6">
-						<div class="flex-1">
-							<h5 class="text-sm font-semibold text-neutral-900 mb-3 flex items-center gap-2">
-								<UIcon :name="ICONS.SPARKLES" class="w-4 h-4 text-amber-500" />
-								{{ $t('components.productUpdate.exampleTShirtVariants') }}
-							</h5>
-							<div class="space-y-3 text-xs">
-								<div>
-									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.optionsYouMightDefine') }}</p>
-									<div class="flex flex-wrap gap-2">
-										<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-200">{{ $t('components.productUpdate.exampleSizeOption') }}</span>
-										<span class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">{{ $t('components.productUpdate.exampleColorOption') }}</span>
-									</div>
-								</div>
-								<div>
-									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.resultsInVariantsLike') }}</p>
-									<div class="flex flex-wrap gap-2">
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantRedS') }}</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantRedM') }}</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantBlueS') }}</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleMore') }}</span>
-										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium"
-											>12 {{ $t('components.productUpdate.totalVariants') }}</span
-										>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Workflow Container -->
-				<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
-					<div class="space-y-8">
-						<!-- Step 1: Variations -->
-						<ZInputProductVariations v-model:variations="product.variations" @update:variations="updateProductVariations" />
-
-						<!-- Divider -->
-						<div v-if="product.variations && product.variations.length > 0" class="relative">
-							<div class="absolute inset-0 flex items-center" aria-hidden="true">
-								<div class="w-full border-t border-neutral-200"></div>
-							</div>
-							<div class="relative flex justify-center">
-								<span class="bg-white px-3 text-xs font-medium text-neutral-500">
-									<UIcon :name="ICONS.ARROW_DOWN" class="w-4 h-4" />
-								</span>
-							</div>
-						</div>
-
-						<!-- Step 2: Variants -->
-						<ZInputProductVariantList
-							:variations="product.variations"
-							:variants="product.variants"
-							:product="product"
-							@delete:variant="deleteProductVariant"
-							@update:variants="updateProductVariants"
-						/>
-					</div>
-				</div>
+				<!-- Variant List (auto-generated) -->
+				<ZInputProductVariantList
+					:variations="product.variations"
+					:variants="product.variants"
+					:product="product"
+					@delete:variant="deleteProductVariant"
+					@update:variants="updateProductVariants"
+				/>
 			</div>
 		</template>
 
