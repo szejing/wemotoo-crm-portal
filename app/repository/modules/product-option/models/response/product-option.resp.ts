@@ -1,5 +1,5 @@
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductVariation } from '~/utils/types/product-variation';
 
 export type ProductOptionResp = {
-	productOption: ProductOption;
+	productOption: ProductVariation;
 };

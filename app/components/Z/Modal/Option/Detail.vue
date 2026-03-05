@@ -35,21 +35,21 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { UpdateProductOptionValidation } from '~/utils/schema';
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductVariation } from '~/utils/types/product-variation';
 
 type Schema = z.output<typeof UpdateProductOptionValidation>;
 const formRef = ref();
 
 const props = defineProps({
 	productOption: {
-		type: Object as PropType<ProductOption> | undefined,
+		type: Object as PropType<ProductVariation> | undefined,
 		required: true,
 	},
 });
 const emit = defineEmits(['update', 'delete', 'cancel']);
 
 const state = reactive({
-	option: { name: props.productOption.name, values: props.productOption.values },
+	option: { name: props.productOption.name, values: props.productOption.options },
 });
 
 const tagStore = useProductTagStore();

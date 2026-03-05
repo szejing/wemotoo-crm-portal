@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductOptionInput } from '~/utils/types/product';
+import type { ProductOptionInput } from '~/utils/types/product-option';
 import { getSelectableProductOptionColumns } from '~/utils/table-columns';
 
 const { t } = useI18n();
@@ -87,7 +87,7 @@ const selectedOptions = computed({
 		const selected: ProductOptionInput[] = [];
 		productOptions.forEach((option: ProductOptionInput, index: number) => {
 			if (value[index]) {
-				selected.push({ ...option, metadata: undefined, values: option.values.map((value) => ({ ...value, metadata: undefined })) });
+				selected.push({ ...option, metadata: undefined, value: option.value });
 			}
 		});
 		emit('update:productOptions', JSON.parse(JSON.stringify(selected)));

@@ -1,10 +1,10 @@
 import { UCheckbox, UIcon } from '#components';
 import type { TableColumn } from '@nuxt/ui';
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductVariation } from '~/utils/types/product-variation';
 
 type TranslateFn = (key: string) => string;
 
-export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<ProductOption>[] {
+export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<ProductVariation>[] {
 	return [
 		{
 			id: 'select',
@@ -25,7 +25,7 @@ export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<P
 			accessorKey: 'name',
 			header: () => h('span', { class: 'text-xs font-semibold text-neutral-700 uppercase tracking-wider' }, t('table.optionName')),
 			cell: ({ row }) => {
-				const count = row.original.values?.length || 0;
+				const count = row.original.options?.length || 0;
 				const valueLabel = count === 1 ? t('table.value') : t('table.values');
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('div', [
@@ -39,7 +39,7 @@ export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<P
 			accessorKey: 'values',
 			header: () => h('span', { class: 'text-xs font-semibold text-neutral-700 uppercase tracking-wider' }, t('table.values')),
 			cell: ({ row }) => {
-				if (!row.original.values || row.original.values.length === 0) {
+				if (!row.original.options || row.original.options.length === 0) {
 					return h('div', { class: 'flex items-center gap-1.5 text-xs text-amber-600' }, [
 						h(UIcon, { name: 'i-heroicons-exclamation-triangle', class: 'w-3 h-3' }),
 						h('span', t('table.noValues')),
@@ -49,7 +49,7 @@ export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<P
 				return h(
 					'div',
 					{ class: 'flex flex-wrap gap-1.5' },
-					row.original.values.map((value) =>
+					row.original.options.map((value) =>
 						h(
 							'span',
 							{ class: 'inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-neutral-100 text-neutral-700 border border-neutral-200' },

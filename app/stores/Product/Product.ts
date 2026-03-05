@@ -63,7 +63,7 @@ const initialEmptyProduct: ProductCreate = {
 	],
 
 	// variants
-	options: [],
+	variations: [],
 	variants: [],
 
 	// metadata
@@ -284,7 +284,7 @@ export const useProductStore = defineStore('productStore', {
 				if (product.brand_codes !== undefined) body.brand_codes = product.brand_codes;
 				if (product.category_codes !== undefined) body.category_codes = product.category_codes;
 				if (product.price_types !== undefined) body.price_types = product.price_types;
-				if (product.options !== undefined) body.options = product.options;
+				if (product.variations !== undefined) body.options = product.variations;
 				if (product.variants !== undefined) body.variants = product.variants;
 				if (thumbnail !== undefined) body.thumbnail = thumbnail;
 				if (images !== undefined) body.images = images;

@@ -1,6 +1,6 @@
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductVariation } from '~/utils/types/product-variation';
 
 export type ProductOptionsResp = {
 	count: number;
-	productOptions: ProductOption[];
+	productOptions: ProductVariation[];
 };

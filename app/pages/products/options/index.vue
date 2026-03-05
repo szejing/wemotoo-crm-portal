@@ -70,8 +70,8 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOptionDetail } from '#components';
 import { getProductOptionColumns } from '~/utils/table-columns';
+import type { ProductVariation } from '~/utils/types/product-variation';
 import type { ProductOption } from '~/utils/types/product-option';
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
@@ -95,7 +95,7 @@ onMounted(async () => {
 	}
 });
 
-const deleteProductOption = async (row: TableRow<ProductOption>) => {
+const deleteProductOption = async (row: TableRow<ProductVariation>) => {
 	const option = row.original;
 
 	if (!option) return;
@@ -118,7 +118,7 @@ const deleteProductOption = async (row: TableRow<ProductOption>) => {
 	confirmModal.open();
 };
 
-const selectProductOption = async (e: Event, row: TableRow<ProductOption>) => {
+const selectProductOption = async (e: Event, row: TableRow<ProductVariation>) => {
 	const option = row.original;
 
 	if (!option) return;
@@ -126,7 +126,7 @@ const selectProductOption = async (e: Event, row: TableRow<ProductOption>) => {
 	const optionModal = overlay.create(ZModalOptionDetail, {
 		props: {
 			productOption: JSON.parse(JSON.stringify(option)),
-			onUpdate: async (name: string, values: ProductOptionValue[]) => {
+			onUpdate: async (name: string, values: ProductOption[]) => {
 				await productOptionsStore.updateProductOption(option.id!, name, values);
 				optionModal.close();
 			},

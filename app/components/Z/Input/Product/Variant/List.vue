@@ -55,8 +55,8 @@
 								class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-md border border-primary-200"
 							>
 								<UIcon :name="ICONS.CHECK_ROUNDED" class="w-3 h-3 text-green-600" />
-								<span class="text-xs font-medium text-neutral-900">{{ option.name }}</span>
-								<span class="text-xs text-neutral-500">({{ option.values?.length || 0 }})</span>
+								<span class="text-xs font-medium text-neutral-900">{{ option.value }}</span>
+								<span class="text-xs text-neutral-500">({{ option.value?.length || 0 }})</span>
 							</div>
 						</div>
 						<div v-else class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
@@ -168,8 +168,9 @@
 <script lang="ts" setup>
 import { ZInputProductVariantDetail } from '#components';
 import type { ProductCreate } from '~/utils/types/form/product-creation';
-import type { ProductOptionInput, ProductOptionValueInput, Product, ProductVariantInput } from '~/utils/types/product';
+import type { Product, ProductVariantInput } from '~/utils/types/product';
 import { formatCurrency } from 'wemotoo-common';
+import type { ProductOptionInput } from '~/utils/types/product-option';
 
 const overlay = useOverlay();
 const props = defineProps<{
@@ -197,30 +198,28 @@ const prodVariants = computed({
 
 // Get only selected options
 const selectedOptions = computed(() => {
-	return prodOptions.value.filter((option) => option.selected !== false);
+	return prodOptions.value.filter((option) => option.metadata?.selected !== false);
 });
 
 const totalPossibleVariants = computed(() => {
 	if (selectedOptions.value.length === 0) return 0;
-	return selectedOptions.value.reduce((acc, option) => acc * (option?.values?.length || 0), 1);
+	return selectedOptions.value.reduce((acc, option) => acc * (option?.value?.length || 0), 1);
 });
 
 const autoGenerate = () => {
 	if (selectedOptions.value.length === 0) return;
 	const variants: ProductVariantInput[] = [];
 
-	const combine = (currentOptions: ProductOptionValueInput[], optionIndex: number) => {
+	const combine = (currentOptions: ProductOptionInput[], optionIndex: number) => {
 		if (optionIndex === selectedOptions.value.length) {
 			variants.push({ options: [...currentOptions] });
 			return;
 		}
 
 		const option = selectedOptions.value[optionIndex];
-		if (!option || !option.values) return;
+		if (!option || !option.value) return;
 
-		for (const value of option.values) {
-			combine([...currentOptions, { id: value.id, option_id: option.id, value: value.value }], optionIndex + 1);
-		}
+		combine([...currentOptions, { id: option.id, variation_id: option.id, value: option.value }], optionIndex + 1);
 	};
 
 	combine([], 0);

@@ -41,19 +41,19 @@ export function transformProductToUpdate(product: Product): ProductUpdate {
 					cost_price: price.cost_price,
 					sale_price: price.sale_price,
 				})) ?? [],
-		options:
-			product.options
-				?.filter((option) => option != null)
-				.map((option) => ({
-					id: option.id,
-					name: option.name,
-					values:
-						option.values
-							?.filter((value) => value != null)
-							.map((value) => ({
-								id: value.id,
-								option_id: value.option_id,
-								value: value.value,
+		variations:
+			product.variations
+				?.filter((variation) => variation != null)
+				.map((variation) => ({
+					id: variation.id,
+					name: variation.name,
+					options:
+						variation.options
+							?.filter((option) => option != null)
+							.map((option) => ({
+								id: option.id,
+								variation_id: option.variation_id,
+								value: option.value,
 							})) ?? [],
 				})) ?? [],
 		variants:
@@ -92,7 +92,7 @@ export function transformProductToUpdate(product: Product): ProductUpdate {
 							?.filter((option) => option != null)
 							.map((option) => ({
 								id: option.id,
-								option_id: option.option_id,
+								option_id: option.variation_id,
 								value: option.value,
 							})) ?? [],
 					metadata: variant.metadata,

@@ -1,7 +1,7 @@
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import type { ProductOption } from '~/utils/types/product-option';
 
 export type UpdateProductOptionReq = {
 	name: string;
-	values: ProductOptionValue[];
+	values: ProductOption[];
 	metadata?: Record<string, unknown> | undefined;
 };

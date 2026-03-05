@@ -1,4 +1,4 @@
-import type { ProductOptionValue, ProductOptionValueInput } from './product-option-value';
+import type { ProductOption, ProductOptionInput } from './product-option';
 import type { Price, PriceInput } from './price';
 
 // Input type for create/update operations
@@ -22,7 +22,7 @@ export type ProductVariantInput = {
 	origin_country?: string;
 	material?: string;
 	price_types?: PriceInput[];
-	options?: ProductOptionValueInput[];
+	options?: ProductOptionInput[];
 	metadata?: Record<string, unknown>;
 };
 
@@ -47,7 +47,7 @@ export type ProductVariant = {
 	origin_country?: string;
 	material?: string;
 	price_types?: Price[];
-	options?: ProductOptionValue[];
+	options?: ProductOption[];
 	metadata?: Record<string, unknown>;
 	created_at?: string;
 	updated_at?: string;

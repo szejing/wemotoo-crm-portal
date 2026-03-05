@@ -1,7 +1,8 @@
 import type { ProductStatus } from 'wemotoo-common';
 import type { PriceInput } from '../price';
-import type { ProductOptionInput, ProductVariantInput } from '../product';
+import type { ProductVariantInput } from '../product';
 import type { Image } from '../image';
+import type { ProductVariationInput } from '../product-variation';
 
 export type ProductCreate = {
 	code?: string;
@@ -25,7 +26,7 @@ export type ProductCreate = {
 
 	// Nested inputs
 	price_types?: PriceInput[]; // required
-	options?: ProductOptionInput[]; // mainly for items
+	variations?: ProductVariationInput[]; // mainly for items
 	variants?: ProductVariantInput[]; // mainly for items
 
 	metadata?: Record<string, unknown>;
@@ -53,7 +54,7 @@ export type ProductUpdate = {
 
 	// Nested inputs
 	price_types?: PriceInput[]; // required
-	options?: ProductOptionInput[]; // mainly for items
+	variations?: ProductVariationInput[]; // mainly for items
 	variants?: ProductVariantInput[]; // mainly for items
 
 	metadata?: Record<string, unknown>;

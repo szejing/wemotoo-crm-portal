@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { ProductOptionCreate } from '~/utils/types/form/product-option-creation';
-import type { ProductOption } from '~/utils/types/product-option';
+import type { ProductVariation } from '~/utils/types/product-variation';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
-import type { ProductOptionValue } from '~/utils/types/product-option-value';
+import type { ProductOption } from '~/utils/types/product-option';
 import { defaultProductOptionRelations } from 'wemotoo-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
@@ -31,7 +31,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 		adding: false as boolean,
 		updating: false as boolean,
 		exporting: false as boolean,
-		prod_option: [] as ProductOption[],
+		prod_option: [] as ProductVariation[],
 		total_options: 0 as number,
 		new_prod_option: structuredClone(initialEmptyOption),
 		filter: initialEmptyProductOptionFilter,
@@ -119,7 +119,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 				this.loading = false;
 			}
 		},
-		async updateProductOption(optionId: number, name: string, values: ProductOptionValue[]) {
+		async updateProductOption(optionId: number, name: string, values: ProductOption[]) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
@@ -145,7 +145,7 @@ export const useProductOptionStore = defineStore('productOptionStore', {
 				this.updating = false;
 			}
 		},
-		async deleteProductOption(option: ProductOption) {
+		async deleteProductOption(option: ProductVariation) {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();

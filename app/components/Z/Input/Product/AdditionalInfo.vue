@@ -83,7 +83,7 @@
 				</div>
 
 				<!-- Example Preview (if no options yet) -->
-				<div v-if="!product.options || product.options.length === 0" class="bg-white border-2 border-dashed border-neutral-300 rounded-xl p-6">
+				<div v-if="!product.variations || product.variations.length === 0" class="bg-white border-2 border-dashed border-neutral-300 rounded-xl p-6">
 					<div class="flex flex-col sm:flex-row gap-6">
 						<div class="flex-1">
 							<h5 class="text-sm font-semibold text-neutral-900 mb-3 flex items-center gap-2">
@@ -119,10 +119,10 @@
 				<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
 					<div class="space-y-8">
 						<!-- Step 1: Options -->
-						<ZInputProductOptions v-model:options="product.options" @update:product-options="updateProductOptions" />
+						<ZInputProductOptions v-model:options="product.variations" @update:product-options="updateProductOptions" />
 
 						<!-- Divider -->
-						<div v-if="product.options && product.options.length > 0" class="relative">
+						<div v-if="product.variations && product.variations.length > 0" class="relative">
 							<div class="absolute inset-0 flex items-center" aria-hidden="true">
 								<div class="w-full border-t border-neutral-200"></div>
 							</div>
@@ -135,7 +135,7 @@
 
 						<!-- Step 2: Variants -->
 						<ZInputProductVariantList
-							:options="product.options"
+							:options="product.variations"
 							:variants="product.variants"
 							:product="product"
 							@delete:variant="deleteProductVariant"

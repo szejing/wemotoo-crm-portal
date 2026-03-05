@@ -4,7 +4,7 @@
 
 		<UTable v-model="selectedOptions" :data="productOptions" :columns="product_option_columns" by="name" @select="select">
 			<template #values-data="{ row }">
-				<span>{{ row.original.values.map((v: ProductOptionValueInput) => v.value).join(' · ') }}</span>
+				<span>{{ row.original.options.map((v: ProductOptionValueInput) => v.value).join(' · ') }}</span>
 			</template>
 
 			<template #empty-state>

@@ -220,12 +220,13 @@
 import { ProductStatus } from 'wemotoo-common';
 import type { CategoryInput, Category } from '~/utils/types/category';
 import type { PriceInput } from '~/utils/types/price';
-import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
+import type { ProductVariantInput } from '~/utils/types/product';
 import type { TagInput, Tag } from '~/utils/types/tag';
 import type { BrandInput, Brand } from '~/utils/types/brand';
 import { CreateProductValidation } from '~/utils/schema';
 import { ZModalConfirmation, ZModalLoading } from '#components';
 import type { FormErrorEvent } from '#ui/types';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 const overlay = useOverlay();
 const formRef = ref();
@@ -395,7 +396,7 @@ const reviewSummary = computed(() => ({
 	tagsCount: tags.value?.length ?? 0,
 	brandsCount: brands.value?.length ?? 0,
 	variantsCount: new_product.value.variants?.length ?? 0,
-	optionsCount: new_product.value.options?.length ?? 0,
+	optionsCount: new_product.value.variations?.length ?? 0,
 	hasThumbnail: !!new_product.value.thumbnail,
 	imagesCount: new_product.value.images?.length ?? 0,
 	thumbnail: new_product.value.thumbnail,
@@ -459,8 +460,8 @@ const updateCurrency = (currency: any) => {
 };
 
 // Methods: Product Options & Variants
-const updateProductOptions = (value: ProductOptionInput[]) => {
-	new_product.value.options = value;
+const updateProductOptions = (value: ProductVariationInput[]) => {
+	new_product.value.variations = value;
 	triggerAutoSave();
 };
 
@@ -545,15 +546,15 @@ const doCreateProduct = async () => {
 		});
 	});
 
-	const prodOptions: ProductOptionInput[] = [];
-	new_product.value.options?.forEach((option) => {
-		prodOptions.push({
-			id: option.id!,
-			name: option.name!,
-			values: option.values?.map((value) => {
+	const prodVariations: ProductVariationInput[] = [];
+	new_product.value.variations?.forEach((variation) => {
+		prodVariations.push({
+			id: variation.id!,
+			name: variation.name!,
+			options: variation.options?.map((option) => {
 				return {
-					id: value.id!,
-					value: value.value!,
+					id: option.id!,
+					value: option.value!,
 				};
 			}),
 		});
@@ -577,7 +578,7 @@ const doCreateProduct = async () => {
 			options: variant.options?.map((option) => {
 				return {
 					id: option.id!,
-					option_id: option.option_id!,
+					variation_id: option.variation_id!,
 					value: option.value!,
 				};
 			}),
@@ -594,7 +595,7 @@ const doCreateProduct = async () => {
 	new_product.value.tag_ids = prodTags.map((t) => t.id!);
 	new_product.value.brand_codes = prodBrands.map((b) => b.code!);
 	new_product.value.status = ProductStatus.PUBLISHED;
-	new_product.value.options = prodOptions;
+	new_product.value.variations = prodVariations;
 	new_product.value.variants = prodVariants;
 	new_product.value.metadata = new_product.value.metadata ? JSON.parse(JSON.stringify(new_product.value.metadata)) : undefined;
 

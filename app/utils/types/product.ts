@@ -5,26 +5,27 @@ import type { Tag } from './tag';
 import type { Brand } from './brand';
 import type { Image } from './image';
 import type { ProductVariant } from './product-variant';
-import type { ProductOption } from './product-option';
+import type { ProductVariation } from './product-variation';
+import type { ProductOptionInput } from './product-option';
 
 // ============================================
 // INPUT TYPES (for create/update operations)
 // ============================================
 
-export type ProductOptionValueInput = {
-	id?: number;
-	option_id?: number;
-	value: string;
-	metadata?: Record<string, unknown>;
-};
+// export type ProductOptionValueInput = {
+// 	id?: number;
+// 	option_id?: number;
+// 	value: string;
+// 	metadata?: Record<string, unknown>;
+// };
 
-export type ProductOptionInput = {
-	id?: number;
-	name: string;
-	values: ProductOptionValueInput[];
-	metadata?: Record<string, unknown>;
-	selected?: boolean;
-};
+// export type ProductOptionInput = {
+// 	id?: number;
+// 	name: string;
+// 	values: ProductOptionValueInput[];
+// 	metadata?: Record<string, unknown>;
+// 	selected?: boolean;
+// };
 
 export type ProductVariantInput = {
 	variant_code?: string;
@@ -45,7 +46,7 @@ export type ProductVariantInput = {
 	origin_country?: string;
 	material?: string;
 	price_types?: PriceInput[];
-	options?: ProductOptionValueInput[];
+	options?: ProductOptionInput[];
 	metadata?: Record<string, unknown>;
 };
 
@@ -75,7 +76,7 @@ export type Product = {
 
 	// Nested models
 	price_types?: Price[];
-	options?: ProductOption[];
+	variations?: ProductVariation[];
 	variants?: ProductVariant[];
 
 	// Timestamps
