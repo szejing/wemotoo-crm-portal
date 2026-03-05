@@ -37,7 +37,7 @@ const { t } = useI18n();
 const product_option_columns = computed(() => getProductOptionColumns(t));
 
 const productOptionsStore = useProductOptionStore();
-const productOptions = productOptionsStore.currentProductOptions();
+const productOptions = productOptionsStore.currentProdVariation();
 
 const selectedOptions = ref<ProductOptionInput[]>([]);
 selectedOptions.value = computed(() => {

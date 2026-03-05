@@ -48,7 +48,7 @@
 						</div>
 					</div>
 				</template>
-				<UTable v-else :data="prod_option" :columns="product_option_columns" :loading="loading" @select="selectProductOption">
+				<UTable v-else :data="prod_variations" :columns="product_variation_columns" :loading="loading" @select="selectProductOption">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -59,8 +59,8 @@
 				</UTable>
 
 				<!-- Pagination  -->
-				<div v-if="prod_option.length > 0" class="section-pagination">
-					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_options" @update:page="updatePage" />
+				<div v-if="prod_variations.length > 0" class="section-pagination">
+					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_variations" @update:page="updatePage" />
 				</div>
 			</div>
 		</template>
@@ -69,27 +69,27 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOptionDetail } from '#components';
-import { getProductOptionColumns } from '~/utils/table-columns';
+import { getProductVariationColumns } from '~/utils/table-columns';
 import type { ProductVariation } from '~/utils/types/product-variation';
 import type { ProductOption } from '~/utils/types/product-option';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
 const { t } = useI18n();
-const product_option_columns = computed(() => getProductOptionColumns(t));
+const product_variation_columns = computed(() => getProductVariationColumns(t));
 useHead({ title: () => t('pages.optionsTitle') });
 
 const overlay = useOverlay();
 const productOptionsStore = useProductOptionStore();
 
-const { loading, prod_option, filter, exporting } = storeToRefs(productOptionsStore);
-const { total_options } = storeToRefs(productOptionsStore);
+const { loading, prod_variations, filter, exporting } = storeToRefs(productOptionsStore);
+const { total_variations } = storeToRefs(productOptionsStore);
 const initialize = ref(true);
 
 onMounted(async () => {
 	initialize.value = true;
 	try {
-		await productOptionsStore.getOptions();
+		await productOptionsStore.getProductVariations();
 	} finally {
 		initialize.value = false;
 	}
@@ -106,7 +106,7 @@ const deleteProductOption = async (row: TableRow<ProductVariation>) => {
 			message: 'Are you sure you want to delete this option?',
 			action: 'delete',
 			onConfirm: async () => {
-				await productOptionsStore.deleteProductOption(option);
+				await productOptionsStore.deleteProductVariation(option);
 				confirmModal.close();
 			},
 			onCancel: () => {
@@ -127,7 +127,7 @@ const selectProductOption = async (e: Event, row: TableRow<ProductVariation>) =>
 		props: {
 			productOption: JSON.parse(JSON.stringify(option)),
 			onUpdate: async (name: string, values: ProductOption[]) => {
-				await productOptionsStore.updateProductOption(option.id!, name, values);
+				await productOptionsStore.updateProductVariation(option.id!, name, values);
 				optionModal.close();
 			},
 			onDelete: async () => {

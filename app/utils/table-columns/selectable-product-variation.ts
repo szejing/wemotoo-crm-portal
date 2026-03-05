@@ -4,7 +4,7 @@ import type { ProductVariation } from '~/utils/types/product-variation';
 
 type TranslateFn = (key: string) => string;
 
-export function getSelectableProductOptionColumns(t: TranslateFn): TableColumn<ProductVariation>[] {
+export function getSelectableProductVariationColumns(t: TranslateFn): TableColumn<ProductVariation>[] {
 	return [
 		{
 			id: 'select',

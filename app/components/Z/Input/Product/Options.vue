@@ -63,7 +63,7 @@ const { t } = useI18n();
 const selectable_product_option_columns = computed(() => getSelectableProductOptionColumns(t));
 
 const productOptionsStore = useProductOptionStore();
-const productOptions = productOptionsStore.currentProductOptions();
+const productOptions = productOptionsStore.currentProdVariation();
 
 const props = defineProps({
 	options: {

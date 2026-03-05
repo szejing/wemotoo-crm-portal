@@ -1,5 +1,5 @@
-export type ProductOptionCreate = {
+export type ProductVariationCreate = {
 	name: string | undefined;
-	values?: string[];
+	options?: string[];
 	metadata?: Record<string, unknown>;
 };

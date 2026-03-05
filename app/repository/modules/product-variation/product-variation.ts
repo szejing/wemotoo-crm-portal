@@ -1,15 +1,15 @@
 import HttpFactory from '~/repository/factory';
 import MerchantRoutes from '~/repository/routes.client';
-import type { CreateProductOptionReq } from './models/request/create-product-option.req';
-import type { ProductOptionReq } from './models/request/product-option.req';
-import type { UpdateProductOptionReq } from './models/request/update-product-option.req';
-import type { ProductOptionResp } from './models/response/product-option.resp';
+import type { CreateProductOptionReq } from './models/request/create-product-variation.req';
+import type { ProductOptionReq } from './models/request/product-variation.req';
+import type { UpdateProductOptionReq } from './models/request/update-product-variation.req';
+import type { ProductOptionResp } from './models/response/product-variation.resp';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { ProductVariation } from '~/utils/types/product-variation';
 
-class ProductOptionModule extends HttpFactory {
-	private RESOURCE = MerchantRoutes.ProdOptions;
+class ProductVariationModule extends HttpFactory {
+	private RESOURCE = MerchantRoutes.ProdVariations;
 
 	async getMany(query: BaseODataReq): Promise<BaseODataResp<ProductVariation>> {
 		return await this.call<BaseODataResp<ProductVariation>>({
@@ -57,4 +57,4 @@ class ProductOptionModule extends HttpFactory {
 	}
 }
 
-export default ProductOptionModule;
+export default ProductVariationModule;

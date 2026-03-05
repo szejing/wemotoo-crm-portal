@@ -80,12 +80,12 @@ const attribute_navigations = computed(() => [
 		to: '/products/brands',
 		description: t('pages.brandsManufacturersDesc'),
 	},
-	{
-		title: t('nav.options'),
-		icon: ICONS.ADDITIONAL,
-		to: '/products/options',
-		description: t('pages.optionsVariantsDesc'),
-	},
+	// {
+	// 	title: t('nav.variations'),
+	// 	icon: ICONS.ADDITIONAL,
+	// 	to: '/products/variations',
+	// 	description: t('pages.optionsVariantsDesc'),
+	// },
 ]);
 </script>
 

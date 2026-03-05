@@ -1,6 +1,6 @@
 import { useProductTagStore } from './ProductTag/ProductTag';
 import { useProductCategoryStore } from './ProductCategory/ProductCategory';
-import { useProductOptionStore } from './ProductOption/ProductOption';
+import { useProductVariationStore } from './ProductVariation/ProductVariation';
 import { useProductStore } from './Product/Product';
 import { useSettingStore } from './Setting/Setting';
 import { useCustomerStore } from './Customers/Customers';
@@ -29,7 +29,7 @@ export {
 	useSettingStore,
 	useProductCategoryStore,
 	useProductTagStore,
-	useProductOptionStore,
+	useProductVariationStore as useProductOptionStore,
 	useProductStore,
 	useOrderStore,
 	useSummSaleStore,

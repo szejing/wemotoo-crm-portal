@@ -80,13 +80,13 @@ export const Routes = {
 		Delete: (code: string) => `${API_PATH.PROD_CATEGORIES}/${code}`,
 		Restore: (code: string) => `${API_PATH.PROD_CATEGORIES}/restore/${code}`,
 	},
-	ProdOptions: {
-		Create: () => `${API_PATH.PROD_OPTIONS}/`,
-		Single: (id: number) => `${API_PATH.PROD_OPTIONS}/${id}`,
-		Many: () => `${API_PATH.PROD_OPTIONS}/`,
-		Update: (id: number) => `${API_PATH.PROD_OPTIONS}/${id}`,
-		Delete: (id: number) => `${API_PATH.PROD_OPTIONS}/${id}`,
-		Restore: (id: number) => `${API_PATH.PROD_OPTIONS}/restore/${id}`,
+	ProdVariations: {
+		Create: () => `${API_PATH.PROD_VARIATIONS}/`,
+		Single: (id: number) => `${API_PATH.PROD_VARIATIONS}/${id}`,
+		Many: () => `${API_PATH.PROD_VARIATIONS}/`,
+		Update: (id: number) => `${API_PATH.PROD_VARIATIONS}/${id}`,
+		Delete: (id: number) => `${API_PATH.PROD_VARIATIONS}/${id}`,
+		Restore: (id: number) => `${API_PATH.PROD_VARIATIONS}/restore/${id}`,
 	},
 	Settings: {
 		Many: () => `${API_PATH.SETTINGS}/`,

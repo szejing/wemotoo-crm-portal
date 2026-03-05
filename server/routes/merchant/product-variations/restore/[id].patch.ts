@@ -5,10 +5,18 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
+		const id = getRouterParams(event).id;
 
-		const result = await $fetch(`${Routes.ProdOptions.Create()}`, {
+		if (!id) {
+			throw createError({
+				statusCode: 400,
+				statusMessage: 'Product Option Id is required',
+			});
+		}
+
+		const result = await $fetch(`${Routes.ProdVariations.Restore(Number(id))}`, {
 			baseURL: config.public.baseUrl,
-			method: 'POST',
+			method: 'PATCH',
 			body: data,
 			headers: generateHeaders(event),
 		});

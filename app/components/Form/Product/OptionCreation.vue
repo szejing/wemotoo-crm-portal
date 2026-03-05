@@ -3,7 +3,7 @@
 		<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.productForm.generalInformation') }}</h3>
 		<p class="text-sm text-neutral-400">{{ $t('components.productForm.optionGeneralDesc') }}</p>
 		<!-- *********************** General Info *********************** -->
-		<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.values" />
+		<ZInputOptionGeneralInfo v-model:name="new_prod_option.name" v-model:values="new_prod_option.options" />
 		<!-- *********************** General Info *********************** -->
 
 		<div class="flex-center text-center mt-3">
@@ -25,13 +25,13 @@ const optionStore = useProductOptionStore();
 const { adding, new_prod_option } = storeToRefs(optionStore);
 
 onMounted(() => {
-	optionStore.resetNewProductOption();
+	optionStore.resetProdVariation();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const { name, values } = event.data;
 
-	await optionStore.addProductOption(name, values ?? []);
+	await optionStore.addProductVariation(name, values ?? []);
 };
 </script>
 

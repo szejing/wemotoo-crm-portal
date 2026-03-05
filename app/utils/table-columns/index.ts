@@ -1,8 +1,8 @@
 import { getOrderColumns } from './order/order';
 import { getCustomerColumns } from './customer';
 import { getCategoryColumns, getCategoryTreeColumns } from './category';
-import { getProductOptionColumns } from './product-option';
-import { getSelectableProductOptionColumns } from './selectable-product-option';
+import { getProductVariationColumns } from './product-variation';
+import { getSelectableProductVariationColumns } from './selectable-product-variation';
 import { getTagColumns } from './tag';
 import { getProductColumns } from './product';
 import { getOrderSummColumns } from './order-summ/order-summ';
@@ -30,8 +30,8 @@ export {
 	getTagColumns,
 	getCategoryColumns,
 	getCategoryTreeColumns,
-	getProductOptionColumns,
-	getSelectableProductOptionColumns,
+	getProductVariationColumns,
+	getSelectableProductVariationColumns,
 	getOrderColumns,
 	getProductColumns,
 	getOrderSummColumns,

@@ -8,7 +8,7 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 	return [
 		{
 			accessorKey: 'value',
-			header: () => h('h1', t('table.description')),
+			header: () => t('table.description'),
 			cell: ({ row }) => {
 				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
 
@@ -24,7 +24,7 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => h('div', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			header: () => t('table.noOfItems'),
 			meta: {
 				class: {
 					th: 'text-right',
