@@ -666,6 +666,7 @@
 			"optionsSelected": "pilihan dipilih",
 			"combination": "kombinasi",
 			"combinations": "kombinasi",
+			"possible": "mungkin",
 			"selectedOptionsWillBeUsed": "Pilihan yang dipilih akan digunakan untuk menjana varian produk dalam langkah seterusnya"
 		},
 		"orderDetail": {
@@ -801,7 +802,14 @@
 			"configureTaxSettingsProduct": "Konfigurasi tetapan cukai untuk produk ini. Peraturan cukai boleh digunakan berdasarkan lokasi dan peraturan anda.",
 			"taxConfigurationComingSoon": "Konfigurasi cukai akan datang",
 			"serviceTab": "Perkhidmatan",
-			"variantsTab": "Varian"
+			"variantsTab": "Varian",
+			"variationsTab": "Variasi",
+			"exampleSizeOption": "Saiz: S, M, L, XL",
+			"exampleColorOption": "Warna: Merah, Biru, Hitam",
+			"exampleVariantRedS": "Merah / S",
+			"exampleVariantRedM": "Merah / M",
+			"exampleVariantBlueS": "Biru / S",
+			"exampleMore": "..."
 		},
 		"productForm": {
 			"generalInformation": "Maklumat Umum",

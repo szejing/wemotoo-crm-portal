@@ -11,16 +11,16 @@
 			</div>
 		</div>
 
-		<!-- No Options State -->
-		<div v-if="!prodOptions || prodOptions.length === 0" class="border-2 border-dashed border-neutral-200 rounded-lg p-8 text-center bg-neutral-50">
+		<!-- No Variations State -->
+		<div v-if="!prodVariations || prodVariations.length === 0" class="border-2 border-dashed border-neutral-200 rounded-lg p-8 text-center bg-neutral-50">
 			<div class="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-3">
 				<UIcon :name="ICONS.ALERT" class="w-6 h-6 text-neutral-400" />
 			</div>
-			<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.defineOptionsFirst') }}</p>
-			<p class="text-xs text-neutral-500">{{ $t('components.zInput.addOptionsAbove') }}</p>
+			<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.defineVariationsFirst') }}</p>
+			<p class="text-xs text-neutral-500">{{ $t('components.zInput.addVariationsAbove') }}</p>
 		</div>
 
-		<!-- Has Options -->
+		<!-- Has Variations -->
 		<div v-else class="space-y-4">
 			<!-- Combination Preview Card -->
 			<div class="border border-primary-200 rounded-lg p-4 bg-linear-to-br from-primary-50 to-purple-50">
@@ -35,8 +35,8 @@
 								<p class="text-xs text-neutral-600 mt-0.5">
 									{{
 										$t('components.zInput.basedOnSelectedOptions', {
-											count: selectedOptions.length,
-											optionLabel: selectedOptions.length === 1 ? $t('components.zInput.option') : $t('components.zInput.options'),
+											count: selectedVariations.length,
+											optionLabel: selectedVariations.length === 1 ? $t('components.zInput.option') : $t('components.zInput.options'),
 										})
 									}}
 								</p>
@@ -47,22 +47,22 @@
 							</div>
 						</div>
 
-						<!-- Option Preview -->
-						<div v-if="selectedOptions.length > 0" class="flex flex-wrap gap-2 mb-3">
+						<!-- Variation Preview -->
+						<div v-if="selectedVariations.length > 0" class="flex flex-wrap gap-2 mb-3">
 							<div
-								v-for="(option, idx) in selectedOptions"
+								v-for="(variation, idx) in selectedVariations"
 								:key="idx"
 								class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-md border border-primary-200"
 							>
 								<UIcon :name="ICONS.CHECK_ROUNDED" class="w-3 h-3 text-green-600" />
-								<span class="text-xs font-medium text-neutral-900">{{ option.value }}</span>
-								<span class="text-xs text-neutral-500">({{ option.value?.length || 0 }})</span>
+								<span class="text-xs font-medium text-neutral-900">{{ variation.options.map((option) => option.value).join('_') }}</span>
+								<span class="text-xs text-neutral-500">({{ variation.options?.length || 0 }})</span>
 							</div>
 						</div>
 						<div v-else class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
 							<div class="flex items-center gap-2 text-xs text-amber-700">
 								<UIcon :name="ICONS.ALERT" class="w-4 h-4" />
-								<span>{{ $t('components.zInput.noOptionsSelected') }}</span>
+								<span>{{ $t('components.zInput.noVariationsSelected') }}</span>
 							</div>
 						</div>
 
@@ -73,12 +73,12 @@
 								color="primary"
 								size="sm"
 								:icon="ICONS.SPARKLES"
-								:disabled="selectedOptions.length === 0 || totalPossibleVariants === 0"
+								:disabled="selectedVariations.length === 0 || totalPossibleVariants === 0"
 								@click="autoGenerate"
 							>
 								Auto Generate All Variants
 							</UButton>
-							<UButton v-else color="success" variant="soft" size="sm" :icon="ICONS.REFRESH" :disabled="selectedOptions.length === 0" @click="autoGenerate">
+							<UButton v-else color="success" variant="soft" size="sm" :icon="ICONS.REFRESH" :disabled="selectedVariations.length === 0" @click="autoGenerate">
 								Regenerate All Variants
 							</UButton>
 						</div>
@@ -118,11 +118,11 @@
 								<div class="flex items-start justify-between mb-1.5">
 									<div class="flex flex-wrap gap-1">
 										<span
-											v-for="(opt, optIdx) in variant.options"
-											:key="optIdx"
+											v-for="(option, optionIdx) in variant.options"
+											:key="optionIdx"
 											class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-neutral-100 text-neutral-700"
 										>
-											{{ opt.value }}
+											{{ option.value }}
 										</span>
 									</div>
 									<UIcon :name="ICONS.CHEVRON_RIGHT" class="w-4 h-4 text-neutral-400 group-hover:text-primary-500 shrink-0" />
@@ -171,18 +171,19 @@ import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 import { formatCurrency } from 'wemotoo-common';
 import type { ProductOptionInput } from '~/utils/types/product-option';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 const overlay = useOverlay();
 const props = defineProps<{
 	product: Product | ProductCreate;
-	options: ProductOptionInput[] | undefined;
+	variations: ProductVariationInput[] | undefined;
 	variants: ProductVariantInput[] | undefined;
 }>();
 const emit = defineEmits(['update:variants', 'delete:variant']);
 
-const prodOptions = computed({
+const prodVariations = computed({
 	get() {
-		return props.options ?? [];
+		return props.variations ?? [];
 	},
 	set(_) {},
 });
@@ -197,29 +198,32 @@ const prodVariants = computed({
 });
 
 // Get only selected options
-const selectedOptions = computed(() => {
-	return prodOptions.value.filter((option) => option.metadata?.selected !== false);
+const selectedVariations = computed(() => {
+	return prodVariations.value.filter((variation) => variation.selected !== false);
 });
 
 const totalPossibleVariants = computed(() => {
-	if (selectedOptions.value.length === 0) return 0;
-	return selectedOptions.value.reduce((acc, option) => acc * (option?.value?.length || 0), 1);
+	if (selectedVariations.value.length === 0) return 0;
+	return selectedVariations.value.reduce((acc, variation) => acc * (variation?.options?.length || 0), 1);
 });
 
 const autoGenerate = () => {
-	if (selectedOptions.value.length === 0) return;
+	if (selectedVariations.value.length === 0) return;
 	const variants: ProductVariantInput[] = [];
 
 	const combine = (currentOptions: ProductOptionInput[], optionIndex: number) => {
-		if (optionIndex === selectedOptions.value.length) {
+		if (optionIndex === selectedVariations.value.length) {
 			variants.push({ options: [...currentOptions] });
 			return;
 		}
 
-		const option = selectedOptions.value[optionIndex];
-		if (!option || !option.value) return;
+		const variation = selectedVariations.value[optionIndex];
+		if (!variation || !variation.options) return;
 
-		combine([...currentOptions, { id: option.id, variation_id: option.id, value: option.value }], optionIndex + 1);
+		combine(
+			[...currentOptions, { id: variation.id, variation_id: variation.id, value: variation.options.map((option) => option.value).join('_') }],
+			optionIndex + 1,
+		);
 	};
 
 	combine([], 0);

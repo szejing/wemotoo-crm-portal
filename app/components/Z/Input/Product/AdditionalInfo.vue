@@ -37,7 +37,7 @@
 			</div>
 		</template>
 
-		<template #variants>
+		<template #variations>
 			<div class="space-y-6 pt-4">
 				<!-- Header Section -->
 				<div class="flex items-start justify-between">
@@ -94,17 +94,17 @@
 								<div>
 									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.optionsYouMightDefine') }}</p>
 									<div class="flex flex-wrap gap-2">
-										<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-200">Size: S, M, L, XL</span>
-										<span class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">Color: Red, Blue, Black</span>
+										<span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md border border-blue-200">{{ $t('components.productUpdate.exampleSizeOption') }}</span>
+										<span class="px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">{{ $t('components.productUpdate.exampleColorOption') }}</span>
 									</div>
 								</div>
 								<div>
 									<p class="font-medium text-neutral-700 mb-1.5">{{ $t('components.productUpdate.resultsInVariantsLike') }}</p>
 									<div class="flex flex-wrap gap-2">
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / S</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Red / M</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">Blue / S</span>
-										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">...</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantRedS') }}</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantRedM') }}</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleVariantBlueS') }}</span>
+										<span class="px-2 py-1 bg-neutral-100 text-neutral-700 rounded text-xs">{{ $t('components.productUpdate.exampleMore') }}</span>
 										<span class="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium"
 											>12 {{ $t('components.productUpdate.totalVariants') }}</span
 										>
@@ -118,8 +118,8 @@
 				<!-- Workflow Container -->
 				<div class="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
 					<div class="space-y-8">
-						<!-- Step 1: Options -->
-						<ZInputProductOptions v-model:options="product.variations" @update:product-options="updateProductOptions" />
+						<!-- Step 1: Variations -->
+						<ZInputProductVariations v-model:variations="product.variations" @update:variations="updateProductVariations" />
 
 						<!-- Divider -->
 						<div v-if="product.variations && product.variations.length > 0" class="relative">
@@ -135,7 +135,7 @@
 
 						<!-- Step 2: Variants -->
 						<ZInputProductVariantList
-							:options="product.variations"
+							:variations="product.variations"
 							:variants="product.variants"
 							:product="product"
 							@delete:variant="deleteProductVariant"
@@ -184,7 +184,8 @@
 
 <script lang="ts" setup>
 import type { ProductCreate } from '~/utils/types/form/product-creation';
-import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
+import type { Product, ProductVariantInput } from '~/utils/types/product';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 const props = defineProps({
 	product: {
@@ -193,7 +194,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['update:options', 'update:variants', 'delete:variant', 'update:metadata']);
+const emit = defineEmits(['update:variations', 'update:variants', 'delete:variant', 'update:metadata']);
 const { t } = useI18n();
 
 const product = computed({
@@ -222,6 +223,12 @@ const product_additional_info = computed(() => {
 		});
 	}
 
+	tabs.push({
+		label: t('components.productUpdate.variationsTab'),
+		slot: 'variations',
+		icon: ICONS.LAYERS,
+	});
+
 	// Always add tax
 	tabs.push({
 		label: t('nav.tax'),
@@ -233,8 +240,8 @@ const product_additional_info = computed(() => {
 });
 
 // Event handlers
-const updateProductOptions = (value: ProductOptionInput[]) => {
-	emit('update:options', value);
+const updateProductVariations = (value: ProductVariationInput[]) => {
+	emit('update:variations', value);
 };
 
 const updateProductVariants = (value: ProductVariantInput[]) => {

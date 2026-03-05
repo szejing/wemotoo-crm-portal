@@ -24,7 +24,7 @@
 			</div>
 
 			<!-- Table -->
-			<UTable v-model:row-selection="selectedOptions" :data="productOptions" :columns="selectable_product_option_columns">
+			<UTable v-model:row-selection="selectedVariations" :data="productVariations" :columns="selectable_product_variation_columns">
 				<template #empty-state>
 					<div class="flex flex-col items-center justify-center py-12">
 						<UIcon :name="ICONS.LAYERS" class="w-12 h-12 text-neutral-300 mb-3" />
@@ -40,10 +40,10 @@
 					<UIcon :name="ICONS.CHECK_ROUNDED" class="w-5 h-5 text-primary-600 shrink-0" />
 					<div class="flex-1">
 						<p class="text-sm font-medium text-neutral-900">
-							{{ selectedCount }} of {{ productOptions.length }}
-							{{ productOptions.length === 1 ? $t('components.selectionOptions.optionSelected') : $t('components.selectionOptions.optionsSelected') }}
+							{{ selectedCount }} of {{ productVariations.length }}
+							{{ productVariations.length === 1 ? $t('components.selectionOptions.optionSelected') : $t('components.selectionOptions.optionsSelected') }}
 							<span v-if="selectedCount > 0" class="text-neutral-600">
-								· {{ possibleCombinations }} possible
+								· {{ possibleCombinations }} {{ $t('components.selectionOptions.possible') }}
 								{{ possibleCombinations === 1 ? $t('components.selectionOptions.combination') : $t('components.selectionOptions.combinations') }}
 							</span>
 						</p>
@@ -56,53 +56,54 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductOptionInput } from '~/utils/types/product-option';
-import { getSelectableProductOptionColumns } from '~/utils/table-columns';
+import { useProductVariationStore } from '~/stores/ProductVariation/ProductVariation';
+import { getSelectableProductVariationColumns } from '~/utils/table-columns';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 const { t } = useI18n();
-const selectable_product_option_columns = computed(() => getSelectableProductOptionColumns(t));
+const selectable_product_variation_columns = computed(() => getSelectableProductVariationColumns(t));
 
-const productOptionsStore = useProductOptionStore();
-const productOptions = productOptionsStore.currentProdVariation();
+const productVariationsStore = useProductVariationStore();
+const productVariations = productVariationsStore.currentProdVariation();
 
 const props = defineProps({
-	options: {
-		type: Array as PropType<ProductOptionInput[]>,
+	variations: {
+		type: Array as PropType<ProductVariationInput[]>,
 		required: false,
 	},
 });
 
-const emit = defineEmits(['update:productOptions']);
+const emit = defineEmits(['update:variations']);
 
-const selectedOptions = computed({
+const selectedVariations = computed({
 	get() {
 		const selected: Record<number, boolean> = {};
-		productOptions.forEach((option: ProductOptionInput, index: number) => {
-			selected[index] = props.options?.some((propOption) => propOption.id == option.id) ?? false;
+		productVariations.forEach((variation: ProductVariationInput, index: number) => {
+			selected[index] = props.variations?.some((propVariation) => propVariation.id == variation.id) ?? false;
 		});
 
 		return selected;
 	},
 	set(value) {
-		const selected: ProductOptionInput[] = [];
-		productOptions.forEach((option: ProductOptionInput, index: number) => {
+		const selected: ProductVariationInput[] = [];
+		productVariations.forEach((variation: ProductVariationInput, index: number) => {
 			if (value[index]) {
-				selected.push({ ...option, metadata: undefined, value: option.value });
+				selected.push({ ...variation, options: variation.options });
 			}
 		});
-		emit('update:productOptions', JSON.parse(JSON.stringify(selected)));
+		emit('update:variations', JSON.parse(JSON.stringify(selected)));
 	},
 });
 
 // Compute selected count
 const selectedCount = computed(() => {
-	return Object.values(selectedOptions.value).filter(Boolean).length;
+	return Object.values(selectedVariations.value).filter(Boolean).length;
 });
 
 // Calculate possible combinations
 const possibleCombinations = computed(() => {
 	if (selectedCount.value === 0) return 0;
-	return Object.values(selectedOptions.value)
+	return Object.values(selectedVariations.value)
 		.filter(Boolean)
 		.reduce((acc, isSelected) => acc * (isSelected ? 1 : 0), 1);
 });
