@@ -4,7 +4,7 @@ export const useAppStore = defineStore('appStore', {
 	state: () => ({}),
 	actions: {
 		async init() {
-			const productOptionsStore = useProductOptionStore();
+			// const productOptionsStore = useProductOptionStore();
 			const productTagsStore = useProductTagStore();
 			const categoryStore = useProductCategoryStore();
 			const brandStore = useBrandStore();
@@ -26,7 +26,7 @@ export const useAppStore = defineStore('appStore', {
 			await merchantInfo.getMerchantInfos();
 
 			await Promise.all([
-				productOptionsStore.getProductVariations(),
+				// productOptionsStore.getProductVariations(),
 				productTagsStore.getTags(),
 				categoryStore.getCategoriesForTree(),
 				brandStore.getBrands(),
