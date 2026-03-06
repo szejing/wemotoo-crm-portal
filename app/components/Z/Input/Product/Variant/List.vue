@@ -16,19 +16,8 @@
 					<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
 				</template>
 			</UInput>
-			<UInput
-				v-model="applyAll.stock"
-				:placeholder="$t('components.variantList.stockPlaceholder')"
-				type="number"
-				size="sm"
-				class="max-w-36"
-			/>
-			<UInput
-				v-model="applyAll.sku"
-				:placeholder="$t('components.variantList.skuPlaceholder')"
-				size="sm"
-				class="max-w-40"
-			/>
+			<UInput v-model="applyAll.stock" :placeholder="$t('components.variantList.stockPlaceholder')" type="number" size="sm" class="max-w-36" />
+			<UInput v-model="applyAll.sku" :placeholder="$t('components.variantList.skuPlaceholder')" size="sm" class="max-w-40" />
 			<UButton color="primary" variant="soft" size="sm" @click="applyToAll">
 				{{ $t('components.variantList.applyToAll') }}
 			</UButton>
@@ -39,11 +28,7 @@
 			<table class="w-full text-sm">
 				<thead class="bg-neutral-50 border-b border-neutral-200">
 					<tr>
-						<th
-							v-for="variation in validVariations"
-							:key="'header-' + variation.name"
-							class="text-left px-3 py-2 text-xs font-semibold text-neutral-700"
-						>
+						<th v-for="variation in validVariations" :key="'header-' + variation.name" class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
 							<div class="flex items-center gap-1">
 								<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0" />
 								{{ variation.name }}
@@ -74,11 +59,7 @@
 							</template>
 							<!-- Two variations with rowspan grouping -->
 							<template v-else>
-								<td
-									v-if="isFirstInGroup(rowIdx)"
-									:rowspan="groupSize"
-									class="px-3 py-2 text-neutral-900 font-medium align-top border-r border-neutral-100"
-								>
+								<td v-if="isFirstInGroup(rowIdx)" :rowspan="groupSize" class="px-3 py-2 text-neutral-900 font-medium align-top border-r border-neutral-100">
 									{{ row.optionLabels[0] }}
 								</td>
 								<td class="px-3 py-2 text-neutral-700">
@@ -104,13 +85,7 @@
 
 							<!-- Stock -->
 							<td class="px-3 py-2">
-								<UInput
-									v-model.number="row.variant.inventory_quantity"
-									type="number"
-									size="sm"
-									class="max-w-28"
-									@update:model-value="emitVariants"
-								/>
+								<UInput v-model.number="row.variant.inventory_quantity" type="number" size="sm" class="max-w-28" @update:model-value="emitVariants" />
 							</td>
 
 							<!-- SKU -->
@@ -148,7 +123,7 @@ const emit = defineEmits(['update:variants', 'delete:variant']);
 const applyAll = reactive({
 	price: undefined as number | undefined,
 	stock: undefined as number | undefined,
-	sku: '',
+	sku: undefined as string | undefined,
 });
 
 type VariantRow = {
@@ -161,9 +136,7 @@ type VariantRow = {
 const variantRows = ref<VariantRow[]>([]);
 
 const validVariations = computed(() => {
-	return (props.variations ?? []).filter(
-		(v) => v.name.trim() !== '' && v.options.some((o) => o.value.trim() !== ''),
-	);
+	return (props.variations ?? []).filter((v) => v.name.trim() !== '' && v.options.some((o) => o.value.trim() !== ''));
 });
 
 const validOptions = (variation: ProductVariationInput) => {
@@ -193,7 +166,7 @@ const createDefaultVariant = (name: string, options: ProductOptionInput[]): Prod
 		product_code: props.product.code,
 		options,
 		inventory_quantity: 0,
-		sku: '',
+		sku: undefined,
 		price_types: [
 			{
 				orig_sell_price: basePrice?.orig_sell_price ?? 0,

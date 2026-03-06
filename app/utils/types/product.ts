@@ -53,6 +53,10 @@ export type ProductVariantInput = {
 // ============================================
 // MODEL TYPES (for display/read operations)
 // ============================================
+// On get/retrieve, each product has at most 2 variation sets. Each variation set has:
+// - id: global variation id (e.g. 1 = Size)
+// - name: variation name (e.g. "Size")
+// - options: scoped options for this product only (e.g. [L, XL, XXL], not the full global list)
 
 export type Product = {
 	code?: string;
@@ -76,6 +80,7 @@ export type Product = {
 
 	// Nested models
 	price_types?: Price[];
+	/** Per-product variation sets: variation id/name + scoped options (max 2 per product). */
 	variations?: ProductVariation[];
 	variants?: ProductVariant[];
 

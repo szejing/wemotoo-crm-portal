@@ -125,7 +125,7 @@ export const useProductStore = defineStore('productStore', {
 			}
 		},
 
-		async getProducts() {
+		async getProducts(): Promise<void> {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
@@ -152,17 +152,16 @@ export const useProductStore = defineStore('productStore', {
 					$orderby: 'updated_at desc',
 				};
 
-				// Only add $filter if it's not empty
 				if (filter) {
 					queryParams.$filter = filter;
 				}
 
-				const { data, '@odata.count': total } = await $api.product.getMany(queryParams);
+				const resp = await $api.product.getMany(queryParams);
+				const items = resp.data ?? resp.value ?? [];
+				const total = resp['@odata.count'] ?? resp.count ?? 0;
 
-				if (data) {
-					this.products = data;
-					this.total_products = total ?? 0;
-				}
+				this.products = Array.isArray(items) ? items : [];
+				this.total_products = typeof total === 'number' ? total : 0;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product';
 				failedNotification(message);
