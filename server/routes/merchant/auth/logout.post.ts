@@ -1,17 +1,14 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 
-		const result = await $fetch(`${Routes.Auth.Logout()}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.Auth.Logout()}`, {
 			method: 'POST',
 			body: data,
-			headers: generateHeaders(event),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

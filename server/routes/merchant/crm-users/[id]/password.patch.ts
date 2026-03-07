@@ -1,9 +1,8 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const id = getRouterParams(event).id;
 		const body = await readBody(event);
 
@@ -11,10 +10,8 @@ export default defineEventHandler(async (event) => {
 			throw createError({ statusCode: 400, statusMessage: 'CRM user id is required' });
 		}
 
-		const result = await $fetch(Routes.CrmUsers.UpdatePassword(id), {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, Routes.CrmUsers.UpdatePassword(id), {
 			method: 'PATCH',
-			headers: generateHeaders(event, true),
 			body,
 		});
 		return result;

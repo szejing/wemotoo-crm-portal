@@ -1,9 +1,8 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 		const query = getQuery(event);
 		const code = getRouterParams(event).code;
@@ -15,13 +14,11 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.Appoinments.Update(code)}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.Appoinments.Update(code)}`, {
 			method: 'PATCH',
 			query: query,
 			body: data,
-			headers: generateHeaders(event),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

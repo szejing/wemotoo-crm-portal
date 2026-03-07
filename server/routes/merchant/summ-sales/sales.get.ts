@@ -1,16 +1,13 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const query = getQuery(event);
 
-		const result = await $fetch(`${Routes.SummSales.Sales()}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, Routes.SummSales.Sales(), {
 			method: 'GET',
 			query,
-			headers: generateHeaders(event),
 		});
 		return result;
 	} catch (err) {

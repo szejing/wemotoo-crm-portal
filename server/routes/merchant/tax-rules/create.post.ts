@@ -1,17 +1,14 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 
-		const result = await $fetch(`${Routes.TaxRules.Create()}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.TaxRules.Create()}`, {
 			method: 'POST',
 			body: data,
-			headers: generateHeaders(event),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

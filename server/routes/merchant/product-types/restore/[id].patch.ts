@@ -1,9 +1,8 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const id = getRouterParams(event).id;
 
 		if (!id) {
@@ -13,11 +12,9 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdTypes.Restore(Number(id))}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.ProdTypes.Restore(Number(id))}`, {
 			method: 'PATCH',
-			headers: generateHeaders(event),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

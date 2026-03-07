@@ -1,15 +1,12 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const query = getQuery(event);
 
-		const result = await $fetch(`${Routes.ProdVariations.Many()}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.ProdVariations.Many()}`, {
 			method: 'GET',
-			headers: generateHeaders(event, true),
 			query,
 		});
 		return result;

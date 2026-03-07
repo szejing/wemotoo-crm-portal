@@ -1,9 +1,8 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const query = getQuery(event);
 		const id = getRouterParams(event).id;
 
@@ -14,12 +13,10 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdVariations.Delete(Number(id))}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.ProdVariations.Delete(Number(id))}`, {
 			method: 'DELETE',
 			query: query,
-			headers: generateHeaders(event),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

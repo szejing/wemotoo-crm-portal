@@ -1,9 +1,8 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 		const code = getRouterParams(event).code;
 
@@ -14,12 +13,10 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.Taxes.Single(code)}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.Taxes.Single(code)}`, {
 			method: 'GET',
 			body: data,
-			headers: generateHeaders(event, true),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

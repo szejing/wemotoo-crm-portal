@@ -1,15 +1,12 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const data = await readBody(event);
 
-		const result = await $fetch(Routes.CrmUsers.Create(), {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, Routes.CrmUsers.Create(), {
 			method: 'POST',
-			headers: generateHeaders(event, true),
 			body: data,
 		});
 		return result;

@@ -1,4 +1,4 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
@@ -6,11 +6,9 @@ export default defineEventHandler(async (event) => {
 		const config = useRuntimeConfig(event);
 		const bill_no = getRouterParams(event).bill_no;
 
-		const result = await $fetch(`${Routes.Sales.Single(bill_no)}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.Sales.Single(bill_no)}`, {
 			method: 'GET',
-			headers: generateHeaders(event, true),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;

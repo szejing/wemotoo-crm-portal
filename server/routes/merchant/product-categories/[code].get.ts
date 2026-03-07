@@ -1,16 +1,13 @@
-import { generateHeaders } from '#root/server/base_api';
+import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const code = getRouterParams(event).code;
 
-		const result = await $fetch(`${Routes.ProdCategories.Single(code)}`, {
-			baseURL: config.public.baseUrl,
+		const result = await signedFetch(event, `${Routes.ProdCategories.Single(code)}`, {
 			method: 'GET',
-			headers: generateHeaders(event, true),
-		});
+			});
 		return result;
 	} catch (err) {
 		return err;
