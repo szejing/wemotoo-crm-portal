@@ -1,44 +1,64 @@
 <template>
-	<UDropdownMenu
-		:items="items"
-		:content="{ align: 'center', collisionPadding: 12 }"
-		:ui="{ content: collapsed ? 'w-48' : 'w-(--reka-dropdown-menu-trigger-width)' }"
-	>
-		<UButton
-			v-bind="{
-				...user,
-				label: collapsed ? (user?.name?.[0] ?? '') : user?.name,
-				trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
-			}"
-			color="neutral"
-			variant="ghost"
-			block
-			:square="collapsed"
-			:class="[
-				'data-[state=open]:bg-elevated',
-				{
-					'rounded-full size-11 min-w-11 min-h-11 text-lg font-medium': collapsed,
-				},
-			]"
-			:ui="{ trailingIcon: 'text-dimmed' }"
-		/>
+	<ClientOnly>
+		<UDropdownMenu
+			:items="items"
+			:content="{ align: 'center', collisionPadding: 12 }"
+			:ui="{ content: collapsed ? 'w-48' : 'w-(--reka-dropdown-menu-trigger-width)' }"
+		>
+			<UButton
+				v-bind="{
+					...user,
+					label: collapsed ? (user?.name?.[0] ?? '') : user?.name,
+					trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
+				}"
+				color="neutral"
+				variant="ghost"
+				block
+				:square="collapsed"
+				:class="[
+					'data-[state=open]:bg-elevated',
+					{
+						'rounded-full size-11 min-w-11 min-h-11 text-lg font-medium': collapsed,
+					},
+				]"
+				:ui="{ trailingIcon: 'text-dimmed' }"
+			/>
 
-		<template #chip-leading="{ item }">
-			<div class="inline-flex items-center justify-center shrink-0 size-5">
-				<span
-					class="rounded-full ring ring-bg bg-(--chip-light) dark:bg-(--chip-dark) size-2"
-					:style="{
-						'--chip-light': `var(--color-${(item as any).chip}-500)`,
-						'--chip-dark': `var(--color-${(item as any).chip}-400)`,
-					}"
-				/>
+			<template #chip-leading="{ item }">
+				<div class="inline-flex items-center justify-center shrink-0 size-5">
+					<span
+						class="rounded-full ring ring-bg bg-(--chip-light) dark:bg-(--chip-dark) size-2"
+						:style="{
+							'--chip-light': `var(--color-${(item as any).chip}-500)`,
+							'--chip-dark': `var(--color-${(item as any).chip}-400)`,
+						}"
+					/>
+				</div>
+			</template>
+
+			<template #item-trailing="{ item }">
+				<UIcon v-if="isItemSelected(item)" name="i-lucide-check" class="shrink-0 size-5 text-primary" />
+			</template>
+		</UDropdownMenu>
+		<template #fallback>
+			<div
+				:class="[
+					'flex w-full items-center gap-2 rounded-md px-2 py-2',
+					collapsed ? 'justify-center size-11 min-w-11 min-h-11' : 'min-h-10',
+				]"
+				aria-hidden="true"
+			>
+				<USkeleton class="size-8 shrink-0 rounded-full" />
+				<template v-if="!collapsed">
+					<div class="flex flex-1 flex-col gap-1">
+						<USkeleton class="h-4 w-24" />
+						<USkeleton class="h-3 w-12" />
+					</div>
+					<USkeleton class="size-4 shrink-0 rounded" />
+				</template>
 			</div>
 		</template>
-
-		<template #item-trailing="{ item }">
-			<UIcon v-if="isItemSelected(item)" name="i-lucide-check" class="shrink-0 size-5 text-primary" />
-		</template>
-	</UDropdownMenu>
+	</ClientOnly>
 </template>
 
 <script lang="ts" setup>
