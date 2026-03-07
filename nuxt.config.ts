@@ -114,6 +114,10 @@ export default defineNuxtConfig({
 	},
 
 	vite: {
+		resolve: {
+			// Prefer "browser" entry for client build so wemotoo-common uses browser-safe bundle (no Node crypto).
+			conditions: ['browser', 'import', 'module', 'default'],
+		},
 		css: {
 			preprocessorOptions: {
 				scss: {
