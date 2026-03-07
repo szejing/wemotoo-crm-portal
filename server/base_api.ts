@@ -1,6 +1,6 @@
 import { KEY, buildCanonicalString, canonicalPathAndQueryFromParts, hashBody, signRequest } from 'wemotoo-common';
 
-const API_PATH_PREFIX = '/api/merchant';
+const API_PATH_PREFIX = '/api';
 
 function getSignatureHeaders(event: any, method: string, pathForSignature: string, body: string | undefined | null): Record<string, string> {
 	const config = useRuntimeConfig(event);
@@ -47,7 +47,8 @@ export async function signedFetch(
 	const baseURL = config.public.baseUrl;
 	const method = (options.method || 'GET').toUpperCase();
 	const query = options.query ?? {};
-	const pathForSig = pathForSignature(pathSegment, query);
+	const normalizedSegment = pathSegment.replace(/^\//, '').replace(/^api\//, '').replace(/^merchant\//, '');
+	const pathForSig = pathForSignature(normalizedSegment, query);
 	const bodyForHash =
 		method === 'GET' || method === 'HEAD' || method === 'OPTIONS'
 			? undefined
@@ -67,16 +68,10 @@ export async function signedFetch(
 	const baseHeaders = generateHeaders(event, options.includeAccessToken !== false, merchant_id);
 	const headers = { ...baseHeaders, ...sigHeaders, ...(options.headers || {}) };
 	const { includeAccessToken, merchant_id: _omit, method: _method, ...fetchOptions } = options;
-	// Request path must match what we signed (/api/merchant/...). Avoid double "api" when baseURL already includes /api.
+	// Request path must match what we signed (/api/...). Avoid double "api" when baseURL already includes /api.
 	const basePath = (baseURL || '').replace(/\/+$/, '');
 	const baseHasApi = basePath.endsWith('/api');
-	const requestPath = pathSegment.startsWith('api/merchant')
-		? pathSegment
-		: pathSegment.startsWith('merchant/')
-			? pathSegment
-			: baseHasApi
-				? `merchant/${pathSegment.replace(/^\//, '')}`
-				: `api/merchant/${pathSegment.replace(/^\//, '')}`;
+	const requestPath = baseHasApi ? normalizedSegment : `api/${normalizedSegment}`;
 	return $fetch(requestPath, {
 		...fetchOptions,
 		baseURL,
