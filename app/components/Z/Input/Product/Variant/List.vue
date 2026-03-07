@@ -1,281 +1,274 @@
 <template>
-	<div class="space-y-4">
-		<!-- Header Section -->
-		<div class="flex items-start justify-between">
-			<div class="flex-1">
-				<div class="flex items-center gap-2">
-					<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-sm">2</div>
-					<h3 class="text-base font-semibold text-neutral-900">{{ $t('components.zInput.generateProductVariants') }}</h3>
-				</div>
-				<p class="text-xs text-neutral-500 mt-1 ml-10">{{ $t('components.zInput.combineOptionsDesc') }}</p>
-			</div>
+	<div v-if="validVariations.length > 0 && variantRows.length > 0" class="space-y-4">
+		<h4 class="text-sm font-semibold text-neutral-900">{{ $t('components.variantList.title') }}</h4>
+
+		<!-- Apply to All row -->
+		<div class="flex items-center gap-3 mb-2">
+			<UInput
+				v-model="applyAll.price"
+				:placeholder="$t('components.variantList.pricePlaceholder')"
+				type="number"
+				size="sm"
+				class="max-w-44"
+				:ui="{ base: 'ps-12' }"
+			>
+				<template #leading>
+					<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
+				</template>
+			</UInput>
+			<UInput v-model="applyAll.stock" :placeholder="$t('components.variantList.stockPlaceholder')" type="number" size="sm" class="max-w-36" />
+			<UInput v-model="applyAll.sku" :placeholder="$t('components.variantList.skuPlaceholder')" size="sm" class="max-w-40" />
+			<UButton color="primary" variant="soft" size="sm" @click="applyToAll">
+				{{ $t('components.variantList.applyToAll') }}
+			</UButton>
 		</div>
 
-		<!-- No Options State -->
-		<div v-if="!prodOptions || prodOptions.length === 0" class="border-2 border-dashed border-neutral-200 rounded-lg p-8 text-center bg-neutral-50">
-			<div class="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-3">
-				<UIcon :name="ICONS.ALERT" class="w-6 h-6 text-neutral-400" />
-			</div>
-			<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.defineOptionsFirst') }}</p>
-			<p class="text-xs text-neutral-500">{{ $t('components.zInput.addOptionsAbove') }}</p>
-		</div>
-
-		<!-- Has Options -->
-		<div v-else class="space-y-4">
-			<!-- Combination Preview Card -->
-			<div class="border border-primary-200 rounded-lg p-4 bg-linear-to-br from-primary-50 to-purple-50">
-				<div class="flex items-start gap-3">
-					<div class="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center shrink-0">
-						<UIcon :name="ICONS.CUBE" class="w-5 h-5 text-primary-600" />
-					</div>
-					<div class="flex-1 min-w-0">
-						<div class="flex items-center justify-between mb-2">
-							<div>
-								<h4 class="text-sm font-semibold text-neutral-900">{{ $t('components.zInput.possibleCombinations') }}</h4>
-								<p class="text-xs text-neutral-600 mt-0.5">
-									{{
-										$t('components.zInput.basedOnSelectedOptions', {
-											count: selectedOptions.length,
-											optionLabel: selectedOptions.length === 1 ? $t('components.zInput.option') : $t('components.zInput.options'),
-										})
-									}}
-								</p>
+		<!-- Variants Table -->
+		<div class="border border-neutral-200 rounded-lg overflow-x-auto">
+			<table class="w-full text-sm">
+				<thead class="bg-neutral-50 border-b border-neutral-200">
+					<tr>
+						<th v-for="variation in validVariations" :key="'header-' + variation.name" class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+							<div class="flex items-center gap-1">
+								<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0" />
+								{{ variation.name }}
 							</div>
-							<div class="text-right">
-								<div class="text-2xl font-bold text-primary-600">{{ totalPossibleVariants }}</div>
-								<p class="text-xs text-neutral-500">{{ $t('components.zInput.variantsLabel') }}</p>
-							</div>
-						</div>
+						</th>
+						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+							<span class="text-red-500">*</span> {{ $t('components.variantList.price') }}
+						</th>
+						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+							<span class="text-red-500">*</span> {{ $t('components.variantList.stock') }}
+							<UTooltip :text="$t('components.variantList.stockTooltip')">
+								<UIcon :name="ICONS.HELP" class="w-3.5 h-3.5 text-neutral-400 inline-block" />
+							</UTooltip>
+						</th>
+						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+							{{ $t('components.variantList.sku') }}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template v-for="(row, rowIdx) in variantRows" :key="row.key">
+						<tr class="border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50/50">
+							<!-- Single variation -->
+							<template v-if="validVariations.length === 1">
+								<td class="px-3 py-2 text-neutral-900 font-medium">
+									{{ row.optionLabels[0] }}
+								</td>
+							</template>
+							<!-- Two variations with rowspan grouping -->
+							<template v-else>
+								<td v-if="isFirstInGroup(rowIdx)" :rowspan="groupSize" class="px-3 py-2 text-neutral-900 font-medium align-top border-r border-neutral-100">
+									{{ row.optionLabels[0] }}
+								</td>
+								<td class="px-3 py-2 text-neutral-700">
+									{{ row.optionLabels[1] }}
+								</td>
+							</template>
 
-						<!-- Option Preview -->
-						<div v-if="selectedOptions.length > 0" class="flex flex-wrap gap-2 mb-3">
-							<div
-								v-for="(option, idx) in selectedOptions"
-								:key="idx"
-								class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-md border border-primary-200"
-							>
-								<UIcon :name="ICONS.CHECK_ROUNDED" class="w-3 h-3 text-green-600" />
-								<span class="text-xs font-medium text-neutral-900">{{ option.name }}</span>
-								<span class="text-xs text-neutral-500">({{ option.values?.length || 0 }})</span>
-							</div>
-						</div>
-						<div v-else class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
-							<div class="flex items-center gap-2 text-xs text-amber-700">
-								<UIcon :name="ICONS.ALERT" class="w-4 h-4" />
-								<span>{{ $t('components.zInput.noOptionsSelected') }}</span>
-							</div>
-						</div>
+							<!-- Price -->
+							<td class="px-3 py-2">
+								<UInput
+									v-model.number="row.variant.price_types![0]!.orig_sell_price"
+									type="number"
+									size="sm"
+									class="max-w-44"
+									:ui="{ base: 'ps-12' }"
+									@update:model-value="emitVariants"
+								>
+									<template #leading>
+										<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
+									</template>
+								</UInput>
+							</td>
 
-						<!-- Action Buttons -->
-						<div class="flex flex-wrap gap-2">
-							<UButton
-								v-if="prodVariants.length === 0"
-								color="primary"
-								size="sm"
-								:icon="ICONS.SPARKLES"
-								:disabled="selectedOptions.length === 0 || totalPossibleVariants === 0"
-								@click="autoGenerate"
-							>
-								Auto Generate All Variants
-							</UButton>
-							<UButton v-else color="success" variant="soft" size="sm" :icon="ICONS.REFRESH" :disabled="selectedOptions.length === 0" @click="autoGenerate">
-								Regenerate All Variants
-							</UButton>
-						</div>
-					</div>
-				</div>
-			</div>
+							<!-- Stock -->
+							<td class="px-3 py-2">
+								<UInput v-model.number="row.variant.inventory_quantity" type="number" size="sm" class="max-w-28" @update:model-value="emitVariants" />
+							</td>
 
-			<!-- Variants List -->
-			<div v-if="prodVariants.length > 0" class="space-y-3">
-				<!-- Variants Header -->
-				<div class="flex items-center justify-between">
-					<div class="flex items-center gap-2">
-						<h4 class="text-sm font-semibold text-neutral-900">Your Variants</h4>
-						<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
-							{{ prodVariants.length }} / {{ totalPossibleVariants }}
-						</span>
-					</div>
-					<p class="text-xs text-neutral-500">Click a variant to edit details</p>
-				</div>
-
-				<!-- Variants Grid -->
-				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-					<div
-						v-for="(variant, index) in prodVariants"
-						:key="index"
-						class="border border-neutral-200 rounded-lg p-3 hover:border-primary-300 hover:shadow-sm transition-all cursor-pointer group"
-						@click="viewVariant(variant)"
-					>
-						<div class="flex items-start gap-3">
-							<!-- Variant Number Badge -->
-							<div class="w-8 h-8 rounded-lg bg-linear-to-br from-neutral-100 to-neutral-200 flex items-center justify-center shrink-0">
-								<span class="text-xs font-bold text-neutral-600">#{{ index + 1 }}</span>
-							</div>
-
-							<!-- Variant Info -->
-							<div class="flex-1 min-w-0">
-								<div class="flex items-start justify-between mb-1.5">
-									<div class="flex flex-wrap gap-1">
-										<span
-											v-for="(opt, optIdx) in variant.options"
-											:key="optIdx"
-											class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-neutral-100 text-neutral-700"
-										>
-											{{ opt.value }}
-										</span>
-									</div>
-									<UIcon :name="ICONS.CHEVRON_RIGHT" class="w-4 h-4 text-neutral-400 group-hover:text-primary-500 shrink-0" />
-								</div>
-
-								<!-- Variant Meta Info -->
-								<div class="flex items-center gap-3 text-xs text-neutral-500">
-									<span v-if="variant.variant_code" class="flex items-center gap-1">
-										<UIcon :name="ICONS.BARCODE" class="w-3 h-3" />
-										{{ variant.variant_code }}
-									</span>
-								</div>
-
-								<!-- Variant Price -->
-								<div class="flex items-center gap-1 mt-1">
-									<UIcon :name="ICONS.CURRENCY" class="text-main" />
-
-									<p v-if="variant.price_types?.[0]?.sale_price" class="text-sm font-medium text-main">
-										{{ formatCurrency(variant.price_types?.[0].sale_price ?? 0) }}
-									</p>
-									<p v-else class="text-sm font-medium text-main">
-										{{ formatCurrency(variant.price_types?.[0]?.orig_sell_price ?? 0) }}
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Empty Variants State (when options exist but no variants) -->
-			<div v-else class="border-2 border-dashed border-neutral-200 rounded-lg p-8 text-center">
-				<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
-					<UIcon :name="ICONS.SPARKLES" class="w-6 h-6 text-purple-600" />
-				</div>
-				<p class="text-sm font-medium text-neutral-900 mb-1">{{ $t('components.zInput.readyToCreateVariants', { count: totalPossibleVariants }) }}</p>
-				<p class="text-xs text-neutral-500 mb-4">{{ $t('components.zInput.autoGenerateHint') }}</p>
-			</div>
+							<!-- SKU -->
+							<td class="px-3 py-2">
+								<UInput
+									v-model="row.variant.sku"
+									size="sm"
+									class="max-w-36"
+									:placeholder="$t('components.variantList.skuPlaceholder')"
+									@update:model-value="emitVariants"
+								/>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ZInputProductVariantDetail } from '#components';
 import type { ProductCreate } from '~/utils/types/form/product-creation';
-import type { ProductOptionInput, ProductOptionValueInput, Product, ProductVariantInput } from '~/utils/types/product';
-import { formatCurrency } from 'wemotoo-common';
+import type { Product, ProductVariantInput } from '~/utils/types/product';
+import type { ProductOptionInput } from '~/utils/types/product-option';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
-const overlay = useOverlay();
 const props = defineProps<{
 	product: Product | ProductCreate;
-	options: ProductOptionInput[] | undefined;
+	variations: ProductVariationInput[] | undefined;
 	variants: ProductVariantInput[] | undefined;
 }>();
+
 const emit = defineEmits(['update:variants', 'delete:variant']);
 
-const prodOptions = computed({
-	get() {
-		return props.options ?? [];
-	},
-	set(_) {},
+const applyAll = reactive({
+	price: undefined as number | undefined,
+	stock: undefined as number | undefined,
+	sku: undefined as string | undefined,
 });
 
-const prodVariants = computed({
-	get() {
-		return props.variants ?? [];
-	},
-	set(value) {
-		emit('update:variants', value);
-	},
+type VariantRow = {
+	key: string;
+	optionLabels: string[];
+	options: ProductOptionInput[];
+	variant: ProductVariantInput;
+};
+
+const variantRows = ref<VariantRow[]>([]);
+
+const validVariations = computed(() => {
+	return (props.variations ?? []).filter((v) => v.name.trim() !== '' && v.options.some((o) => o.value.trim() !== ''));
 });
 
-// Get only selected options
-const selectedOptions = computed(() => {
-	return prodOptions.value.filter((option) => option.selected !== false);
+const validOptions = (variation: ProductVariationInput) => {
+	return variation.options.filter((o) => o.value.trim() !== '');
+};
+
+const groupSize = computed(() => {
+	const second = validVariations.value[1];
+	if (validVariations.value.length < 2 || !second) return 1;
+	return validOptions(second).length;
 });
 
-const totalPossibleVariants = computed(() => {
-	if (selectedOptions.value.length === 0) return 0;
-	return selectedOptions.value.reduce((acc, option) => acc * (option?.values?.length || 0), 1);
+const isFirstInGroup = (rowIdx: number) => {
+	if (validVariations.value.length < 2) return true;
+	return rowIdx % groupSize.value === 0;
+};
+
+const currencyCode = computed(() => {
+	return props.product.price_types?.[0]?.currency_code ?? 'MYR';
 });
 
-const autoGenerate = () => {
-	if (selectedOptions.value.length === 0) return;
-	const variants: ProductVariantInput[] = [];
+const createDefaultVariant = (name: string, options: ProductOptionInput[]): ProductVariantInput => {
+	const basePrice = props.product.price_types?.[0];
+	return {
+		name,
+		variant_code: props.product.code ? `${props.product.code}_${name}` : name,
+		product_code: props.product.code,
+		options,
+		inventory_quantity: 0,
+		sku: undefined,
+		price_types: [
+			{
+				orig_sell_price: basePrice?.orig_sell_price ?? 0,
+				cost_price: basePrice?.cost_price ?? 0,
+				sale_price: basePrice?.sale_price ?? 0,
+				currency_code: basePrice?.currency_code ?? 'MYR',
+			},
+		],
+	};
+};
 
-	const combine = (currentOptions: ProductOptionValueInput[], optionIndex: number) => {
-		if (optionIndex === selectedOptions.value.length) {
-			variants.push({ options: [...currentOptions] });
+const emitVariants = () => {
+	const variants = variantRows.value.map((row) => JSON.parse(JSON.stringify(row.variant)));
+	emit('update:variants', variants);
+};
+
+// Rebuild variant rows when variations change, preserving existing variant data
+watch(
+	validVariations,
+	(vars) => {
+		if (vars.length === 0) {
+			variantRows.value = [];
+			emitVariants();
 			return;
 		}
 
-		const option = selectedOptions.value[optionIndex];
-		if (!option || !option.values) return;
-
-		for (const value of option.values) {
-			combine([...currentOptions, { id: value.id, option_id: option.id, value: value.value }], optionIndex + 1);
-		}
-	};
-
-	combine([], 0);
-
-	variants.forEach((variant) => {
-		if (variant.name) return;
-
-		variant.name = variant.options?.map((option) => option.value).join('_');
-		variant.variant_code = props.product.code + '_' + variant.name;
-		variant.product_code = props.product.code;
-
-		if (variant.price_types) return;
-
-		if (props.product.price_types) {
-			variant.price_types = [JSON.parse(JSON.stringify(props.product.price_types[0]))];
-		} else {
-			variant.price_types = undefined;
+		const oldMap = new Map<string, VariantRow>();
+		for (const row of variantRows.value) {
+			oldMap.set(row.key, row);
 		}
 
-		for (const price of variant.price_types ?? []) {
-			if (price.id == props.product.price_types?.[0]?.id) {
-				price.id = undefined;
+		const propsMap = new Map<string, ProductVariantInput>();
+		(props.variants ?? []).forEach((v) => {
+			if (v.name) propsMap.set(v.name, v);
+		});
+
+		const newRows: VariantRow[] = [];
+		const first = vars[0];
+		const second = vars[1];
+
+		if (!first) return;
+
+		if (vars.length === 1) {
+			for (const opt of validOptions(first)) {
+				const key = opt.value;
+				const existing = oldMap.get(key);
+				if (existing) {
+					newRows.push(existing);
+				} else {
+					const propsVariant = propsMap.get(key);
+					newRows.push({
+						key,
+						optionLabels: [opt.value],
+						options: [{ variation_id: first.id, value: opt.value }],
+						variant: propsVariant ? JSON.parse(JSON.stringify(propsVariant)) : createDefaultVariant(key, [{ variation_id: first.id, value: opt.value }]),
+					});
+				}
+			}
+		} else if (second) {
+			for (const opt1 of validOptions(first)) {
+				for (const opt2 of validOptions(second)) {
+					const key = `${opt1.value}_${opt2.value}`;
+					const existing = oldMap.get(key);
+					if (existing) {
+						newRows.push(existing);
+					} else {
+						const propsVariant = propsMap.get(key);
+						const options: ProductOptionInput[] = [
+							{ variation_id: first.id, value: opt1.value },
+							{ variation_id: second.id, value: opt2.value },
+						];
+						newRows.push({
+							key,
+							optionLabels: [opt1.value, opt2.value],
+							options,
+							variant: propsVariant ? JSON.parse(JSON.stringify(propsVariant)) : createDefaultVariant(key, options),
+						});
+					}
+				}
 			}
 		}
-	});
 
-	prodVariants.value = variants;
-};
+		variantRows.value = newRows;
+		emitVariants();
+	},
+	{ immediate: true, deep: true },
+);
 
-const viewVariant = (variant: ProductVariantInput) => {
-	const modal = overlay.create(ZInputProductVariantDetail, {
-		props: {
-			product: props.product,
-			details: JSON.parse(JSON.stringify(variant)),
-			onUpdate: (variant: ProductVariantInput) => {
-				const index = prodVariants.value.findIndex(
-					(v: ProductVariantInput) => v.variant_code === variant.variant_code && v.product_code === variant.product_code,
-				); // Find variant by codes
-
-				if (index !== -1) {
-					prodVariants.value[index] = { ...variant }; // Replace all details of the found variant
-				}
-				emit('update:variants', prodVariants.value);
-				modal.close();
-			},
-			onDelete: (variant: ProductVariantInput) => {
-				console.log('delete variant', variant);
-			},
-			onCancel: () => {
-				modal.close();
-			},
-		},
-	});
-	modal.open();
+const applyToAll = () => {
+	for (const row of variantRows.value) {
+		if (applyAll.price !== undefined && applyAll.price !== null) {
+			if (row.variant.price_types?.[0]) {
+				row.variant.price_types[0].orig_sell_price = applyAll.price;
+			}
+		}
+		if (applyAll.stock !== undefined && applyAll.stock !== null) {
+			row.variant.inventory_quantity = applyAll.stock;
+		}
+		if (applyAll.sku) {
+			row.variant.sku = applyAll.sku;
+		}
+	}
+	emitVariants();
 };
 </script>
-
-<style scoped></style>

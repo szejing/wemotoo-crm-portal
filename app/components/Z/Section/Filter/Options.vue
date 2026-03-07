@@ -46,7 +46,7 @@ const hasActiveFilters = computed(() => {
 });
 
 const search = async () => {
-	await productOptionStore.getOptions();
+	await productOptionStore.getProductVariations();
 };
 
 const debouncedSearch = () => {

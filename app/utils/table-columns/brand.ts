@@ -26,7 +26,7 @@ export function getBrandColumns(t: TranslateFn): TableColumn<Brand>[] {
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => h('div', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			header: () => t('table.noOfItems'),
 			meta: {
 				class: {
 					th: 'text-right',

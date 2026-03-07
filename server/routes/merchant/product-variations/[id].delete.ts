@@ -4,7 +4,6 @@ import { Routes } from '#root/server/routes.server';
 export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
-		const data = await readBody(event);
 		const query = getQuery(event);
 		const id = getRouterParams(event).id;
 
@@ -15,11 +14,10 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdOptions.Update(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdVariations.Delete(Number(id))}`, {
 			baseURL: config.public.baseUrl,
-			method: 'PATCH',
+			method: 'DELETE',
 			query: query,
-			body: data,
 			headers: generateHeaders(event),
 		});
 		return result;

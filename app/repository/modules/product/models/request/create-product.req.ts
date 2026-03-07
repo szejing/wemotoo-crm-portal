@@ -2,7 +2,8 @@ import type { ProductStatus } from 'wemotoo-common';
 import type { ImageReq } from '../../../image/models/request/image.req';
 
 import type { PriceInput } from '~/utils/types/price';
-import type { ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
+import type { ProductVariantInput } from '~/utils/types/product';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 export type CreateProductReq = {
 	code?: string;
@@ -26,7 +27,7 @@ export type CreateProductReq = {
 
 	// Nested inputs
 	price_types?: PriceInput[];
-	options?: ProductOptionInput[];
+	variations?: ProductVariationInput[];
 	variants?: ProductVariantInput[];
 
 	metadata?: Record<string, unknown>;

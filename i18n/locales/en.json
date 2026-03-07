@@ -666,6 +666,7 @@
 			"optionsSelected": "options selected",
 			"combination": "combination",
 			"combinations": "combinations",
+			"possible": "possible",
 			"selectedOptionsWillBeUsed": "Selected options will be used to generate product variants in the next step"
 		},
 		"orderDetail": {
@@ -801,7 +802,14 @@
 			"configureTaxSettingsProduct": "Configure tax settings for this product. Tax rules can be applied based on your location and regulations.",
 			"taxConfigurationComingSoon": "Tax configuration coming soon",
 			"serviceTab": "Service",
-			"variantsTab": "Variants"
+			"variantsTab": "Variants",
+			"variationsTab": "Variations",
+			"exampleSizeOption": "Size: S, M, L, XL",
+			"exampleColorOption": "Color: Red, Blue, Black",
+			"exampleVariantRedS": "Red / S",
+			"exampleVariantRedM": "Red / M",
+			"exampleVariantBlueS": "Blue / S",
+			"exampleMore": "..."
 		},
 		"productForm": {
 			"generalInformation": "General Information",
@@ -928,6 +936,25 @@
 			"possible": "possible",
 			"autoGenerateHint": "Click \"Auto Generate\" to create all possible combinations automatically",
 			"readyToCreateVariants": "Ready to create {count} variants"
+		},
+		"variations": {
+			"variationLabel": "Variation{index}",
+			"variationNamePlaceholder": "e.g. Color, Size",
+			"optionsLabel": "Options",
+			"optionValuePlaceholder": "Input",
+			"addOptionPlaceholder": "Input",
+			"addVariation": "Add Variation"
+		},
+		"variantList": {
+			"title": "Variation List",
+			"pricePlaceholder": "Price",
+			"stockPlaceholder": "Stock",
+			"skuPlaceholder": "SKU",
+			"applyToAll": "Apply To All",
+			"price": "Price",
+			"stock": "Stock",
+			"stockTooltip": "Available inventory quantity for this variant",
+			"sku": "SKU"
 		},
 		"zModal": {
 			"brandDetail": {

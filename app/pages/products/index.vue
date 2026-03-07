@@ -47,6 +47,8 @@
 const { t } = useI18n();
 useHead({ title: () => t('pages.productsTitle') });
 
+// Product list (with variations: id, name, scoped options) is loaded via useProductStore().getProducts() on the listing page.
+
 const main_navigation = computed(() => ({
 	title: t('pages.servicesProducts'),
 	icon: ICONS.LIST,
@@ -80,12 +82,12 @@ const attribute_navigations = computed(() => [
 		to: '/products/brands',
 		description: t('pages.brandsManufacturersDesc'),
 	},
-	{
-		title: t('nav.options'),
-		icon: ICONS.ADDITIONAL,
-		to: '/products/options',
-		description: t('pages.optionsVariantsDesc'),
-	},
+	// {
+	// 	title: t('nav.variations'),
+	// 	icon: ICONS.ADDITIONAL,
+	// 	to: '/products/variations',
+	// 	description: t('pages.optionsVariantsDesc'),
+	// },
 ]);
 </script>
 

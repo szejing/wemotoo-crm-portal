@@ -5,26 +5,27 @@ import type { Tag } from './tag';
 import type { Brand } from './brand';
 import type { Image } from './image';
 import type { ProductVariant } from './product-variant';
-import type { ProductOption } from './product-option';
+import type { ProductVariation } from './product-variation';
+import type { ProductOptionInput } from './product-option';
 
 // ============================================
 // INPUT TYPES (for create/update operations)
 // ============================================
 
-export type ProductOptionValueInput = {
-	id?: number;
-	option_id?: number;
-	value: string;
-	metadata?: Record<string, unknown>;
-};
+// export type ProductOptionValueInput = {
+// 	id?: number;
+// 	option_id?: number;
+// 	value: string;
+// 	metadata?: Record<string, unknown>;
+// };
 
-export type ProductOptionInput = {
-	id?: number;
-	name: string;
-	values: ProductOptionValueInput[];
-	metadata?: Record<string, unknown>;
-	selected?: boolean;
-};
+// export type ProductOptionInput = {
+// 	id?: number;
+// 	name: string;
+// 	values: ProductOptionValueInput[];
+// 	metadata?: Record<string, unknown>;
+// 	selected?: boolean;
+// };
 
 export type ProductVariantInput = {
 	variant_code?: string;
@@ -45,13 +46,17 @@ export type ProductVariantInput = {
 	origin_country?: string;
 	material?: string;
 	price_types?: PriceInput[];
-	options?: ProductOptionValueInput[];
+	options?: ProductOptionInput[];
 	metadata?: Record<string, unknown>;
 };
 
 // ============================================
 // MODEL TYPES (for display/read operations)
 // ============================================
+// On get/retrieve, each product has at most 2 variation sets. Each variation set has:
+// - id: global variation id (e.g. 1 = Size)
+// - name: variation name (e.g. "Size")
+// - options: scoped options for this product only (e.g. [L, XL, XXL], not the full global list)
 
 export type Product = {
 	code?: string;
@@ -75,7 +80,8 @@ export type Product = {
 
 	// Nested models
 	price_types?: Price[];
-	options?: ProductOption[];
+	/** Per-product variation sets: variation id/name + scoped options (max 2 per product). */
+	variations?: ProductVariation[];
 	variants?: ProductVariant[];
 
 	// Timestamps

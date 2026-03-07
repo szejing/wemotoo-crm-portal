@@ -158,7 +158,7 @@
 					/>
 
 					<!-- Section 4: Variants (only show for physical items) -->
-					<!-- <UCard id="section-variants" class="shadow-md scroll-mt-4">
+					<UCard id="section-variants" class="shadow-md scroll-mt-4">
 						<template #header>
 							<div class="flex items-start justify-between">
 								<div class="flex-1">
@@ -188,12 +188,12 @@
 
 							<ZInputProductAdditionalInfo
 								:product="productForAdditionalInfo"
-								@update:options="updateProductOptions"
+								@update:variations="updateProductVariations"
 								@update:variants="updateProductVariants"
 								@update:metadata="updateProductMetadata"
 							/>
 						</div>
-					</UCard> -->
+					</UCard>
 				</UForm>
 			</div>
 
@@ -210,7 +210,7 @@
 <script lang="ts" setup>
 import { ProductStatus } from 'wemotoo-common';
 import type { Category } from '~/utils/types/category';
-import type { Product, ProductOptionInput, ProductVariantInput } from '~/utils/types/product';
+import type { Product, ProductVariantInput } from '~/utils/types/product';
 import type { Tag } from '~/utils/types/tag';
 import type { Brand } from '~/utils/types/brand';
 import type { ProductCreate, ProductUpdate } from '~/utils/types/form/product-creation';
@@ -218,6 +218,7 @@ import { createUpdateProductValidation } from '~/utils/schema';
 import { ZModalConfirmation, ZModalLoading } from '#components';
 import type { Image } from '~/utils/types/image';
 import type { FormErrorEvent } from '#ui/types';
+import type { ProductVariationInput } from '~/utils/types/product-variation';
 
 const { t } = useI18n();
 const updateProductSchema = computed(() => createUpdateProductValidation(t));
@@ -274,20 +275,19 @@ const transformProductToUpdate = (product: Product): ProductUpdate => {
 					cost_price: price.cost_price,
 					sale_price: price.sale_price,
 				})) ?? [],
-		// Transform ProductOption[] to ProductOptionInput[]
-		options:
-			product.options
-				?.filter((option) => option != null)
-				.map((option) => ({
-					id: option.id,
-					name: option.name,
-					values:
-						option.values
-							?.filter((value) => value != null)
-							.map((value) => ({
-								id: value.id,
-								option_id: value.option_id,
-								value: value.value,
+		variations:
+			product.variations
+				?.filter((variation) => variation != null)
+				.map((variation) => ({
+					id: variation.id,
+					name: variation.name,
+					options:
+						variation.options
+							?.filter((option) => option != null)
+							.map((option) => ({
+								id: option.id,
+								variation_id: option.variation_id,
+								value: option.value,
 							})) ?? [],
 				})) ?? [],
 		// Transform ProductVariant[] to ProductVariantInput[]
@@ -327,7 +327,7 @@ const transformProductToUpdate = (product: Product): ProductUpdate => {
 							?.filter((option) => option != null)
 							.map((option) => ({
 								id: option.id,
-								option_id: option.option_id,
+								option_id: option.variation_id,
 								value: option.value,
 							})) ?? [],
 					metadata: variant.metadata,
@@ -415,7 +415,7 @@ const sections = computed(() => [
 		description: t('pages.pricingDesc'),
 		required: true,
 	},
-	// ...[{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false }],
+	...[{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false }],
 ]);
 
 // Scroll to section
@@ -547,7 +547,7 @@ const reviewSummary = computed(() => ({
 	tagsCount: tags.value?.length ?? 0,
 	brandsCount: brands.value?.length ?? 0,
 	variantsCount: formState.value.variants?.length ?? 0,
-	optionsCount: formState.value.options?.length ?? 0,
+	optionsCount: formState.value.variations?.length ?? 0,
 	hasThumbnail: !!formState.value.thumbnail,
 	imagesCount: formState.value.images?.length ?? 0,
 	thumbnail: formState.value.thumbnail,
@@ -580,9 +580,9 @@ const updateCurrency = (currency: any) => {
 	currency_code.value = currency.code;
 };
 
-// Methods: Product Options & Variants
-const updateProductOptions = (value: ProductOptionInput[]) => {
-	formState.value.options = value;
+// Methods: Product Variations & Variants
+const updateProductVariations = (value: ProductVariationInput[]) => {
+	formState.value.variations = value;
 };
 
 const updateProductVariants = (value: ProductVariantInput[]) => {

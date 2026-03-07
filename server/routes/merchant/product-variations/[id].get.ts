@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await $fetch(`${Routes.ProdOptions.Single(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdVariations.Single(Number(id))}`, {
 			baseURL: config.public.baseUrl,
 			method: 'GET',
 			body: data,

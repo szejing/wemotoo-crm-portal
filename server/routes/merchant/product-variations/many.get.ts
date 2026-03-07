@@ -5,20 +5,12 @@ export default defineEventHandler(async (event) => {
 	try {
 		const config = useRuntimeConfig(event);
 		const query = getQuery(event);
-		const id = getRouterParams(event).id;
 
-		if (!id) {
-			throw createError({
-				statusCode: 400,
-				statusMessage: 'Product Option Id is required',
-			});
-		}
-
-		const result = await $fetch(`${Routes.ProdOptions.Delete(Number(id))}`, {
+		const result = await $fetch(`${Routes.ProdVariations.Many()}`, {
 			baseURL: config.public.baseUrl,
-			method: 'DELETE',
-			query: query,
-			headers: generateHeaders(event),
+			method: 'GET',
+			headers: generateHeaders(event, true),
+			query,
 		});
 		return result;
 	} catch (err) {

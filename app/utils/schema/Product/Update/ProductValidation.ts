@@ -13,9 +13,9 @@ const Category = z.object({ code: z.string().optional(), name: z.string().option
 
 const Tag = z.object({ id: z.number().optional(), value: z.string().optional() });
 
-const OptionValues = z.object({ id: z.number().optional(), option_id: z.number().optional(), value: z.string().optional() });
+const Option = z.object({ id: z.number().optional(), variation_id: z.number().optional(), value: z.string().optional() });
 
-const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
+const Variation = z.object({ id: z.number().optional(), name: z.string().optional(), options: z.array(Option).optional() });
 
 const buildVariant = (t: TranslateFn) => {
 	return z.object({
@@ -37,7 +37,7 @@ const buildVariant = (t: TranslateFn) => {
 		origin_country: z.string().optional().nullable(),
 		material: z.string().optional().nullable(),
 		price_types: z.array(Price).optional().nullable(),
-		options: z.array(OptionValues).optional().nullable(),
+		options: z.array(Option).optional().nullable(),
 	});
 };
 
@@ -56,7 +56,7 @@ export const createUpdateProductValidation = (t: TranslateFn) => {
 		categories: z.array(Category).optional().nullable(),
 		tags: z.array(Tag).optional().nullable(),
 		price_types: z.array(Price).min(1, t('validation.product.priceRequired')),
-		options: z.array(Option).optional().nullable(),
+		variations: z.array(Variation).optional().nullable(),
 		variants: z.array(Variant).optional().nullable(),
 		type: z.number().default(1),
 	});
@@ -89,7 +89,7 @@ const VariantLegacy = z.object({
 	origin_country: z.string().optional().nullable(),
 	material: z.string().optional().nullable(),
 	price_types: z.array(PriceLegacy).optional().nullable(),
-	options: z.array(OptionValues).optional().nullable(),
+	options: z.array(Option).optional().nullable(),
 });
 
 /** @deprecated Use createUpdateProductValidation(t) for i18n. */
@@ -103,7 +103,7 @@ export const UpdateProductValidation = z.object({
 	categories: z.array(Category).optional().nullable(),
 	tags: z.array(Tag).optional().nullable(),
 	price_types: z.array(PriceLegacy).min(1, 'At least one price is required'),
-	options: z.array(Option).optional().nullable(),
+	variations: z.array(Variation).optional().nullable(),
 	variants: z.array(VariantLegacy).optional().nullable(),
 	type: z.number().default(1),
 });

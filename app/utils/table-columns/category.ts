@@ -8,7 +8,7 @@ export function getCategoryColumns(t: TranslateFn): TableColumn<Category>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: () => h('h1', t('table.code')),
+			header: () => t('table.code'),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),
@@ -18,7 +18,7 @@ export function getCategoryColumns(t: TranslateFn): TableColumn<Category>[] {
 		},
 		{
 			accessorKey: 'total_items',
-			header: () => h('div', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			header: () => t('table.noOfItems'),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex justify-end w-full' }, [
 					h('div', { class: 'text-center', style: 'min-width: 90px' }, [h('p', { class: 'text-neutral-900' }, row.original.total_products)]),
@@ -33,7 +33,7 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 	return [
 		{
 			id: 'category',
-			header: () => h('h1', t('table.code')),
+			header: () => t('table.code'),
 			cell: ({ row }) => {
 				const depth = row.depth;
 				const isParent = row.getCanExpand();
@@ -95,7 +95,7 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => h('div', { class: 'flex justify-end w-full' }, [h('h1', t('table.noOfItems'))]),
+			header: () => t('table.noOfItems'),
 			meta: {
 				class: {
 					th: 'text-right',

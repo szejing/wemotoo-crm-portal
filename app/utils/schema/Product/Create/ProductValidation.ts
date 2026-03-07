@@ -11,9 +11,9 @@ const Category = z.object({ code: z.string().optional(), name: z.string().option
 
 const Tag = z.object({ id: z.number().optional(), value: z.string().optional() });
 
-const OptionValues = z.object({ id: z.number().optional(), option_id: z.number().optional(), value: z.string().optional() });
+const Option = z.object({ id: z.number().optional(), variation_id: z.number().optional(), value: z.string().optional() });
 
-const Option = z.object({ id: z.number().optional(), name: z.string().optional(), values: z.array(OptionValues).optional() });
+const Variation = z.object({ id: z.number().optional(), name: z.string().optional(), options: z.array(Option).optional() });
 
 const Variant = z.object({
 	variant_code: z.string().optional(),
@@ -34,7 +34,7 @@ const Variant = z.object({
 	origin_country: z.string().optional(),
 	material: z.string().optional(),
 	price_types: z.array(Price).optional(),
-	options: z.array(OptionValues).optional(),
+	variations: z.array(Variation).optional(),
 });
 
 export const CreateProductValidation = z.object({
@@ -51,8 +51,8 @@ export const CreateProductValidation = z.object({
 	tags: z.array(Tag).optional(),
 	// prices
 	price_types: z.array(Price).min(1, 'At least one price is required'),
-	// options
-	options: z.array(Option).optional(),
+	// variations
+	variations: z.array(Variation).optional(),
 	// variants
 	variants: z.array(Variant).optional(),
 	// type

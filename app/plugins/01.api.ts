@@ -6,7 +6,7 @@ import {
 	CrmUserModule,
 	ImageModule,
 	ProductModule,
-	ProductOptionModule,
+	ProductVariationModule,
 	ProductTypeModule,
 	SettingModule,
 	OrderModule,
@@ -32,7 +32,7 @@ interface IApiInstance {
 	product: ProductModule;
 	tag: ProductTagModule;
 	category: ProductCategoryModule;
-	productOption: ProductOptionModule;
+	productVariation: ProductVariationModule;
 	auth: AuthModule;
 	currency: CurrencyModule;
 	crmUser: CrmUserModule;
@@ -75,7 +75,7 @@ export default defineNuxtPlugin((_) => {
 	const productModule = new ProductModule();
 	const tagModule = new ProductTagModule();
 	const categoryModule = new ProductCategoryModule();
-	const productOptionModule = new ProductOptionModule();
+	const productVariationModule = new ProductVariationModule();
 	const imageModule = new ImageModule();
 	const settingModule = new SettingModule();
 	const merchantInfoModule = new MerchantInfoModule();
@@ -104,7 +104,7 @@ export default defineNuxtPlugin((_) => {
 		product: productModule,
 		tag: tagModule,
 		category: categoryModule,
-		productOption: productOptionModule,
+		productVariation: productVariationModule,
 		image: imageModule,
 		setting: settingModule,
 		merchantInfo: merchantInfoModule,

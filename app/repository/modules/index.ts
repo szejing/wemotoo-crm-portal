@@ -9,7 +9,7 @@ import PaymentMethodModule from './payment-method/payment-method';
 import CurrencyModule from './currency/currency';
 import AuthModule from './auth/auth';
 import ProductCategoryModule from './product-category/product-category';
-import ProductOptionModule from './product-option/product-option';
+import ProductVariationModule from './product-variation/product-variation';
 import ProductTagModule from './product-tag/product-tag';
 import ProductVariantModule from './product-variant/product-variant';
 import ProductModule from './product/product';
@@ -32,7 +32,7 @@ export {
 	SummOrderModule,
 	ProductModule,
 	ProductCategoryModule,
-	ProductOptionModule,
+	ProductVariationModule,
 	ProductTagModule,
 	SettingModule,
 	ProductTypeModule,

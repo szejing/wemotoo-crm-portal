@@ -12,7 +12,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 	return [
 		{
 			accessorKey: 'name',
-			header: () => h('h1', t('table.codeAndName')),
+			header: () => t('table.codeAndName'),
 			cell: ({ row }) => {
 				const thumbnailUrl = row.original.thumbnail?.url;
 				const variants = row.original.variants;

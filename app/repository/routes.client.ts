@@ -75,13 +75,13 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_CATEGORIES}/restore/${code}`,
 	},
-	ProdOptions: {
-		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/create`,
-		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
-		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/many`,
-		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
-		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/${id}`,
-		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_OPTIONS}/restore/${id}`,
+	ProdVariations: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/create`,
+		Single: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/${id}`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/many`,
+		Update: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/${id}`,
+		Delete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/${id}`,
+		Restore: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIATIONS}/restore/${id}`,
 	},
 	ProdVariants: {
 		// Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.PROD_VARIANTS}/create`,

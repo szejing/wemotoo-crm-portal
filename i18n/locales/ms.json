@@ -666,6 +666,7 @@
 			"optionsSelected": "pilihan dipilih",
 			"combination": "kombinasi",
 			"combinations": "kombinasi",
+			"possible": "mungkin",
 			"selectedOptionsWillBeUsed": "Pilihan yang dipilih akan digunakan untuk menjana varian produk dalam langkah seterusnya"
 		},
 		"orderDetail": {
@@ -801,7 +802,14 @@
 			"configureTaxSettingsProduct": "Konfigurasi tetapan cukai untuk produk ini. Peraturan cukai boleh digunakan berdasarkan lokasi dan peraturan anda.",
 			"taxConfigurationComingSoon": "Konfigurasi cukai akan datang",
 			"serviceTab": "Perkhidmatan",
-			"variantsTab": "Varian"
+			"variantsTab": "Varian",
+			"variationsTab": "Variasi",
+			"exampleSizeOption": "Saiz: S, M, L, XL",
+			"exampleColorOption": "Warna: Merah, Biru, Hitam",
+			"exampleVariantRedS": "Merah / S",
+			"exampleVariantRedM": "Merah / M",
+			"exampleVariantBlueS": "Biru / S",
+			"exampleMore": "..."
 		},
 		"productForm": {
 			"generalInformation": "Maklumat Umum",
@@ -928,6 +936,25 @@
 			"possible": "mungkin",
 			"autoGenerateHint": "Klik \"Jana Auto\" untuk cipta semua kombinasi yang mungkin secara automatik",
 			"readyToCreateVariants": "Sedia untuk cipta {count} varian"
+		},
+		"variations": {
+			"variationLabel": "Variasi{index}",
+			"variationNamePlaceholder": "cth. Warna, Saiz",
+			"optionsLabel": "Pilihan",
+			"optionValuePlaceholder": "Input",
+			"addOptionPlaceholder": "Input",
+			"addVariation": "Tambah Variasi"
+		},
+		"variantList": {
+			"title": "Senarai Variasi",
+			"pricePlaceholder": "Harga",
+			"stockPlaceholder": "Stok",
+			"skuPlaceholder": "SKU",
+			"applyToAll": "Gunakan Untuk Semua",
+			"price": "Harga",
+			"stock": "Stok",
+			"stockTooltip": "Kuantiti inventori tersedia untuk varian ini",
+			"sku": "SKU"
 		},
 		"zModal": {
 			"brandDetail": {
