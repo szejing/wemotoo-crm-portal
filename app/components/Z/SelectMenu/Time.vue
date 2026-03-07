@@ -4,17 +4,17 @@
 		:items="items"
 		value-key="label"
 		size="md"
+		class="min-w-0 w-full"
 		:search-input="{
-			placeholder: 'Search time…',
+			placeholder: $t('components.selectMenu.searchTime'),
 			icon: 'i-lucide-search',
 		}"
 	>
 		<template #default>
 			<span v-if="time" class="truncate">
-				{{ props.type === 'start' ? 'Start : ' : 'End : ' }}
-				{{ time }}
+				{{ prefix }}: {{ time }}
 			</span>
-			<span v-else class="text-neutral-400">{{ title }}</span>
+			<span v-else class="text-muted">{{ title }}</span>
 		</template>
 	</USelectMenu>
 </template>
@@ -47,22 +47,21 @@ const time_options = [
 	'11.00 pm',
 ];
 
-const items = computed(() => {
-	return time_options.map((time) => ({ label: time }));
-});
+const items = computed(() => time_options.map((t) => ({ label: t })));
 
 const props = defineProps<{ title: string; time: string | null; type: 'start' | 'end' }>();
 
 const emit = defineEmits(['update:time']);
 
+const { t } = useI18n();
+const prefix = computed(() => (props.type === 'start' ? t('components.zInput.startTime') : t('components.zInput.endTime')));
+
 const time = computed({
 	get() {
 		return props.time ?? '';
 	},
-	set(time) {
-		emit('update:time', time);
+	set(val) {
+		emit('update:time', val);
 	},
 });
 </script>
-
-<style scoped></style>

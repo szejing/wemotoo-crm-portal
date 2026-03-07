@@ -5,14 +5,15 @@
 		size="md"
 		multiple
 		value-key="short"
+		class="min-w-0 w-full"
 		:search-input="{
-			placeholder: 'Search days…',
+			placeholder: $t('components.selectMenu.searchDays'),
 			icon: 'i-lucide-search',
 		}"
 	>
 		<template #default>
-			<span v-if="days.length > 0" class="truncate">{{ days?.map((day) => days_options.find((d) => d.short === day)?.short).join(', ') }}</span>
-			<span v-else class="text-neutral-400">Mon, Tue, Wed...</span>
+			<span v-if="days.length > 0" class="truncate">{{ displayDays }}</span>
+			<span v-else class="text-muted">{{ $t('components.zInput.selectDays') }}</span>
 		</template>
 	</USelectMenu>
 </template>
@@ -28,12 +29,12 @@ const days_options = [
 	{ seq: 7, short: 'Sun', long: 'Sunday' },
 ];
 
-const daysItems = computed(() => {
-	return days_options.map((day) => ({
+const daysItems = computed(() =>
+	days_options.map((day) => ({
 		...day,
 		label: day.long,
-	}));
-});
+	})),
+);
 
 const props = defineProps<{ days: string[] | null }>();
 
@@ -49,10 +50,12 @@ const days = computed({
 			}) ?? []
 		);
 	},
-	set(days) {
-		emit('update:days', days);
+	set(val) {
+		emit('update:days', val);
 	},
 });
-</script>
 
-<style scoped></style>
+const displayDays = computed(() =>
+	days.value.map((short) => days_options.find((d) => d.short === short)?.short ?? short).join(', '),
+);
+</script>
