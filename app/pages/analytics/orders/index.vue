@@ -163,7 +163,7 @@ const orderStats = computed(() => [
 		icon: 'i-heroicons-shopping-cart',
 		iconBg: 'bg-primary/10',
 		iconColor: 'text-primary',
-		to: '/orders',
+		to: '/sales/orders',
 	},
 	{
 		title: t('pages.orderDashboardNewCustomers'),

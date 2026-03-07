@@ -22,16 +22,25 @@ const default_navigations = [
 					{ label: 'nav.salesAnalytics', to: '/analytics/sales' },
 				],
 			},
+			// Only shown if service-based (excluded via setExcludeRoutes when not)
 			{
 				label: 'nav.appointments',
 				icon: ICONS.CALENDAR,
 				to: '/appointments',
 			},
+			// Sales
 			{
-				label: 'nav.orders',
+				label: 'nav.sales',
 				icon: ICONS.ORDER,
-				to: '/orders',
+				to: '/sales/orders',
+				value: 'sales',
+				children: [
+					{ label: 'nav.orders', to: '/sales/orders' },
+					// Coming soon: { label: 'nav.payments', to: '/sales/payments' },
+					// Coming soon: { label: 'nav.refunds', to: '/sales/refunds' },
+				],
 			},
+			// Products
 			{
 				label: 'nav.products',
 				icon: ICONS.PRODUCT,
@@ -42,7 +51,7 @@ const default_navigations = [
 					{ label: 'nav.categories', to: '/products/categories' },
 					{ label: 'nav.brands', to: '/products/brands' },
 					{ label: 'nav.tags', to: '/products/tags' },
-					// { label: 'nav.variations', to: '/products/variations' },
+					// Coming soon: { label: 'nav.inventory', to: '/products/inventory' },
 				],
 			},
 			{
@@ -50,49 +59,47 @@ const default_navigations = [
 				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 				to: '/customers',
 			},
+			// Marketing - Discussion (coming soon: Campaigns, Coupons, Automations)
+			// {
+			// 	label: 'nav.marketing',
+			// 	icon: ICONS.SPARKLES,
+			// 	to: '/marketing/campaigns',
+			// 	value: 'marketing',
+			// 	children: [
+			// 		{ label: 'nav.campaigns', to: '/marketing/campaigns' },
+			// 		{ label: 'nav.coupons', to: '/marketing/coupons' },
+			// 		{ label: 'nav.automations', to: '/marketing/automations' },
+			// 	],
+			// },
+			// Operation
 			{
-				label: 'nav.staffs',
+				label: 'nav.operation',
 				icon: ICONS.USER_GROUP_ROUNDED,
-				to: '/crm-users',
-			},
-			{
-				label: 'nav.affiliates',
-				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
-				to: '/affiliates',
-			},
-			{
-				label: 'nav.outlets',
-				icon: ICONS.OUTLET,
-				to: '/outlets',
-			},
-			{
-				label: 'nav.payment',
-				icon: ICONS.PAYMENT_METHODS,
-				to: '/payment',
-				value: 'payment',
+				to: '/operation',
+				value: 'operation',
 				children: [
-					{ label: 'nav.paymentMethods', to: '/payment/methods' },
-					// { label: 'nav.paymentTypes', to: '/payment/types' },// temporary hide
+					{ label: 'nav.staffs', to: '/operation/staff' },
+					{ label: 'nav.outlets', to: '/operation/outlets' },
 				],
 			},
-			{
-				label: 'nav.tax',
-				icon: ICONS.TAX,
-				to: '/taxes',
-				value: 'taxes',
-				children: [
-					{ label: 'nav.taxCodes', to: '/taxes/codes' },
-					{ label: 'nav.taxRules', to: '/taxes/rules' },
-				],
-			},
+			// Reports (coming soon)
+			// {
+			// 	label: 'nav.reports',
+			// 	icon: ICONS.REPORT_ORDER,
+			// 	to: '/reports',
+			// },
+			// Settings
 			{
 				label: 'nav.settings',
 				icon: ICONS.SETTINGS_ROUNDED,
 				to: '/settings',
 				value: 'settings',
 				children: [
-					{ label: 'nav.storeProfile', to: '/settings/store-profile' },
-					{ label: 'nav.configuration', to: '/settings/configuration' },
+					{ label: 'nav.paymentSettings', to: '/settings/payment' },
+					{ label: 'nav.taxSettings', to: '/settings/taxes' },
+					// Coming soon: { label: 'nav.shippingSettings', to: '/settings/shipping' },
+					// Coming soon: { label: 'nav.rolesPermissions', to: '/settings/roles-permissions' },
+					{ label: 'nav.systemSettings', to: '/settings/system' },
 				],
 			},
 		],

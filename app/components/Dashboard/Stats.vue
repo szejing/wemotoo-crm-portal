@@ -44,7 +44,7 @@ const baseStats = computed(() => [
 		title: t('pages.dashboardStatsOrders'),
 		icon: 'i-heroicons-shopping-cart',
 		value: new_orders.value ?? 0,
-		to: '/orders',
+		to: '/sales/orders',
 	},
 	{
 		title: t('pages.dashboardStatsPendingPayments'),

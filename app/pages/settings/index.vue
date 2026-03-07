@@ -39,16 +39,34 @@ useHead({ title: () => t('pages.settingsTitle') });
 
 const settings_navigations = computed(() => [
 	{
-		title: t('nav.storeProfile'),
-		icon: ICONS.OUTLET,
-		to: '/settings/store-profile',
-		description: t('pages.storeProfileDesc'),
+		title: t('nav.paymentSettings'),
+		icon: ICONS.PAYMENT_METHODS,
+		to: '/settings/payment',
+		description: t('pages.paymentManagementDesc'),
 	},
 	{
-		title: t('nav.configuration'),
+		title: t('nav.taxSettings'),
+		icon: ICONS.TAX,
+		to: '/settings/taxes',
+		description: t('pages.taxManagementDesc'),
+	},
+	// {
+	// 	title: t('nav.shippingSettings'),
+	// 	icon: ICONS.SETTINGS_ROUNDED,
+	// 	to: '/settings/shipping',
+	// 	description: t('pages.settingsMenuDesc'),
+	// },
+	// {
+	// 	title: t('nav.rolesPermissions'),
+	// 	icon: ICONS.USER_GROUP_ROUNDED,
+	// 	to: '/settings/roles-permissions',
+	// 	description: t('pages.settingsMenuDesc'),
+	// },
+	{
+		title: t('nav.systemSettings'),
 		icon: ICONS.SETTINGS_ROUNDED,
-		to: '/settings/configuration',
-		description: t('pages.configurationMenuDesc'),
+		to: '/settings/system',
+		description: t('pages.settingsMenuDesc'),
 	},
 ]);
 </script>

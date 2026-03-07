@@ -1,0 +1,38 @@
+<template>
+	<UDashboardPanel id="crm-user-create">
+		<template #header>
+			<UDashboardNavbar :title="pageTitle">
+				<template #leading>
+					<ZBackButton fallbackTo="/operation/staff" />
+				</template>
+			</UDashboardNavbar>
+		</template>
+
+		<template #body>
+			<div class="mx-auto max-w-3xl w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+				<div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
+					<FormCrmUserCreation />
+				</div>
+			</div>
+		</template>
+	</UDashboardPanel>
+</template>
+
+<script lang="ts" setup>
+import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+
+const { t } = useI18n();
+const pageTitle = computed(() => t('pages.crmUserCreate'));
+
+const crmUserStore = useCRMUserStore();
+const { new_crm_user } = storeToRefs(crmUserStore);
+
+const isDirty = computed(() => {
+	const u = new_crm_user.value;
+	return !!(u.name || u.email_address || u.phone_no);
+});
+
+useLeavePageGuard(isDirty);
+</script>
+
+<style scoped></style>
