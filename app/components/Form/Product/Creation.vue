@@ -166,42 +166,18 @@
 						@update:sale-price="sale_price = $event"
 					/>
 
-					<!-- Section 4: Variants (only show for physical items) -->
-					<UCard id="section-variants" class="shadow-md scroll-mt-4">
+					<!-- Section 4: Additional Info (only show for physical items) -->
+					<UCard id="section-additional-info" class="shadow-md scroll-mt-4">
 						<template #header>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<div class="flex items-center gap-2">
-										<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.productVariants') }}</h2>
-										<span class="text-xs text-neutral-500 ml-2">({{ $t('components.productUpdate.optional') }})</span>
-									</div>
-									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.addOptionsVariations') }}</p>
-								</div>
-								<UTooltip :text="$t('components.productUpdate.variantsTooltip')" :popper="{ placement: 'bottom' }">
-									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
-								</UTooltip>
-							</div>
+							<ZInputProductAdditionalInfoSectionHeader />
 						</template>
 
-						<div class="p-4 sm:p-6">
-							<div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
-								<div class="flex items-start gap-3">
-									<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
-									<div>
-										<h4 class="text-sm font-medium text-purple-900">{{ $t('components.productUpdate.productVariants') }}</h4>
-										<p class="text-xs text-purple-700 mt-1">{{ $t('components.productUpdate.variantsTooltip') }}</p>
-									</div>
-								</div>
-							</div>
-
-							<ZInputProductAdditionalInfo
-								:product="new_product"
-								@update:variations="updateProductVariations"
-								@update:variants="updateProductVariants"
-								@update:metadata="updateProductMetadata"
-							/>
-						</div>
+						<ZInputProductAdditionalInfo
+							:product="new_product"
+							@update:variations="updateProductVariations"
+							@update:variants="updateProductVariants"
+							@update:metadata="updateProductMetadata"
+						/>
 					</UCard>
 				</UForm>
 			</div>
@@ -284,7 +260,7 @@ const sections = computed(() => [
 		description: t('pages.pricingDesc'),
 		required: true,
 	},
-	{ id: 'section-variants', number: 4, name: t('components.productUpdate.productVariants'), description: t('pages.productVariantsDesc'), required: false },
+	{ id: 'section-additional-info', number: 4, name: t('pages.additionalInfo'), description: t('pages.additionalInfoDesc'), required: false },
 ]);
 
 // Scroll to section

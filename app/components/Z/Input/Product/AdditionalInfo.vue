@@ -6,43 +6,22 @@
 			</div>
 		</template>
 
-		<template #service>
-			<div class="space-y-4 pt-4">
-				<div class="flex items-start justify-between mb-4">
-					<div class="flex-1">
-						<div class="flex items-center gap-2">
-							<UIcon :name="ICONS.SETTINGS_ROUNDED" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.serviceSettings') }}</h3>
-						</div>
-						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.configureBookingRequirements') }}</p>
-					</div>
-					<UTooltip :text="$t('components.productUpdate.setUpServiceTooltip')" :popper="{ placement: 'left' }">
-						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-					</UTooltip>
-				</div>
-
-				<div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-					<div class="flex items-start gap-3">
-						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
-						<div>
-							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.serviceInformation') }}</h4>
-							<p class="text-xs text-orange-700 mt-1">
-								{{ $t('components.productUpdate.addServiceInformation') }}
-							</p>
-						</div>
-					</div>
-				</div>
-
-				<ZInputProductService v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
-			</div>
-		</template>
-
 		<template #variations>
 			<div class="space-y-6 pt-4">
-				<!-- Header -->
-				<div class="flex items-center gap-2">
-					<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
-					<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.productVariants') }}</h3>
+				<ZInputProductAdditionalInfoTabSectionHeader
+					:icon="ICONS.LAYERS"
+					title-key="components.productUpdate.productVariants"
+					description-key="components.productUpdate.addOptionsVariations"
+					tooltip-key="components.productUpdate.variantsTooltip"
+				/>
+				<div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+					<div class="flex items-start gap-3">
+						<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
+						<div>
+							<h4 class="text-sm font-medium text-purple-900">{{ $t('components.productUpdate.productVariants') }}</h4>
+							<p class="text-xs text-purple-700 mt-1">{{ $t('components.productUpdate.variantsTooltip') }}</p>
+						</div>
+					</div>
 				</div>
 
 				<!-- Variations Input -->
@@ -59,21 +38,38 @@
 			</div>
 		</template>
 
-		<template #tax>
+		<template #service>
 			<div class="space-y-4 pt-4">
-				<div class="flex items-start justify-between mb-4">
-					<div class="flex-1">
-						<div class="flex items-center gap-2">
-							<UIcon :name="ICONS.TAX" class="text-primary-500 w-5 h-5" />
-							<h3 class="text-lg font-semibold text-neutral-900">{{ $t('components.productUpdate.taxSettings') }}</h3>
+				<ZInputProductAdditionalInfoTabSectionHeader
+					:icon="ICONS.SETTINGS_ROUNDED"
+					title-key="components.productUpdate.serviceSettings"
+					description-key="components.productUpdate.configureBookingRequirements"
+					tooltip-key="components.productUpdate.setUpServiceTooltip"
+				/>
+				<div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+					<div class="flex items-start gap-3">
+						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
+						<div>
+							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.serviceInformation') }}</h4>
+							<p class="text-xs text-orange-700 mt-1">
+								{{ $t('components.productUpdate.addServiceInformation') }}
+							</p>
 						</div>
-						<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.configureTaxRulesProduct') }}</p>
 					</div>
-					<UTooltip :text="$t('components.productUpdate.setUpTaxTooltipProduct')" :popper="{ placement: 'left' }">
-						<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-4 h-4 cursor-help shrink-0" />
-					</UTooltip>
 				</div>
 
+				<ZInputProductService v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
+			</div>
+		</template>
+
+		<template #tax>
+			<div class="space-y-4 pt-4">
+				<ZInputProductAdditionalInfoTabSectionHeader
+					:icon="ICONS.TAX"
+					title-key="components.productUpdate.taxSettings"
+					description-key="components.productUpdate.configureTaxRulesProduct"
+					tooltip-key="components.productUpdate.setUpTaxTooltipProduct"
+				/>
 				<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
 					<div class="flex items-start gap-3">
 						<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
@@ -127,6 +123,12 @@ const shouldShowService = computed(() => {
 const product_additional_info = computed(() => {
 	const tabs = [];
 
+	tabs.push({
+		label: t('components.productUpdate.variationsTab'),
+		slot: 'variations',
+		icon: ICONS.LAYERS,
+	});
+
 	// Conditionally add service for type 2 (Services)
 	if (shouldShowService.value) {
 		tabs.push({
@@ -135,12 +137,6 @@ const product_additional_info = computed(() => {
 			icon: ICONS.SETTINGS_ROUNDED,
 		});
 	}
-
-	tabs.push({
-		label: t('components.productUpdate.variationsTab'),
-		slot: 'variations',
-		icon: ICONS.LAYERS,
-	});
 
 	// Always add tax
 	tabs.push({
