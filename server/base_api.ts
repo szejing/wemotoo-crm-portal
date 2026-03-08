@@ -47,7 +47,10 @@ export async function signedFetch(
 	const baseURL = config.public.baseUrl;
 	const method = (options.method || 'GET').toUpperCase();
 	const query = options.query ?? {};
-	const normalizedSegment = pathSegment.replace(/^\//, '').replace(/^api\//, '').replace(/^merchant\//, '');
+	const normalizedSegment = pathSegment
+		.replace(/^\//, '')
+		.replace(/^api\//, '')
+		.replace(/^merchant\//, '');
 	const pathForSig = pathForSignature(normalizedSegment, query);
 	const bodyForHash =
 		method === 'GET' || method === 'HEAD' || method === 'OPTIONS'
