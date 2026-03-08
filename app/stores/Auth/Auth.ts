@@ -225,7 +225,6 @@ export const useAuthStore = defineStore('authStore', {
 		clearCookies() {
 			const access_token = useCookie(KEY.ACCESS_TOKEN);
 			access_token.value = null;
-
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID);
 			merchant_id.value = null;
 		},
