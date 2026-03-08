@@ -388,7 +388,8 @@
 			"city": "Bandar",
 			"state": "Negeri",
 			"postalCode": "Poskod",
-			"country": "Negara"
+			"country": "Negara",
+			"operatingHoursAndOffDays": "Waktu operasi & hari cuti"
 		},
 		"appointmentsTitle": "Temujanji",
 		"noAppointmentsFound": "Tiada temujanji dijumpai",
@@ -940,6 +941,8 @@
 			"offDayNote": "Nota: Jika tiada hari cuti dipilih, hari tersedia akan mengikut hari cuti lalai.",
 			"operatingHours": "Waktu Operasi",
 			"operatingHoursDesc": "Pilih waktu operasi perkhidmatan.",
+			"followOperationHour": "Ikut waktu operasi merchant",
+			"merchantHoursNotSet": "Waktu operasi merchant belum diset.",
 			"startTime": "Mula",
 			"endTime": "Tamat",
 			"selectTime": "Pilih masa",

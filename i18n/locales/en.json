@@ -388,7 +388,8 @@
 			"city": "City",
 			"state": "State",
 			"postalCode": "Postal code",
-			"country": "Country"
+			"country": "Country",
+			"operatingHoursAndOffDays": "Operating hours & off days"
 		},
 		"appointmentsTitle": "Appointments",
 		"noAppointmentsFound": "No appointments found",
@@ -940,6 +941,8 @@
 			"offDayNote": "Note: If no off days are selected, the available days will follow the default off days.",
 			"operatingHours": "Operating Hours",
 			"operatingHoursDesc": "Select the service operating hours.",
+			"followOperationHour": "Follow merchant operation hours",
+			"merchantHoursNotSet": "Merchant operation hours are not set.",
 			"startTime": "Start",
 			"endTime": "End",
 			"selectTime": "Select time",

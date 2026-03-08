@@ -158,6 +158,35 @@
 								</UFormField>
 							</div>
 						</div>
+
+						<!-- Operating hours & off days -->
+						<div class="space-y-4">
+							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
+							<div class="grid gap-4 sm:grid-cols-2">
+								<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
+									<ZSelectMenuDays
+										:days="operationOffDaysArray"
+										@update:days="onOperationOffDaysUpdate"
+									/>
+								</UFormField>
+								<UFormField :label="$t('components.zInput.startTime')">
+									<ZSelectMenuTime
+										:title="$t('components.zInput.selectTime')"
+										:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
+										type="start"
+										@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
+									/>
+								</UFormField>
+								<UFormField :label="$t('components.zInput.endTime')">
+									<ZSelectMenuTime
+										:title="$t('components.zInput.selectTime')"
+										:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
+										type="end"
+										@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
+									/>
+								</UFormField>
+							</div>
+						</div>
 					</div>
 				</UCard>
 			</div>
@@ -219,6 +248,17 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 		set_code: setCode,
 		set_value: value ?? '',
 	});
+};
+
+/** Off days from merchant info (OPERATION_OFF_DAYS) as comma-separated "Mon, Tue, Wed". */
+const operationOffDaysArray = computed(() => {
+	const raw = getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_OFF_DAYS);
+	if (!raw?.trim()) return [];
+	return raw.split(',').map((s) => s.trim()).filter(Boolean);
+});
+
+const onOperationOffDaysUpdate = (days: string[]) => {
+	setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_OFF_DAYS, days.length ? days.join(', ') : '');
 };
 
 const thumbnailExistingImages = computed(() => {
