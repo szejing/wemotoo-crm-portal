@@ -88,7 +88,7 @@ export const useSaleStore = defineStore('saleStore', {
 
 				// Add query filter if provided
 				if (this.filter.query) {
-					const queryFilter = `bill_no contains '${this.filter.query}'`;
+					const queryFilter = `order_no contains '${this.filter.query}'`;
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
@@ -136,7 +136,7 @@ export const useSaleStore = defineStore('saleStore', {
 
 				// Add query filter if provided
 				if (this.filter.query) {
-					const queryFilter = `bill_no contains '${this.filter.query}'`;
+					const queryFilter = `order_no contains '${this.filter.query}'`;
 					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
 				}
 
@@ -170,7 +170,7 @@ export const useSaleStore = defineStore('saleStore', {
 			}
 		},
 
-		async getBillDetailsByBillNo(bill_no: string) {
+		async getBillDetailsByBillNo(order_no: string) {
 			if (!this.detail) {
 				this.loading = true;
 			}
@@ -178,7 +178,7 @@ export const useSaleStore = defineStore('saleStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.sale.getBillDetailsByBillNo(bill_no);
+				const data = await $api.sale.getBillDetailsByOrderNo(order_no);
 
 				if (data.bill) {
 					this.detail = data.bill;

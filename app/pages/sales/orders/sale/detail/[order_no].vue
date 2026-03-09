@@ -16,15 +16,15 @@
 				<div class="bill-header">
 					<div class="bill-header-left">
 						<div class="bill-header-title">
-							<h1 class="bill-number">{{ bill?.bill_no }}</h1>
+							<h1 class="bill-number">{{ bill?.order_no }}</h1>
 						</div>
 						<div class="flex flex-col">
 							<div v-if="bill?.order_date_time" class="metadata-item">
 								<UIcon :name="ICONS.CALENDAR" class="w-4 h-4" />
 								<p>{{ bill?.order_date_time }}</p>
 							</div>
-							<div v-if="bill?.trace_no" class="metadata-item">
-								<p class="text-sm text-neutral-400 italic">{{ bill?.trace_no }}</p>
+							<div v-if="bill?.inv_no" class="metadata-item">
+								<p class="text-sm text-neutral-400 italic">{{ bill?.inv_no }}</p>
 							</div>
 							<div v-if="bill?.ref_no" class="metadata-item">
 								<p>{{ $t('components.orderDetail.refLabel') }}: {{ bill?.ref_no }}</p>
@@ -228,11 +228,11 @@ watch(
 );
 
 const { t } = useI18n();
-useHead({ title: () => t('pages.orderDetailTitle') + (bill.value?.bill_no ?? '') });
+useHead({ title: () => t('pages.orderDetailTitle') + (bill.value?.order_no ?? '') });
 
 onMounted(async () => {
 	const route = useRoute();
-	await saleStore.getBillDetailsByBillNo(route.params.bill_no as string);
+	await saleStore.getBillDetailsByBillNo(route.params.order_no as string);
 	checkMobile();
 	window.addEventListener('resize', checkMobile);
 });
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
 
 const getBillDetailsByBillNo = async () => {
 	try {
-		await saleStore.getBillDetailsByBillNo(bill.value!.bill_no);
+		await saleStore.getBillDetailsByBillNo(bill.value!.order_no);
 	} catch {
 		return navigateTo('/sales/orders');
 	}
@@ -266,7 +266,7 @@ const refreshOrder = async () => {
 		return;
 	}
 
-	if (!bill.value?.bill_no) return;
+	if (!bill.value?.order_no) return;
 
 	is_refreshing.value = true;
 
@@ -320,7 +320,7 @@ const handleUpdateOrderStatus = async () => {
 /* Update Sale Status		*/
 const updateSaleStatus = async (_new_status: SaleStatus) => {
 	try {
-		// await saleStore.updateSaleStatus(bill.value.bill_no, _new_status, PaymentStatus.PENDING);
+		// await saleStore.updateSaleStatus(bill.value.order_no, _new_status, PaymentStatus.PENDING);
 		successNotification(t('components.orderDetail.statusUpdateSuccess'));
 	} catch {
 		failedModal(t('components.orderDetail.statusUpdateFailed'), t('components.orderDetail.error'));

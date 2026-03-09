@@ -125,7 +125,7 @@ const props = defineProps<{
 }>();
 
 onMounted(async () => {
-	selectedVariantCode.value = props.prodVariantCode;
+	selectedVariantCode.value = props.prodVariantCode ? ({ variant_code: props.prodVariantCode } as ProductVariant) : undefined;
 
 	if (props.prodVariantCode) {
 		isLoading.value = true;
@@ -173,10 +173,14 @@ const appointmentStatus = computed({
 
 const appointmentDate = computed({
 	get() {
-		return props.appointment?.date_time;
+		return props.appointment?.start_date_time;
 	},
 	set(value) {
-		emit('update:appointment', { ...props.appointment, date_time: value } as AppointmentModel);
+		emit('update:appointment', {
+			...props.appointment,
+			start_date_time: value,
+			end_date_time: value,
+		} as AppointmentModel);
 	},
 });
 

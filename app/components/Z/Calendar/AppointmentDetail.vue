@@ -9,10 +9,10 @@
 				</div>
 			</div>
 			<div class="flex items-center gap-2 shrink-0">
-				<UBadge :color="getStatusColor(appointment.status)" variant="subtle" size="md" class="hidden sm:inline-flex">
+				<UBadge :color="getAppointmentStatusColor(appointment.status)" variant="subtle" size="md" class="hidden sm:inline-flex">
 					{{ $t('options.' + appointment.status.toLowerCase()) }}
 				</UBadge>
-				<UBadge :color="getStatusColor(appointment.status)" variant="subtle" size="sm" class="sm:hidden">
+				<UBadge :color="getAppointmentStatusColor(appointment.status)" variant="subtle" size="sm" class="sm:hidden">
 					{{ $t('options.' + appointment.status.toLowerCase()) }}
 				</UBadge>
 				<UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" size="sm" @click="$emit('close')" />
@@ -81,12 +81,13 @@
 </template>
 
 <script lang="ts" setup>
+import type { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { formatAppointmentDateRange } from '~/utils/utils';
 
 defineProps<{
 	appointment: Appointment;
-	getStatusColor: (status: string) => string;
+	getStatusColor: (status: AppointmentStatus) => string;
 }>();
 
 defineEmits<{

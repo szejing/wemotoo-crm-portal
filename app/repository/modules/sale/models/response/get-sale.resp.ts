@@ -5,8 +5,8 @@ import type { Currency } from '~/utils/types/currency';
 
 type Bill = {
 	biz_date: string;
-	bill_no: string;
-	trace_no: string;
+	order_no: string;
+	inv_no: string;
 	order_date_time: Date;
 	customer_no: string;
 	status: SaleStatus;

@@ -102,14 +102,20 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			}
 		},
 
-		async updateAppointment(code: string, date_time: string, ref_no: string, status: string) {
+		async updateAppointment(appointment: Appointment) {
 			this.updating = true;
 			const { $api } = useNuxtApp();
 			try {
-				const updated = await $api.appointment.update(code, { date_time, ref_no, status });
+				const updated = await $api.appointment.update(appointment.code, {
+					order_no: appointment.order_no ?? '',
+					start_date_time: appointment.start_date_time,
+					end_date_time: appointment.end_date_time ?? appointment.start_date_time,
+					ref_no: appointment.ref_no,
+					status: appointment.status,
+				});
 
 				if (updated.appointment) {
-					this.appointments = this.appointments.map((appointment) => (appointment.code === code ? updated.appointment : appointment));
+					this.appointments = this.appointments.map((a) => (a.code === appointment.code ? updated.appointment : a));
 				}
 				successNotification('Appointment updated successfully');
 			} catch (err: unknown | ErrorResponse) {

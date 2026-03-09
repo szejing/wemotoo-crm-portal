@@ -291,6 +291,7 @@ import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { formatAppointmentDateRange } from '~/utils/utils';
 import { getAppointmentStatusColor } from '~/utils/ui-utils';
+import type { AppointmentModel } from '~/utils/models';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
@@ -539,12 +540,10 @@ const openEditModal = async (appointment: Appointment) => {
 
 	const appointmentModal = overlay.create(ZModalAppointmentDetail, {
 		props: {
-			appointment: JSON.parse(JSON.stringify(appointment)),
-			onUpdate: async (data: { date_time: string; ref_no: string; status: AppointmentStatus }) => {
-				const { date_time, ref_no, status } = data;
-				await appointmentStore.updateAppointment(appointment.code, date_time, ref_no, status);
+			appointment: appointment,
+			onUpdate: async (appointment: Appointment) => {
+				await appointmentStore.updateAppointment(appointment);
 				appointmentModal.close();
-				// Update the selected appointment with the new data
 				if (selectedAppointment.value?.code === appointment.code) {
 					selectedAppointment.value = appointments.value.find((a) => a.code === appointment.code) || null;
 				}

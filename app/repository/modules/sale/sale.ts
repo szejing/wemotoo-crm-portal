@@ -38,10 +38,10 @@ class SaleModule extends HttpFactory {
 	 * Fetches sale by bill no
 	 * @returns
 	 */
-	async getBillDetailsByBillNo(bill_no: string): Promise<GetSaleResp> {
+	async getBillDetailsByOrderNo(order_no: string): Promise<GetSaleResp> {
 		return await this.call<GetSaleResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(encodeURIComponent(bill_no))}`,
+			url: `${this.RESOURCE.Single(encodeURIComponent(order_no))}`,
 		});
 	}
 }

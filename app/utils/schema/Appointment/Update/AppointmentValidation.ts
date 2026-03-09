@@ -4,11 +4,11 @@ type TranslateFn = (key: string) => string;
 export function UpdateAppointmentValidation(t: TranslateFn) {
 	return z.object({
 		code: z.string({ message: t('validation.appointment.codeRequired') }),
-		date_time: z.union([z.string().datetime(), z.date()]),
+		start_date_time: z.union([z.string().datetime(), z.date()]),
+		end_date_time: z.union([z.string().datetime(), z.date()]).optional(),
 		item_line: z.number(),
 		cart_no: z.string().optional().nullable(),
 		order_no: z.string().optional().nullable(),
-		bill_no: z.string().optional().nullable(),
 		duration: z.number().optional().nullable(),
 		customer_name: z.string({ message: t('validation.appointment.customerNameRequired') }),
 		customer_phone: z.string({ message: t('validation.appointment.customerPhoneRequired') }),

@@ -23,8 +23,8 @@
 								<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-main" />
 								<p>{{ order?.order_date_time }}</p>
 							</div>
-							<div v-if="order?.trace_no" class="metadata-item">
-								<p class="text-sm text-neutral-400 italic">{{ order?.trace_no }}</p>
+							<div v-if="order?.inv_no" class="metadata-item">
+								<p class="text-sm text-neutral-400 italic">{{ order?.inv_no }}</p>
 							</div>
 							<div v-if="order?.ref_no" class="metadata-item">
 								<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
