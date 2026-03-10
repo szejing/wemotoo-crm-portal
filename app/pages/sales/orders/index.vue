@@ -43,7 +43,7 @@
 					/>
 				</div>
 
-				<template v-if="loading && initialize">
+				<template v-if="loading">
 					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
 						<div class="grid grid-cols-4 gap-4 p-4">
 							<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
@@ -55,7 +55,7 @@
 				</template>
 
 				<!-- Orders Table -->
-				<UTable v-if="!initialize" :data="orders" :columns="order_columns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectOrder">
+				<UTable v-if="!initialize && !loading" :data="orders" :columns="order_columns" :ui="{ tr: 'cursor-pointer' }" @select="selectOrder">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
@@ -66,7 +66,7 @@
 				</UTable>
 
 				<!-- Pagination -->
-				<div v-if="!initialize && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+				<div v-if="!initialize && !loading && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
 					<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 						<div class="text-sm text-gray-700 dark:text-gray-300">
 							{{
