@@ -111,15 +111,15 @@
 					<div class="text-sm space-y-1">
 						<p>
 							<span class="text-neutral-500">{{ $t('components.productUpdate.categoriesLabel') }}:</span>
-							<span class="font-medium">{{ summary.categoriesCount ?? 0 }}</span>
+							<span class="font-medium">{{ summary.categoriesCount ?? - }}</span>
 						</p>
 						<p>
 							<span class="text-neutral-500">{{ $t('components.productUpdate.tagsLabel') }}:</span>
-							<span class="font-medium">{{ summary.tagsCount ?? 0 }}</span>
+							<span class="font-medium">{{ summary.tagsCount ?? - }}</span>
 						</p>
 						<p>
 							<span class="text-neutral-500">{{ $t('components.productUpdate.brandsLabel') }}:</span>
-							<span class="font-medium">{{ summary.brandsCount ?? 0 }}</span>
+							<span class="font-medium">{{ summary.brandsCount ?? - }}</span>
 						</p>
 					</div>
 				</div>
@@ -133,11 +133,11 @@
 					<div class="text-sm">
 						<p>
 							<span class="text-neutral-500">{{ $t('components.productUpdate.total') }}:</span>
-							<span class="font-medium">{{ summary.variantsCount ?? 0 }}</span>
+							<span class="font-medium">{{ summary.variantsCount ?? - }}</span>
 						</p>
 						<p>
 							<span class="text-neutral-500">{{ $t('components.productUpdate.options') }}:</span>
-							<span class="font-medium">{{ summary.optionsCount ?? 0 }}</span>
+							<span class="font-medium">{{ summary.optionsCount ?? - }}</span>
 						</p>
 					</div>
 				</div>
