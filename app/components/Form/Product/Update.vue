@@ -549,8 +549,6 @@ const onSubmit = async () => {
 	formState.value.category_codes = categories.value?.map((cat) => cat.code!).filter(Boolean) ?? [];
 	formState.value.tag_ids = tags.value?.map((tag) => tag.id!).filter(Boolean);
 	formState.value.brand_codes = brands.value?.map((brand) => brand.code!).filter(Boolean);
-	formState.value.status = ProductStatus.PUBLISHED;
-
 	// Deep clone metadata to avoid reference issues
 	if (formState.value.metadata) {
 		formState.value.metadata = JSON.parse(JSON.stringify(formState.value.metadata));
