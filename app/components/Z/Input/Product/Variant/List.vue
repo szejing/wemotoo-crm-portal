@@ -16,7 +16,7 @@
 					<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
 				</template>
 			</UInput>
-			<UInput v-model="applyAll.stock" :placeholder="$t('components.variantList.stockPlaceholder')" type="number" size="sm" class="max-w-36" />
+			<!-- <UInput v-model="applyAll.stock" :placeholder="$t('components.variantList.stockPlaceholder')" type="number" size="sm" class="max-w-36" /> -->
 			<UButton color="primary" variant="soft" size="sm" @click="applyToAll">
 				{{ $t('components.variantList.applyToAll') }}
 			</UButton>
@@ -36,15 +36,12 @@
 						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
 							<span class="text-red-500">*</span> {{ $t('components.variantList.price') }}
 						</th>
-						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+						<!-- <th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
 							<span class="text-red-500">*</span> {{ $t('components.variantList.stock') }}
 							<UTooltip :text="$t('components.variantList.stockTooltip')">
 								<UIcon :name="ICONS.HELP" class="w-3.5 h-3.5 text-neutral-400 inline-block" />
 							</UTooltip>
-						</th>
-						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
-							{{ $t('components.variantList.sku') }}
-						</th>
+						</th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -83,20 +80,9 @@
 							</td>
 
 							<!-- Stock -->
-							<td class="px-3 py-2">
+							<!-- <td class="px-3 py-2">
 								<UInput v-model.number="row.variant.inventory_quantity" type="number" size="sm" class="max-w-28" @update:model-value="emitVariants" />
-							</td>
-
-							<!-- SKU -->
-							<td class="px-3 py-2">
-								<UInput
-									v-model="row.variant.sku"
-									size="sm"
-									class="max-w-36"
-									:placeholder="$t('components.variantList.skuPlaceholder')"
-									@update:model-value="emitVariants"
-								/>
-							</td>
+							</td> -->
 						</tr>
 					</template>
 				</tbody>
@@ -122,7 +108,6 @@ const emit = defineEmits(['update:variants', 'delete:variant']);
 const applyAll = reactive({
 	price: undefined as number | undefined,
 	stock: undefined as number | undefined,
-	sku: undefined as string | undefined,
 });
 
 type VariantRow = {
@@ -165,7 +150,6 @@ const createDefaultVariant = (name: string, options: ProductOptionInput[]): Prod
 		product_code: props.product.code,
 		options,
 		inventory_quantity: 0,
-		sku: undefined,
 		price_types: [
 			{
 				orig_sell_price: basePrice?.orig_sell_price ?? 0,
@@ -258,7 +242,7 @@ const applyToAll = () => {
 	for (const row of variantRows.value) {
 		if (applyAll.price !== undefined && applyAll.price !== null) {
 			if (row.variant.price_types?.[0]) {
-				row.variant.price_types[0].sale_price = applyAll.price;
+				row.variant.price_types[0].orig_sell_price = applyAll.price;
 			}
 		}
 		if (applyAll.stock !== undefined && applyAll.stock !== null) {
