@@ -188,7 +188,9 @@
 								<div v-else class="payment-empty">
 									<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
 									<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
-									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">{{ $t('components.orderDetail.addPayment') }}</UButton>
+									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">
+										{{ $t('components.orderDetail.addPayment') }}
+									</UButton>
 								</div>
 							</UCard>
 						</div>
@@ -202,7 +204,7 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
-import { failedModal, successNotification } from '~/stores/AppUi/AppUi';
+import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
 import type { Order } from '~/utils/types/order';
@@ -336,20 +338,19 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	}
 
 	if (new_status == OrderStatus.CANCELLED) {
-		failedModal(t('components.orderDetail.confirmCancelOrder'));
+		failedNotification(t('components.orderDetail.confirmCancelOrder'));
 		return;
 	}
 
 	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
-		failedModal(t('components.orderDetail.paymentRequiredMessage'), t('components.orderDetail.paymentInfoRequired'));
+		failedNotification(t('components.orderDetail.paymentInfoRequired'));
 		return;
 	}
-
 	try {
 		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
 		successNotification(t('components.orderDetail.statusUpdateSuccess'));
 	} catch {
-		failedModal(t('components.orderDetail.statusUpdateFailed'), t('components.orderDetail.error'));
+		failedNotification(t('components.orderDetail.error'));
 	}
 };
 
