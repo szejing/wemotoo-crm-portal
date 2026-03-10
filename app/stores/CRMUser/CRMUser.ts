@@ -103,6 +103,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 		},
 
 		async createCrmUser() {
+			this.adding = true;
 			const { $api } = useNuxtApp();
 
 			try {

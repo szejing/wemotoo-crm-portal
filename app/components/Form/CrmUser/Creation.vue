@@ -48,7 +48,7 @@
 		<!-- Submit Button -->
 		<div class="flex justify-center pt-4 border-t border-gray-200 dark:border-gray-700 mt-8">
 			<UButton color="success" size="lg" type="submit" :loading="adding" class="w-full sm:w-auto">
-				<UIcon :name="ICONS.CHECK_ROUNDED" class="w-5 h-5" />
+				<UIcon v-if="!adding" :name="ICONS.CHECK_ROUNDED" class="w-5 h-5" />
 				<span>{{ $t('components.crmUserForm.createCrmUser') }}</span>
 			</UButton>
 		</div>
