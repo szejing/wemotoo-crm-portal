@@ -28,6 +28,10 @@
 					:model-value="getOptionValues(vIdx)"
 					:placeholder="$t('components.variations.optionValuePlaceholder')"
 					:max-length="20"
+					add-on-blur
+					add-on-enter
+					add-on-tab
+					add-on-paste
 					size="md"
 					class="flex-1"
 					@update:model-value="(tags: string[]) => setOptionValues(vIdx, tags)"

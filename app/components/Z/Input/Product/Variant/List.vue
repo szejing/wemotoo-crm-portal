@@ -17,7 +17,6 @@
 				</template>
 			</UInput>
 			<UInput v-model="applyAll.stock" :placeholder="$t('components.variantList.stockPlaceholder')" type="number" size="sm" class="max-w-36" />
-			<UInput v-model="applyAll.sku" :placeholder="$t('components.variantList.skuPlaceholder')" size="sm" class="max-w-40" />
 			<UButton color="primary" variant="soft" size="sm" @click="applyToAll">
 				{{ $t('components.variantList.applyToAll') }}
 			</UButton>
@@ -259,14 +258,11 @@ const applyToAll = () => {
 	for (const row of variantRows.value) {
 		if (applyAll.price !== undefined && applyAll.price !== null) {
 			if (row.variant.price_types?.[0]) {
-				row.variant.price_types[0].orig_sell_price = applyAll.price;
+				row.variant.price_types[0].sale_price = applyAll.price;
 			}
 		}
 		if (applyAll.stock !== undefined && applyAll.stock !== null) {
 			row.variant.inventory_quantity = applyAll.stock;
-		}
-		if (applyAll.sku) {
-			row.variant.sku = applyAll.sku;
 		}
 	}
 	emitVariants();
