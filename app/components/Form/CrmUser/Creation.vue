@@ -12,14 +12,16 @@
 					@update:model-value="(v: string) => set('email_address', v)"
 				/>
 			</UFormField>
-			<UFormField :label="$t('components.crmUserForm.phone')" name="phone_number" required>
-				<ZPhoneInput
-					v-model:dial-code="new_crm_user.dial_code"
-					v-model:phone-no="new_crm_user.phone_no"
-					:placeholder="$t('components.crmUserForm.phone')"
-					@update:dial-code="(v: string) => set('dial_code', v)"
-					@update:phone-no="(v: string) => set('phone_no', v)"
-				/>
+			<UFormField :label="$t('components.crmUserForm.phone')" name="dial_code" required>
+				<UFormField name="phone_no" required>
+					<ZPhoneInput
+						:dial-code="new_crm_user.dial_code"
+						:phone-no="new_crm_user.phone_no"
+						:placeholder="$t('components.crmUserForm.phone')"
+						@update:dial-code="(v: string) => set('dial_code', v)"
+						@update:phone-no="(v: string) => set('phone_no', v ?? '')"
+					/>
+				</UFormField>
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.role')">
 				<USelect

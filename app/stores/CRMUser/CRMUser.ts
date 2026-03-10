@@ -116,6 +116,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				});
 
 				if (resp?.user) {
+					this.resetNewCrmUser();
 					successNotification(`${resp.user.name} - CRM User Created !`);
 					return true;
 				}
