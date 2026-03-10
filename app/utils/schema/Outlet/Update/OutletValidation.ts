@@ -3,6 +3,12 @@ import { z } from 'zod';
 type TranslateFn = (key: string) => string;
 export function UpdateOutletValidation(t: TranslateFn) {
 	return z.object({
+		code: z.string({ message: t('validation.outlet.outletCodeRequired') }),
+		dial_code: z.string({ message: t('validation.outlet.dialCodeRequired') }),
+		phone_no: z
+			.string({ message: t('validation.outlet.phoneNoRequired') })
+			.min(1, { message: t('validation.outlet.phoneNoRequired') })
+			.regex(/^\d{6,15}$/, { message: t('validation.outlet.phoneNoInvalid') }),
 		description: z.string({ message: t('validation.outlet.descriptionRequired') }),
 		address1: z.string({ message: t('validation.outlet.address1Required') }),
 		address2: z.string().optional().nullable(),

@@ -1,4 +1,6 @@
 export type UpdateOutletReq = {
+	dial_code: string | undefined;
+	phone_no: string | undefined;
 	description: string | undefined;
 	address1: string | undefined;
 	address2: string | undefined;

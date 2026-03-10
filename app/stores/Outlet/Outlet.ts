@@ -100,8 +100,6 @@ export const useOutletStore = defineStore('outletStore', {
 					this.outlets = data;
 					this.total_outlets = total ?? 0;
 				}
-
-				console.log(data);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
@@ -161,6 +159,8 @@ export const useOutletStore = defineStore('outletStore', {
 				const lat = outlet.latitude as number | string | null | undefined;
 				const data = await $api.outlet.update(code, {
 					description: outlet.description,
+					dial_code: outlet.dial_code,
+					phone_no: outlet.phone_no,
 					address1: outlet.address1,
 					address2: outlet.address2 || undefined,
 					address3: outlet.address3 || undefined,

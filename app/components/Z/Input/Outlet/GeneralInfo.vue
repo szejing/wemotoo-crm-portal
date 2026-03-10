@@ -13,13 +13,17 @@
 			<UInput v-model="description" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.descriptionPlaceholder')" />
 		</UFormField>
 
-		<UFormField :label="$t('common.phoneNo')" :class="['col-span-2', isUpdate ? 'lg:col-span-3' : 'lg:col-span-2']" required>
-			<ZPhoneInput
-				:dial-code="dialCode"
-				:phone-no="phoneNo"
-				@update:dial-code="(v: string) => emit('update:dialCode', v)"
-				@update:phone-no="(v: string) => emit('update:phoneNo', v)"
-			/>
+		<UFormField :label="$t('common.phoneNo')" name="dial_code" :class="['col-span-2', isUpdate ? 'lg:col-span-3' : 'lg:col-span-2']" required>
+			<UFormField name="phone_no" required>
+				<div>
+					<ZPhoneInput
+						:dial-code="dialCode"
+						:phone-no="phoneNo"
+						@update:dial-code="(v: string) => emit('update:dialCode', v)"
+						@update:phone-no="(v: string) => emit('update:phoneNo', v)"
+					/>
+				</div>
+			</UFormField>
 		</UFormField>
 	</div>
 </template>

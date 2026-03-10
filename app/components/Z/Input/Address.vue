@@ -23,7 +23,7 @@
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.state')" name="state_name" required>
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.state')" :name="stateFieldName" required>
 				<UInput v-model="state_name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.state')" />
 			</UFormField>
 
@@ -55,10 +55,14 @@ const props = defineProps<{
 	postalCode?: string;
 	countryCode?: string;
 	stateName?: string;
+	/** Form field name for state (e.g. "state" for outlet schema). */
+	stateFieldName?: string;
 	requiredLatLng?: boolean;
 	longitude?: number;
 	latitude?: number;
 }>();
+
+const stateFieldName = computed(() => props.stateFieldName ?? 'state_name');
 
 const emit = defineEmits([
 	'update:address1',

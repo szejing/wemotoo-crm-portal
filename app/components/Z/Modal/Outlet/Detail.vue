@@ -25,6 +25,7 @@
 					v-model:country-code="state.outlet.country_code"
 					v-model:longitude="state.outlet.longitude"
 					v-model:latitude="state.outlet.latitude"
+					state-field-name="state"
 					required-lat-lng
 					class="mt-4"
 				/>
@@ -102,9 +103,25 @@ const updateTaxRule = (tax_rule: TaxRule | undefined) => {
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } = event.data;
+	const { code, description, dial_code, phone_no, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule } =
+		event.data;
 
-	emit('update', { description, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude, tax_rule });
+	emit('update', {
+		code,
+		description,
+		dial_code,
+		phone_no,
+		address1,
+		address2,
+		address3,
+		city,
+		country_code,
+		state,
+		postal_code,
+		longitude,
+		latitude,
+		tax_rule,
+	});
 };
 
 const onDelete = () => {

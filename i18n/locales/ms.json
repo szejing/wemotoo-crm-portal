@@ -171,6 +171,9 @@
 		},
 		"outlet": {
 			"outletCodeRequired": "Kod cawangan wajib",
+			"dialCodeRequired": "Kod dail wajib",
+			"phoneNoRequired": "No. telefon wajib",
+			"phoneNoInvalid": "No. telefon mesti 6–15 digit",
 			"descriptionRequired": "Keterangan wajib",
 			"address1Required": "Alamat 1 wajib",
 			"cityRequired": "Bandar wajib",

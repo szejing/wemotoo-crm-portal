@@ -171,6 +171,9 @@
 		},
 		"outlet": {
 			"outletCodeRequired": "Outlet code is required",
+			"dialCodeRequired": "Dial code is required",
+			"phoneNoRequired": "Phone number is required",
+			"phoneNoInvalid": "Phone number must be 6–15 digits",
 			"descriptionRequired": "Description is required",
 			"address1Required": "Address 1 is required",
 			"cityRequired": "City is required",

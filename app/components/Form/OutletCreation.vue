@@ -34,6 +34,7 @@
 						v-model:country-code="new_outlet.country_code"
 						v-model:longitude="new_outlet.longitude"
 						v-model:latitude="new_outlet.latitude"
+						state-field-name="state"
 						required-lat-lng
 					/>
 				</div>
