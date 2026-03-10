@@ -72,6 +72,7 @@
 		"payments": "Payments",
 		"refunds": "Refunds",
 		"products": "Products",
+		"all_products": "All Products",
 		"categories": "Categories",
 		"brands": "Brands",
 		"tags": "Tags",
@@ -906,7 +907,8 @@
 			"totalPrice": "Total Price",
 			"voided": "VOIDED",
 			"refunded": "REFUNDED",
-			"active": "ACTIVE"
+			"active": "ACTIVE",
+			"changeItemStatus": "Change item status"
 		},
 		"zInput": {
 			"address1": "Address 1",
@@ -1031,6 +1033,8 @@
 			"parentCategory": "Parent Category",
 			"appointment": "Appointment",
 			"appointmentDate": "Appointment Date",
+			"appointmentStartDate": "Start date & time",
+			"appointmentEndDate": "End date & time",
 			"taxRule": "Tax Rule",
 			"confirmationTitle": "Confirmation",
 			"confirmationMessage": "Are you sure you want to proceed?"

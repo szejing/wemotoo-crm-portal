@@ -2,7 +2,7 @@
 	<UModal
 		:title="$t('components.zModal.updateItem')"
 		:ui="{
-			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
+			content: 'w-full sm:max-w-[60%] md:max-w-[55%] lg:max-w-[50%]',
 		}"
 	>
 		<template #body>

@@ -1,30 +1,48 @@
 <template>
-	<div class="section-grid-basic-details">
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormField v-slot="{ error }" :label="$t('components.orderInput.customerName')" name="customer_name" required>
-				<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.customerNamePlaceholder')" />
-			</UFormField>
+	<div class="space-y-6">
+		<!-- Contact details -->
+		<UCard class="card">
+			<template #header>
+				<div class="flex items-center gap-2">
+					<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5 text-muted" />
+					<h2 class="text-base font-semibold text-default">{{ $t('components.orderDetail.customerInformation') }}</h2>
+				</div>
+			</template>
 
-			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.emailAddress')" name="email_address" required>
-				<UInput
-					v-model="email_address"
-					:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
-					:placeholder="$t('components.orderInput.emailAddressPlaceholder')"
-				/>
-			</UFormField>
-		</div>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<UFormField v-slot="{ error }" :label="$t('components.orderInput.customerName')" name="customer_name" required>
+					<UInput v-model="name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.customerNamePlaceholder')" />
+				</UFormField>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<UFormField v-slot="{ error }" :label="$t('components.orderDetail.phoneNo')" name="phone_no" required>
-				<UInput v-model="phone_no" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.orderInput.phoneNoPlaceholder')" />
-			</UFormField>
-		</div>
+				<UFormField v-slot="{ error }" :label="$t('components.orderDetail.emailAddress')" name="email_address" required>
+					<UInput
+						v-model="email_address"
+						type="email"
+						autocomplete="email"
+						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+						:placeholder="$t('components.orderInput.emailAddressPlaceholder')"
+					/>
+				</UFormField>
 
-		<div v-if="shipping_address || billing_address" class="grid grid-cols-1 sm:grid-cols-2 sm:gap-12 sm:mt-4">
-			<div v-if="shipping_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
-				<h3>{{ $t('components.orderInput.shippingAddress') }}</h3>
+				<UFormField v-slot="{ error }" :label="$t('components.orderDetail.phoneNo')" name="phone_no" required>
+					<UInput
+						v-model="phone_no"
+						type="tel"
+						autocomplete="tel"
+						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+						:placeholder="$t('components.orderInput.phoneNoPlaceholder')"
+					/>
+				</UFormField>
+			</div>
+		</UCard>
+
+		<!-- Addresses -->
+		<template v-if="shipping_address || billing_address">
+			<UCard v-if="shipping_address" class="card">
+				<template #header>
+					<h2 class="text-base font-semibold text-default">{{ $t('components.orderInput.shippingAddress') }}</h2>
+				</template>
 				<ZInputAddress
-					v-if="shipping_address"
 					v-model:address1="shipping_address.address1"
 					v-model:address2="shipping_address.address2"
 					v-model:address3="shipping_address.address3"
@@ -32,22 +50,23 @@
 					v-model:postal-code="shipping_address.postal_code"
 					v-model:state-name="shipping_address.state"
 					v-model:country-code="shipping_address.country_code"
-					class="mt-4"
+					class="mt-1"
 				/>
-			</div>
+			</UCard>
 
-			<div v-if="billing_address" class="mt-8 sm:mt-0 border-t pt-4 sm:border-none sm:pt-0">
-				<div class="flex-between">
-					<h3>{{ $t('components.orderInput.billingAddress') }}</h3>
-					<UCheckbox
-						v-model="same_as_shipping_address"
-						:ui="{ label: 'text-xs font-normal text-neutral-500' }"
-						:label="$t('components.orderInput.sameAsShippingAddress')"
-						@change="onChangeSameAsShippingAddress"
-					/>
-				</div>
+			<UCard v-if="billing_address" class="card">
+				<template #header>
+					<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+						<h2 class="text-base font-semibold text-default">{{ $t('components.orderInput.billingAddress') }}</h2>
+						<UCheckbox
+							v-model="same_as_shipping_address"
+							:ui="{ label: 'text-sm font-normal text-muted' }"
+							:label="$t('components.orderInput.sameAsShippingAddress')"
+							@change="onChangeSameAsShippingAddress"
+						/>
+					</div>
+				</template>
 				<ZInputAddress
-					v-if="billing_address"
 					v-model:address1="billing_address.address1"
 					v-model:address2="billing_address.address2"
 					v-model:address3="billing_address.address3"
@@ -55,10 +74,10 @@
 					v-model:postal-code="billing_address.postal_code"
 					v-model:state-name="billing_address.state"
 					v-model:country-code="billing_address.country_code"
-					class="mt-4"
+					class="mt-1"
 				/>
-			</div>
-		</div>
+			</UCard>
+		</template>
 	</div>
 </template>
 
@@ -129,9 +148,13 @@ const onChangeSameAsShippingAddress = () => {
 </script>
 
 <style scoped>
-.section-grid-basic-details {
-	display: grid;
-	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 0.75rem;
+/* Cards */
+.card {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 </style>

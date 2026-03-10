@@ -43,7 +43,7 @@
 					/>
 				</div>
 
-				<template v-if="initialize">
+				<template v-if="loading">
 					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
 						<div class="grid grid-cols-4 gap-4 p-4">
 							<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
@@ -53,48 +53,41 @@
 						</div>
 					</div>
 				</template>
-				<!-- Orders Table -->
-				<UCard v-else class="[&>div]:p-0!">
-					<UTable
-						:data="orders"
-						:columns="order_columns"
-						:loading="loading"
-						class="[&_tr]:hover:bg-gray-50 dark:[&_tr]:hover:bg-gray-800/50 [&_tr]:cursor-pointer [&_tr]:transition-colors"
-						@select="selectOrder"
-					>
-						<template #empty>
-							<div class="flex flex-col items-center justify-center py-12 gap-3">
-								<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
-								<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrdersFound') }}</p>
-								<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-							</div>
-						</template>
-					</UTable>
 
-					<!-- Pagination -->
-					<div v-if="!initialize && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
-						<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-							<div class="text-sm text-gray-700 dark:text-gray-300">
-								{{
-									$t('pages.showingToOf', {
-										from: (current_page - 1) * filter.page_size + 1,
-										to: Math.min(current_page * filter.page_size, orderStore.total_orders),
-										total: orderStore.total_orders,
-									})
-								}}
-							</div>
-							<UPagination
-								v-model="current_page"
-								:total="orderStore.total_orders"
-								:page-size="filter.page_size"
-								show-last
-								show-first
-								size="sm"
-								@update:page="updatePage"
-							/>
+				<!-- Orders Table -->
+				<UTable v-if="!initialize && !loading" :data="orders" :columns="order_columns" :ui="{ tr: 'cursor-pointer' }" @select="selectOrder">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrdersFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
+					</template>
+				</UTable>
+
+				<!-- Pagination -->
+				<div v-if="!initialize && !loading && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+					<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+						<div class="text-sm text-gray-700 dark:text-gray-300">
+							{{
+								$t('pages.showingToOf', {
+									from: (current_page - 1) * filter.page_size + 1,
+									to: Math.min(current_page * filter.page_size, orderStore.total_orders),
+									total: orderStore.total_orders,
+								})
+							}}
+						</div>
+						<UPagination
+							v-model="current_page"
+							:total="orderStore.total_orders"
+							:page-size="filter.page_size"
+							show-last
+							show-first
+							size="sm"
+							@update:page="updatePage"
+						/>
 					</div>
-				</UCard>
+				</div>
 			</div>
 		</template>
 	</UDashboardPanel>
@@ -161,9 +154,9 @@ const selectOrder = async (e: Event, row: TableRow<OrderHistory>) => {
 	if (!order) return;
 
 	if (order.type === 'order') {
-		navigateTo(`/sales/orders/detail/${encodeURIComponent(order.transaction_no)}`);
+		navigateTo(`/sales/orders/detail/${encodeURIComponent(order.order_no)}`);
 	} else {
-		navigateTo(`/sales/orders/sale/detail/${encodeURIComponent(order.transaction_no)}`);
+		navigateTo(`/sales/orders/sale/detail/${encodeURIComponent(order.order_no)}`);
 	}
 };
 </script>

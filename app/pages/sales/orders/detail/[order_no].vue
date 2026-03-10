@@ -23,8 +23,8 @@
 								<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-main" />
 								<p>{{ order?.order_date_time }}</p>
 							</div>
-							<div v-if="order?.trace_no" class="metadata-item">
-								<p class="text-sm text-neutral-400 italic">{{ order?.trace_no }}</p>
+							<div v-if="order?.inv_no" class="metadata-item">
+								<p class="text-base text-neutral-400 italic">{{ order?.inv_no }}</p>
 							</div>
 							<div v-if="order?.ref_no" class="metadata-item">
 								<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
@@ -68,7 +68,10 @@
 										<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
 										{{ $t('components.orderDetail.customerInformation') }}
 									</h2>
-									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">{{ $t('components.orderDetail.edit') }}</UButton>
+									<UButton variant="ghost" size="sm" @click="editCustomerDetail">
+										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
+										{{ $t('components.orderDetail.edit') }}
+									</UButton>
 								</div>
 							</template>
 							<ZSectionOrderDetailCustomer :customer="customer" />
@@ -83,7 +86,7 @@
 										{{ $t('components.orderDetail.orderItems') }}
 									</h2>
 									<div class="flex items-center gap-2">
-										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="text-xs text-green-600 font-medium">
+										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
 											<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
 											{{ $t('components.orderDetail.editable') }}
 										</span>
@@ -185,7 +188,9 @@
 								<div v-else class="payment-empty">
 									<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
 									<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
-									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">{{ $t('components.orderDetail.addPayment') }}</UButton>
+									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">
+										{{ $t('components.orderDetail.addPayment') }}
+									</UButton>
 								</div>
 							</UCard>
 						</div>
@@ -199,7 +204,7 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
-import { failedModal, successNotification } from '~/stores/AppUi/AppUi';
+import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
 import type { Order } from '~/utils/types/order';
@@ -333,20 +338,19 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	}
 
 	if (new_status == OrderStatus.CANCELLED) {
-		failedModal(t('components.orderDetail.confirmCancelOrder'));
+		failedNotification(t('components.orderDetail.confirmCancelOrder'));
 		return;
 	}
 
 	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
-		failedModal(t('components.orderDetail.paymentRequiredMessage'), t('components.orderDetail.paymentInfoRequired'));
+		failedNotification(t('components.orderDetail.paymentInfoRequired'));
 		return;
 	}
-
 	try {
 		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
 		successNotification(t('components.orderDetail.statusUpdateSuccess'));
 	} catch {
-		failedModal(t('components.orderDetail.statusUpdateFailed'), t('components.orderDetail.error'));
+		failedNotification(t('components.orderDetail.error'));
 	}
 };
 
@@ -409,7 +413,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 /* Main Container */
 .order-detail-container {
 	max-width: 1600px;
-	margin: 0 auto;
 }
 
 /* Order Header */

@@ -41,106 +41,14 @@
 				<!-- Single Form with all sections -->
 				<UForm ref="formRef" :schema="updateProductSchema" :state="formState" class="space-y-6 mb-6" @submit="onSubmit" @error="onError">
 					<!-- Section 1: Basic Information -->
-					<UCard id="section-basic-info" class="shadow-md scroll-mt-4">
-						<template #header>
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<div class="flex items-center gap-2">
-										<UIcon :name="ICONS.INFO" class="text-primary-500 w-6 h-6" />
-										<h2 class="text-xl font-semibold">{{ $t('components.productUpdate.basicInformation') }}</h2>
-										<span class="text-red-500 text-sm">*</span>
-									</div>
-									<p class="text-sm text-neutral-500 mt-1">{{ $t('components.productUpdate.essentialProductDetails') }}</p>
-								</div>
-								<UTooltip :text="$t('pages.essentialInfoTooltip')" :popper="{ placement: 'bottom' }">
-									<UIcon :name="ICONS.HELP" class="text-neutral-400 hover:text-primary-500 w-5 h-5 cursor-help" />
-								</UTooltip>
-							</div>
-						</template>
-
-						<div class="space-y-6 p-4 sm:p-6">
-							<!-- Product Basic Fields -->
-							<div class="space-y-4">
-								<div class="w-full flex flex-wrap items-center gap-4 justify-between">
-									<UFormField name="status" :label="$t('components.selectMenu.selectProductStatus')" class="min-w-0 flex-1 sm:flex-initial">
-										<ZSelectMenuProductStatus v-model:status="formState.status" />
-									</UFormField>
-									<UFormField>
-										<USwitch
-											v-model="formState.is_active"
-											:label="
-												$t('components.productUpdate.currentStatusLabel', {
-													status: formState.is_active ? $t('components.productUpdate.statusActive') : $t('components.productUpdate.statusDisabled'),
-												})
-											"
-										/>
-									</UFormField>
-								</div>
-
-								<UFormField name="type_id" :label="$t('components.productUpdate.productType')" required>
-									<ZSelectMenuProductType v-model:type-id="formState.type_id" />
-								</UFormField>
-
-								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-									<UFormField name="code" :label="$t('components.productUpdate.productCode')">
-										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.uniqueIdentifier') }}</p>
-										<UInput v-model="formState.code" :placeholder="$t('components.productUpdate.productCodePlaceholder')" disabled />
-									</UFormField>
-									<UFormField name="name" :label="$t('components.productUpdate.productName')" required>
-										<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.nameCustomersSee') }}</p>
-										<UInput v-model="formState.name" :placeholder="$t('components.productUpdate.productNamePlaceholder')" />
-									</UFormField>
-								</div>
-
-								<UFormField name="short_desc" :label="$t('components.productUpdate.shortDescription')" required>
-									<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.briefDescription') }}</p>
-									<UInput v-model="formState.short_desc" :placeholder="$t('components.productUpdate.shortDescPlaceholder')" />
-								</UFormField>
-							</div>
-
-							<hr class="my-6" />
-
-							<!-- Product Images -->
-							<div class="space-y-4">
-								<h3 class="text-lg font-semibold">{{ $t('components.productUpdate.productImages') }}</h3>
-								<div class="flex flex-col gap-6 sm:flex-row sm:justify-between">
-									<div class="flex flex-col w-full">
-										<div class="flex items-center gap-2 mb-2">
-											<h4 class="text-md font-medium">{{ $t('components.productUpdate.thumbnail') }}</h4>
-											<UTooltip :text="$t('pages.mainImageTooltip')" :popper="{ placement: 'right' }">
-												<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
-											</UTooltip>
-										</div>
-										<p class="text-xs text-neutral-500 mb-3">{{ $t('components.productUpdate.recommendedRatio') }}</p>
-										<ZDropzone
-											class="max-w-full sm:max-w-[250px]"
-											:existing-images="formState.thumbnail ? [formState.thumbnail] : []"
-											@files-selected="updateThumbnail"
-											@delete-image="deleteThumbnail"
-										/>
-									</div>
-
-									<div class="flex flex-col w-full">
-										<div class="flex items-center gap-2 mb-2">
-											<h4 class="text-md font-medium">{{ $t('components.productUpdate.additionalImages') }}</h4>
-											<UTooltip :text="$t('pages.moreImagesTooltip')" :popper="{ placement: 'right' }">
-												<UIcon :name="ICONS.HELP" class="text-neutral-400 w-4 h-4 cursor-help" />
-											</UTooltip>
-										</div>
-										<p class="text-xs text-neutral-500 mb-3">{{ $t('components.productUpdate.max3Images') }}</p>
-										<ZDropzone
-											multiple
-											:max-images="3"
-											class="max-w-full sm:max-w-[250px]"
-											:existing-images="formState.images"
-											@files-selected="updateImages"
-											@delete-image="deleteImage"
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-					</UCard>
+					<ZInputProductBasicInfoSection
+						:state="formState"
+						:code-disabled="true"
+						@update:thumbnail="updateThumbnail"
+						@update:images="updateImages"
+						@delete:thumbnail="deleteThumbnail"
+						@delete:image="deleteImage"
+					/>
 
 					<!-- Section 2: Classification -->
 					<ZInputProductClassificationSection v-model:categories="categories" v-model:tags="tags" v-model:brands="brands" />

@@ -9,10 +9,10 @@ type TranslateFn = (key: string) => string;
 export function getSaleColumns(t: TranslateFn): TableColumn<Bill>[] {
 	return [
 		{
-			accessorKey: 'bill_no',
-			header: t('table.billNo'),
+			accessorKey: 'order_no',
+			header: t('table.orderNo'),
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('bill_no'))]);
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('order_no'))]);
 			},
 		},
 		{

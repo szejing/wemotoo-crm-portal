@@ -1,5 +1,9 @@
+import type { AppointmentStatus } from 'wemotoo-common';
+
 export type UpdateAppointmentReq = {
-	date_time: string;
-	ref_no: string;
-	status: string;
+	order_no: string;
+	start_date_time: Date;
+	end_date_time?: Date;
+	ref_no?: string | undefined;
+	status?: AppointmentStatus;
 };

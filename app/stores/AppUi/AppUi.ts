@@ -47,7 +47,7 @@ const default_navigations = [
 				to: '/products',
 				value: 'products',
 				children: [
-					{ label: 'nav.products', to: '/products/listing' },
+					{ label: 'nav.all_products', to: '/products/listing' },
 					{ label: 'nav.categories', to: '/products/categories' },
 					{ label: 'nav.brands', to: '/products/brands' },
 					{ label: 'nav.tags', to: '/products/tags' },
@@ -99,7 +99,8 @@ const default_navigations = [
 					{ label: 'nav.taxSettings', to: '/settings/taxes' },
 					// Coming soon: { label: 'nav.shippingSettings', to: '/settings/shipping' },
 					// Coming soon: { label: 'nav.rolesPermissions', to: '/settings/roles-permissions' },
-					{ label: 'nav.systemSettings', to: '/settings/system' },
+					{ label: 'nav.storeProfile', to: '/settings/store-profile' },
+					{ label: 'nav.configuration', to: '/settings/configuration' },
 				],
 			},
 		],

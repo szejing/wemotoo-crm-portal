@@ -72,6 +72,7 @@
 		"payments": "Pembayaran",
 		"refunds": "Pemulangan",
 		"products": "Produk",
+		"all_products": "Semua Produk",
 		"categories": "Kategori",
 		"brands": "Jenama",
 		"tags": "Tag",
@@ -906,7 +907,8 @@
 			"totalPrice": "Jumlah Harga",
 			"voided": "DIBATALKAN",
 			"refunded": "DIPULANGKAN",
-			"active": "AKTIF"
+			"active": "AKTIF",
+			"changeItemStatus": "Tukar status item"
 		},
 		"zInput": {
 			"address1": "Alamat 1",
@@ -1031,6 +1033,8 @@
 			"parentCategory": "Kategori Induk",
 			"appointment": "Temujanji",
 			"appointmentDate": "Tarikh Temujanji",
+			"appointmentStartDate": "Tarikh & masa mula",
+			"appointmentEndDate": "Tarikh & masa tamat",
 			"taxRule": "Peraturan Cukai",
 			"confirmationTitle": "Pengesahan",
 			"confirmationMessage": "Adakah anda pasti mahu meneruskan?"
