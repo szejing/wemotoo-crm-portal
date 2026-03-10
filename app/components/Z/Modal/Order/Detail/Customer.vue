@@ -1,10 +1,5 @@
 <template>
-	<UModal
-		:title="$t('components.zModal.updateCustomer')"
-		:ui="{
-			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
-		}"
-	>
+	<UModal :title="$t('components.zModal.updateCustomer')" :ui="{ content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]' }">
 		<template #body>
 			<UForm :schema="customerSchema" :state="state.customer" class="space-y-4" @submit="onSubmit">
 				<!-- *********************** General Info *********************** -->

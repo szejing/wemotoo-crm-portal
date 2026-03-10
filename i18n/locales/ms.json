@@ -907,7 +907,8 @@
 			"totalPrice": "Jumlah Harga",
 			"voided": "DIBATALKAN",
 			"refunded": "DIPULANGKAN",
-			"active": "AKTIF"
+			"active": "AKTIF",
+			"changeItemStatus": "Tukar status item"
 		},
 		"zInput": {
 			"address1": "Alamat 1",

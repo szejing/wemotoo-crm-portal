@@ -907,7 +907,8 @@
 			"totalPrice": "Total Price",
 			"voided": "VOIDED",
 			"refunded": "REFUNDED",
-			"active": "ACTIVE"
+			"active": "ACTIVE",
+			"changeItemStatus": "Change item status"
 		},
 		"zInput": {
 			"address1": "Address 1",

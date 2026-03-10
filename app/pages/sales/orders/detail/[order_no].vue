@@ -24,7 +24,7 @@
 								<p>{{ order?.order_date_time }}</p>
 							</div>
 							<div v-if="order?.inv_no" class="metadata-item">
-								<p class="text-sm text-neutral-400 italic">{{ order?.inv_no }}</p>
+								<p class="text-base text-neutral-400 italic">{{ order?.inv_no }}</p>
 							</div>
 							<div v-if="order?.ref_no" class="metadata-item">
 								<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
@@ -68,7 +68,10 @@
 										<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
 										{{ $t('components.orderDetail.customerInformation') }}
 									</h2>
-									<UButton variant="ghost" :icon="ICONS.PENCIL" size="sm" @click="editCustomerDetail">{{ $t('components.orderDetail.edit') }}</UButton>
+									<UButton variant="ghost" size="sm" @click="editCustomerDetail">
+										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
+										{{ $t('components.orderDetail.edit') }}
+									</UButton>
 								</div>
 							</template>
 							<ZSectionOrderDetailCustomer :customer="customer" />
@@ -83,7 +86,7 @@
 										{{ $t('components.orderDetail.orderItems') }}
 									</h2>
 									<div class="flex items-center gap-2">
-										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="text-xs text-green-600 font-medium">
+										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
 											<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
 											{{ $t('components.orderDetail.editable') }}
 										</span>
@@ -409,7 +412,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 /* Main Container */
 .order-detail-container {
 	max-width: 1600px;
-	margin: 0 auto;
 }
 
 /* Order Header */

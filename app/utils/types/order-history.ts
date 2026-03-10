@@ -6,7 +6,6 @@ import type { ItemModel, PaymentModel, CustomerModel } from '../models';
 export type OrderHistory = {
 	biz_date: string;
 	order_date_time: string;
-	transaction_no: string;
 	type: 'order' | 'sale';
 	total_qty: number;
 	order_no: string;

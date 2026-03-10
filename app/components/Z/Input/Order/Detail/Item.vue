@@ -1,102 +1,88 @@
 <template>
-	<div class="section-grid-basic-details">
-		<div class="flex-jbetween-icenter w-full">
-			<div class="flex-icenter gap-4">
-				<div>
-					<h2 class="font-bold">#{{ prodCode }}</h2>
-					<p class="font-light">{{ prodName }}</p>
+	<div class="space-y-6">
+		<!-- Product & status -->
+		<UCard class="card">
+			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+				<div class="flex items-start gap-3 min-w-0">
+					<div class="shrink-0 rounded-lg bg-elevated p-2">
+						<UIcon :name="ICONS.CUBE" class="w-6 h-6 text-muted" />
+					</div>
+					<div class="min-w-0">
+						<h2 class="font-semibold text-default truncate">#{{ prodCode }}</h2>
+						<p class="text-sm text-muted mt-0.5 truncate">{{ prodName }}</p>
+					</div>
 				</div>
-				<div class="ml-4">
-					<UBadge v-if="status == OrderItemStatus.VOIDED" size="md" color="primary">
-						{{ $t('components.orderInput.voided') }}
-						<template #trailing>
-							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.REFUNDED)" />
-						</template>
-					</UBadge>
-					<UBadge v-else-if="status == OrderItemStatus.REFUNDED" size="md" color="error">
-						{{ $t('components.orderInput.refunded') }}
-						<template #trailing>
-							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.ACTIVE)" />
-						</template>
-					</UBadge>
-					<UBadge v-else size="md" color="success">
-						{{ $t('components.orderInput.active') }}
-						<template #trailing>
-							<UIcon color="white" class="w-4 h-4 cursor-pointer" :name="ICONS.CHEVRON_RIGHT" @click="updateStatus(OrderItemStatus.VOIDED)" />
-						</template>
-					</UBadge>
-				</div>
+				<UFormField :label="$t('components.orderInput.status')" name="item_status" class="sm:w-40 shrink-0">
+					<UTooltip :text="$t('components.orderInput.changeItemStatus')" :popper="{ placement: 'bottom' }">
+						<USelectMenu v-model="status" :items="itemStatusOptions" value-key="value" size="md" :ui="{ base: 'min-w-full' }">
+							<template #default>
+								<UBadge :color="getOrderItemStatusColor(status)" variant="subtle" class="truncate w-full justify-center">
+									{{ itemStatusLabel }}
+								</UBadge>
+							</template>
+							<template #item="{ item }">
+								<UBadge :color="getOrderItemStatusColor(item.value)" variant="subtle" class="truncate">
+									{{ item.label }}
+								</UBadge>
+							</template>
+						</USelectMenu>
+					</UTooltip>
+				</UFormField>
 			</div>
+		</UCard>
 
-			<!-- <ZQuantity v-model:quantity="orderQty" /> -->
-		</div>
-
-		<hr class="my-2" />
-
-		<div v-if="appointment">
-			<h2 class="text-main">{{ $t('components.orderInput.appointment') }}</h2>
-			<h4 class="text-neutral-700">#{{ appointment!.code }}</h4>
-
-			<div class="grid grid-cols-1 gap-4 mt-2">
-				<div class="flex-jbetween-icenter">
-					<h4 class="text-neutral-400">{{ $t('components.orderInput.date') }}</h4>
+		<!-- Appointment (optional) -->
+		<UCard v-if="appointment" class="card">
+			<template #header>
+				<div class="flex items-center gap-2">
+					<UIcon :name="ICONS.CALENDAR" class="w-5 h-5 text-muted" />
+					<h2 class="text-base font-semibold text-default">{{ $t('components.orderInput.appointment') }}</h2>
+				</div>
+			</template>
+			<p class="text-sm text-muted mb-4">#{{ appointment.code }}</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<UFormField :label="$t('components.orderInput.date')" name="appointment_date">
 					<ZSelectMenuDateTime
 						v-model:date-time="appointmentDate"
 						:placeholder="$t('components.orderInput.appointmentDate')"
 						:min-date="new Date()"
 						:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
+						class="w-full"
 					/>
-				</div>
-
-				<div class="flex-jbetween-icenter">
-					<h4 class="text-neutral-400">{{ $t('common.status') }}</h4>
-					<ZSelectMenuAppointmentStatus v-model:status="appointmentStatus" />
-				</div>
-			</div>
-		</div>
-
-		<hr v-if="appointment" class="my-2" />
-
-		<div>
-			<h2 class="text-main">{{ $t('components.orderInput.pricing') }}</h2>
-
-			<div class="grid grid-cols-2 gap-4 mt-2">
-				<UFormField :label="$t('components.orderInput.currency')" name="currency" disabled>
-					<ZSelectMenuCurrency :currency-code="currencyCode" class="mt-2" />
 				</UFormField>
+				<UFormField :label="$t('common.status')" name="appointment_status">
+					<ZSelectMenuAppointmentStatus v-model:status="appointmentStatus" />
+				</UFormField>
+			</div>
+		</UCard>
 
+		<!-- Pricing -->
+		<UCard class="card">
+			<template #header>
+				<div class="flex items-center gap-2">
+					<UIcon :name="ICONS.CURRENCY" class="w-5 h-5 text-muted" />
+					<h2 class="text-base font-semibold text-default">{{ $t('components.orderInput.pricing') }}</h2>
+				</div>
+			</template>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<UFormField :label="$t('components.orderInput.currency')" name="currency" disabled>
+					<ZSelectMenuCurrency :currency-code="currencyCode" class="w-full" />
+				</UFormField>
 				<UFormField v-slot="{ error }" :label="$t('components.orderDetail.unitSellPrice')" name="unit_sell_price" disabled>
 					<UInput
 						:model-value="unitSellPrice.toFixed(2)"
 						:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
 						:placeholder="$t('components.orderInput.unitSellPricePlaceholder')"
-						class="mt-2"
+						class="w-full"
 						disabled
 					/>
 				</UFormField>
 			</div>
-		</div>
-
-		<!-- <div v-if="prodVariants.length > 0">
-			<h2 class="text-main">Variants</h2>
-
-			<ul>
-				<div v-for="variant in prodVariants" :key="variant!.variant_code">
-					<UButton
-						:color="selectedVariantCode == variant!.variant_code ? 'main' : 'gray'"
-						:variant="selectedVariantCode == variant!.variant_code ? 'solid' : 'outline'"
-						size="sm"
-						@click="updateVariant(variant)"
-					>
-						{{ variant!.variant_code }}
-					</UButton>
-				</div>
-			</ul>
-		</div> -->
-
-		<div class="mt-4 text-end">
-			<h3 class="text-main">{{ $t('components.orderInput.totalPrice') }} : {{ currencyCode }} {{ netTotal.toFixed(2) }}</h3>
-		</div>
+			<div class="mt-4 pt-4 border-t border-default/10 flex items-center justify-end gap-2">
+				<span class="text-sm text-muted">{{ $t('components.orderInput.totalPrice') }}</span>
+				<span class="text-lg font-semibold text-default">{{ currencyCode }} {{ netTotal.toFixed(2) }}</span>
+			</div>
+		</UCard>
 	</div>
 </template>
 
@@ -105,8 +91,10 @@ import { ZSelectMenuDateTime } from '#components';
 import { OrderItemStatus } from 'wemotoo-common';
 import type { AppointmentModel } from '~/utils/models';
 import type { ProductVariant } from '~/utils/types/product-variant';
+import { getOrderItemStatusOptions, getOrderItemStatusColor } from '~/utils/options';
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
 const isLoading = ref(false);
 const prodVariants = ref<ProductVariant[]>([]);
 const selectedVariantCode = ref<ProductVariant>();
@@ -123,6 +111,9 @@ const props = defineProps<{
 	unitSellPrice: number;
 	appointment?: AppointmentModel;
 }>();
+
+const itemStatusOptions = computed(() => getOrderItemStatusOptions(t).filter((o) => o.value !== 'All'));
+const itemStatusLabel = computed(() => itemStatusOptions.value.find((o) => o.value === props.status)?.label ?? props.status);
 
 onMounted(async () => {
 	selectedVariantCode.value = props.prodVariantCode ? ({ variant_code: props.prodVariantCode } as ProductVariant) : undefined;
@@ -148,7 +139,7 @@ const status = computed({
 	get() {
 		return props.status;
 	},
-	set(value) {
+	set(value: OrderItemStatus) {
 		emit('update:status', value);
 	},
 });
@@ -184,35 +175,19 @@ const appointmentDate = computed({
 	},
 });
 
-const updateStatus = (newStatus: OrderItemStatus) => {
-	status.value = newStatus;
-};
-
-// const updateVariant = (variant: ProductVariant) => {
-// 	selectedVariantCode.value = variant.variant_code;
-
-// 	emit('update:prodVariantCode', variant.variant_code);
-// 	emit('update:prodVariantName', variant.name);
-// 	emit('update:prodVariantSku', variant.sku);
-
-// 	unitSellPrice.value = variant!.price_types![0].sale_price ?? 0;
-// };
-
 const netTotal = computed(() => {
 	return props.unitSellPrice * orderQty.value;
 });
 </script>
 
 <style scoped>
-.section-grid-basic-details {
-	display: grid;
-	gap: 1rem;
+/* Cards */
+.card {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.2s ease;
 }
 
-ul {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	margin-top: 0.5rem;
+.card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 </style>

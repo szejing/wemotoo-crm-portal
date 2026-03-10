@@ -16,17 +16,13 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 			},
 		},
 		{
-			accessorKey: 'biz_date',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.date')),
-			cell: ({ row }) => {
-				return h('div', [h('p', row.original.biz_date)]);
-			},
-		},
-		{
 			accessorKey: 'order_no',
 			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.orderNo')),
 			cell: ({ row }) => {
-				return h('div', [h('p', row.original.transaction_no)]);
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100' }, row.original.order_no),
+					h('p', { class: 'text-sm text-neutral-400 dark:text-neutral-500' }, row.original.biz_date),
+				]);
 			},
 		},
 		{
