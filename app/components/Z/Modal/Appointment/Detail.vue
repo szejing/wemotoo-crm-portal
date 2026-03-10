@@ -3,49 +3,76 @@
 		:default-open="true"
 		:title="$t('components.zModal.updateAppointment')"
 		:ui="{
-			content: 'w-full sm:max-w-[60%] md:max-w-[40%] lg:max-w-[30%]',
+			content: 'max-w-[85%] md:max-w-[55%] ',
 		}"
 	>
 		<template #header>
-			<h2 class="text-main">{{ $t('components.zModal.appointment') }}</h2>
-			<div class="mt-2">
-				<h4 class="font-bold text-neutral-400">#{{ appointment!.code }}</h4>
-				<h4 v-if="appointment!.order_no" class="font-bold text-neutral-700">{{ $t('components.zModal.orderNo') }} #{{ appointment!.order_no }}</h4>
+			<div class="flex flex-col gap-3 w-full">
+				<div class="flex items-center gap-2">
+					<UIcon name="i-lucide-calendar-days" class="size-5 text-main-500" aria-hidden="true" />
+					<h2 class="text-main text-lg font-semibold">{{ $t('components.zModal.appointment') }}</h2>
+				</div>
+				<div class="flex flex-row flex-jbetween-icenter w-full gap-4">
+					<div class="flex flex-col gap-1">
+						<UBadge color="neutral" variant="subtle" size="lg" class="font-mono w-fit">#{{ appointment!.code }}</UBadge>
+						<template v-if="appointment!.order_no">
+							<span class="text-neutral-600 text-sm">{{ $t('components.zModal.orderNo') }} #{{ appointment!.order_no }}</span>
+						</template>
+					</div>
+					<div class="flex flex-col gap-2">
+						<label class="text-neutral-500 text-sm">{{ $t('table.status') }}</label>
+						<ZSelectMenuAppointmentStatus v-model:status="state.appointment.status" />
+					</div>
+				</div>
 			</div>
 		</template>
 
 		<template #body>
-			<UForm ref="formRef" :schema="appointmentSchema" :state="state.appointment" class="space-y-4" @submit="onSubmit">
-				<div class="flex flex-col gap-4">
-					<div class="flex-jbetween-icenter">
-						<div>
-							<div class="flex flex-col gap-1">
-								<h4 class="text-neutral-700 font-bold">
-									{{ appointment!.customer_name }} <br />
-									{{ appointment!.customer_phone }}
-								</h4>
-							</div>
+			<UForm ref="formRef" :schema="appointmentSchema" :state="state.appointment" class="space-y-5" @submit="onSubmit">
+				<!-- Customer -->
+				<div class="rounded-lg border border-neutral-200 bg-neutral-50/80 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center gap-2">
+							<UIcon name="i-lucide-user" class="size-4 shrink-0 text-neutral-500" aria-hidden="true" />
+							<span class="font-semibold text-neutral-800 truncate">{{ appointment!.customer_name }}</span>
 						</div>
-						<ZSelectMenuAppointmentStatus v-model:status="state.appointment.status" />
-					</div>
+						<div class="flex items-center gap-2 pl-6">
+							<UIcon name="i-lucide-phone" class="size-4 shrink-0 text-neutral-400" aria-hidden="true" />
+							<span class="text-neutral-600 text-sm">{{ appointment!.customer_phone }}</span>
+						</div>
 
-					<div class="flex flex-col gap-2">
-						<h4 class="text-neutral-400 font-light">{{ $t('components.zModal.appointmentStartDate') }}</h4>
-						<ZSelectMenuDateTime
-							v-model:date-time="state.appointment.start_date_time"
-							:placeholder="$t('components.zModal.appointmentStartDate')"
-							:min-date="new Date()"
-							:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
-						/>
+						<div class="flex items-center gap-2 pl-6">
+							<UIcon name="i-heroicons-wrench" class="size-4 shrink-0 text-neutral-400" aria-hidden="true" />
+							<span class="text-neutral-600 text-sm">{{ appointment!.appt_desc }}</span>
+						</div>
 					</div>
-					<div class="flex flex-col gap-2">
-						<h4 class="text-neutral-400 font-light">{{ $t('components.zModal.appointmentEndDate') }}</h4>
-						<ZSelectMenuDateTime
-							v-model:date-time="state.appointment.end_date_time"
-							:placeholder="$t('components.zModal.appointmentEndDate')"
-							:min-date="state.appointment.start_date_time ?? new Date()"
-							:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
-						/>
+				</div>
+
+				<!-- Schedule -->
+				<div class="space-y-4">
+					<h3 class="flex items-center gap-2 text-sm font-medium text-neutral-700">
+						<UIcon name="i-lucide-clock" class="size-4 text-neutral-500" aria-hidden="true" />
+						{{ $t('components.zModal.appointmentStartDate') }} / {{ $t('components.zModal.appointmentEndDate') }}
+					</h3>
+					<div class="grid gap-4 sm:grid-cols-2">
+						<div class="flex flex-col gap-2">
+							<label class="text-neutral-500 text-sm">{{ $t('components.zModal.appointmentStartDate') }}</label>
+							<ZSelectMenuDateTime
+								v-model:date-time="state.appointment.start_date_time"
+								:placeholder="$t('components.zModal.appointmentStartDate')"
+								:min-date="new Date()"
+								:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
+							/>
+						</div>
+						<div class="flex flex-col gap-2">
+							<label class="text-neutral-500 text-sm">{{ $t('components.zModal.appointmentEndDate') }}</label>
+							<ZSelectMenuDateTime
+								v-model:date-time="state.appointment.end_date_time"
+								:placeholder="$t('components.zModal.appointmentEndDate')"
+								:min-date="state.appointment.start_date_time ?? new Date()"
+								:max-date="new Date(new Date().setMonth(new Date().getMonth() + 2))"
+							/>
+						</div>
 					</div>
 				</div>
 			</UForm>
@@ -53,11 +80,15 @@
 
 		<template #footer>
 			<div class="flex-jbetween-icenter w-full">
-				<UButton color="error" variant="ghost" class="opacity-50 hover:opacity-100" @click="onDelete">{{ $t('components.zModal.delete') }}</UButton>
-
-				<div class="flex-jend gap-4">
+				<UButton color="error" variant="ghost" size="sm" class="opacity-70 hover:opacity-100" @click="onDelete">
+					<UIcon name="i-lucide-trash-2" class="size-4" />
+					{{ $t('components.zModal.delete') }}
+				</UButton>
+				<div class="flex flex-wrap items-center justify-end gap-3">
 					<UButton color="neutral" variant="soft" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="primary" variant="solid" :loading="updating" @click="formRef?.submit()">{{ $t('components.zModal.update') }}</UButton>
+					<UButton color="primary" variant="solid" :loading="updating" @click="formRef?.submit()">
+						{{ $t('components.zModal.update') }}
+					</UButton>
 				</div>
 			</div>
 		</template>

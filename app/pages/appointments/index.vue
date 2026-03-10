@@ -295,7 +295,7 @@ import type { AppointmentModel } from '~/utils/models';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();
-const { appointments, filter, exporting } = storeToRefs(appointmentStore);
+const { appointments, filter } = storeToRefs(appointmentStore);
 const selectedAppointment = ref<Appointment | null>(null);
 
 // Calendar view state
@@ -517,9 +517,10 @@ watch(
 			appointmentStore.getAppointments();
 		} else {
 			filter.value.date_range = {
-				start: startOfDay(calendarFocusDate.value),
-				end: endOfDay(add(calendarFocusDate.value, { days: 14 })),
+				start: sub(new Date(), { days: 14 }),
+				end: add(new Date(), { days: 14 }),
 			};
+
 			appointmentStore.getAppointments();
 		}
 	},
