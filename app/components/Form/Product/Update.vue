@@ -535,7 +535,8 @@ const doUpdateProduct = async () => {
 			...formState.value,
 		});
 		if (success) {
-			productStore.getProduct(formState.value.code!);
+			const product = await productStore.getProduct(formState.value.code!);
+			productStore.current_product = product;
 		}
 	} catch (error) {
 		console.error(error);

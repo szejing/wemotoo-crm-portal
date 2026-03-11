@@ -43,7 +43,14 @@
 							<span class="text-sm">{{ $t('pages.updateProduct') }}</span>
 						</UButton>
 						<div class="flex gap-2">
-							<UButton color="error" variant="ghost" size="sm" class="flex-1 opacity-50 hover:opacity-100 cursor-pointer" :loading="updating" @click="deleteProduct">
+							<UButton
+								color="error"
+								variant="ghost"
+								size="sm"
+								class="flex-1 opacity-50 hover:opacity-100 cursor-pointer"
+								:loading="updating"
+								@click="deleteProduct"
+							>
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								<span class="text-xs">{{ $t('common.delete') }}</span>
 							</UButton>
