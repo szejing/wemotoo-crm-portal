@@ -91,10 +91,10 @@
 							<span class="text-neutral-500">{{ $t('components.productUpdate.priceLabel') }}:</span>
 							<span class="font-bold">{{ summary.currencyCode }} {{ (summary.origSellPrice ?? 0).toFixed(2) }}</span>
 						</p>
-						<p v-if="summary.salePrice != null">
+						<!-- <p v-if="summary.salePrice != null">
 							<span class="text-neutral-500">{{ $t('components.productUpdate.sale') }}:</span>
 							<span class="font-bold text-green-600">{{ summary.currencyCode }} {{ summary.salePrice.toFixed(2) }}</span>
-						</p>
+						</p> -->
 						<p v-if="summary.costPrice != null">
 							<span class="text-neutral-500">{{ $t('components.productUpdate.cost') }}:</span>
 							<span class="font-medium">{{ summary.currencyCode }} {{ summary.costPrice.toFixed(2) }}</span>

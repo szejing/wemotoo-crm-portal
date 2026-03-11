@@ -28,15 +28,15 @@
 			</div>
 
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-				<UFormField :label="$t('components.productUpdate.currency')">
+				<!-- <UFormField :label="$t('components.productUpdate.currency')">
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.currency') }}</p>
 					<ZSelectMenuCurrency :currency-code="currencyCode" class="w-full" @update:currency="emit('update:currency', $event)" />
-				</UFormField>
+				</UFormField> -->
 
-				<UFormField :label="$t('components.productUpdate.originalSellingPrice')" required>
+				<UFormField :label="$t('components.productUpdate.sellingprice')" required>
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.sellingPrice') }}</p>
 					<UInput
-						:model-value="origSellPrice"
+						:model-value="origSellPrice ?? undefined"
 						type="number"
 						:placeholder="$t('components.productUpdate.pricePlaceholder')"
 						:min="0"
@@ -48,7 +48,7 @@
 				<UFormField :label="$t('components.productUpdate.costPriceOptional')">
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.costForProfit') }}</p>
 					<UInput
-						:model-value="costPrice"
+						:model-value="costPrice ?? undefined"
 						type="number"
 						:placeholder="$t('components.productUpdate.costPricePlaceholder')"
 						:min="0"
@@ -57,17 +57,17 @@
 					/>
 				</UFormField>
 
-				<UFormField :label="$t('components.productUpdate.salePriceOptional')">
+				<!-- <UFormField :label="$t('components.productUpdate.salePriceOptional')">
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.discountedPrice') }}</p>
 					<UInput
-						:model-value="salePrice"
+						:model-value="salePrice ?? undefined"
 						type="number"
 						:placeholder="$t('components.productUpdate.salePricePlaceholder')"
 						:min="0"
 						:step="0.1"
 						@update:model-value="onSalePriceInput($event)"
 					/>
-				</UFormField>
+				</UFormField> -->
 			</div>
 
 			<!-- Price Preview: treat sale price 0 as undefined (no sale) -->
@@ -86,11 +86,6 @@
 					<div v-if="effectiveSalePrice != null && effectiveSalePrice < origSellPrice" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
 						{{ Math.round(((origSellPrice - effectiveSalePrice) / origSellPrice) * 100) }}% {{ $t('components.productUpdate.percentOff') }}
 					</div>
-					<div v-if="effectiveSalePrice != null && effectiveSalePrice > origSellPrice" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-						{{ $t('components.productUpdate.salePriceHigherThanOriginal') }}
-						<span class="font-semibold">−{{ Math.round(((effectiveSalePrice - origSellPrice) / origSellPrice) * 100) }}%</span>
-						({{ currencyCode }} +{{ (effectiveSalePrice - origSellPrice).toFixed(2) }})
-					</div>
 				</div>
 				<div v-if="costPrice != null && origSellPrice" class="text-xs text-neutral-600 mt-2">
 					{{ $t('components.productUpdate.profitMargin') }}: {{ currencyCode }} {{ (origSellPrice - costPrice).toFixed(2) }} ({{
@@ -104,6 +99,9 @@
 
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
+import { failedNotification } from '~/stores/AppUi/AppUi';
+
+const { t } = useI18n();
 
 const props = defineProps<{
 	currencyCode: string;
@@ -127,6 +125,17 @@ const effectiveSalePrice = computed(() => {
 
 const onSalePriceInput = (event: number | string | null | undefined) => {
 	const num = event != null && event !== '' ? Number(event) : undefined;
+	const cost = props.costPrice != null ? Number(props.costPrice) : null;
+	const orig = props.origSellPrice != null ? Number(props.origSellPrice) : null;
+	if (num != null && num > 0 && cost != null && num < cost) {
+		failedNotification(t('components.productUpdate.salePriceLowerThanCost'));
+		emit('update:salePrice', cost);
+		return;
+	}
+	if (num != null && num > 0 && orig != null && num > orig) {
+		emit('update:salePrice', orig);
+		return;
+	}
 	emit('update:salePrice', num === 0 ? undefined : num);
 };
 </script>
