@@ -26,11 +26,7 @@
 					<UFormField>
 						<USwitch
 							v-model="state.is_active"
-							:label="
-								$t('components.productUpdate.currentStatusLabel', {
-									status: state.is_active ? $t('components.productUpdate.statusActive') : $t('components.productUpdate.statusDisabled'),
-								})
-							"
+							:label="$t(state.is_active ? 'components.productUpdate.showInStore' : 'components.productUpdate.hideInStore')"
 						/>
 					</UFormField>
 				</div>

@@ -4,7 +4,6 @@ import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
 import { formatCurrency } from 'wemotoo-common';
-import { getProductStatusColor } from '~/utils/options/product-status';
 
 type TranslateFn = (key: string) => string;
 
@@ -70,23 +69,17 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			},
 		},
 		{
-			accessorKey: 'status',
-			header: () => h('div', t('table.status')),
+			accessorKey: 'is_active',
+			header: () => h('div', t('table.visible')),
 			cell: ({ row }) => {
 				const productStore = useProductStore();
-				const status = row.original.status;
-				const statusBadge =
-					status != null
-						? h(UBadge, { class: 'capitalize', variant: 'subtle', color: getProductStatusColor(status) ?? 'neutral' }, () => t(`options.${status}`))
-						: h('span', { class: 'text-neutral-400 text-xs' }, '—');
-				const visibleRow = h(
+				return h(
 					'div',
 					{
-						class: 'flex items-center gap-2 mt-1.5 leading-none',
+						class: 'flex items-center gap-2 leading-none',
 						onClick: (e: Event) => e.stopPropagation(),
 					},
 					[
-						h('span', { class: 'text-xs text-neutral-500 dark:text-neutral-400 leading-none' }, t('table.visible')),
 						h(USwitch, {
 							'class': 'size-4 cursor-pointer',
 							'modelValue': row.original.is_active,
@@ -95,7 +88,6 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 						}),
 					],
 				);
-				return h('div', { class: 'flex flex-col items-start justify-center min-h-[3.5rem]' }, [statusBadge, visibleRow]);
 			},
 		},
 		{
