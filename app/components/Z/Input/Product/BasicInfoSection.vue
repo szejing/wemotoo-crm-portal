@@ -19,10 +19,10 @@
 		<div class="space-y-6 p-4 sm:p-6">
 			<!-- Product Basic Fields -->
 			<div class="space-y-4">
-				<div class="w-full flex flex-wrap items-center gap-4 justify-between">
-					<UFormField name="status" :label="$t('components.selectMenu.selectProductStatus')" class="min-w-0 flex-1 sm:flex-initial">
+				<div class="w-full flex flex-wrap items-center gap-4 justify-end">
+					<!-- <UFormField name="status" :label="$t('components.selectMenu.selectProductStatus')" class="min-w-0 flex-1 sm:flex-initial">
 						<ZSelectMenuProductStatus v-model:status="state.status" />
-					</UFormField>
+					</UFormField> -->
 					<UFormField>
 						<USwitch
 							v-model="state.is_active"
