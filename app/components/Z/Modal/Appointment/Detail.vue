@@ -29,21 +29,36 @@
 
 		<template #body>
 			<UForm ref="formRef" :schema="appointmentSchema" :state="state.appointment" class="space-y-5" @submit="onSubmit">
-				<!-- Customer -->
-				<div class="rounded-lg border border-neutral-200 bg-neutral-50/80 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
-					<div class="flex flex-col gap-2">
-						<div class="flex items-center gap-2">
-							<UIcon name="i-lucide-user" class="size-4 shrink-0 text-neutral-500" aria-hidden="true" />
-							<span class="font-semibold text-neutral-800 truncate">{{ appointment!.customer_name }}</span>
+				<!-- Service details -->
+				<div>
+					<h4 class="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3">{{ $t('pages.serviceDetails') }}</h4>
+					<div :class="['flex gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg', appointment!.ref_no ? 'items-start' : 'items-center']">
+						<div class="p-2 sm:p-3 bg-gray-100 dark:bg-gray-700 rounded-lg shrink-0">
+							<UIcon name="i-heroicons-wrench" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-400" />
 						</div>
-						<div class="flex items-center gap-2 pl-6">
-							<UIcon name="i-lucide-phone" class="size-4 shrink-0 text-neutral-400" aria-hidden="true" />
-							<span class="text-neutral-600 text-sm">{{ appointment!.customer_phone }}</span>
+						<div class="flex-1 min-w-0">
+							<p class="font-semibold text-gray-900 dark:text-white mb-1 wrap-break-word">{{ appointment!.appt_desc || $t('pages.noDescription') }}</p>
+							<p v-if="appointment!.ref_no" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+								<UIcon name="i-heroicons-hashtag" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+								{{ $t('pages.reference') }}: {{ appointment!.ref_no }}
+							</p>
 						</div>
+					</div>
+				</div>
 
-						<div class="flex items-center gap-2 pl-6">
-							<UIcon name="i-heroicons-wrench" class="size-4 shrink-0 text-neutral-400" aria-hidden="true" />
-							<span class="text-neutral-600 text-sm">{{ appointment!.appt_desc }}</span>
+				<!-- Customer information -->
+				<div>
+					<h4 class="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3">{{ $t('components.orderDetail.customerInformation') }}</h4>
+					<div class="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+						<div class="p-2 sm:p-3 bg-primary-100 dark:bg-primary-900/20 rounded-lg shrink-0">
+							<UIcon name="i-heroicons-user" class="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 dark:text-primary-400" />
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="font-semibold text-gray-900 dark:text-white wrap-break-word">{{ appointment!.customer_name }}</p>
+							<p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
+								<UIcon name="i-heroicons-phone" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+								{{ appointment!.customer_phone }}
+							</p>
 						</div>
 					</div>
 				</div>

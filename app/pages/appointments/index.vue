@@ -120,7 +120,6 @@
 						<div v-if="selectedAppointment" class="lg:col-span-2">
 							<ZCalendarAppointmentDetail
 								:appointment="selectedAppointment"
-								:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 								@close="selectedAppointment = null"
 								@edit="openEditModal"
 								@delete="deleteAppointment"
@@ -179,7 +178,6 @@
 							<div class="lg:sticky lg:top-4">
 								<ZCalendarAppointmentDetail
 									:appointment="selectedAppointment"
-									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 									@close="selectedAppointment = null"
 									@edit="openEditModal"
 									@delete="deleteAppointment"
@@ -227,7 +225,6 @@
 							<div class="lg:sticky lg:top-4">
 								<ZCalendarAppointmentDetail
 									:appointment="selectedAppointment"
-									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 									@close="selectedAppointment = null"
 									@edit="openEditModal"
 									@delete="deleteAppointment"
@@ -269,7 +266,6 @@
 							<div class="lg:sticky lg:top-4">
 								<ZCalendarAppointmentDetail
 									:appointment="selectedAppointment"
-									:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 									@close="selectedAppointment = null"
 									@edit="openEditModal"
 									@delete="deleteAppointment"
@@ -286,12 +282,11 @@
 <script lang="ts" setup>
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { add, endOfDay, endOfMonth, endOfWeek, format, getISOWeek, startOfDay, startOfWeek, sub } from 'date-fns';
+import { add, endOfMonth, endOfWeek, format, getISOWeek, startOfWeek, sub } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { formatAppointmentDateRange } from '~/utils/utils';
-import { getAppointmentStatusColor } from '~/utils/ui-utils';
-import type { AppointmentModel } from '~/utils/models';
+import { getAppointmentStatusColor } from '~/utils/options';
 
 const overlay = useOverlay();
 const appointmentStore = useAppointmentStore();

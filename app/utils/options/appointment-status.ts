@@ -13,15 +13,13 @@ export function getAppointmentStatusOptions(t: TranslateFn) {
 	];
 }
 
-export const getAppointmentStatusColor = (status: AppointmentStatus): 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral' => {
-	const color: Record<AppointmentStatus, 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral'> = {
-		[AppointmentStatus.PENDING]: 'info',
-		[AppointmentStatus.CONFIRMED]: 'success',
-		[AppointmentStatus.CANCELLED]: 'error',
+// Helper to get status badge color
+export const getAppointmentStatusColor = (status: AppointmentStatus): 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral' => {
+	const colorMap: Record<string, string> = {
+		[AppointmentStatus.PENDING]: 'warning',
+		[AppointmentStatus.CONFIRMED]: 'info',
 		[AppointmentStatus.COMPLETED]: 'success',
-		[AppointmentStatus.VOIDED]: 'error',
-		[AppointmentStatus.RESCHEDULED]: 'warning',
-		[AppointmentStatus.NO_SHOW]: 'neutral',
+		[AppointmentStatus.CANCELLED]: 'error',
 	};
-	return color[status as keyof typeof color] as 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral';
+	return colorMap[status] as 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
 };

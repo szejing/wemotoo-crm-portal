@@ -81,13 +81,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { AppointmentStatus } from 'wemotoo-common';
+import { getAppointmentStatusColor } from '~/utils/options/appointment-status';
 import type { Appointment } from '~/utils/types/appointment';
 import { formatAppointmentDateRange } from '~/utils/utils';
 
 defineProps<{
 	appointment: Appointment;
-	getStatusColor: (status: AppointmentStatus) => string;
 }>();
 
 defineEmits<{
