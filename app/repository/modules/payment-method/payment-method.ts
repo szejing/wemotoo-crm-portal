@@ -1,12 +1,10 @@
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import HttpFactory from '../../factory';
 import MerchantRoutes from '../../routes.client';
-import type {
-	UpdatePaymentMethodBody,
-	UpdatePaymentMethodReq,
-} from './models/request/update-payment-method.req';
+import type { UpdatePaymentMethodBody, UpdatePaymentMethodReq } from './models/request/update-payment-method.req';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { PaymentMethodResp } from './models/response/get-payment-methods.resp';
 
 class PaymentMethodModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.PaymentMethods;
@@ -20,7 +18,7 @@ class PaymentMethodModule extends HttpFactory {
 	}
 
 	async update(code: string, body: UpdatePaymentMethodBody) {
-		return await this.call<{ payment_method: PaymentMethod }>({
+		return await this.call<PaymentMethodResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
 			body,

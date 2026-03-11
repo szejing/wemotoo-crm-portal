@@ -112,8 +112,8 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 
 				const data = await $api.paymentMethod.update(code, body);
 
-				if (data.payment_method) {
-					successNotification(`${data.payment_method.code} - Payment method updated`);
+				if (data.method) {
+					successNotification(`${data.method.code} - Payment method updated`);
 					await this.getPaymentMethods();
 				}
 			} catch (err: unknown | ErrorResponse) {
