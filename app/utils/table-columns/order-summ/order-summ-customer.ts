@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { SummOrderCustomer } from '~/utils/types/summ-orders';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -20,7 +21,7 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.orderStatus')),
+			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
 			cell: ({ row }) => {
 				const color = {
 					[OrderStatus.COMPLETED]: 'success' as const,
@@ -45,7 +46,7 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.grossAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
@@ -54,7 +55,7 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 		},
 		{
 			accessorKey: 'net_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.netAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),

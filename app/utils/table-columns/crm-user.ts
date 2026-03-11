@@ -4,6 +4,7 @@ import { formatCrmUserPhone } from '../utils';
 import { USwitch } from '#components';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import { roleLabel } from '../options/user-roles';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -29,7 +30,7 @@ export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
 		},
 		{
 			accessorKey: 'name',
-			header: t('table.name'),
+			header: ({ column }) => getSortableHeader(column, t('table.name')),
 			cell: ({ row }) => {
 				const u = row.original;
 				const fullName = u.name || '—';
@@ -41,14 +42,14 @@ export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
 		},
 		{
 			accessorKey: 'phone_no',
-			header: t('table.phone'),
+			header: ({ column }) => getSortableHeader(column, t('table.phone')),
 			cell: ({ row }) => {
 				return h('p', { class: 'text-neutral-600 dark:text-neutral-400' }, formatCrmUserPhone(row.original));
 			},
 		},
 		{
 			accessorKey: 'role',
-			header: t('table.role'),
+			header: ({ column }) => getSortableHeader(column, t('table.role')),
 			cell: ({ row }) => {
 				const label = roleLabel(row.original.role, t);
 				return h(

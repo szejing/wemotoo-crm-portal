@@ -1,4 +1,5 @@
 import type { TableColumn } from '@nuxt/ui';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -13,7 +14,7 @@ export function getPaymentTypeGroupColumns(t: TranslateFn): TableColumn<any>[] {
 		},
 		{
 			accessorKey: 'code',
-			header: t('table.groupCode'),
+			header: ({ column }) => getSortableHeader(column, t('table.groupCode')),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.short_desc),

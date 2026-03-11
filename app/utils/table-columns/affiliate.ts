@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import type { Affiliate } from '~/utils/types/affiliate';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -16,7 +17,7 @@ export function getAffiliateColumns(t: TranslateFn): ColumnDef<Affiliate>[] {
 		},
 		{
 			accessorKey: 'slug',
-			header: t('affiliate.slug'),
+			header: ({ column }) => getSortableHeader(column, t('affiliate.slug')),
 			cell: ({ row }) => {
 				const a = row.original;
 				return h('div', [
@@ -35,14 +36,14 @@ export function getAffiliateColumns(t: TranslateFn): ColumnDef<Affiliate>[] {
 		},
 		{
 			accessorKey: 'total_referrals_count',
-			header: t('affiliate.referrals'),
+			header: ({ column }) => getSortableHeader(column, t('affiliate.referrals')),
 			cell: ({ row }) => {
 				return h('p', { class: 'text-neutral-600 dark:text-neutral-400' }, String(row.original.total_referrals_count ?? 0));
 			},
 		},
 		{
 			accessorKey: 'current_balance',
-			header: t('affiliate.balance'),
+			header: ({ column }) => getSortableHeader(column, t('affiliate.balance')),
 			cell: ({ row }) => {
 				const bal = row.original.current_balance ?? 0;
 				return h('p', { class: 'font-medium text-neutral-900 dark:text-neutral-100' }, String(bal));
@@ -50,7 +51,7 @@ export function getAffiliateColumns(t: TranslateFn): ColumnDef<Affiliate>[] {
 		},
 		{
 			accessorKey: 'created_at',
-			header: t('affiliate.createdAt'),
+			header: ({ column }) => getSortableHeader(column, t('affiliate.createdAt')),
 			cell: ({ row }) => {
 				const date = row.original.created_at;
 				const str = date ? new Date(date).toLocaleDateString() : '—';

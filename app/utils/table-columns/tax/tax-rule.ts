@@ -3,6 +3,7 @@ import { UBadge } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -18,7 +19,7 @@ export function getTaxRuleColumns(t: TranslateFn): TableColumn<TaxRule>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: t('table.code'),
+			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex-col-start' }, [
 					h('h3', { class: 'text-neutral-800 font-bold' }, row.getValue('code')),

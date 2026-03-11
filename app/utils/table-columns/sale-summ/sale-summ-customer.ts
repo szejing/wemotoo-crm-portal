@@ -3,6 +3,7 @@ import type { TableColumn, TableRow } from '@nuxt/ui';
 import { h } from 'vue';
 import { formatCurrency, SaleStatus } from 'wemotoo-common';
 import type { SummSaleCustomer } from '~/utils/types/summ-sales';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -20,7 +21,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.status')),
+			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const color = {
 					[SaleStatus.COMPLETED]: 'success' as const,
@@ -40,7 +41,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 
 		{
 			accessorKey: 'total_txns',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalTxns')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.total_txns, 0);
 
@@ -52,7 +53,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 		},
 		{
 			accessorKey: 'total_qty',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalQty')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalQty')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.total_qty, 0);
 
@@ -64,7 +65,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.grossAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.gross_amt, 0);
 
@@ -78,7 +79,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 		},
 		{
 			accessorKey: 'net_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.netAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleCustomer>) => acc + row.original.net_amt, 0);
 

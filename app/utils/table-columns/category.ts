@@ -1,6 +1,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import { UBadge, UButton } from '#components';
 import type { Category } from '~/utils/types/category';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -8,7 +9,7 @@ export function getCategoryColumns(t: TranslateFn): TableColumn<Category>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: () => t('table.code'),
+			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),

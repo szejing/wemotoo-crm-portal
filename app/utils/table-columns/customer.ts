@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/vue-table';
 import type { Customer } from '~/utils/types/customer';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -14,7 +15,7 @@ export function getCustomerColumns(t: TranslateFn): ColumnDef<Customer>[] {
 		},
 		{
 			accessorKey: 'name',
-			header: t('table.name'),
+			header: ({ column }) => getSortableHeader(column, t('table.name')),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
@@ -24,7 +25,7 @@ export function getCustomerColumns(t: TranslateFn): ColumnDef<Customer>[] {
 		},
 		{
 			accessorKey: 'email_address',
-			header: t('table.email'),
+			header: ({ column }) => getSortableHeader(column, t('table.email')),
 			cell: ({ row }) => {
 				return h('div', [h('p', { class: 'font-medium text-neutral-900' }, row.original.email_address)]);
 			},

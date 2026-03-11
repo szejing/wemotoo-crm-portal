@@ -2,6 +2,7 @@ import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { formatCurrency, SaleStatus } from 'wemotoo-common';
 import type { SummSaleBill } from '~/utils/types/summ-sales';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -9,14 +10,14 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 	return [
 		{
 			accessorKey: 'currency_code',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.currency')),
+			header: ({ column }) => getSortableHeader(column, t('table.currency')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
 			},
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.status')),
+			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const color = {
 					[SaleStatus.COMPLETED]: 'success' as const,
@@ -36,7 +37,7 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 
 		{
 			accessorKey: 'total_txns',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalTransactions')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalTransactions')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleBill>) => acc + row.original.total_txns, 0);
 
@@ -48,7 +49,7 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 		},
 		{
 			accessorKey: 'total_qty',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalItems')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalItems')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleBill>) => acc + row.original.total_qty, 0);
 
@@ -60,7 +61,7 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.grossAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleBill>) => acc + row.original.gross_amt, 0);
 
@@ -74,7 +75,7 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 		},
 		{
 			accessorKey: 'net_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.netAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleBill>) => acc + row.original.net_amt, 0);
 

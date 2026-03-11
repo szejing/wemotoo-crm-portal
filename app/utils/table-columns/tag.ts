@@ -1,6 +1,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Tag } from '~/utils/types/tag';
 import { UBadge } from '#components';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -8,7 +9,7 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 	return [
 		{
 			accessorKey: 'value',
-			header: () => t('table.description'),
+			header: ({ column }) => getSortableHeader(column, t('table.description')),
 			cell: ({ row }) => {
 				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
 
@@ -24,7 +25,7 @@ export function getTagColumns(t: TranslateFn): TableColumn<Tag>[] {
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => t('table.noOfItems'),
+			header: ({ column }) => getSortableHeader(column, t('table.noOfItems')),
 			meta: {
 				class: {
 					th: 'text-right',

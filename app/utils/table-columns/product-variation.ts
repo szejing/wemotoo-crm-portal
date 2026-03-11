@@ -1,6 +1,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductVariation } from '~/utils/types/product-variation';
 import { UBadge } from '#components';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -8,7 +9,7 @@ export function getProductVariationColumns(t: TranslateFn): TableColumn<ProductV
 	return [
 		{
 			accessorKey: 'name',
-			header: () => t('table.name'),
+			header: ({ column }) => getSortableHeader(column, t('table.name')),
 			cell: ({ row }) => {
 				return h('div', [h('div', { class: 'font-bold text-neutral-900' }, row.original.name)]);
 			},

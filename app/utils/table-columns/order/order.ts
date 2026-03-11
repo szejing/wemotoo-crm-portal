@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -16,12 +17,13 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 			},
 		},
 		{
-			accessorKey: 'order_no',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.orderNo')),
+			id: 'order_no',
+			accessorFn: (row) => (row.order_date_time ? new Date(row.order_date_time).getTime() : 0),
+			header: ({ column }) => getSortableHeader(column, t('table.orderNo')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
 					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100' }, row.original.order_no),
-					h('p', { class: 'text-sm text-neutral-400 dark:text-neutral-500' }, row.original.biz_date),
+					h('p', { class: 'text-sm text-neutral-400 dark:text-neutral-500' }, row.original.order_date_time),
 				]);
 			},
 		},
@@ -38,7 +40,7 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.status')),
+			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const color = {
 					[OrderStatus.COMPLETED]: 'success' as const,
@@ -69,7 +71,7 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.grossAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
 			cell: ({ row }) => {
 				return h('div', [h('p', formatCurrency(row.original.gross_amt ?? 0, row.original.currency.code))]);
 			},
@@ -82,7 +84,7 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 		},
 		{
 			accessorKey: 'tax_amt_exc',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.taxAmtExc')),
+			header: ({ column }) => getSortableHeader(column, t('table.taxAmtExc')),
 			cell: ({ row }) => {
 				return h('div', [h('p', formatCurrency(row.original.tax_amt_exc ?? 0, row.original.currency.code))]);
 			},
@@ -95,7 +97,7 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 		},
 		{
 			accessorKey: 'net_amt',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.netAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
 			cell: ({ row }) => {
 				return h('div', [h('p', formatCurrency(row.original.net_amt ?? 0, row.original.currency.code))]);
 			},

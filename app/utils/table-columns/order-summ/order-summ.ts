@@ -2,6 +2,7 @@ import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummOrderBill } from '~/utils/types/summ-orders';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -9,14 +10,14 @@ export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[
 	return [
 		{
 			accessorKey: 'currency_code',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.currency')),
+			header: ({ column }) => getSortableHeader(column, t('table.currency')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
 			},
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.orderStatus')),
+			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
 			cell: ({ row }) => {
 				const color = {
 					[OrderStatus.COMPLETED]: 'success' as const,
@@ -41,7 +42,7 @@ export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[
 		},
 		{
 			accessorKey: 'total_orders',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalOrders')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalOrders')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_orders, 0);
 
@@ -53,7 +54,7 @@ export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[
 		},
 		{
 			accessorKey: 'total_qty',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalItems')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalItems')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.total_qty, 0);
 
@@ -65,7 +66,7 @@ export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.grossAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.gross_amt, 0);
 
@@ -79,7 +80,7 @@ export function getOrderSummColumns(t: TranslateFn): TableColumn<SummOrderBill>[
 		},
 		{
 			accessorKey: 'net_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.netAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
 			footer: ({ column }) => {
 				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderBill>) => acc + row.original.net_amt, 0);
 

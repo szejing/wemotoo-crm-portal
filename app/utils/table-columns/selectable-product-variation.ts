@@ -1,6 +1,7 @@
 import { UCheckbox, UIcon } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductVariation } from '~/utils/types/product-variation';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -23,7 +24,7 @@ export function getSelectableProductVariationColumns(t: TranslateFn): TableColum
 		},
 		{
 			accessorKey: 'name',
-			header: () => h('span', { class: 'text-xs font-semibold text-neutral-700 uppercase tracking-wider' }, t('table.optionName')),
+			header: ({ column }) => getSortableHeader(column, t('table.optionName')),
 			cell: ({ row }) => {
 				const count = row.original.options?.length || 0;
 				const valueLabel = count === 1 ? t('table.value') : t('table.values');

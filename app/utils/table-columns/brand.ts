@@ -1,6 +1,7 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Brand } from '~/utils/types/brand';
 import { UBadge } from '#components';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -8,7 +9,7 @@ export function getBrandColumns(t: TranslateFn): TableColumn<Brand>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: t('table.code'),
+			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
 				const descClass = 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic';
@@ -26,7 +27,7 @@ export function getBrandColumns(t: TranslateFn): TableColumn<Brand>[] {
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => t('table.noOfItems'),
+			header: ({ column }) => getSortableHeader(column, t('table.noOfItems')),
 			meta: {
 				class: {
 					th: 'text-right',

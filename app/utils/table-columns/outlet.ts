@@ -1,5 +1,6 @@
 import type { TableColumn } from '@nuxt/ui';
 import type { Outlet } from '~/utils/types/outlet';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -7,7 +8,7 @@ export function getOutletColumns(t: TranslateFn): TableColumn<Outlet>[] {
 	return [
 		{
 			accessorKey: 'code',
-			header: t('table.code'),
+			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
 					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),

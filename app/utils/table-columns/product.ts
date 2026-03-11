@@ -4,6 +4,7 @@ import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
 import { formatCurrency } from 'wemotoo-common';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -11,7 +12,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 	return [
 		{
 			accessorKey: 'name',
-			header: () => t('table.codeAndName'),
+			header: ({ column }) => getSortableHeader(column, t('table.codeAndName')),
 			cell: ({ row }) => {
 				const thumbnailUrl = row.original.thumbnail?.url;
 				const variants = row.original.variants;
@@ -91,8 +92,14 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			},
 		},
 		{
-			accessorKey: 'price_types',
-			header: () => h('div', t('table.price')),
+			id: 'price_types',
+			accessorFn: (row) => {
+				const priceType = row.price_types?.[0];
+				if (!priceType) return 0;
+
+				return priceType.sale_price != null && priceType.sale_price > 0 ? priceType.sale_price : (priceType.orig_sell_price ?? 0);
+			},
+			header: ({ column }) => getSortableHeader(column, t('table.price')),
 			cell: ({ row }) => {
 				const price_types: PriceInput[] | undefined = row.original.price_types;
 				const pt = price_types?.[0];

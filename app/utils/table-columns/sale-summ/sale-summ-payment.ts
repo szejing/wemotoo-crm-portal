@@ -2,6 +2,7 @@ import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { formatCurrency, SaleStatus } from 'wemotoo-common';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
+import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
@@ -9,21 +10,21 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 	return [
 		{
 			accessorKey: 'currency_code',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.currency')),
+			header: ({ column }) => getSortableHeader(column, t('table.currency')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
 			},
 		},
 		{
 			accessorKey: 'payment_type_desc',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.desc')),
+			header: ({ column }) => getSortableHeader(column, t('table.desc')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('payment_type_desc'))]);
 			},
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.orderStatus')),
+			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
 			cell: ({ row }) => {
 				const color = {
 					[SaleStatus.COMPLETED]: 'success' as const,
@@ -43,7 +44,7 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 
 		{
 			accessorKey: 'void_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.voidAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.voidAmt')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.void_amt ?? 0, row.original.currency_code)),
@@ -64,7 +65,7 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 		},
 		{
 			accessorKey: 'payment_amt',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.paymentAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.paymentAmt')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.payment_amt, row.original.currency_code)),
@@ -85,7 +86,7 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 		},
 		{
 			accessorKey: 'total_txns',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.totalTxns')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_txns'))]);
 			},
