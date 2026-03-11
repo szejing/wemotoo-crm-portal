@@ -13,16 +13,6 @@
 		</template>
 
 		<div class="space-y-4">
-			<div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
-				<div class="flex items-start gap-3">
-					<UIcon :name="ICONS.CHECK_ROUNDED" class="text-primary-600 w-5 h-5 mt-0.5 shrink-0" />
-					<div>
-						<h4 class="text-sm font-medium text-primary-900">{{ $t('components.productUpdate.readyToCreate') }}</h4>
-						<p class="text-xs text-primary-700 mt-1">{{ $t('components.productUpdate.reviewBeforeSubmit') }}</p>
-					</div>
-				</div>
-			</div>
-
 			<div class="grid grid-cols-1 gap-4">
 				<!-- Thumbnail & Images -->
 				<div v-if="summary.hasThumbnail || (summary.images && summary.images.length > 0)" class="bg-neutral-50 rounded-lg p-4">
