@@ -7,7 +7,7 @@
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 				<template #right>
-					<ZCreateButton to="/products/categories/create" />
+					<ZCreateButton to="/products/categories/create" :label="$t('common.addCategory')" />
 				</template>
 			</UDashboardNavbar>
 			<UDashboardToolbar>

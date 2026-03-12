@@ -7,7 +7,7 @@
 					<UDashboardSidebarCollapse class="hidden lg:flex" />
 				</template>
 				<template #right>
-					<ZCreateButton to="/operation/staff/create" :label="$t('common.create')" />
+					<ZCreateButton to="/operation/staff/create" :label="$t('common.addStaff')" />
 				</template>
 			</UDashboardNavbar>
 

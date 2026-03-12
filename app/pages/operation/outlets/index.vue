@@ -8,7 +8,7 @@
 				</template>
 
 				<template #right>
-					<ZCreateButton to="/operation/outlets/create" />
+					<ZCreateButton to="/operation/outlets/create" :label="$t('common.addOutlet')" />
 				</template>
 			</UDashboardNavbar>
 

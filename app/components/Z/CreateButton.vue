@@ -14,15 +14,13 @@ const props = withDefaults(
 	defineProps<{
 		/** Route to navigate to when clicked. If not set, only @click is emitted. */
 		to?: string;
-		/** Button label. Defaults to translated "Create". */
+		/** Button label (e.g. "Add Product", "Add Category"). Defaults to translated "Create". */
 		label?: string;
 	}>(),
 	{},
 );
 
-const emit = defineEmits<{
-	click: [];
-}>();
+const emit = defineEmits<{ click: [] }>();
 
 const label = computed(() => props.label ?? t('common.create'));
 

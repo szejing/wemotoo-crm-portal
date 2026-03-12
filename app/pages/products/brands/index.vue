@@ -8,7 +8,7 @@
 				</template>
 
 				<template #right>
-					<ZCreateButton to="/products/brands/create" />
+					<ZCreateButton to="/products/brands/create" :label="$t('common.addBrand')" />
 				</template>
 			</UDashboardNavbar>
 
