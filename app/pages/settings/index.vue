@@ -11,20 +11,22 @@
 
 		<template #body>
 			<div class="space-y-8">
-				<!-- Header Section -->
-				<div class="space-y-2">
+				<div class="space-y-1">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.settings') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.settingsDesc') }}</p>
+					<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.settingsDesc') }}</p>
 				</div>
 
-				<!-- Settings Options -->
-				<ZMenu
-					:title="$t('nav.settings')"
-					:icon="ICONS.SETTINGS_ROUNDED"
-					:description="$t('pages.settingsMenuDesc')"
-					color="slate"
-					:navigations="settings_navigations"
-				/>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<ZSettingsGroup
+						v-for="group in settingsGroups"
+						:key="group.title"
+						:title="group.title"
+						:description="group.description"
+						:icon="group.icon"
+						:color="group.color"
+						:items="group.items"
+					/>
+				</div>
 			</div>
 		</template>
 	</UDashboardPanel>
@@ -37,38 +39,43 @@ const { t } = useI18n();
 
 useHead({ title: () => t('pages.settingsTitle') });
 
-const settings_navigations = computed(() => [
+const settingsGroups = computed(() => [
 	{
 		title: t('nav.paymentSettings'),
-		icon: ICONS.PAYMENT_METHODS,
-		to: '/settings/payment',
 		description: t('pages.paymentManagementDesc'),
+		icon: ICONS.PAYMENT_METHODS,
+		color: 'green' as const,
+		items: [
+			{ label: t('nav.paymentMethods'), to: '/settings/payment/methods' },
+		],
 	},
 	{
 		title: t('nav.taxSettings'),
-		icon: ICONS.TAX,
-		to: '/settings/taxes',
 		description: t('pages.taxManagementDesc'),
+		icon: ICONS.TAX,
+		color: 'blue' as const,
+		items: [
+			{ label: t('nav.taxCodes'), to: '/settings/taxes/codes' },
+			{ label: t('nav.taxRules'), to: '/settings/taxes/rules' },
+		],
 	},
-	// {
-	// 	title: t('nav.shippingSettings'),
-	// 	icon: ICONS.SETTINGS_ROUNDED,
-	// 	to: '/settings/shipping',
-	// 	description: t('pages.settingsMenuDesc'),
-	// },
-	// {
-	// 	title: t('nav.rolesPermissions'),
-	// 	icon: ICONS.USER_GROUP_ROUNDED,
-	// 	to: '/settings/roles-permissions',
-	// 	description: t('pages.settingsMenuDesc'),
-	// },
+	{
+		title: t('nav.storeProfile'),
+		description: t('pages.storeProfileDesc'),
+		icon: ICONS.USER_GROUP_ROUNDED,
+		color: 'pink' as const,
+		items: [
+			{ label: t('nav.storeProfile'), to: '/settings/store-profile' },
+		],
+	},
 	{
 		title: t('nav.systemSettings'),
-		icon: ICONS.SETTINGS_ROUNDED,
-		to: '/settings/system',
 		description: t('pages.settingsMenuDesc'),
+		icon: ICONS.SETTINGS_ROUNDED,
+		color: 'slate' as const,
+		items: [
+			{ label: t('nav.configuration'), to: '/settings/configuration' },
+		],
 	},
 ]);
 </script>
-
-<style scoped></style>

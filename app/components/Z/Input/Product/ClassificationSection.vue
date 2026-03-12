@@ -17,7 +17,7 @@
 		</template>
 
 		<div class="p-4 sm:p-6">
-			<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+			<!-- <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
 				<div class="flex items-start gap-3">
 					<UIcon :name="ICONS.INFO" class="text-blue-500 w-5 h-5 mt-0.5 shrink-0" />
 					<div>
@@ -27,7 +27,7 @@
 						</p>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="grid grid-cols-1 sm:grid-cols-1 gap-6">
 				<UFormField :label="$t('components.productUpdate.categories')">
