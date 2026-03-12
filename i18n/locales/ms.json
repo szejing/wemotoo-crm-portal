@@ -537,7 +537,8 @@
 		"exclusive": "Tidak termasuk",
 		"productThumbnail": "Imej produk",
 		"duration": "Tempoh",
-		"visible": "Tunjukkan di kedai"
+		"visible": "Tunjukkan di kedai",
+		"lastUpdated": "Kemas kini terakhir"
 	},
 	"options": {
 		"all": "Semua",

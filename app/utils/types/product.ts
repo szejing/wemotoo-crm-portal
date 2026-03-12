@@ -85,8 +85,8 @@ export type Product = {
 	variants?: ProductVariant[];
 
 	// Timestamps
-	created_at?: string;
-	updated_at?: string;
+	created_at?: Date;
+	updated_at: Date;
 
 	metadata?: Record<string, unknown>;
 };

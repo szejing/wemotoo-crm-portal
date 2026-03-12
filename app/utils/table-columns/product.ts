@@ -3,7 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate } from 'wemotoo-common';
 import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
@@ -50,7 +50,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 		},
 		{
 			accessorKey: 'type',
-			header: () => h('div', t('table.type')),
+			header: ({ column }) => getSortableHeader(column, t('table.type')),
 			cell: ({ row }) => {
 				const productTypeStore = useProductTypeStore();
 				const typeId = row.original.type;
@@ -71,7 +71,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 		},
 		{
 			accessorKey: 'is_active',
-			header: () => h('div', t('table.visible')),
+			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const productStore = useProductStore();
 				return h(
@@ -89,6 +89,18 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 						}),
 					],
 				);
+			},
+		},
+		{
+			accessorKey: 'updated_at',
+			header: ({ column }) => getSortableHeader(column, t('table.lastUpdated')),
+			cell: ({ row }) => {
+				const dateStr = getFormattedDate(row.original.updated_at, 'dd/MM/yyyy');
+				const timeStr = getFormattedDate(row.original.updated_at, 'hh:mm a');
+				return h('div', { class: 'flex flex-col gap-0.5 text-neutral-600 dark:text-neutral-400 font-medium italic' }, [
+					h('div', {}, timeStr),
+					h('div', {}, dateStr),
+				]);
 			},
 		},
 		{

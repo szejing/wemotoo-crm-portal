@@ -537,7 +537,8 @@
 		"exclusive": "Exclusive",
 		"productThumbnail": "Product thumbnail",
 		"duration": "Duration",
-		"visible": "Show in store"
+		"visible": "Show in store",
+		"lastUpdated": "Last updated"
 	},
 	"options": {
 		"all": "All",
