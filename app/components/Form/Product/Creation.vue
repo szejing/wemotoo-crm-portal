@@ -273,11 +273,18 @@ const reviewSummary = computed(() => ({
 	origSellPrice: orig_sell_price.value,
 	salePrice: sale_price.value,
 	costPrice: cost_price.value,
-	categoriesCount: categories.value?.length ?? 0,
-	tagsCount: tags.value?.length ?? 0,
-	brandsCount: brands.value?.length ?? 0,
+	categoryLabels: categories.value?.map((c) => c.description ?? c.code).filter(Boolean) ?? [],
+	tagLabels: tags.value?.map((t) => t.value).filter(Boolean) ?? [],
+	brandLabels: brands.value?.map((b) => b.description ?? b.code).filter(Boolean) ?? [],
+	variationDescriptions:
+		new_product.value.variations
+			?.filter((v) => v.name?.trim())
+			.map((v) => ({
+				name: v.name,
+				values: v.options.map((o) => o.value).filter((val) => val?.trim()).join('_') || '—',
+			}))
+			.filter((d) => d.values !== '—') ?? [],
 	variantsCount: new_product.value.variants?.length ?? 0,
-	optionsCount: new_product.value.variations?.length ?? 0,
 	hasThumbnail: !!new_product.value.thumbnail,
 	imagesCount: new_product.value.images?.length ?? 0,
 	thumbnail: new_product.value.thumbnail,
