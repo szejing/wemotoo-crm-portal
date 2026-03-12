@@ -11,20 +11,20 @@
 
 		<template #body>
 			<div class="space-y-8">
-				<!-- Header Section -->
-				<div class="space-y-2">
+				<div class="space-y-1">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.operationManagement') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.operationManagementDesc') }}</p>
+					<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.operationManagementDesc') }}</p>
 				</div>
 
-				<!-- Operation Options Section -->
-				<div class="space-y-4">
-					<ZMenu
-						:title="$t('pages.operationOptions')"
-						:icon="operation_navigation.icon"
-						:description="$t('pages.operationOptionsDesc')"
-						color="primary"
-						:navigations="operation_navigations"
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<ZSettingsGroup
+						v-for="group in operationGroups"
+						:key="group.title"
+						:title="group.title"
+						:description="group.description"
+						:icon="group.icon"
+						:color="group.color"
+						:items="group.items"
 					/>
 				</div>
 			</div>
@@ -33,30 +33,21 @@
 </template>
 
 <script lang="ts" setup>
+import { ICONS } from '~/utils/icons';
+
 const { t } = useI18n();
 useHead({ title: () => t('pages.operationTitle') });
 
-const operation_navigation = computed(() => ({
-	title: t('nav.operation'),
-	icon: ICONS.USER_GROUP_ROUNDED,
-	to: '/operation',
-	description: t('pages.operationManagementDesc'),
-}));
-
-const operation_navigations = computed(() => [
+const operationGroups = computed(() => [
 	{
-		title: t('nav.staffs'),
+		title: t('pages.operationOptions'),
+		description: t('pages.operationOptionsDesc'),
 		icon: ICONS.USER_GROUP_ROUNDED,
-		to: '/operation/staff',
-		description: t('pages.staffDesc'),
-	},
-	{
-		title: t('nav.outlets'),
-		icon: ICONS.OUTLET,
-		to: '/operation/outlets',
-		description: t('pages.outletsDesc'),
+		color: 'blue' as const,
+		items: [
+			{ label: t('nav.staffs'), to: '/operation/staff' },
+			{ label: t('nav.outlets'), to: '/operation/outlets' },
+		],
 	},
 ]);
 </script>
-
-<style scoped></style>

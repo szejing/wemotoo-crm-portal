@@ -11,31 +11,20 @@
 
 		<template #body>
 			<div class="space-y-8">
-				<!-- Header Section -->
-				<div class="space-y-2">
+				<div class="space-y-1">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.servicesProductsManagement') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.servicesProductsManagementDesc') }}</p>
+					<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.servicesProductsManagementDesc') }}</p>
 				</div>
 
-				<!-- Main Products Section -->
-				<div class="space-y-4">
-					<ZMenu
-						:title="main_navigation.title"
-						:icon="main_navigation.icon"
-						:description="main_navigation.description"
-						color="primary"
-						:navigations="[main_navigation]"
-					/>
-				</div>
-
-				<!-- Product Attributes Section -->
-				<div class="space-y-4">
-					<ZMenu
-						:title="attribute_navigation.title"
-						:icon="attribute_navigation.icon"
-						:description="attribute_navigation.description"
-						color="purple"
-						:navigations="attribute_navigations"
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<ZSettingsGroup
+						v-for="group in productGroups"
+						:key="group.title"
+						:title="group.title"
+						:description="group.description"
+						:icon="group.icon"
+						:color="group.color"
+						:items="group.items"
 					/>
 				</div>
 			</div>
@@ -44,51 +33,31 @@
 </template>
 
 <script lang="ts" setup>
+import { ICONS } from '~/utils/icons';
+
 const { t } = useI18n();
 useHead({ title: () => t('pages.productsTitle') });
 
-// Product list (with variations: id, name, scoped options) is loaded via useProductStore().getProducts() on the listing page.
-
-const main_navigation = computed(() => ({
-	title: t('pages.servicesProducts'),
-	icon: ICONS.LIST,
-	to: '/products/listing',
-	description: t('pages.servicesProductsDesc'),
-}));
-
-const attribute_navigation = computed(() => ({
-	title: t('pages.productAttributes'),
-	icon: ICONS.ADDITIONAL,
-	to: '/products/attributes',
-	description: t('pages.productAttributesDesc'),
-}));
-
-const attribute_navigations = computed(() => [
+const productGroups = computed(() => [
 	{
-		title: t('nav.categories'),
-		icon: ICONS.CATEGORY,
-		to: '/products/categories',
-		description: t('pages.categoriesDesc'),
+		title: t('pages.servicesProducts'),
+		description: t('pages.servicesProductsDesc'),
+		icon: ICONS.LIST,
+		color: 'teal' as const,
+		items: [
+			{ label: t('pages.servicesProducts'), to: '/products/listing' },
+		],
 	},
 	{
-		title: t('nav.tags'),
+		title: t('pages.productAttributes'),
+		description: t('pages.productAttributesDesc'),
 		icon: ICONS.ADDITIONAL,
-		to: '/products/tags',
-		description: t('pages.tagsDesc'),
+		color: 'purple' as const,
+		items: [
+			{ label: t('nav.categories'), to: '/products/categories' },
+			{ label: t('nav.tags'), to: '/products/tags' },
+			{ label: t('nav.brands'), to: '/products/brands' },
+		],
 	},
-	{
-		title: t('nav.brands'),
-		icon: ICONS.ADDITIONAL,
-		to: '/products/brands',
-		description: t('pages.brandsManufacturersDesc'),
-	},
-	// {
-	// 	title: t('nav.variations'),
-	// 	icon: ICONS.ADDITIONAL,
-	// 	to: '/products/variations',
-	// 	description: t('pages.optionsVariantsDesc'),
-	// },
 ]);
 </script>
-
-<style scoped></style>
