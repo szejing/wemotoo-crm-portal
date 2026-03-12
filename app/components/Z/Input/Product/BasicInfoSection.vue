@@ -16,7 +16,7 @@
 			</div>
 		</template>
 
-		<div class="space-y-6 p-4 sm:p-6">
+		<div class="space-y-6 py-2 px-4">
 			<!-- Product Basic Fields -->
 			<div class="space-y-4">
 				<div class="w-full flex flex-wrap items-center gap-4 justify-end">
@@ -24,10 +24,7 @@
 						<ZSelectMenuProductStatus v-model:status="state.status" />
 					</UFormField> -->
 					<UFormField>
-						<USwitch
-							v-model="state.is_active"
-							:label="$t(state.is_active ? 'components.productUpdate.showInStore' : 'components.productUpdate.hideInStore')"
-						/>
+						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'components.productUpdate.showInStore' : 'components.productUpdate.hideInStore')" />
 					</UFormField>
 				</div>
 

@@ -14,15 +14,6 @@
 					description-key="components.productUpdate.addOptionsVariations"
 					tooltip-key="components.productUpdate.variantsTooltip"
 				/>
-				<!-- <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-					<div class="flex items-start gap-3">
-						<UIcon :name="ICONS.INFO" class="text-purple-600 w-5 h-5 mt-0.5 shrink-0" />
-						<div>
-							<h4 class="text-sm font-medium text-purple-900">{{ $t('components.productUpdate.productVariants') }}</h4>
-							<p class="text-xs text-purple-700 mt-1">{{ $t('components.productUpdate.variantsTooltip') }}</p>
-						</div>
-					</div>
-				</div> -->
 
 				<!-- Variations Input -->
 				<ZInputProductVariations :variations="product.variations" @update:variations="updateProductVariations" />
@@ -46,17 +37,6 @@
 					description-key="components.productUpdate.configureBookingRequirements"
 					tooltip-key="components.productUpdate.setUpServiceTooltip"
 				/>
-				<!-- <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-					<div class="flex items-start gap-3">
-						<UIcon :name="ICONS.INFO" class="text-orange-600 w-5 h-5 mt-0.5 shrink-0" />
-						<div>
-							<h4 class="text-sm font-medium text-orange-900">{{ $t('components.productUpdate.serviceInformation') }}</h4>
-							<p class="text-xs text-orange-700 mt-1">
-								{{ $t('components.productUpdate.addServiceInformation') }}
-							</p>
-						</div>
-					</div>
-				</div> -->
 
 				<ZInputProductService v-model:metadata="product.metadata" @update:product-metadata="updateProductMetadata" />
 			</div>
@@ -70,17 +50,6 @@
 					description-key="components.productUpdate.configureTaxRulesProduct"
 					tooltip-key="components.productUpdate.setUpTaxTooltipProduct"
 				/>
-				<!-- <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-					<div class="flex items-start gap-3">
-						<UIcon :name="ICONS.INFO" class="text-blue-600 w-5 h-5 mt-0.5 shrink-0" />
-						<div>
-							<h4 class="text-sm font-medium text-blue-900">{{ $t('components.productUpdate.taxInformation') }}</h4>
-							<p class="text-xs text-blue-700 mt-1">
-								{{ $t('components.productUpdate.configureTaxSettingsProduct') }}
-							</p>
-						</div>
-					</div>
-				</div> -->
 
 				<div class="text-center py-12 text-neutral-500">
 					<UIcon :name="ICONS.SETTINGS_ROUNDED" class="w-12 h-12 mx-auto mb-3 text-neutral-300" />

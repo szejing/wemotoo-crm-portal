@@ -16,20 +16,8 @@
 			</div>
 		</template>
 
-		<div class="p-4 sm:p-6">
-			<!-- <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-				<div class="flex items-start gap-3">
-					<UIcon :name="ICONS.INFO" class="text-blue-500 w-5 h-5 mt-0.5 shrink-0" />
-					<div>
-						<h4 class="text-sm font-medium text-blue-900">{{ $t('components.productUpdate.aboutClassification') }}</h4>
-						<p class="text-xs text-blue-700 mt-1">
-							{{ $t('components.productUpdate.classificationAboutDesc') }}
-						</p>
-					</div>
-				</div>
-			</div> -->
-
-			<div class="grid grid-cols-1 sm:grid-cols-1 gap-6">
+		<div class="py-2 px-4">
+			<div class="grid grid-cols-1 gap-6">
 				<UFormField :label="$t('components.productUpdate.categories')">
 					<p class="text-xs text-neutral-500 my-1">{{ $t('components.productUpdate.mainCategories') }}</p>
 					<!-- Category Picker Trigger -->
