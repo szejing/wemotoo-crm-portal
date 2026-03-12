@@ -95,6 +95,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			accessorKey: 'updated_at',
 			header: ({ column }) => getSortableHeader(column, t('table.lastUpdated')),
 			cell: ({ row }) => {
+				if (!row.original.updated_at) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
 				const dateStr = getFormattedDate(row.original.updated_at, 'dd/MM/yyyy');
 				const timeStr = getFormattedDate(row.original.updated_at, 'hh:mm a');
 				return h('div', { class: 'flex flex-col gap-0.5 text-neutral-600 dark:text-neutral-400 font-medium italic' }, [
