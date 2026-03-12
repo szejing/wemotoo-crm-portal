@@ -10,8 +10,9 @@ type TranslateFn = (key: string) => string;
 export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 	return [
 		{
-			accessorKey: 'index',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.no')),
+			id: 'index',
+			accessorFn: (_row, index) => index,
+			header: ({ column }) => getSortableHeader(column, t('table.no')),
 			cell: ({ row }) => {
 				return h('div', [h('p', row.index + 1)]);
 			},
@@ -28,9 +29,9 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 			},
 		},
 		{
-			accessorKey: 'customer',
-			header: () => h('p', { class: 'text-neutral-400 dark:text-neutral-500' }, t('table.customer')),
-
+			id: 'customer',
+			accessorFn: (row) => row.customer?.name ?? '',
+			header: ({ column }) => getSortableHeader(column, t('table.customer')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
 					h('h3', { class: 'text-neutral-800 font-bold' }, `${row.original.customer?.customer_no} | ${row.original.customer?.name}`),
