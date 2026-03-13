@@ -68,6 +68,7 @@
 		"addOutlet": "Add Outlet",
 		"addStaff": "Add Staff",
 		"confirm": "Confirm",
+		"apply": "Apply",
 		"phoneNo": "Phone No"
 	},
 	"nav": {
@@ -691,6 +692,13 @@
 			"createLabel": "Create \"{term}\""
 		},
 		"dateRange": {
+			"today": "Today",
+			"yesterday": "Yesterday",
+			"tomorrow": "Tomorrow",
+			"thisWeek": "This week",
+			"lastWeek": "Last week",
+			"thisMonth": "This month",
+			"thisYear": "This year",
 			"last7Days": "Last 7 days",
 			"last14Days": "Last 14 days",
 			"last30Days": "Last 30 days",

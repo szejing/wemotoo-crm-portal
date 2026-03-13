@@ -68,6 +68,7 @@
 		"addOutlet": "Tambah Cawangan",
 		"addStaff": "Tambah Kakitangan",
 		"confirm": "Konfirmasi",
+		"apply": "Guna",
 		"phoneNo": "No. telefon"
 	},
 	"nav": {
@@ -691,6 +692,13 @@
 			"createLabel": "Cipta \"{term}\""
 		},
 		"dateRange": {
+			"today": "Hari ini",
+			"yesterday": "Semalam",
+			"tomorrow": "Esok",
+			"thisWeek": "Minggu ini",
+			"lastWeek": "Minggu lepas",
+			"thisMonth": "Bulan ini",
+			"thisYear": "Tahun ini",
 			"last7Days": "7 hari lepas",
 			"last14Days": "14 hari lepas",
 			"last30Days": "30 hari lepas",
