@@ -5,7 +5,7 @@ alwaysApply: false
 
 # Legacy Styling Guidelines
 
-> **Note:** This rule may conflict with @nuxt/ui which uses Tailwind. Enable only when working on non-Nuxt-UI components.
+> **Note:** This rule may conflict with @nuxt/ui which uses Tailwind. **Prefer Nuxt UI** for new work — see `styling-ui-nuxt-ui.mdc` and https://ui.nuxt.com/docs/components. Enable this rule only when working on non–Nuxt UI or legacy CSS-only components.
 
 ## CSS Only - No Tailwind Syntax
 

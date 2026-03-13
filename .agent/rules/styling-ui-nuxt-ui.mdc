@@ -1,0 +1,41 @@
+---
+description: Styling and UI — prefer Nuxt UI components; reference https://ui.nuxt.com/docs/components
+globs: app/pages/**/*.vue, app/components/**/*.vue, app/layouts/**/*.vue
+alwaysApply: false
+---
+
+# Styling and UI — Nuxt UI First
+
+When creating or updating **pages**, **components**, or **layouts**, prefer **@nuxt/ui** components. Use the official component reference:
+
+- **Component docs**: https://ui.nuxt.com/docs/components
+
+## Use Nuxt UI Components
+
+Before building custom UI, check whether a Nuxt UI component exists:
+
+| Need | Prefer Nuxt UI | Notes |
+|------|----------------|--------|
+| Layout | App, Container, Main, Sidebar, Header, Footer | https://ui.nuxt.com/docs/components |
+| Buttons, badges, cards | Button, Badge, Card, Avatar, Chip, Progress | Element group |
+| Forms | Form, Input, Select, SelectMenu, Checkbox, Switch, Textarea | Form group; use UForm + Zod (see nuxt-ui-usage skill) |
+| Data display | Table, Accordion, Carousel, Timeline, Empty | Data group |
+| Navigation | Tabs, Breadcrumb, Pagination, Link | Navigation group |
+| Modals, dropdowns, tooltips | Modal, Popover, DropdownMenu, Drawer, Toast, Tooltip | Overlay group |
+| Date/time | Calendar, InputDate, InputTime | Element / Form |
+| Dashboard | DashboardGroup, DashboardPanel, DashboardSidebar, DashboardToolbar | Dashboard group |
+
+Use **Tailwind** (and project semantic utilities: `text-default`, `bg-elevated`, `border-muted`) for layout and spacing when using Nuxt UI. Project theme: `main` (primary), `secondary`, `neutral` — see `app/app.config.ts` and `.agent/skills/nuxt-ui-usage/SKILL.md`.
+
+## When to Use Custom UI
+
+- No suitable Nuxt UI component (e.g. highly custom calendar grid, domain-specific widget).
+- Wrapping a Nuxt UI component in a project pattern (e.g. `components/Z/Modal/` wrappers).
+
+For **custom-only** styling (no Tailwind), see `styling-legacy.mdc` — enable only when working on legacy or non–Nuxt UI code.
+
+## References
+
+- **Components**: https://ui.nuxt.com/docs/components
+- **Theming**: https://ui.nuxt.com/docs/getting-started/theming
+- **Project skill**: `.agent/skills/nuxt-ui-usage/SKILL.md` — theming, UForm, table columns, options, modals, i18n

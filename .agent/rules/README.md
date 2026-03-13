@@ -29,6 +29,10 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 
 - **`vue-pages-components.mdc`** – Pages (`app/pages/`) and components (`app/components/`). File-based routing, layouts, data loading, shared components, and component conventions.
 
+- **`styling-ui-nuxt-ui.mdc`** – Styling and UI: prefer **@nuxt/ui** components when creating or updating pages/components. Reference: https://ui.nuxt.com/docs/components (Layout, Element, Form, Data, Navigation, Overlay, etc.). Use Tailwind and project theme; see also `.agent/skills/nuxt-ui-usage/SKILL.md`.
+
+- **`styling-legacy.mdc`** – Legacy CSS-only styling (no Tailwind). Enable only for non–Nuxt UI or legacy components; conflicts with @nuxt/ui.
+
 - **`composables.mdc`** – Composables in `app/composables/`. Naming (`useXxx`), structure, and when to use them.
 
 ### Cross-Cutting
@@ -52,6 +56,7 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 | Validation         | `app/utils/schema/*`        | schema.mdc             |
 | Types / models     | `app/utils/types`, repo models | types.mdc          |
 | Pages & components | `app/pages/*`, `app/components/*` | vue-pages-components.mdc |
+| Styling / UI       | Pages, components, layouts | styling-ui-nuxt-ui.mdc (prefer [Nuxt UI](https://ui.nuxt.com/docs/components)) |
 | Composables        | `app/composables/*`         | composables.mdc        |
 | Middleware         | `app/middleware/*`, `server/middleware/*` | middleware.mdc |
 | Utils, constants   | `app/utils/*`               | utility.mdc            |
