@@ -8,14 +8,16 @@
 			</div>
 			<div class="flex flex-wrap gap-2 shrink-0">
 				<UButton
-					v-for="(tab, index) in viewTabs"
+					v-for="tab in viewTabs"
 					:key="tab.value"
 					:variant="filter.view === tab.value ? 'solid' : 'soft'"
 					:color="filter.view === tab.value ? 'primary' : 'neutral'"
-					:icon="tab.icon"
 					@click="selectView(tab.value)"
 				>
-					<span class="hidden sm:inline">{{ tab.label }}</span>
+					<span class="flex flex-col items-center gap-0.5 sm:flex-row sm:gap-2">
+						<UIcon :name="tab.icon" class="size-4 shrink-0" />
+						<span class="text-xs sm:text-inherit">{{ tab.label }}</span>
+					</span>
 				</UButton>
 			</div>
 		</div>
