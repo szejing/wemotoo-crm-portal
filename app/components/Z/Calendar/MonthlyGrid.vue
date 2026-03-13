@@ -64,13 +64,16 @@
 							</div>
 						</template>
 						<!-- "+N more" overflow indicator -->
-						<button
+						<UButton
 							v-if="cell.appointments.length > maxVisibleAppointments"
-							class="w-full text-[10px] sm:text-xs text-primary-600 dark:text-primary-400 font-medium text-left px-1.5 py-0.5 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded transition-colors"
-							@click.stop="$emit('selectDay', cell.date as Date)"
+							variant="link"
+							color="primary"
+							size="xs"
+							class="w-full justify-start text-[10px] sm:text-xs font-medium px-1.5 py-0.5 min-h-0"
+							@click.stop="openDayListing(cell.date as Date)"
 						>
 							+{{ cell.appointments.length - maxVisibleAppointments }} {{ $t('components.calendar.more') }}
-						</button>
+						</UButton>
 					</div>
 				</div>
 			</div>
@@ -133,6 +136,53 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Day listing modal: all appointments for the selected day -->
+		<UModal
+			v-model:open="dayListingOpen"
+			:title="dayListingDate ? format(dayListingDate, 'EEEE, d MMMM') : ''"
+			:ui="{ content: 'sm:max-w-md' }"
+			@update:open="onDayListingModalClose"
+		>
+			<div v-if="dayListingAppointments.length > 0" class="divide-y divide-gray-100 dark:divide-gray-800 max-h-[60vh] overflow-y-auto">
+				<div
+					v-for="appointment in dayListingAppointments"
+					:key="appointment.code"
+					class="flex items-start gap-3 px-1 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors rounded-lg"
+					:class="[selectedCode === appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
+					@click="onDayListingSelectAppointment(appointment)"
+				>
+					<div class="w-1 self-stretch rounded-full shrink-0 mt-0.5" :class="getDotColorClass(appointment.status)" />
+					<div class="flex-1 min-w-0">
+						<div class="flex items-center justify-between gap-2">
+							<p class="font-medium text-sm text-gray-900 dark:text-white truncate">{{ appointment.customer_name }}</p>
+							<UBadge
+								:color="getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral'"
+								variant="subtle"
+								size="xs"
+								class="shrink-0"
+							>
+								{{ $t('options.' + appointment.status.toLowerCase()) }}
+							</UBadge>
+						</div>
+						<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
+							<UIcon name="i-heroicons-clock" class="w-3 h-3 shrink-0" />
+							{{ formatTime(appointment.start_date_time) }}
+							<span v-if="appointment.duration" class="text-gray-400 dark:text-gray-500">
+								· {{ $t('pages.durationMinutes', { n: appointment.duration }) }}
+							</span>
+						</p>
+						<p v-if="appointment.appt_desc" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
+							{{ appointment.appt_desc }}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div v-else class="px-3 py-8 text-center">
+				<UIcon name="i-heroicons-calendar-days" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+				<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
+			</div>
+		</UModal>
 	</div>
 </template>
 
@@ -156,7 +206,7 @@ const props = withDefaults(
 	},
 );
 
-defineEmits<{
+const emit = defineEmits<{
 	selectDay: [date: Date];
 	selectAppointment: [appointment: Appointment];
 }>();
@@ -254,6 +304,29 @@ const selectedDayAppointments = computed(() => {
 	if (!props.selectedDay) return [];
 	return appointmentsByDate.value[dayKey(props.selectedDay)] ?? [];
 });
+
+// Day listing modal (when clicking "+N more" on a cell)
+const dayListingOpen = ref(false);
+const dayListingDate = ref<Date | null>(null);
+const dayListingAppointments = computed(() => {
+	if (!dayListingDate.value) return [];
+	return appointmentsByDate.value[dayKey(dayListingDate.value)] ?? [];
+});
+
+function openDayListing(date: Date) {
+	dayListingDate.value = date;
+	dayListingOpen.value = true;
+	emit('selectDay', date);
+}
+
+function onDayListingSelectAppointment(appointment: Appointment) {
+	emit('selectAppointment', appointment);
+	dayListingOpen.value = false;
+}
+
+function onDayListingModalClose(open: boolean) {
+	if (!open) dayListingDate.value = null;
+}
 
 const formatTime = (d: string | Date) => format(new Date(d), 'h:mm a');
 
