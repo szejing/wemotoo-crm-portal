@@ -1,8 +1,6 @@
 <template>
 	<ZPagePanel id="home" :title="$t('pages.home')">
-		<template #navbar-right>
-			<DashboardDateRange v-model="dashboardRange" @update:model-value="onDashboardRangeChange" />
-		</template>
+		<DashboardDateRange v-model="dashboardRange" @update:model-value="onDashboardRangeChange" />
 		<DashboardStats />
 		<DashboardOrderAmtChart />
 		<DashboardOrders />

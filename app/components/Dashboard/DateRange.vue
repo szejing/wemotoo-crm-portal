@@ -5,48 +5,25 @@
 			v-for="preset in presets"
 			:key="preset.key"
 			:label="$t(`components.dateRange.${preset.key}`)"
-			color="neutral"
-			variant="ghost"
+			color="primary"
+			:variant="isPresetActive(preset) ? 'solid' : 'soft'"
 			size="xs"
-			:class="[isPresetActive(preset) ? 'bg-elevated ring-1 ring-primary' : '']"
 			@click="applyPreset(preset)"
 		/>
 		<!-- Date range display + calendar popover -->
 		<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
-			<UButton
-				icon="i-lucide-calendar"
-				color="neutral"
-				variant="outline"
-				class="min-w-56 justify-between group"
-			>
+			<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
 				<span class="truncate">
 					{{ rangeLabel }}
 				</span>
-				<UIcon
-					name="i-lucide-chevron-down"
-					class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform"
-				/>
+				<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
 			</UButton>
 			<template #content>
 				<div class="p-2">
-					<UCalendar
-						v-model="draftCalendarRangeComputed"
-						class="p-2"
-						:number-of-months="2"
-						range
-					/>
+					<UCalendar v-model="draftCalendarRangeComputed" class="p-2" :number-of-months="2" range />
 					<div class="flex justify-end gap-2 pt-2 border-t border-default mt-2">
-						<UButton
-							:label="$t('common.cancel')"
-							color="neutral"
-							variant="ghost"
-							@click="popoverOpen = false"
-						/>
-						<UButton
-							:label="$t('common.apply')"
-							color="primary"
-							@click="applyCalendar"
-						/>
+						<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="popoverOpen = false" />
+						<UButton :label="$t('common.apply')" color="primary" @click="applyCalendar" />
 					</div>
 				</div>
 			</template>
@@ -56,17 +33,7 @@
 
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
-import {
-	startOfDay,
-	endOfDay,
-	startOfWeek,
-	endOfWeek,
-	startOfMonth,
-	endOfMonth,
-	startOfYear,
-	endOfYear,
-	subWeeks,
-} from 'date-fns';
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, subWeeks } from 'date-fns';
 import { getFormattedDate } from 'wemotoo-common';
 import type { Range } from '~/utils/interface';
 
@@ -132,8 +99,7 @@ const rangeLabel = computed(() => {
 	return `${getFormattedDate(start, 'dd-MM-yyyy')} - ${getFormattedDate(end, 'dd-MM-yyyy')}`;
 });
 
-const toCalendarDate = (date: Date) =>
-	new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+const toCalendarDate = (date: Date) => new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 
 const popoverOpen = ref(false);
 
@@ -168,10 +134,7 @@ function isPresetActive(preset: (typeof presets)[0]) {
 	const r = model.value;
 	if (!r?.start || !r?.end) return false;
 	const presetRange = preset.getRange();
-	return (
-		r.start.getTime() === presetRange.start.getTime() &&
-		r.end.getTime() === presetRange.end.getTime()
-	);
+	return r.start.getTime() === presetRange.start.getTime() && r.end.getTime() === presetRange.end.getTime();
 }
 
 function applyPreset(preset: (typeof presets)[0]) {
