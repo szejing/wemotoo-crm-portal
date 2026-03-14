@@ -57,12 +57,27 @@ const loginSchema = computed(() => LoginValidation(t));
 
 type Schema = z.infer<ReturnType<typeof LoginValidation>>;
 
+const LOGIN_MERCHANT_ID_KEY = 'wemotoo-login-merchant-id';
+
 const state = reactive({
 	merchant_id: undefined as string | undefined,
 	email_address: undefined as string | undefined,
 	password: undefined as string | undefined,
 	show: false as boolean,
 });
+
+function loadStoredMerchantId() {
+	if (import.meta.client) {
+		try {
+			const stored = localStorage.getItem(LOGIN_MERCHANT_ID_KEY);
+			if (stored?.trim()) state.merchant_id = stored.trim().toUpperCase();
+		} catch {
+			// ignore (e.g. private mode)
+		}
+	}
+}
+
+onMounted(loadStoredMerchantId);
 
 const setMerchantId = (value: string | undefined) => {
 	state.merchant_id = value ? value.toUpperCase() : undefined;
@@ -77,6 +92,11 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	const success = await authStore.login(merchant_id, email_address, password);
 
 	if (success) {
+		try {
+			localStorage.setItem(LOGIN_MERCHANT_ID_KEY, merchant_id.trim());
+		} catch {
+			// ignore (e.g. private mode)
+		}
 		navigateTo('/');
 	}
 };
