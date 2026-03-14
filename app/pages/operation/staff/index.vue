@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="crm-users" :title="$t('nav.staffs')">
+	<ZPagePanel id="crm-users" :title="$t('nav.staffs')" back-to="/operation">
 		<template #navbar-right>
 			<ZCreateButton to="/operation/staff/create" :label="$t('common.addStaff')" />
 		</template>

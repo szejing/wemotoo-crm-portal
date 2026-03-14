@@ -1,5 +1,13 @@
 <template>
-	<UButton variant="ghost" color="neutral" :icon="ICONS.ARROW_LEFT" :aria-label="$t('components.backButton.backToPreviousPage')" @click="goBack" />
+	<UButton
+		variant="ghost"
+		color="neutral"
+		:icon="ICONS.ARROW_LEFT"
+		:label="labeled ? $t('components.backButton.backToPreviousPage') : undefined"
+		:aria-label="$t('components.backButton.backToPreviousPage')"
+		@click="goBack"
+		class="px-0"
+	/>
 </template>
 
 <script lang="ts" setup>
@@ -9,8 +17,10 @@ const props = withDefaults(
 	defineProps<{
 		/** When there is no history (e.g. direct load), navigate here instead of leaving the app. */
 		fallbackTo?: string;
+		/** When true, shows a text label next to the icon. */
+		labeled?: boolean;
 	}>(),
-	{ fallbackTo: '/' },
+	{ fallbackTo: '/', labeled: false },
 );
 
 function goBack() {

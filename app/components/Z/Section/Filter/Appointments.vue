@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full py-4 space-y-4">
+	<div class="w-full space-y-4">
 		<!-- Search + View Tabs: stacked on mobile, side-by-side on desktop -->
 		<div class="flex flex-col sm:flex-row gap-4 sm:items-end sm:justify-between">
 			<div class="flex flex-col gap-1.5 flex-1 min-w-0 sm:min-w-0">

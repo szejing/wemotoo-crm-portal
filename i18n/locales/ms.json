@@ -589,7 +589,7 @@
 	},
 	"components": {
 		"backButton": {
-			"backToPreviousPage": "Kembali ke halaman sebelumnya"
+			"backToPreviousPage": "Kembali"
 		},
 		"calendar": {
 			"view": "Lihat",

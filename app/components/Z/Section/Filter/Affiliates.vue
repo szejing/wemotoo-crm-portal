@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full py-4">
+	<div class="w-full">
 		<div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Search -->
 			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">

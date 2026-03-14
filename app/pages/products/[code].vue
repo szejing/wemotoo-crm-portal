@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="product-detail" :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" back-to="/products" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormProductUpdateLoading v-if="isLoading" />
 			<FormProductUpdate v-else-if="current_product" ref="formRef" :product="current_product" />
 		</div>

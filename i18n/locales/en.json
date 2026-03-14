@@ -589,7 +589,7 @@
 	},
 	"components": {
 		"backButton": {
-			"backToPreviousPage": "Back to previous page"
+			"backToPreviousPage": "Back"
 		},
 		"calendar": {
 			"view": "View",

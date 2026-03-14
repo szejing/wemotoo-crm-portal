@@ -4,7 +4,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 			<!-- Left Sidebar Navigation (Sticky) -->
 			<div class="hidden lg:block lg:col-span-2">
-				<div class="sticky top-4">
+				<div class="sticky top-2">
 					<nav class="space-y-2">
 						<div
 							v-for="section in sections"
@@ -82,7 +82,7 @@
 
 			<!-- Right: Review Summary (Sticky on laptop) -->
 			<div class="lg:col-span-3">
-				<div class="lg:sticky lg:top-4">
+				<div class="lg:sticky lg:top-2">
 					<FormProductReviewSummary :summary="reviewSummary" />
 				</div>
 			</div>
@@ -434,7 +434,11 @@ const reviewSummary = computed(() => ({
 			?.filter((v) => v.name?.trim())
 			.map((v) => ({
 				name: v.name,
-				values: v.options.map((o) => o.value).filter((val) => val?.trim()).join('_') || '—',
+				values:
+					v.options
+						.map((o) => o.value)
+						.filter((val) => val?.trim())
+						.join('_') || '—',
 			}))
 			.filter((d) => d.values !== '—') ?? [],
 	variantsCount: formState.value.variants?.length ?? 0,

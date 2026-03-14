@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full py-4">
+	<div class="w-full">
 		<!-- Compact Filter Grid -->
 		<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Date Range Filter -->

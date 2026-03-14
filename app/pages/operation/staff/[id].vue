@@ -5,64 +5,64 @@
 		</div>
 
 		<div v-else class="space-y-6 max-w-3xl">
-				<!-- User info card: view / edit -->
-				<UCard>
-					<template #header>
-						<div class="flex items-center justify-between">
-							<h2 class="flex items-center text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-								<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
-								{{ $t('pages.crmUserDetailUserInformation') }}
-							</h2>
-							<div class="flex items-center gap-2">
-								<UButton color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
-									<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-									{{ $t('common.save') }}
-								</UButton>
-								<UButton
-									size="sm"
-									color="error"
-									variant="ghost"
-									class="flex-1 opacity-50 hover:opacity-100"
-									:icon="ICONS.TRASH"
-									:disabled="updating"
-									@click="deleteUser"
-								>
-									{{ $t('common.delete') }}
-								</UButton>
-							</div>
+			<!-- User info card: view / edit -->
+			<UCard>
+				<template #header>
+					<div class="flex items-center justify-between">
+						<h2 class="flex items-center text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+							<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
+							{{ $t('pages.crmUserDetailUserInformation') }}
+						</h2>
+						<div class="flex items-center gap-2">
+							<UButton color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
+								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+								{{ $t('common.save') }}
+							</UButton>
+							<UButton
+								size="sm"
+								color="error"
+								variant="ghost"
+								class="flex-1 opacity-50 hover:opacity-100"
+								:icon="ICONS.TRASH"
+								:disabled="updating"
+								@click="deleteUser"
+							>
+								{{ $t('common.delete') }}
+							</UButton>
 						</div>
-					</template>
+					</div>
+				</template>
 
-					<div v-if="current_crm_user" class="space-y-4">
-						<FormCrmUserUpdate
-							ref="editFormRef"
-							:model-value="current_crm_user"
-							@update:model-value="
+				<div v-if="current_crm_user" class="space-y-4">
+					<FormCrmUserUpdate
+						ref="editFormRef"
+						:model-value="current_crm_user"
+						@update:model-value="
 							(v: CrmUserUpdate) => {
 								crmUserStore.new_crm_user = v;
 								formTouched = true;
 							}
 						"
-							@submit="onEditFormSubmit"
-						/>
-					</div>
-				</UCard>
+						@submit="onEditFormSubmit"
+					/>
+				</div>
+			</UCard>
 
-				<!-- Change password: separate section -->
-				<UCard>
-					<template #header>
-						<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-							<UIcon name="i-heroicons-key" class="w-5 h-5 inline-block mr-2" />
-							{{ $t('pages.crmUserDetailChangePasswordTitle') }}
-						</h2>
-					</template>
+			<!-- Change password: separate section -->
+			<UCard>
+				<template #header>
+					<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+						<UIcon name="i-heroicons-key" class="w-5 h-5 inline-block mr-2" />
+						{{ $t('pages.crmUserDetailChangePasswordTitle') }}
+					</h2>
+				</template>
 
-					<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-						{{ $t('pages.crmUserDetailChangePasswordDesc') }}
-					</p>
-					<FormCrmUserChangePassword ref="formRef" :loading="updating" @submit="submitPassword" />
-				</UCard>
-			</div>
+				<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+					{{ $t('pages.crmUserDetailChangePasswordDesc') }}
+				</p>
+				<FormCrmUserChangePassword ref="formRef" :loading="updating" @submit="submitPassword" />
+			</UCard>
+		</div>
 	</ZPagePanel>
 </template>
 
