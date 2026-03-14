@@ -3,28 +3,15 @@
 	<div class="relative">
 		<div class="absolute top-0 right-0 z-1">
 			<UPopover v-model:open="customizeOpen" :content="{ align: 'end' }">
-				<UButton
-					icon="i-heroicons-cog-6-tooth"
-					color="neutral"
-					variant="ghost"
-					size="xs"
-					:aria-label="$t('pages.dashboardStatsCustomize')"
-				/>
+				<UButton icon="i-heroicons-cog-6-tooth" color="neutral" variant="ghost" size="xs" :aria-label="$t('pages.dashboardStatsCustomize')" />
 				<template #content>
 					<div class="p-3 min-w-56">
 						<p class="text-xs font-medium text-muted uppercase mb-2">
 							{{ $t('pages.dashboardStatsCustomize') }}
 						</p>
 						<div class="space-y-1.5">
-							<label
-								v-for="key in ALL_DASHBOARD_STAT_KEYS"
-								:key="key"
-								class="flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-elevated cursor-pointer"
-							>
-								<UCheckbox
-									:model-value="isSelected(key)"
-									@update:model-value="toggleStat(key)"
-								/>
+							<label v-for="key in ALL_DASHBOARD_STAT_KEYS" :key="key" class="flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-elevated cursor-pointer">
+								<UCheckbox :model-value="isSelected(key)" @update:model-value="toggleStat(key)" />
 								<span class="text-sm">{{ statLabel(key) }}</span>
 							</label>
 						</div>
@@ -34,13 +21,16 @@
 							variant="soft"
 							size="xs"
 							:label="$t('pages.dashboardStatsReset')"
-							@click="resetToDefault(); customizeOpen = false"
+							@click="
+								resetToDefault();
+								customizeOpen = false;
+							"
 						/>
 					</div>
 				</template>
 			</UPopover>
 		</div>
-		<UPageGrid class="lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
+		<UPageGrid class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
 			<UPageCard
 				v-for="stat in visibleStats"
 				:key="stat.key"
@@ -68,21 +58,10 @@
 
 <script setup lang="ts">
 import { formatCurrency } from 'wemotoo-common';
-import {
-	useDashboardStatsConfig,
-	ALL_DASHBOARD_STAT_KEYS,
-	type DashboardStatKey,
-} from '~/composables/useDashboardStatsConfig';
+import { useDashboardStatsConfig, ALL_DASHBOARD_STAT_KEYS, type DashboardStatKey } from '~/composables/useDashboardStatsConfig';
 
 const summOrderStore = useSummOrderStore();
-const {
-	new_appointments,
-	new_orders,
-	pending_payments,
-	pending_actions,
-	total_order_amt,
-	new_customers,
-} = storeToRefs(summOrderStore);
+const { new_appointments, new_orders, pending_payments, pending_actions, total_order_amt, new_customers } = storeToRefs(summOrderStore);
 
 const { t } = useI18n();
 const { selectedKeys, toggleStat, isSelected, resetToDefault } = useDashboardStatsConfig();
@@ -126,8 +105,7 @@ const statDefs: Record<
 	},
 	revenue: {
 		icon: 'i-heroicons-currency-dollar',
-		formatter: (v) =>
-			formatCurrency(v, total_order_amt.value?.[0]?.currency_code ?? 'MYR'),
+		formatter: (v) => formatCurrency(v, total_order_amt.value?.[0]?.currency_code ?? 'MYR'),
 	},
 	new_customers: {
 		icon: 'i-heroicons-user-plus',
