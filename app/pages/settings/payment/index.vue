@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="payment" :title="$t('pages.paymentManagement')">
+	<ZPagePanel id="settings-payment" :title="$t('pages.paymentManagement')" back-to="/settings">
 		<div class="space-y-8">
 			<!-- Header Section -->
 			<div class="space-y-2">

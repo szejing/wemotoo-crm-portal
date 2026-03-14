@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="taxes" :title="$t('pages.taxManagement')">
+	<ZPagePanel id="taxes" :title="$t('pages.taxManagement')" back-to="/settings">
 		<div class="space-y-8">
 			<!-- Header Section -->
 			<div class="space-y-2">

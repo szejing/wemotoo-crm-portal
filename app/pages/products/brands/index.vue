@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="products-brands" :title="$t('nav.brands')">
+	<ZPagePanel id="products-brands" :title="$t('nav.brands')" back-to="/products">
 		<template #navbar-right>
 			<ZCreateButton to="/products/brands/create" :label="$t('common.addBrand')" />
 		</template>

@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="taxes-rules" :title="$t('nav.taxRules')">
+	<ZPagePanel id="taxes-rules" :title="$t('nav.taxRules')" back-to="/settings/taxes/rules">
 		<div class="wrapper-grid">
 			<UCard>
 				<template #header>

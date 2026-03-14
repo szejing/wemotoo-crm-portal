@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="taxes-groups" :title="$t('nav.taxGroups')">
+	<ZPagePanel id="taxes-groups" :title="$t('nav.taxGroups')" back-to="/settings/taxes">
 		<template #navbar-right>
 			<ZCreateButton to="/products/create" :label="$t('common.addTaxGroup')" />
 		</template>

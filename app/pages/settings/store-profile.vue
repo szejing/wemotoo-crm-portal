@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="settings-store-profile" :title="$t('nav.storeProfile')">
+	<ZPagePanel id="settings-store-profile" :title="$t('nav.storeProfile')" back-to="/settings">
 		<template #navbar-right>
 			<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
 			<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave" :disabled="!isDirty">
@@ -8,175 +8,175 @@
 			</UButton>
 		</template>
 
-			<div class="p-6 space-y-6">
-				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.storeProfile') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.storeProfileDesc') }}</p>
+		<div class="p-6 space-y-6">
+			<div class="space-y-2">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.storeProfile') }}</h2>
+				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.storeProfileDesc') }}</p>
+			</div>
+
+			<!-- Merchant ID | Account Type | Expired Date | Account Status – card based, tinted backgrounds -->
+			<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+				<div
+					class="flex min-w-0 flex-col gap-2.5 rounded-xl border border-primary-200/50 bg-primary-50/80 p-4 dark:border-primary-800/50 dark:bg-primary-950/40"
+				>
+					<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+						{{ $t('pages.storeProfilePage.merchantId') }}
+					</span>
+					<span class="text-lg font-semibold font-mono text-primary-700 dark:text-primary-300">{{ merchantId }}</span>
 				</div>
-
-				<!-- Merchant ID | Account Type | Expired Date | Account Status – card based, tinted backgrounds -->
-				<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-					<div
-						class="flex min-w-0 flex-col gap-2.5 rounded-xl border border-primary-200/50 bg-primary-50/80 p-4 dark:border-primary-800/50 dark:bg-primary-950/40"
-					>
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
-							{{ $t('pages.storeProfilePage.merchantId') }}
-						</span>
-						<span class="text-lg font-semibold font-mono text-primary-700 dark:text-primary-300">{{ merchantId }}</span>
-					</div>
-					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountStatusCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
-							{{ $t('pages.storeProfilePage.accountStatus') }}
-						</span>
-						<span class="text-lg font-semibold capitalize" :class="accountStatusTextClass">{{ accountStatusLabel }}</span>
-					</div>
-					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountTypeCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
-							{{ $t('pages.storeProfilePage.accountType') }}
-						</span>
-						<span class="text-lg font-semibold capitalize" :class="accountTypeTextClass">{{ accountType }}</span>
-					</div>
-					<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="expiredDateCardBg">
-						<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
-							{{ $t('pages.storeProfilePage.expiredDate') }}
-						</span>
-						<span class="text-lg font-semibold" :class="isExpiringSoon ? 'text-red-700 dark:text-red-300' : 'text-gray-700 dark:text-gray-300'">
-							{{ merchantExpiredDate }}
-						</span>
-					</div>
+				<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountStatusCardBg">
+					<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+						{{ $t('pages.storeProfilePage.accountStatus') }}
+					</span>
+					<span class="text-lg font-semibold capitalize" :class="accountStatusTextClass">{{ accountStatusLabel }}</span>
 				</div>
+				<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="accountTypeCardBg">
+					<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+						{{ $t('pages.storeProfilePage.accountType') }}
+					</span>
+					<span class="text-lg font-semibold capitalize" :class="accountTypeTextClass">{{ accountType }}</span>
+				</div>
+				<div class="flex min-w-0 flex-col gap-2.5 rounded-xl border p-4" :class="expiredDateCardBg">
+					<span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 wrap-break-word leading-tight">
+						{{ $t('pages.storeProfilePage.expiredDate') }}
+					</span>
+					<span class="text-lg font-semibold" :class="isExpiringSoon ? 'text-red-700 dark:text-red-300' : 'text-gray-700 dark:text-gray-300'">
+						{{ merchantExpiredDate }}
+					</span>
+				</div>
+			</div>
 
-				<UCard>
-					<div class="space-y-6">
-						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('pages.storeProfilePage.merchantInformation') }}</h3>
+			<UCard>
+				<div class="space-y-6">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('pages.storeProfilePage.merchantInformation') }}</h3>
 
-						<!-- Thumbnail -->
-						<UFormField :label="$t('pages.storeProfilePage.thumbnail')">
-							<ZDropzone
-								class="max-w-full sm:max-w-[200px]"
-								:key="thumbnailDropzoneKey"
-								:existing-images="thumbnailExistingImages"
-								:multiple="false"
-								:disabled="merchantInfoStore.loading || merchantInfoStore.updating"
-								@files-selected="onThumbnailFilesSelected"
-								@delete-image="onThumbnailDelete"
+					<!-- Thumbnail -->
+					<UFormField :label="$t('pages.storeProfilePage.thumbnail')">
+						<ZDropzone
+							class="max-w-full sm:max-w-[200px]"
+							:key="thumbnailDropzoneKey"
+							:existing-images="thumbnailExistingImages"
+							:multiple="false"
+							:disabled="merchantInfoStore.loading || merchantInfoStore.updating"
+							@files-selected="onThumbnailFilesSelected"
+							@delete-image="onThumbnailDelete"
+						/>
+					</UFormField>
+
+					<!-- Name, Company email, website, phone no -->
+					<div class="grid gap-4 sm:grid-cols-2">
+						<UFormField :label="$t('common.name')">
+							<UInput
+								:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME)"
+								@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME, v)"
 							/>
 						</UFormField>
+						<UFormField :label="$t('pages.storeProfilePage.companyEmail')">
+							<UInput
+								type="email"
+								:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS)"
+								@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS, v)"
+							/>
+						</UFormField>
+						<UFormField :label="$t('pages.storeProfilePage.companyWebsite')" class="sm:col-span-2">
+							<UInput
+								:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE)"
+								@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE, v)"
+							/>
+						</UFormField>
+						<UFormField :label="$t('pages.storeProfilePage.contactPerson')">
+							<UInput
+								:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON)"
+								@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON, v)"
+							/>
+						</UFormField>
+						<UFormField :label="$t('pages.storeProfilePage.contactNo')">
+							<ZPhoneInput
+								:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE)"
+								:phone-no="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO)"
+								@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE, v)"
+								@update:phone-no="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO, v)"
+							/>
+						</UFormField>
+					</div>
 
-						<!-- Name, Company email, website, phone no -->
+					<!-- Address -->
+					<div class="space-y-4">
+						<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('common.address') }}</h4>
 						<div class="grid gap-4 sm:grid-cols-2">
-							<UFormField :label="$t('common.name')">
+							<UFormField :label="$t('pages.storeProfilePage.addressLine1')">
 								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.NAME, v)"
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.companyEmail')">
+							<UFormField :label="$t('pages.storeProfilePage.addressLine2')">
 								<UInput
-									type="email"
-									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_EMAIL_ADDRESS, v)"
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.companyWebsite')" class="sm:col-span-2">
+							<UFormField :label="$t('pages.storeProfilePage.addressLine3')">
 								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.COMPANY_WEBSITE, v)"
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.contactPerson')">
+							<UFormField :label="$t('pages.storeProfilePage.city')">
 								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.CONTACT_PERSON, v)"
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.contactNo')">
-								<ZPhoneInput
-									:dial-code="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE)"
-									:phone-no="getMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO)"
-									@update:dial-code="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.DIAL_CODE, v)"
-									@update:phone-no="(v: string) => setMerchantValue(GROUP_CODE.CONTACT, MERCHANT.PHONE_NO, v)"
+							<UFormField :label="$t('pages.storeProfilePage.state')">
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
 								/>
 							</UFormField>
-						</div>
-
-						<!-- Address -->
-						<div class="space-y-4">
-							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('common.address') }}</h4>
-							<div class="grid gap-4 sm:grid-cols-2">
-								<UFormField :label="$t('pages.storeProfilePage.addressLine1')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS1, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.addressLine2')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS2, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.addressLine3')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS3, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.city')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.state')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.postalCode')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('pages.storeProfilePage.country')">
-									<UInput
-										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)"
-										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, v)"
-									/>
-								</UFormField>
-							</div>
-						</div>
-
-						<!-- Operating hours & off days -->
-						<div class="space-y-4">
-							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
-							<div class="grid gap-4 sm:grid-cols-2">
-								<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
-									<ZSelectMenuDays :days="operationOffDaysArray" @update:days="onOperationOffDaysUpdate" />
-								</UFormField>
-								<UFormField :label="$t('components.zInput.startTime')">
-									<ZSelectMenuTime
-										:title="$t('components.zInput.selectTime')"
-										:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
-										type="start"
-										@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
-									/>
-								</UFormField>
-								<UFormField :label="$t('components.zInput.endTime')">
-									<ZSelectMenuTime
-										:title="$t('components.zInput.selectTime')"
-										:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
-										type="end"
-										@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
-									/>
-								</UFormField>
-							</div>
+							<UFormField :label="$t('pages.storeProfilePage.postalCode')">
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
+								/>
+							</UFormField>
+							<UFormField :label="$t('pages.storeProfilePage.country')">
+								<UInput
+									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)"
+									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, v)"
+								/>
+							</UFormField>
 						</div>
 					</div>
-				</UCard>
-			</div>
+
+					<!-- Operating hours & off days -->
+					<div class="space-y-4">
+						<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
+						<div class="grid gap-4 sm:grid-cols-2">
+							<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
+								<ZSelectMenuDays :days="operationOffDaysArray" @update:days="onOperationOffDaysUpdate" />
+							</UFormField>
+							<UFormField :label="$t('components.zInput.startTime')">
+								<ZSelectMenuTime
+									:title="$t('components.zInput.selectTime')"
+									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
+									type="start"
+									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
+								/>
+							</UFormField>
+							<UFormField :label="$t('components.zInput.endTime')">
+								<ZSelectMenuTime
+									:title="$t('components.zInput.selectTime')"
+									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
+									type="end"
+									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
+								/>
+							</UFormField>
+						</div>
+					</div>
+				</div>
+			</UCard>
+		</div>
 	</ZPagePanel>
 </template>
 

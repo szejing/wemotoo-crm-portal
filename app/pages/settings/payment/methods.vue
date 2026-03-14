@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="payment-methods" :title="$t('nav.paymentMethods')">
+	<ZPagePanel id="payment-methods" :title="$t('nav.paymentMethods')" back-to="/settings/payment">
 		<template #toolbar>
 			<ZSectionFilterPaymentMethods />
 		</template>

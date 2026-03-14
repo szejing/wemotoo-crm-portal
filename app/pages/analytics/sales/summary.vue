@@ -1,60 +1,60 @@
 <template>
-	<ZPagePanel id="analytics-sales-summary" :title="$t('pages.analyticsSalesSummary')">
+	<ZPagePanel id="analytics-sales-summary" :title="$t('pages.analyticsSalesSummary')" back-to="/analytics/sales">
 		<template #toolbar>
 			<ZSectionFilterSaleSumm />
 		</template>
 
-			<div class="space-y-6">
-				<div v-if="!loading && groupedByDate.length == 0">
-					<div class="flex flex-col items-center justify-center py-6">
-						<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesSummaryFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
+		<div class="space-y-6">
+			<div v-if="!loading && groupedByDate.length == 0">
+				<div class="flex flex-col items-center justify-center py-6">
+					<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
+					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesSummaryFound') }}</p>
+					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 				</div>
+			</div>
 
-				<div v-else>
-					<!-- Table Controls -->
-					<ZTableToolbar
-						v-model="sale_summ.page_size"
-						:page-size-options="options_page_size"
-						:export-enabled="true"
-						:exporting="sale_summ.exporting"
-						@update:model-value="updatePageSize"
-						@export="salesSummStore.exportSalesSummary"
-					/>
+			<div v-else>
+				<!-- Table Controls -->
+				<ZTableToolbar
+					v-model="sale_summ.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="sale_summ.exporting"
+					@update:model-value="updatePageSize"
+					@export="salesSummStore.exportSalesSummary"
+				/>
 
-					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
-						<!-- Date Header -->
-						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
-							<div class="flex items-center justify-between">
-								<div class="flex items-center gap-4">
-									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
-									<div class="flex items-center gap-3 text-sm">
-										<div class="flex items-center gap-1.5 text-neutral-600">
-											<Icon name="i-heroicons-banknotes" class="text-base" />
-											<span class="font-medium">{{ group.total_txns }} {{ $t('pages.transactionsLabel') }}</span>
-										</div>
+				<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
+					<!-- Date Header -->
+					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center gap-4">
+								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+								<div class="flex items-center gap-3 text-sm">
+									<div class="flex items-center gap-1.5 text-neutral-600">
+										<Icon name="i-heroicons-banknotes" class="text-base" />
+										<span class="font-medium">{{ group.total_txns }} {{ $t('pages.transactionsLabel') }}</span>
 									</div>
 								</div>
-								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
-								</div>
+							</div>
+							<div class="flex items-center gap-2 text-sm font-semibold text-primary">
+								<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 							</div>
 						</div>
+					</div>
 
-						<!-- Items Table -->
-						<div class="px-6 pb-6 pt-4">
-							<UTable :data="group.items" :columns="sale_summ_columns" :loading="loading" />
-						</div>
+					<!-- Items Table -->
+					<div class="px-6 pb-6 pt-4">
+						<UTable :data="group.items" :columns="sale_summ_columns" :loading="loading" />
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- Pagination -->
-			<div v-if="data.length > 0" class="mt-6 flex justify-center">
-				<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
-			</div>
+		<!-- Pagination -->
+		<div v-if="data.length > 0" class="mt-6 flex justify-center">
+			<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
+		</div>
 	</ZPagePanel>
 </template>
 

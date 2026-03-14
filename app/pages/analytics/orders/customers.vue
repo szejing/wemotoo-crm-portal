@@ -1,50 +1,45 @@
 <template>
-	<ZPagePanel id="analytics-orders-customers" :title="$t('pages.analyticsOrdersCustomers')">
+	<ZPagePanel id="analytics-orders-customers" :title="$t('pages.analyticsOrdersCustomers')" back-to="/analytics/orders">
 		<template #toolbar>
 			<ZSectionFilterOrderSummCustomers />
 		</template>
 
-			<div class="space-y-6">
-				<div v-if="!is_loading && data.length == 0">
-					<div class="flex flex-col items-center justify-center py-6">
-						<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
-				</div>
-
-				<div v-else>
-					<!-- Table Controls -->
-					<ZTableToolbar
-						v-model="order_summ_customer.page_size"
-						:page-size-options="options_page_size"
-						:export-enabled="true"
-						:exporting="order_summ_customer.exporting"
-						@update:model-value="updatePageSize"
-						@export="exportOrderCustomerSummaryToCsv"
-					/>
-
-					<!-- Table -->
-					<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" class="mt-4">
-						<template #empty>
-							<div class="flex flex-col items-center justify-center py-12 gap-3">
-								<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-								<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
-								<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-							</div>
-						</template>
-					</UTable>
-				</div>
-
-				<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
-					<UPagination
-						v-model="current_page"
-						:items-per-page="order_summ_customer.page_size"
-						:total="order_summ_customer.total_data"
-						@update:page="updatePage"
-					/>
+		<div class="space-y-6">
+			<div v-if="!is_loading && data.length == 0">
+				<div class="flex flex-col items-center justify-center py-6">
+					<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
+					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
+					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 				</div>
 			</div>
+
+			<div v-else>
+				<!-- Table Controls -->
+				<ZTableToolbar
+					v-model="order_summ_customer.page_size"
+					:page-size-options="options_page_size"
+					:export-enabled="true"
+					:exporting="order_summ_customer.exporting"
+					@update:model-value="updatePageSize"
+					@export="exportOrderCustomerSummaryToCsv"
+				/>
+
+				<!-- Table -->
+				<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" class="mt-4">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</div>
+
+			<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
+				<UPagination v-model="current_page" :items-per-page="order_summ_customer.page_size" :total="order_summ_customer.total_data" @update:page="updatePage" />
+			</div>
+		</div>
 	</ZPagePanel>
 </template>
 

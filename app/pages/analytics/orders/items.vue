@@ -1,78 +1,78 @@
 <template>
-	<ZPagePanel id="analytics-orders-items" :title="$t('pages.analyticsOrdersItems')">
+	<ZPagePanel id="analytics-orders-items" :title="$t('pages.analyticsOrdersItems')" back-to="/analytics/orders">
 		<template #toolbar>
 			<ZSectionFilterOrderSummItems />
 		</template>
 
-			<!-- Empty State -->
-			<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-				<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderItemSummaryFound') }}</p>
-				<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-			</div>
+		<!-- Empty State -->
+		<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
+			<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
+			<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderItemSummaryFound') }}</p>
+			<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+		</div>
 
-			<!-- Grouped by Date -->
-			<div v-else class="mt-4 space-y-6">
-				<ZTableToolbar
-					v-model="order_summ_item.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="order_summ_item.exporting"
-					@update:model-value="updatePageSize"
-					@export="exportToCsv"
-				/>
+		<!-- Grouped by Date -->
+		<div v-else class="mt-4 space-y-6">
+			<ZTableToolbar
+				v-model="order_summ_item.page_size"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="order_summ_item.exporting"
+				@update:model-value="updatePageSize"
+				@export="exportToCsv"
+			/>
 
-				<UCard class="overflow-hidden">
-					<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
-						<!-- Date Header -->
-						<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
-							<div class="flex items-center justify-between">
-								<div class="flex items-center gap-4">
-									<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
-									<div class="flex items-center gap-3 text-sm">
-										<div class="flex items-center gap-1.5 text-neutral-600">
-											<Icon name="i-heroicons-shopping-cart" class="text-base" />
-											<span class="font-medium">{{ group.total_orders }} {{ $t('pages.ordersLabel') }}</span>
-										</div>
-										<div class="h-4 w-px bg-neutral-300"></div>
-										<div class="flex items-center gap-1.5 text-green-600">
-											<Icon name="i-heroicons-cube" class="text-base" />
-											<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
-										</div>
-										<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
-										<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
-											<Icon name="i-heroicons-x-circle" class="text-base" />
-											<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
-										</div>
+			<UCard class="overflow-hidden">
+				<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
+					<!-- Date Header -->
+					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center gap-4">
+								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
+								<div class="flex items-center gap-3 text-sm">
+									<div class="flex items-center gap-1.5 text-neutral-600">
+										<Icon name="i-heroicons-shopping-cart" class="text-base" />
+										<span class="font-medium">{{ group.total_orders }} {{ $t('pages.ordersLabel') }}</span>
+									</div>
+									<div class="h-4 w-px bg-neutral-300"></div>
+									<div class="flex items-center gap-1.5 text-green-600">
+										<Icon name="i-heroicons-cube" class="text-base" />
+										<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
+									</div>
+									<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
+									<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
+										<Icon name="i-heroicons-x-circle" class="text-base" />
+										<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
 									</div>
 								</div>
-								<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-									<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
-								</div>
+							</div>
+							<div class="flex items-center gap-2 text-sm font-semibold text-primary">
+								<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
 							</div>
 						</div>
-
-						<!-- Items Table -->
-						<div class="px-6 pb-6 pt-4">
-							<UTable
-								:data="group.items"
-								:columns="order_summ_item_columns"
-								:ui="{
-									root: 'relative overflow-auto',
-									base: 'table-fixed',
-									tbody: 'divide-y divide-gray-200',
-									tr: '',
-								}"
-							/>
-						</div>
 					</div>
-				</UCard>
-			</div>
 
-			<!-- Pagination -->
-			<div v-if="data.length > 0" class="mt-6 flex justify-center">
-				<UPagination v-model="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
-			</div>
+					<!-- Items Table -->
+					<div class="px-6 pb-6 pt-4">
+						<UTable
+							:data="group.items"
+							:columns="order_summ_item_columns"
+							:ui="{
+								root: 'relative overflow-auto',
+								base: 'table-fixed',
+								tbody: 'divide-y divide-gray-200',
+								tr: '',
+							}"
+						/>
+					</div>
+				</div>
+			</UCard>
+		</div>
+
+		<!-- Pagination -->
+		<div v-if="data.length > 0" class="mt-6 flex justify-center">
+			<UPagination v-model="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
+		</div>
 	</ZPagePanel>
 </template>
 

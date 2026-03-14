@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="taxes-codes" :title="$t('nav.taxCodes')">
+	<ZPagePanel id="taxes-codes" :title="$t('nav.taxCodes')" back-to="/settings/taxes">
 		<template #toolbar>
 			<ZSectionFilterTaxCodes />
 		</template>

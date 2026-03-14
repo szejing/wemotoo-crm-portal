@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="outlets" :title="$t('nav.outlets')">
+	<ZPagePanel id="operation-outlets" :title="$t('nav.outlets')" back-to="/operation">
 		<template #navbar-right>
 			<ZCreateButton to="/operation/outlets/create" :label="$t('common.addOutlet')" />
 		</template>
