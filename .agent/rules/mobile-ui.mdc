@@ -1,0 +1,36 @@
+---
+description: Mobile UI — consider responsive and touch-friendly design for all UI changes
+globs: app/pages/**/*.vue, app/components/**/*.vue, app/layouts/**/*.vue
+alwaysApply: false
+---
+
+# Mobile UI Consideration
+
+Whenever making **UI changes or customization**, consider mobile and small-screen layouts.
+
+## Checklist
+
+- **Layout**: Use responsive utilities (`sm:`, `md:`, `lg:`) or flex/grid that stacks or reflows on narrow viewports.
+- **Touch targets**: Buttons, links, and interactive elements should be at least 44×44px for touch.
+- **Tables**: Prefer horizontal scroll, card-style layout on mobile, or Nuxt UI Table with responsive options.
+- **Modals / Drawers**: On mobile, prefer full-screen or bottom drawer patterns over centered modals.
+- **Forms**: Stack form fields vertically on small screens; avoid side-by-side layouts that squeeze on mobile.
+- **Typography**: Ensure text remains readable without horizontal scroll; avoid fixed min-widths that break layout.
+
+## Examples
+
+```vue
+<!-- ✅ Responsive grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+<!-- ✅ Responsive flex -->
+<div class="flex flex-col sm:flex-row gap-2">
+
+<!-- ✅ Touch-friendly button -->
+<UButton size="lg" />  <!-- or min-h-11 min-w-11 for custom -->
+```
+
+## References
+
+- Nuxt UI responsive docs: https://ui.nuxt.com
+- Tailwind breakpoints: `sm` 640px, `md` 768px, `lg` 1024px, `xl` 1280px
