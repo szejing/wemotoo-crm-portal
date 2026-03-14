@@ -2,7 +2,7 @@
 	<ZPagePanel id="home" :title="$t('pages.home')">
 		<DashboardDateRange v-model="dashboardRange" @update:model-value="onDashboardRangeChange" />
 		<DashboardStats />
-		<DashboardOrderAmtChart />
+		<!-- <DashboardOrderAmtChart /> -->
 		<DashboardOrders />
 	</ZPagePanel>
 </template>
