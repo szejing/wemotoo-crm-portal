@@ -170,32 +170,42 @@ const totalQtySum = computed(() =>
 	}, 0),
 );
 
-const salesStats = computed(() => [
-	{
-		title: t('pages.salesDashboardTotalSales'),
-		value: formatCurrency(chartTotal.value, primaryCurrency.value),
-		icon: 'i-heroicons-banknotes',
-		iconBg: 'bg-green-500/10',
-		iconColor: 'text-green-600 dark:text-green-400',
-		to: '/analytics/sales/summary',
-	},
-	{
-		title: t('pages.salesDashboardTotalQty'),
-		value: totalQtySum.value,
-		icon: 'i-heroicons-cube',
-		iconBg: 'bg-secondary/10',
-		iconColor: 'text-secondary',
-		to: '/analytics/sales/items',
-	},
-	{
-		title: t('pages.salesDashboardTopProducts'),
-		value: top_purchased_products.value.length,
-		icon: 'i-heroicons-squares-2x2',
-		iconBg: 'bg-amber-500/10',
-		iconColor: 'text-amber-600 dark:text-amber-400',
-		to: '/analytics/sales/items',
-	},
-]);
+function formatRangeQuery(r: Range) {
+	return {
+		start_date: r.start ? getFormattedDate(r.start, 'yyyy-MM-dd') : undefined,
+		end_date: r.end ? getFormattedDate(r.end, 'yyyy-MM-dd') : undefined,
+	};
+}
+
+const salesStats = computed(() => {
+	const q = formatRangeQuery(range.value);
+	return [
+		{
+			title: t('pages.salesDashboardTotalSales'),
+			value: formatCurrency(chartTotal.value, primaryCurrency.value),
+			icon: 'i-heroicons-banknotes',
+			iconBg: 'bg-green-500/10',
+			iconColor: 'text-green-600 dark:text-green-400',
+			to: { path: '/analytics/sales/summary', query: q },
+		},
+		{
+			title: t('pages.salesDashboardTotalQty'),
+			value: totalQtySum.value,
+			icon: 'i-heroicons-cube',
+			iconBg: 'bg-secondary/10',
+			iconColor: 'text-secondary',
+			to: { path: '/analytics/sales/items', query: q },
+		},
+		{
+			title: t('pages.salesDashboardTopProducts'),
+			value: top_purchased_products.value.length,
+			icon: 'i-heroicons-squares-2x2',
+			iconBg: 'bg-amber-500/10',
+			iconColor: 'text-amber-600 dark:text-amber-400',
+			to: { path: '/analytics/sales/items', query: q },
+		},
+	];
+});
 
 const chartX = (_: { date: string; amount: number }, i: number) => i;
 const chartY = (d: { date: string; amount: number }) => d.amount;

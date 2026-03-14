@@ -63,15 +63,42 @@ import { getFormattedDate, formatCurrency } from 'wemotoo-common';
 import { getSaleSummColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
+const route = useRoute();
 const { t } = useI18n();
 const sale_summ_columns = computed(() => getSaleSummColumns(t));
 useHead({ title: () => t('pages.saleSummaryTitle') });
 
+const salesSummStore = useSummSaleStore();
+
+function applyQueryToFilter() {
+	const start = route.query.start_date;
+	const end = route.query.end_date;
+	if (typeof start === 'string' && start) {
+		const d = new Date(start);
+		if (!Number.isNaN(d.getTime())) {
+			salesSummStore.sale_summ.filter.date_range.start = d;
+		}
+	}
+	if (typeof end === 'string' && end) {
+		const d = new Date(end);
+		if (!Number.isNaN(d.getTime())) {
+			salesSummStore.sale_summ.filter.date_range.end = d;
+		}
+	}
+}
+
 onMounted(async () => {
+	applyQueryToFilter();
 	await salesSummStore.getSaleSummary();
 });
 
-const salesSummStore = useSummSaleStore();
+watch(
+	() => route.query.start_date && route.query.end_date,
+	() => {
+		applyQueryToFilter();
+		salesSummStore.getSaleSummary();
+	},
+);
 const { sale_summ, loading } = storeToRefs(salesSummStore);
 
 const data = computed(() => sale_summ.value.data);

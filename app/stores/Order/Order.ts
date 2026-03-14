@@ -83,7 +83,11 @@ export const useOrderStore = defineStore('orderStore', {
 				} else if (this.filter.status === OrderStatus.COMPLETED) {
 					filter = `status eq '${OrderStatus.COMPLETED}'`;
 				} else if (this.filter.status === OrderStatus.CANCELLED) {
-					filter = `status in ('${OrderStatus.CANCELLED}', '${OrderStatus.REFUNDED}')`;
+					filter = `status eq '${OrderStatus.CANCELLED}'`;
+				} else if (this.filter.status === OrderStatus.REQUIRES_ACTION) {
+					filter = `status eq '${OrderStatus.REQUIRES_ACTION}'`;
+				} else if (this.filter.status === OrderStatus.REFUNDED) {
+					filter = `status eq '${OrderStatus.REFUNDED}'`;
 				}
 
 				let { start, end } = this.filter.date_range;

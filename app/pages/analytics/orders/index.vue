@@ -116,7 +116,7 @@
 
 <script lang="ts" setup>
 import { VisXYContainer, VisLine, VisAxis, VisArea, VisCrosshair, VisTooltip } from '@unovis/vue';
-import { getFormattedDate, parseDate, formatCurrency } from 'wemotoo-common';
+import { getFormattedDate, parseDate, formatCurrency, OrderStatus } from 'wemotoo-common';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 
@@ -137,40 +137,51 @@ const { width: chartWidth } = useElementSize(chartCardRef);
 
 const primaryCurrency = computed(() => total_order_amt.value[0]?.currency_code ?? 'MYR');
 
-const orderStats = computed(() => [
-	{
-		title: t('pages.orderDashboardTotalOrdersAmt'),
-		value: formatCurrency(total_order_amt.value[0]?.total_order_amt ?? 0, primaryCurrency.value),
-		icon: 'i-heroicons-banknotes',
-		iconBg: 'bg-green-500/10',
-		iconColor: 'text-green-600 dark:text-green-400',
-		to: '/analytics/orders/summary',
-	},
-	{
-		title: t('pages.orderDashboardNewOrders'),
-		value: new_orders.value ?? 0,
-		icon: 'i-heroicons-shopping-cart',
-		iconBg: 'bg-primary/10',
-		iconColor: 'text-primary',
-		to: '/sales/orders',
-	},
-	{
-		title: t('pages.orderDashboardNewCustomers'),
-		value: new_customers.value ?? 0,
-		icon: 'i-heroicons-user-plus',
-		iconBg: 'bg-secondary/10',
-		iconColor: 'text-secondary',
-		to: '/customers',
-	},
-	{
-		title: t('pages.orderDashboardPendingPayments'),
-		value: pending_payments.value ?? 0,
-		icon: 'i-heroicons-credit-card',
-		iconBg: 'bg-amber-500/10',
-		iconColor: 'text-amber-600 dark:text-amber-400',
-		to: undefined,
-	},
-]);
+function formatRangeQuery(r: Range, status?: OrderStatus) {
+	return {
+		start_date: r.start ? getFormattedDate(r.start, 'yyyy-MM-dd') : undefined,
+		end_date: r.end ? getFormattedDate(r.end, 'yyyy-MM-dd') : undefined,
+		...(status != null && { status }),
+	};
+}
+
+const orderStats = computed(() => {
+	const r = range.value;
+	return [
+		{
+			title: t('pages.orderDashboardTotalOrdersAmt'),
+			value: formatCurrency(total_order_amt.value[0]?.total_order_amt ?? 0, primaryCurrency.value),
+			icon: 'i-heroicons-banknotes',
+			iconBg: 'bg-green-500/10',
+			iconColor: 'text-green-600 dark:text-green-400',
+			to: { path: '/analytics/orders/summary', query: formatRangeQuery(r) },
+		},
+		{
+			title: t('pages.orderDashboardNewOrders'),
+			value: new_orders.value ?? 0,
+			icon: 'i-heroicons-shopping-cart',
+			iconBg: 'bg-primary/10',
+			iconColor: 'text-primary',
+			to: { path: '/sales/orders', query: formatRangeQuery(r, OrderStatus.PROCESSING) },
+		},
+		{
+			title: t('pages.orderDashboardNewCustomers'),
+			value: new_customers.value ?? 0,
+			icon: 'i-heroicons-user-plus',
+			iconBg: 'bg-secondary/10',
+			iconColor: 'text-secondary',
+			to: { path: '/customers', query: formatRangeQuery(r) },
+		},
+		{
+			title: t('pages.orderDashboardPendingPayments'),
+			value: pending_payments.value ?? 0,
+			icon: 'i-heroicons-credit-card',
+			iconBg: 'bg-amber-500/10',
+			iconColor: 'text-amber-600 dark:text-amber-400',
+			to: { path: '/sales/orders', query: formatRangeQuery(r, OrderStatus.PENDING_PAYMENT) },
+		},
+	];
+});
 
 const chartData = computed(() =>
 	daily_summaries.value.map((s) => ({

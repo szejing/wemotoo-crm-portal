@@ -77,20 +77,54 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderItemStatus, getFormattedDate, formatCurrency } from 'wemotoo-common';
+import { OrderItemStatus, getFormattedDate, formatCurrency, OrderStatus } from 'wemotoo-common';
 import { getOrderSummItemColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
+const route = useRoute();
 const { t } = useI18n();
 const order_summ_item_columns = computed(() => getOrderSummItemColumns(t));
 useHead({ title: () => t('pages.orderItemSummary') });
 
+const orderSummStore = useSummOrderStore();
+const { order_summ_item } = storeToRefs(orderSummStore);
+
+const VALID_ORDER_STATUSES = new Set(Object.values(OrderStatus));
+
+function applyQueryToFilter() {
+	const start = route.query.start_date;
+	const end = route.query.end_date;
+	const status = route.query.status;
+	if (typeof start === 'string' && start) {
+		const d = new Date(start);
+		if (!Number.isNaN(d.getTime())) {
+			orderSummStore.order_summ_item.filter.date_range.start = d;
+		}
+	}
+	if (typeof end === 'string' && end) {
+		const d = new Date(end);
+		if (!Number.isNaN(d.getTime())) {
+			orderSummStore.order_summ_item.filter.date_range.end = d;
+		}
+	}
+	if (typeof status === 'string' && VALID_ORDER_STATUSES.has(status as OrderStatus)) {
+		orderSummStore.order_summ_item.filter.status = status as OrderStatus;
+	}
+}
+
 onMounted(async () => {
+	applyQueryToFilter();
 	await orderSummStore.getOrderItemSummary();
 });
 
-const orderSummStore = useSummOrderStore();
-const { order_summ_item } = storeToRefs(orderSummStore);
+watch(
+	() => ({ start: route.query.start_date, end: route.query.end_date, status: route.query.status }),
+	() => {
+		applyQueryToFilter();
+		orderSummStore.getOrderItemSummary();
+	},
+	{ deep: true },
+);
 const current_page = computed(() => order_summ_item.value.current_page);
 
 const is_loading = computed(() => order_summ_item.value.loading);

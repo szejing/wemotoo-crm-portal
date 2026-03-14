@@ -72,16 +72,43 @@ import { getFormattedDate, OrderItemStatus, formatCurrency } from 'wemotoo-commo
 import { getSaleSummItemColumns } from '~/utils/table-columns';
 import { options_page_size } from '~/utils/options';
 
+const route = useRoute();
 const { t } = useI18n();
 const sale_summ_item_columns = computed(() => getSaleSummItemColumns(t));
 useHead({ title: () => t('pages.saleItemSummary') });
 
+const salesSummStore = useSummSaleStore();
+const { sale_summ_items, loading } = storeToRefs(salesSummStore);
+
+function applyQueryToFilter() {
+	const start = route.query.start_date;
+	const end = route.query.end_date;
+	if (typeof start === 'string' && start) {
+		const d = new Date(start);
+		if (!Number.isNaN(d.getTime())) {
+			salesSummStore.sale_summ_items.filter.date_range.start = d;
+		}
+	}
+	if (typeof end === 'string' && end) {
+		const d = new Date(end);
+		if (!Number.isNaN(d.getTime())) {
+			salesSummStore.sale_summ_items.filter.date_range.end = d;
+		}
+	}
+}
+
 onMounted(async () => {
+	applyQueryToFilter();
 	await salesSummStore.getSaleItemSummary();
 });
 
-const salesSummStore = useSummSaleStore();
-const { sale_summ_items, loading } = storeToRefs(salesSummStore);
+watch(
+	() => route.query.start_date && route.query.end_date,
+	() => {
+		applyQueryToFilter();
+		salesSummStore.getSaleItemSummary();
+	},
+);
 const data = computed(() => sale_summ_items.value.data);
 const current_page = computed(() => sale_summ_items.value.current_page);
 

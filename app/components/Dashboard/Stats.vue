@@ -35,8 +35,20 @@
 </template>
 
 <script setup lang="ts">
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { sub } from 'date-fns';
 import { useDashboardStatsConfig, ALL_DASHBOARD_STAT_KEYS, type DashboardStatKey } from '~/composables/useDashboardStatsConfig';
+
+const defaultRangeEnd = new Date();
+defaultRangeEnd.setHours(0, 0, 0, 0);
+const defaultRangeStart = sub(defaultRangeEnd, { days: 7 });
+function defaultQuery(extra?: { status?: string }) {
+	return {
+		start_date: getFormattedDate(defaultRangeStart, 'yyyy-MM-dd'),
+		end_date: getFormattedDate(defaultRangeEnd, 'yyyy-MM-dd'),
+		...(extra?.status != null && { status: extra.status }),
+	};
+}
 
 const summOrderStore = useSummOrderStore();
 const { new_appointments, new_orders, pending_payments, pending_actions, total_order_amt, new_customers } = storeToRefs(summOrderStore);
@@ -63,6 +75,7 @@ const statDefs: Record<
 	{
 		icon: string;
 		to?: string;
+		status?: OrderStatus;
 		formatter?: (v: number) => string;
 	}
 > = {
@@ -73,13 +86,17 @@ const statDefs: Record<
 	item_orders: {
 		icon: 'i-heroicons-shopping-cart',
 		to: '/sales/orders',
+		status: OrderStatus.PROCESSING,
 	},
 	pending_payments: {
 		icon: 'i-heroicons-credit-card',
+		to: '/sales/orders',
+		status: OrderStatus.PENDING_PAYMENT,
 	},
 	pending_actions: {
 		icon: 'i-heroicons-bell',
-		to: '/analytics',
+		to: '/sales/orders',
+		status: OrderStatus.REQUIRES_ACTION,
 	},
 	revenue: {
 		icon: 'i-heroicons-currency-dollar',
@@ -121,11 +138,12 @@ const visibleStats = computed(() => {
 				value = 0;
 		}
 		const formattedValue = def.formatter ? def.formatter(value) : String(value);
+		const to = def.to != null ? { path: def.to, query: defaultQuery(def.status != null ? { status: def.status } : undefined) } : undefined;
 		return {
 			key,
 			title: statLabel(key),
 			icon: def.icon,
-			to: def.to,
+			to,
 			formattedValue,
 		};
 	});
