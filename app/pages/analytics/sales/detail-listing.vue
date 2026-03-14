@@ -1,21 +1,9 @@
 <template>
-	<UDashboardPanel id="analytics-sales-detail-listing">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.analyticsSalesDetailListing')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterSaleSummDetailListing />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="analytics-sales-detail-listing" :title="$t('pages.analyticsSalesDetailListing')">
+		<template #toolbar>
+			<ZSectionFilterSaleSummDetailListing />
 		</template>
 
-		<template #body>
 			<!-- Grouped by Date -->
 			<div class="space-y-6">
 				<div v-if="!loading && groupedByDate.length == 0">
@@ -73,8 +61,7 @@
 			<div v-if="bills.length > 0" class="mt-6 flex justify-center">
 				<UPagination v-model="current_page" :items-per-page="filter.page_size" :total="total_bills" @update:page="updatePage" />
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
@@ -149,7 +136,7 @@ const selectSale = (e: Event, row: TableRow<Bill>) => {
 	const bill = row.original;
 	if (!bill) return;
 
-	navigateTo(`/bills/detail/${encodeURIComponent(bill.bill_no)}`);
+	navigateTo(`/bills/detail/${encodeURIComponent(bill.order_no)}`);
 };
 </script>
 

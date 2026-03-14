@@ -1,37 +1,26 @@
 <template>
-	<UDashboardPanel id="taxes-rules">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
+	<ZPagePanel id="taxes-rules" :title="$t('nav.taxRules')">
+		<div class="wrapper-grid">
+			<UCard>
+				<template #header>
+					<div class="flex items-center justify-between">
+						<h2>Tax Rule</h2>
+						<UButton size="sm" color="error" variant="ghost" class="opacity-50 hover:opacity-100" :icon="ICONS.TRASH" @click="deleteTaxRule">
+							{{ $t('common.delete') }}
+						</UButton>
+					</div>
 				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="wrapper-grid">
-				<UCard>
-					<template #header>
-						<div class="flex items-center justify-between">
-							<h2>Tax Rule</h2>
-							<UButton size="sm" color="error" variant="ghost" class="opacity-50 hover:opacity-100" :icon="ICONS.TRASH" @click="deleteTaxRule">
-								{{ $t('common.delete') }}
-							</UButton>
-						</div>
-					</template>
-					<FormTaxRuleUpdate
-						v-if="current_tax_rule"
-						:current-tax-rule="current_tax_rule"
-						@select-detail="selectDetail"
-						@delete-detail="deleteDetail"
-						@update="onUpdate"
-					/>
-					<FormTaxRuleUpdateLoading v-else />
-				</UCard>
-			</div>
-		</template>
-	</UDashboardPanel>
+				<FormTaxRuleUpdate
+					v-if="current_tax_rule"
+					:current-tax-rule="current_tax_rule"
+					@select-detail="selectDetail"
+					@delete-detail="deleteDetail"
+					@update="onUpdate"
+				/>
+				<FormTaxRuleUpdateLoading v-else />
+			</UCard>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

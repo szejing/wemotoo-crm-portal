@@ -1,22 +1,11 @@
 <template>
-	<UDashboardPanel id="product-detail" grow>
-		<template #header>
-			<UDashboardNavbar :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton fallbackTo="/products" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="container w-full mx-auto py-4">
-				<FormProductUpdateLoading v-if="isLoading" />
-				<FormProductUpdate v-else-if="current_product" ref="formRef" :product="current_product" />
-			</div>
-		</template>
+	<ZPagePanel id="product-detail" :title="`${$t('pages.productDetail')} #${current_product?.code ?? code}`" back-to="/products" grow>
+		<div class="container w-full mx-auto py-4">
+			<FormProductUpdateLoading v-if="isLoading" />
+			<FormProductUpdate v-else-if="current_product" ref="formRef" :product="current_product" />
+		</div>
 
 		<template #footer>
-			<!-- Fixed Footer with Actions -->
 			<div v-if="current_product" class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
 				<div class="mx-auto px-4 sm:px-6 py-4">
 					<!-- Desktop Layout -->
@@ -62,7 +51,7 @@
 				</div>
 			</div>
 		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

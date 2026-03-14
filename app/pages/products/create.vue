@@ -1,22 +1,10 @@
 <template>
-	<UDashboardPanel id="product-create" grow>
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.addNewProduct')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton fallbackTo="/products" />
-					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
-				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="container w-full mx-auto py-4">
-				<FormProductCreation ref="formRef" />
-			</div>
-		</template>
+	<ZPagePanel id="product-create" :title="$t('pages.addNewProduct')" back-to="/products" grow>
+		<div class="container w-full mx-auto py-4">
+			<FormProductCreation ref="formRef" />
+		</div>
 
 		<template #footer>
-			<!-- Fixed Footer with Actions -->
 			<div class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
 				<div class="mx-auto px-4 sm:px-6 py-4">
 					<!-- Desktop Layout -->
@@ -55,7 +43,7 @@
 				</div>
 			</div>
 		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

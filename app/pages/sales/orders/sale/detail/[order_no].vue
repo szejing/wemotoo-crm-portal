@@ -1,15 +1,6 @@
 <template>
-	<UDashboardPanel id="orders-detail">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.orderDetail')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton fallbackTo="/sales/orders/sale" />
-					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
-				</template>
-			</UDashboardNavbar>
-		</template>
+	<ZPagePanel id="orders-detail" :title="$t('pages.orderDetail')" back-to="/sales/orders/sale">
 
-		<template #body>
 			<ZLoading v-if="loading" />
 			<div v-else class="bill-detail-container">
 				<!-- Header Section -->
@@ -182,8 +173,7 @@
 					</div>
 				</div>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

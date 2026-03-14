@@ -1,64 +1,50 @@
 <template>
-	<UDashboardPanel id="taxes-rules">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-
-				<template #right>
-					<ZCreateButton to="/settings/taxes/rules/create" :label="$t('common.addTaxRule')" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterTaxRules />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="taxes-rules" :title="$t('nav.taxRules')">
+		<template #navbar-right>
+			<ZCreateButton to="/settings/taxes/rules/create" :label="$t('common.addTaxRule')" />
+		</template>
+		<template #toolbar>
+			<ZSectionFilterTaxRules />
 		</template>
 
-		<template #body>
-			<div class="space-y-6">
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="filter.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="exporting"
-					@update:model-value="updatePageSize"
-					@export="exportTaxes"
-				/>
+		<div class="space-y-6">
+			<!-- Table Controls -->
+			<ZTableToolbar
+				v-model="filter.page_size"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="exporting"
+				@update:model-value="updatePageSize"
+				@export="exportTaxes"
+			/>
 
-				<template v-if="initialize">
-					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
-						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
-							<USkeleton class="h-4 w-24" />
-							<USkeleton class="h-4 w-16" />
-						</div>
-						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
-							<USkeleton class="h-4 w-40" />
-							<USkeleton class="h-4 w-12" />
-						</div>
+			<template v-if="initialize">
+				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+					<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+						<USkeleton class="h-4 w-24" />
+						<USkeleton class="h-4 w-16" />
+					</div>
+					<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+						<USkeleton class="h-4 w-40" />
+						<USkeleton class="h-4 w-12" />
+					</div>
+				</div>
+			</template>
+			<UTable v-else :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+				<template #empty-state>
+					<div class="flex-col-center section-empty">
+						<h2>No tax code Found</h2>
+						<p>Create a new tax code to get started</p>
 					</div>
 				</template>
-				<UTable v-else :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
-					<template #empty-state>
-						<div class="flex-col-center section-empty">
-							<h2>No tax code Found</h2>
-							<p>Create a new tax code to get started</p>
-						</div>
-					</template>
-				</UTable>
+			</UTable>
 
-				<!-- Pagination  -->
-				<div v-if="!initialize && tax_rules.length > 0" class="section-pagination">
-					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_rules" @update:page="updatePage" />
-				</div>
+			<!-- Pagination  -->
+			<div v-if="!initialize && tax_rules.length > 0" class="section-pagination">
+				<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_rules" @update:page="updatePage" />
 			</div>
-		</template>
-	</UDashboardPanel>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

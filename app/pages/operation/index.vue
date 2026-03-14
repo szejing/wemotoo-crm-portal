@@ -1,35 +1,24 @@
 <template>
-	<UDashboardPanel id="operation">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.operation')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="space-y-8">
-				<div class="space-y-1">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.operationManagement') }}</h2>
-					<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.operationManagementDesc') }}</p>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<ZSettingsGroup
-						v-for="group in operationGroups"
-						:key="group.title"
-						:title="group.title"
-						:description="group.description"
-						:icon="group.icon"
-						:color="group.color"
-						:items="group.items"
-					/>
-				</div>
+	<ZPagePanel id="operation" :title="$t('nav.operation')">
+		<div class="space-y-8">
+			<div class="space-y-1">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.operationManagement') }}</h2>
+				<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.operationManagementDesc') }}</p>
 			</div>
-		</template>
-	</UDashboardPanel>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<ZSettingsGroup
+					v-for="group in operationGroups"
+					:key="group.title"
+					:title="group.title"
+					:description="group.description"
+					:icon="group.icon"
+					:color="group.color"
+					:items="group.items"
+				/>
+			</div>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

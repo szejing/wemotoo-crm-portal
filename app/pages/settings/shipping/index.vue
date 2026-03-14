@@ -1,20 +1,10 @@
 <template>
-	<UDashboardPanel id="settings-shipping">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.shippingSettings')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-		<template #body>
-			<div class="space-y-4">
-				<h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $t('nav.shippingSettings') }}</h2>
-				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.comingSoon') || 'Coming soon' }}</p>
-			</div>
-		</template>
-	</UDashboardPanel>
+	<ZPagePanel id="settings-shipping" :title="$t('nav.shippingSettings')">
+		<div class="space-y-4">
+			<h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $t('nav.shippingSettings') }}</h2>
+			<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.comingSoon') || 'Coming soon' }}</p>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

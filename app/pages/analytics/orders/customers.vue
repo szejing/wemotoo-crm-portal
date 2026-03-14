@@ -1,21 +1,9 @@
 <template>
-	<UDashboardPanel id="analytics-orders-customers">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.analyticsOrdersCustomers')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterOrderSummCustomers />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="analytics-orders-customers" :title="$t('pages.analyticsOrdersCustomers')">
+		<template #toolbar>
+			<ZSectionFilterOrderSummCustomers />
 		</template>
 
-		<template #body>
 			<div class="space-y-6">
 				<div v-if="!is_loading && data.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
@@ -57,8 +45,7 @@
 					/>
 				</div>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

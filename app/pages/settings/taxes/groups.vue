@@ -1,54 +1,40 @@
 <template>
-	<UDashboardPanel id="taxes-groups">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.taxGroups')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-
-				<template #right>
-					<ZCreateButton to="/products/create" :label="$t('common.addTaxGroup')" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterTaxGroups />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="taxes-groups" :title="$t('nav.taxGroups')">
+		<template #navbar-right>
+			<ZCreateButton to="/products/create" :label="$t('common.addTaxGroup')" />
+		</template>
+		<template #toolbar>
+			<ZSectionFilterTaxGroups />
 		</template>
 
-		<template #body>
-			<div class="space-y-6">
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="filter.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="exporting"
-					@update:model-value="updatePageSize"
-					@export="exportTaxGroups"
-				/>
+		<div class="space-y-6">
+			<!-- Table Controls -->
+			<ZTableToolbar
+				v-model="filter.page_size"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="exporting"
+				@update:model-value="updatePageSize"
+				@export="exportTaxGroups"
+			/>
 
-				<!-- Table  -->
-				<UTable :data="tax_groups" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
-					<template #empty>
-						<div class="flex flex-col items-center justify-center py-12 gap-3">
-							<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noTaxGroupsFound') }}</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-						</div>
-					</template>
-				</UTable>
+			<!-- Table  -->
+			<UTable :data="tax_groups" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
+				<template #empty>
+					<div class="flex flex-col items-center justify-center py-12 gap-3">
+						<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
+						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noTaxGroupsFound') }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+					</div>
+				</template>
+			</UTable>
 
-				<!-- Pagination  -->
-				<div v-if="tax_groups.length > 0" class="section-pagination">
-					<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_groups" @update:page="updatePage" />
-				</div>
+			<!-- Pagination  -->
+			<div v-if="tax_groups.length > 0" class="section-pagination">
+				<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_tax_groups" @update:page="updatePage" />
 			</div>
-		</template>
-	</UDashboardPanel>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

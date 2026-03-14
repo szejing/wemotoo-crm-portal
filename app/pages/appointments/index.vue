@@ -1,23 +1,10 @@
 <!-- eslint-disable indent -->
 <template>
-	<UDashboardPanel id="appointments">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.appointments')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar :ui="{ left: 'w-full', right: 'items-start justify-start' }">
-				<template #left>
-					<ZSectionFilterAppointments />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="appointments" :title="$t('nav.appointments')">
+		<template #toolbar>
+			<ZSectionFilterAppointments />
 		</template>
-
-		<template #body>
-			<div class="space-y-6">
+		<div class="space-y-6">
 				<!-- Status Filter -->
 				<div class="flex flex-col gap-1.5">
 					<div class="flex flex-wrap gap-2">
@@ -275,8 +262,7 @@
 					</div>
 				</template>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

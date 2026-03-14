@@ -1,23 +1,12 @@
 <template>
-	<UDashboardPanel id="home">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.home')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-				<template #right>
-					<DashboardDateRange v-model="dashboardRange" @update:model-value="onDashboardRangeChange" />
-				</template>
-			</UDashboardNavbar>
+	<ZPagePanel id="home" :title="$t('pages.home')">
+		<template #navbar-right>
+			<DashboardDateRange v-model="dashboardRange" @update:model-value="onDashboardRangeChange" />
 		</template>
-
-		<template #body>
-			<DashboardStats />
-			<DashboardOrderAmtChart />
-			<DashboardOrders />
-		</template>
-	</UDashboardPanel>
+		<DashboardStats />
+		<DashboardOrderAmtChart />
+		<DashboardOrders />
+	</ZPagePanel>
 </template>
 
 <script setup lang="ts">

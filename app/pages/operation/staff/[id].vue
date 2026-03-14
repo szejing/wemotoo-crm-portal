@@ -1,20 +1,10 @@
 <template>
-	<UDashboardPanel id="crm-user-detail">
-		<template #header>
-			<UDashboardNavbar :title="pageTitle">
-				<template #leading>
-					<ZBackButton fallbackTo="/operation/staff" />
-					<!-- <UDashboardSidebarCollapse class="hidden lg:flex" /> -->
-				</template>
-			</UDashboardNavbar>
-		</template>
+	<ZPagePanel id="crm-user-detail" :title="pageTitle" back-to="/operation/staff">
+		<div v-if="loading || !current_crm_user" class="w-full animate-in fade-in duration-200 space-y-6 max-w-3xl">
+			<FormCrmUserUpdateLoading />
+		</div>
 
-		<template #body>
-			<div v-if="loading || !current_crm_user" class="w-full animate-in fade-in duration-200 space-y-6 max-w-3xl">
-				<FormCrmUserUpdateLoading />
-			</div>
-
-			<div v-else class="space-y-6 max-w-3xl">
+		<div v-else class="space-y-6 max-w-3xl">
 				<!-- User info card: view / edit -->
 				<UCard>
 					<template #header>
@@ -73,8 +63,7 @@
 					<FormCrmUserChangePassword ref="formRef" :loading="updating" @submit="submitPassword" />
 				</UCard>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

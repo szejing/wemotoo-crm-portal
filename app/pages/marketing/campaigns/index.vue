@@ -1,20 +1,10 @@
 <template>
-	<UDashboardPanel id="marketing-campaigns">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.campaigns')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-		<template #body>
-			<div class="space-y-4">
-				<h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $t('nav.campaigns') }}</h2>
-				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.comingSoon') || 'Coming soon' }}</p>
-			</div>
-		</template>
-	</UDashboardPanel>
+	<ZPagePanel id="marketing-campaigns" :title="$t('nav.campaigns')">
+		<div class="space-y-4">
+			<h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $t('nav.campaigns') }}</h2>
+			<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.comingSoon') || 'Coming soon' }}</p>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

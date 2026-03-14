@@ -1,79 +1,66 @@
 <template>
-	<UDashboardPanel id="products-categories">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.categories')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-				<template #right>
-					<ZCreateButton to="/products/categories/create" :label="$t('common.addCategory')" />
-				</template>
-			</UDashboardNavbar>
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterCategories />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="products-categories" :title="$t('nav.categories')">
+		<template #navbar-right>
+			<ZCreateButton to="/products/categories/create" :label="$t('common.addCategory')" />
 		</template>
+		<template #toolbar>
+			<ZSectionFilterCategories />
+		</template>
+		<div class="space-y-6">
+			<!-- Table Controls -->
+			<ZTableToolbar
+				v-model="filter.page_size"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="exporting"
+				@update:model-value="updatePageSize"
+				@export="exportCategories"
+			/>
 
-		<template #body>
-			<div class="space-y-6">
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="filter.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="exporting"
-					@update:model-value="updatePageSize"
-					@export="exportCategories"
-				/>
-
-				<template v-if="initialize">
-					<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
-						<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
-							<USkeleton class="h-4 w-24" />
-							<USkeleton class="h-4 w-16" />
-						</div>
-						<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
-							<USkeleton class="h-4 w-40" />
-							<USkeleton class="h-4 w-12" />
-						</div>
+			<template v-if="initialize">
+				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+					<div class="grid grid-cols-[1fr_auto] gap-4 p-4">
+						<USkeleton class="h-4 w-24" />
+						<USkeleton class="h-4 w-16" />
+					</div>
+					<div v-for="i in 5" :key="i" class="grid grid-cols-[1fr_auto] gap-4 p-4 items-center">
+						<USkeleton class="h-4 w-40" />
+						<USkeleton class="h-4 w-12" />
+					</div>
+				</div>
+			</template>
+			<!-- Tree table (WooCommerce-style hierarchy) -->
+			<UTable
+				v-else
+				v-model:expanded="expanded"
+				:data="getDisplayCategories"
+				:columns="category_tree_columns"
+				:get-row-id="(row) => row.code"
+				:get-sub-rows="getSubRows"
+				:loading="loading"
+				:ui="{
+					base: 'border-separate border-spacing-0',
+					tbody: '[&>tr]:last:[&>td]:border-b-0',
+					tr: 'group data-[expanded=true]:bg-elevated/50',
+					td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default group-data-[expanded=true]:first:border-l-2 group-data-[expanded=true]:first:border-l-primary-400',
+				}"
+				@select="selectCategory"
+			>
+				<template #empty>
+					<div class="flex flex-col items-center justify-center py-12 gap-3">
+						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
+						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCategoriesFound') }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 					</div>
 				</template>
-				<!-- Tree table (WooCommerce-style hierarchy) -->
-				<UTable
-					v-else
-					v-model:expanded="expanded"
-					:data="getDisplayCategories"
-					:columns="category_tree_columns"
-					:get-row-id="(row) => row.code"
-					:get-sub-rows="getSubRows"
-					:loading="loading"
-					:ui="{
-						base: 'border-separate border-spacing-0',
-						tbody: '[&>tr]:last:[&>td]:border-b-0',
-						tr: 'group data-[expanded=true]:bg-elevated/50',
-						td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default group-data-[expanded=true]:first:border-l-2 group-data-[expanded=true]:first:border-l-primary-400',
-					}"
-					@select="selectCategory"
-				>
-					<template #empty>
-						<div class="flex flex-col items-center justify-center py-12 gap-3">
-							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
-							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCategoriesFound') }}</p>
-							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-						</div>
-					</template>
-				</UTable>
+			</UTable>
 
-				<!-- Count (tree view shows all categories) -->
-				<div v-if="!initialize && getDisplayCategories.length > 0" class="section-pagination text-sm text-muted">
-					{{ $t('pages.categoriesCount', { total: total_categories }) }}
-				</div>
+			<!-- Count (tree view shows all categories) -->
+			<div v-if="!initialize && getDisplayCategories.length > 0" class="section-pagination text-sm text-muted">
+				{{ $t('pages.categoriesCount', { total: total_categories }) }}
 			</div>
-		</template>
-	</UDashboardPanel>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

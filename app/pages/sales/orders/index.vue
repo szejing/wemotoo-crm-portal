@@ -1,21 +1,9 @@
 <template>
-	<UDashboardPanel id="orders">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.orders')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterOrders />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="orders" :title="$t('nav.orders')">
+		<template #toolbar>
+			<ZSectionFilterOrders />
 		</template>
 
-		<template #body>
 			<div class="space-y-6">
 				<!-- Table Controls -->
 				<div class="flex flex-col sm:flex-row sm:items-center justify-end sm:justify-between gap-4">
@@ -66,7 +54,10 @@
 				</UTable>
 
 				<!-- Pagination -->
-				<div v-if="!initialize && !loading && orders.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+				<div
+					v-if="!initialize && !loading && orders.length > 0"
+					class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3"
+				>
 					<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 						<div class="text-sm text-gray-700 dark:text-gray-300">
 							{{
@@ -89,8 +80,7 @@
 					</div>
 				</div>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

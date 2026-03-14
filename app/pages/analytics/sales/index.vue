@@ -1,15 +1,6 @@
 <template>
-	<UDashboardPanel id="analytics-sales">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.analytics')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
+	<ZPagePanel id="analytics-sales" :title="$t('nav.analytics')">
 
-		<template #body>
 			<div class="space-y-8">
 				<!-- Header -->
 				<div class="space-y-2">
@@ -121,8 +112,7 @@
 					:navigations="sales_navigations"
 				/>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

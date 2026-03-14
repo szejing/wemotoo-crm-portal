@@ -1,23 +1,12 @@
 <template>
-	<UDashboardPanel id="taxes-rules-detail-create">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.taxRules')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="flex-jbetween-icenter">
-				<h2 class="my-6">Add Tax Rule</h2>
-			</div>
-			<div class="wrapper-grid">
-				<FormTaxRuleCreation :adding="false" :new-tax-rule="new_tax_rule" />
-			</div>
-		</template>
-	</UDashboardPanel>
+	<ZPagePanel id="taxes-rules-detail-create" :title="$t('nav.taxRules')">
+		<div class="flex-jbetween-icenter">
+			<h2 class="my-6">Add Tax Rule</h2>
+		</div>
+		<div class="wrapper-grid">
+			<!-- <FormTaxRuleCreation :adding="false" :new-tax-rule="new_tax_rule" /> -->
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup></script>

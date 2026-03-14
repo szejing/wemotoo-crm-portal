@@ -1,21 +1,9 @@
 <template>
-	<UDashboardPanel id="analytics-sales-summary">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.analyticsSalesSummary')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterSaleSumm />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="analytics-sales-summary" :title="$t('pages.analyticsSalesSummary')">
+		<template #toolbar>
+			<ZSectionFilterSaleSumm />
 		</template>
 
-		<template #body>
 			<div class="space-y-6">
 				<div v-if="!loading && groupedByDate.length == 0">
 					<div class="flex flex-col items-center justify-center py-6">
@@ -67,8 +55,7 @@
 			<div v-if="data.length > 0" class="mt-6 flex justify-center">
 				<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

@@ -1,33 +1,22 @@
 <template>
-	<UDashboardPanel id="taxes">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.taxManagement')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-		</template>
-
-		<template #body>
-			<div class="space-y-8">
-				<!-- Header Section -->
-				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.taxManagement') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.taxManagementDesc') }}</p>
-				</div>
-
-				<!-- Tax Configuration Section -->
-				<ZMenu
-					:title="$t('pages.taxConfiguration')"
-					:icon="ICONS.TAX"
-					:description="$t('pages.taxConfigurationDesc')"
-					color="red"
-					:navigations="tax_navigations"
-				/>
+	<ZPagePanel id="taxes" :title="$t('pages.taxManagement')">
+		<div class="space-y-8">
+			<!-- Header Section -->
+			<div class="space-y-2">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.taxManagement') }}</h2>
+				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.taxManagementDesc') }}</p>
 			</div>
-		</template>
-	</UDashboardPanel>
+
+			<!-- Tax Configuration Section -->
+			<ZMenu
+				:title="$t('pages.taxConfiguration')"
+				:icon="ICONS.TAX"
+				:description="$t('pages.taxConfigurationDesc')"
+				color="red"
+				:navigations="tax_navigations"
+			/>
+		</div>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>

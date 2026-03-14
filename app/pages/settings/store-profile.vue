@@ -1,23 +1,13 @@
 <template>
-	<UDashboardPanel id="settings-store-profile">
-		<template #header>
-			<UDashboardNavbar :title="$t('nav.storeProfile')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-
-				<template #right>
-					<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
-					<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave" :disabled="!isDirty">
-						<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
-						{{ $t('common.save') }}
-					</UButton>
-				</template>
-			</UDashboardNavbar>
+	<ZPagePanel id="settings-store-profile" :title="$t('nav.storeProfile')">
+		<template #navbar-right>
+			<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
+			<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave" :disabled="!isDirty">
+				<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
+				{{ $t('common.save') }}
+			</UButton>
 		</template>
 
-		<template #body>
 			<div class="p-6 space-y-6">
 				<div class="space-y-2">
 					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.storeProfile') }}</h2>
@@ -164,10 +154,7 @@
 							<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
 							<div class="grid gap-4 sm:grid-cols-2">
 								<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
-									<ZSelectMenuDays
-										:days="operationOffDaysArray"
-										@update:days="onOperationOffDaysUpdate"
-									/>
+									<ZSelectMenuDays :days="operationOffDaysArray" @update:days="onOperationOffDaysUpdate" />
 								</UFormField>
 								<UFormField :label="$t('components.zInput.startTime')">
 									<ZSelectMenuTime
@@ -190,8 +177,7 @@
 					</div>
 				</UCard>
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
@@ -254,7 +240,10 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 const operationOffDaysArray = computed(() => {
 	const raw = getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_OFF_DAYS);
 	if (!raw?.trim()) return [];
-	return raw.split(',').map((s) => s.trim()).filter(Boolean);
+	return raw
+		.split(',')
+		.map((s) => s.trim())
+		.filter(Boolean);
 });
 
 const onOperationOffDaysUpdate = (days: string[]) => {

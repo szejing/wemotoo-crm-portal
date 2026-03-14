@@ -1,21 +1,9 @@
 <template>
-	<UDashboardPanel id="analytics-orders-items">
-		<template #header>
-			<UDashboardNavbar :title="$t('pages.analyticsOrdersItems')" :ui="{ right: 'gap-3' }">
-				<template #leading>
-					<ZBackButton class="lg:hidden" />
-					<UDashboardSidebarCollapse class="hidden lg:flex" />
-				</template>
-			</UDashboardNavbar>
-
-			<UDashboardToolbar>
-				<template #left>
-					<ZSectionFilterOrderSummItems />
-				</template>
-			</UDashboardToolbar>
+	<ZPagePanel id="analytics-orders-items" :title="$t('pages.analyticsOrdersItems')">
+		<template #toolbar>
+			<ZSectionFilterOrderSummItems />
 		</template>
 
-		<template #body>
 			<!-- Empty State -->
 			<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
 				<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
@@ -85,8 +73,7 @@
 			<div v-if="data.length > 0" class="mt-6 flex justify-center">
 				<UPagination v-model="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
 			</div>
-		</template>
-	</UDashboardPanel>
+	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
