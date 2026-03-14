@@ -8,11 +8,8 @@
 				body: 'p-4',
 			}"
 		>
-			<div class="flex items-start gap-3">
-				<div
-					class="p-2.5 rounded-full shrink-0"
-					:class="stat.iconBg"
-				>
+			<NuxtLink :to="stat.to" class="flex items-start gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-inherit -m-4 p-4">
+				<div class="w-10 h-10 flex items-center justify-center rounded-full" :class="stat.iconBg">
 					<UIcon :name="stat.icon" class="w-5 h-5" :class="stat.iconColor" />
 				</div>
 				<div class="min-w-0 flex-1">
@@ -20,15 +17,8 @@
 					<p class="mt-1 text-2xl font-semibold text-highlighted">
 						{{ stat.value }}
 					</p>
-					<NuxtLink
-						v-if="stat.to"
-						:to="stat.to"
-						class="mt-1 text-xs text-primary hover:underline"
-					>
-						{{ $t('common.details') }}
-					</NuxtLink>
 				</div>
-			</div>
+			</NuxtLink>
 		</UCard>
 	</UPageGrid>
 </template>
