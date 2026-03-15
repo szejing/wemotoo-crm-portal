@@ -28,7 +28,6 @@
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 col-span-full">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300 invisible">{{ $t('components.filter.actions') }}</label>
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
