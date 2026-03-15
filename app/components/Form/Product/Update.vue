@@ -91,7 +91,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ProductStatus } from 'wemotoo-common';
 import type { Category } from '~/utils/types/category';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 import type { Tag } from '~/utils/types/tag';

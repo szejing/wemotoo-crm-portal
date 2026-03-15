@@ -109,7 +109,8 @@ const emit = defineEmits<{
 
 // Sale price 0 or empty => treat as undefined (no sale); avoids showing "100% OFF"
 const effectiveSalePrice = computed(() => {
-	const p = props.salePrice;
+	const p = props.origSellPrice;
+	// const p = props.salePrice;
 	return p != null && Number(p) > 0 ? Number(p) : undefined;
 });
 
