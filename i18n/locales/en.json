@@ -178,7 +178,8 @@
 			"shortDescRequired": "Short description is required",
 			"priceRequired": "At least one price is required",
 			"optionNameRequired": "Option name is required (eg: Size)",
-			"optionValuesRequired": "Value is required (eg: Small, Medium, Large)"
+			"optionValuesRequired": "Value is required (eg: Small, Medium, Large)",
+			"variantPriceRequired": "Price is required for this variant"
 		},
 		"outlet": {
 			"outletCodeRequired": "Outlet code is required",

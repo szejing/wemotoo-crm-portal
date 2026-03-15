@@ -64,19 +64,29 @@
 							</template>
 
 							<!-- Price -->
-							<td class="px-3 py-2">
-								<UInput
-									v-model.number="row.variant.price_types![0]!.orig_sell_price"
-									type="number"
-									size="sm"
-									class="max-w-44"
-									:ui="{ base: 'ps-12' }"
-									@update:model-value="emitVariants"
+							<td class="px-3 py-2 align-top">
+								<UFormField
+									v-slot="{ error }"
+									:name="`variants.${rowIdx}.price_types.0.orig_sell_price`"
+									:label="undefined"
+									class="[&_.ui-form-field-label]:sr-only"
 								>
-									<template #leading>
-										<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
-									</template>
-								</UInput>
+									<div class="flex flex-col gap-0.5">
+										<UInput
+											v-model.number="row.variant.price_types![0]!.orig_sell_price"
+											type="number"
+											size="sm"
+											class="max-w-44"
+											:ui="{ base: 'ps-12' }"
+											:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+											@update:model-value="emitVariants"
+										>
+											<template #leading>
+												<span class="text-xs text-neutral-400">{{ currencyCode }}</span>
+											</template>
+										</UInput>
+									</div>
+								</UFormField>
 							</td>
 
 							<!-- Stock -->

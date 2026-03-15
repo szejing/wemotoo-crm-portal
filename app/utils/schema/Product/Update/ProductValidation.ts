@@ -9,6 +9,14 @@ const Price = z.object({
 	sale_price: z.number().optional().nullable(),
 });
 
+// Relaxed price for variants: input may be string (e.g. empty) before coercion; validation in superRefine
+const VariantPrice = z.object({
+	currency_code: z.string().optional(),
+	orig_sell_price: z.union([z.number(), z.string()]).optional(),
+	cost_price: z.number().optional().nullable(),
+	sale_price: z.number().optional().nullable(),
+});
+
 const Category = z.object({ code: z.string().optional(), name: z.string().optional() });
 
 const Tag = z.object({ id: z.number().optional(), value: z.string().optional() });
@@ -36,14 +44,14 @@ const buildVariant = (t: TranslateFn) => {
 		width: z.number().optional().nullable(),
 		origin_country: z.string().optional().nullable(),
 		material: z.string().optional().nullable(),
-		price_types: z.array(Price).optional().nullable(),
+		price_types: z.array(VariantPrice).optional().nullable(),
 		options: z.array(Option).optional().nullable(),
 	});
 };
 
 export const createUpdateProductValidation = (t: TranslateFn) => {
 	const Variant = buildVariant(t);
-	return z.object({
+	const base = z.object({
 		code: z
 			.string({ message: t('validation.product.codeRequired') })
 			.min(1, t('validation.product.codeRequired'))
@@ -59,6 +67,26 @@ export const createUpdateProductValidation = (t: TranslateFn) => {
 		variations: z.array(Variation).optional().nullable(),
 		variants: z.array(Variant).optional().nullable(),
 		type: z.number().default(1),
+	});
+	return base.superRefine((data, ctx) => {
+		const variants = data.variants ?? [];
+		for (let i = 0; i < variants.length; i++) {
+			const pt = variants[i]?.price_types?.[0];
+			const raw = pt?.orig_sell_price;
+			const price = typeof raw === 'string' ? Number.parseFloat(raw) : raw;
+			if (
+				pt == null ||
+				typeof price !== 'number' ||
+				Number.isNaN(price) ||
+				price < 0
+			) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: t('validation.product.variantPriceRequired'),
+					path: ['variants', i, 'price_types', 0, 'orig_sell_price'],
+				});
+			}
+		}
 	});
 };
 

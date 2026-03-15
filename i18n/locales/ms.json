@@ -178,7 +178,8 @@
 			"shortDescRequired": "Penerangan ringkas wajib",
 			"priceRequired": "Sekurang-kurangnya satu harga wajib",
 			"optionNameRequired": "Nama pilihan wajib (cth: Saiz)",
-			"optionValuesRequired": "Nilai wajib (cth: S, M, L)"
+			"optionValuesRequired": "Nilai wajib (cth: S, M, L)",
+			"variantPriceRequired": "Harga wajib untuk varian ini"
 		},
 		"outlet": {
 			"outletCodeRequired": "Kod cawangan wajib",

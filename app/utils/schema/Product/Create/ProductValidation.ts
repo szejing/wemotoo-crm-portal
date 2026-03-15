@@ -15,6 +15,14 @@ const Option = z.object({ id: z.number().optional(), variation_id: z.number().op
 
 const Variation = z.object({ id: z.number().optional(), name: z.string().optional(), options: z.array(Option).optional() });
 
+// Relaxed price for variants: input may be string (e.g. empty) before coercion; validation in superRefine
+const VariantPrice = z.object({
+	currency_code: z.string().optional(),
+	orig_sell_price: z.union([z.number(), z.string()]).optional(),
+	cost_price: z.number().optional().nullable(),
+	sale_price: z.number().optional().nullable(),
+});
+
 const Variant = z.object({
 	variant_code: z.string().optional(),
 	product_code: z.string().optional(),
@@ -33,11 +41,11 @@ const Variant = z.object({
 	width: z.number().optional(),
 	origin_country: z.string().optional(),
 	material: z.string().optional(),
-	price_types: z.array(Price).optional(),
+	price_types: z.array(VariantPrice).optional(),
 	variations: z.array(Variation).optional(),
 });
 
-export const CreateProductValidation = z.object({
+const createProductBase = z.object({
 	code: z.string().optional(),
 	name: z.string({ message: 'Name is required' }).min(1, 'Name is required'),
 	short_desc: z.string({ message: 'Short description is required' }).min(1, 'Short description is required'),
@@ -57,4 +65,27 @@ export const CreateProductValidation = z.object({
 	variants: z.array(Variant).optional(),
 	// type
 	type: z.number().default(1),
+});
+
+const VARIANT_PRICE_REQUIRED_MSG = 'Price is required for this variant';
+
+export const CreateProductValidation = createProductBase.superRefine((data, ctx) => {
+	const variants = data.variants ?? [];
+	for (let i = 0; i < variants.length; i++) {
+		const pt = variants[i]?.price_types?.[0];
+		const raw = pt?.orig_sell_price;
+		const price = typeof raw === 'string' ? Number.parseFloat(raw) : raw;
+		if (
+			pt == null ||
+			typeof price !== 'number' ||
+			Number.isNaN(price) ||
+			price < 0
+		) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: VARIANT_PRICE_REQUIRED_MSG,
+				path: ['variants', i, 'price_types', 0, 'orig_sell_price'],
+			});
+		}
+	}
 });
