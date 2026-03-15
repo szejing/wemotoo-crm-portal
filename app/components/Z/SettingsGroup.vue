@@ -18,10 +18,10 @@
 					v-for="(item, index) in items"
 					:key="index"
 					:to="item.to"
-					class="flex items-center justify-between px-1 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
+					class="group flex items-center justify-between rounded-md px-2 py-2.5 text-sm text-gray-700 dark:text-gray-300 transition-colors cursor-pointer hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800/60 dark:hover:text-white"
 				>
 					<span>{{ item.label }}</span>
-					<UIcon :name="ICONS.CHEVRON_RIGHT" class="text-lg text-gray-400 dark:text-gray-500" />
+					<UIcon :name="ICONS.CHEVRON_RIGHT" class="text-lg text-gray-400 dark:text-gray-500 transition-colors group-hover:text-gray-600 group-hover:translate-x-0.5 dark:group-hover:text-gray-300" />
 				</NuxtLink>
 			</div>
 		</div>
