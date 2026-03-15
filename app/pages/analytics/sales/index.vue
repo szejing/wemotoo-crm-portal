@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="analytics-sales" :title="$t('nav.analytics')" back-to="/analytics">
-		<div class="space-y-8">
+		<div class="space-y-4">
 			<!-- Header -->
 			<div class="space-y-2">
 				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.salesAnalytics') }}</h2>

@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="products" :title="$t('pages.servicesProductsManagement')">
-		<div class="space-y-8">
+		<div class="space-y-4">
 			<div class="space-y-1">
 				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.servicesProductsManagement') }}</h2>
 				<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.servicesProductsManagementDesc') }}</p>

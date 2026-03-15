@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="taxes" :title="$t('pages.taxManagement')" back-to="/settings">
-		<div class="space-y-8">
+		<div class="space-y-4">
 			<!-- Header Section -->
 			<div class="space-y-2">
 				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.taxManagement') }}</h2>

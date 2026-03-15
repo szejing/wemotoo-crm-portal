@@ -1,85 +1,55 @@
 <template>
 	<ZPagePanel id="analytics" :title="$t('nav.analytics')">
+		<div class="space-y-4">
+			<div class="space-y-2">
+				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.analyticsDashboard') }}</h2>
+				<p class="text-gray-500 dark:text-gray-400">{{ $t('pages.analyticsDashboardDesc') }}</p>
+			</div>
 
-			<div class="space-y-8">
-				<!-- Header Section -->
-				<div class="space-y-2">
-					<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('pages.analyticsDashboard') }}</h2>
-					<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.analyticsDashboardDesc') }}</p>
-				</div>
-
-				<!-- Order Analytics Section -->
-				<ZMenu
-					:title="$t('pages.orderAnalytics')"
-					:icon="ICONS.REPORT_ORDER"
-					:description="$t('pages.orderAnalyticsDesc')"
-					color="primary"
-					:navigations="order_navigations"
-				/>
-
-				<!-- Sales Analytics Section -->
-				<ZMenu
-					:title="$t('pages.salesAnalytics')"
-					:icon="ICONS.REPORT_SALES"
-					:description="$t('pages.salesAnalyticsDesc')"
-					color="green"
-					:navigations="sales_navigations"
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<ZSettingsGroup
+					v-for="group in analyticsGroups"
+					:key="group.title"
+					:title="group.title"
+					:description="group.description"
+					:icon="group.icon"
+					:color="group.color"
+					:items="group.items"
 				/>
 			</div>
+		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
+import { ICONS } from '~/utils/icons';
+
 const { t } = useI18n();
 useHead({ title: () => t('pages.analyticsTitle') });
 
-const order_navigations = computed(() => [
+const analyticsGroups = computed(() => [
 	{
-		title: t('pages.orderSummary'),
+		title: t('pages.orderAnalytics'),
+		description: t('pages.orderAnalyticsDesc'),
 		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/summary',
-		description: t('pages.orderSummaryDesc'),
+		color: 'blue' as const,
+		items: [
+			{ label: t('pages.orderSummary'), to: '/analytics/orders/summary' },
+			{ label: t('pages.orderItem'), to: '/analytics/orders/items' },
+			{ label: t('pages.orderCustomer'), to: '/analytics/orders/customers' },
+		],
 	},
 	{
-		title: t('pages.orderItem'),
-		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/items',
-		description: t('pages.orderItemDesc'),
-	},
-	{
-		title: t('pages.orderCustomer'),
-		icon: ICONS.REPORT_ORDER,
-		to: '/analytics/orders/customers',
-		description: t('pages.orderCustomerDesc'),
-	},
-]);
-
-const sales_navigations = computed(() => [
-	{
-		title: t('pages.salesSummary'),
+		title: t('pages.salesAnalytics'),
+		description: t('pages.salesAnalyticsDesc'),
 		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/summary',
-		description: t('pages.salesSummaryDesc'),
-	},
-	{
-		title: t('pages.salesItems'),
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/items',
-		description: t('pages.salesItemsDesc'),
-	},
-	{
-		title: t('pages.salesPayment'),
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/payments',
-		description: t('pages.salesPaymentDesc'),
-	},
-	{
-		title: t('pages.salesCustomer'),
-		icon: ICONS.REPORT_SALES,
-		to: '/analytics/sales/customers',
-		description: t('pages.salesCustomerDesc'),
+		color: 'green' as const,
+		items: [
+			{ label: t('pages.salesSummary'), to: '/analytics/sales/summary' },
+			{ label: t('pages.salesItems'), to: '/analytics/sales/items' },
+			{ label: t('pages.salesPayment'), to: '/analytics/sales/payments' },
+			{ label: t('pages.salesCustomer'), to: '/analytics/sales/customers' },
+		],
 	},
 ]);
 </script>
-
-<style scoped></style>
