@@ -9,7 +9,7 @@
 
 			<!-- Date range -->
 			<div class="flex flex-wrap items-center gap-3">
-				<ZSelectMenuDateRange v-model="range" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="onRangeChange" />
+				<ZDateRange v-model="range" @update:model-value="onRangeChange" />
 			</div>
 
 			<!-- Stats row -->

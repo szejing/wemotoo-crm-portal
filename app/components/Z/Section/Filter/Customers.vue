@@ -3,9 +3,9 @@
 		<!-- Compact Filter Grid -->
 		<div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
 			<!-- Date Range Filter -->
-			<div class="flex flex-col col-span-3 sm:col-span-2 gap-1.5">
+			<div class="flex flex-col col-span-full gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.joinedDate') }}</label>
-				<ZSelectMenuDateRange v-model="filter.joined_date" :placeholder="$t('components.filter.selectDateRange')" @update:model-value="handleDateRangeChange" />
+				<ZDateRange v-model="filter.joined_date" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Customer Search -->
@@ -15,7 +15,7 @@
 			</div>
 
 			<!-- Actions -->
-			<div class="flex flex-col gap-1.5 justify-end">
+			<div class="flex flex-col gap-1.5 col-span-full">
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />

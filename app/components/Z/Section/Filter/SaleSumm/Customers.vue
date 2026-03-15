@@ -3,9 +3,9 @@
 		<!-- Compact Filter Grid -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3 items-center">
 			<!-- Date Range Filter -->
-			<div class="flex flex-col gap-1.5">
+			<div class="flex flex-col col-span-full gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.dateRange') }}</label>
-				<ZSelectMenuDateRange v-model="filter.date_range" placeholder="Select date range" @update:model-value="handleDateRangeChange" />
+				<ZDateRange v-model="filter.date_range" @update:model-value="handleDateRangeChange" />
 			</div>
 
 			<!-- Order Status Filter -->
@@ -21,7 +21,7 @@
 			</div>
 
 			<!-- Actions -->
-			<div class="flex flex-col gap-1.5 justify-end sm:col-span-2">
+			<div class="flex flex-col gap-1.5 col-span-full">
 				<div class="flex gap-2">
 					<UButton variant="outline" color="neutral" :disabled="is_loading" @click="clearFilters">
 						<UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
