@@ -76,8 +76,7 @@ export const useProductTagStore = defineStore('productTagStore', {
 				};
 
 				if (this.filter.query) {
-					const queryFilter = `(value contains '${this.filter.query}')`;
-					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
+					queryParams.$search = this.filter.query;
 				}
 
 				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);

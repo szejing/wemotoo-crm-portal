@@ -78,20 +78,21 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
-				// Add query filter if provided
-				if (this.filter.query) {
-					const queryFilter = `order_no contains '${this.filter.query}'`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
-				const { data, '@odata.count': _total } = await $api.appointment.getMany({
+				const queryParams = {
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
 					$filter: filter,
 					// $expand: removeDuplicateExpands(defaultOrderRelations).join(','),
 					$orderby: 'start_date_time desc',
-				});
+				} as const;
+
+				// Use backend $search support for text search
+				if (this.filter.query) {
+					(queryParams as any).$search = this.filter.query;
+				}
+
+				const { data, '@odata.count': _total } = await $api.appointment.getMany(queryParams);
 
 				if (data) {
 					this.appointments = data;

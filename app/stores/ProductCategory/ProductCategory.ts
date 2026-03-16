@@ -93,8 +93,7 @@ export const useProductCategoryStore = defineStore('productCategoryStore', {
 				};
 
 				if (this.filter.query) {
-					const searchFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
-					queryParams.$filter = `parent_category_code eq null and ${searchFilter}`;
+					queryParams.$search = this.filter.query;
 				}
 
 				const { data, '@odata.count': total } = await $api.category.getMany(queryParams);

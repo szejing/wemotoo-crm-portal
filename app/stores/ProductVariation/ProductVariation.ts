@@ -80,8 +80,7 @@ export const useProductVariationStore = defineStore('productVariationStore', {
 				};
 
 				if (this.filter.query) {
-					const queryFilter = `(name contains '${this.filter.query}')`;
-					queryParams.$filter = queryFilter;
+					queryParams.$search = this.filter.query;
 				}
 
 				const { data, '@odata.count': total } = await $api.productVariation.getMany(queryParams);

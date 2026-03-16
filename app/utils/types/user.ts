@@ -1,6 +1,7 @@
 import type { UserRoles } from 'wemotoo-common';
 
 export type User = {
+	id: string;
 	role: UserRoles;
 	email_address: string;
 	name: string;
