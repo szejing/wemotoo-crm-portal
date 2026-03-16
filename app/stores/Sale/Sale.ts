@@ -86,20 +86,20 @@ export const useSaleStore = defineStore('saleStore', {
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
-				// Add query filter if provided
-				if (this.filter.query) {
-					const queryFilter = `order_no contains '${this.filter.query}'`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
-				const { bills, total } = await $api.sale.getBills({
+				const queryParams = {
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
 					$filter: filter,
 					$orderby: 'biz_date desc, created_at desc',
-					// $search: this.filter.query,
-				});
+				} as const;
+
+				// Use backend $search support for text search
+				if (this.filter.query) {
+					(queryParams as any).$search = this.filter.query;
+				}
+
+				const { bills, total } = await $api.sale.getBills(queryParams);
 
 				if (bills) {
 					this.bills = bills;
@@ -134,19 +134,20 @@ export const useSaleStore = defineStore('saleStore', {
 
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
-				// Add query filter if provided
-				if (this.filter.query) {
-					const queryFilter = `order_no contains '${this.filter.query}'`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
-				const blob = await $api.sale.exportBills({
+				const queryParams = {
 					$filter: filter,
 					$orderby: 'biz_date desc',
 					$count: true,
 					$top: this.filter.page_size,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-				});
+				} as const;
+
+				// Use backend $search support for text search
+				if (this.filter.query) {
+					(queryParams as any).$search = this.filter.query;
+				}
+
+				const blob = await $api.sale.exportBills(queryParams);
 
 				if (blob) {
 					const url = window.URL.createObjectURL(blob);

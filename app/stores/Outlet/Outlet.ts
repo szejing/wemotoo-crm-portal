@@ -75,13 +75,6 @@ export const useOutletStore = defineStore('outletStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				let filter = '';
-
-				if (this.filter.query) {
-					const queryFilter = `(code contains '${this.filter.query}' or description contains '${this.filter.query}')`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
@@ -90,8 +83,8 @@ export const useOutletStore = defineStore('outletStore', {
 					$orderby: 'updated_at desc',
 				};
 
-				if (filter) {
-					queryParams.$filter = filter;
+				if (this.filter.query) {
+					queryParams.$search = this.filter.query;
 				}
 
 				const { data, '@odata.count': total } = await $api.outlet.getMany(queryParams);
