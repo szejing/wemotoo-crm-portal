@@ -74,8 +74,6 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					? `(start_date_time between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
 					: `start_date_time le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
 
-				console.log(dateFilter);
-
 				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
 				// Add query filter if provided

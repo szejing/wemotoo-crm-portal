@@ -245,6 +245,8 @@
 										:get-status-color="(s: string) => getAppointmentStatusColor(s as AppointmentStatus)"
 										@select-day="selectDayInCalendarFromDate"
 										@select-appointment="selectAppointment"
+										@edit="openEditModal"
+										@delete="deleteAppointment"
 									/>
 								</div>
 							</UCard>
