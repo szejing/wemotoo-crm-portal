@@ -69,12 +69,6 @@ export const useCustomerStore = defineStore('customerStore', {
 					filter = filter ? `${filter} and ${joinedDateFilter}` : joinedDateFilter;
 				}
 
-				// Add query filter if provided
-				if (query) {
-					const queryFilter = `(customer_no contains '${query}' or name contains '${query}' or phone_no contains '${query}' or email_address contains '${query}')`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
@@ -85,6 +79,11 @@ export const useCustomerStore = defineStore('customerStore', {
 				// Only add $filter if it's not empty
 				if (filter) {
 					queryParams.$filter = filter;
+				}
+
+				// Use backend $search support for text search
+				if (query) {
+					queryParams.$search = query;
 				}
 
 				const { data, '@odata.count': total } = await $api.customer.getMany(queryParams);

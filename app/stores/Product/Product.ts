@@ -138,12 +138,6 @@ export const useProductStore = defineStore('productStore', {
 					filter = `status eq '${status}'`;
 				}
 
-				// Add query filter if provided
-				if (query) {
-					const queryFilter = `(code contains '${query}' or name contains '${query}' or short_desc contains '${query}')`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
@@ -154,6 +148,11 @@ export const useProductStore = defineStore('productStore', {
 
 				if (filter) {
 					queryParams.$filter = filter;
+				}
+
+				// Use backend $search support for text search
+				if (query) {
+					queryParams.$search = query;
 				}
 
 				const resp = await $api.product.getMany(queryParams);

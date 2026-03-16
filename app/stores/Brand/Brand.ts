@@ -84,7 +84,6 @@ export const useBrandStore = defineStore('brandStore', {
 
 			try {
 				const { query } = this.filter;
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
@@ -92,8 +91,7 @@ export const useBrandStore = defineStore('brandStore', {
 				};
 
 				if (query) {
-					const queryFilter = `(code contains '${query}' or description contains '${query}')`;
-					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
+					queryParams.$search = query;
 				}
 
 				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);

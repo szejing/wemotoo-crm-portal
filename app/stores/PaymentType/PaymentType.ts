@@ -63,12 +63,6 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 					filter = `currency_code eq '${currency_code}'`;
 				}
 
-				// Add query filter if provided
-				if (query) {
-					const queryFilter = `(code contains '${query}' or description contains '${query}')`;
-					filter = filter ? `${filter} and ${queryFilter}` : queryFilter;
-				}
-
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
 					$count: true,
@@ -80,6 +74,11 @@ export const usePaymentTypeStore = defineStore('paymentTypeStore', {
 				// Only add $filter if it's not empty
 				if (filter) {
 					queryParams.$filter = filter;
+				}
+
+				// Use backend $search support for text search
+				if (query) {
+					queryParams.$search = query;
 				}
 
 				const { data, '@odata.count': total } = await $api.paymentTypeGroup.getMany(queryParams);
