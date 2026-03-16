@@ -10,7 +10,7 @@
 			size="xs"
 			@click="applyPreset(preset)"
 		/>
-		<!-- Date range display + calendar popover -->
+		<!-- Date range display + calendar popover (custom range or single date) -->
 		<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
 			<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
 				<span class="truncate">
@@ -20,7 +20,11 @@
 			</UButton>
 			<template #content>
 				<div class="p-2">
-					<UCalendar v-model="draftCalendarRangeComputed" class="p-2" :number-of-months="2" range />
+					<ZDateRangePicker
+						:model-value="draftForPicker"
+						@update:model-value="onDraftUpdate"
+						@close="applyCalendar"
+					/>
 					<div class="flex justify-end gap-2 pt-2 border-t border-default mt-2">
 						<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="popoverOpen = false" />
 						<UButton :label="$t('common.apply')" color="primary" @click="applyCalendar" />
@@ -32,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, subWeeks } from 'date-fns';
 import { getFormattedDate } from 'wemotoo-common';
 import type { Range } from '~/utils/interface';
+import type { DateRange as PickerDateRange } from '~/components/Z/DateRangePicker.vue';
 
 const model = defineModel<Range>({ required: true });
 
@@ -95,40 +99,44 @@ const presets = [
 
 const rangeLabel = computed(() => {
 	const { start, end } = model.value;
-	if (!start || !end) return t('components.filter.selectDateRange');
+	if (!start) return t('components.filter.selectDateRange');
+	// Single date: only start, or start and end on same day
+	if (!end || (start.getTime() === end.getTime())) {
+		return getFormattedDate(start, 'dd-MM-yyyy');
+	}
 	return `${getFormattedDate(start, 'dd-MM-yyyy')} - ${getFormattedDate(end, 'dd-MM-yyyy')}`;
 });
 
-const toCalendarDate = (date: Date) => new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-
 const popoverOpen = ref(false);
 
-// Draft range (Date) for calendar popover; only committed to model on Apply
+// Draft range for calendar popover; only committed to model on Apply or when picker emits close
 const draftRange = ref<Range>({ start: undefined, end: undefined });
 
 watch(popoverOpen, (open) => {
-	if (open && model.value?.start && model.value?.end) {
+	if (open) {
 		draftRange.value = {
-			start: model.value.start,
-			end: model.value.end,
+			start: model.value?.start,
+			end: model.value?.end,
 		};
 	}
 });
 
-// Bridge for UCalendar: computed converts between our Range (Date) and CalendarDate range
-const draftCalendarRangeComputed = computed({
-	get: () => ({
-		start: draftRange.value?.start ? toCalendarDate(draftRange.value.start) : undefined,
-		end: draftRange.value?.end ? toCalendarDate(draftRange.value.end) : undefined,
-	}),
-	set: (val: { start?: CalendarDate; end?: CalendarDate } | null) => {
-		if (!val?.start) return;
-		draftRange.value = {
-			start: val.start.toDate(getLocalTimeZone()),
-			end: val.end ? val.end.toDate(getLocalTimeZone()) : val.start.toDate(getLocalTimeZone()),
-		};
-	},
-});
+// Adapter for ZDateRangePicker (expects start/end as Date | null)
+const draftForPicker = computed<PickerDateRange | null>(() => ({
+	start: draftRange.value?.start ?? null,
+	end: draftRange.value?.end ?? null,
+}));
+
+function onDraftUpdate(v: PickerDateRange | null) {
+	if (!v) {
+		draftRange.value = { start: undefined, end: undefined };
+		return;
+	}
+	draftRange.value = {
+		start: v.start ?? undefined,
+		end: v.end ?? undefined,
+	};
+}
 
 function isPresetActive(preset: (typeof presets)[0]) {
 	const r = model.value;
@@ -142,8 +150,10 @@ function applyPreset(preset: (typeof presets)[0]) {
 }
 
 function applyCalendar() {
-	if (draftRange.value?.start && draftRange.value?.end) {
-		model.value = { start: draftRange.value.start, end: draftRange.value.end };
+	const { start, end } = draftRange.value ?? {};
+	// Commit single date (start only) or range (start + end; end defaults to start when missing)
+	if (start) {
+		model.value = { start, end: end ?? start };
 	}
 	popoverOpen.value = false;
 }
