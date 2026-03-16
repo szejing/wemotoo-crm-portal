@@ -63,9 +63,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 			this.getTags();
 		},
 
-		async getTags() {
-			this.loading = true;
+		async fetchTags(append = false) {
 			const { $api } = useNuxtApp();
+
 			try {
 				const queryParams: BaseODataReq = {
 					$top: this.filter.page_size,
@@ -83,12 +83,20 @@ export const useProductTagStore = defineStore('productTagStore', {
 				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);
 
 				if (data) {
-					this.tags = data;
+					this.tags = append ? [...this.tags, ...data] : data;
 					this.total_tags = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
 				failedNotification(message);
+			}
+		},
+
+		async getTags() {
+			this.loading = true;
+
+			try {
+				await this.fetchTags(false);
 			} finally {
 				this.loading = false;
 			}
@@ -99,31 +107,9 @@ export const useProductTagStore = defineStore('productTagStore', {
 
 			this.loading = true;
 			this.filter.current_page += 1;
-			const { $api } = useNuxtApp();
 
 			try {
-				const queryParams: BaseODataReq = {
-					$top: this.filter.page_size,
-					$count: true,
-					$expand: 'products',
-					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$orderby: 'updated_at desc',
-				};
-
-				if (this.filter.query) {
-					const queryFilter = `(value contains '${this.filter.query}')`;
-					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
-				}
-
-				const { data, '@odata.count': total } = await $api.tag.getMany(queryParams);
-
-				if (data) {
-					this.tags = [...this.tags, ...data];
-					this.total_tags = total ?? 0;
-				}
-			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to process product tag';
-				failedNotification(message);
+				await this.fetchTags(true);
 			} finally {
 				this.loading = false;
 			}

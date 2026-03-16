@@ -79,9 +79,9 @@ export const useBrandStore = defineStore('brandStore', {
 			}
 		},
 
-		async getBrands() {
-			this.loading = true;
+		async fetchBrands(append = false) {
 			const { $api } = useNuxtApp();
+
 			try {
 				const { query } = this.filter;
 
@@ -99,12 +99,20 @@ export const useBrandStore = defineStore('brandStore', {
 				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);
 
 				if (data) {
-					this.brands = data;
+					this.brands = append ? [...this.brands, ...data] : data;
 					this.total_brands = total ?? 0;
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
 				failedNotification(message);
+			}
+		},
+
+		async getBrands() {
+			this.loading = true;
+
+			try {
+				await this.fetchBrands(false);
 			} finally {
 				this.loading = false;
 			}
@@ -115,31 +123,9 @@ export const useBrandStore = defineStore('brandStore', {
 
 			this.loading = true;
 			this.filter.current_page += 1;
-			const { $api } = useNuxtApp();
 
 			try {
-				const { query } = this.filter;
-
-				const queryParams: BaseODataReq = {
-					$top: this.filter.page_size,
-					$count: true,
-					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-				};
-
-				if (query) {
-					const queryFilter = `(code contains '${query}' or description contains '${query}')`;
-					queryParams.$filter = queryParams.$filter ? `${queryParams.$filter} and ${queryFilter}` : queryFilter;
-				}
-
-				const { data, '@odata.count': total } = await $api.brand.getMany(queryParams);
-
-				if (data) {
-					this.brands = [...this.brands, ...data];
-					this.total_brands = total ?? 0;
-				}
-			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to process brand';
-				failedNotification(message);
+				await this.fetchBrands(true);
 			} finally {
 				this.loading = false;
 			}
