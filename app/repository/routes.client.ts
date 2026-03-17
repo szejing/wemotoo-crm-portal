@@ -101,6 +101,7 @@ const MerchantRoutes = {
 		Single: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Update: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		UpdatePassword: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}/password`,
+		ResetPassword: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}/reset-password`,
 		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Restore: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},

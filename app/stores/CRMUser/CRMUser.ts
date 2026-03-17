@@ -7,6 +7,7 @@ import type { BaseODataReq } from '~/repository/base/base.req';
 import type { UpdateCrmUserReq } from '~/repository/modules/crm-user/request/update-crm-user.req';
 import type { ChangePasswordReq } from '~/repository/modules/crm-user/request/change-password.req';
 import type { ErrorResponse } from '~/repository/base/error';
+import type { ResetPasswordReq } from '~/repository/modules/crm-user/request/reset-password.req';
 
 type CrmUserFilter = {
 	query: string;
@@ -80,7 +81,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				this.crm_users = data;
 				this.total_count = total;
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to load CRM users';
+				const message = (err as ErrorResponse).message ?? 'Failed to load staff';
 				failedNotification(message);
 			} finally {
 				this.loading = false;
@@ -94,7 +95,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 				const resp = await $api.crmUser.getSingle(id);
 				return resp.user;
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to load CRM user';
+				const message = (err as ErrorResponse).message ?? 'Failed to load staff';
 				failedNotification(message);
 				return null;
 			} finally {
@@ -118,12 +119,12 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 
 				if (resp?.user) {
 					this.resetNewCrmUser();
-					successNotification(`${resp.user.name} - CRM User Created !`);
+					successNotification(`${resp.user.name} - Staff Created !`);
 					return true;
 				}
 				return false;
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to create CRM user';
+				const message = (err as ErrorResponse).message ?? 'Failed to create staff';
 				failedNotification(message);
 				return false;
 			} finally {
@@ -148,11 +149,11 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 						}
 						return user;
 					});
-					successNotification(`${resp.user.name} - CRM User Updated !`);
+					successNotification(`${resp.user.name} - Staff Updated !`);
 				}
 				return null;
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to update CRM user';
+				const message = (err as ErrorResponse).message ?? 'Failed to update staff';
 				failedNotification(message);
 				return null;
 			} finally {
@@ -168,12 +169,32 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			try {
 				const resp = await $api.crmUser.updatePassword(id, body);
 				if (resp?.user) {
-					successNotification(`${resp.user.name} - CRM User Password Updated !`);
+					successNotification(`${resp.user.name} - Staff Password Updated !`);
 					return true;
 				}
 				return undefined;
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to delete CRM user';
+				const message = (err as ErrorResponse).message ?? 'Failed to delete staff';
+				failedNotification(message);
+			} finally {
+				this.updating = false;
+			}
+		},
+
+		async resetCrmUserPassword(id: string, body: ResetPasswordReq): Promise<true | undefined> {
+			const nuxtApp = useNuxtApp();
+			const { $api } = nuxtApp;
+			const t = nuxtApp.$i18n.t;
+			this.updating = true;
+			try {
+				const resp = await $api.crmUser.resetPassword(id, body);
+				if (resp?.user) {
+					successNotification(`${resp.user.name} - Staff Password Reset !`);
+					return true;
+				}
+				return undefined;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to reset staff password';
 				failedNotification(message);
 			} finally {
 				this.updating = false;
@@ -185,12 +206,12 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			this.updating = true;
 			try {
 				await $api.crmUser.delete(crmUser);
-				successNotification(`${crmUser.name} - CRM User Deleted !`);
+				successNotification(`${crmUser.name} - Staff Deleted !`);
 
 				const index = this.crm_users.findIndex((t) => t.id === crmUser.id);
 				this.crm_users.splice(index, 1);
 			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to delete CRM user';
+				const message = (err as ErrorResponse).message ?? 'Failed to delete staff';
 				failedNotification(message);
 			} finally {
 				this.updating = false;

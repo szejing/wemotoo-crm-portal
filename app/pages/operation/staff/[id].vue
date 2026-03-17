@@ -195,11 +195,18 @@ const submitPassword = async (payload: { old_password: string; new_password: str
 	if (isResetOther && !isAdmin.value) {
 		return;
 	}
-	const result = await crmUserStore.updateCrmUserPassword(id.value, {
-		old_password: payload.old_password,
-		new_password: payload.new_password,
-		confirm_password: payload.confirm_password,
-	});
+
+	const result = isViewingSelf.value
+		? await crmUserStore.updateCrmUserPassword(id.value, {
+				old_password: payload.old_password,
+				new_password: payload.new_password,
+				confirm_password: payload.confirm_password,
+			})
+		: await crmUserStore.resetCrmUserPassword(authUser.value!.id, {
+				staff_id: current_crm_user.value!.id,
+				new_password: payload.new_password,
+				confirm_password: payload.confirm_password,
+			});
 
 	if (result === true) {
 		formRef.value?.reset();
