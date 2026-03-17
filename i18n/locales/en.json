@@ -236,9 +236,12 @@
 		"crmUser": {
 			"nameRequired": "Name is required",
 			"emailAddressRequired": "Email address is required",
+			"emailAddressInvalid": "Email address must be valid",
 			"dialCodeRequired": "Dial code is required",
 			"phoneNumberRequired": "Phone number is required",
-			"roleRequired": "Role is required"
+			"phoneNumberInvalid": "Phone number must be 6–15 digits",
+			"roleRequired": "Role is required",
+			"isActiveRequired": "Status is required"
 		}
 	},
 	"pages": {

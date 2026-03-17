@@ -236,9 +236,12 @@
 		"crmUser": {
 			"nameRequired": "Nama wajib",
 			"emailAddressRequired": "Alamat e-mel wajib",
+			"emailAddressInvalid": "Alamat e-mel mesti sah",
 			"dialCodeRequired": "Kod dail wajib",
 			"phoneNumberRequired": "Nombor telefon wajib",
-			"roleRequired": "Peranan wajib"
+			"phoneNumberInvalid": "Nombor telefon mesti 6–15 digit",
+			"roleRequired": "Peranan wajib",
+			"isActiveRequired": "Status wajib"
 		}
 	},
 	"pages": {
