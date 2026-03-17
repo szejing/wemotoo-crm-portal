@@ -130,65 +130,18 @@
 						</div>
 					</div>
 				</div>
-				<div v-else class="px-3 py-6 text-center">
-					<UIcon name="i-heroicons-calendar-days" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-					<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
-				</div>
 			</div>
 		</div>
-
-		<!-- Day listing modal: all appointments for the selected day -->
-		<UModal
-			v-model:open="dayListingOpen"
-			:title="dayListingDate ? format(dayListingDate, 'EEEE, d MMMM') : ''"
-			:ui="{ content: 'sm:max-w-md' }"
-			@update:open="onDayListingModalClose"
-		>
-			<div v-if="dayListingAppointments.length > 0" class="divide-y divide-gray-100 dark:divide-gray-800 max-h-[60vh] overflow-y-auto">
-				<div
-					v-for="appointment in dayListingAppointments"
-					:key="appointment.code"
-					class="flex items-start gap-3 px-1 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors rounded-lg"
-					:class="[selectedCode === appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
-					@click="onDayListingSelectAppointment(appointment)"
-				>
-					<div class="w-1 self-stretch rounded-full shrink-0 mt-0.5" :class="getDotColorClass(appointment.status)" />
-					<div class="flex-1 min-w-0">
-						<div class="flex items-center justify-between gap-2">
-							<p class="font-medium text-sm text-gray-900 dark:text-white truncate">{{ appointment.customer_name }}</p>
-							<UBadge
-								:color="getStatusColor(appointment.status) as 'primary' | 'success' | 'warning' | 'error' | 'info' | 'neutral'"
-								variant="subtle"
-								size="xs"
-								class="shrink-0"
-							>
-								{{ $t('options.' + appointment.status.toLowerCase()) }}
-							</UBadge>
-						</div>
-						<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
-							<UIcon name="i-heroicons-clock" class="w-3 h-3 shrink-0" />
-							{{ formatTime(appointment.start_date_time) }}
-							<span v-if="appointment.duration" class="text-gray-400 dark:text-gray-500">
-								· {{ $t('pages.durationMinutes', { n: appointment.duration }) }}
-							</span>
-						</p>
-						<p v-if="appointment.appt_desc" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
-							{{ appointment.appt_desc }}
-						</p>
-					</div>
-				</div>
-			</div>
-			<div v-else class="px-3 py-8 text-center">
-				<UIcon name="i-heroicons-calendar-days" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-				<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
-			</div>
-		</UModal>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { add, endOfMonth, format, isToday as isTodayFn, startOfMonth, startOfWeek } from 'date-fns';
+import { ZModalDayAppointments } from '#components';
+import { add, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
+
+const overlay = useOverlay();
+const dayModal = overlay.create(ZModalDayAppointments);
 
 const props = withDefaults(
 	defineProps<{
@@ -209,6 +162,8 @@ const props = withDefaults(
 const emit = defineEmits<{
 	selectDay: [date: Date];
 	selectAppointment: [appointment: Appointment];
+	edit: [appointment: Appointment];
+	delete: [code: string];
 }>();
 
 const { t: $t } = useI18n();
@@ -225,9 +180,9 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener('resize', checkMobile);
 });
-function checkMobile() {
+const checkMobile = () => {
 	isMobileView.value = window.innerWidth < 640;
-}
+};
 
 // Weekday headers with full & short labels
 const weekdayLabels = computed(() => {
@@ -305,33 +260,24 @@ const selectedDayAppointments = computed(() => {
 	return appointmentsByDate.value[dayKey(props.selectedDay)] ?? [];
 });
 
-// Day listing modal (when clicking "+N more" on a cell)
-const dayListingOpen = ref(false);
-const dayListingDate = ref<Date | null>(null);
-const dayListingAppointments = computed(() => {
-	if (!dayListingDate.value) return [];
-	return appointmentsByDate.value[dayKey(dayListingDate.value)] ?? [];
-});
-
-function openDayListing(date: Date) {
-	dayListingDate.value = date;
-	dayListingOpen.value = true;
+// Day listing modal: open programmatically via useOverlay when clicking "+N more"
+const openDayListing = (date: Date) => {
 	emit('selectDay', date);
-}
-
-function onDayListingSelectAppointment(appointment: Appointment) {
-	emit('selectAppointment', appointment);
-	dayListingOpen.value = false;
-}
-
-function onDayListingModalClose(open: boolean) {
-	if (!open) dayListingDate.value = null;
-}
+	const appointments = appointmentsByDate.value[dayKey(date)] ?? [];
+	dayModal.open({
+		date,
+		appointments,
+		getStatusColor: props.getStatusColor,
+		onSelectAppointment: (a) => emit('selectAppointment', a),
+		onEdit: (a) => emit('edit', a),
+		onDelete: (c) => emit('delete', c),
+	});
+};
 
 const formatTime = (d: string | Date) => format(new Date(d), 'h:mm a');
 
 /** Get the color dot class for a status */
-function getDotColorClass(status?: string): string {
+const getDotColorClass = (status?: string): string => {
 	if (!status) return 'bg-gray-400';
 	const color = props.getStatusColor(status);
 	const map: Record<string, string> = {
@@ -343,7 +289,7 @@ function getDotColorClass(status?: string): string {
 		neutral: 'bg-gray-400',
 	};
 	return map[color] ?? 'bg-primary-500';
-}
+};
 
 const getStatusColor = (status: string) => props.getStatusColor(status);
 </script>
