@@ -23,7 +23,7 @@
 			<!-- Listing view (default) -->
 			<template v-if="appointmentStore.isListingView">
 				<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-					<div :class="selectedAppointment ? 'lg:col-span-1' : 'lg:col-span-3'">
+					<div :class="selectedAppointment ? 'lg:col-span-2' : 'lg:col-span-3'">
 						<UCard>
 							<div class="flex items-center justify-between mb-4">
 								<div>
@@ -34,77 +34,22 @@
 								</div>
 							</div>
 							<ZLoading v-if="appointmentStore.loading" />
-							<div v-else-if="displayedAppointments.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-								<UIcon name="i-heroicons-calendar-days" class="w-16 h-16 text-gray-400" />
-								<div class="text-center">
-									<p class="font-medium text-gray-900 dark:text-white">{{ $t('pages.noAppointmentsFound') }}</p>
-									<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-										{{ filter.query ? $t('pages.tryAdjustingFilters') : $t('pages.scheduleFirstAppointment') }}
-									</p>
-								</div>
-							</div>
-							<div v-else class="space-y-3 max-h-[calc(100vh-420px)] overflow-y-auto pr-2">
-								<UCard
-									v-for="appointment in displayedAppointments"
-									:key="appointment.code"
-									:class="[
-										'hover:shadow-md transition-shadow cursor-pointer border',
-										selectedAppointment?.code === appointment.code
-											? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
-											: 'border-gray-200 dark:border-gray-700',
-									]"
-									@click="selectAppointment(appointment)"
-								>
-									<div class="space-y-3">
-										<div class="flex items-center justify-between">
-											<div class="flex items-center gap-2">
-												<UIcon name="i-heroicons-document-text" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
-												<span class="text-lg font-bold text-gray-900 dark:text-white"> {{ appointment.code }} </span>
-											</div>
-											<UBadge :color="getAppointmentStatusColor(appointment.status)" variant="subtle" size="sm">
-												{{ $t('options.' + appointment.status.toLowerCase()) }}
-											</UBadge>
-										</div>
-										<div class="flex items-center gap-3 p-3 bg-primary-50 dark:bg-primary-900/10 rounded-lg">
-											<div class="p-2 bg-primary-100 dark:bg-primary-900/20 rounded-lg">
-												<UIcon name="i-heroicons-calendar-days" class="w-5 h-5 text-primary-600 dark:text-primary-400" />
-											</div>
-											<div class="flex-1">
-												<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.appointmentDate') }}</p>
-												<p class="font-semibold text-gray-900 dark:text-white">
-													{{ formatAppointmentDateRange(appointment.start_date_time, appointment.end_date_time) }}
-												</p>
-											</div>
-										</div>
-										<div class="flex items-start gap-3">
-											<div class="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
-												<UIcon name="i-heroicons-wrench" class="w-5 h-5 text-gray-600 dark:text-gray-400" />
-											</div>
-											<div class="flex-1 min-w-0">
-												<p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ $t('pages.service') }}</p>
-												<p class="font-medium text-gray-900 dark:text-white">{{ appointment.appt_desc || $t('pages.noDescription') }}</p>
-											</div>
-										</div>
-										<div class="flex items-start gap-3">
-											<div class="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
-												<UIcon name="i-heroicons-user" class="w-5 h-5 text-gray-600 dark:text-gray-400" />
-											</div>
-											<div class="flex-1 min-w-0">
-												<p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ $t('pages.customer') }}</p>
-												<p class="font-medium text-gray-900 dark:text-white truncate">{{ appointment.customer_name }}</p>
-												<p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ appointment.customer_phone }}</p>
-											</div>
-										</div>
-										<div v-if="appointment.duration" class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 pl-1">
-											<UIcon name="i-heroicons-clock" class="w-4 h-4" />
-											<span>{{ $t('pages.durationMinutes', { n: appointment.duration }) }}</span>
+							<UTable v-else :data="displayedAppointments" :columns="appointment_columns" :ui="{ tr: 'cursor-pointer' }" @select="onSelectAppointment">
+								<template #empty>
+									<div class="flex flex-col items-center justify-center py-12 gap-3">
+										<UIcon name="i-heroicons-calendar-days" class="w-16 h-16 text-gray-400" />
+										<div class="text-center">
+											<p class="font-medium text-gray-900 dark:text-white">{{ $t('pages.noAppointmentsFound') }}</p>
+											<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+												{{ filter.query ? $t('pages.tryAdjustingFilters') : $t('pages.scheduleFirstAppointment') }}
+											</p>
 										</div>
 									</div>
-								</UCard>
-							</div>
+								</template>
+							</UTable>
 						</UCard>
 					</div>
-					<div v-if="selectedAppointment" class="lg:col-span-2">
+					<div v-if="selectedAppointment" class="lg:col-span-1">
 						<ZCalendarAppointmentDetail
 							:appointment="selectedAppointment"
 							@close="selectedAppointment = null"
@@ -269,11 +214,12 @@
 
 <script lang="ts" setup>
 import { CalendarDate, type DateValue } from '@internationalized/date';
+import type { TableRow } from '@nuxt/ui';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { add, endOfMonth, endOfWeek, format, getISOWeek, startOfWeek, sub } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
-import { formatAppointmentDateRange } from '~/utils/utils';
+import { getAppointmentColumns } from '~/utils/table-columns';
 import { getAppointmentStatusColor } from '~/utils/options';
 
 const overlay = useOverlay();
@@ -289,6 +235,7 @@ const selectedCalendarDay = ref<Date | null>(null);
 const selectedTab = ref(0);
 
 const { t } = useI18n();
+const appointment_columns = computed(() => getAppointmentColumns(t));
 useHead({ title: () => t('pages.appointmentsTitle') });
 
 const dateKey = (d: Date) => format(d, 'yyyy-MM-dd');
@@ -508,6 +455,11 @@ onMounted(async () => {
 const selectAppointment = (appointment: Appointment) => {
 	if (!appointment) return;
 	selectedAppointment.value = appointment;
+};
+
+const onSelectAppointment = (_e: Event, row: TableRow<Appointment>) => {
+	const appointment = row.original;
+	if (appointment) selectAppointment(appointment);
 };
 
 const openEditModal = async (appointment: Appointment) => {
