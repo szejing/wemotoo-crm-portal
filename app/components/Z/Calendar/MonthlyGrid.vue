@@ -267,7 +267,6 @@ const openDayListing = (date: Date) => {
 	dayModal.open({
 		date,
 		appointments,
-		selectedCode: props.selectedCode,
 		getStatusColor: props.getStatusColor,
 		onSelectAppointment: (a) => emit('selectAppointment', a),
 		onEdit: (a) => emit('edit', a),

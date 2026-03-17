@@ -19,7 +19,7 @@
 							v-for="appointment in appointments"
 							:key="appointment.code"
 							class="flex items-start gap-3 px-1.5 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors rounded-lg"
-							:class="[selectedCode === appointment.code || selectedAppointment?.code === appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
+							:class="[selectedAppointment?.code === appointment.code ? 'bg-primary-50/50 dark:bg-primary-900/10' : '']"
 							@click="onSelectAppointment(appointment)"
 						>
 							<div class="w-1 self-stretch rounded-full shrink-0 mt-0.5" :class="getDotColorClass(appointment.status)" />
@@ -71,14 +71,12 @@
 import { format } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
 
-// When used programmatically via useOverlay(), modal is open when mounted.
 const isOpen = ref(true);
 
 const props = withDefaults(
 	defineProps<{
 		date: Date | null;
 		appointments: Appointment[];
-		selectedCode?: string | null;
 		getStatusColor?: (status: string) => string;
 		onSelectAppointment?: (appointment: Appointment) => void;
 		onEdit?: (appointment: Appointment) => void;
