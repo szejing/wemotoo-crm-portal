@@ -130,31 +130,18 @@
 						</div>
 					</div>
 				</div>
-				<div v-else class="px-3 py-6 text-center">
-					<UIcon name="i-heroicons-calendar-days" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-					<p class="text-xs text-gray-400 dark:text-gray-500">{{ $t('pages.noAppointmentsFound') }}</p>
-				</div>
 			</div>
 		</div>
-
-		<!-- Day listing modal: all appointments for the selected day -->
-		<ZModalDayAppointments
-			v-model:open="dayListingOpen"
-			:date="dayListingDate"
-			:appointments="dayListingAppointments"
-			:selected-code="selectedCode ?? null"
-			:get-status-color="getStatusColor"
-			@update:open="onDayListingModalClose"
-			@select-appointment="(appointment: Appointment) => emit('selectAppointment', appointment)"
-			@edit="(appointment: Appointment) => emit('selectAppointment', appointment)"
-			@delete="(code: string) => emit('selectAppointment', dayListingAppointments.find((a) => a.code === code) as Appointment)"
-		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { add, endOfMonth, format, isToday as isTodayFn, startOfMonth, startOfWeek } from 'date-fns';
+import { ZModalDayAppointments } from '#components';
+import { add, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
+
+const overlay = useOverlay();
+const dayModal = overlay.create(ZModalDayAppointments);
 
 const props = withDefaults(
 	defineProps<{
@@ -175,6 +162,8 @@ const props = withDefaults(
 const emit = defineEmits<{
 	selectDay: [date: Date];
 	selectAppointment: [appointment: Appointment];
+	edit: [appointment: Appointment];
+	delete: [code: string];
 }>();
 
 const { t: $t } = useI18n();
@@ -191,9 +180,9 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener('resize', checkMobile);
 });
-function checkMobile() {
+const checkMobile = () => {
 	isMobileView.value = window.innerWidth < 640;
-}
+};
 
 // Weekday headers with full & short labels
 const weekdayLabels = computed(() => {
@@ -271,28 +260,25 @@ const selectedDayAppointments = computed(() => {
 	return appointmentsByDate.value[dayKey(props.selectedDay)] ?? [];
 });
 
-// Day listing modal (when clicking "+N more" on a cell)
-const dayListingOpen = ref(false);
-const dayListingDate = ref<Date | null>(null);
-const dayListingAppointments = computed(() => {
-	if (!dayListingDate.value) return [];
-	return appointmentsByDate.value[dayKey(dayListingDate.value)] ?? [];
-});
-
-function openDayListing(date: Date) {
-	dayListingDate.value = date;
-	dayListingOpen.value = true;
+// Day listing modal: open programmatically via useOverlay when clicking "+N more"
+const openDayListing = (date: Date) => {
 	emit('selectDay', date);
-}
-
-function onDayListingModalClose(open: boolean) {
-	if (!open) dayListingDate.value = null;
-}
+	const appointments = appointmentsByDate.value[dayKey(date)] ?? [];
+	dayModal.open({
+		date,
+		appointments,
+		selectedCode: props.selectedCode,
+		getStatusColor: props.getStatusColor,
+		onSelectAppointment: (a) => emit('selectAppointment', a),
+		onEdit: (a) => emit('edit', a),
+		onDelete: (c) => emit('delete', c),
+	});
+};
 
 const formatTime = (d: string | Date) => format(new Date(d), 'h:mm a');
 
 /** Get the color dot class for a status */
-function getDotColorClass(status?: string): string {
+const getDotColorClass = (status?: string): string => {
 	if (!status) return 'bg-gray-400';
 	const color = props.getStatusColor(status);
 	const map: Record<string, string> = {
@@ -304,7 +290,7 @@ function getDotColorClass(status?: string): string {
 		neutral: 'bg-gray-400',
 	};
 	return map[color] ?? 'bg-primary-500';
-}
+};
 
 const getStatusColor = (status: string) => props.getStatusColor(status);
 </script>
