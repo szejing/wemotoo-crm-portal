@@ -67,16 +67,19 @@ const state = reactive({
 	show: false as boolean,
 });
 
-function loadStoredMerchantId() {
+const loadStoredMerchantId = () => {
 	if (import.meta.client) {
 		try {
-			const stored = localStorage.getItem(LOGIN_MERCHANT_ID_KEY);
-			if (stored?.trim()) state.merchant_id = stored.trim().toUpperCase();
+			const storedMerchantId = localStorage.getItem(LOGIN_MERCHANT_ID_KEY);
+			if (storedMerchantId?.trim()) state.merchant_id = storedMerchantId.trim().toUpperCase();
+
+			const storedEmail = localStorage.getItem(LOGIN_EMAIL_KEY);
+			if (storedEmail?.trim()) state.email_address = storedEmail.trim();
 		} catch {
 			// ignore (e.g. private mode)
 		}
 	}
-}
+};
 
 onMounted(loadStoredMerchantId);
 
@@ -95,9 +98,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	if (success) {
 		try {
 			localStorage.setItem(LOGIN_MERCHANT_ID_KEY, merchant_id.trim());
-			if (email_address?.trim()) {
-				localStorage.setItem(LOGIN_EMAIL_KEY, email_address.trim());
-			}
+			localStorage.setItem(LOGIN_EMAIL_KEY, email_address.trim());
 		} catch {
 			// ignore (e.g. private mode)
 		}
