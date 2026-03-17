@@ -71,7 +71,7 @@ export const useOrderStore = defineStore('orderStore', {
 			this.getOrders();
 		},
 
-		async getOrders() {
+		async getOrders(range?: Range) {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
@@ -90,7 +90,7 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = `status eq '${OrderStatus.REFUNDED}'`;
 				}
 
-				let { start, end } = this.filter.date_range;
+				let { start, end } = range ?? this.filter.date_range;
 
 				start = start ?? new Date();
 				end = end ?? new Date();

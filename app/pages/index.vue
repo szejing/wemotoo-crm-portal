@@ -14,6 +14,7 @@ import type { Range } from '~/utils/interface';
 useHead({ title: 'Wemotoo CRM' });
 
 const summOrderStore = useSummOrderStore();
+const orderStore = useOrderStore();
 
 const dashboardRange = ref<Range>({
 	start: startOfWeek(new Date(), { weekStartsOn: 1 }),
@@ -22,9 +23,11 @@ const dashboardRange = ref<Range>({
 
 async function onDashboardRangeChange(range: Range) {
 	await summOrderStore.getDashboardSummary(range);
+	await orderStore.getOrders(range);
 }
 
 onMounted(() => {
 	summOrderStore.getDashboardSummary(dashboardRange.value);
+	orderStore.getOrders(dashboardRange.value);
 });
 </script>

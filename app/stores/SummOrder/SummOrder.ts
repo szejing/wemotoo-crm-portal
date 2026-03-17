@@ -51,41 +51,15 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					end_date: getFormattedDate(end!),
 				});
 
-				if (data.daily_summaries) {
-					this.daily_summaries = data.daily_summaries;
-				}
-
-				if (data.top_purchased_customers) {
-					this.top_purchased_customers = data.top_purchased_customers;
-				}
-
-				if (data.top_purchased_products) {
-					this.top_purchased_products = data.top_purchased_products;
-				}
-
-				if (data.new_orders) {
-					this.new_orders = data.new_orders;
-				}
-
-				if (data.new_customers) {
-					this.new_customers = data.new_customers;
-				}
-
-				if (data.total_order_amt) {
-					this.total_order_amt = data.total_order_amt;
-				}
-
-				if (data.new_appointments) {
-					this.new_appointments = data.new_appointments;
-				}
-
-				if (data.pending_payments) {
-					this.pending_payments = data.pending_payments;
-				}
-
-				if (data.pending_actions) {
-					this.pending_actions = data.pending_actions;
-				}
+				this.daily_summaries = data.daily_summaries;
+				this.top_purchased_customers = data.top_purchased_customers;
+				this.top_purchased_products = data.top_purchased_products;
+				this.new_orders = data.new_orders;
+				this.new_customers = data.new_customers;
+				this.total_order_amt = data.total_order_amt;
+				this.new_appointments = data.new_appointments;
+				this.pending_payments = data.pending_payments;
+				this.pending_actions = data.pending_actions;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load order summary';
 				failedNotification(message);

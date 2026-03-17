@@ -68,9 +68,9 @@ const internalRange = computed({
 		emit('update:model-value', range);
 
 		// Only emit close when both start and end dates are selected
-		if (range.start && range.end) {
-			emit('close');
-		}
+		// if (range.start && range.end) {
+		// 	emit('close');
+		// }
 	},
 });
 </script>

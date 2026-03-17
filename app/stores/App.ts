@@ -33,7 +33,6 @@ export const useAppStore = defineStore('appStore', {
 				merchantInfo.getCurrencies(),
 				settingsStore.getSettings(),
 				productTypeStore.getProductTypes(),
-				orderStore.getOrders(),
 				paymentTypeStore.getPaymentTypeGroups(),
 				paymentMethodStore.getPaymentMethods(),
 				summOrderStore.getDashboardSummary(),
