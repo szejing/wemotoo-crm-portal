@@ -460,6 +460,8 @@
 		"crmUserDetailUserInformation": "User information",
 		"crmUserDetailChangePasswordTitle": "Change password",
 		"crmUserDetailChangePasswordDesc": "Use this form only when this user is you. You must enter the current password.",
+		"crmUserDetailResetPasswordTitle": "Reset staff password",
+		"crmUserDetailResetPasswordDesc": "Set a new password for this staff member. They will need to use it on next login.",
 		"crmUserUpdated": "User updated.",
 		"crmUserUpdateFailed": "Update failed",
 		"crmUserPasswordUpdated": "Password updated.",

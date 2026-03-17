@@ -460,6 +460,8 @@
 		"crmUserDetailUserInformation": "Maklumat pengguna",
 		"crmUserDetailChangePasswordTitle": "Tukar kata laluan",
 		"crmUserDetailChangePasswordDesc": "Gunakan borang ini hanya apabila pengguna ini ialah anda. Anda mesti masukkan kata laluan semasa.",
+		"crmUserDetailResetPasswordTitle": "Set semula kata laluan staf",
+		"crmUserDetailResetPasswordDesc": "Tetapkan kata laluan baharu untuk ahli staf ini. Mereka perlu menggunakannya pada log masuk seterusnya.",
 		"crmUserUpdated": "Pengguna dikemas kini.",
 		"crmUserUpdateFailed": "Gagal dikemas kini",
 		"crmUserPasswordUpdated": "Kata laluan dikemas kini.",

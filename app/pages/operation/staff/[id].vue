@@ -13,7 +13,7 @@
 							<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
 							{{ $t('pages.crmUserDetailUserInformation') }}
 						</h2>
-						<div class="flex items-center gap-2">
+						<div v-if="isViewingSelf" class="flex items-center gap-2">
 							<UButton color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								{{ $t('common.save') }}
@@ -35,6 +35,7 @@
 
 				<div v-if="current_crm_user" class="space-y-4">
 					<FormCrmUserUpdate
+						v-if="isViewingSelf"
 						ref="editFormRef"
 						:model-value="current_crm_user"
 						@update:model-value="
@@ -45,38 +46,80 @@
 						"
 						@submit="onEditFormSubmit"
 					/>
+					<div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+						<div>
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.name') }}</span>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.name || '—' }}</p>
+						</div>
+						<div>
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.role') }}</span>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.role ? roleLabel(current_crm_user.role, $t) : '—' }}</p>
+						</div>
+						<div class="sm:col-span-2">
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.email') }}</span>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.email_address || '—' }}</p>
+						</div>
+						<div>
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.phone') }}</span>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">
+								{{ current_crm_user.dial_code && current_crm_user.phone_no ? `${current_crm_user.dial_code} ${current_crm_user.phone_no}` : '—' }}
+							</p>
+						</div>
+						<div>
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.status') }}</span>
+							<div class="mt-1">
+								<UBadge :color="current_crm_user.is_active ? 'success' : 'error'" variant="subtle">
+									{{ current_crm_user.is_active ? $t('components.crmUserForm.statusActive') : $t('components.crmUserForm.statusDisabled') }}
+								</UBadge>
+							</div>
+						</div>
+					</div>
 				</div>
 			</UCard>
 
-			<!-- Change password: separate section -->
-			<UCard>
+			<!-- Change / reset password: only for self or admin viewing another user -->
+			<UCard v-if="showPasswordSection">
 				<template #header>
 					<h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
 						<UIcon name="i-heroicons-key" class="w-5 h-5 inline-block mr-2" />
-						{{ $t('pages.crmUserDetailChangePasswordTitle') }}
+						{{ isViewingSelf ? $t('pages.crmUserDetailChangePasswordTitle') : $t('pages.crmUserDetailResetPasswordTitle') }}
 					</h2>
 				</template>
 
 				<p class="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-					{{ $t('pages.crmUserDetailChangePasswordDesc') }}
+					{{ isViewingSelf ? $t('pages.crmUserDetailChangePasswordDesc') : $t('pages.crmUserDetailResetPasswordDesc') }}
 				</p>
-				<FormCrmUserChangePassword ref="formRef" :loading="updating" @submit="submitPassword" />
+				<FormCrmUserChangePassword ref="formRef" :loading="updating" :require-current-password="isViewingSelf" @submit="submitPassword" />
 			</UCard>
 		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
+import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+import { useAuthStore } from '~/stores/Auth/Auth';
+import { roleLabel } from '~/utils/options/user-roles';
 import { ZModalConfirmation, ZModalLoading } from '#components';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
 const crmUserStore = useCRMUserStore();
+const authStore = useAuthStore();
 const overlay = useOverlay();
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 const { updating, loading, current_crm_user } = storeToRefs(crmUserStore);
+const { user: authUser } = storeToRefs(authStore);
+
+const isViewingSelf = computed(() => current_crm_user.value?.id === authUser.value?.id);
+const isAdmin = computed(() => {
+	const role = authUser.value?.role;
+	return role === UserRoles.MERCHANT_ADMIN || role === UserRoles.SUPER_ADMIN;
+});
+/** Only admin can reset another staff's password; own password change is allowed for everyone. */
+const canResetOtherStaffPassword = computed(() => !isViewingSelf.value && isAdmin.value);
+const showPasswordSection = computed(() => isViewingSelf.value || canResetOtherStaffPassword.value);
 
 const { t } = useI18n();
 const pageTitle = computed(() => {
@@ -147,6 +190,11 @@ const onEditFormSubmit = async (payload: { name: string; email_address: string; 
 };
 
 const submitPassword = async (payload: { old_password: string; new_password: string; confirm_password: string }) => {
+	// Reset other staff password is allowed only for admin; enforce role check even if UI is bypassed
+	const isResetOther = !isViewingSelf.value && !payload.old_password;
+	if (isResetOther && !isAdmin.value) {
+		return;
+	}
 	const result = await crmUserStore.updateCrmUserPassword(id.value, {
 		old_password: payload.old_password,
 		new_password: payload.new_password,

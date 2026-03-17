@@ -1,6 +1,6 @@
 <template>
 	<UForm ref="formRef" :schema="schema" :state="state" class="space-y-4 max-w-md" @submit="onSubmit" @error="onError">
-		<UFormField :label="$t('components.changePassword.currentPassword')" name="old_password" required>
+		<UFormField v-if="requireCurrentPassword" :label="$t('components.changePassword.currentPassword')" name="old_password" required>
 			<UInput
 				id="old_password"
 				v-model="state.old_password"
@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ChangePasswordValidation } from '~/utils/schema/CRMUser/ChangePassword/ChangePasswordValidation';
+import { ChangePasswordValidation, AdminResetPasswordValidation } from '~/utils/schema/CRMUser/ChangePassword/ChangePasswordValidation';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
 
@@ -107,9 +107,13 @@ export interface ChangePasswordServerError {
 const props = withDefaults(
 	defineProps<{
 		loading?: boolean;
+		/** When false, hide current password field (admin reset other user). */
+		requireCurrentPassword?: boolean;
 	}>(),
-	{ loading: false },
+	{ loading: false, requireCurrentPassword: true },
 );
+
+const requireCurrentPassword = computed(() => props.requireCurrentPassword);
 
 const emit = defineEmits<{
 	submit: [payload: ChangePasswordPayload];
@@ -118,7 +122,9 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const schema = computed(() => ChangePasswordValidation(t));
+const schema = computed(() =>
+	props.requireCurrentPassword ? ChangePasswordValidation(t) : AdminResetPasswordValidation(t),
+);
 type Schema = z.infer<ReturnType<typeof ChangePasswordValidation>>;
 
 const formRef = useTemplateRef('formRef');
@@ -173,15 +179,15 @@ const passwordStrengthText = computed(() => {
 	return t('common.strongPassword');
 });
 
-const canSubmit = computed(
-	() =>
-		Boolean(state.old_password?.trim()) && Boolean(state.new_password?.trim()) && Boolean(state.confirm_password?.trim()) && passwordStrengthScore.value === 4,
-);
+const canSubmit = computed(() => {
+	const hasNew = Boolean(state.new_password?.trim()) && Boolean(state.confirm_password?.trim()) && passwordStrengthScore.value === 4;
+	return props.requireCurrentPassword ? Boolean(state.old_password?.trim()) && hasNew : hasNew;
+});
 
 const onSubmit = (event: FormSubmitEvent<Schema>) => {
 	emit('clearError');
 	emit('submit', {
-		old_password: event.data.old_password,
+		old_password: event.data.old_password ?? '',
 		new_password: event.data.new_password,
 		confirm_password: event.data.confirm_password,
 	});
