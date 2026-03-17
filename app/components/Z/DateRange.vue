@@ -1,33 +1,59 @@
 <template>
 	<div class="flex flex-wrap items-center gap-2">
-		<!-- Quick preset buttons -->
-		<UButton
-			v-for="preset in presets"
-			:key="preset.key"
-			:label="$t(`components.dateRange.${preset.key}`)"
-			color="primary"
-			:variant="isPresetActive(preset) ? 'solid' : 'soft'"
-			size="xs"
-			@click="applyPreset(preset)"
-		/>
-		<!-- Date range display + calendar popover (custom range or single date) -->
-		<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
-			<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
-				<span class="truncate">
-					{{ rangeLabel }}
-				</span>
-				<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
-			</UButton>
-			<template #content>
-				<div class="p-2">
-					<ZDateRangePicker :model-value="draftForPicker" @update:model-value="onDraftUpdate" @close="applyCalendar" />
-					<div class="flex justify-end gap-2 pt-2 border-t border-default mt-2">
-						<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="popoverOpen = false" />
-						<UButton :label="$t('common.apply')" color="primary" @click="applyCalendar" />
+		<!-- Mobile: single USelect for presets + custom -->
+		<template v-if="isMobile">
+			<USelect
+				:model-value="selectedPresetKey"
+				:items="presetSelectItems"
+				value-attribute="value"
+				color="neutral"
+				variant="outline"
+				class="min-w-40"
+				:ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform' }"
+				@update:model-value="onPresetSelect"
+			/>
+			<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
+				<UButton icon="i-lucide-calendar" color="neutral" variant="outline" size="md" class="shrink-0" />
+				<template #content>
+					<div class="p-2">
+						<ZDateRangePicker :model-value="draftForPicker" @update:model-value="onDraftUpdate" @close="applyCalendar" />
+						<div class="flex justify-end gap-2 pt-2 border-t border-default mt-2">
+							<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="popoverOpen = false" />
+							<UButton :label="$t('common.apply')" color="primary" @click="applyCalendar" />
+						</div>
 					</div>
-				</div>
-			</template>
-		</UPopover>
+				</template>
+			</UPopover>
+		</template>
+		<!-- Desktop: preset buttons + date range popover -->
+		<template v-else>
+			<UButton
+				v-for="preset in presets"
+				:key="preset.key"
+				:label="$t(`components.dateRange.${preset.key}`)"
+				color="primary"
+				:variant="isPresetActive(preset) ? 'solid' : 'soft'"
+				size="xs"
+				@click="applyPreset(preset)"
+			/>
+			<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
+				<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
+					<span class="truncate">
+						{{ rangeLabel }}
+					</span>
+					<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
+				</UButton>
+				<template #content>
+					<div class="p-2">
+						<ZDateRangePicker :model-value="draftForPicker" @update:model-value="onDraftUpdate" @close="applyCalendar" />
+						<div class="flex justify-end gap-2 pt-2 border-t border-default mt-2">
+							<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="popoverOpen = false" />
+							<UButton :label="$t('common.apply')" color="primary" @click="applyCalendar" />
+						</div>
+					</div>
+				</template>
+			</UPopover>
+		</template>
 	</div>
 </template>
 
@@ -102,6 +128,44 @@ const rangeLabel = computed(() => {
 	}
 	return `${getFormattedDate(start, 'dd-MM-yyyy')} - ${getFormattedDate(end, 'dd-MM-yyyy')}`;
 });
+
+// Mobile: sm breakpoint (640px)
+const isMobile = ref(false);
+const checkMobile = () => {
+	isMobile.value = typeof window !== 'undefined' && window.innerWidth < 640;
+};
+onMounted(() => {
+	checkMobile();
+	if (typeof window !== 'undefined') window.addEventListener('resize', checkMobile);
+});
+onUnmounted(() => {
+	if (typeof window !== 'undefined') window.removeEventListener('resize', checkMobile);
+});
+
+// Mobile USelect: presets + custom option
+const presetSelectItems = computed(() => [
+	...presets.map((p) => ({ value: p.key, label: t(`components.dateRange.${p.key}`) })),
+	{ value: 'custom', label: t('components.dateRange.custom') },
+]);
+
+const selectedPresetKey = computed(() => {
+	const r = model.value;
+	if (!r?.start || !r?.end) return 'custom';
+	const matched = presets.find((preset) => {
+		const presetRange = preset.getRange();
+		return r.start!.getTime() === presetRange.start.getTime() && r.end!.getTime() === presetRange.end.getTime();
+	});
+	return matched?.key ?? 'custom';
+});
+
+const onPresetSelect = (value: string) => {
+	if (value === 'custom') {
+		popoverOpen.value = true;
+		return;
+	}
+	const preset = presets.find((p) => p.key === value);
+	if (preset) applyPreset(preset);
+};
 
 const popoverOpen = ref(false);
 
