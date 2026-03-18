@@ -68,7 +68,7 @@ const selectCustomer = async (e: Event, row: TableRow<Customer>) => {
 	const customer = row.original;
 	if (!customer) return;
 
-	navigateTo(`/customers/detail/${encodeURIComponent(customer.customer_no)}`);
+	navigateTo(`/customers/${encodeURIComponent(customer.customer_no)}`);
 };
 
 const updatePage = async (page: number) => {

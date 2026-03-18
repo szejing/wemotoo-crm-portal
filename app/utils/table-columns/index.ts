@@ -25,6 +25,7 @@ import { getTaxRuleColumns } from './tax/tax-rule';
 import { getCrmUserColumns } from './crm-user';
 import { getAffiliateColumns } from './affiliate';
 import { getAppointmentColumns } from './appointment';
+import { getCustomerOrderHistoryColumns } from './customer-order-history';
 
 export {
 	getCustomerColumns,
@@ -55,4 +56,5 @@ export {
 	getCrmUserColumns,
 	getAffiliateColumns,
 	getAppointmentColumns,
+	getCustomerOrderHistoryColumns,
 };

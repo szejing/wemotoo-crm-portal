@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { options_page_size } from '~/utils/options';
 import type { Customer } from '~/utils/types/customer';
+import type { OrderHistory } from '~/utils/types/order-history';
 import { failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { sub } from 'date-fns';
@@ -33,6 +34,8 @@ export const useCustomerStore = defineStore('customerStore', {
 		total_customers: 0 as number,
 		errors: [] as string[],
 		filter: initialEmptyCustomerFilter,
+		current_customer: null as Customer | null,
+		customer_orders: [] as OrderHistory[],
 	}),
 	actions: {
 		async updatePageSize(size: number) {
@@ -88,6 +91,7 @@ export const useCustomerStore = defineStore('customerStore', {
 
 				const { data, '@odata.count': total } = await $api.customer.getMany(queryParams);
 
+				console.log(data);
 				if (data) {
 					this.customers = data;
 					this.total_customers = total ?? 0;
@@ -95,6 +99,41 @@ export const useCustomerStore = defineStore('customerStore', {
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load customers';
 				failedNotification(message);
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async getCustomer(cust_no: string): Promise<Customer | null> {
+			this.loading = true;
+			const { $api } = useNuxtApp();
+			try {
+				const resp = await $api.customer.getSingle(cust_no);
+				this.current_customer = resp?.customer ?? null;
+				return this.current_customer;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load customer';
+				failedNotification(message);
+				return null;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async getCustomerOrders(cust_no: string): Promise<OrderHistory[]> {
+			this.loading = true;
+			const { $api } = useNuxtApp();
+			try {
+				const resp = await $api.customer.getOrders(cust_no);
+				const list = resp?.data ?? resp?.value ?? [];
+				this.customer_orders = list;
+
+				console.log(this.customer_orders);
+				return this.customer_orders;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load customer orders';
+				failedNotification(message);
+				return [];
 			} finally {
 				this.loading = false;
 			}

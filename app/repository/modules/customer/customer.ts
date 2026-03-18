@@ -4,6 +4,7 @@ import type { CustomerResp } from './models/response/customer.resp';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { Customer } from '~/utils/types/customer';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 class CustomerModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Customers;
@@ -20,6 +21,13 @@ class CustomerModule extends HttpFactory {
 		return await this.call<CustomerResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Single(cust_no)}`,
+		});
+	}
+
+	async getOrders(cust_no: string): Promise<BaseODataResp<OrderHistory>> {
+		return await this.call<BaseODataResp<OrderHistory>>({
+			method: 'GET',
+			url: `${this.RESOURCE.Orders(cust_no)}`,
 		});
 	}
 }

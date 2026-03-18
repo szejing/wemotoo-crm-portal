@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 			});
 		}
 
-		const result = await signedFetch(event, `${Routes.Customers.Single(cust_no)}`, {
+		const result = await signedFetch(event, `${Routes.Customers.Orders(cust_no)}`, {
 			method: 'GET',
 		});
 		return result;

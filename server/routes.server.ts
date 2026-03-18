@@ -29,6 +29,7 @@ export const Routes = {
 	},
 	Customers: {
 		Single: (cust_no: string) => `${API_PATH.CUSTOMERS}/${cust_no}`,
+		Orders: (cust_no: string) => `${API_PATH.CUSTOMERS}/${cust_no}/orders`,
 		Many: () => `${API_PATH.CUSTOMERS}/`,
 	},
 	Products: {

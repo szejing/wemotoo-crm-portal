@@ -32,6 +32,7 @@ const MerchantRoutes = {
 	},
 	Customers: {
 		Single: (cust_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/${cust_no}`,
+		Orders: (cust_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/${cust_no}/orders`,
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CUSTOMERS}/many`,
 	},
 	Products: {

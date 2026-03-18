@@ -81,7 +81,6 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
 					$count: true,
 					$filter: filter,
-					// $expand: removeDuplicateExpands(defaultOrderRelations).join(','),
 					$orderby: 'start_date_time desc',
 				} as const;
 
@@ -136,6 +135,28 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process appointment';
 				failedNotification(message);
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async getAppointmentsByCustomer(customer_no: string): Promise<Appointment[]> {
+			this.loading = true;
+			const { $api } = useNuxtApp();
+			try {
+				const filter = `customer_no eq '${customer_no}'`;
+
+				const queryParams = {
+					$filter: filter,
+				} as const;
+
+				const { data } = await $api.appointment.getMany(queryParams);
+
+				return data;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to process appointment';
+				failedNotification(message);
+				return [];
 			} finally {
 				this.loading = false;
 			}
