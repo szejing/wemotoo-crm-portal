@@ -111,7 +111,26 @@
 						<!-- Appointments -->
 						<template #appointments>
 							<div class="py-2">
-								<p class="text-sm text-muted">{{ $t('pages.noAppointmentsFoundForCustomer') }}</p>
+								<UTable v-if="customer_appointments.length" :data="pagedCustomerAppointments" :columns="appointmentColumns" :loading="appointmentsLoading">
+									<template #empty>
+										<div class="flex flex-col items-center justify-center py-8 gap-2">
+											<UIcon name="i-heroicons-calendar-days" class="w-10 h-10 text-neutral-300" />
+											<p class="text-sm text-muted">{{ $t('pages.noAppointmentsFoundForCustomer') }}</p>
+										</div>
+									</template>
+								</UTable>
+								<div v-if="customer_appointments.length > appointmentsPagination.page_size" class="flex justify-end pt-4">
+									<UPagination
+										v-model="appointmentsPagination.current_page"
+										:items-per-page="appointmentsPagination.page_size"
+										:total="customer_appointments.length"
+										@update:page="updateAppointmentsPage"
+									/>
+								</div>
+								<div v-else-if="!customer_appointments.length" class="flex flex-col items-center justify-center py-8 gap-2">
+									<UIcon name="i-heroicons-calendar-days" class="w-10 h-10 text-neutral-300" />
+									<p class="text-sm text-muted">{{ $t('pages.noAppointmentsFoundForCustomer') }}</p>
+								</div>
 							</div>
 						</template>
 
@@ -159,6 +178,8 @@ import { formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
 import { getCustomerOrderHistoryColumns } from '~/utils/table-columns';
+import type { Appointment } from '~/utils/types/appointment';
+import { getAppointmentColumns } from '~/utils/table-columns';
 
 const route = useRoute();
 const custNo = computed(() => String(route.params.id ?? ''));
@@ -216,6 +237,25 @@ const tabItems = computed(() => [
 
 const totalOrdersCount = computed(() => customer_orders.value.length);
 const totalAppointmentsCount = ref(0);
+const customer_appointments = ref<Appointment[]>([]);
+const appointmentsLoading = computed(() => appointmentStore.loading);
+
+const appointmentColumns = computed(() => getAppointmentColumns(t));
+
+const appointmentsPagination = reactive({
+	current_page: 1,
+	page_size: 10,
+});
+
+const pagedCustomerAppointments = computed(() => {
+	const start = (appointmentsPagination.current_page - 1) * appointmentsPagination.page_size;
+	const end = start + appointmentsPagination.page_size;
+	return customer_appointments.value.slice(start, end);
+});
+
+const updateAppointmentsPage = (page: number) => {
+	appointmentsPagination.current_page = page;
+};
 
 const formatOrderItemsSummary = (items: ItemModel[] | undefined): string => {
 	if (!items?.length) return '—';
@@ -260,7 +300,8 @@ onBeforeMount(async () => {
 		}
 
 		current_customer.value = customer;
-		totalAppointmentsCount.value = appointments.length;
+		customer_appointments.value = appointments ?? [];
+		totalAppointmentsCount.value = customer_appointments.value.length;
 	}
 });
 
@@ -270,6 +311,16 @@ watch(
 		const maxPage = Math.max(1, Math.ceil(total / ordersPagination.page_size));
 		if (ordersPagination.current_page > maxPage) {
 			ordersPagination.current_page = 1;
+		}
+	},
+);
+
+watch(
+	() => customer_appointments.value.length,
+	(total) => {
+		const maxPage = Math.max(1, Math.ceil(total / appointmentsPagination.page_size));
+		if (appointmentsPagination.current_page > maxPage) {
+			appointmentsPagination.current_page = 1;
 		}
 	},
 );
