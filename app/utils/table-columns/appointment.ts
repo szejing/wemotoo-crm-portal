@@ -65,7 +65,7 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 				const status = row.original.status;
 				const color = getAppointmentStatusColor(status);
 				const label = t('options.' + status.toLowerCase());
-				return h(UBadge, { variant: 'subtle', color, size: 'sm' }, () => label);
+				return h(UBadge, { variant: 'subtle', color }, () => label);
 			},
 			meta: {
 				class: {
