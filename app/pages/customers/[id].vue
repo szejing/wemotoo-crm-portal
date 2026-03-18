@@ -46,12 +46,6 @@
 						<UButton variant="outline" color="neutral" size="sm" @click="onEdit">
 							{{ $t('common.edit') }}
 						</UButton>
-						<UButton variant="outline" color="neutral" size="sm" :icon="'i-heroicons-shopping-cart'" @click="onOrder">
-							{{ $t('pages.addOrder') }}
-						</UButton>
-						<UButton variant="outline" color="neutral" size="sm" :icon="ICONS.CALENDAR" @click="onAppointment">
-							{{ $t('pages.addAppointment') }}
-						</UButton>
 					</div>
 				</div>
 			</UCard>
