@@ -150,7 +150,7 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 					$filter: filter,
 				} as const;
 
-				const { data } = await $api.appointment.getMany(queryParams);
+				const { data } = await $api.appointment.getByCustomer(customer_no);
 
 				return data;
 			} catch (err: unknown | ErrorResponse) {

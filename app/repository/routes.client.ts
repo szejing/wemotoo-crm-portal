@@ -160,6 +160,7 @@ const MerchantRoutes = {
 		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/restore/${code}`,
+		GetByCustomer: (customer_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.APPOINTMENTS}/customer/${customer_no}`,
 	},
 	Outlets: {
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.OUTLETS}/create`,

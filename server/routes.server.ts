@@ -157,6 +157,7 @@ export const Routes = {
 		Update: (code: string) => `${API_PATH.APPOINTMENTS}/${code}`,
 		Delete: (code: string) => `${API_PATH.APPOINTMENTS}/${code}`,
 		Restore: (code: string) => `${API_PATH.APPOINTMENTS}/restore/${code}`,
+		GetByCustomer: (customer_no: string) => `${API_PATH.APPOINTMENTS}/customer/${customer_no}`,
 	},
 	Outlets: {
 		Create: () => `${API_PATH.OUTLETS}/`,

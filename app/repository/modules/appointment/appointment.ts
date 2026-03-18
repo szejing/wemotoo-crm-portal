@@ -26,7 +26,7 @@ class AppointmentModule extends HttpFactory {
 	}
 
 	async create(appointment: CreateAppointmentReq): Promise<AppointmentResp> {
-		return await this.call<any>({
+		return await this.call<AppointmentResp>({
 			method: 'POST',
 			url: `${this.RESOURCE.Create()}`,
 			body: appointment,
@@ -34,7 +34,7 @@ class AppointmentModule extends HttpFactory {
 	}
 
 	async update(code: string, appointment: UpdateAppointmentReq): Promise<AppointmentResp> {
-		return await this.call<any>({
+		return await this.call<AppointmentResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(code)}`,
 			body: appointment,
@@ -42,7 +42,7 @@ class AppointmentModule extends HttpFactory {
 	}
 
 	async delete(code: string): Promise<AppointmentResp> {
-		return await this.call<any>({
+		return await this.call<AppointmentResp>({
 			method: 'DELETE',
 			url: `${this.RESOURCE.Delete(code)}`,
 		});
@@ -52,6 +52,13 @@ class AppointmentModule extends HttpFactory {
 		return await this.call<any>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Restore(code)}`,
+		});
+	}
+
+	async getByCustomer(customer_no: string): Promise<BaseODataResp<Appointment>> {
+		return await this.call<BaseODataResp<Appointment>>({
+			method: 'GET',
+			url: `${this.RESOURCE.GetByCustomer(customer_no)}`,
 		});
 	}
 }
