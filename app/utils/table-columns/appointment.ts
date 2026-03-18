@@ -54,8 +54,17 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 			id: 'service',
 			accessorKey: 'appt_desc',
 			header: t('pages.service'),
-			cell: ({ row }) =>
-				h('p', { class: 'text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]' }, row.original.appt_desc || t('pages.noDescription')),
+			cell: ({ row }) => {
+				const desc = row.original.appt_desc || t('pages.noDescription');
+				const n = row.original.duration;
+				const children = [
+					h('p', { class: 'text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]' }, desc),
+				];
+				if (n != null) {
+					children.push(h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, t('pages.durationMinutes', { n })));
+				}
+				return h('div', { class: 'flex flex-col gap-0.5' }, children);
+			},
 		},
 		{
 			id: 'customer',
@@ -66,21 +75,6 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100 truncate max-w-[180px]' }, row.original.customer_name),
 					h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400 truncate max-w-[180px]' }, row.original.customer_phone || '—'),
 				]),
-		},
-		{
-			accessorKey: 'duration',
-			header: t('table.duration'),
-			cell: ({ row }) => {
-				const n = row.original.duration;
-				if (n == null) return h('span', { class: 'text-neutral-400' }, '—');
-				return h('span', { class: 'text-sm text-neutral-600 dark:text-neutral-400' }, t('pages.durationMinutes', { n }));
-			},
-			meta: {
-				class: {
-					th: 'text-center',
-					td: 'text-center',
-				},
-			},
 		},
 	];
 }
