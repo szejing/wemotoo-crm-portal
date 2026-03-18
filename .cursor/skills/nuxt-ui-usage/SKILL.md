@@ -141,4 +141,4 @@ Icons use Iconify format `i-{collection}-{name}`. Collections: `lucide`, `heroic
 
 - [Nuxt UI docs](https://ui.nuxt.com/docs)
 - [Nuxt UI skill](https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui) — install for full component reference
-- [i18n-translation skill](.cursor/skills/i18n-translation/SKILL.md) — locale patterns
+- [i18n-translation skill](.agent/skills/i18n-translation/SKILL.md) — locale patterns

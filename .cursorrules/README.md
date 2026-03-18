@@ -1,6 +1,11 @@
-# Cursor Rules Documentation
+# AI Rules Documentation (Cursor & Antigravity)
 
-This directory contains coding rules and conventions for the Wemotoo CRM Portal (Nuxt 3 / Vue 3). The structure mirrors the ecommerce-nestjs `.cursorrules` layout; file extension is `.mdc`.
+This directory contains coding rules and conventions for the Wemotoo CRM Portal (Nuxt 3 / Vue 3). **Shared across Cursor and Antigravity** via `.agent/rules/`.
+
+- **Cursor**: Reads via `.cursorrules` symlink → `.agent/rules/`
+- **Antigravity**: Reads `.agent/rules/` directly
+
+File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors).
 
 ## Rule Files
 
@@ -24,7 +29,15 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 
 - **`vue-pages-components.mdc`** – Pages (`app/pages/`) and components (`app/components/`). File-based routing, layouts, data loading, shared components, and component conventions.
 
+- **`styling-ui-nuxt-ui.mdc`** – Styling and UI: prefer **@nuxt/ui** components when creating or updating pages/components. Reference: https://ui.nuxt.com/docs/components (Layout, Element, Form, Data, Navigation, Overlay, etc.). Use Tailwind and project theme; see also `.agent/skills/nuxt-ui-usage/SKILL.md`.
+
+- **`styling-legacy.mdc`** – Legacy CSS-only styling (no Tailwind). Enable only for non–Nuxt UI or legacy components; conflicts with @nuxt/ui.
+
 - **`composables.mdc`** – Composables in `app/composables/`. Naming (`useXxx`), structure, and when to use them.
+
+### Responsive / Mobile
+
+- **`mobile-ui.mdc`** – Responsive and touch-friendly design checklist for UI changes: responsive grids, touch targets, tables, modals, forms, and typography.
 
 ### Cross-Cutting
 
@@ -34,7 +47,7 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 
 ## How to Use
 
-- Cursor uses these rules to guide edits and suggestions.
+- **Cursor** and **Antigravity** both use these rules to guide edits and suggestions. Edit rules here (`.agent/rules/`) — changes apply to both editors.
 - When adding features, open the relevant `.mdc` (and `general.mdc`) for the layer you’re editing (e.g. server-routes, repository, schema, pages/components).
 - Keep rules under ~50 lines each where possible; add only patterns that match this codebase.
 
@@ -47,15 +60,19 @@ This directory contains coding rules and conventions for the Wemotoo CRM Portal 
 | Validation         | `app/utils/schema/*`        | schema.mdc             |
 | Types / models     | `app/utils/types`, repo models | types.mdc          |
 | Pages & components | `app/pages/*`, `app/components/*` | vue-pages-components.mdc |
+| Styling / UI       | Pages, components, layouts | styling-ui-nuxt-ui.mdc (prefer [Nuxt UI](https://ui.nuxt.com/docs/components)) |
+| Mobile / Responsive| Pages, components, layouts | mobile-ui.mdc          |
 | Composables        | `app/composables/*`         | composables.mdc        |
 | Middleware         | `app/middleware/*`, `server/middleware/*` | middleware.mdc |
 | Utils, constants   | `app/utils/*`               | utility.mdc            |
 
 ## Agent skills
 
-Project-specific skills in `.cursor/skills/` (use when relevant):
+Project-specific skills in `.agent/skills/` (use when relevant; Cursor reads via `.cursor/skills`):
 
 - **nuxt-ui-usage** — Build UIs with @nuxt/ui v4; project theming, components, forms, tables, modals, i18n integration.
 - **i18n-translation** — Locales (en, ms), translation patterns, validation schemas, options, table columns.
+- **page-panel-layout** — ZPagePanel wrapper for dashboard pages; navbar, toolbar, footer slots.
+- **shareable-components** — Extract duplicate UI into reusable components; placement, API patterns, workflow.
 
 For full Nuxt UI component reference, install the official skill: `npx skills add nuxt/ui` or add in Cursor Settings > Skills: `https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui`.

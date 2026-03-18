@@ -35,6 +35,10 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 
 - **`composables.mdc`** – Composables in `app/composables/`. Naming (`useXxx`), structure, and when to use them.
 
+### Responsive / Mobile
+
+- **`mobile-ui.mdc`** – Responsive and touch-friendly design checklist for UI changes: responsive grids, touch targets, tables, modals, forms, and typography.
+
 ### Cross-Cutting
 
 - **`middleware.mdc`** – Nuxt route middleware (`app/middleware/`) and Nitro server middleware (`server/middleware/`). Auth, redirects, CORS.
@@ -57,15 +61,18 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 | Types / models     | `app/utils/types`, repo models | types.mdc          |
 | Pages & components | `app/pages/*`, `app/components/*` | vue-pages-components.mdc |
 | Styling / UI       | Pages, components, layouts | styling-ui-nuxt-ui.mdc (prefer [Nuxt UI](https://ui.nuxt.com/docs/components)) |
+| Mobile / Responsive| Pages, components, layouts | mobile-ui.mdc          |
 | Composables        | `app/composables/*`         | composables.mdc        |
 | Middleware         | `app/middleware/*`, `server/middleware/*` | middleware.mdc |
 | Utils, constants   | `app/utils/*`               | utility.mdc            |
 
 ## Agent skills
 
-Project-specific skills in `.agent/skills/` (use when relevant; Cursor reads via `.cursor/skills` symlink):
+Project-specific skills in `.agent/skills/` (use when relevant; Cursor reads via `.cursor/skills`):
 
 - **nuxt-ui-usage** — Build UIs with @nuxt/ui v4; project theming, components, forms, tables, modals, i18n integration.
 - **i18n-translation** — Locales (en, ms), translation patterns, validation schemas, options, table columns.
+- **page-panel-layout** — ZPagePanel wrapper for dashboard pages; navbar, toolbar, footer slots.
+- **shareable-components** — Extract duplicate UI into reusable components; placement, API patterns, workflow.
 
 For full Nuxt UI component reference, install the official skill: `npx skills add nuxt/ui` or add in Cursor Settings > Skills: `https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui`.

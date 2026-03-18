@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Vue Pages and Components
 
+**UI and styling:** Prefer **@nuxt/ui** components when creating or updating pages and components. See `styling-ui-nuxt-ui.mdc` and https://ui.nuxt.com/docs/components for the component reference.
+
 ## Pages (app/pages/)
 
 ### File-Based Routing

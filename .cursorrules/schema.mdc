@@ -10,7 +10,7 @@ alwaysApply: false
 
 - Directory: `app/utils/schema/{Entity}/{Create|Update|Filter}/` or `app/utils/schema/{Entity}/`.
 - File names: `*Validation.ts` (e.g. `ProductValidation.ts`, `TagValidation.ts`, `LoginValidation.ts`).
-- Group by domain: Product, Tag, Brand, Category, Outlet, Tax, TaxRule, TaxGroup, Auth, Order, Customer, Appointment, PaymentMethod, PaymentTypeGroup.
+- Group by domain: Product, Tag, Brand, Category, Outlet, Tax, TaxRule, TaxGroup, Auth, Order, Customer, Appointment, PaymentMethod, PaymentTypeGroup, CRMUser.
 
 ## Structure
 

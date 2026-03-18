@@ -8,9 +8,12 @@ alwaysApply: true
 
 This is an **ecommerce admin portal** (CRM) for merchants. Core domains include:
 
-- **Orders** – order management, fulfilment, status tracking, order amounts, and related analytics
+- **Orders & Sales** – order management, fulfilment, status tracking, order amounts, refunds, and related analytics
 - **Appointments** – scheduling, booking, and appointment lifecycle management
+- **Customers** – customer profiles, order history, and customer management
 - **Ecommerce** – products, store profile, taxes, and merchant configuration
+- **Affiliates** – affiliate programme, tiers, and affiliate management
+- **Marketing** – coupons, automations, and campaigns
 
 When making UI changes or suggestions, consider this context: dashboards, tables, forms, and workflows should support merchant staff managing orders and appointments efficiently. Use terminology and patterns appropriate for an admin/back-office interface rather than a consumer-facing storefront.
 
