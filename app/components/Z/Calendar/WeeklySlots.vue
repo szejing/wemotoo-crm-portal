@@ -1,36 +1,47 @@
 <template>
 	<div>
 		<!-- Desktop: 7-column time grid (hidden on mobile) -->
-		<div class="hidden lg:flex flex-col border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-default">
+		<div class="hidden lg:flex flex-col rounded-xl overflow-hidden bg-default border border-neutral-200 dark:border-neutral-800">
 			<!-- Day headers -->
 			<div
-				class="grid shrink-0 border-b border-gray-200 dark:border-gray-700 grid-cols-[3.5rem_repeat(7,minmax(0,1fr))] sm:grid-cols-[4rem_repeat(7,minmax(0,1fr))]"
+				class="grid shrink-0 border-b border-neutral-200 dark:border-neutral-800 grid-cols-[7.5rem_repeat(7,minmax(0,1fr))]"
 			>
-				<div class="py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700 min-w-0"></div>
+				<div class="px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-white border-r border-neutral-200 dark:border-neutral-800 min-w-0">Time</div>
 				<div
 					v-for="day in weekDays"
 					:key="dayKey(day)"
-					class="py-2 px-1 text-center text-xs font-medium border-r border-gray-200 dark:border-gray-700 last:border-r-0 transition-colors"
-					:class="[isToday(day) ? 'text-primary-600 dark:text-primary-400 bg-primary-50/60 dark:bg-primary-950/30' : 'text-gray-700 dark:text-gray-300']"
+					class="px-4 py-3 border-r border-neutral-200 dark:border-neutral-800 last:border-r-0"
 				>
-					<div>{{ format(day, 'EEE') }}</div>
-					<div
-						class="text-lg font-semibold mt-0.5"
-						:class="[isToday(day) ? 'bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto' : '']"
-					>
-						{{ format(day, 'd') }}
-					</div>
+					<p class="text-sm font-semibold text-neutral-900 dark:text-white leading-tight">
+						{{ format(day, 'MMM d, yyyy') }}
+					</p>
+					<p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+						{{ format(day, 'EEEE') }}
+					</p>
 				</div>
 			</div>
 			<!-- Time grid: 30-min rows, time axis + 7 day columns -->
 			<div class="flex flex-1 min-h-0 overflow-auto items-stretch max-h-[calc(100vh-380px)]">
-				<ZCalendarTimeAxis :start-hour="startHour" :end-hour="endHour" :slot-height-px="slotHeightPx" />
+				<!-- Time axis (weekly style) -->
+				<div
+					class="shrink-0 w-[7.5rem] border-r border-neutral-200 dark:border-neutral-800 flex flex-col"
+					:style="{ height: `${totalHeightPx}px`, minHeight: `${totalHeightPx}px` }"
+				>
+					<div
+						v-for="(slot, i) in slotRows"
+						:key="i"
+						class="px-4 flex items-center justify-start text-sm font-semibold text-neutral-900 dark:text-white box-border"
+						:style="{ height: `${slotHeightPx}px`, minHeight: `${slotHeightPx}px` }"
+					>
+						{{ slot.label }}
+					</div>
+				</div>
+
 				<div class="flex-1 grid min-w-0 min-h-0 relative" :style="{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', minHeight: `${totalHeightPx}px` }">
 					<div
 						v-for="(day, dayIndex) in weekDays"
 						:key="dayKey(day)"
-						class="relative border-r border-gray-100 dark:border-gray-800 last:border-r-0 min-h-0"
-						:class="[isToday(day) ? 'bg-primary-50/30 dark:bg-primary-950/15' : '']"
+						class="relative border-r border-neutral-100 dark:border-neutral-900 last:border-r-0 min-h-0 bg-default"
 						:style="{ minHeight: `${totalHeightPx}px` }"
 					>
 						<!-- Grid lines -->
@@ -39,7 +50,7 @@
 								<div
 									:class="[
 										'absolute left-0 right-0',
-										(h - 1) % 2 === 0 ? 'border-b-2 border-gray-200 dark:border-gray-600' : 'border-b border-dotted border-gray-100/80 dark:border-gray-700/60',
+										'border-b border-neutral-100 dark:border-neutral-900',
 									]"
 									:style="{
 										top: `${(h - 1) * slotHeightPx}px`,
@@ -49,14 +60,9 @@
 							</template>
 						</div>
 
-						<!-- Current-time indicator -->
-						<div
-							v-if="isToday(day) && nowLinePx !== null"
-							class="absolute left-0 right-0 z-30 pointer-events-none flex items-center"
-							:style="{ top: `${nowLinePx}px` }"
-						>
-							<div class="w-2 h-2 rounded-full bg-red-500 dark:bg-red-400 -ml-0.5 shrink-0" />
-							<div class="flex-1 h-0.5 bg-red-500 dark:bg-red-400" />
+						<!-- Current-time indicator (kept subtle for weekly view) -->
+						<div v-if="isToday(day) && nowLinePx !== null" class="absolute left-0 right-0 z-30 pointer-events-none" :style="{ top: `${nowLinePx}px` }">
+							<div class="h-px bg-error-500/70 dark:bg-error-400/70" />
 						</div>
 
 						<!-- Appointments layer -->
@@ -64,13 +70,13 @@
 							<template v-for="block in blocksByDay.get(dayIndex) ?? []" :key="block.appointment.code">
 								<UPopover :open="hoveredCode === block.appointment.code" :popper="{ placement: 'right', strategy: 'fixed' }">
 									<div
-										class="absolute rounded-md cursor-pointer transition-all overflow-hidden flex flex-col"
+										class="absolute rounded-md cursor-pointer transition-colors overflow-hidden flex flex-col bg-neutral-50 dark:bg-neutral-900/40"
 										:class="[
-											'border-l-[5px] shadow-sm hover:shadow-md',
+											'border-l-[3px]',
 											block.borderClass,
 											selectedCode === block.appointment.code
-												? 'ring-2 ring-primary ring-inset border border-primary-300 dark:border-primary-600'
-												: 'bg-elevated border border-gray-200 dark:border-gray-600',
+												? 'ring-2 ring-primary ring-inset'
+												: '',
 										]"
 										:style="{
 											top: `${block.topPx}px`,
@@ -84,9 +90,13 @@
 										@mouseenter="hoveredCode = block.appointment.code"
 										@mouseleave="hoveredCode = null"
 									>
-										<div class="p-1.5 h-full overflow-hidden flex flex-col gap-0.5 min-w-0">
-											<span class="font-semibold truncate text-xs text-gray-900 dark:text-gray-100">{{ block.appointment.customer_name }}</span>
-											<span class="text-[10px] text-gray-600 dark:text-gray-400 truncate">{{ block.timeText }}</span>
+										<div class="px-3 py-2 h-full overflow-hidden flex flex-col gap-0.5 min-w-0">
+											<span class="text-xs font-semibold truncate" :class="block.timeTextClass">
+												{{ format(block.clipStartMs, 'hh:mm a') }}
+											</span>
+											<span class="text-xs font-semibold truncate text-neutral-900 dark:text-white">
+												{{ block.appointment.customer_name || '—' }}
+											</span>
 										</div>
 									</div>
 									<template #content>
@@ -128,6 +138,19 @@
 										</div>
 									</template>
 								</UPopover>
+							</template>
+						</div>
+
+						<!-- Empty dash markers (subtle), to resemble the table look -->
+						<div class="absolute inset-0 z-[1] pointer-events-none">
+							<template v-for="h in totalSlots" :key="`dash-${h}`">
+								<div
+									v-if="(h - 1) % 2 === 0"
+									class="absolute left-0 right-0 flex items-center justify-center text-neutral-300 dark:text-neutral-700 text-sm"
+									:style="{ top: `${(h - 1) * slotHeightPx}px`, height: `${slotHeightPx}px` }"
+								>
+									—
+								</div>
 							</template>
 						</div>
 					</div>
@@ -209,6 +232,7 @@ export type CalendarBlock = {
 	timeText: string;
 	statusColor: BadgeColor;
 	borderClass: string;
+	timeTextClass: string;
 	clipStartMs: number;
 	clipEndMs: number;
 	columnIndex: number;
@@ -228,9 +252,9 @@ const props = withDefaults(
 		getStatusColor?: (status: string) => string;
 	}>(),
 	{
-		startHour: 6,
-		endHour: 22,
-		slotHeightPx: 28,
+		startHour: 9,
+		endHour: 17,
+		slotHeightPx: 64,
 		getStatusColor: () => 'primary',
 	},
 );
@@ -248,6 +272,16 @@ const { totalSlots, totalHeightPx, slotHeightPx } = useCalendarTimeSlots(() => (
 	endHour: props.endHour,
 	slotHeightPx: props.slotHeightPx,
 }));
+
+const slotRows = computed(() => {
+	const rows: { label: string }[] = [];
+	for (let i = 0; i < totalSlots.value; i++) {
+		const hour = props.startHour + Math.floor(i / 2);
+		const minute = i % 2 === 0 ? 0 : 30;
+		rows.push({ label: format(new Date(2000, 0, 1, hour, minute), 'hh:mm a') });
+	}
+	return rows;
+});
 
 // Current-time indicator
 const now = ref(new Date());
@@ -287,6 +321,15 @@ const borderClassMap: Record<string, string> = {
 	error: 'border-l-error-500',
 	info: 'border-l-info-500',
 	neutral: 'border-l-gray-400 dark:border-l-gray-500',
+};
+
+const timeTextClassMap: Record<string, string> = {
+	primary: 'text-primary-600 dark:text-primary-400',
+	success: 'text-success-600 dark:text-success-400',
+	warning: 'text-warning-600 dark:text-warning-400',
+	error: 'text-error-600 dark:text-error-400',
+	info: 'text-info-600 dark:text-info-400',
+	neutral: 'text-neutral-500 dark:text-neutral-400',
 };
 
 /** Background class map for mobile color strip */
@@ -350,6 +393,7 @@ const blocksByDay = computed(() => {
 			const timeText = `${format(clipStartMs, 'h:mm a')} – ${format(clipEndMs, 'h:mm a')}`;
 			const statusColor = props.getStatusColor(appointment.status) as BadgeColor;
 			const borderClass = borderClassMap[statusColor] ?? borderClassMap.primary ?? '';
+			const timeTextClass = timeTextClassMap[statusColor] ?? timeTextClassMap.primary ?? 'text-primary-600 dark:text-primary-400';
 
 			map.get(dayIndex)!.push({
 				appointment,
@@ -358,6 +402,7 @@ const blocksByDay = computed(() => {
 				timeText,
 				statusColor,
 				borderClass,
+				timeTextClass,
 				clipStartMs,
 				clipEndMs,
 				columnIndex: 0,
