@@ -34,69 +34,19 @@
 								</div>
 							</div>
 							<ZLoading v-if="appointmentStore.loading" />
-							<div v-else>
-								<div v-if="displayedAppointments.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-									<UIcon name="i-heroicons-calendar-days" class="w-16 h-16 text-gray-400" />
-									<div class="text-center">
-										<p class="font-medium text-gray-900 dark:text-white">{{ $t('pages.noAppointmentsFound') }}</p>
-										<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-											{{ filter.query ? $t('pages.tryAdjustingFilters') : $t('pages.scheduleFirstAppointment') }}
-										</p>
+							<UTable v-else :data="displayedAppointments" :columns="appointment_columns" :ui="{ tr: 'cursor-pointer' }" @select="onSelectAppointment">
+								<template #empty>
+									<div class="flex flex-col items-center justify-center py-12 gap-3">
+										<UIcon name="i-heroicons-calendar-days" class="w-16 h-16 text-gray-400" />
+										<div class="text-center">
+											<p class="font-medium text-gray-900 dark:text-white">{{ $t('pages.noAppointmentsFound') }}</p>
+											<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+												{{ filter.query ? $t('pages.tryAdjustingFilters') : $t('pages.scheduleFirstAppointment') }}
+											</p>
+										</div>
 									</div>
-								</div>
-
-								<div v-else class="space-y-4">
-									<UCard v-for="group in displayedAppointmentGroups" :key="group.key" class="p-0 overflow-hidden">
-										<div class="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/40 border-b border-neutral-200 dark:border-neutral-800">
-											<div class="flex items-baseline gap-2">
-												<p class="font-semibold text-neutral-900 dark:text-white">
-													{{ group.title }}
-												</p>
-												<p class="text-sm text-neutral-500 dark:text-neutral-400">
-													{{ group.subtitle }}
-												</p>
-											</div>
-										</div>
-
-										<div class="divide-y divide-neutral-200 dark:divide-neutral-800">
-											<button
-												v-for="a in group.items"
-												:key="a.code"
-												type="button"
-												class="w-full text-left px-4 py-4 hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition-colors"
-												:class="selectedAppointment?.code === a.code ? 'bg-neutral-50 dark:bg-neutral-900/40' : ''"
-												@click="selectAppointment(a)"
-											>
-												<div class="flex items-center gap-4">
-													<div class="shrink-0 w-[88px]">
-														<p class="font-semibold text-neutral-900 dark:text-white">
-															{{ format(new Date(a.start_date_time), 'hh:mm a') }}
-														</p>
-														<p class="text-sm text-neutral-500 dark:text-neutral-400">
-															{{ a.duration != null ? `${a.duration} min` : '—' }}
-														</p>
-													</div>
-
-													<div class="min-w-0 flex-1">
-														<p class="font-semibold text-neutral-900 dark:text-white truncate">
-															{{ a.customer_name || '—' }}
-														</p>
-														<p class="text-sm text-neutral-500 dark:text-neutral-400 truncate">
-															{{ a.appt_desc || $t('pages.noDescription') }}
-														</p>
-													</div>
-
-													<div class="shrink-0">
-														<UBadge :color="getAppointmentStatusColor(a.status)" variant="subtle" size="sm">
-															{{ $t('options.' + a.status.toLowerCase()) }}
-														</UBadge>
-													</div>
-												</div>
-											</button>
-										</div>
-									</UCard>
-								</div>
-							</div>
+								</template>
+							</UTable>
 						</UCard>
 					</div>
 					<div v-if="selectedAppointment" class="lg:col-span-1">
@@ -264,10 +214,12 @@
 
 <script lang="ts" setup>
 import { CalendarDate, type DateValue } from '@internationalized/date';
+import type { TableRow } from '@nuxt/ui';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { add, endOfMonth, endOfWeek, format, getISOWeek, startOfWeek, sub } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
+import { getAppointmentColumns } from '~/utils/table-columns';
 import { getAppointmentStatusColor } from '~/utils/options';
 
 const overlay = useOverlay();
@@ -283,6 +235,7 @@ const selectedCalendarDay = ref<Date | null>(null);
 const selectedTab = ref(0);
 
 const { t } = useI18n();
+const appointment_columns = computed(() => getAppointmentColumns(t));
 useHead({ title: () => t('pages.appointmentsTitle') });
 
 const dateKey = (d: Date) => format(d, 'yyyy-MM-dd');
@@ -322,6 +275,11 @@ const dailyAppointments = computed(() => {
 	return appointmentsByDate.value[key] ?? [];
 });
 
+// Daily view: CalendarDate for UCalendar (single-day picker)
+const dailyCalendarDate = computed(
+	() => new CalendarDate(calendarFocusDate.value.getFullYear(), calendarFocusDate.value.getMonth() + 1, calendarFocusDate.value.getDate()),
+);
+
 // For weekly view: start of week (Monday) and 7 days
 const weekStartDate = computed(() => startOfWeek(calendarFocusDate.value, { weekStartsOn: 1 }));
 const weekDays = computed(() => {
@@ -329,38 +287,10 @@ const weekDays = computed(() => {
 	return Array.from({ length: 7 }, (_, i) => add(start, { days: i }));
 });
 
-// Daily view: CalendarDate for UCalendar (single-day picker)
-const dailyCalendarDate = computed(
-	() => new CalendarDate(calendarFocusDate.value.getFullYear(), calendarFocusDate.value.getMonth() + 1, calendarFocusDate.value.getDate()),
-);
-
 // Display appointments based on filter state (listing view)
 const displayedAppointments = computed(() => {
 	const result = [...appointments.value];
 	return result.sort((a, b) => new Date(a.start_date_time).getTime() - new Date(b.start_date_time).getTime());
-});
-
-const displayedAppointmentGroups = computed(() => {
-	const groupsByKey = new Map<string, Appointment[]>();
-	for (const a of displayedAppointments.value) {
-		const key = dateKey(new Date(a.start_date_time));
-		const arr = groupsByKey.get(key);
-		if (arr) arr.push(a);
-		else groupsByKey.set(key, [a]);
-	}
-
-	const keys = [...groupsByKey.keys()].sort((a, b) => a.localeCompare(b));
-	return keys.map((key) => {
-		const items = groupsByKey.get(key) ?? [];
-		items.sort((x, y) => new Date(x.start_date_time).getTime() - new Date(y.start_date_time).getTime());
-		const d = new Date(`${key}T00:00:00`);
-		return {
-			key,
-			title: format(d, 'MMM d, yyyy'),
-			subtitle: format(d, 'EEEE'),
-			items,
-		};
-	});
 });
 
 const monthDate = computed(() => new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1));
@@ -376,13 +306,13 @@ const selectTab = async (index: number) => {
 const search = async () => {
 	await appointmentStore.getAppointments();
 };
+
 const onDailyCalendarDateSelect = async (value: DateValue | DateValue[] | { start?: DateValue; end?: DateValue } | null | undefined) => {
 	const dateValue =
 		value == null ? null : Array.isArray(value) ? value[0] : 'start' in (value as object) ? (value as { start?: DateValue }).start : (value as DateValue);
 	if (!dateValue || !('year' in dateValue) || !('month' in dateValue) || !('day' in dateValue)) return;
 	const d = new Date(dateValue.year, dateValue.month - 1, dateValue.day);
 	calendarFocusDate.value = d;
-	// Fetch full month so mini calendar indicators work
 	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
 	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
 	await appointmentStore.getAppointments();
@@ -525,6 +455,11 @@ onMounted(async () => {
 const selectAppointment = (appointment: Appointment) => {
 	if (!appointment) return;
 	selectedAppointment.value = appointment;
+};
+
+const onSelectAppointment = (_e: Event, row: TableRow<Appointment>) => {
+	const appointment = row.original;
+	if (appointment) selectAppointment(appointment);
 };
 
 const openEditModal = async (appointment: Appointment) => {

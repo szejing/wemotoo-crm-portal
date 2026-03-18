@@ -1,33 +1,42 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
+import { getFormattedDate, isSameDate } from 'wemotoo-common';
 import { UBadge } from '#components';
 import { getAppointmentStatusColor } from '~/utils/options';
 import type { Appointment } from '~/utils/types/appointment';
-import { formatAppointmentDateRange } from '~/utils/utils';
+import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string, params?: Record<string, number | string>) => string;
 
 export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[] {
 	return [
 		{
-			id: 'index',
-			accessorFn: (_row, index) => index,
-			header: t('table.no'),
-			cell: ({ row }) => h('div', [h('p', row.index + 1)]),
+			id: 'date_time',
+			accessorFn: (row) => (row.start_date_time ? new Date(row.start_date_time).getTime() : 0),
+			header: ({ column }) => getSortableHeader(column, t('table.dateTime')),
+			cell: ({ row }) => {
+				const start = row.original.start_date_time ? new Date(row.original.start_date_time) : null;
+				const end = row.original.end_date_time ? new Date(row.original.end_date_time) : null;
+				if (!start) return h('span', { class: 'text-neutral-400' }, '—');
+				const dateLine = getFormattedDate(start, 'dd MMM yyyy');
+				const timeLine =
+					!end || isSameDate(start, end)
+						? getFormattedDate(start, 'hh:mm aa') + (end ? ` - ${getFormattedDate(end, 'hh:mm aa')}` : '')
+						: `${getFormattedDate(start, 'hh:mm aa')} - ${getFormattedDate(end, 'dd MMM yyyy, hh:mm aa')}`;
+				return h('div', { class: 'flex flex-col gap-0.5' }, [
+					h('span', { class: 'font-medium text-neutral-800 dark:text-neutral-100' }, dateLine),
+					h('span', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, timeLine),
+				]);
+			},
 		},
 		{
-			id: 'code_and_date',
-			accessorFn: (row) => (row.start_date_time ? new Date(row.start_date_time).getTime() : 0),
+			accessorKey: 'code',
 			header: t('table.code'),
-			cell: ({ row }) =>
-				h('div', { class: 'flex flex-col gap-0.5' }, [
-					h('span', { class: 'font-semibold text-neutral-800 dark:text-neutral-100' }, row.original.code),
-					h('span', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, formatAppointmentDateRange(row.original.start_date_time, row.original.end_date_time)),
-				]),
+			cell: ({ row }) => h('span', { class: 'font-semibold text-neutral-800 dark:text-neutral-100' }, row.original.code),
 		},
 		{
 			accessorKey: 'status',
-			header: t('table.status'),
+			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const status = row.original.status;
 				const color = getAppointmentStatusColor(status);
