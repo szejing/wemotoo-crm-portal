@@ -3,15 +3,9 @@
 		<!-- Desktop: 7-column time grid (hidden on mobile) -->
 		<div class="hidden lg:flex flex-col rounded-xl overflow-hidden bg-default border border-neutral-200 dark:border-neutral-800">
 			<!-- Day headers -->
-			<div
-				class="grid shrink-0 border-b border-neutral-200 dark:border-neutral-800 grid-cols-[7.5rem_repeat(7,minmax(0,1fr))]"
-			>
+			<div class="grid shrink-0 border-b border-neutral-200 dark:border-neutral-800 grid-cols-[7.5rem_repeat(7,minmax(0,1fr))]">
 				<div class="px-4 py-3 text-sm font-semibold text-neutral-900 dark:text-white border-r border-neutral-200 dark:border-neutral-800 min-w-0">Time</div>
-				<div
-					v-for="day in weekDays"
-					:key="dayKey(day)"
-					class="px-4 py-3 border-r border-neutral-200 dark:border-neutral-800 last:border-r-0"
-				>
+				<div v-for="day in weekDays" :key="dayKey(day)" class="px-4 py-3 border-r border-neutral-200 dark:border-neutral-800 last:border-r-0">
 					<p class="text-sm font-semibold text-neutral-900 dark:text-white leading-tight">
 						{{ format(day, 'MMM d, yyyy') }}
 					</p>
@@ -24,7 +18,7 @@
 			<div class="flex flex-1 min-h-0 overflow-auto items-stretch max-h-[calc(100vh-380px)]">
 				<!-- Time axis (weekly style) -->
 				<div
-					class="shrink-0 w-[7.5rem] border-r border-neutral-200 dark:border-neutral-800 flex flex-col"
+					class="shrink-0 w-30 border-r border-neutral-200 dark:border-neutral-800 flex flex-col"
 					:style="{ height: `${totalHeightPx}px`, minHeight: `${totalHeightPx}px` }"
 				>
 					<div
@@ -48,10 +42,7 @@
 						<div class="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
 							<template v-for="h in totalSlots" :key="h">
 								<div
-									:class="[
-										'absolute left-0 right-0',
-										'border-b border-neutral-100 dark:border-neutral-900',
-									]"
+									:class="['absolute left-0 right-0', 'border-b border-neutral-100 dark:border-neutral-900']"
 									:style="{
 										top: `${(h - 1) * slotHeightPx}px`,
 										height: `${slotHeightPx}px`,
@@ -71,13 +62,7 @@
 								<UPopover :open="hoveredCode === block.appointment.code" :popper="{ placement: 'right', strategy: 'fixed' }">
 									<div
 										class="absolute rounded-md cursor-pointer transition-colors overflow-hidden flex flex-col bg-neutral-50 dark:bg-neutral-900/40"
-										:class="[
-											'border-l-[3px]',
-											block.borderClass,
-											selectedCode === block.appointment.code
-												? 'ring-2 ring-primary ring-inset'
-												: '',
-										]"
+										:class="['border-l-[3px]', block.borderClass, selectedCode === block.appointment.code ? 'ring-2 ring-primary ring-inset' : '']"
 										:style="{
 											top: `${block.topPx}px`,
 											left: `${block.leftPct}%`,
@@ -96,6 +81,12 @@
 											</span>
 											<span class="text-xs font-semibold truncate text-neutral-900 dark:text-white">
 												{{ block.appointment.customer_name || '—' }}
+											</span>
+											<span v-if="block.appointment.customer_phone" class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+												{{ block.appointment.customer_phone }}
+											</span>
+											<span v-if="block.appointment.appt_desc" class="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+												{{ block.appointment.appt_desc }}
 											</span>
 										</div>
 									</div>
@@ -142,7 +133,7 @@
 						</div>
 
 						<!-- Empty dash markers (subtle), to resemble the table look -->
-						<div class="absolute inset-0 z-[1] pointer-events-none">
+						<div class="absolute inset-0 z-1 pointer-events-none">
 							<template v-for="h in totalSlots" :key="`dash-${h}`">
 								<div
 									v-if="(h - 1) % 2 === 0"
@@ -203,6 +194,9 @@
 								<UIcon name="i-heroicons-clock" class="w-3 h-3 shrink-0" />
 								{{ block.timeText }}
 							</p>
+							<p v-if="block.appointment.customer_phone" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
+								{{ block.appointment.customer_phone }}
+							</p>
 							<p v-if="block.appointment.appt_desc" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
 								{{ block.appointment.appt_desc }}
 							</p>
@@ -252,8 +246,8 @@ const props = withDefaults(
 		getStatusColor?: (status: string) => string;
 	}>(),
 	{
-		startHour: 9,
-		endHour: 17,
+		startHour: 6,
+		endHour: 24,
 		slotHeightPx: 64,
 		getStatusColor: () => 'primary',
 	},

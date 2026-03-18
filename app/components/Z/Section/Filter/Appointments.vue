@@ -1,8 +1,8 @@
 <template>
 	<div class="w-full space-y-4">
 		<!-- Search + View Tabs: stacked on mobile, side-by-side on desktop -->
-		<div class="flex flex-col sm:flex-row gap-4 sm:items-end sm:justify-between">
-			<div class="flex flex-col gap-1.5 flex-1 min-w-0 sm:min-w-0">
+		<div class="flex flex-col gap-4">
+			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.searchLabel') }}</label>
 				<UInput v-model="filter.query" :placeholder="$t('components.filter.searchByNamePhone')" :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>

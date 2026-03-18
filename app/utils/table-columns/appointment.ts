@@ -35,6 +35,30 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 			cell: ({ row }) => h('span', { class: 'font-semibold text-neutral-800 dark:text-neutral-100' }, row.original.code),
 		},
 		{
+			id: 'customer',
+			accessorFn: (row) => row.customer_name ?? '',
+			header: t('table.customer'),
+			cell: ({ row }) =>
+				h('div', { class: 'flex flex-col gap-0.5' }, [
+					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100 truncate max-w-[180px]' }, row.original.customer_name),
+					h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400 truncate max-w-[180px]' }, row.original.customer_phone || '—'),
+				]),
+		},
+		{
+			id: 'service',
+			accessorKey: 'appt_desc',
+			header: t('pages.service'),
+			cell: ({ row }) => {
+				const desc = row.original.appt_desc || t('pages.noDescription');
+				const n = row.original.duration;
+				const children = [h('p', { class: 'text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]' }, desc)];
+				if (n != null) {
+					children.push(h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, t('pages.durationMinutes', { n })));
+				}
+				return h('div', { class: 'flex flex-col gap-0.5' }, children);
+			},
+		},
+		{
 			accessorKey: 'status',
 			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
@@ -49,32 +73,6 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 					td: 'text-center',
 				},
 			},
-		},
-		{
-			id: 'service',
-			accessorKey: 'appt_desc',
-			header: t('pages.service'),
-			cell: ({ row }) => {
-				const desc = row.original.appt_desc || t('pages.noDescription');
-				const n = row.original.duration;
-				const children = [
-					h('p', { class: 'text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]' }, desc),
-				];
-				if (n != null) {
-					children.push(h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, t('pages.durationMinutes', { n })));
-				}
-				return h('div', { class: 'flex flex-col gap-0.5' }, children);
-			},
-		},
-		{
-			id: 'customer',
-			accessorFn: (row) => row.customer_name ?? '',
-			header: t('table.customer'),
-			cell: ({ row }) =>
-				h('div', { class: 'flex flex-col gap-0.5' }, [
-					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100 truncate max-w-[180px]' }, row.original.customer_name),
-					h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400 truncate max-w-[180px]' }, row.original.customer_phone || '—'),
-				]),
 		},
 	];
 }
