@@ -26,6 +26,7 @@ import { getCrmUserColumns } from './crm-user';
 import { getAffiliateColumns } from './affiliate';
 import { getAppointmentColumns } from './appointment';
 import { getCustomerOrderHistoryColumns } from './customer-order-history';
+import { getCustomerAppointmentColumns } from './customer-appointment';
 
 export {
 	getCustomerColumns,
@@ -57,4 +58,5 @@ export {
 	getAffiliateColumns,
 	getAppointmentColumns,
 	getCustomerOrderHistoryColumns,
+	getCustomerAppointmentColumns,
 };

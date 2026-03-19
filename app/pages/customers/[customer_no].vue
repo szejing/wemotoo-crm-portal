@@ -42,11 +42,6 @@
 							<span class="text-sm text-muted"> {{ $t('pages.totalSpend') }}: {{ formatCurrency(current_customer.total_spent ?? 0, 'MYR') }} </span>
 						</div>
 					</div>
-					<div class="flex items-center gap-2 shrink-0">
-						<UButton variant="outline" color="neutral" size="sm" @click="onEdit">
-							{{ $t('common.edit') }}
-						</UButton>
-					</div>
 				</div>
 			</UCard>
 
@@ -77,7 +72,7 @@
 							<dd class="font-medium text-default mt-0.5">{{ joinedDisplay }}</dd>
 						</div>
 						<div>
-							<dt class="text-muted">{{ $t('pages.lastActivity') }}</dt>
+							<dt class="text-muted">{{ $t('pages.lastTransaction') }}</dt>
 							<dd class="font-medium text-default mt-0.5">{{ lastActivityDisplay }}</dd>
 						</div>
 					</dl>
@@ -127,10 +122,6 @@
 										@update:page="updateAppointmentsPage"
 									/>
 								</div>
-								<div v-else-if="!customer_appointments.length" class="flex flex-col items-center justify-center py-8 gap-2">
-									<UIcon name="i-heroicons-calendar-days" class="w-10 h-10 text-neutral-300" />
-									<p class="text-sm text-muted">{{ $t('pages.noAppointmentsFoundForCustomer') }}</p>
-								</div>
 							</div>
 						</template>
 
@@ -153,10 +144,6 @@
 										@update:page="updateOrdersPage"
 									/>
 								</div>
-								<div v-else class="flex flex-col items-center justify-center py-8 gap-2">
-									<UIcon name="i-heroicons-shopping-cart" class="w-10 h-10 text-neutral-300" />
-									<p class="text-sm text-muted">{{ $t('pages.noOrdersFound') }}</p>
-								</div>
 							</div>
 						</template>
 
@@ -176,13 +163,11 @@
 <script lang="ts" setup>
 import { formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models';
-import { ICONS } from '~/utils/icons';
-import { getCustomerOrderHistoryColumns } from '~/utils/table-columns';
+import { getCustomerAppointmentColumns, getCustomerOrderHistoryColumns } from '~/utils/table-columns';
 import type { Appointment } from '~/utils/types/appointment';
-import { getAppointmentColumns } from '~/utils/table-columns';
 
 const route = useRoute();
-const custNo = computed(() => String(route.params.id ?? ''));
+const custNo = computed(() => String(route.params.customer_no ?? ''));
 const customerStore = useCustomerStore();
 const appointmentStore = useAppointmentStore();
 const { loading, current_customer, customer_orders } = storeToRefs(customerStore);
@@ -198,7 +183,8 @@ const pageTitle = computed(() => {
 const phoneDisplay = computed(() => {
 	const c = current_customer.value;
 	if (!c?.dial_code && !c?.phone_no) return '';
-	return [c.dial_code, c.phone_no].filter(Boolean).join(' ');
+	if (c?.dial_code && c?.phone_no) return `(${c.dial_code}) ${c.phone_no}`;
+	return c?.dial_code ? `(${c.dial_code})` : c.phone_no;
 });
 
 const isVip = computed(() => (current_customer.value?.total_spent ?? 0) >= 1000);
@@ -240,7 +226,7 @@ const totalAppointmentsCount = ref(0);
 const customer_appointments = ref<Appointment[]>([]);
 const appointmentsLoading = computed(() => appointmentStore.loading);
 
-const appointmentColumns = computed(() => getAppointmentColumns(t));
+const appointmentColumns = computed(() => getCustomerAppointmentColumns(t));
 
 const appointmentsPagination = reactive({
 	current_page: 1,
@@ -292,17 +278,20 @@ const onAppointment = () => {
 };
 
 onBeforeMount(async () => {
-	if (!current_customer.value || current_customer.value.customer_no !== custNo.value) {
-		const [customer, appointments] = await Promise.all([customerStore.getCustomer(custNo.value), appointmentStore.getAppointmentsByCustomer(custNo.value)]);
-		if (!customer) {
-			await navigateTo('/customers');
-			return;
-		}
-
-		current_customer.value = customer;
-		customer_appointments.value = appointments ?? [];
-		totalAppointmentsCount.value = customer_appointments.value.length;
+	const [customer, orders, appointments] = await Promise.all([
+		customerStore.getCustomer(custNo.value),
+		customerStore.getCustomerOrders(custNo.value),
+		appointmentStore.getAppointmentsByCustomer(custNo.value),
+	]);
+	if (!customer) {
+		await navigateTo('/customers');
+		return;
 	}
+
+	current_customer.value = customer;
+	customer_orders.value = orders ?? [];
+	customer_appointments.value = appointments ?? [];
+	totalAppointmentsCount.value = customer_appointments.value.length;
 });
 
 watch(

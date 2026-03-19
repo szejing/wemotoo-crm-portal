@@ -144,13 +144,38 @@ export const useAppointmentStore = defineStore('appointmentStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const filter = `customer_no eq '${customer_no}'`;
+				let filter = '';
+				if (this.filter.status === 'pending') {
+					filter = `status in ('${AppointmentStatus.PENDING}')`;
+				} else if (this.filter.status === 'confirmed') {
+					filter = `status eq '${AppointmentStatus.CONFIRMED}'`;
+				} else if (this.filter.status === 'completed') {
+					filter = `status eq '${AppointmentStatus.COMPLETED}'`;
+				} else if (this.filter.status === 'cancelled') {
+					filter = `status in ('${AppointmentStatus.CANCELLED}', '${AppointmentStatus.VOIDED}')`;
+				}
+
+				let { start, end } = this.filter.date_range;
+
+				start = start ?? new Date();
+				end = end ?? new Date();
+
+				// Add date filter
+				const dateFilter = end
+					? `(start_date_time between '${getFormattedDate(start, 'yyyy-MM-dd')}' and '${getFormattedDate(end, 'yyyy-MM-dd')}')`
+					: `start_date_time le '${getFormattedDate(start, 'yyyy-MM-dd')}'`;
+
+				filter = filter ? `${filter} and ${dateFilter}` : dateFilter;
 
 				const queryParams = {
+					$top: this.filter.page_size,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$count: true,
 					$filter: filter,
+					$orderby: 'start_date_time desc',
 				} as const;
 
-				const { data } = await $api.appointment.getByCustomer(customer_no);
+				const { data } = await $api.appointment.getByCustomer(customer_no, queryParams);
 
 				return data;
 			} catch (err: unknown | ErrorResponse) {

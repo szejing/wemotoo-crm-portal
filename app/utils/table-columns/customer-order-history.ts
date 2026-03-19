@@ -1,11 +1,11 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { formatCurrency, PaymentStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge, UIcon } from '#components';
-
 import type { OrderHistory } from '~/utils/types/order-history';
 import type { ItemModel } from '~/utils/models';
-import { getPaymentStatusColor } from '~/utils/options/payment-status';
+import { getSortableHeader } from './sortable';
+import { getOrderStatusColor } from '../options';
 
 type TranslateFn = (key: string) => string;
 
@@ -17,7 +17,8 @@ export function getCustomerOrderHistoryColumns(
 		{
 			id: 'order_no',
 			accessorKey: 'order_no',
-			header: t('table.orderId'),
+			accessorFn: (row) => (row.order_date_time ? new Date(row.order_date_time).getTime() : 0),
+			header: ({ column }) => getSortableHeader(column, t('table.orderNo')),
 			cell: ({ row }) => {
 				const d = row.original.order_date_time;
 				let dateLabel = '—';
@@ -42,15 +43,16 @@ export function getCustomerOrderHistoryColumns(
 			cell: ({ row }) => h('span', { class: 'text-default' }, formatOrderItemsSummary(row.original.items)),
 		},
 		{
-			id: 'payment_status',
-			accessorKey: 'payment_status',
-			header: t('table.status'),
+			id: 'order_status',
+			accessorKey: 'order_status',
+			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
 			cell: ({ row }) => {
-				const status = row.original.payment_status;
-				const color = getPaymentStatusColor(status) ?? 'neutral';
-				const label = status === PaymentStatus.PAID ? t('options.paid') : status === PaymentStatus.PENDING ? t('options.pending') : (status ?? '—');
-				return h(UBadge, { color, variant: 'subtle', size: 'sm', class: 'inline-flex items-center gap-1' }, () => [
-					status === PaymentStatus.PAID ? h(UIcon, { name: 'i-heroicons-check-circle', class: 'w-3.5 h-3.5' }) : null,
+				const status = row.original.status;
+				const color = getOrderStatusColor(status) ?? 'neutral';
+				const label =
+					status === OrderStatus.COMPLETED ? t('options.completed') : status === OrderStatus.PENDING_PAYMENT ? t('options.pendingPayment') : (status ?? '—');
+				return h(UBadge, { color, variant: 'subtle', class: 'inline-flex items-center gap-1' }, () => [
+					status === OrderStatus.COMPLETED ? h(UIcon, { name: 'i-heroicons-check-circle', class: 'w-3.5 h-3.5' }) : null,
 					label,
 				]);
 			},
@@ -58,7 +60,8 @@ export function getCustomerOrderHistoryColumns(
 		{
 			id: 'net_total',
 			accessorKey: 'net_total',
-			header: t('table.totalAmt'),
+			accessorFn: (row) => row.net_total ?? 0,
+			header: ({ column }) => getSortableHeader(column, t('table.totalAmt')),
 			cell: ({ row }) => {
 				const o = row.original;
 				const code = o.currency?.code ?? 'MYR';

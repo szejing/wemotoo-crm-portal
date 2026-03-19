@@ -511,6 +511,7 @@
 		"invoices": "Invoices",
 		"totalSpend": "Total Spend",
 		"lastActivity": "Last Activity",
+		"lastTransaction": "Last Transaction",
 		"joined": "Joined",
 		"recentActivity": "Recent Activity",
 		"appointmentBooked": "Appointment booked",

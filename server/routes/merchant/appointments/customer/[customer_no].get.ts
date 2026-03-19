@@ -3,19 +3,19 @@ import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const data = await readBody(event);
-		const id = getRouterParams(event).id;
+		const customer_no = getRouterParams(event).customer_no;
+		const query = getQuery(event);
 
-		if (!id) {
+		if (!customer_no) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Appointment Code is required',
+				statusMessage: 'Customer No is required',
 			});
 		}
 
-		const result = await signedFetch(event, `${Routes.Appoinments.GetByCustomer(id)}`, {
+		const result = await signedFetch(event, `${Routes.Appoinments.GetByCustomer(customer_no)}`, {
 			method: 'GET',
-			body: data,
+			query,
 		});
 		return result;
 	} catch (err) {

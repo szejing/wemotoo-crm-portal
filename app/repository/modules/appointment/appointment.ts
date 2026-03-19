@@ -55,10 +55,11 @@ class AppointmentModule extends HttpFactory {
 		});
 	}
 
-	async getByCustomer(customer_no: string): Promise<BaseODataResp<Appointment>> {
+	async getByCustomer(customer_no: string, queryParams: BaseODataReq): Promise<BaseODataResp<Appointment>> {
 		return await this.call<BaseODataResp<Appointment>>({
 			method: 'GET',
 			url: `${this.RESOURCE.GetByCustomer(customer_no)}`,
+			query: queryParams,
 		});
 	}
 }
