@@ -13,12 +13,13 @@
 							<UIcon name="i-heroicons-user" class="w-5 h-5 inline-block mr-2" />
 							{{ $t('pages.crmUserDetailUserInformation') }}
 						</h2>
-						<div v-if="isViewingSelf" class="flex items-center gap-2">
-							<UButton color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
+						<div class="flex items-center gap-2">
+							<UButton v-if="isViewingSelf" color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								{{ $t('common.save') }}
 							</UButton>
 							<UButton
+								v-if="canDeleteCurrentUser"
 								size="sm"
 								color="error"
 								variant="ghost"
@@ -117,6 +118,11 @@ const isAdmin = computed(() => {
 	const role = authUser.value?.role;
 	return role === UserRoles.MERCHANT_ADMIN || role === UserRoles.SUPER_ADMIN;
 });
+const isCurrentUserStaff = computed(() => {
+	const role = current_crm_user.value?.role;
+	return role === UserRoles.MERCHANT_STAFF || role === UserRoles.SUPER_STAFF;
+});
+const canDeleteCurrentUser = computed(() => isAdmin.value && isCurrentUserStaff.value);
 /** Only admin can reset another staff's password; own password change is allowed for everyone. */
 const canResetOtherStaffPassword = computed(() => !isViewingSelf.value && isAdmin.value);
 const showPasswordSection = computed(() => isViewingSelf.value || canResetOtherStaffPassword.value);

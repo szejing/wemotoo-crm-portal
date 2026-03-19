@@ -203,6 +203,7 @@ export const useProductStore = defineStore('productStore', {
 					successNotification(`${data.product.code} - Product Created !`);
 				}
 
+				this.resetNewProduct();
 				return data.product;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process product';

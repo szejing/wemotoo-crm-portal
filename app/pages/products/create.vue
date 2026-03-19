@@ -47,7 +47,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ProductStatus } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
 
 const productStore = useProductStore();
@@ -67,7 +66,7 @@ useLeavePageGuard(isDirty, {
 });
 
 const saveDraft = async () => {
-	new_product.value.status = ProductStatus.DRAFT;
+	new_product.value.is_active = false;
 	await productStore.createProduct();
 };
 
