@@ -59,7 +59,6 @@ export type SummOrderBill = {
 export type SummOrderItem = {
 	biz_date: Date;
 	currency_code: string;
-	status: OrderStatus;
 	item_status: OrderItemStatus;
 	prod_code: string;
 	prod_name: string;

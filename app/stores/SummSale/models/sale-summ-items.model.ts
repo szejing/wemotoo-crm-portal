@@ -7,7 +7,6 @@ import { sub } from 'date-fns';
 type SaleSummItem = {
 	filter: {
 		date_range: Range;
-		status: SaleStatus | undefined;
 		item_status: OrderItemStatus | undefined;
 		currency_code: string;
 	};
@@ -25,7 +24,6 @@ export const initialEmptySaleSummItem: SaleSummItem = {
 			start: sub(new Date(), { days: 14 }),
 			end: new Date(),
 		},
-		status: undefined,
 		item_status: undefined,
 		currency_code: 'MYR',
 	},

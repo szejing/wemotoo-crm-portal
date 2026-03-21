@@ -73,31 +73,6 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 			},
 		},
 		{
-			accessorKey: 'status',
-			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
-			cell: ({ row }) => {
-				const color = {
-					[OrderStatus.COMPLETED]: 'success' as const,
-					[OrderStatus.CANCELLED]: 'neutral' as const,
-					[OrderStatus.REFUNDED]: 'error' as const,
-					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
-					[OrderStatus.PROCESSING]: 'info' as const,
-					[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
-				}[row.original.status as OrderStatus];
-
-				const value = {
-					[OrderStatus.COMPLETED]: t('options.completed'),
-					[OrderStatus.CANCELLED]: t('options.cancelled'),
-					[OrderStatus.REFUNDED]: t('options.refunded'),
-					[OrderStatus.PENDING_PAYMENT]: t('options.pendingPayment'),
-					[OrderStatus.PROCESSING]: t('options.processing'),
-					[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
-				}[row.original.status as OrderStatus];
-
-				return h(UBadge, { variant: 'subtle', color }, () => value);
-			},
-		},
-		{
 			accessorKey: 'item_status',
 			header: ({ column }) => getSortableHeader(column, t('table.itemStatus')),
 			cell: ({ row }) => {

@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import { formatCurrency, OrderItemStatus, SaleStatus } from 'wemotoo-common';
+import { formatCurrency, OrderItemStatus } from 'wemotoo-common';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { UBadge } from '#components';
@@ -14,26 +14,6 @@ export function getSaleSummItemColumns(t: TranslateFn): TableColumn<SummSaleItem
 			header: ({ column }) => getSortableHeader(column, t('table.product')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_code'))]);
-			},
-		},
-
-		{
-			accessorKey: 'status',
-			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
-			cell: ({ row }) => {
-				const color = {
-					[SaleStatus.COMPLETED]: 'success' as const,
-					[SaleStatus.CANCELLED]: 'neutral' as const,
-					[SaleStatus.REFUNDED]: 'error' as const,
-				}[row.original.status as SaleStatus];
-
-				const value = {
-					[SaleStatus.COMPLETED]: t('options.completed'),
-					[SaleStatus.CANCELLED]: t('options.cancelled'),
-					[SaleStatus.REFUNDED]: t('options.refunded'),
-				}[row.original.status as SaleStatus];
-
-				return h(UBadge, { variant: 'subtle', color }, () => value);
 			},
 		},
 
