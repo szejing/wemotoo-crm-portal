@@ -61,7 +61,6 @@
 								root: 'relative overflow-auto',
 								base: 'table-fixed',
 								tbody: 'divide-y divide-gray-200',
-								tr: '',
 							}"
 						/>
 					</div>
@@ -191,36 +190,12 @@ const exportToCsv = async () => {
 }
 
 :deep(table) {
-	table-layout: fixed;
+	table-layout: auto;
+	min-width: 100%;
 }
 
-:deep(th:nth-child(1)),
-:deep(td:nth-child(1)) {
-	width: 25%;
-}
-
-:deep(th:nth-child(2)),
-:deep(td:nth-child(2)) {
-	width: 15%;
-}
-
-:deep(th:nth-child(3)),
-:deep(td:nth-child(3)) {
-	width: 15%;
-}
-
-:deep(th:nth-child(4)),
-:deep(td:nth-child(4)) {
-	width: 15%;
-}
-
-:deep(th:nth-child(5)),
-:deep(td:nth-child(5)) {
-	width: 15%;
-}
-
-:deep(th:nth-child(6)),
-:deep(td:nth-child(6)) {
-	width: 15%;
+:deep(th:first-child),
+:deep(td:first-child) {
+	min-width: 14rem;
 }
 </style>

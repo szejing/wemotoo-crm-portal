@@ -34,7 +34,7 @@
 								</div>
 							</div>
 							<ZLoading v-if="appointmentStore.loading" />
-							<UTable v-else :data="displayedAppointments" :columns="appointment_columns" :ui="{ tr: 'cursor-pointer' }" @select="onSelectAppointment">
+							<UTable v-else :data="displayedAppointments" :columns="appointment_columns" @select="onSelectAppointment">
 								<template #empty>
 									<div class="flex flex-col items-center justify-center py-12 gap-3">
 										<UIcon name="i-heroicons-calendar-days" class="w-16 h-16 text-gray-400" />

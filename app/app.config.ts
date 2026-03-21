@@ -115,5 +115,12 @@ export default defineAppConfig({
 				},
 			},
 		},
+
+		// table
+		table: {
+			slots: {
+				tr: 'cursor-pointer',
+			},
+		},
 	},
 });

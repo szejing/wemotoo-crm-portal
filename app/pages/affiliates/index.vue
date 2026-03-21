@@ -21,7 +21,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="affiliates" :columns="affiliate_columns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectAffiliate">
+			<UTable v-else :data="affiliates" :columns="affiliate_columns" :loading="loading" @select="selectAffiliate">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />

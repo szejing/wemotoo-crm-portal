@@ -33,8 +33,8 @@
 			<UTable v-else :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
 				<template #empty-state>
 					<div class="flex-col-center section-empty">
-						<h2>No tax code Found</h2>
-						<p>Create a new tax code to get started</p>
+						<h2>{{ $t('pages.noTaxRulesFound') }}</h2>
+						<p>{{ $t('pages.tryAdjustingFilters') }}</p>
 					</div>
 				</template>
 			</UTable>

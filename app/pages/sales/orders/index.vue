@@ -43,7 +43,7 @@
 			</template>
 
 			<!-- Orders Table -->
-			<UTable v-if="!initialize && !loading" :data="orders" :columns="order_columns" :ui="{ tr: 'cursor-pointer' }" @select="selectOrder">
+			<UTable v-if="!initialize && !loading" :data="orders" :columns="order_columns" @select="selectOrder">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
@@ -109,23 +109,27 @@ const tabItems = computed(() => [
 	{ label: t('options.requiresAction'), value: OrderStatus.REQUIRES_ACTION },
 ]);
 
-function tabIndexForStatus(status: OrderStatus | string): number {
-	if (status === OrderStatus.PENDING_PAYMENT || status === OrderStatus.PROCESSING) return 1;
+const tabIndexForStatus = (status: OrderStatus | string): number => {
+	if (status === OrderStatus.PENDING_PAYMENT) return 1;
 	if (status === OrderStatus.COMPLETED) return 2;
-	if (status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED) return 3;
+	if (status === OrderStatus.PROCESSING) return 3;
+	if (status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED) return 4;
+	if (status === OrderStatus.REQUIRES_ACTION) return 5;
 	return 0;
-}
+};
 
-function storeStatusFromQuery(status: string): OrderStatus | undefined {
-	if (status === OrderStatus.PENDING_PAYMENT || status === OrderStatus.PROCESSING) return OrderStatus.PENDING_PAYMENT;
+const storeStatusFromQuery = (status: string): OrderStatus | undefined => {
+	if (status === OrderStatus.PENDING_PAYMENT) return OrderStatus.PENDING_PAYMENT;
+	if (status === OrderStatus.PROCESSING) return OrderStatus.PROCESSING;
 	if (status === OrderStatus.COMPLETED) return OrderStatus.COMPLETED;
 	if (status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED) return OrderStatus.CANCELLED;
+	if (status === OrderStatus.REQUIRES_ACTION) return OrderStatus.REQUIRES_ACTION;
 	return undefined;
-}
+};
 
 const VALID_ORDER_STATUSES = new Set(Object.values(OrderStatus));
 
-function applyQueryToFilter() {
+const applyQueryToFilter = () => {
 	const start = route.query.start_date;
 	const end = route.query.end_date;
 	const status = route.query.status;
@@ -148,7 +152,7 @@ function applyQueryToFilter() {
 			selectedTab.value = tabIndexForStatus(status);
 		}
 	}
-}
+};
 
 const initialize = ref(true);
 

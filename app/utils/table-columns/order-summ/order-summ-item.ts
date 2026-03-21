@@ -6,13 +6,70 @@ import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
+type MoneyKey = keyof Pick<
+	SummOrderItem,
+	'gross_amt' | 'disc_amt' | 'net_amt' | 'gross_amt_exc' | 'disc_amt_exc' | 'net_amt_exc' | 'tax_amt_inc' | 'tax_amt_exc' | 'adj_amt'
+>;
+
+function sumMoneyFooter(column: { getFacetedRowModel: () => { rows: TableRow<SummOrderItem>[] } }, key: MoneyKey) {
+	const rows = column.getFacetedRowModel().rows;
+	const total = rows.reduce((acc, row) => {
+		const v = row.original[key];
+		return acc + (typeof v === 'number' && !Number.isNaN(v) ? v : 0);
+	}, 0);
+	const cc = rows[0]?.original.currency_code ?? 'MYR';
+	return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, cc))]);
+}
+
+function optionalMoneyCell(row: SummOrderItem, value: number | undefined) {
+	if (value == null) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
+	return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(value, row.currency_code ?? 'MYR'))]);
+}
+
 export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderItem>[] {
 	return [
 		{
-			accessorKey: 'prod_code',
-			header: ({ column }) => getSortableHeader(column, t('table.product')),
+			accessorKey: 'prod_name',
+			header: ({ column }) => getSortableHeader(column, t('table.codeAndName')),
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('prod_code'))]);
+				const o = row.original;
+				const variantNameBadge =
+					o.prod_variant_name != null && String(o.prod_variant_name).trim() !== ''
+						? h(UBadge, { class: 'capitalize mt-1', variant: 'subtle', color: 'info' }, () => o.prod_variant_name!)
+						: null;
+
+				return h('div', { class: 'flex items-start gap-3' }, [
+					h('img', {
+						src: '/svg/product-holder.svg',
+						alt: o.prod_name || t('table.productThumbnail'),
+						class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
+					}),
+					h('div', { class: 'flex-1 min-w-0' }, [
+						h('div', { class: 'flex items-center gap-1.5' }, [
+							h('span', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, o.prod_name || '—'),
+						]),
+						h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, o.prod_code ?? ''),
+						variantNameBadge,
+					]),
+				]);
+			},
+		},
+		{
+			accessorKey: 'prod_variant_code',
+			header: ({ column }) => getSortableHeader(column, t('table.prodVariantCode')),
+			cell: ({ row }) => {
+				const code = row.original.prod_variant_code;
+				if (code == null || String(code).trim() === '') {
+					return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '-');
+				}
+				return h('p', { class: 'font-mono text-sm text-neutral-800 dark:text-neutral-200' }, code);
+			},
+		},
+		{
+			accessorKey: 'currency_code',
+			header: ({ column }) => getSortableHeader(column, t('table.currency')),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.currency_code)]);
 			},
 		},
 		{
@@ -40,7 +97,6 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 				return h(UBadge, { variant: 'subtle', color }, () => value);
 			},
 		},
-
 		{
 			accessorKey: 'item_status',
 			header: ({ column }) => getSortableHeader(column, t('table.itemStatus')),
@@ -52,12 +108,24 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 				}[row.original.item_status as OrderItemStatus];
 
 				const value = {
-					[OrderItemStatus.ACTIVE]: 'ACTIVE',
-					[OrderItemStatus.REFUNDED]: 'REFUNDED',
-					[OrderItemStatus.VOIDED]: 'VOIDED',
+					[OrderItemStatus.ACTIVE]: t('options.active'),
+					[OrderItemStatus.REFUNDED]: t('options.refunded'),
+					[OrderItemStatus.VOIDED]: t('options.voided'),
 				}[row.original.item_status as OrderItemStatus];
 
 				return h(UBadge, { variant: 'subtle', color }, () => value);
+			},
+		},
+		{
+			accessorKey: 'total_orders',
+			header: ({ column }) => getSortableHeader(column, t('table.totalOrders')),
+			footer: ({ column }) => {
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.total_orders, 0);
+
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
+			},
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_orders)]);
 			},
 		},
 		{
@@ -75,30 +143,56 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 		{
 			accessorKey: 'gross_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
-			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.gross_amt, 0);
-
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
-				]);
-			},
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code))]);
-			},
+			footer: ({ column }) => sumMoneyFooter(column, 'gross_amt'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.gross_amt),
+		},
+		{
+			accessorKey: 'disc_amt',
+			header: ({ column }) => getSortableHeader(column, t('table.discountAmt')),
+			footer: ({ column }) => sumMoneyFooter(column, 'disc_amt'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.disc_amt),
 		},
 		{
 			accessorKey: 'net_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
-			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderItem>) => acc + row.original.net_amt, 0);
-
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR')),
-				]);
-			},
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code))]);
-			},
+			footer: ({ column }) => sumMoneyFooter(column, 'net_amt'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.net_amt),
+		},
+		{
+			accessorKey: 'gross_amt_exc',
+			header: ({ column }) => getSortableHeader(column, t('table.grossAmtExc')),
+			footer: ({ column }) => sumMoneyFooter(column, 'gross_amt_exc'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.gross_amt_exc),
+		},
+		{
+			accessorKey: 'disc_amt_exc',
+			header: ({ column }) => getSortableHeader(column, t('table.discAmtExc')),
+			footer: ({ column }) => sumMoneyFooter(column, 'disc_amt_exc'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.disc_amt_exc),
+		},
+		{
+			accessorKey: 'net_amt_exc',
+			header: ({ column }) => getSortableHeader(column, t('table.netAmtExc')),
+			footer: ({ column }) => sumMoneyFooter(column, 'net_amt_exc'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.net_amt_exc),
+		},
+		{
+			accessorKey: 'tax_amt_inc',
+			header: ({ column }) => getSortableHeader(column, t('table.taxAmtInc')),
+			footer: ({ column }) => sumMoneyFooter(column, 'tax_amt_inc'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.tax_amt_inc),
+		},
+		{
+			accessorKey: 'tax_amt_exc',
+			header: ({ column }) => getSortableHeader(column, t('table.taxAmtExc')),
+			footer: ({ column }) => sumMoneyFooter(column, 'tax_amt_exc'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.tax_amt_exc),
+		},
+		{
+			accessorKey: 'adj_amt',
+			header: ({ column }) => getSortableHeader(column, t('table.adjAmt')),
+			footer: ({ column }) => sumMoneyFooter(column, 'adj_amt'),
+			cell: ({ row }) => optionalMoneyCell(row.original, row.original.adj_amt),
 		},
 	];
 }
