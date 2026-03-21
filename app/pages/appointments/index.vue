@@ -216,7 +216,20 @@
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import { add, endOfMonth, endOfWeek, format, getISOWeek, startOfWeek, sub } from 'date-fns';
+import {
+	add,
+	addMonths,
+	endOfMonth,
+	endOfDay,
+	endOfWeek,
+	format,
+	getISOWeek,
+	isWithinInterval,
+	startOfDay,
+	startOfMonth,
+	startOfWeek,
+	sub,
+} from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { getAppointmentColumns } from '~/utils/table-columns';
@@ -239,6 +252,24 @@ const appointment_columns = computed(() => getAppointmentColumns(t));
 useHead({ title: () => t('pages.appointmentsTitle') });
 
 const dateKey = (d: Date) => format(d, 'yyyy-MM-dd');
+
+/** Current month, next month, and the following two months (four calendar months total). */
+const fourMonthForwardRange = (anchor: Date) => {
+	const monthStart = startOfMonth(anchor);
+	return {
+		start: monthStart,
+		end: endOfMonth(addMonths(monthStart, 3)),
+	};
+};
+
+const dateInLoadedRange = (d: Date) => {
+	const { start, end } = filter.value.date_range;
+	if (!start || !end) return false;
+	return isWithinInterval(d, { start: startOfDay(start), end: endOfDay(end) });
+};
+
+const weekFullyInLoadedRange = (weekStart: Date, weekEnd: Date) =>
+	dateInLoadedRange(weekStart) && dateInLoadedRange(weekEnd);
 
 const appointmentTabs = computed(() => [
 	{ label: t('options.all'), value: 'All' },
@@ -282,10 +313,6 @@ const dailyCalendarDate = computed(
 
 // For weekly view: start of week (Monday) and 7 days
 const weekStartDate = computed(() => startOfWeek(calendarFocusDate.value, { weekStartsOn: 1 }));
-const weekDays = computed(() => {
-	const start = weekStartDate.value;
-	return Array.from({ length: 7 }, (_, i) => add(start, { days: i }));
-});
 
 // Display appointments based on filter state (listing view)
 const displayedAppointments = computed(() => {
@@ -313,58 +340,56 @@ const onDailyCalendarDateSelect = async (value: DateValue | DateValue[] | { star
 	if (!dateValue || !('year' in dateValue) || !('month' in dateValue) || !('day' in dateValue)) return;
 	const d = new Date(dateValue.year, dateValue.month - 1, dateValue.day);
 	calendarFocusDate.value = d;
-	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
-	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
+	if (dateInLoadedRange(d)) return;
+	filter.value.date_range = fourMonthForwardRange(d);
 	await appointmentStore.getAppointments();
 };
 
 const goPrevDay = async () => {
 	calendarFocusDate.value = sub(calendarFocusDate.value, { days: 1 });
-	const d = calendarFocusDate.value;
-	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
-	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
+	if (dateInLoadedRange(calendarFocusDate.value)) return;
+	filter.value.date_range = fourMonthForwardRange(calendarFocusDate.value);
 	await appointmentStore.getAppointments();
 };
 
 const goNextDay = async () => {
 	calendarFocusDate.value = add(calendarFocusDate.value, { days: 1 });
-	const d = calendarFocusDate.value;
-	const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
-	filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
+	if (dateInLoadedRange(calendarFocusDate.value)) return;
+	filter.value.date_range = fourMonthForwardRange(calendarFocusDate.value);
 	await appointmentStore.getAppointments();
 };
 
 const goPrevWeek = async () => {
 	calendarFocusDate.value = sub(weekStartDate.value, { days: 7 });
-	const start = weekStartDate.value;
-	const end = endOfWeek(calendarFocusDate.value, { weekStartsOn: 1 });
-	filter.value.date_range = { start, end };
+	const ws = weekStartDate.value;
+	const we = endOfWeek(calendarFocusDate.value, { weekStartsOn: 1 });
+	if (weekFullyInLoadedRange(ws, we)) return;
+	filter.value.date_range = fourMonthForwardRange(ws);
 	await appointmentStore.getAppointments();
 };
 
 const goNextWeek = async () => {
 	calendarFocusDate.value = add(weekStartDate.value, { days: 7 });
-	const start = weekStartDate.value;
-	const end = endOfWeek(calendarFocusDate.value, { weekStartsOn: 1 });
-	filter.value.date_range = { start, end };
+	const ws = weekStartDate.value;
+	const we = endOfWeek(calendarFocusDate.value, { weekStartsOn: 1 });
+	if (weekFullyInLoadedRange(ws, we)) return;
+	filter.value.date_range = fourMonthForwardRange(ws);
 	await appointmentStore.getAppointments();
 };
 
 const goPrevMonth = async () => {
 	const prev = sub(monthDate.value, { months: 1 });
 	calendarPlaceholder.value = new CalendarDate(prev.getFullYear(), prev.getMonth() + 1, 1);
-	const start = new Date(prev.getFullYear(), prev.getMonth(), 1);
-	const end = endOfMonth(start);
-	filter.value.date_range = { start, end };
+	const anchor = new Date(prev.getFullYear(), prev.getMonth(), 1);
+	filter.value.date_range = fourMonthForwardRange(anchor);
 	await appointmentStore.getAppointments();
 };
 
 const goNextMonth = async () => {
 	const next = add(monthDate.value, { months: 1 });
 	calendarPlaceholder.value = new CalendarDate(next.getFullYear(), next.getMonth() + 1, 1);
-	const start = new Date(next.getFullYear(), next.getMonth(), 1);
-	const end = endOfMonth(start);
-	filter.value.date_range = { start, end };
+	const anchor = new Date(next.getFullYear(), next.getMonth(), 1);
+	filter.value.date_range = fourMonthForwardRange(anchor);
 	await appointmentStore.getAppointments();
 };
 
@@ -373,17 +398,12 @@ const goToTodayMonth = async () => {
 	calendarPlaceholder.value = new CalendarDate(now.getFullYear(), now.getMonth() + 1, 1);
 	if (appointmentStore.isWeeklyView) {
 		calendarFocusDate.value = now;
-		const start = startOfWeek(now, { weekStartsOn: 1 });
-		const end = endOfWeek(now, { weekStartsOn: 1 });
-		filter.value.date_range = { start, end };
+		filter.value.date_range = fourMonthForwardRange(startOfWeek(now, { weekStartsOn: 1 }));
 	} else if (appointmentStore.isDailyView) {
 		calendarFocusDate.value = now;
-		const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-		filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
+		filter.value.date_range = fourMonthForwardRange(now);
 	} else {
-		const start = new Date(now.getFullYear(), now.getMonth(), 1);
-		const end = endOfMonth(start);
-		filter.value.date_range = { start, end };
+		filter.value.date_range = fourMonthForwardRange(new Date(now.getFullYear(), now.getMonth(), 1));
 	}
 	await appointmentStore.getAppointments();
 };
@@ -420,21 +440,17 @@ watch(
 	(view) => {
 		selectedAppointment.value = null;
 		if (view === 'monthly') {
-			const start = new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1);
-			const end = endOfMonth(start);
-			filter.value.date_range = { start, end };
+			const anchor = new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1);
+			filter.value.date_range = fourMonthForwardRange(anchor);
 			appointmentStore.getAppointments();
 		} else if (view === 'daily') {
 			calendarFocusDate.value = new Date();
-			const d = calendarFocusDate.value;
-			const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
-			filter.value.date_range = { start: monthStart, end: endOfMonth(monthStart) };
+			filter.value.date_range = fourMonthForwardRange(calendarFocusDate.value);
 			appointmentStore.getAppointments();
 		} else if (view === 'weekly') {
 			const start = startOfWeek(new Date(), { weekStartsOn: 1 });
-			const end = endOfWeek(start, { weekStartsOn: 1 });
 			calendarFocusDate.value = start;
-			filter.value.date_range = { start, end };
+			filter.value.date_range = fourMonthForwardRange(start);
 			appointmentStore.getAppointments();
 		} else {
 			filter.value.date_range = {
