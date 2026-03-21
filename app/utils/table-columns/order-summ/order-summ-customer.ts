@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummOrderCustomer } from '~/utils/types/summ-orders';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
@@ -11,7 +11,7 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 	return [
 		{
 			accessorKey: 'customer',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.customer')),
+			header: ({ column }) => getSortableHeader(column, t('table.customer')),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
@@ -47,6 +47,13 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 		{
 			accessorKey: 'gross_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
+			footer: ({ column }) => {
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderCustomer>) => acc + row.original.gross_amt, 0);
+
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code)),
+				]);
+			},
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
@@ -56,6 +63,13 @@ export function getOrderSummCustomerColumns(t: TranslateFn): TableColumn<SummOrd
 		{
 			accessorKey: 'net_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
+			footer: ({ column }) => {
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummOrderCustomer>) => acc + row.original.net_amt, 0);
+
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, column.getFacetedRowModel().rows[0]?.original.currency_code)),
+				]);
+			},
 			cell: ({ row }) => {
 				return h('div', { class: 'flex items-center gap-2' }, [
 					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),

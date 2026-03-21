@@ -217,6 +217,10 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 					filter = `status eq '${this.order_summ_item.filter.status}'`;
 				}
 
+				if (this.order_summ_item.filter.item_status) {
+					filter = `item_status eq '${this.order_summ_item.filter.item_status}'`;
+				}
+
 				if (this.order_summ_item.filter.currency_code) {
 					const currencyFilter = `currency_code eq '${this.order_summ_item.filter.currency_code}'`;
 					filter = filter ? `${filter} and ${currencyFilter}` : currencyFilter;

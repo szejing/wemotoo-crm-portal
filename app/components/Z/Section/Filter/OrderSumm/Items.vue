@@ -9,13 +9,13 @@
 			</div>
 
 			<!-- Order Status Filter -->
-			<div class="flex flex-col gap-1.5">
+			<div class="flex flex-col col-span-2 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderStatus') }}</label>
 				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
 			</div>
 
 			<!-- Order Item Status Filter -->
-			<div class="flex flex-col gap-1.5">
+			<div class="flex flex-col col-span-2 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.itemStatus') }}</label>
 				<ZSelectMenuOrderItemStatus v-model:status="filter.item_status" @update:model-value="handleItemStatusChange" />
 			</div>
