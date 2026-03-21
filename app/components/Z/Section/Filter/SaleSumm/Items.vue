@@ -20,10 +20,10 @@
 				<ZSelectMenuOrderItemStatus v-model:status="filter.item_status" @update:model-value="handleItemStatusChange" />
 			</div>
 			<!-- Currency Filter -->
-			<div class="flex flex-col gap-1.5">
+			<!-- <div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.currency') }}</label>
 				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
-			</div>
+			</div> -->
 
 			<!-- Actions -->
 			<div class="flex flex-col gap-1.5 col-span-full">

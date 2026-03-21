@@ -9,16 +9,16 @@
 			</div>
 
 			<!-- Order Number Search -->
-			<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
+			<div class="flex flex-col col-span-2 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderNo') }}</label>
 				<UInput v-model="filter.query" :placeholder="$t('components.filter.searchOrderNo')" :icon="ICONS.SEARCH_ROUNDED" @input="debouncedSearch" />
 			</div>
 
 			<!-- Currency Filter -->
-			<div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
+			<!-- <div class="flex flex-col col-span-2 sm:col-span-1 gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.currency') }}</label>
 				<ZSelectMenuCurrency v-model:currency-code="filter.currency_code" @update:model-value="handleCurrencyChange" />
-			</div>
+			</div> -->
 
 			<!-- Status Filter - Mobile Only -->
 			<div class="flex flex-col gap-1.5 sm:hidden">
