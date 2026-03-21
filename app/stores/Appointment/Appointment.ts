@@ -4,7 +4,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
 import type { Range } from '~/utils/interface';
-import { add, sub } from 'date-fns';
+import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';
 
 export type AppointmentView = 'listing' | 'daily' | 'weekly' | 'monthly';
@@ -18,17 +18,20 @@ type AppointmentFilter = {
 	view: AppointmentView;
 };
 
-const initialEmptyAppointmentFilter: AppointmentFilter = {
-	query: '',
-	status: 'All',
-	date_range: {
-		start: sub(new Date(), { days: 14 }),
-		end: add(new Date(), { days: 14 }),
-	},
-	page_size: options_page_size[0] as number,
-	current_page: 1,
-	view: 'listing',
-};
+const initialEmptyAppointmentFilter: AppointmentFilter = (() => {
+	const now = new Date();
+	return {
+		query: '',
+		status: 'All',
+		date_range: {
+			start: startOfMonth(now),
+			end: endOfMonth(addMonths(now, 2)),
+		},
+		page_size: options_page_size[0] as number,
+		current_page: 1,
+		view: 'listing',
+	};
+})();
 
 export const useAppointmentStore = defineStore('appointmentStore', {
 	state: () => ({

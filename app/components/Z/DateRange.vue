@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-wrap items-center gap-2">
-		<!-- Mobile: single USelect for presets + custom -->
-		<template v-if="isMobile">
+		<!-- Mobile: single USelect for presets + custom (hidden when hidePresets) -->
+		<template v-if="isMobile && !hidePresets">
 			<USelect
 				:model-value="selectedPresetKey"
 				:items="presetSelectItems"
@@ -25,17 +25,18 @@
 				</template>
 			</UPopover>
 		</template>
-		<!-- Desktop: preset buttons + date range popover -->
+		<!-- Desktop: optional preset buttons + date range popover; mobile w/ hidePresets: popover only (same as desktop row) -->
 		<template v-else>
-			<UButton
-				v-for="preset in presets"
-				:key="preset.key"
-				:label="$t(`components.dateRange.${preset.key}`)"
-				color="primary"
-				:variant="isPresetActive(preset) ? 'solid' : 'soft'"
-				size="xs"
-				@click="applyPreset(preset)"
-			/>
+			<template v-for="preset in presets" :key="preset.key">
+				<UButton
+					v-if="!hidePresets && !isMobile"
+					:label="$t(`components.dateRange.${preset.key}`)"
+					color="primary"
+					:variant="isPresetActive(preset) ? 'solid' : 'soft'"
+					size="xs"
+					@click="applyPreset(preset)"
+				/>
+			</template>
 			<UPopover v-model:open="popoverOpen" :content="{ align: 'end' }" :modal="true">
 				<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
 					<span class="truncate">
@@ -64,6 +65,16 @@ import type { Range } from '~/utils/interface';
 import type { DateRange as PickerDateRange } from '~/components/Z/DateRangePicker.vue';
 
 const model = defineModel<Range>({ required: true });
+
+withDefaults(
+	defineProps<{
+		/** When true, preset shortcuts are hidden (desktop chips + mobile preset select). Custom range popover remains. */
+		hidePresets?: boolean;
+	}>(),
+	{
+		hidePresets: false,
+	},
+);
 
 const { t } = useI18n();
 

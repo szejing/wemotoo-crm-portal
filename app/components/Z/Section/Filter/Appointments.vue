@@ -1,5 +1,11 @@
 <template>
 	<div class="w-full space-y-4">
+		<!-- Date Range Filter (presets + custom range in popover, same as ZDateRange desktop/mobile) -->
+		<div class="flex flex-col gap-1.5">
+			<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.dateRange') }}</label>
+			<ZDateRange v-model="filter.date_range" hide-presets @update:model-value="handleDateRangeChange" />
+		</div>
+
 		<!-- Search + View Tabs: stacked on mobile, side-by-side on desktop -->
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-col gap-1.5">
@@ -25,6 +31,16 @@
 		<div v-if="hasActiveFilters" class="flex flex-wrap gap-2 items-center">
 			<span class="text-xs text-gray-600 dark:text-gray-400">{{ $t('components.filter.activeFilters') }}</span>
 
+			<UBadge
+				v-if="filter.date_range && (filter.date_range.start || filter.date_range.end)"
+				color="primary"
+				variant="subtle"
+				size="sm"
+				@click="clearFilter('date')"
+			>
+				{{ $t('components.filter.date') }}: {{ formatDateRange(filter.date_range) }}
+				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
+			</UBadge>
 			<UBadge v-if="filter.query" color="info" variant="subtle" size="sm">
 				{{ $t('components.filter.search') }}: {{ filter.query }} <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
@@ -37,6 +53,9 @@
 
 <script lang="ts" setup>
 import type { AppointmentView } from '~/stores/Appointment/Appointment';
+import type { Range } from '~/utils/interface';
+import { add, addMonths, endOfMonth, format, startOfMonth, sub } from 'date-fns';
+import type { now } from '@vueuse/core';
 
 const { t } = useI18n();
 const viewTabs = computed(() => [
@@ -72,9 +91,27 @@ const debouncedSearch = () => {
 	}, 500);
 };
 
+const formatDateRange = (range: Range) => {
+	if (!range) return '';
+	const startDate = range.start ? format(new Date(range.start), 'dd/MM/yyyy') : '';
+	const endDate = range.end ? format(new Date(range.end), 'dd/MM/yyyy') : '';
+	if (startDate && endDate) {
+		return `${startDate} - ${endDate}`;
+	}
+	return startDate || endDate;
+};
+
+const handleDateRangeChange = async (newValue: Range) => {
+	filter.value.date_range = newValue;
+	await search();
+};
+
 const clearFilters = async () => {
 	selectedDateRangeTab.value = null;
-	filter.value.date_range = {};
+	filter.value.date_range = {
+		start: sub(new Date(), { days: 14 }),
+		end: add(new Date(), { days: 14 }),
+	};
 	filter.value.query = '';
 	filter.value.status = 'All';
 	await search();
@@ -86,6 +123,13 @@ const clearFilter = async (filterKey: string) => {
 		await search();
 	} else if (filterKey === 'status') {
 		filter.value.status = 'All';
+		await search();
+	} else if (filterKey === 'date') {
+		const now = new Date();
+		filter.value.date_range = {
+			start: startOfMonth(now),
+			end: endOfMonth(addMonths(now, 2)),
+		};
 		await search();
 	}
 };

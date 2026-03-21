@@ -216,20 +216,7 @@
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
-import {
-	add,
-	addMonths,
-	endOfMonth,
-	endOfDay,
-	endOfWeek,
-	format,
-	getISOWeek,
-	isWithinInterval,
-	startOfDay,
-	startOfMonth,
-	startOfWeek,
-	sub,
-} from 'date-fns';
+import { add, addMonths, endOfMonth, endOfDay, endOfWeek, format, getISOWeek, isWithinInterval, startOfDay, startOfMonth, startOfWeek, sub } from 'date-fns';
 import { AppointmentStatus } from 'wemotoo-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { getAppointmentColumns } from '~/utils/table-columns';
@@ -268,8 +255,7 @@ const dateInLoadedRange = (d: Date) => {
 	return isWithinInterval(d, { start: startOfDay(start), end: endOfDay(end) });
 };
 
-const weekFullyInLoadedRange = (weekStart: Date, weekEnd: Date) =>
-	dateInLoadedRange(weekStart) && dateInLoadedRange(weekEnd);
+const weekFullyInLoadedRange = (weekStart: Date, weekEnd: Date) => dateInLoadedRange(weekStart) && dateInLoadedRange(weekEnd);
 
 const appointmentTabs = computed(() => [
 	{ label: t('options.all'), value: 'All' },
@@ -434,35 +420,30 @@ const deleteAppointment = async (code: string) => {
 	confirmModal.open();
 };
 
-// When switching to a calendar view, set date range and refetch
-watch(
-	() => filter.value.view,
-	(view) => {
-		selectedAppointment.value = null;
-		if (view === 'monthly') {
-			const anchor = new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1);
-			filter.value.date_range = fourMonthForwardRange(anchor);
-			appointmentStore.getAppointments();
-		} else if (view === 'daily') {
-			calendarFocusDate.value = new Date();
-			filter.value.date_range = fourMonthForwardRange(calendarFocusDate.value);
-			appointmentStore.getAppointments();
-		} else if (view === 'weekly') {
-			const start = startOfWeek(new Date(), { weekStartsOn: 1 });
-			calendarFocusDate.value = start;
-			filter.value.date_range = fourMonthForwardRange(start);
-			appointmentStore.getAppointments();
-		} else {
-			filter.value.date_range = {
-				start: sub(new Date(), { days: 14 }),
-				end: add(new Date(), { days: 14 }),
-			};
-
-			appointmentStore.getAppointments();
-		}
-	},
-	{ immediate: false },
-);
+// When switching view, align date range and calendar focus; refetch is handled elsewhere
+// watch(
+// 	() => filter.value.view,
+// 	(view) => {
+// 		selectedAppointment.value = null;
+// 		if (view === 'monthly') {
+// 			const anchor = new Date(calendarPlaceholder.value.year, calendarPlaceholder.value.month - 1, 1);
+// 			filter.value.date_range = fourMonthForwardRange(anchor);
+// 		} else if (view === 'daily') {
+// 			calendarFocusDate.value = new Date();
+// 			filter.value.date_range = fourMonthForwardRange(calendarFocusDate.value);
+// 		} else if (view === 'weekly') {
+// 			const start = startOfWeek(new Date(), { weekStartsOn: 1 });
+// 			calendarFocusDate.value = start;
+// 			filter.value.date_range = fourMonthForwardRange(start);
+// 		} else {
+// 			filter.value.date_range = {
+// 				start: sub(new Date(), { days: 14 }),
+// 				end: add(new Date(), { days: 14 }),
+// 			};
+// 		}
+// 	},
+// 	{ immediate: false },
+// );
 
 onMounted(async () => {
 	await appointmentStore.getAppointments();
