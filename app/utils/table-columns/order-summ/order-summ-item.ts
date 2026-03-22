@@ -1,5 +1,5 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import { formatCurrency, OrderItemStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
 import type { SummOrderItem } from '~/utils/types/summ-orders';
 import { getSortableHeader } from '../sortable';
@@ -11,7 +11,7 @@ type MoneyKey = keyof Pick<
 	'gross_amt' | 'disc_amt' | 'net_amt' | 'gross_amt_exc' | 'disc_amt_exc' | 'net_amt_exc' | 'tax_amt_inc' | 'tax_amt_exc' | 'adj_amt'
 >;
 
-function sumMoneyFooter(column: { getFacetedRowModel: () => { rows: TableRow<SummOrderItem>[] } }, key: MoneyKey) {
+const sumMoneyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<SummOrderItem>[] } }, key: MoneyKey) => {
 	const rows = column.getFacetedRowModel().rows;
 	const total = rows.reduce((acc, row) => {
 		const v = row.original[key];
@@ -19,14 +19,14 @@ function sumMoneyFooter(column: { getFacetedRowModel: () => { rows: TableRow<Sum
 	}, 0);
 	const cc = rows[0]?.original.currency_code ?? 'MYR';
 	return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, cc))]);
-}
+};
 
-function optionalMoneyCell(row: SummOrderItem, value: number | undefined) {
+const optionalMoneyCell = (row: SummOrderItem, value: number | undefined) => {
 	if (value == null) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
 	return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(value, row.currency_code ?? 'MYR'))]);
-}
+};
 
-export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderItem>[] {
+export const getOrderSummItemColumns = (t: TranslateFn): TableColumn<SummOrderItem>[] => {
 	return [
 		{
 			accessorKey: 'prod_name',
@@ -65,13 +65,13 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 				return h('p', { class: 'font-mono text-sm text-neutral-800 dark:text-neutral-200' }, code);
 			},
 		},
-		{
-			accessorKey: 'currency_code',
-			header: ({ column }) => getSortableHeader(column, t('table.currency')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.currency_code)]);
-			},
-		},
+		// {
+		// 	accessorKey: 'currency_code',
+		// 	header: ({ column }) => getSortableHeader(column, t('table.currency')),
+		// 	cell: ({ row }) => {
+		// 		return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.currency_code)]);
+		// 	},
+		// },
 		{
 			accessorKey: 'item_status',
 			header: ({ column }) => getSortableHeader(column, t('table.itemStatus')),
@@ -170,4 +170,4 @@ export function getOrderSummItemColumns(t: TranslateFn): TableColumn<SummOrderIt
 			cell: ({ row }) => optionalMoneyCell(row.original, row.original.adj_amt),
 		},
 	];
-}
+};

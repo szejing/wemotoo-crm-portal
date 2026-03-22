@@ -67,7 +67,7 @@ const { order_summ, loading } = storeToRefs(orderSummStore);
 
 const VALID_ORDER_STATUSES = new Set(Object.values(OrderStatus));
 
-function applyQueryToFilter() {
+const applyQueryToFilter = () => {
 	const start = route.query.start_date;
 	const end = route.query.end_date;
 	const status = route.query.status;
@@ -86,7 +86,7 @@ function applyQueryToFilter() {
 	if (typeof status === 'string' && VALID_ORDER_STATUSES.has(status as OrderStatus)) {
 		orderSummStore.order_summ.filter.status = status as OrderStatus;
 	}
-}
+};
 
 onMounted(async () => {
 	applyQueryToFilter();

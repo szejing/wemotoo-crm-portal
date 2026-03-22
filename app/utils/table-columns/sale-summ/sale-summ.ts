@@ -8,13 +8,13 @@ type TranslateFn = (key: string) => string;
 
 export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] {
 	return [
-		{
-			accessorKey: 'currency_code',
-			header: ({ column }) => getSortableHeader(column, t('table.currency')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
-			},
-		},
+		// {
+		// 	accessorKey: 'currency_code',
+		// 	header: ({ column }) => getSortableHeader(column, t('table.currency')),
+		// 	cell: ({ row }) => {
+		// 		return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
+		// 	},
+		// },
 		{
 			accessorKey: 'status',
 			header: ({ column }) => getSortableHeader(column, t('table.status')),
