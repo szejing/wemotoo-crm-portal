@@ -107,7 +107,7 @@ function applyQueryToFilter() {
 		}
 	}
 	if (typeof status === 'string' && VALID_ORDER_STATUSES.has(status as OrderStatus)) {
-		orderSummStore.order_summ_item.filter.status = status as OrderStatus;
+		orderSummStore.order_summ_item.filter.item_status = status as OrderItemStatus;
 	}
 }
 
