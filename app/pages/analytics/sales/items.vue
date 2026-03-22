@@ -174,7 +174,8 @@ const updatePageSize = async (size: number) => {
 </script>
 
 <style scoped>
-:deep(tr:last-child) {
+/* `tr:last-child` would wrongly match the last tbody row; footer lives in tfoot */
+:deep(tfoot tr) {
 	background-color: rgb(249 250 251);
 	border-top: 2px solid rgb(209 213 219);
 }
