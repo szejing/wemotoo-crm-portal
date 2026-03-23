@@ -142,6 +142,7 @@ export const useOrderStore = defineStore('orderStore', {
 				if (data.order) {
 					this.detail = data.order as Order;
 				}
+				console.log('data.order', data.order);
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';
 				failedNotification(message);

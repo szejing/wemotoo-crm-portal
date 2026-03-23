@@ -1,41 +1,41 @@
 <template>
 	<ZPagePanel id="orders-detail" :title="$t('pages.orderDetail')" back-to="/sales/orders">
-
-			<ZLoading v-if="loading" />
-			<div v-else class="order-detail-container">
-				<!-- Header Section -->
-				<div class="order-header">
-					<div class="order-header-left">
-						<div class="order-header-title">
-							<h1 class="order-number">{{ order?.order_no }}</h1>
+		<ZLoading v-if="loading" />
+		<div v-else class="order-detail-container">
+			<!-- Header Section -->
+			<div class="order-header">
+				<div class="order-header-left">
+					<div class="order-header-title">
+						<h1 class="order-number">{{ order?.order_no }}</h1>
+					</div>
+					<div class="flex flex-col">
+						<div v-if="order?.order_date_time" class="metadata-item">
+							<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-main" />
+							<p>{{ order?.order_date_time }}</p>
 						</div>
-						<div class="flex flex-col">
-							<div v-if="order?.order_date_time" class="metadata-item">
-								<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-main" />
-								<p>{{ order?.order_date_time }}</p>
-							</div>
-							<div v-if="order?.inv_no" class="metadata-item">
-								<p class="text-base text-neutral-400 italic">{{ order?.inv_no }}</p>
-							</div>
-							<div v-if="order?.ref_no" class="metadata-item">
-								<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
-							</div>
+						<div v-if="order?.inv_no" class="metadata-item">
+							<p class="text-base text-neutral-400 italic">{{ order?.inv_no }}</p>
+						</div>
+						<div v-if="order?.ref_no" class="metadata-item">
+							<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
 						</div>
 					</div>
-					<div class="order-header-right">
-						<div class="status-badges">
-							<UButton
-								color="primary"
-								:icon="ICONS.SYNC_ROUNDED"
-								variant="ghost"
-								:disabled="is_refreshing || refresh_cooldown > 0"
-								:loading="is_refreshing"
-								:class="{ 'spin-icon': is_refreshing }"
-								@click="refreshOrder"
-							>
-								{{ refresh_button_text }}
-							</UButton>
+				</div>
+				<div class="order-header-right">
+					<div class="status-badges">
+						<UButton
+							color="primary"
+							:icon="ICONS.SYNC_ROUNDED"
+							variant="ghost"
+							:disabled="is_refreshing || refresh_cooldown > 0"
+							:loading="is_refreshing"
+							:class="{ 'spin-icon': is_refreshing }"
+							@click="refreshOrder"
+						>
+							{{ refresh_button_text }}
+						</UButton>
 
+						<div class="status-badge-stack">
 							<div class="status-group">
 								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg">{{ $t('options.pendingPayment') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg">{{ $t('options.processing') }}</UBadge>
@@ -44,150 +44,158 @@
 								<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Main Grid Layout -->
-				<div class="wrapper-grid">
-					<div class="main-wrapper">
-						<!-- Customer Detail -->
-						<UCard class="customer-card">
-							<template #header>
-								<div class="card-header">
-									<h2 class="card-title">
-										<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
-										{{ $t('components.orderDetail.customerInformation') }}
-									</h2>
-									<UButton variant="ghost" size="sm" @click="editCustomerDetail">
-										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
-										{{ $t('components.orderDetail.edit') }}
-									</UButton>
-								</div>
-							</template>
-							<ZSectionOrderDetailCustomer :customer="customer" />
-						</UCard>
-
-						<!-- Order Items -->
-						<UCard class="items-card">
-							<template #header>
-								<div class="card-header">
-									<h2 class="card-title">
-										<UIcon :name="ICONS.PRODUCT" class="w-5 h-5" />
-										{{ $t('components.orderDetail.orderItems') }}
-									</h2>
-									<div class="flex items-center gap-2">
-										<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
-											<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
-											{{ $t('components.orderDetail.editable') }}
-										</span>
-										<UPopover v-else overlay>
-											<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
-											<template #content>
-												<div class="p-4 max-w-xs">
-													<p class="text-sm">
-														{{ $t('components.orderDetail.orderNotEditableMessage') }}<br />
-														<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
-													</p>
-												</div>
-											</template>
-										</UPopover>
-									</div>
-								</div>
-							</template>
-
-							<ZSectionOrderDetailItems
-								:items="items ?? []"
-								:currency-code="currency_code"
-								:total-gross-amt="order?.gross_amt"
-								:total-net-amt="order?.net_total"
-								:taxes="order?.taxes ?? []"
-								:editable="order?.status == OrderStatus.PENDING_PAYMENT"
-								@refresh="getOrderByTransactionNo()"
-							/>
-						</UCard>
-
-						<!-- Remarks Section -->
-						<UCard v-if="order?.remarks" class="remarks-card">
-							<template #header>
-								<div class="card-header">
-									<h2 class="card-title">
-										<UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
-										{{ $t('components.orderDetail.remarks') }}
-									</h2>
-								</div>
-							</template>
-							<p class="remarks-text">{{ order?.remarks }}</p>
-						</UCard>
-					</div>
-
-					<!-- Sidebar -->
-					<div v-if="order !== undefined" class="side-wrapper">
-						<div class="sticky-sidebar">
-							<!-- Status Management -->
-							<UCard class="status-management-card">
-								<template #header>
-									<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
-								</template>
-
-								<div class="status-section">
-									<ZSelectMenuOrderStatus v-model:status="new_order_status" />
-									<UButton
-										block
-										color="primary"
-										:icon="ICONS.SAVE"
-										:disabled="new_order_status === order?.status || updating"
-										:loading="updating"
-										@click="handleUpdateOrderStatus"
-									>
-										{{ $t('components.orderDetail.updateOrderStatus') }}
-									</UButton>
-								</div>
-							</UCard>
-
-							<!-- Payment Information -->
-							<UCard class="payment-info-card">
-								<template #header>
-									<div class="card-header-sidebar">
-										<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
-										<UButton v-if="order.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
-										<div v-if="order?.payment_status === PaymentStatus.PAID" class="status-group">
-											<UBadge color="success" size="lg">
-												<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
-												{{ $t('components.orderDetail.paid') }}
-											</UBadge>
-										</div>
-									</div>
-								</template>
-
-								<div v-if="order.payments && order.payments.length > 0" class="payments-list">
-									<div v-for="payment in order.payments" :key="payment.payment_line" class="payment-item" @click="viewPaymentInfo(payment)">
-										<div class="payment-header">
-											<span class="payment-type">{{ payment.payment_type_desc }}</span>
-											<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
-										</div>
-										<div v-if="payment.ref_no1" class="payment-ref">
-											<span class="payment-ref-label">{{ $t('components.orderDetail.refLabel') }}:</span>
-											<span class="payment-ref-value">{{ payment.ref_no1 }}</span>
-										</div>
-										<div class="payment-date">
-											<UIcon name="i-heroicons-clock" class="w-3 h-3" />
-											{{ getFormattedDate(payment.payment_date_time, 'dd MMM yyyy HH:mm') }}
-										</div>
-									</div>
-								</div>
-								<div v-else class="payment-empty">
-									<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
-									<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
-									<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">
-										{{ $t('components.orderDetail.addPayment') }}
-									</UButton>
-								</div>
-							</UCard>
+							<p
+								v-if="order?.last_updated"
+								class="status-last-updated"
+								:title="$t('table.lastUpdated')"
+							>
+								{{ order.last_updated }}
+							</p>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<!-- Main Grid Layout -->
+			<div class="wrapper-grid">
+				<div class="main-wrapper">
+					<!-- Customer Detail -->
+					<UCard class="customer-card">
+						<template #header>
+							<div class="card-header">
+								<h2 class="card-title">
+									<UIcon :name="ICONS.CUSTOMER_GROUP_ROUNDED" class="w-5 h-5" />
+									{{ $t('components.orderDetail.customerInformation') }}
+								</h2>
+								<UButton variant="ghost" size="sm" @click="editCustomerDetail">
+									<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
+									{{ $t('components.orderDetail.edit') }}
+								</UButton>
+							</div>
+						</template>
+						<ZSectionOrderDetailCustomer :customer="customer" />
+					</UCard>
+
+					<!-- Order Items -->
+					<UCard class="items-card">
+						<template #header>
+							<div class="card-header">
+								<h2 class="card-title">
+									<UIcon :name="ICONS.PRODUCT" class="w-5 h-5" />
+									{{ $t('components.orderDetail.orderItems') }}
+								</h2>
+								<div class="flex items-center gap-2">
+									<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
+										{{ $t('components.orderDetail.editable') }}
+									</span>
+									<UPopover v-else overlay>
+										<UButton color="neutral" :trailing-icon="ICONS.QUESTION_MARK" variant="soft" size="xs" />
+										<template #content>
+											<div class="p-4 max-w-xs">
+												<p class="text-sm">
+													{{ $t('components.orderDetail.orderNotEditableMessage') }}<br />
+													<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
+												</p>
+											</div>
+										</template>
+									</UPopover>
+								</div>
+							</div>
+						</template>
+
+						<ZSectionOrderDetailItems
+							:items="items ?? []"
+							:currency-code="currency_code"
+							:total-gross-amt="order?.gross_amt"
+							:total-net-amt="order?.net_total"
+							:taxes="order?.taxes ?? []"
+							:editable="order?.status == OrderStatus.PENDING_PAYMENT"
+							@refresh="getOrderByTransactionNo()"
+						/>
+					</UCard>
+
+					<!-- Remarks Section -->
+					<UCard v-if="order?.remarks" class="remarks-card">
+						<template #header>
+							<div class="card-header">
+								<h2 class="card-title">
+									<UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
+									{{ $t('components.orderDetail.remarks') }}
+								</h2>
+							</div>
+						</template>
+						<p class="remarks-text">{{ order?.remarks }}</p>
+					</UCard>
+				</div>
+
+				<!-- Sidebar -->
+				<div v-if="order !== undefined" class="side-wrapper">
+					<div class="sticky-sidebar">
+						<!-- Status Management -->
+						<UCard class="status-management-card">
+							<template #header>
+								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
+							</template>
+
+							<div class="status-section">
+								<ZSelectMenuOrderStatus v-model:status="new_order_status" />
+								<UButton
+									block
+									color="primary"
+									:icon="ICONS.SAVE"
+									:disabled="new_order_status === order?.status || updating"
+									:loading="updating"
+									@click="handleUpdateOrderStatus"
+								>
+									{{ $t('components.orderDetail.updateOrderStatus') }}
+								</UButton>
+							</div>
+						</UCard>
+
+						<!-- Payment Information -->
+						<UCard class="payment-info-card">
+							<template #header>
+								<div class="card-header-sidebar">
+									<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
+									<UButton v-if="order.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
+									<div v-if="order?.payment_status === PaymentStatus.PAID" class="status-group">
+										<UBadge color="success" size="lg">
+											<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
+											{{ $t('components.orderDetail.paid') }}
+										</UBadge>
+									</div>
+								</div>
+							</template>
+
+							<div v-if="order.payments && order.payments.length > 0" class="payments-list">
+								<div v-for="payment in order.payments" :key="payment.payment_line" class="payment-item" @click="viewPaymentInfo(payment)">
+									<div class="payment-header">
+										<span class="payment-type">{{ payment.payment_type_desc }}</span>
+										<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
+									</div>
+									<div v-if="payment.ref_no1" class="payment-ref">
+										<span class="payment-ref-label">{{ $t('components.orderDetail.refLabel') }}:</span>
+										<span class="payment-ref-value">{{ payment.ref_no1 }}</span>
+									</div>
+									<div class="payment-date">
+										<UIcon name="i-heroicons-clock" class="w-3 h-3" />
+										{{ getFormattedDate(payment.payment_date_time, 'dd MMM yyyy HH:mm') }}
+									</div>
+								</div>
+							</div>
+							<div v-else class="payment-empty">
+								<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
+								<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
+								<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">
+									{{ $t('components.orderDetail.addPayment') }}
+								</UButton>
+							</div>
+						</UCard>
+					</div>
+				</div>
+			</div>
+		</div>
 	</ZPagePanel>
 </template>
 
@@ -466,6 +474,13 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	align-items: flex-end;
 }
 
+.status-badge-stack {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.375rem;
+}
+
 .status-group {
 	display: flex;
 	flex-direction: column;
@@ -477,6 +492,17 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	.status-group {
 		align-items: flex-end;
 	}
+}
+
+.status-last-updated {
+	margin: 0;
+	max-width: min(100%, 18rem);
+	text-align: right;
+	font-size: 0.6875rem;
+	line-height: 1.25;
+	font-variant-numeric: tabular-nums;
+	color: var(--ui-text-muted, var(--color-gray-500));
+	opacity: 0.75;
 }
 
 /* Grid Layout */

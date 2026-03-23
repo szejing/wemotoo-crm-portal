@@ -80,6 +80,7 @@ type OrderPaymentDto_ = {
 export type Order = {
 	biz_date: string;
 	order_date_time: string;
+	last_updated: string;
 	order_no: string;
 	inv_no: string;
 	customer_no: string;

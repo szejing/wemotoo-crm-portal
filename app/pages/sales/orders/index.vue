@@ -110,7 +110,7 @@ const tabItems = computed(() => [
 ]);
 
 const tabIndexForStatus = (status: OrderStatus | string): number => {
-	if (status === OrderStatus.PENDING_PAYMENT) return 1;
+	if (status === OrderStatus.PENDING_PAYMENT || status === OrderStatus.PROCESSING) return 1;
 	if (status === OrderStatus.COMPLETED) return 2;
 	if (status === OrderStatus.PROCESSING) return 3;
 	if (status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED) return 4;
