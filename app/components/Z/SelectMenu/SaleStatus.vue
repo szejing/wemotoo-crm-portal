@@ -12,7 +12,7 @@
 	>
 		<template #default>
 			<span v-if="status">
-				<UBadge :color="getSaleStatusColor(status)" variant="subtle" class="truncate">
+				<UBadge :color="getOrderStatusColor(status)" variant="subtle" class="truncate">
 					{{ selectedLabel }}
 				</UBadge>
 			</span>
@@ -20,7 +20,7 @@
 		</template>
 
 		<template #item="{ item }">
-			<UBadge :color="getSaleStatusColor(item.value)" variant="subtle" class="truncate">
+			<UBadge :color="getOrderStatusColor(item.value)" variant="subtle" class="truncate">
 				{{ item.label }}
 			</UBadge>
 		</template>
@@ -28,15 +28,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getSaleStatusOptions, getSaleStatusColor } from '~/utils/options';
-import type { SaleStatus } from 'wemotoo-common';
+import { getOrderStatusOptions, getOrderStatusColor } from '~/utils/options';
+import type { OrderStatus } from 'wemotoo-common';
 
 const { t } = useI18n();
 
-const props = defineProps<{ status: SaleStatus | undefined }>();
+const props = defineProps<{ status: OrderStatus | undefined }>();
 const emit = defineEmits(['update:status']);
 
-const items = computed(() => getSaleStatusOptions(t));
+const items = computed(() => getOrderStatusOptions(t));
 
 const status = computed({
 	get() {

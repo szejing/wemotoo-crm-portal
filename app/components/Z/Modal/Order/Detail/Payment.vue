@@ -32,6 +32,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { PaymentModel } from '~/utils/models/index';
+import type { Order } from '~/utils/types/order';
 import { UpdateOrderPaymentValidation } from '~/utils/schema';
 
 const { t } = useI18n();
@@ -41,9 +42,12 @@ type Schema = z.infer<ReturnType<typeof UpdateOrderPaymentValidation>>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);
-const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
+	order: {
+		type: Object as PropType<Order>,
+		required: true,
+	},
 	payment: {
 		type: Object as PropType<PaymentModel> | undefined,
 		required: false,
@@ -57,8 +61,8 @@ const state = reactive({
 		payment_type_code: undefined,
 		ref_no1: undefined,
 		ref_no2: undefined,
-		payment_amt: detail.value?.net_amt,
-		currency_code: detail.value?.currency?.code,
+		payment_amt: props.order.net_total ?? props.order.net_amt,
+		currency_code: props.order.currency?.code,
 		external_intg_type: undefined,
 		metadata: undefined,
 	},
@@ -66,13 +70,14 @@ const state = reactive({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
-		if (!detail.value) {
-			throw new Error('Order not found');
-		}
-
 		is_loading.value = true;
 
-		await orderStore.updatePayments(detail.value?.order_no as string, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updatePayments(
+			props.order.order_no,
+			props.order.customer.customer_no,
+			JSON.parse(JSON.stringify(event.data)) as PaymentModel,
+			props.order.payments as PaymentModel[],
+		);
 		emit('update', true);
 	} catch {
 		emit('update', false);

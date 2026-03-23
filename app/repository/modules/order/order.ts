@@ -27,10 +27,10 @@ class OrderModule extends HttpFactory {
 	 * Fetches order by order no
 	 * @returns
 	 */
-	async getOrderByTransactionNo(transaction_no: string): Promise<GetOrderResp> {
+	async getOrderByOrderNo(order_no: string): Promise<GetOrderResp> {
 		return await this.call<GetOrderResp>({
 			method: 'GET',
-			url: `${this.RESOURCE.Single(encodeURIComponent(transaction_no))}`,
+			url: `${this.RESOURCE.Single(encodeURIComponent(order_no))}`,
 		});
 	}
 

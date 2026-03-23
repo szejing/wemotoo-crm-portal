@@ -1,4 +1,4 @@
-import type { SaleStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { SummSaleBill } from '~/utils/types/summ-sales';
 import type { Range } from '~/utils/interface';
@@ -7,7 +7,7 @@ import { sub } from 'date-fns';
 type SaleSumm = {
 	filter: {
 		date_range: Range;
-		status: SaleStatus | undefined;
+		status: OrderStatus | undefined;
 		currency_code: string;
 	};
 	exporting: boolean;

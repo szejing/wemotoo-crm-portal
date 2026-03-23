@@ -35,6 +35,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import type { ItemModel } from '~/utils/models/item.model';
+import type { Order } from '~/utils/types/order';
 import { UpdateOrderItemValidation } from '~/utils/schema';
 
 const { t } = useI18n();
@@ -44,9 +45,12 @@ type Schema = z.infer<ReturnType<typeof UpdateOrderItemValidation>>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);
-const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
+	order: {
+		type: Object as PropType<Order>,
+		required: true,
+	},
 	item: {
 		type: Object as PropType<ItemModel>,
 		required: true,
@@ -60,14 +64,14 @@ const state = reactive({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
-		if (!detail.value) {
-			throw new Error('Order not found');
-		}
 		is_loading.value = true;
 
-		const { order_no } = detail.value;
-
-		await orderStore.updateItems(order_no, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updateItems(
+			props.order.order_no,
+			props.order.customer.customer_no,
+			JSON.parse(JSON.stringify(event.data)) as ItemModel,
+			props.order.items as ItemModel[],
+		);
 		emit('update', true);
 	} catch {
 		emit('update', false);

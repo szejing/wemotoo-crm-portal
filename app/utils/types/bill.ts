@@ -1,4 +1,4 @@
-import type { PaymentStatus, SaleStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { TaxModel } from '../models/tax.model';
 import type { Currency } from './currency';
 import type { ItemModel, PaymentModel, CustomerModel } from '../models';
@@ -9,7 +9,7 @@ export type Bill = {
 	inv_no: string;
 	order_date_time: Date;
 	customer_no: string;
-	status: SaleStatus;
+	status: OrderStatus;
 	payment_status: PaymentStatus;
 	gross_amt: number;
 	net_amt: number;

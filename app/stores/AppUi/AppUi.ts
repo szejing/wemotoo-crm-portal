@@ -30,15 +30,15 @@ const default_navigations = [
 			},
 			// Sales
 			{
-				label: 'nav.sales',
+				label: 'nav.orders',
 				icon: ICONS.ORDER,
-				to: '/sales/orders',
-				value: 'sales',
-				children: [
-					{ label: 'nav.orders', to: '/sales/orders' },
-					// Coming soon: { label: 'nav.payments', to: '/sales/payments' },
-					// Coming soon: { label: 'nav.refunds', to: '/sales/refunds' },
-				],
+				to: '/orders',
+				value: 'orders',
+				// children: [
+				// 	{ label: 'nav.orders', to: '/orders' },
+				// 	// Coming soon: { label: 'nav.payments', to: '/sales/payments' },
+				// 	// Coming soon: { label: 'nav.refunds', to: '/sales/refunds' },
+				// ],
 			},
 			// Products
 			{

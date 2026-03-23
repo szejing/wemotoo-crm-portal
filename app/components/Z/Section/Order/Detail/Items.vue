@@ -89,9 +89,11 @@ import { ZModalInformation, ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus, formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
 import type { TaxModel } from '~/utils/models/tax.model';
+import type { Order } from '~/utils/types/order';
 import { formatAppointmentDateRange } from '~/utils/utils';
 
-defineProps<{
+const props = defineProps<{
+	order: Order;
 	items: ItemModel[];
 	taxes: TaxModel[];
 	currencyCode: string | undefined;
@@ -107,6 +109,7 @@ const editItem = (item: ItemModel) => {
 	if (item.status == OrderItemStatus.ACTIVE) {
 		const itemModal = overlay.create(ZModalOrderDetailItem, {
 			props: {
+				order: props.order,
 				item: JSON.parse(JSON.stringify(item)),
 				onCancel: () => {
 					itemModal.close();

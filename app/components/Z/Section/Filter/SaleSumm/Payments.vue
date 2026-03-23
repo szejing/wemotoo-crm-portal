@@ -10,8 +10,8 @@
 
 			<!-- Sale Status Filter -->
 			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.saleStatus') }}</label>
-				<ZSelectMenuSaleStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderStatus') }}</label>
+				<ZSelectMenuOrderStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
 			</div>
 
 			<!-- Payment Status Filter -->

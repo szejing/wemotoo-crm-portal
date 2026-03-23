@@ -26,7 +26,7 @@ const selectOrder = (e: Event, row: TableRow<OrderHistory>) => {
 	const order = row.original;
 	if (!order) return;
 
-	navigateTo(`/sales/orders/detail/${encodeURIComponent(order.order_no)}`);
+	navigateTo(`/orders/detail/${encodeURIComponent(order.order_no)}`);
 };
 </script>
 

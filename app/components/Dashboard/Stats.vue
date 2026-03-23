@@ -85,17 +85,17 @@ const statDefs: Record<
 	},
 	item_orders: {
 		icon: 'i-heroicons-shopping-cart',
-		to: '/sales/orders',
+		to: '/orders',
 		status: OrderStatus.PROCESSING,
 	},
 	pending_payments: {
 		icon: 'i-heroicons-credit-card',
-		to: '/sales/orders',
+		to: '/orders',
 		status: OrderStatus.PENDING_PAYMENT,
 	},
 	pending_actions: {
 		icon: 'i-heroicons-bell',
-		to: '/sales/orders',
+		to: '/orders',
 		status: OrderStatus.REQUIRES_ACTION,
 	},
 	revenue: {

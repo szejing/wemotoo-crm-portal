@@ -34,9 +34,12 @@ type Schema = z.infer<ReturnType<typeof UpdateOrderCustomerValidation>>;
 
 const orderStore = useOrderStore();
 const is_loading = ref(false);
-const { detail } = storeToRefs(orderStore);
 
 const props = defineProps({
+	orderNo: {
+		type: String,
+		required: true,
+	},
 	customer: {
 		type: Object as PropType<CustomerModel>,
 		required: true,
@@ -49,14 +52,9 @@ const state = reactive({
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
-		if (!detail.value) {
-			throw new Error('Order not found');
-		}
 		is_loading.value = true;
 
-		const { order_no } = detail.value;
-
-		await orderStore.updateCustomer(order_no, JSON.parse(JSON.stringify(event.data)));
+		await orderStore.updateCustomer(props.orderNo, JSON.parse(JSON.stringify(event.data)));
 		emit('update', true);
 	} catch {
 		emit('update', false);

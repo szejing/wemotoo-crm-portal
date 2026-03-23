@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import type { SaleStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
@@ -10,7 +10,7 @@ import type { Bill } from '~/utils/types/bill';
 
 type SaleFilter = {
 	query: string;
-	status: SaleStatus | string;
+	status: OrderStatus | string;
 	// payment_status: PaymentStatus;
 	start_date: Date;
 	end_date: Date | undefined;
@@ -36,15 +36,9 @@ export const useSaleStore = defineStore('saleStore', {
 		loading: false as boolean,
 		bills: [] as Bill[],
 		total_bills: 0 as number,
-		detail: undefined as Bill | undefined,
-		errors: [] as string[],
 		filter: initialEmptySaleFilter,
 	}),
 	actions: {
-		resetDetail() {
-			this.detail = undefined;
-		},
-
 		async updateSalePageSize(size: number) {
 			this.filter.page_size = size;
 
@@ -171,19 +165,15 @@ export const useSaleStore = defineStore('saleStore', {
 			}
 		},
 
-		async getBillDetailsByBillNo(order_no: string) {
-			if (!this.detail) {
-				this.loading = true;
-			}
+		async getBillDetailsByBillNo(order_no: string): Promise<Bill | undefined> {
+			this.loading = true;
 
 			const { $api } = useNuxtApp();
 
 			try {
 				const data = await $api.sale.getBillDetailsByOrderNo(order_no);
 
-				if (data.bill) {
-					this.detail = data.bill;
-				}
+				return data.bill ?? undefined;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process sale';
 				failedNotification(message);

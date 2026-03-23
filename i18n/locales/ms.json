@@ -280,6 +280,7 @@
 		"ordersTitle": "Wemotoo CRM - Pesanan",
 		"orders": "Pesanan",
 		"orderDetail": "Butiran Pesanan",
+		"orderNotFound": "Nombor pesanan {orderNo} tidak dijumpai.",
 		"orderDetailTitle": "Wemotoo CRM - Butiran Pesanan #",
 		"orderCustomerSummary": "Wemotoo CRM - Ringkasan Pelanggan Pesanan",
 		"orderSummaryTitle": "Wemotoo CRM - Ringkasan Pesanan",

@@ -192,11 +192,7 @@ const selectOrder = async (e: Event, row: TableRow<OrderHistory>) => {
 	const order = row.original;
 	if (!order) return;
 
-	if (order.type === 'order') {
-		navigateTo(`/sales/orders/detail/${encodeURIComponent(order.order_no)}`);
-	} else {
-		navigateTo(`/sales/orders/sale/detail/${encodeURIComponent(order.order_no)}`);
-	}
+	navigateTo(`/orders/${encodeURIComponent(order.order_no)}?type=${order.type}`);
 };
 </script>
 

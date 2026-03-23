@@ -1,23 +1,28 @@
 <template>
-	<ZPagePanel id="orders-detail" :title="$t('pages.orderDetail')" back-to="/sales/orders">
+	<ZPagePanel id="orders-detail" :title="$t('pages.orderDetail')">
 		<ZLoading v-if="loading" />
+		<div v-else-if="isOrder && order_not_found" class="order-not-found">
+			<UIcon name="i-heroicons-magnifying-glass-circle" class="order-not-found-icon" />
+			<p class="order-not-found-text">{{ $t('pages.orderNotFound', { orderNo: order_no_param }) }}</p>
+			<UButton color="primary" variant="soft" :to="'/orders'">{{ $t('nav.orders') }}</UButton>
+		</div>
 		<div v-else class="order-detail-container">
 			<!-- Header Section -->
 			<div class="order-header">
 				<div class="order-header-left">
 					<div class="order-header-title">
-						<h1 class="order-number">{{ order?.order_no }}</h1>
+						<h1 class="order-number">{{ record?.order_no }}</h1>
 					</div>
 					<div class="flex flex-col">
-						<div v-if="order?.order_date_time" class="metadata-item">
+						<div v-if="record?.order_date_time" class="metadata-item">
 							<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-main" />
-							<p>{{ order?.order_date_time }}</p>
+							<p>{{ record?.order_date_time }}</p>
 						</div>
-						<div v-if="order?.inv_no" class="metadata-item">
-							<p class="text-base text-neutral-400 italic">{{ order?.inv_no }}</p>
+						<div v-if="record?.inv_no" class="metadata-item">
+							<p class="text-base text-neutral-400 italic">{{ record?.inv_no }}</p>
 						</div>
-						<div v-if="order?.ref_no" class="metadata-item">
-							<p>{{ $t('components.orderDetail.refLabel') }}: {{ order?.ref_no }}</p>
+						<div v-if="record?.ref_no" class="metadata-item">
+							<p>{{ $t('components.orderDetail.refLabel') }}: {{ record?.ref_no }}</p>
 						</div>
 					</div>
 				</div>
@@ -35,7 +40,7 @@
 							{{ refresh_button_text }}
 						</UButton>
 
-						<div class="status-badge-stack">
+						<div v-if="isOrder" class="status-badge-stack">
 							<div class="status-group">
 								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg">{{ $t('options.pendingPayment') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg">{{ $t('options.processing') }}</UBadge>
@@ -44,13 +49,14 @@
 								<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.CANCELLED" color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 							</div>
-							<p
-								v-if="order?.last_updated"
-								class="status-last-updated"
-								:title="$t('table.lastUpdated')"
-							>
+							<p v-if="order?.last_updated" class="status-last-updated" :title="$t('table.lastUpdated')">
 								{{ order.last_updated }}
 							</p>
+						</div>
+						<div v-else class="status-group">
+							<UBadge v-if="bill?.status === OrderStatus.COMPLETED" color="success" size="lg">{{ $t('options.completed') }}</UBadge>
+							<UBadge v-else-if="bill?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
+							<UBadge v-else color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 						</div>
 					</div>
 				</div>
@@ -77,7 +83,7 @@
 					</UCard>
 
 					<!-- Order Items -->
-					<UCard class="items-card">
+					<UCard v-if="orderForModal" class="items-card">
 						<template #header>
 							<div class="card-header">
 								<h2 class="card-title">
@@ -85,7 +91,14 @@
 									{{ $t('components.orderDetail.orderItems') }}
 								</h2>
 								<div class="flex items-center gap-2">
-									<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+									<span
+										v-if="isOrder && order?.status === OrderStatus.PENDING_PAYMENT"
+										class="inline-flex items-center gap-1 text-xs text-green-600 font-medium"
+									>
+										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
+										{{ $t('components.orderDetail.editable') }}
+									</span>
+									<span v-else-if="!isOrder && bill?.status === OrderStatus.COMPLETED" class="text-xs text-green-600 font-medium">
 										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
 										{{ $t('components.orderDetail.editable') }}
 									</span>
@@ -94,7 +107,7 @@
 										<template #content>
 											<div class="p-4 max-w-xs">
 												<p class="text-sm">
-													{{ $t('components.orderDetail.orderNotEditableMessage') }}<br />
+													{{ isOrder ? $t('components.orderDetail.orderNotEditableMessage') : $t('components.orderDetail.billNotEditableMessage') }}<br />
 													<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
 												</p>
 											</div>
@@ -105,18 +118,19 @@
 						</template>
 
 						<ZSectionOrderDetailItems
+							:order="orderForModal"
 							:items="items ?? []"
 							:currency-code="currency_code"
-							:total-gross-amt="order?.gross_amt"
-							:total-net-amt="order?.net_total"
-							:taxes="order?.taxes ?? []"
-							:editable="order?.status == OrderStatus.PENDING_PAYMENT"
-							@refresh="getOrderByTransactionNo()"
+							:total-gross-amt="record?.gross_amt"
+							:total-net-amt="isOrder ? order?.net_total : bill?.net_amt"
+							:taxes="record?.taxes ?? []"
+							:editable="isOrder ? order?.status == OrderStatus.PENDING_PAYMENT : bill?.status == OrderStatus.COMPLETED"
+							@refresh="onItemsRefresh"
 						/>
 					</UCard>
 
 					<!-- Remarks Section -->
-					<UCard v-if="order?.remarks" class="remarks-card">
+					<UCard v-if="record?.remarks" class="remarks-card">
 						<template #header>
 							<div class="card-header">
 								<h2 class="card-title">
@@ -125,15 +139,15 @@
 								</h2>
 							</div>
 						</template>
-						<p class="remarks-text">{{ order?.remarks }}</p>
+						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
 				</div>
 
 				<!-- Sidebar -->
-				<div v-if="order !== undefined" class="side-wrapper">
+				<div v-if="record !== undefined" class="side-wrapper">
 					<div class="sticky-sidebar">
 						<!-- Status Management -->
-						<UCard class="status-management-card">
+						<UCard v-if="isOrder" class="status-management-card">
 							<template #header>
 								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
 							</template>
@@ -153,13 +167,26 @@
 							</div>
 						</UCard>
 
+						<UCard v-if="!isOrder" class="status-management-card">
+							<template #header>
+								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
+							</template>
+
+							<div class="status-section">
+								<ZSelectMenuOrderStatus v-model:status="new_sale_status" />
+								<UButton block color="primary" :icon="ICONS.SAVE" :disabled="new_sale_status === bill?.status" @click="handleUpdateOrderStatusClick">
+									{{ $t('components.orderDetail.updateOrderStatus') }}
+								</UButton>
+							</div>
+						</UCard>
+
 						<!-- Payment Information -->
 						<UCard class="payment-info-card">
 							<template #header>
 								<div class="card-header-sidebar">
 									<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
-									<UButton v-if="order.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
-									<div v-if="order?.payment_status === PaymentStatus.PAID" class="status-group">
+									<UButton v-if="record.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
+									<div v-if="record?.payment_status === PaymentStatus.PAID" class="status-group">
 										<UBadge color="success" size="lg">
 											<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
 											{{ $t('components.orderDetail.paid') }}
@@ -168,8 +195,8 @@
 								</div>
 							</template>
 
-							<div v-if="order.payments && order.payments.length > 0" class="payments-list">
-								<div v-for="payment in order.payments" :key="payment.payment_line" class="payment-item" @click="viewPaymentInfo(payment)">
+							<div v-if="record.payments && record.payments.length > 0" class="payments-list">
+								<div v-for="payment in record.payments" :key="payment.payment_line" class="payment-item" @click="viewPaymentInfo(payment)">
 									<div class="payment-header">
 										<span class="payment-type">{{ payment.payment_type_desc }}</span>
 										<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
@@ -202,56 +229,117 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
-import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
+import { failedModal, failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
+import type { Bill } from '~/utils/types/bill';
 import type { Order } from '~/utils/types/order';
 
 const orderStore = useOrderStore();
-const { detail, loading, updating } = storeToRefs(orderStore);
+const saleStore = useSaleStore();
+const { updating } = storeToRefs(orderStore);
+
+const loading = computed(() => (isOrder.value ? orderStore.loading : saleStore.loading));
+
+const route = useRoute();
+const order_not_found = ref(false);
+const order_no_param = computed(() => String(route.params.order_no ?? ''));
+
+const order = ref<Order | undefined>();
+const bill = ref<Bill | undefined>();
+
+const record = computed(() => (isOrder.value ? order.value : bill.value));
+
+const orderForModal = computed((): Order | undefined => {
+	if (isOrder.value) {
+		return order.value;
+	}
+	return bill.value ? (bill.value as unknown as Order) : undefined;
+});
+
+const resolvedErrorRedirect = computed(() => (isOrder.value ? '/orders' : '/orders'));
 
 const overlay = useOverlay();
-const order = computed<Order | undefined>(() => detail.value);
-const new_order_status = ref<OrderStatus>(order.value?.status || OrderStatus.PENDING_PAYMENT);
-const customer = computed(() => order.value?.customer);
-const items = computed(() => order.value?.items);
-const currency_code = computed(() => order.value?.currency.code);
+const new_order_status = ref<OrderStatus>(OrderStatus.PENDING_PAYMENT);
+const new_sale_status = ref<OrderStatus | undefined>(undefined);
 
-// Refresh cooldown management
+const customer = computed(() => record.value?.customer);
+const items = computed(() => record.value?.items);
+const currency_code = computed(() => record.value?.currency.code);
+
 const REFRESH_COOLDOWN_SECONDS = 5;
 const refresh_cooldown = ref(0);
 const is_refreshing = ref(false);
 let cooldown_interval: NodeJS.Timeout | null = null;
 
-// Check if screen is mobile
 const isMobile = ref(false);
 
 const checkMobile = () => {
-	isMobile.value = window.innerWidth < 640; // sm breakpoint
+	isMobile.value = window.innerWidth < 640;
 };
 
-// Watch for order changes to update the new_order_status
 watch(
 	() => order.value?.status,
 	(newStatus) => {
-		if (newStatus) {
-			new_order_status.value = newStatus;
+		if (isOrder.value && newStatus) {
+			new_order_status.value = newStatus as OrderStatus;
+		}
+	},
+);
+
+watch(
+	() => bill.value?.status,
+	(newStatus) => {
+		if (!isOrder.value && newStatus) {
+			new_sale_status.value = newStatus;
 		}
 	},
 );
 
 const { t } = useI18n();
-useHead({ title: () => t('pages.orderDetailTitle') + (order.value?.order_no ?? '') });
+useHead({ title: () => t('pages.orderDetailTitle') + (record.value?.order_no ?? '') });
 
-onMounted(async () => {
-	const route = useRoute();
-	await orderStore.getOrderByOrderNo(route.params.order_no as string);
+const isOrder = computed(() => route.query.type === 'order');
+
+watch(
+	() => route.params.order_no,
+	async (orderNo) => {
+		if (!orderNo || typeof orderNo !== 'string') {
+			return;
+		}
+		order_not_found.value = false;
+		try {
+			if (isOrder.value) {
+				bill.value = undefined;
+				const data = await orderStore.getOrderByOrderNo(orderNo);
+				order.value = data;
+				if (!data) {
+					order_not_found.value = true;
+				}
+			} else {
+				order.value = undefined;
+				const data = await saleStore.getBillDetailsByBillNo(orderNo);
+				bill.value = data;
+			}
+		} catch {
+			if (isOrder.value) {
+				order_not_found.value = true;
+			} else {
+				await navigateTo(resolvedErrorRedirect.value);
+			}
+		}
+	},
+	{ immediate: true },
+);
+
+onMounted(() => {
 	checkMobile();
 	window.addEventListener('resize', checkMobile);
 });
 
 onBeforeRouteLeave(() => {
-	orderStore.resetDetail();
+	order.value = undefined;
+	bill.value = undefined;
 	if (cooldown_interval) {
 		clearInterval(cooldown_interval);
 	}
@@ -264,38 +352,67 @@ onBeforeUnmount(() => {
 	window.removeEventListener('resize', checkMobile);
 });
 
-const getOrderByTransactionNo = async () => {
+const getOrderByOrderNo = async () => {
+	const orderNo = order.value?.order_no ?? order_no_param.value;
+	if (!orderNo) {
+		return;
+	}
 	try {
-		await orderStore.getOrderByOrderNo(order.value!.order_no);
-	} catch {
-		return navigateTo('/sales/orders');
+		order_not_found.value = false;
+		const data = await orderStore.getOrderByOrderNo(orderNo);
+		order.value = data;
+		if (!data) {
+			order_not_found.value = true;
+		}
+	} catch (err) {
+		order_not_found.value = true;
+		throw err;
 	}
 };
 
-/* Refresh Order with Cooldown */
+const getBillDetailsByBillNo = async () => {
+	const no = bill.value?.order_no ?? order_no_param.value;
+	if (!no) {
+		return;
+	}
+	try {
+		const data = await saleStore.getBillDetailsByBillNo(no);
+		bill.value = data;
+	} catch {
+		await navigateTo(resolvedErrorRedirect.value);
+	}
+};
+
+const onItemsRefresh = () => {
+	if (isOrder.value) {
+		return getOrderByOrderNo();
+	}
+	return getBillDetailsByBillNo();
+};
+
 const refreshOrder = async () => {
-	// Check if already refreshing or on cooldown
 	if (is_refreshing.value || refresh_cooldown.value > 0) {
 		return;
 	}
 
-	if (!order.value?.order_no) return;
+	if (!record.value?.order_no) return;
 
 	is_refreshing.value = true;
 
 	try {
-		await getOrderByTransactionNo();
+		if (isOrder.value) {
+			await getOrderByOrderNo();
+		} else {
+			await getBillDetailsByBillNo();
+		}
 		successNotification(t('components.orderDetail.refreshSuccess'));
 
-		// Start cooldown timer
 		refresh_cooldown.value = REFRESH_COOLDOWN_SECONDS;
 
-		// Clear existing interval if any
 		if (cooldown_interval) {
 			clearInterval(cooldown_interval);
 		}
 
-		// Countdown interval
 		cooldown_interval = setInterval(() => {
 			refresh_cooldown.value -= 1;
 			if (refresh_cooldown.value <= 0) {
@@ -306,14 +423,13 @@ const refreshOrder = async () => {
 			}
 		}, 1000);
 	} catch (error) {
-		console.error('Failed to refresh order:', error);
+		console.error('Failed to refresh:', error);
 	} finally {
 		is_refreshing.value = false;
 	}
 };
 
 const refresh_button_text = computed(() => {
-	// Hide text on mobile
 	if (isMobile.value) {
 		return '';
 	}
@@ -324,12 +440,10 @@ const refresh_button_text = computed(() => {
 	return t('components.orderDetail.refresh');
 });
 
-/* Handle Update Order Status */
 const handleUpdateOrderStatus = async () => {
 	await updateOrderStatus(new_order_status.value);
 };
 
-/* Update Order Status		*/
 const updateOrderStatus = async (new_status: OrderStatus) => {
 	if (!order.value) {
 		throw new Error('Order not found');
@@ -345,19 +459,28 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 		return;
 	}
 	try {
-		await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
-		successNotification(t('components.orderDetail.statusUpdateSuccess'));
+		const outcome = await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
+		if (outcome === 'stay') {
+			const refreshed = await orderStore.getOrderByOrderNo(order.value.order_no);
+			order.value = refreshed;
+			successNotification(t('components.orderDetail.statusUpdateSuccess'));
+		}
 	} catch {
 		failedNotification(t('components.orderDetail.error'));
 	}
 };
 
-/* Edit Customer Detail */
+const handleUpdateOrderStatusClick = async () => {
+	if (!new_sale_status.value) return;
+	await updateOrderStatus(new_sale_status.value);
+};
+
 const editCustomerDetail = async () => {
-	if (!customer.value) return;
+	if (!customer.value || !record.value) return;
 
 	const customerModal = overlay.create(ZModalOrderDetailCustomer, {
 		props: {
+			orderNo: record.value.order_no,
 			customer: JSON.parse(JSON.stringify(customer.value)),
 			onUpdate: () => {
 				customerModal.close();
@@ -372,10 +495,12 @@ const editCustomerDetail = async () => {
 	customerModal.open();
 };
 
-/* Add Payment Info */
 const addPaymentInfo = () => {
+	if (!orderForModal.value) return;
+
 	const paymentModal = overlay.create(ZModalOrderDetailPayment, {
 		props: {
+			order: orderForModal.value,
 			onUpdate: () => {
 				paymentModal.close();
 				refreshOrder();
@@ -390,8 +515,11 @@ const addPaymentInfo = () => {
 };
 
 const viewPaymentInfo = (payment: PaymentModel) => {
+	if (!orderForModal.value) return;
+
 	const paymentModal = overlay.create(ZModalOrderDetailPayment, {
 		props: {
+			order: orderForModal.value,
 			payment: payment,
 			onUpdate: () => {
 				paymentModal.close();
@@ -408,12 +536,32 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 </script>
 
 <style scoped>
-/* Main Container */
 .order-detail-container {
 	max-width: 1600px;
 }
 
-/* Order Header */
+.order-not-found {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem 1.5rem;
+	text-align: center;
+	gap: 1rem;
+}
+
+.order-not-found-icon {
+	width: 3rem;
+	height: 3rem;
+	color: var(--color-gray-400);
+}
+
+.order-not-found-text {
+	color: var(--color-gray-600);
+	font-size: 1rem;
+	max-width: 28rem;
+}
+
 .order-header {
 	display: grid;
 	grid-template-columns: 1fr auto;
@@ -446,12 +594,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	font-weight: 700;
 	line-height: 1.2;
 	margin: 0;
-}
-
-.order-type {
-	font-size: 0.875rem;
-	opacity: 0.9;
-	margin: 0.25rem 0 0 0;
 }
 
 .metadata-item {
@@ -505,7 +647,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	opacity: 0.75;
 }
 
-/* Grid Layout */
 .wrapper-grid {
 	display: grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -551,7 +692,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	gap: 1rem;
 }
 
-/* Card Headers */
 .card-header {
 	display: flex;
 	justify-content: space-between;
@@ -583,7 +723,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	gap: 0.5rem;
 }
 
-/* Cards */
 .customer-card,
 .items-card,
 .remarks-card {
@@ -604,7 +743,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	white-space: pre-wrap;
 }
 
-/* Sidebar Cards */
 .quick-actions-card,
 .status-management-card,
 .payment-info-card {
@@ -617,7 +755,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	gap: 0.75rem;
 }
 
-/* Status Section */
 .status-section {
 	display: flex;
 	flex-direction: column;
@@ -632,7 +769,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	letter-spacing: 0.025em;
 }
 
-/* Payment List */
 .payments-list {
 	display: flex;
 	flex-direction: column;
@@ -713,7 +849,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	font-size: 0.875rem;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
 	.order-header {
 		padding: 1.5rem;
@@ -730,7 +865,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	}
 }
 
-/* Spinning animation for refresh button */
 .spin-icon :deep(svg) {
 	animation: spin 1s linear infinite;
 }

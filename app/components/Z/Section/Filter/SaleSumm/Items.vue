@@ -8,12 +8,6 @@
 				<ZDateRange v-model="filter.date_range" @update:model-value="handleDateRangeChange" />
 			</div>
 
-			<!-- Order Status Filter -->
-			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.saleStatus') }}</label>
-				<ZSelectMenuSaleStatus v-model:status="filter.status" @update:model-value="handleStatusChange" />
-			</div>
-
 			<!-- Order Item Status Filter -->
 			<div class="flex flex-col gap-1.5">
 				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderItemStatus') }}</label>
@@ -47,10 +41,6 @@
 				{{ $t('components.filter.date') }}: {{ formatDateRange(filter.date_range) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
 			</UBadge>
-			<UBadge v-if="filter.status" color="success" variant="subtle" size="sm" @click="clearFilter('status')">
-				{{ $t('components.filter.status') }}: {{ capitalizeFirstLetter(filter.status) }}
-				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
-			</UBadge>
 			<UBadge v-if="filter.item_status" color="info" variant="subtle" size="sm" @click="clearFilter('item_status')">
 				{{ $t('components.filter.itemStatus') }}: {{ capitalizeFirstLetter(filter.item_status) }}
 				<UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer" />
@@ -66,7 +56,6 @@
 <script lang="ts" setup>
 import type { Range } from '~/utils/interface';
 import { format } from 'date-fns';
-import { SaleStatus } from 'wemotoo-common';
 
 const salesSummStore = useSummSaleStore();
 const { sale_summ_items } = storeToRefs(salesSummStore);
@@ -75,9 +64,7 @@ const filter = computed(() => sale_summ_items.value.filter);
 const is_loading = computed(() => sale_summ_items.value.loading);
 
 const hasActiveFilters = computed(() => {
-	return (
-		filter.value.date_range.start || filter.value.date_range.end || filter.value.status || (filter.value.currency_code && filter.value.currency_code !== 'MYR')
-	);
+	return filter.value.date_range.start || filter.value.date_range.end || (filter.value.currency_code && filter.value.currency_code !== 'MYR');
 });
 
 const formatDateRange = (range: Range) => {
@@ -115,7 +102,6 @@ const handleCurrencyChange = async () => {
 const clearFilters = async () => {
 	filter.value.date_range.start = new Date();
 	filter.value.date_range.end = undefined;
-	filter.value.status = SaleStatus.COMPLETED;
 	filter.value.item_status = undefined;
 	filter.value.currency_code = 'MYR';
 	sale_summ_items.value.current_page = 1;
@@ -126,8 +112,6 @@ const clearFilter = async (filterKey: string) => {
 	if (filterKey === 'date') {
 		filter.value.date_range.start = new Date();
 		filter.value.date_range.end = undefined;
-	} else if (filterKey === 'status') {
-		filter.value.status = undefined;
 	} else if (filterKey === 'item_status') {
 		filter.value.item_status = undefined;
 	} else if (filterKey === 'currency') {

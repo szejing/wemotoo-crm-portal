@@ -10,8 +10,8 @@
 
 			<!-- Sale Status Filter -->
 			<div class="flex flex-col gap-1.5">
-				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.saleStatus') }}</label>
-				<ZSelectMenuSaleStatus :status="filter.status" @update:status="handleStatusChange" />
+				<label class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $t('components.filter.orderStatus') }}</label>
+				<ZSelectMenuOrderStatus :status="filter.status" @update:status="handleStatusChange" />
 			</div>
 
 			<!-- Currency Filter -->
@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 import type { Range } from '~/utils/interface';
 import { format } from 'date-fns';
-import { SaleStatus } from 'wemotoo-common';
+import { OrderStatus } from 'wemotoo-common';
 
 const saleSummStore = useSummSaleStore();
 const { sale_summ } = storeToRefs(saleSummStore);
@@ -102,7 +102,7 @@ const handleCurrencyChange = async () => {
 const clearFilters = async () => {
 	filter.value.date_range.start = new Date();
 	filter.value.date_range.end = undefined;
-	filter.value.status = SaleStatus.COMPLETED;
+	filter.value.status = OrderStatus.COMPLETED;
 	filter.value.currency_code = 'MYR';
 	sale_summ.value.current_page = 1;
 	await search();
@@ -113,7 +113,7 @@ const clearFilter = async (filterKey: string) => {
 		filter.value.date_range.start = new Date();
 		filter.value.date_range.end = undefined;
 	} else if (filterKey === 'status') {
-		filter.value.status = SaleStatus.COMPLETED;
+		filter.value.status = OrderStatus.COMPLETED;
 	} else if (filterKey === 'currency') {
 		filter.value.currency_code = 'MYR';
 	}

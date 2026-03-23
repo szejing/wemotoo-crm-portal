@@ -41,15 +41,9 @@ export const useOrderStore = defineStore('orderStore', {
 		exporting: false as boolean,
 		orders: [] as OrderHistory[],
 		total_orders: 0 as number,
-		detail: undefined as Order | undefined,
-		errors: [] as string[],
 		filter: initialEmptyOrderFilter,
 	}),
 	actions: {
-		resetDetail() {
-			this.detail = undefined;
-		},
-
 		async updateOrderPageSize(size: number) {
 			this.filter.page_size = size;
 
@@ -131,18 +125,13 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async getOrderByOrderNo(order_no: string) {
-			if (!this.detail) {
-				this.loading = true;
-			}
+		async getOrderByOrderNo(order_no: string): Promise<Order | undefined> {
+			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.order.getOrderByTransactionNo(order_no);
+				const data = await $api.order.getOrderByOrderNo(order_no);
 
-				if (data.order) {
-					this.detail = data.order as Order;
-				}
-				console.log('data.order', data.order);
+				return data.order ? (data.order as Order) : undefined;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';
 				failedNotification(message);
@@ -152,7 +141,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateOrderStatus(order_no: string, customer_no: string, status: string) {
+		async updateOrderStatus(order_no: string, customer_no: string, status: string): Promise<'stay' | 'back'> {
 			const { $api } = useNuxtApp();
 			this.updating = true;
 
@@ -160,11 +149,10 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
 
 				if (data?.status && status !== OrderStatus.COMPLETED) {
-					this.getOrderByOrderNo(order_no);
-					successNotification('Order status updated successfully');
-				} else {
-					useRouter().back();
+					return 'stay';
 				}
+				useRouter().back();
+				return 'back';
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';
 				failedNotification(message);
@@ -181,7 +169,6 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.updateOrder(order_no, customer_no, payment_status);
 
 				if (data.status) {
-					this.getOrderByOrderNo(order_no);
 					successNotification('Payment status updated successfully');
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -191,23 +178,22 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updatePayments(order_no: string, payment: PaymentModel) {
+		async updatePayments(order_no: string, customer_no: string, payment: PaymentModel, existingPayments: PaymentModel[]) {
 			const { $api } = useNuxtApp();
 
 			let payments: PaymentModel[] = [];
 
-			if (this.detail?.payments.length === 0) {
+			if (existingPayments.length === 0) {
 				payment.payment_line = 1;
 				payments = [payment];
 			} else {
-				payments = this.detail?.payments ?? [];
+				payments = existingPayments;
 			}
 
 			try {
-				const data = await $api.order.updatePayments(order_no, this.detail!.customer.customer_no, payments);
+				const data = await $api.order.updatePayments(order_no, customer_no, payments);
 
 				if (data.status) {
-					this.getOrderByOrderNo(order_no);
 					successNotification('Payment Info Added successfully');
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -224,7 +210,6 @@ export const useOrderStore = defineStore('orderStore', {
 				const data = await $api.order.updateCustomer(order_no, customer);
 
 				if (data.status) {
-					this.getOrderByOrderNo(order_no);
 					successNotification('Customer updated successfully');
 				}
 			} catch (err: unknown | ErrorResponse) {
@@ -234,21 +219,20 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateItems(order_no: string, item: ItemModel) {
+		async updateItems(order_no: string, customer_no: string, item: ItemModel, existingItems: ItemModel[]) {
 			const { $api } = useNuxtApp();
 
 			try {
-				const items = this.detail?.items.map((orderItem) => {
+				const items = existingItems.map((orderItem) => {
 					if (orderItem.item_line === item.item_line) {
 						return item;
 					}
 					return orderItem;
 				});
 
-				const data = await $api.order.updateItems(order_no, this.detail!.customer.customer_no, items ?? []);
+				const data = await $api.order.updateItems(order_no, customer_no, items);
 
 				if (data.status) {
-					this.getOrderByOrderNo(order_no);
 					successNotification('Order item updated successfully');
 				}
 			} catch (err: unknown | ErrorResponse) {

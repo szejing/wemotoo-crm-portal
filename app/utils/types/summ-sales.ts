@@ -1,4 +1,4 @@
-import type { OrderItemStatus, SaleStatus } from 'wemotoo-common';
+import type { OrderItemStatus, OrderStatus } from 'wemotoo-common';
 
 type SummSaleTxnDaily = {
 	biz_date: string;
@@ -39,7 +39,7 @@ export type SummProduct = {
 export type SummSaleBill = {
 	biz_date: Date;
 	currency_code: string;
-	status: SaleStatus;
+	status: OrderStatus;
 	gross_amt: number;
 	net_amt: number;
 	disc_amt?: number;
@@ -79,7 +79,7 @@ export type SummSaleItem = {
 export type SummSalePayment = {
 	biz_date: Date;
 	currency_code: string;
-	status: SaleStatus;
+	status: OrderStatus;
 	payment_type_code: string;
 	payment_type_desc: string;
 	payment_amt: number;
@@ -94,7 +94,7 @@ export type SummSaleCustomer = {
 	customer_no: string;
 	customer_name: string;
 	currency_code: string;
-	status: SaleStatus;
+	status: OrderStatus;
 	email_address: string;
 	gross_amt: number;
 	net_amt: number;

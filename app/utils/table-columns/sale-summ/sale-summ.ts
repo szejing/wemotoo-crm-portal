@@ -1,6 +1,6 @@
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, SaleStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import type { SummSaleBill } from '~/utils/types/summ-sales';
 import { getSortableHeader } from '../sortable';
 
@@ -20,16 +20,22 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SummSaleBill>[] 
 			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const color = {
-					[SaleStatus.COMPLETED]: 'success' as const,
-					[SaleStatus.CANCELLED]: 'neutral' as const,
-					[SaleStatus.REFUNDED]: 'error' as const,
-				}[row.original.status as SaleStatus];
+					[OrderStatus.COMPLETED]: 'success' as const,
+					[OrderStatus.CANCELLED]: 'neutral' as const,
+					[OrderStatus.REFUNDED]: 'error' as const,
+					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
+					[OrderStatus.PROCESSING]: 'info' as const,
+					[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
+				}[row.original.status as OrderStatus];
 
 				const value = {
-					[SaleStatus.COMPLETED]: t('options.completed'),
-					[SaleStatus.CANCELLED]: t('options.cancelled'),
-					[SaleStatus.REFUNDED]: t('options.refunded'),
-				}[row.original.status as SaleStatus];
+					[OrderStatus.COMPLETED]: t('options.completed'),
+					[OrderStatus.CANCELLED]: t('options.cancelled'),
+					[OrderStatus.REFUNDED]: t('options.refunded'),
+					[OrderStatus.PENDING_PAYMENT]: t('options.pendingPayment'),
+					[OrderStatus.PROCESSING]: t('options.processing'),
+					[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
+				}[row.original.status as OrderStatus];
 
 				return h(UBadge, { variant: 'subtle', color }, () => value);
 			},

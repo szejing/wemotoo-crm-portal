@@ -1,4 +1,4 @@
-import { SaleStatus } from 'wemotoo-common';
+import { OrderStatus } from 'wemotoo-common';
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { UBadge } from '#components';
@@ -21,10 +21,13 @@ export function getSaleColumns(t: TranslateFn): TableColumn<Bill>[] {
 			header: ({ column }) => getSortableHeader(column, t('table.status')),
 			cell: ({ row }) => {
 				const color = {
-					[SaleStatus.COMPLETED]: 'success' as const,
-					[SaleStatus.CANCELLED]: 'neutral' as const,
-					[SaleStatus.REFUNDED]: 'error' as const,
-				}[row.getValue('status') as SaleStatus];
+					[OrderStatus.COMPLETED]: 'success' as const,
+					[OrderStatus.CANCELLED]: 'neutral' as const,
+					[OrderStatus.REFUNDED]: 'error' as const,
+					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
+					[OrderStatus.PROCESSING]: 'info' as const,
+					[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
+				}[row.getValue('status') as OrderStatus];
 				return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.getValue('status'));
 			},
 		},

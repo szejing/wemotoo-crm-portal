@@ -1,4 +1,4 @@
-import type { FilterType, OrderItemStatus, SaleStatus } from 'wemotoo-common';
+import type { FilterType, OrderItemStatus } from 'wemotoo-common';
 
 export type GetSummSaleItemsReq = {
 	start_date: string;

@@ -280,6 +280,7 @@
 		"ordersTitle": "Wemotoo CRM - Orders",
 		"orders": "Orders",
 		"orderDetail": "Order Detail",
+		"orderNotFound": "Order number {orderNo} was not found.",
 		"orderDetailTitle": "Wemotoo CRM - Order Detail #",
 		"orderCustomerSummary": "Wemotoo CRM - Order Customer Summary",
 		"orderSummaryTitle": "Wemotoo CRM - Order Summary",
