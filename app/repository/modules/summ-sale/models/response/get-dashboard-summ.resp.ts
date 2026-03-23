@@ -23,6 +23,7 @@ export type SummDaily_ = {
 
 export type SummCustomer_ = {
 	customer_no: string;
+	customer_name: string;
 	total_orders: number;
 	total_spent: number;
 };

@@ -1,8 +1,8 @@
-import { UBadge } from '#components';
-import type { TableColumn, TableRow } from '@nuxt/ui';
 import { h } from 'vue';
-import { formatCurrency, SaleStatus } from 'wemotoo-common';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleCustomer } from '~/utils/types/summ-sales';
+import { formatCurrency, SaleStatus } from 'wemotoo-common';
+import { UBadge } from '#components';
 import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
@@ -11,7 +11,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 	return [
 		{
 			accessorKey: 'customer',
-			header: () => h('h1', { class: 'text-neutral-400' }, t('table.customer')),
+			header: ({ column }) => getSortableHeader(column, t('table.customer')),
 			cell: ({ row }) => {
 				return h('div', [
 					h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
@@ -35,7 +35,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 					[SaleStatus.REFUNDED]: t('options.refunded'),
 				}[row.original.status as SaleStatus];
 
-				return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => value);
+				return h(UBadge, { variant: 'subtle', color }, () => value);
 			},
 		},
 
@@ -48,7 +48,9 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
 			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_txns)]);
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, row.original.total_txns),
+				]);
 			},
 		},
 		{
@@ -60,7 +62,9 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
 			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, row.original.total_qty),
+				]);
 			},
 		},
 		{
@@ -74,7 +78,9 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 				]);
 			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.gross_amt, row.original.currency_code))]);
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.gross_amt, row.original.currency_code)),
+				]);
 			},
 		},
 		{
@@ -88,7 +94,9 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 				]);
 			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(row.original.net_amt, row.original.currency_code))]);
+				return h('div', { class: 'flex items-center gap-2' }, [
+					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.net_amt, row.original.currency_code)),
+				]);
 			},
 		},
 	];

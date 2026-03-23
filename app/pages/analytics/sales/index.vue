@@ -91,7 +91,7 @@
 						>
 							<div class="flex items-center gap-3 min-w-0">
 								<span class="shrink-0 w-6 text-xs font-medium text-muted">{{ i + 1 }}</span>
-								<span class="truncate font-medium text-highlighted">{{ customer.customer_no }}</span>
+								<span class="truncate font-medium text-highlighted">{{ customer.customer_name }}</span>
 							</div>
 							<div class="flex shrink-0 items-center gap-2 text-sm">
 								<span class="text-muted">{{ customer.total_orders }} {{ $t('pages.ordersLabel') }}</span>

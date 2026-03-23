@@ -6,12 +6,7 @@ import { initialEmptySaleSummItem } from './models/sale-summ-items.model';
 import { initialEmptySaleSummPayment } from './models/sale-summ-payments.model';
 import { initialEmptySaleSummCustomer } from './models/sale-summ-customer.model';
 import type { Range } from '~/utils/interface';
-import type {
-	SummDaily_,
-	SummCustomer_,
-	SummProduct_,
-	TotalSaleAmt_,
-} from '~/repository/modules/summ-sale/models/response/get-dashboard-summ.resp';
+import type { SummDaily_, SummCustomer_, SummProduct_, TotalSaleAmt_ } from '~/repository/modules/summ-sale/models/response/get-dashboard-summ.resp';
 
 export const useSummSaleStore = defineStore('summSaleStore', {
 	state: () => ({
@@ -222,8 +217,8 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			try {
 				let filter = '';
 
-				if (this.sale_summ_items.filter.status) {
-					filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				if (this.sale_summ_items.filter.item_status) {
+					filter = `item_status eq '${this.sale_summ_items.filter.item_status}'`;
 				}
 
 				if (this.sale_summ_items.filter.currency_code) {
@@ -266,8 +261,8 @@ export const useSummSaleStore = defineStore('summSaleStore', {
 			try {
 				let filter = '';
 
-				if (this.sale_summ_items.filter.status) {
-					filter = `status eq '${this.sale_summ_items.filter.status}'`;
+				if (this.sale_summ_items.filter.item_status) {
+					filter = `item_status eq '${this.sale_summ_items.filter.item_status}'`;
 				}
 
 				if (this.sale_summ_items.filter.currency_code) {
