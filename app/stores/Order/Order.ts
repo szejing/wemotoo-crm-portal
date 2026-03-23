@@ -78,7 +78,7 @@ export const useOrderStore = defineStore('orderStore', {
 				let filter = '';
 
 				// For 'All' status, don't add any status filter - let all statuses through
-				if (this.filter.status === OrderStatus.PENDING_PAYMENT) {
+				if (this.filter.status === OrderStatus.PENDING_PAYMENT || this.filter.status === OrderStatus.PROCESSING) {
 					filter = `status in ('${OrderStatus.PENDING_PAYMENT}', '${OrderStatus.PROCESSING}')`;
 				} else if (this.filter.status === OrderStatus.COMPLETED) {
 					filter = `status eq '${OrderStatus.COMPLETED}'`;
