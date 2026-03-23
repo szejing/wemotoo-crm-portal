@@ -7,7 +7,7 @@ export type AppointmentInput = {
 export type Appointment = {
 	code: string;
 	start_date_time: Date;
-	end_date_time: Date;
+	end_date_time?: Date;
 	item_line: number;
 	appt_desc?: string;
 	order_no?: string;

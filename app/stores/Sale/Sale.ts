@@ -7,6 +7,7 @@ import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { Bill } from '~/utils/types/bill';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 type SaleFilter = {
 	query: string;
@@ -165,7 +166,7 @@ export const useSaleStore = defineStore('saleStore', {
 			}
 		},
 
-		async getBillDetailsByBillNo(order_no: string): Promise<Bill | undefined> {
+		async getBillDetailByOrderNo(order_no: string): Promise<OrderHistory | undefined> {
 			this.loading = true;
 
 			const { $api } = useNuxtApp();
@@ -173,7 +174,7 @@ export const useSaleStore = defineStore('saleStore', {
 			try {
 				const data = await $api.sale.getBillDetailsByOrderNo(order_no);
 
-				return data.bill ?? undefined;
+				return data.bill;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process sale';
 				failedNotification(message);

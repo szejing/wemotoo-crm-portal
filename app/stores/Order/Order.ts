@@ -125,13 +125,13 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async getOrderByOrderNo(order_no: string): Promise<Order | undefined> {
+		async getOrderByOrderNo(order_no: string): Promise<OrderHistory | undefined> {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.order.getOrderByOrderNo(order_no);
 
-				return data.order ? (data.order as Order) : undefined;
+				return data.order;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';
 				failedNotification(message);

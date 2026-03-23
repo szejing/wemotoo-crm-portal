@@ -1,7 +1,7 @@
 <template>
 	<ZPagePanel id="orders-detail" :title="$t('pages.orderDetail')">
 		<ZLoading v-if="loading" />
-		<div v-else-if="isOrder && order_not_found" class="order-not-found">
+		<div v-else-if="order_not_found" class="order-not-found">
 			<UIcon name="i-heroicons-magnifying-glass-circle" class="order-not-found-icon" />
 			<p class="order-not-found-text">{{ $t('pages.orderNotFound', { orderNo: order_no_param }) }}</p>
 			<UButton color="primary" variant="soft" :to="'/orders'">{{ $t('nav.orders') }}</UButton>
@@ -40,7 +40,7 @@
 							{{ refresh_button_text }}
 						</UButton>
 
-						<div v-if="isOrder" class="status-badge-stack">
+						<div class="status-badge-stack">
 							<div class="status-group">
 								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg">{{ $t('options.pendingPayment') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg">{{ $t('options.processing') }}</UBadge>
@@ -52,11 +52,6 @@
 							<p v-if="order?.last_updated" class="status-last-updated" :title="$t('table.lastUpdated')">
 								{{ order.last_updated }}
 							</p>
-						</div>
-						<div v-else class="status-group">
-							<UBadge v-if="bill?.status === OrderStatus.COMPLETED" color="success" size="lg">{{ $t('options.completed') }}</UBadge>
-							<UBadge v-else-if="bill?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
-							<UBadge v-else color="error" size="lg">{{ $t('options.cancelled') }}</UBadge>
 						</div>
 					</div>
 				</div>
@@ -91,14 +86,11 @@
 									{{ $t('components.orderDetail.orderItems') }}
 								</h2>
 								<div class="flex items-center gap-2">
-									<span
-										v-if="isOrder && order?.status === OrderStatus.PENDING_PAYMENT"
-										class="inline-flex items-center gap-1 text-xs text-green-600 font-medium"
-									>
+									<span v-if="order?.status === OrderStatus.PENDING_PAYMENT" class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
 										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
 										{{ $t('components.orderDetail.editable') }}
 									</span>
-									<span v-else-if="!isOrder && bill?.status === OrderStatus.COMPLETED" class="text-xs text-green-600 font-medium">
+									<span v-else-if="order?.status === OrderStatus.COMPLETED" class="text-xs text-green-600 font-medium">
 										<UIcon name="i-heroicons-pencil" class="w-3 h-3" />
 										{{ $t('components.orderDetail.editable') }}
 									</span>
@@ -107,7 +99,7 @@
 										<template #content>
 											<div class="p-4 max-w-xs">
 												<p class="text-sm">
-													{{ isOrder ? $t('components.orderDetail.orderNotEditableMessage') : $t('components.orderDetail.billNotEditableMessage') }}<br />
+													{{ $t('components.orderDetail.orderNotEditableMessage') }}<br />
 													<b class="text-primary">{{ $t('components.orderDetail.changeStatusToEdit') }}</b>
 												</p>
 											</div>
@@ -122,9 +114,9 @@
 							:items="items ?? []"
 							:currency-code="currency_code"
 							:total-gross-amt="record?.gross_amt"
-							:total-net-amt="isOrder ? order?.net_total : bill?.net_amt"
+							:total-net-amt="order?.net_total"
 							:taxes="record?.taxes ?? []"
-							:editable="isOrder ? order?.status == OrderStatus.PENDING_PAYMENT : bill?.status == OrderStatus.COMPLETED"
+							:editable="order?.status == OrderStatus.PENDING_PAYMENT"
 							@refresh="onItemsRefresh"
 						/>
 					</UCard>
@@ -147,7 +139,7 @@
 				<div v-if="record !== undefined" class="side-wrapper">
 					<div class="sticky-sidebar">
 						<!-- Status Management -->
-						<UCard v-if="isOrder" class="status-management-card">
+						<UCard class="status-management-card">
 							<template #header>
 								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
 							</template>
@@ -162,19 +154,6 @@
 									:loading="updating"
 									@click="handleUpdateOrderStatus"
 								>
-									{{ $t('components.orderDetail.updateOrderStatus') }}
-								</UButton>
-							</div>
-						</UCard>
-
-						<UCard v-if="!isOrder" class="status-management-card">
-							<template #header>
-								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
-							</template>
-
-							<div class="status-section">
-								<ZSelectMenuOrderStatus v-model:status="new_sale_status" />
-								<UButton block color="primary" :icon="ICONS.SAVE" :disabled="new_sale_status === bill?.status" @click="handleUpdateOrderStatusClick">
 									{{ $t('components.orderDetail.updateOrderStatus') }}
 								</UButton>
 							</div>
@@ -229,39 +208,33 @@
 <script lang="ts" setup>
 import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
-import { failedModal, failedNotification, successNotification } from '~/stores/AppUi/AppUi';
+import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
-import type { Bill } from '~/utils/types/bill';
 import type { Order } from '~/utils/types/order';
+import type { OrderHistory } from '~/utils/types/order-history';
 
 const orderStore = useOrderStore();
 const saleStore = useSaleStore();
 const { updating } = storeToRefs(orderStore);
 
-const loading = computed(() => (isOrder.value ? orderStore.loading : saleStore.loading));
+const loading = computed(() => orderStore.loading || saleStore.loading);
 
 const route = useRoute();
 const order_not_found = ref(false);
 const order_no_param = computed(() => String(route.params.order_no ?? ''));
+const type = computed(() => String(route.query.type ?? ''));
 
-const order = ref<Order | undefined>();
-const bill = ref<Bill | undefined>();
+const order = ref<OrderHistory | undefined>();
 
-const record = computed(() => (isOrder.value ? order.value : bill.value));
+const record = computed(() => order.value);
 
-const orderForModal = computed((): Order | undefined => {
-	if (isOrder.value) {
-		return order.value;
-	}
-	return bill.value ? (bill.value as unknown as Order) : undefined;
+const orderForModal = computed((): OrderHistory | undefined => {
+	return order.value;
 });
-
-const resolvedErrorRedirect = computed(() => (isOrder.value ? '/orders' : '/orders'));
 
 const overlay = useOverlay();
 const new_order_status = ref<OrderStatus>(OrderStatus.PENDING_PAYMENT);
-const new_sale_status = ref<OrderStatus | undefined>(undefined);
 
 const customer = computed(() => record.value?.customer);
 const items = computed(() => record.value?.items);
@@ -281,17 +254,8 @@ const checkMobile = () => {
 watch(
 	() => order.value?.status,
 	(newStatus) => {
-		if (isOrder.value && newStatus) {
+		if (newStatus) {
 			new_order_status.value = newStatus as OrderStatus;
-		}
-	},
-);
-
-watch(
-	() => bill.value?.status,
-	(newStatus) => {
-		if (!isOrder.value && newStatus) {
-			new_sale_status.value = newStatus;
 		}
 	},
 );
@@ -299,47 +263,14 @@ watch(
 const { t } = useI18n();
 useHead({ title: () => t('pages.orderDetailTitle') + (record.value?.order_no ?? '') });
 
-const isOrder = computed(() => route.query.type === 'order');
-
-watch(
-	() => route.params.order_no,
-	async (orderNo) => {
-		if (!orderNo || typeof orderNo !== 'string') {
-			return;
-		}
-		order_not_found.value = false;
-		try {
-			if (isOrder.value) {
-				bill.value = undefined;
-				const data = await orderStore.getOrderByOrderNo(orderNo);
-				order.value = data;
-				if (!data) {
-					order_not_found.value = true;
-				}
-			} else {
-				order.value = undefined;
-				const data = await saleStore.getBillDetailsByBillNo(orderNo);
-				bill.value = data;
-			}
-		} catch {
-			if (isOrder.value) {
-				order_not_found.value = true;
-			} else {
-				await navigateTo(resolvedErrorRedirect.value);
-			}
-		}
-	},
-	{ immediate: true },
-);
-
 onMounted(() => {
 	checkMobile();
 	window.addEventListener('resize', checkMobile);
+	getOrderDetails();
 });
 
 onBeforeRouteLeave(() => {
 	order.value = undefined;
-	bill.value = undefined;
 	if (cooldown_interval) {
 		clearInterval(cooldown_interval);
 	}
@@ -352,42 +283,22 @@ onBeforeUnmount(() => {
 	window.removeEventListener('resize', checkMobile);
 });
 
-const getOrderByOrderNo = async () => {
-	const orderNo = order.value?.order_no ?? order_no_param.value;
-	if (!orderNo) {
-		return;
-	}
+const getOrderDetails = async () => {
 	try {
-		order_not_found.value = false;
-		const data = await orderStore.getOrderByOrderNo(orderNo);
-		order.value = data;
-		if (!data) {
-			order_not_found.value = true;
+		if (type.value === 'order') {
+			const data = await orderStore.getOrderByOrderNo(order_no_param.value);
+			order.value = data;
+		} else {
+			const data = await saleStore.getBillDetailByOrderNo(order_no_param.value);
+			order.value = data;
 		}
-	} catch (err) {
-		order_not_found.value = true;
-		throw err;
-	}
-};
-
-const getBillDetailsByBillNo = async () => {
-	const no = bill.value?.order_no ?? order_no_param.value;
-	if (!no) {
-		return;
-	}
-	try {
-		const data = await saleStore.getBillDetailsByBillNo(no);
-		bill.value = data;
 	} catch {
-		await navigateTo(resolvedErrorRedirect.value);
+		order_not_found.value = true;
 	}
 };
 
 const onItemsRefresh = () => {
-	if (isOrder.value) {
-		return getOrderByOrderNo();
-	}
-	return getBillDetailsByBillNo();
+	return getOrderDetails();
 };
 
 const refreshOrder = async () => {
@@ -400,11 +311,7 @@ const refreshOrder = async () => {
 	is_refreshing.value = true;
 
 	try {
-		if (isOrder.value) {
-			await getOrderByOrderNo();
-		} else {
-			await getBillDetailsByBillNo();
-		}
+		await getOrderDetails();
 		successNotification(t('components.orderDetail.refreshSuccess'));
 
 		refresh_cooldown.value = REFRESH_COOLDOWN_SECONDS;
@@ -461,18 +368,12 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	try {
 		const outcome = await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
 		if (outcome === 'stay') {
-			const refreshed = await orderStore.getOrderByOrderNo(order.value.order_no);
-			order.value = refreshed;
+			await getOrderDetails();
 			successNotification(t('components.orderDetail.statusUpdateSuccess'));
 		}
 	} catch {
 		failedNotification(t('components.orderDetail.error'));
 	}
-};
-
-const handleUpdateOrderStatusClick = async () => {
-	if (!new_sale_status.value) return;
-	await updateOrderStatus(new_sale_status.value);
 };
 
 const editCustomerDetail = async () => {
