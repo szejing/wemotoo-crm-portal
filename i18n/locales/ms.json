@@ -163,7 +163,12 @@
 		"changePassword": {
 			"currentPasswordRequired": "Kata laluan semasa wajib.",
 			"currentPasswordIncorrect": "Kata laluan semasa tidak betul.",
-			"newPasswordMinLength": "Kata laluan mesti sekurang-kurangnya 8 aksara.",
+			"newPasswordRequired": "Kata laluan baharu wajib.",
+			"newPasswordMinLength": "Kata laluan mesti sekurang-kurangnya {n} aksara.",
+			"newPasswordRequiresNumber": "Kata laluan mesti mengandungi sekurang-kurangnya satu nombor.",
+			"newPasswordRequiresLowercase": "Kata laluan mesti mengandungi sekurang-kurangnya satu huruf kecil.",
+			"newPasswordRequiresUppercase": "Kata laluan mesti mengandungi sekurang-kurangnya satu huruf besar.",
+			"confirmPasswordRequired": "Sila sahkan kata laluan baharu anda.",
 			"passwordConfirmationMismatch": "Pengesahan kata laluan tidak sepadan.",
 			"genericError": "Tidak dapat menukar kata laluan. Sila semak maklumat dan cuba lagi."
 		},

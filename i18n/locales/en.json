@@ -163,7 +163,12 @@
 		"changePassword": {
 			"currentPasswordRequired": "Current password is required.",
 			"currentPasswordIncorrect": "Current password is incorrect.",
-			"newPasswordMinLength": "Password must be at least 8 characters.",
+			"newPasswordRequired": "New password is required.",
+			"newPasswordMinLength": "Password must be at least {n} characters.",
+			"newPasswordRequiresNumber": "Password must contain at least one number.",
+			"newPasswordRequiresLowercase": "Password must contain at least one lowercase letter.",
+			"newPasswordRequiresUppercase": "Password must contain at least one uppercase letter.",
+			"confirmPasswordRequired": "Please confirm your new password.",
 			"passwordConfirmationMismatch": "Password confirmation does not match.",
 			"genericError": "Unable to update password. Please check your entries and try again."
 		},
