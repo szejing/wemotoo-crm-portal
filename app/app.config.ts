@@ -122,5 +122,14 @@ export default defineAppConfig({
 				tr: 'cursor-pointer',
 			},
 		},
+
+		// calendar — no hover tint; no range-selection preview (data-highlighted) while picking end date
+		// (Reka RangeCalendar sets data-highlighted from highlightedRange; theme uses data-[highlighted]:bg-*/20)
+		calendar: {
+			slots: {
+				cellTrigger:
+					'hover:not-data-[selected]:!bg-transparent data-[highlighted]:not-data-[selected]:!bg-transparent',
+			},
+		},
 	},
 });
