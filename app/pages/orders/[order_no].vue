@@ -206,7 +206,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
+import { ZModalConfirmation, ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
 import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
@@ -351,14 +351,9 @@ const handleUpdateOrderStatus = async () => {
 	await updateOrderStatus(new_order_status.value);
 };
 
-const updateOrderStatus = async (new_status: OrderStatus) => {
+const executeOrderStatusUpdate = async (new_status: OrderStatus) => {
 	if (!order.value) {
 		throw new Error('Order not found');
-	}
-
-	if (new_status == OrderStatus.CANCELLED) {
-		failedNotification(t('components.orderDetail.confirmCancelOrder'));
-		return;
 	}
 
 	if (new_status == OrderStatus.COMPLETED && order.value.payment_status == PaymentStatus.PENDING) {
@@ -374,6 +369,33 @@ const updateOrderStatus = async (new_status: OrderStatus) => {
 	} catch {
 		failedNotification(t('components.orderDetail.error'));
 	}
+};
+
+const updateOrderStatus = async (new_status: OrderStatus) => {
+	if (!order.value) {
+		throw new Error('Order not found');
+	}
+
+	if (new_status == OrderStatus.CANCELLED) {
+		const confirmModal = overlay.create(ZModalConfirmation, {
+			props: {
+				message: t('components.orderDetail.confirmCancelOrder'),
+				titleVariant: 'danger',
+				action: 'delete',
+				onConfirm: async () => {
+					await executeOrderStatusUpdate(new_status);
+					confirmModal.close();
+				},
+				onCancel: () => {
+					confirmModal.close();
+				},
+			},
+		});
+		confirmModal.open();
+		return;
+	}
+
+	await executeOrderStatusUpdate(new_status);
 };
 
 const editCustomerDetail = async () => {
