@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
+		'@nuxt/test-utils/module',
 		'@pinia/nuxt',
 		'@nuxt/image',
 		'@nuxtjs/i18n',
