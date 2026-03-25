@@ -25,7 +25,7 @@ export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSale
 			cell: ({ row }) => {
 				const color = {
 					[OrderStatus.COMPLETED]: 'success' as const,
-					[OrderStatus.CANCELLED]: 'neutral' as const,
+					[OrderStatus.CANCELLED]: 'error' as const,
 					[OrderStatus.REFUNDED]: 'error' as const,
 					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
 					[OrderStatus.PROCESSING]: 'info' as const,
