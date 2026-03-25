@@ -117,6 +117,7 @@ export const Routes = {
 	Sales: {
 		Many: () => `${API_PATH.SALES}`,
 		Single: (order_no: string) => `${API_PATH.SALES}/${order_no}`,
+		UpdateOrderStatus: (order_no: string) => `${API_PATH.SALES}/${order_no}/status`,
 		Process: () => `${API_PATH.SALES}/process`,
 		Export: () => `${API_PATH.SALES}/export`,
 	},

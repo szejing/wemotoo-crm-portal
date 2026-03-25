@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus } from 'wemotoo-common';
+import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
@@ -141,18 +141,18 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateOrderStatus(order_no: string, customer_no: string, status: string): Promise<'stay' | 'back'> {
+		async updateStatus(order_no: string, customer_no: string, status: OrderStatus, type: 'order' | 'sale'): Promise<boolean> {
 			const { $api } = useNuxtApp();
 			this.updating = true;
 
 			try {
-				const data = await $api.order.updateOrderStatus(order_no, customer_no, status);
-
-				if (data?.status && status !== OrderStatus.COMPLETED) {
-					return 'stay';
+				if (type === 'order') {
+					const data = await $api.order.updateStatus(order_no, customer_no, status);
+					return !!(data?.status && status !== OrderStatus.COMPLETED);
+				} else {
+					const data = await $api.sale.updateStatus(order_no, customer_no, status);
+					return !!data?.status;
 				}
-				useRouter().back();
-				return 'back';
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process order';
 				failedNotification(message);
@@ -162,7 +162,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateOrder(order_no: string, customer_no: string, payment_status: string) {
+		async updateOrder(order_no: string, customer_no: string, payment_status: PaymentStatus) {
 			const { $api } = useNuxtApp();
 
 			try {

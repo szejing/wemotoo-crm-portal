@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 			throw new Error('Order not found');
 		}
 
-		const result = await signedFetch(event, `${Routes.Orders.UpdateOrderStatus(order_no)}`, {
+		const result = await signedFetch(event, `${Routes.Sales.UpdateOrderStatus(order_no)}`, {
 			method: 'PATCH',
 			body: data,
 		});

@@ -1,4 +1,4 @@
-import type { Bill } from './bill';
+import type { Bill } from '~/utils/types/bill';
 
 export type GetSalesResp = {
 	bills: Bill[];

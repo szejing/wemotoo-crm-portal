@@ -172,7 +172,7 @@ describe('OrderModule', () => {
 	});
 
 	it('updateOrderStatus', async () => {
-		await mod.updateOrderStatus('O1', 'C1', 'paid');
+		await mod.updateStatus('O1', 'C1', 'paid');
 		expect(lastFetch().url).toBe(MerchantRoutes.Orders.UpdateOrderStatus(encodeURIComponent('O1')));
 		expect(lastFetch().opts.body).toEqual({ customer_no: 'C1', status: 'paid' });
 	});

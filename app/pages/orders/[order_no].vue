@@ -360,11 +360,14 @@ const executeOrderStatusUpdate = async (new_status: OrderStatus) => {
 		failedNotification(t('components.orderDetail.paymentInfoRequired'));
 		return;
 	}
+
 	try {
-		const outcome = await orderStore.updateOrderStatus(order.value.order_no, order.value.customer.customer_no, new_status);
-		if (outcome === 'stay') {
+		const shouldStay = await orderStore.updateStatus(order.value.order_no, order.value.customer.customer_no, new_status);
+		if (shouldStay) {
 			await getOrderDetails();
 			successNotification(t('components.orderDetail.statusUpdateSuccess'));
+		} else {
+			useRouter().back();
 		}
 	} catch {
 		failedNotification(t('components.orderDetail.error'));

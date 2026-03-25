@@ -7,6 +7,7 @@ import type { UpdateOrderStatusResp } from './models/response/update-order.resp'
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { OrderHistory } from '~/utils/types/order-history';
+import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;
@@ -38,7 +39,7 @@ class OrderModule extends HttpFactory {
 	 * Updates order status
 	 * @returns
 	 */
-	async updateOrderStatus(order_no: string, customer_no: string, status: string): Promise<UpdateOrderStatusResp> {
+	async updateStatus(order_no: string, customer_no: string, status: OrderStatus): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.UpdateOrderStatus(encodeURIComponent(order_no))}`,
@@ -50,7 +51,7 @@ class OrderModule extends HttpFactory {
 	 * Update Order
 	 * @returns
 	 */
-	async updateOrder(order_no: string, customer_no: string, payment_status: string): Promise<UpdateOrderStatusResp> {
+	async updateOrder(order_no: string, customer_no: string, payment_status: PaymentStatus): Promise<UpdateOrderStatusResp> {
 		return await this.call<UpdateOrderStatusResp>({
 			method: 'PATCH',
 			url: `${this.RESOURCE.Update(encodeURIComponent(order_no))}`,

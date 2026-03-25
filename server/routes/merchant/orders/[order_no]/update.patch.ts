@@ -6,6 +6,10 @@ export default defineEventHandler(async (event) => {
 		const data = await readBody(event);
 		const order_no = getRouterParams(event).order_no;
 
+		if (!order_no) {
+			throw new Error('Order not found');
+		}
+
 		const result = await signedFetch(event, `${Routes.Orders.Update(order_no)}`, {
 			method: 'PATCH',
 			body: data,
