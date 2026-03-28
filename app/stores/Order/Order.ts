@@ -141,7 +141,7 @@ export const useOrderStore = defineStore('orderStore', {
 			}
 		},
 
-		async updateStatus(order_no: string, customer_no: string, status: OrderStatus, type: 'order' | 'sale'): Promise<boolean> {
+		async updateStatus(order_no: string, customer_no: string, status: OrderStatus, type: string): Promise<boolean> {
 			const { $api } = useNuxtApp();
 			this.updating = true;
 

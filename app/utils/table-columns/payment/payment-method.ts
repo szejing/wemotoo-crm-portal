@@ -33,7 +33,7 @@ export function getPaymentMethodColumns(t: TranslateFn): TableColumn<PaymentMeth
 							'class': 'size-5',
 							'modelValue': row.original.is_active,
 							'disabled': false,
-							'onUpdate:modelValue': (value: boolean) => paymentMethodStore.updateStatus(row.original, value),
+							'onUpdate:modelValue': (value: unknown) => paymentMethodStore.updateStatus(row.original, value as boolean),
 						}),
 					],
 				);

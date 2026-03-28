@@ -211,7 +211,6 @@ import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
-import type { Order } from '~/utils/types/order';
 import type { OrderHistory } from '~/utils/types/order-history';
 
 const orderStore = useOrderStore();
@@ -362,7 +361,7 @@ const executeOrderStatusUpdate = async (new_status: OrderStatus) => {
 	}
 
 	try {
-		const shouldStay = await orderStore.updateStatus(order.value.order_no, order.value.customer.customer_no, new_status);
+		const shouldStay = await orderStore.updateStatus(order.value.order_no, order.value.customer.customer_no, new_status, type.value);
 		if (shouldStay) {
 			await getOrderDetails();
 			successNotification(t('components.orderDetail.statusUpdateSuccess'));

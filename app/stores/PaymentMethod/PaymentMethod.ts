@@ -68,7 +68,7 @@ export const usePaymentMethodStore = defineStore('paymentMethodStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$orderby: 'updated_at desc',
+					$orderby: 'short_desc asc',
 				};
 
 				// Only add $filter if it's not empty
