@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.ProdTypes.Single(Number(id))}`, {
 			method: 'GET',
 			body: data,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

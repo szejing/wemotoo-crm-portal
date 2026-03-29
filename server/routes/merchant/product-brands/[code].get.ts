@@ -5,9 +5,16 @@ export default defineEventHandler(async (event) => {
 	try {
 		const code = getRouterParams(event).code;
 
+		if (!code) {
+			throw createError({
+				statusCode: 400,
+				statusMessage: 'Brand Code is required',
+			});
+		}
+
 		const result = await signedFetch(event, `${Routes.ProductBrands.Single(code)}`, {
 			method: 'GET',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

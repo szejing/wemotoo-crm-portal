@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.Auth.PasswordReset()}`, {
 			method: 'POST',
 			body: { 'email_address': data.email_address },
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

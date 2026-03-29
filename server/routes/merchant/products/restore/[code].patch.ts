@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
 		const result = await signedFetch(event, `${Routes.Products.Restore(code)}`, {
 			method: 'PATCH',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

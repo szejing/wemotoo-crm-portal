@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
 		const result = await $fetch(`${Routes.Products.DeleteVariant(code, variant_code)}`, {
 			method: 'DELETE',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

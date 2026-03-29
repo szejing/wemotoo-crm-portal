@@ -3,7 +3,6 @@ import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const config = useRuntimeConfig(event);
 		const cust_no = getRouterParams(event).cust_no;
 
 		if (!cust_no) {

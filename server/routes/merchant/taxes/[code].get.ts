@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.Taxes.Single(code)}`, {
 			method: 'GET',
 			body: data,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

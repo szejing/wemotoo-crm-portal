@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
 		const result = await signedFetch(event, `${Routes.ProdVariants.SingleByProdCode(code)}`, {
 			method: 'GET',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

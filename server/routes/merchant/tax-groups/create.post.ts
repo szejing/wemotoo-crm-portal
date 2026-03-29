@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.TaxGroups.Create()}`, {
 			method: 'POST',
 			body: data,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

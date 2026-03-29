@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
 		const result = await signedFetch(event, Routes.CrmUsers.Single(id), {
 			method: 'GET',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

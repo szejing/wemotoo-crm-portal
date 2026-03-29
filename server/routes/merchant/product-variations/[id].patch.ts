@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 			method: 'PATCH',
 			query: query,
 			body: data,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

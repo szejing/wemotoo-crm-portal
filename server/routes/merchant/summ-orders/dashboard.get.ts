@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.SummOrders.Dashboard()}`, {
 			method: 'GET',
 			query,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

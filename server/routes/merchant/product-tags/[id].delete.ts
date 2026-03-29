@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
 		const result = await signedFetch(event, `${Routes.ProdTags.Delete(Number(id))}`, {
 			method: 'DELETE',
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;

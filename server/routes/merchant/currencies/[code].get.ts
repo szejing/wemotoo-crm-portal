@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 		const result = await signedFetch(event, `${Routes.Currencies.Single(code)}`, {
 			method: 'GET',
 			body: data,
-			});
+		});
 		return result;
 	} catch (err) {
 		return err;
