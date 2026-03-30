@@ -91,6 +91,7 @@ export type SummSalePayment = {
 };
 
 export type SummSaleCustomer = {
+	biz_date: Date;
 	customer_no: string;
 	customer_name: string;
 	currency_code: string;

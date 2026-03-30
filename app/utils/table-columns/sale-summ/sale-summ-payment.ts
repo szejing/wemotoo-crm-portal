@@ -49,27 +49,6 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 		},
 
 		{
-			accessorKey: 'void_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.voidAmt')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.void_amt ?? 0, row.original.currency_code)),
-				]);
-			},
-			footer: ({ column }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h(
-						'p',
-						{ class: 'font-medium text-neutral-900' },
-						formatCurrency(
-							column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSalePayment>) => acc + (row.original.void_amt ?? 0), 0),
-							column.getFacetedRowModel().rows[0]?.original.currency_code,
-						),
-					),
-				]);
-			},
-		},
-		{
 			accessorKey: 'payment_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.paymentAmt')),
 			cell: ({ row }) => {
@@ -90,6 +69,7 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 				]);
 			},
 		},
+
 		{
 			accessorKey: 'total_txns',
 			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),

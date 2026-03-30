@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { SummSaleCustomer } from '~/utils/types/summ-sales';
-import { formatCurrency, OrderStatus } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
 import { getSortableHeader } from '../sortable';
 
@@ -9,6 +9,13 @@ type TranslateFn = (key: string) => string;
 
 export function getSaleSummCustomerColumns(t: TranslateFn): TableColumn<SummSaleCustomer>[] {
 	return [
+		{
+			accessorKey: 'biz_date',
+			header: ({ column }) => getSortableHeader(column, t('table.date')),
+			cell: ({ row }) => {
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, getFormattedDate(row.original.biz_date))]);
+			},
+		},
 		{
 			accessorKey: 'customer',
 			header: ({ column }) => getSortableHeader(column, t('table.customer')),

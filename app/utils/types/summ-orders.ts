@@ -79,6 +79,7 @@ export type SummOrderItem = {
 };
 
 export type SummOrderCustomer = {
+	biz_date: Date;
 	customer_no: string;
 	customer_name: string;
 	currency_code: string;
