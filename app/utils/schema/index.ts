@@ -36,6 +36,7 @@ import { UpdateTaxRuleValidation } from './TaxRule/Update/TaxRuleValidation';
 import { CreateCRMUserValidation } from './CRMUser/Create/CRMUserValidation';
 import { ChangePasswordValidation } from './CRMUser/ChangePassword/ChangePasswordValidation';
 import { CreateDiscountValidation } from './Discount/Create/CreateDiscountValidation';
+import { CreateVoucherValidation } from './Voucher/Create/CreateVoucherValidation';
 
 export {
 	LoginValidation,
@@ -80,4 +81,5 @@ export {
 	CreateCRMUserValidation,
 	ChangePasswordValidation,
 	CreateDiscountValidation,
+	CreateVoucherValidation,
 };

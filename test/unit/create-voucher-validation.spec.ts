@@ -1,0 +1,40 @@
+import { describe, expect, it } from 'vitest';
+import { CreateVoucherValidation } from '../../app/utils/schema/Voucher/Create/CreateVoucherValidation';
+
+const t = (key: string) => key;
+
+describe('CreateVoucherValidation', () => {
+	it('accepts minimal valid payload', () => {
+		const schema = CreateVoucherValidation(t);
+		const parsed = schema.parse({
+			code: 'V1',
+			name: 'Test',
+			status: 'active',
+		});
+		expect(parsed.code).toBe('V1');
+	});
+
+	it('rejects empty code', () => {
+		const schema = CreateVoucherValidation(t);
+		expect(() =>
+			schema.parse({
+				code: '',
+				name: 'Test',
+				status: 'active',
+			}),
+		).toThrow();
+	});
+
+	it('rejects end before start', () => {
+		const schema = CreateVoucherValidation(t);
+		expect(() =>
+			schema.parse({
+				code: 'V1',
+				name: 'Test',
+				status: 'active',
+				starts_at: '2026-02-01T00:00:00.000Z',
+				ends_at: '2026-01-01T00:00:00.000Z',
+			}),
+		).toThrow();
+	});
+});

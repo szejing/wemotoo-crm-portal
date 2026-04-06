@@ -61,6 +61,7 @@
 		"addCategory": "Tambah Kategori",
 		"addBrand": "Tambah Jenama",
 		"addDiscount": "Tambah Diskaun",
+		"addVoucher": "Tambah baucar",
 		"addTag": "Tambah Tag",
 		"addOption": "Tambah Pilihan",
 		"addTaxRule": "Tambah Peraturan Cukai",
@@ -75,7 +76,9 @@
 	"form": {
 		"code": "Kod",
 		"name": "Nama",
-		"description": "Keterangan"
+		"description": "Keterangan",
+		"discountCode": "Kod diskaun",
+		"usageLimit": "Had penggunaan"
 	},
 	"nav": {
 		"main": "Utama",
@@ -100,6 +103,7 @@
 		"discounts": "Diskaun",
 		"campaigns": "Kempen",
 		"coupons": "Kupon",
+		"vouchers": "Baucar",
 		"automations": "Automasi",
 		"operation": "Operasi",
 		"staffs": "Kakitangan",
@@ -263,6 +267,12 @@
 			"percentageValueRange": "Peratusan mesti lebih daripada 0 dan tidak melebihi 100",
 			"fixedValuePositive": "Amaun diskaun tetap mesti lebih daripada 0",
 			"endBeforeStart": "Tarikh tamat mesti pada atau selepas tarikh mula"
+		},
+		"voucher": {
+			"codeRequired": "Kod baucar wajib",
+			"nameRequired": "Nama wajib",
+			"statusRequired": "Status wajib",
+			"endBeforeStart": "Tarikh tamat mesti pada atau selepas tarikh mula"
 		}
 	},
 	"pages": {
@@ -358,6 +368,7 @@
 		"categoriesTitle": "Wemotoo CRM - Kategori",
 		"brandsTitle": "Wemotoo CRM - Jenama",
 		"discountsTitle": "Wemotoo CRM - Diskaun",
+		"vouchersTitle": "Wemotoo CRM - Baucar",
 		"tagsTitle": "Wemotoo CRM - Tag",
 		"optionsTitle": "Wemotoo CRM - Pilihan",
 		"productDetail": "Butiran Produk",
@@ -376,8 +387,12 @@
 		"saveDraft": "Simpan Draf",
 		"createProductButton": "Cipta Produk",
 		"createDiscount": "Cipta Diskaun",
+		"createVoucher": "Cipta baucar",
 		"editDiscount": "Kemaskini Diskaun",
+		"editVoucher": "Kemaskini baucar",
 		"discountDetails": "Butiran Diskaun",
+		"voucherDetails": "Butiran baucar",
+		"confirmDeleteVoucher": "Adakah anda pasti mahu padam baucar ini?",
 		"createCategory": "Cipta Kategori",
 		"createTag": "Cipta Tag",
 		"createBrand": "Cipta Jenama",
@@ -501,6 +516,7 @@
 		"noCustomersFound": "Tiada pelanggan dijumpai.",
 		"noCrmUsersFound": "Tiada pengguna CRM dijumpai.",
 		"noDiscountsFound": "Tiada diskaun dijumpai.",
+		"noVouchersFound": "Tiada baucar dijumpai.",
 		"noAffiliatesFound": "Tiada ahli gabungan dijumpai.",
 		"crmUserNotFound": "Pengguna CRM tidak dijumpai.",
 		"backToCrmUsers": "Kembali ke Pengguna CRM",
@@ -636,7 +652,10 @@
 		"productThumbnail": "Imej produk",
 		"duration": "Tempoh",
 		"visible": "Tunjukkan di kedai",
-		"lastUpdated": "Kemas kini terakhir"
+		"lastUpdated": "Kemas kini terakhir",
+		"rule": "Peraturan",
+		"usage": "Penggunaan",
+		"linkedDiscount": "Diskaun dipautkan"
 	},
 	"options": {
 		"all": "Semua",
@@ -729,6 +748,7 @@
 			"searchCategories": "Cari kategori...",
 			"searchBrands": "Cari jenama...",
 			"searchDiscounts": "Cari kod diskaun, nama, atau keterangan...",
+			"searchVouchers": "Cari kod baucar, nama, atau diskaun dipautkan...",
 			"searchByNamePhoneEmail": "Cari mengikut Nama / No. Telefon / E-mel...",
 			"activeFilters": "Penapis aktif:",
 			"listing": "Senarai",
@@ -995,6 +1015,14 @@
 			"nameHint": "Nama dalaman atau paparan untuk diskaun ini",
 			"reviewTitle": "Semak diskaun anda",
 			"reviewSubtitle": "Sahkan butiran sebelum mencipta"
+		},
+		"voucherForm": {
+			"createVoucher": "Cipta baucar",
+			"validityPeriod": "Tempoh sah",
+			"sectionSubtitle": "Kod, nama, diskaun dipautkan dan tempoh sah",
+			"codeHint": "Kod pelanggan masukkan semasa pembayaran",
+			"nameHint": "Nama dalaman untuk baucar ini",
+			"discountCodeHint": "Pilihan: program diskaun sedia ada yang baucar ini gunakan"
 		},
 		"orderInput": {
 			"status": "Status",

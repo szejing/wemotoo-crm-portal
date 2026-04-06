@@ -51,6 +51,7 @@ import OrderSummaryModule from './summ-order/summ-order';
 import TaxGroupModule from './tax-groups/tax-group';
 import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
+import VoucherModule from './voucher/voucher';
 
 const odata: BaseODataReq = { $top: 10 };
 const dashboardRange = { start_date: '2025-01-01', end_date: '2025-01-31' };
@@ -698,6 +699,34 @@ describe('AffiliateModule', () => {
 		await mod.getMyReport({ user: { id: 'u' } });
 		expect(lastFetch().url).toBe(MerchantRoutes.Affiliates.MyReport());
 		expect(lastFetch().opts.query).toEqual({ user: { id: 'u' } });
+	});
+});
+
+describe('VoucherModule', () => {
+	const mod = new VoucherModule();
+	const createPayload = {
+		code: 'SUMMER10',
+		name: 'Summer voucher',
+		status: 'active',
+	};
+
+	it('routes', async () => {
+		await mod.getMany(odata);
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Many());
+		expect(lastFetch().opts.query).toEqual(odata);
+		await mod.getSingle('V1');
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Single('V1'));
+		await mod.create(createPayload);
+		expect(lastFetch().opts.method).toBe('POST');
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Create());
+		expect(lastFetch().opts.body).toEqual(createPayload);
+		await mod.update('V1', { name: 'Updated' });
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Update('V1'));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual({ name: 'Updated' });
+		await mod.remove('V1');
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Delete('V1'));
+		expect(lastFetch().opts.method).toBe('DELETE');
 	});
 });
 

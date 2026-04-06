@@ -28,6 +28,7 @@ import { getAppointmentColumns } from './appointment';
 import { getCustomerOrderHistoryColumns } from './customer-order-history';
 import { getCustomerAppointmentColumns } from './customer-appointment';
 import { getDiscountColumns } from './discount/discount';
+import { getVoucherColumns } from './voucher/voucher';
 
 export {
 	getCustomerColumns,
@@ -61,4 +62,5 @@ export {
 	getCustomerOrderHistoryColumns,
 	getCustomerAppointmentColumns,
 	getDiscountColumns,
+	getVoucherColumns,
 };

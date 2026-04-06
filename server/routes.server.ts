@@ -200,4 +200,11 @@ export const Routes = {
 		Delete: (code: string) => `${API_PATH.DISCOUNTS}/${code}`,
 		Restore: (code: string) => `${API_PATH.DISCOUNTS}/restore/${code}`,
 	},
+	Vouchers: {
+		Create: () => `vouchers/`,
+		Many: () => `vouchers/`,
+		Single: (code: string) => `vouchers/${code}`,
+		Update: (code: string) => `vouchers/${code}`,
+		Delete: (code: string) => `vouchers/${code}`,
+	},
 };
