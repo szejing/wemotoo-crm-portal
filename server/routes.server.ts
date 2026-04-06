@@ -192,4 +192,12 @@ export const Routes = {
 		Delete: (code: string) => `${API_PATH.TAX_RULES}/${code}`,
 		Restore: (code: string) => `${API_PATH.TAX_RULES}/restore/${code}`,
 	},
+	Discounts: {
+		Create: () => `${API_PATH.DISCOUNTS}/`,
+		Many: () => `${API_PATH.DISCOUNTS}/`,
+		Single: (code: string) => `${API_PATH.DISCOUNTS}/${code}`,
+		Update: (code: string) => `${API_PATH.DISCOUNTS}/${code}`,
+		Delete: (code: string) => `${API_PATH.DISCOUNTS}/${code}`,
+		Restore: (code: string) => `${API_PATH.DISCOUNTS}/restore/${code}`,
+	},
 };

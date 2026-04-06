@@ -1,3 +1,4 @@
+import { useDiscountStore } from './discount/discount';
 import { useProductTagStore } from './ProductTag/ProductTag';
 import { useProductCategoryStore } from './ProductCategory/ProductCategory';
 import { useProductVariationStore } from './ProductVariation/ProductVariation';
@@ -44,4 +45,5 @@ export {
 	useTaxStore,
 	useTaxGroupStore,
 	useTaxRuleStore,
+	useDiscountStore,
 };

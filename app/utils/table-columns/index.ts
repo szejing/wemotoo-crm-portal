@@ -27,6 +27,7 @@ import { getAffiliateColumns } from './affiliate';
 import { getAppointmentColumns } from './appointment';
 import { getCustomerOrderHistoryColumns } from './customer-order-history';
 import { getCustomerAppointmentColumns } from './customer-appointment';
+import { getDiscountColumns } from './discount/discount';
 
 export {
 	getCustomerColumns,
@@ -59,4 +60,5 @@ export {
 	getAppointmentColumns,
 	getCustomerOrderHistoryColumns,
 	getCustomerAppointmentColumns,
+	getDiscountColumns,
 };

@@ -60,6 +60,7 @@
 		"addProduct": "Tambah Produk",
 		"addCategory": "Tambah Kategori",
 		"addBrand": "Tambah Jenama",
+		"addDiscount": "Tambah Diskaun",
 		"addTag": "Tambah Tag",
 		"addOption": "Tambah Pilihan",
 		"addTaxRule": "Tambah Peraturan Cukai",
@@ -70,6 +71,11 @@
 		"confirm": "Konfirmasi",
 		"apply": "Guna",
 		"phoneNo": "No. telefon"
+	},
+	"form": {
+		"code": "Kod",
+		"name": "Nama",
+		"description": "Keterangan"
 	},
 	"nav": {
 		"main": "Utama",
@@ -91,6 +97,7 @@
 		"options": "Pilihan",
 		"customers": "Pelanggan",
 		"marketing": "Pemasaran",
+		"discounts": "Diskaun",
 		"campaigns": "Kempen",
 		"coupons": "Kupon",
 		"automations": "Automasi",
@@ -247,6 +254,15 @@
 			"phoneNumberInvalid": "Nombor telefon mesti 6–15 digit",
 			"roleRequired": "Peranan wajib",
 			"isActiveRequired": "Status wajib"
+		},
+		"discount": {
+			"codeRequired": "Kod diskaun wajib",
+			"nameRequired": "Nama wajib",
+			"statusRequired": "Status wajib",
+			"filterValueRequired": "Nilai penapis wajib",
+			"percentageValueRange": "Peratusan mesti lebih daripada 0 dan tidak melebihi 100",
+			"fixedValuePositive": "Amaun diskaun tetap mesti lebih daripada 0",
+			"endBeforeStart": "Tarikh tamat mesti pada atau selepas tarikh mula"
 		}
 	},
 	"pages": {
@@ -341,6 +357,7 @@
 		"productsListing": "Produk",
 		"categoriesTitle": "Wemotoo CRM - Kategori",
 		"brandsTitle": "Wemotoo CRM - Jenama",
+		"discountsTitle": "Wemotoo CRM - Diskaun",
 		"tagsTitle": "Wemotoo CRM - Tag",
 		"optionsTitle": "Wemotoo CRM - Pilihan",
 		"productDetail": "Butiran Produk",
@@ -358,6 +375,9 @@
 		"addNewProduct": "Tambah Produk Baharu",
 		"saveDraft": "Simpan Draf",
 		"createProductButton": "Cipta Produk",
+		"createDiscount": "Cipta Diskaun",
+		"editDiscount": "Kemaskini Diskaun",
+		"discountDetails": "Butiran Diskaun",
 		"createCategory": "Cipta Kategori",
 		"createTag": "Cipta Tag",
 		"createBrand": "Cipta Jenama",
@@ -480,6 +500,7 @@
 		"noPaymentMethodsFound": "Tiada kaedah pembayaran dijumpai.",
 		"noCustomersFound": "Tiada pelanggan dijumpai.",
 		"noCrmUsersFound": "Tiada pengguna CRM dijumpai.",
+		"noDiscountsFound": "Tiada diskaun dijumpai.",
 		"noAffiliatesFound": "Tiada ahli gabungan dijumpai.",
 		"crmUserNotFound": "Pengguna CRM tidak dijumpai.",
 		"backToCrmUsers": "Kembali ke Pengguna CRM",
@@ -707,6 +728,7 @@
 			"searchOrderNo": "Cari no. pesanan...",
 			"searchCategories": "Cari kategori...",
 			"searchBrands": "Cari jenama...",
+			"searchDiscounts": "Cari kod diskaun, nama, atau keterangan...",
 			"searchByNamePhoneEmail": "Cari mengikut Nama / No. Telefon / E-mel...",
 			"activeFilters": "Penapis aktif:",
 			"listing": "Senarai",
@@ -964,6 +986,15 @@
 			"addressAndLocation": "Alamat & Lokasi",
 			"taxConfiguration": "Konfigurasi Cukai",
 			"createOutlet": "Cipta Cawangan"
+		},
+		"discountForm": {
+			"createDiscount": "Cipta Diskaun",
+			"validityPeriod": "Tempoh sah",
+			"sectionSubtitle": "Kod, nama, penerangan dan tempoh sah",
+			"codeHint": "Kod unik untuk pelanggan atau kakitangan kenal pasti diskaun ini",
+			"nameHint": "Nama dalaman atau paparan untuk diskaun ini",
+			"reviewTitle": "Semak diskaun anda",
+			"reviewSubtitle": "Sahkan butiran sebelum mencipta"
 		},
 		"orderInput": {
 			"status": "Status",

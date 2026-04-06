@@ -59,18 +59,20 @@ const default_navigations = [
 				icon: ICONS.CUSTOMER_GROUP_ROUNDED,
 				to: '/customers',
 			},
-			// Marketing - Discussion (coming soon: Campaigns, Coupons, Automations)
-			// {
-			// 	label: 'nav.marketing',
-			// 	icon: ICONS.SPARKLES,
-			// 	to: '/marketing/campaigns',
-			// 	value: 'marketing',
-			// 	children: [
-			// 		{ label: 'nav.campaigns', to: '/marketing/campaigns' },
-			// 		{ label: 'nav.coupons', to: '/marketing/coupons' },
-			// 		{ label: 'nav.automations', to: '/marketing/automations' },
-			// 	],
-			// },
+			// Marketing
+			{
+				label: 'nav.marketing',
+				icon: ICONS.SPARKLES,
+				to: '/marketing',
+				value: 'marketing',
+				children: [
+					{ label: 'nav.affiliates', to: '/marketing/affiliates' },
+					{ label: 'nav.discounts', to: '/marketing/discounts' },
+					{ label: 'nav.vouchers', to: '/marketing/vouchers' },
+					// { label: 'nav.campaigns', to: '/marketing/campaigns' },
+					// { label: 'nav.automations', to: '/marketing/automations' },
+				],
+			},
 			// Operation
 			{
 				label: 'nav.operation',
