@@ -41,7 +41,12 @@ const formRef = ref<{ submit: () => void } | null>(null);
 
 const isDirty = computed(() => {
 	const d = new_discount.value;
-	return !!(d.code?.trim() || d.name?.trim() || d.description?.trim());
+	return !!(
+		d.code?.trim() ||
+		d.description?.trim() ||
+		(d.conditions?.length ?? 0) > 0 ||
+		d.usage_limit != null
+	);
 });
 
 useLeavePageGuard(isDirty, {

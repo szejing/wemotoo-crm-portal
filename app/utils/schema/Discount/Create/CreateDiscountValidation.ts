@@ -1,56 +1,53 @@
 import { z } from 'zod';
-import { DiscountConditionType, DiscountRuleType, FilterCondition } from 'wemotoo-common';
+import {
+	AllocationType,
+	DiscountConditionOperator,
+	DiscountConditionType,
+	DiscountRuleType,
+	FilterCondition,
+	FilterOperator,
+} from 'wemotoo-common';
 
 type TranslateFn = (key: string) => string;
 
+const optionalNonNegativeNumber = z.preprocess((val) => {
+	if (val === '' || val === null || val === undefined) return undefined;
+	const n = typeof val === 'number' ? val : Number(val);
+	if (Number.isNaN(n)) return undefined;
+	return n;
+}, z.number().min(0).optional());
+
 export function CreateDiscountValidation(t: TranslateFn) {
-	const discountFilterSchema = z.object({
-		operator: z.enum(['AND', 'OR']),
-		condition: z.nativeEnum(FilterCondition),
-		value: z.string({ message: t('validation.discount.filterValueRequired') }).min(1, t('validation.discount.filterValueRequired')),
-	});
-
 	const discountConditionSchema = z.object({
+		operator: z.nativeEnum(DiscountConditionOperator),
 		type: z.nativeEnum(DiscountConditionType),
-		filters: z.array(discountFilterSchema),
+		min_amount: optionalNonNegativeNumber,
+		max_amount: optionalNonNegativeNumber,
+		filter_operator: z.nativeEnum(FilterOperator).optional(),
+		filter_condition: z.nativeEnum(FilterCondition).optional(),
+		filter_value: z.string().optional(),
 	});
-
-	const discountRuleSchema = z
-		.object({
-			type: z.nativeEnum(DiscountRuleType),
-			value: z.number(),
-			conditions: z.array(discountConditionSchema),
-		})
-		.superRefine((data, ctx) => {
-			if (data.type === DiscountRuleType.PERCENTAGE) {
-				if (data.value <= 0 || data.value > 100) {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: t('validation.discount.percentageValueRange'),
-						path: ['value'],
-					});
-				}
-			} else if (data.type === DiscountRuleType.FIXED) {
-				if (data.value <= 0) {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: t('validation.discount.fixedValuePositive'),
-						path: ['value'],
-					});
-				}
-			}
-		});
 
 	return z
 		.object({
-			code: z.string({ message: t('validation.discount.codeRequired') }).min(1, t('validation.discount.codeRequired')),
-			name: z.string({ message: t('validation.discount.nameRequired') }).min(1, t('validation.discount.nameRequired')),
-			description: z.string().optional(),
-			status: z.string({ message: t('validation.discount.statusRequired') }).min(1, t('validation.discount.statusRequired')),
+			code: z
+				.string()
+				.optional()
+				.transform((v) => {
+					const s = v?.trim();
+					return s === '' || s === undefined ? undefined : s;
+				}),
+			description: z
+				.string({ message: t('validation.discount.descriptionRequired') })
+				.min(1, t('validation.discount.descriptionRequired')),
+			is_disabled: z.boolean(),
 			starts_at: z.string().optional(),
 			ends_at: z.string().optional(),
 			usage_limit: z.number().int().positive().optional(),
-			rule: discountRuleSchema,
+			rule_type: z.nativeEnum(DiscountRuleType),
+			rule_value: z.number(),
+			allocation: z.nativeEnum(AllocationType).optional(),
+			conditions: z.array(discountConditionSchema).default([]),
 		})
 		.superRefine((data, ctx) => {
 			if (data.starts_at && data.ends_at && data.starts_at > data.ends_at) {
@@ -60,5 +57,45 @@ export function CreateDiscountValidation(t: TranslateFn) {
 					path: ['ends_at'],
 				});
 			}
+
+			if (data.rule_type === DiscountRuleType.PERCENTAGE) {
+				if (data.rule_value <= 0 || data.rule_value > 100) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: t('validation.discount.percentageValueRange'),
+						path: ['rule_value'],
+					});
+				}
+			} else if (data.rule_type === DiscountRuleType.FIXED) {
+				if (data.rule_value <= 0) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: t('validation.discount.fixedValuePositive'),
+						path: ['rule_value'],
+					});
+				}
+			} else if (data.rule_type === DiscountRuleType.FREE_SHIPPING) {
+				if (data.rule_value < 0) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: t('validation.discount.freeShippingValueNonNegative'),
+						path: ['rule_value'],
+					});
+				}
+			}
+
+			data.conditions.forEach((cond, index) => {
+				if (
+					cond.min_amount != null &&
+					cond.max_amount != null &&
+					cond.min_amount > cond.max_amount
+				) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: t('validation.discount.minAmountGtMax'),
+						path: ['conditions', index, 'max_amount'],
+					});
+				}
+			});
 		});
 }

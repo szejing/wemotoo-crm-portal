@@ -1,68 +1,68 @@
-import type { DiscountRuleType, DiscountConditionType, FilterCondition } from 'wemotoo-common';
+import type {
+	AllocationType,
+	DiscountConditionOperator,
+	DiscountConditionType,
+	DiscountRuleType,
+	FilterCondition,
+	FilterOperator,
+} from 'wemotoo-common';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 
-export interface CreateDiscountFilterRequest {
-	operator: 'AND' | 'OR';
-	condition: FilterCondition;
-	value: string;
-}
-
+/** Matches ecommerce-nestjs `CreateDiscountConditionDto` (flat filter fields). */
 export interface CreateDiscountConditionRequest {
+	operator: DiscountConditionOperator;
 	type: DiscountConditionType;
-	filters: CreateDiscountFilterRequest[];
+	min_amount?: number;
+	max_amount?: number;
+	filter_operator?: FilterOperator;
+	filter_condition?: FilterCondition;
+	filter_value?: string;
 }
 
-export interface CreateDiscountRuleRequest {
-	type: DiscountRuleType;
-	value: number;
-	conditions: CreateDiscountConditionRequest[];
-}
-
+/** Matches ecommerce-nestjs `CreateDiscountDto`. */
 export interface CreateDiscountRequest {
-	code: string;
-	name: string;
+	code?: string;
 	description?: string;
-	status: string;
+	is_disabled?: boolean;
 	starts_at?: string;
 	ends_at?: string;
 	usage_limit?: number;
-	rule: CreateDiscountRuleRequest;
+	rule_type: DiscountRuleType;
+	rule_value: number;
+	allocation?: AllocationType;
+	conditions?: CreateDiscountConditionRequest[];
+	metadata?: Record<string, unknown>;
 }
 
 export type UpdateDiscountRequest = Partial<CreateDiscountRequest>;
 
-export interface DiscountFilterResponse {
-	id: number;
-	operator: 'AND' | 'OR';
-	condition: FilterCondition;
-	value: string;
-}
-
 export interface DiscountConditionResponse {
 	id: number;
-	type: DiscountConditionType;
-	filters: DiscountFilterResponse[];
-}
-
-export interface DiscountRuleResponse {
-	id: number;
-	type: DiscountRuleType;
-	value: string;
-	conditions: DiscountConditionResponse[];
+	operator: string;
+	type: string;
+	min_amount?: number | null;
+	max_amount?: number | null;
+	filter_operator?: string | null;
+	filter_condition?: string | null;
+	filter_value?: string | null;
+	metadata?: Record<string, unknown>;
 }
 
 export interface DiscountResponse {
 	code: string;
-	name: string;
-	description: string | null;
-	status: string;
+	description: string;
+	is_disabled: boolean;
 	starts_at: string | null;
 	ends_at: string | null;
 	usage_limit: number | null;
 	usage_count: number;
-	rule: DiscountRuleResponse | null;
-	created_at: string;
-	updated_at: string;
+	rule_type: string;
+	rule_value: number;
+	allocation: string | null;
+	conditions: DiscountConditionResponse[];
+	metadata?: Record<string, unknown>;
+	created_at?: string;
+	updated_at?: string;
 }
 
 export type BaseDiscountResponse = DiscountResponse;

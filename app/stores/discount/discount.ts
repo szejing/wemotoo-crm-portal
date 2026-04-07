@@ -3,7 +3,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { DiscountResponse, CreateDiscountRequest, UpdateDiscountRequest } from '~/repository/modules/discount/discount.type';
-import { DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 
 type DiscountFilter = {
 	query: string;
@@ -19,19 +19,19 @@ const initialDiscountFilter: DiscountFilter = {
 	status: undefined,
 };
 
-const initialEmptyDiscount: Partial<CreateDiscountRequest> = {
+const initialEmptyDiscount: Partial<CreateDiscountRequest> & {
+	conditions: NonNullable<CreateDiscountRequest['conditions']>;
+} = {
 	code: '',
-	name: '',
 	description: '',
-	status: 'active',
+	is_disabled: false,
 	usage_limit: undefined,
 	starts_at: undefined,
 	ends_at: undefined,
-	rule: {
-		type: DiscountRuleType.PERCENTAGE,
-		value: 10,
-		conditions: [],
-	},
+	rule_type: DiscountRuleType.PERCENTAGE,
+	rule_value: 10,
+	allocation: AllocationType.BILL,
+	conditions: [],
 };
 
 export const useDiscountStore = defineStore('discountStore', {
@@ -86,8 +86,10 @@ export const useDiscountStore = defineStore('discountStore', {
 					queryParams.$search = this.filter.query;
 				}
 
-				if (this.filter.status) {
-					queryParams.$filter = `status eq '${this.filter.status}'`;
+				if (this.filter.status === 'active') {
+					queryParams.$filter = 'is_disabled eq false';
+				} else if (this.filter.status === 'inactive') {
+					queryParams.$filter = 'is_disabled eq true';
 				}
 
 				const response = await $api.discount.getMany(queryParams);
@@ -143,8 +145,8 @@ export const useDiscountStore = defineStore('discountStore', {
 			}
 		},
 
-		async updateStatus(discount: DiscountResponse, status: string) {
-			await this.updateDiscount(discount.code, { status });
+		async updateStatus(discount: DiscountResponse, active: boolean) {
+			await this.updateDiscount(discount.code, { is_disabled: !active });
 		},
 
 		async updateDiscount(code: string, payload: UpdateDiscountRequest) {

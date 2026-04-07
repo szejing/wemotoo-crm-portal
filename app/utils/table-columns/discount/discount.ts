@@ -12,21 +12,20 @@ export function getDiscountColumns(t: TranslateFn): TableColumn<DiscountResponse
 			accessorKey: 'code',
 			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
+				const desc = row.original.description?.trim();
 				return h('div', { class: 'flex flex-col gap-1' }, [
 					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
-					h('h5', { class: 'text-neutral-400' }, row.original.name),
+					h('h5', { class: 'text-neutral-400' }, desc || '—'),
 				]);
 			},
 		},
 		{
-			accessorKey: 'rule',
+			accessorKey: 'rule_type',
 			header: t('table.rule'),
 			cell: ({ row }) => {
-				const rule = row.original.rule;
-				if (!rule) return '-';
 				return h('div', { class: 'flex flex-col' }, [
-					h('span', { class: 'text-sm font-medium' }, rule.type),
-					h('span', { class: 'text-xs text-neutral-500' }, rule.value.toString()),
+					h('span', { class: 'text-sm font-medium' }, row.original.rule_type),
+					h('span', { class: 'text-xs text-neutral-500' }, String(row.original.rule_value)),
 				]);
 			},
 		},
@@ -43,17 +42,17 @@ export function getDiscountColumns(t: TranslateFn): TableColumn<DiscountResponse
 			},
 		},
 		{
-			accessorKey: 'status',
+			accessorKey: 'is_disabled',
 			header: () => h('div', { class: 'text-center' }, t('table.active')),
 			cell: ({ row }) => {
 				const discountStore = useNuxtApp().$pinia ? useDiscountStore() : null;
-				const isActive = row.original.status === 'active';
+				const isActive = !row.original.is_disabled;
 				return h(USwitch, {
 					'class': 'size-5 mx-auto',
 					'modelValue': isActive,
 					'onUpdate:modelValue': (value: unknown) => {
 						if (discountStore) {
-							discountStore.updateStatus(row.original, value ? 'active' : 'inactive');
+							discountStore.updateStatus(row.original, Boolean(value));
 						}
 					},
 				});
