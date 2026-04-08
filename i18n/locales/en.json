@@ -1034,7 +1034,7 @@
 			"usageLimit": "Usage limit",
 			"usageLimitPlaceholder": "Unlimited if empty",
 			"disabled": "Disabled",
-			"ruleSection": "Discount offer",
+			"ruleSection": "Discount Offer",
 			"ruleType": "Discount type",
 			"ruleTypeOptionFixed": "Fixed amount",
 			"ruleTypeOptionPercentage": "Percentage",
@@ -1063,7 +1063,8 @@
 			"validityPeriod": "Validity period",
 			"sectionSubtitle": "Code, name, linked discount, and validity",
 			"codeHint": "Code customers enter at checkout",
-			"nameHint": "Internal name for this voucher",
+			"nameHint": "Name for this voucher",
+			"descriptionHint": "Optional. A few plain words about what this voucher is for—helps you spot it later.",
 			"discountCodeHint": "Optional: existing discount program this voucher applies"
 		},
 		"orderInput": {

@@ -120,6 +120,23 @@ export const useDiscountStore = defineStore('discountStore', {
 			}
 		},
 
+		/** Load discounts for pickers (e.g. voucher form) without changing listing filter/state. */
+		async fetchDiscountsForSelect(): Promise<DiscountResponse[]> {
+			const { $api } = useNuxtApp();
+			try {
+				const response = await $api.discount.getMany({
+					$top: 500,
+					$skip: 0,
+					$orderby: 'code asc',
+				});
+				return response.data ?? [];
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load discounts';
+				failedNotification(message);
+				return [];
+			}
+		},
+
 		async createDiscount(payload: CreateDiscountRequest) {
 			this.adding = true;
 			this.loading = true;

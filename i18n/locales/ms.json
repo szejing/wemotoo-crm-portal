@@ -1033,7 +1033,7 @@
 			"usageLimit": "Had penggunaan",
 			"usageLimitPlaceholder": "Tanpa had jika kosong",
 			"disabled": "Dilumpuhkan",
-			"ruleSection": "Tawaran diskaun",
+			"ruleSection": "Tawaran Diskaun",
 			"ruleType": "Jenis diskaun",
 			"ruleTypeOptionFixed": "Jumlah tetap",
 			"ruleTypeOptionPercentage": "Peratus",
@@ -1062,7 +1062,8 @@
 			"validityPeriod": "Tempoh sah",
 			"sectionSubtitle": "Kod, nama, diskaun dipautkan dan tempoh sah",
 			"codeHint": "Kod pelanggan masukkan semasa pembayaran",
-			"nameHint": "Nama dalaman untuk baucar ini",
+			"nameHint": "Nama untuk baucar ini",
+			"descriptionHint": "Tidak wajib. Tulis beberapa perkataan mudah tentang baucar ini—senang cari nanti.",
 			"discountCodeHint": "Pilihan: program diskaun sedia ada yang baucar ini gunakan"
 		},
 		"orderInput": {

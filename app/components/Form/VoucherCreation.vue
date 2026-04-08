@@ -21,43 +21,57 @@
 							<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.codeHint') }}</p>
 							<UInput v-model="new_voucher.code" />
 						</UFormField>
+
 						<UFormField :label="$t('form.name')" name="name" required>
 							<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.nameHint') }}</p>
 							<UInput v-model="new_voucher.name" />
 						</UFormField>
+
 						<UFormField :label="$t('form.description')" name="description">
+							<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.descriptionHint') }}</p>
 							<UInput v-model="new_voucher.description" />
 						</UFormField>
+
 						<UFormField :label="$t('form.discountCode')" name="discount_code">
 							<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.discountCodeHint') }}</p>
-							<UInput v-model="new_voucher.discount_code" />
+							<USelect v-model="discountCodeSelect" :items="discountSelectItems" value-attribute="value" :loading="discountOptionsLoading" class="w-full" />
 						</UFormField>
-						<UFormField :label="$t('components.voucherForm.validityPeriod')" name="ends_at">
-							<div class="flex flex-wrap items-center gap-2">
-								<UPopover v-model:open="validityPopoverOpen" :content="{ align: 'start' }" :modal="true">
-									<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="min-w-56 justify-between group">
-										<span class="truncate">{{ validityRangeLabel }}</span>
+
+						<div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
+							<UFormField class="col-span-1 sm:col-span-3" :label="$t('components.discountForm.validityStartsAt')" name="starts_at">
+								<UPopover v-model:open="startsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
+									<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="w-full min-w-0 justify-between group">
+										<span class="truncate">{{ startsAtButtonLabel }}</span>
 										<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
 									</UButton>
 									<template #content>
-										<div class="p-2">
-											<ZDateRangePicker v-model="draftValidityRange" />
-											<div class="flex flex-wrap justify-end gap-2 pt-2 border-t border-default mt-2">
-												<UButton :label="$t('common.cancel')" color="neutral" variant="ghost" @click="validityPopoverOpen = false" />
-												<UButton
-													v-if="new_voucher.starts_at || new_voucher.ends_at"
-													:label="$t('components.filter.clear')"
-													color="neutral"
-													variant="soft"
-													@click="clearValidityRange"
-												/>
-												<UButton :label="$t('common.apply')" color="primary" @click="applyValidityRange" />
+										<div class="p-2 space-y-2">
+											<ZDatePicker v-model="startsAtAsDate" :max-date="startsAtMaxDate" @close="startsAtPopoverOpen = false" />
+											<div v-if="new_voucher.starts_at" class="flex justify-end border-t border-default pt-2">
+												<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearStartsAt" />
 											</div>
 										</div>
 									</template>
 								</UPopover>
-							</div>
-						</UFormField>
+							</UFormField>
+
+							<UFormField class="col-span-1 sm:col-span-3" :label="$t('components.discountForm.validityEndsAt')" name="ends_at">
+								<UPopover v-model:open="endsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
+									<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="w-full min-w-0 justify-between group">
+										<span class="truncate">{{ endsAtButtonLabel }}</span>
+										<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
+									</UButton>
+									<template #content>
+										<div class="p-2 space-y-2">
+											<ZDatePicker v-model="endsAtAsDate" :min-date="endsAtMinDate" @close="endsAtPopoverOpen = false" />
+											<div v-if="new_voucher.ends_at" class="flex justify-end border-t border-default pt-2">
+												<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearEndsAt" />
+											</div>
+										</div>
+									</template>
+								</UPopover>
+							</UFormField>
+						</div>
 					</div>
 				</div>
 			</UCard>
@@ -71,8 +85,9 @@ import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
-import type { DateRange as PickerDateRange } from '~/components/Z/DateRangePicker.vue';
+import type { DiscountResponse } from '~/repository/modules/discount/discount.type';
 import type { CreateVoucherRequest } from '~/repository/modules/voucher/voucher.type';
+import { useDiscountStore } from '~/stores/discount/discount';
 import { useVoucherStore } from '~/stores/voucher/voucher';
 import { CreateVoucherValidation } from '~/utils/schema';
 import { ICONS } from '~/utils/icons';
@@ -82,8 +97,30 @@ const voucherSchema = computed(() => CreateVoucherValidation(t));
 
 type Schema = z.infer<ReturnType<typeof CreateVoucherValidation>>;
 
+/** USelect reserves `''` for clearing; use sentinel for “no linked discount”. */
+const selectNoneValue = '__none__' as const;
+
 const voucherStore = useVoucherStore();
+const discountStore = useDiscountStore();
 const { adding, new_voucher } = storeToRefs(voucherStore);
+
+const discountOptions = ref<DiscountResponse[]>([]);
+const discountOptionsLoading = ref(false);
+
+const discountSelectItems = computed(() => [
+	{ label: t('components.discountForm.filterNone'), value: selectNoneValue },
+	...discountOptions.value.map((d) => ({
+		label: d.description ? `${d.code} — ${d.description}` : d.code,
+		value: d.code,
+	})),
+]);
+
+const discountCodeSelect = computed({
+	get: () => (new_voucher.value.discount_code || selectNoneValue) as string,
+	set: (v: string) => {
+		new_voucher.value.discount_code = v === selectNoneValue ? '' : v;
+	},
+});
 const router = useRouter();
 const overlay = useOverlay();
 const formRef = ref();
@@ -97,56 +134,71 @@ watch(adding, (v) => {
 	else loadingModal.close();
 });
 
-const validityPopoverOpen = ref(false);
-const draftValidityRange = ref<PickerDateRange | null>(null);
+const startsAtPopoverOpen = ref(false);
+const endsAtPopoverOpen = ref(false);
 
-const pickerRangeFromVoucher = (): PickerDateRange | null => {
-	const s = new_voucher.value.starts_at;
-	const e = new_voucher.value.ends_at;
-	if (!s && !e) return null;
-	return {
-		start: s ? new Date(s) : null,
-		end: e ? new Date(e) : null,
-	};
-};
-
-watch(validityPopoverOpen, (open) => {
-	if (open) {
-		draftValidityRange.value = pickerRangeFromVoucher();
-	}
+const startsAtAsDate = computed({
+	get(): Date | null {
+		const s = new_voucher.value.starts_at;
+		return s ? new Date(s) : null;
+	},
+	set(d: Date | null) {
+		new_voucher.value.starts_at = d ? startOfDay(d).toISOString() : undefined;
+	},
 });
 
-const validityRangeLabel = computed(() => {
-	const s = new_voucher.value.starts_at;
-	const e = new_voucher.value.ends_at;
-	if (!s) return t('components.filter.selectDateRange');
-	const start = new Date(s);
-	const endDate = e ? new Date(e) : start;
-	if (!e || start.toDateString() === endDate.toDateString()) {
-		return getFormattedDate(start, 'dd-MM-yyyy');
-	}
-	return `${getFormattedDate(start, 'dd-MM-yyyy')} - ${getFormattedDate(endDate, 'dd-MM-yyyy')}`;
+const endsAtAsDate = computed({
+	get(): Date | null {
+		const e = new_voucher.value.ends_at;
+		return e ? new Date(e) : null;
+	},
+	set(d: Date | null) {
+		new_voucher.value.ends_at = d ? endOfDay(d).toISOString() : undefined;
+	},
 });
 
-const applyValidityRange = () => {
-	const r = draftValidityRange.value;
-	if (r?.start) {
-		const start = startOfDay(r.start);
-		const end = r.end ? endOfDay(r.end) : endOfDay(r.start);
-		new_voucher.value.starts_at = start.toISOString();
-		new_voucher.value.ends_at = end.toISOString();
-	} else {
-		new_voucher.value.starts_at = undefined;
+/** If end is set without start, default start to today (same as discount create flow). */
+watch(
+	() => [new_voucher.value.starts_at, new_voucher.value.ends_at] as const,
+	([start, end]) => {
+		if (end && !start) {
+			new_voucher.value.starts_at = startOfDay(new Date()).toISOString();
+		}
+	},
+	{ flush: 'sync' },
+);
+
+const startsAtMaxDate = computed((): Date | undefined => {
+	const e = new_voucher.value.ends_at;
+	return e ? new Date(e) : undefined;
+});
+
+const endsAtMinDate = computed((): Date | undefined => {
+	const s = new_voucher.value.starts_at;
+	return s ? new Date(s) : undefined;
+});
+
+const startsAtButtonLabel = computed(() => {
+	const s = new_voucher.value.starts_at;
+	return s ? getFormattedDate(new Date(s), 'dd-MM-yyyy') : t('common.notSet');
+});
+
+const endsAtButtonLabel = computed(() => {
+	const e = new_voucher.value.ends_at;
+	return e ? getFormattedDate(new Date(e), 'dd-MM-yyyy') : t('common.notSet');
+});
+
+const clearStartsAt = () => {
+	if (new_voucher.value.ends_at) {
 		new_voucher.value.ends_at = undefined;
 	}
-	validityPopoverOpen.value = false;
+	new_voucher.value.starts_at = undefined;
+	startsAtPopoverOpen.value = false;
 };
 
-const clearValidityRange = () => {
-	draftValidityRange.value = { start: null, end: null };
-	new_voucher.value.starts_at = undefined;
+const clearEndsAt = () => {
 	new_voucher.value.ends_at = undefined;
-	validityPopoverOpen.value = false;
+	endsAtPopoverOpen.value = false;
 };
 
 const fieldSectionMap: Record<string, string> = {
@@ -177,20 +229,27 @@ const onError = (event: FormErrorEvent) => {
 	});
 };
 
-onMounted(() => {
+onMounted(async () => {
 	voucherStore.resetNewVoucher();
+	discountOptionsLoading.value = true;
+	try {
+		discountOptions.value = await discountStore.fetchDiscountsForSelect();
+	} finally {
+		discountOptionsLoading.value = false;
+	}
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
 		const d = event.data;
+		const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
 		const payload: CreateVoucherRequest = {
 			code: d.code.trim(),
 			name: d.name.trim(),
 			status: d.status,
 			description: d.description?.trim() || undefined,
 			discount_code: d.discount_code?.trim() || undefined,
-			starts_at: d.starts_at,
+			starts_at: startsAt,
 			ends_at: d.ends_at,
 		};
 		const created = await voucherStore.createVoucher(payload);
