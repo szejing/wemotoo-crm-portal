@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { getDiscountColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
-import type { DiscountResponse } from '~/repository/modules/discount/discount.type';
+import type { Discount } from '~/utils/types/discount';
 import { options_page_size } from '~/utils/options';
 
 const { t } = useI18n();
@@ -71,7 +71,7 @@ onMounted(async () => {
 	}
 });
 
-const selectDiscount = async (e: Event, row: TableRow<DiscountResponse>) => {
+const selectDiscount = async (e: Event, row: TableRow<Discount>) => {
 	const discount = row.original;
 	if (!discount) return;
 	router.push(`/marketing/discounts/${discount.code}`);

@@ -1,12 +1,35 @@
 import { UBadge, USwitch } from '#components';
+import { DiscountRuleType, formatCurrency } from 'wemotoo-common';
 import type { TableColumn } from '@nuxt/ui';
-import type { DiscountResponse } from '~/repository/modules/discount/discount.type';
+import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
 import { useDiscountStore } from '~/stores/discount/discount';
 
 type TranslateFn = (key: string) => string;
 
-export function getDiscountColumns(t: TranslateFn): TableColumn<DiscountResponse>[] {
+const RULE_TYPE_I18N: Record<DiscountRuleType, string> = {
+	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
+	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
+	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+};
+
+const RULE_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
+	[DiscountRuleType.PERCENTAGE]: 'info',
+	[DiscountRuleType.FIXED]: 'primary',
+	[DiscountRuleType.FREE_SHIPPING]: 'success',
+};
+
+const ruleValueLabel = (ruleType: DiscountRuleType, ruleValue: number): string => {
+	if (ruleType === DiscountRuleType.PERCENTAGE) {
+		return `${ruleValue}%`;
+	}
+	if (ruleType === DiscountRuleType.FIXED) {
+		return formatCurrency(ruleValue, 'MYR');
+	}
+	return String(ruleValue);
+};
+
+export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 	return [
 		{
 			accessorKey: 'code',
@@ -23,10 +46,22 @@ export function getDiscountColumns(t: TranslateFn): TableColumn<DiscountResponse
 			accessorKey: 'rule_type',
 			header: t('table.rule'),
 			cell: ({ row }) => {
-				return h('div', { class: 'flex flex-col' }, [
-					h('span', { class: 'text-sm font-medium' }, row.original.rule_type),
-					h('span', { class: 'text-xs text-neutral-500' }, String(row.original.rule_value)),
-				]);
+				const rt = row.original.rule_type;
+				const labelKey = RULE_TYPE_I18N[rt];
+				const color = RULE_TYPE_BADGE_COLOR[rt];
+				const children: ReturnType<typeof h>[] = [
+					h(UBadge, { variant: 'subtle', color, class: 'capitalize w-fit' }, () => (labelKey ? t(labelKey) : String(rt))),
+				];
+				if (rt !== DiscountRuleType.FREE_SHIPPING) {
+					children.push(
+						h(
+							'span',
+							{ class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' },
+							ruleValueLabel(rt, row.original.rule_value),
+						),
+					);
+				}
+				return h('div', { class: 'flex flex-col gap-1 items-start' }, children);
 			},
 		},
 		{
@@ -59,4 +94,4 @@ export function getDiscountColumns(t: TranslateFn): TableColumn<DiscountResponse
 			},
 		},
 	];
-}
+};

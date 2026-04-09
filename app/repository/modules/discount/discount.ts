@@ -1,70 +1,53 @@
 import HttpFactory from '~/repository/factory';
 import MerchantRoutes from '~/repository/routes.client';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type {
-	CreateDiscountRequest,
-	UpdateDiscountRequest,
-	DiscountResponse,
-	PaginatedDiscountResponse,
-} from './discount.type';
-
-function unwrapDiscountPayload(raw: unknown): DiscountResponse {
-	if (raw === null || typeof raw !== 'object') {
-		return raw as DiscountResponse;
-	}
-	const obj = raw as Record<string, unknown>;
-	if (
-		'data' in obj &&
-		obj.data !== null &&
-		typeof obj.data === 'object' &&
-		'code' in (obj.data as object)
-	) {
-		return obj.data as DiscountResponse;
-	}
-	return raw as DiscountResponse;
-}
+import type { CreateDiscountReq } from './models/request/create-discount.req';
+import type { DiscountReq } from './models/request/discount.req';
+import type { UpdateDiscountReq } from './models/request/update-discount.req';
+import type { CreateDiscountResp } from './models/response/create-discount.resp';
+import type { DiscountResp } from './models/response/discount.resp';
+import type { BaseODataResp } from '~/repository/base/base.resp';
+import type { Discount } from '~/utils/types/discount';
 
 class DiscountModule extends HttpFactory {
-	async create(body: CreateDiscountRequest) {
-		const raw = await this.call<unknown>({
+	private RESOURCE = MerchantRoutes.Discounts;
+
+	async create(body: CreateDiscountReq): Promise<CreateDiscountResp> {
+		return await this.call<CreateDiscountResp>({
 			method: 'POST',
-			url: MerchantRoutes.Discounts.Create(),
+			url: this.RESOURCE.Create(),
 			body,
 		});
-		return unwrapDiscountPayload(raw);
 	}
 
-	async getMany(query?: BaseODataReq) {
-		return await this.call<PaginatedDiscountResponse>({
+	async getMany(query?: BaseODataReq): Promise<BaseODataResp<Discount>> {
+		return await this.call<BaseODataResp<Discount>>({
 			method: 'GET',
-			url: MerchantRoutes.Discounts.Many(),
+			url: this.RESOURCE.Many(),
 			query,
 		});
 	}
 
-	async getSingle(code: string) {
-		const raw = await this.call<unknown>({
+	async getSingle(code: string): Promise<DiscountResp> {
+		return await this.call<DiscountResp>({
 			method: 'GET',
-			url: MerchantRoutes.Discounts.Single(code),
+			url: this.RESOURCE.Single(code),
 		});
-		return unwrapDiscountPayload(raw);
 	}
 
-	async update(code: string, body: UpdateDiscountRequest) {
-		const raw = await this.call<unknown>({
+	async update(code: string, body: UpdateDiscountReq): Promise<DiscountResp> {
+		return await this.call<DiscountResp>({
 			method: 'PATCH',
-			url: MerchantRoutes.Discounts.Update(code),
+			url: this.RESOURCE.Update(code),
 			body,
 		});
-		return unwrapDiscountPayload(raw);
 	}
 
-	async remove(code: string) {
-		const raw = await this.call<unknown>({
+	async remove(discount: DiscountReq): Promise<DiscountResp> {
+		return await this.call<DiscountResp>({
 			method: 'DELETE',
-			url: MerchantRoutes.Discounts.Delete(code),
+			url: this.RESOURCE.Delete(discount.code),
 		});
-		return unwrapDiscountPayload(raw);
 	}
 }
 

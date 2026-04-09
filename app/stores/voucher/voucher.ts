@@ -2,7 +2,9 @@ import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type { VoucherResponse, CreateVoucherRequest, UpdateVoucherRequest } from '~/repository/modules/voucher/voucher.type';
+import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
+import type { UpdateVoucherReq } from '~/repository/modules/voucher/models/request/update-voucher.req';
+import type { Voucher } from '~/utils/types/voucher';
 
 type VoucherFilter = {
 	query: string;
@@ -16,7 +18,7 @@ const initialVoucherFilter: VoucherFilter = {
 	current_page: 1,
 };
 
-const initialEmptyVoucher: Partial<CreateVoucherRequest> = {
+const initialEmptyVoucher: Partial<CreateVoucherReq> = {
 	code: '',
 	name: '',
 	description: '',
@@ -33,8 +35,9 @@ export const useVoucherStore = defineStore('voucherStore', {
 		updating: false as boolean,
 		exporting: false as boolean,
 		filter: structuredClone(initialVoucherFilter),
-		vouchers: [] as VoucherResponse[],
+		vouchers: [] as Voucher[],
 		total_vouchers: 0 as number,
+		current_voucher: undefined as Voucher | undefined,
 		new_voucher: structuredClone(initialEmptyVoucher),
 	}),
 	actions: {
@@ -106,7 +109,7 @@ export const useVoucherStore = defineStore('voucherStore', {
 			}
 		},
 
-		async createVoucher(payload: CreateVoucherRequest) {
+		async createVoucher(payload: CreateVoucherReq) {
 			this.adding = true;
 			this.loading = true;
 
@@ -131,11 +134,11 @@ export const useVoucherStore = defineStore('voucherStore', {
 			}
 		},
 
-		async updateStatus(voucher: VoucherResponse, status: string) {
+		async updateStatus(voucher: Voucher, status: string) {
 			await this.updateVoucher(voucher.code, { status });
 		},
 
-		async updateVoucher(code: string, payload: UpdateVoucherRequest) {
+		async updateVoucher(code: string, payload: UpdateVoucherReq) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
@@ -163,7 +166,7 @@ export const useVoucherStore = defineStore('voucherStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.voucher.remove(code);
+				const data = await $api.voucher.remove({ code });
 
 				if (data.code) {
 					successNotification(`Voucher #${data.code} deleted`);

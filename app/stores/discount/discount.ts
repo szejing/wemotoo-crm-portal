@@ -2,8 +2,10 @@ import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type { DiscountResponse, CreateDiscountRequest, UpdateDiscountRequest } from '~/repository/modules/discount/discount.type';
+import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
+import type { UpdateDiscountReq } from '~/repository/modules/discount/models/request/update-discount.req';
 import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import type { Discount } from '~/utils/types/discount';
 
 type DiscountFilter = {
 	query: string;
@@ -19,8 +21,8 @@ const initialDiscountFilter: DiscountFilter = {
 	status: undefined,
 };
 
-const initialEmptyDiscount: Partial<CreateDiscountRequest> & {
-	conditions: NonNullable<CreateDiscountRequest['conditions']>;
+const initialEmptyDiscount: Partial<CreateDiscountReq> & {
+	conditions: NonNullable<CreateDiscountReq['conditions']>;
 } = {
 	code: '',
 	description: '',
@@ -41,8 +43,9 @@ export const useDiscountStore = defineStore('discountStore', {
 		updating: false as boolean,
 		exporting: false as boolean,
 		filter: structuredClone(initialDiscountFilter),
-		discounts: [] as DiscountResponse[],
+		discounts: [] as Discount[],
 		total_discounts: 0 as number,
+		current_discount: undefined as Discount | undefined,
 		new_discount: structuredClone(initialEmptyDiscount),
 	}),
 	actions: {
@@ -106,22 +109,21 @@ export const useDiscountStore = defineStore('discountStore', {
 			}
 		},
 
-		async getDiscountByCode(code: string) {
-			this.loading = true;
+		async getDiscountByCode(code: string): Promise<Discount | undefined> {
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.discount.getSingle(code);
-				return data;
+				if (data.discount) {
+					return data.discount;
+				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process discount';
 				failedNotification(message);
-			} finally {
-				this.loading = false;
 			}
 		},
 
 		/** Load discounts for pickers (e.g. voucher form) without changing listing filter/state. */
-		async fetchDiscountsForSelect(): Promise<DiscountResponse[]> {
+		async fetchDiscountsForSelect(): Promise<Discount[]> {
 			const { $api } = useNuxtApp();
 			try {
 				const response = await $api.discount.getMany({
@@ -137,7 +139,7 @@ export const useDiscountStore = defineStore('discountStore', {
 			}
 		},
 
-		async createDiscount(payload: CreateDiscountRequest) {
+		async createDiscount(payload: CreateDiscountReq) {
 			this.adding = true;
 			this.loading = true;
 
@@ -162,11 +164,11 @@ export const useDiscountStore = defineStore('discountStore', {
 			}
 		},
 
-		async updateStatus(discount: DiscountResponse, active: boolean) {
+		async updateStatus(discount: Discount, active: boolean) {
 			await this.updateDiscount(discount.code, { is_disabled: !active });
 		},
 
-		async updateDiscount(code: string, payload: UpdateDiscountRequest) {
+		async updateDiscount(code: string, payload: UpdateDiscountReq) {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
@@ -174,8 +176,8 @@ export const useDiscountStore = defineStore('discountStore', {
 			try {
 				const data = await $api.discount.update(code, payload);
 
-				if (data.code) {
-					successNotification(`${data.code} - Discount Updated !`);
+				if (data.discount.code) {
+					successNotification(`${data.discount.code} - Discount Updated !`);
 					this.getDiscounts();
 				}
 				return data;
@@ -194,12 +196,12 @@ export const useDiscountStore = defineStore('discountStore', {
 			const { $api } = useNuxtApp();
 
 			try {
-				const data = await $api.discount.remove(code);
+				const data = await $api.discount.remove({ code });
 
-				if (data.code) {
-					successNotification(`Discount #${data.code} Deleted !`);
+				if (data.discount.code) {
+					successNotification(`Discount #${data.discount.code} Deleted !`);
 
-					const index = this.discounts.findIndex((d) => d.code === data.code);
+					const index = this.discounts.findIndex((d) => d.code === data.discount.code);
 					if (index !== -1) {
 						this.discounts.splice(index, 1);
 					}

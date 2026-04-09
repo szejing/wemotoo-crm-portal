@@ -229,7 +229,7 @@ import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
-import type { CreateDiscountConditionRequest, CreateDiscountRequest } from '~/repository/modules/discount/discount.type';
+import type { CreateDiscountConditionReq, CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { CreateDiscountValidation } from '~/utils/schema';
 import { ICONS } from '~/utils/icons';
 
@@ -327,7 +327,7 @@ const filterConditionItems = computed(() => [
 	...Object.values(FilterCondition).map((v) => ({ label: humanizeEnum(v), value: v })),
 ]);
 
-const emptyCondition = (): CreateDiscountConditionRequest => {
+const emptyCondition = (): CreateDiscountConditionReq => {
 	return {
 		operator: DiscountConditionOperator.IN,
 		type: DiscountConditionType.PRODUCTS,
@@ -505,7 +505,7 @@ onMounted(() => {
 	discountStore.resetNewDiscount();
 });
 
-const buildCreatePayload = (data: Schema): CreateDiscountRequest => {
+const buildCreatePayload = (data: Schema): CreateDiscountReq => {
 	const conditions = (data.conditions ?? []).map((c) => ({
 		operator: c.operator,
 		type: c.type,

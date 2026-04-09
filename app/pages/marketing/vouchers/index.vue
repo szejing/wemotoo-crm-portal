@@ -49,7 +49,7 @@
 <script lang="ts" setup>
 import { getVoucherColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
-import type { VoucherResponse } from '~/repository/modules/voucher/voucher.type';
+import type { Voucher } from '~/utils/types/voucher';
 import { options_page_size } from '~/utils/options';
 import { ICONS } from '~/utils/icons';
 import { useVoucherStore } from '~/stores/voucher/voucher';
@@ -72,7 +72,7 @@ onMounted(async () => {
 	}
 });
 
-const selectVoucher = async (_e: Event, row: TableRow<VoucherResponse>) => {
+const selectVoucher = async (_e: Event, row: TableRow<Voucher>) => {
 	const voucher = row.original;
 	if (!voucher) return;
 	router.push(`/marketing/vouchers/${voucher.code}`);

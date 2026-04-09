@@ -724,7 +724,7 @@ describe('VoucherModule', () => {
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Update('V1'));
 		expect(lastFetch().opts.method).toBe('PATCH');
 		expect(lastFetch().opts.body).toEqual({ name: 'Updated' });
-		await mod.remove('V1');
+		await mod.remove({ code: 'V1' });
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Delete('V1'));
 		expect(lastFetch().opts.method).toBe('DELETE');
 	});

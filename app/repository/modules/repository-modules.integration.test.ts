@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
-import { DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import MerchantRoutes from '~/repository/routes.client';
 import { ApiErrorModel } from '~/utils/types/api-error-model';
 import { loginPayload } from '../../../test/repository-model-fixtures';
@@ -85,10 +85,12 @@ describe('DiscountModule', () => {
 			ends_at: null,
 			usage_limit: null,
 			usage_count: 0,
-			rule_type: 'percentage',
+			rule_type: DiscountRuleType.PERCENTAGE,
 			rule_value: 10,
-			allocation: 'bill',
+			allocation: AllocationType.BILL,
 			conditions: [],
+			created_at: '2025-01-01T00:00:00.000Z',
+			updated_at: '2025-01-01T00:00:00.000Z',
 		};
 		setMockFetch(async () => ({ data: inner }));
 

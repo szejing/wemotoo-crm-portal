@@ -3,7 +3,6 @@ import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const data = await readBody(event);
 		const code = getRouterParams(event).code;
 
 		if (!code) {
@@ -15,7 +14,6 @@ export default defineEventHandler(async (event) => {
 
 		const result = await signedFetch(event, `${Routes.Discounts.Single(code)}`, {
 			method: 'GET',
-			body: data,
 		});
 		return result;
 	} catch (err) {

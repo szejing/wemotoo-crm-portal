@@ -85,8 +85,8 @@ import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
-import type { DiscountResponse } from '~/repository/modules/discount/discount.type';
-import type { CreateVoucherRequest } from '~/repository/modules/voucher/voucher.type';
+import type { Discount } from '~/utils/types/discount';
+import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import { useDiscountStore } from '~/stores/discount/discount';
 import { useVoucherStore } from '~/stores/voucher/voucher';
 import { CreateVoucherValidation } from '~/utils/schema';
@@ -104,7 +104,7 @@ const voucherStore = useVoucherStore();
 const discountStore = useDiscountStore();
 const { adding, new_voucher } = storeToRefs(voucherStore);
 
-const discountOptions = ref<DiscountResponse[]>([]);
+const discountOptions = ref<Discount[]>([]);
 const discountOptionsLoading = ref(false);
 
 const discountSelectItems = computed(() => [
@@ -243,7 +243,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
 		const d = event.data;
 		const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
-		const payload: CreateVoucherRequest = {
+		const payload: CreateVoucherReq = {
 			code: d.code.trim(),
 			name: d.name.trim(),
 			status: d.status,

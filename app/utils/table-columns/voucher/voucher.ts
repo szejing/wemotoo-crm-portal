@@ -1,12 +1,12 @@
 import { USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
-import type { VoucherResponse } from '~/repository/modules/voucher/voucher.type';
+import type { Voucher } from '~/utils/types/voucher';
 import { useVoucherStore } from '~/stores/voucher/voucher';
 import { getSortableHeader } from '../sortable';
 
 type TranslateFn = (key: string) => string;
 
-export function getVoucherColumns(t: TranslateFn): TableColumn<VoucherResponse>[] {
+export function getVoucherColumns(t: TranslateFn): TableColumn<Voucher>[] {
 	return [
 		{
 			accessorKey: 'code',
