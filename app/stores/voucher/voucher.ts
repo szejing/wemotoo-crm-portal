@@ -5,6 +5,7 @@ import type { BaseODataReq } from '~/repository/base/base.req';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import type { UpdateVoucherReq } from '~/repository/modules/voucher/models/request/update-voucher.req';
 import type { Voucher } from '~/utils/types/voucher';
+import { defaultVoucherRelations, removeDuplicateExpands } from 'wemotoo-common';
 
 type VoucherFilter = {
 	query: string;
@@ -74,6 +75,7 @@ export const useVoucherStore = defineStore('voucherStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$expand: removeDuplicateExpands(defaultVoucherRelations).join(','),
 					$orderby: 'updated_at desc',
 				};
 

@@ -4,7 +4,7 @@ import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { UpdateDiscountReq } from '~/repository/modules/discount/models/request/update-discount.req';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, defaultDiscountRelations, DiscountRuleType, removeDuplicateExpands } from 'wemotoo-common';
 import type { Discount } from '~/utils/types/discount';
 
 type DiscountFilter = {
@@ -82,6 +82,7 @@ export const useDiscountStore = defineStore('discountStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$expand: removeDuplicateExpands(defaultDiscountRelations).join(','),
 					$orderby: 'updated_at desc',
 				};
 
