@@ -31,7 +31,6 @@
 
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
-import { useVoucherStore } from '~/stores/voucher/voucher';
 
 const { t } = useI18n();
 useHead({ title: () => t('pages.createVoucher') });

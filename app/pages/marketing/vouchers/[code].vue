@@ -1,49 +1,40 @@
 <template>
 	<ZPagePanel id="vouchers-edit" :title="`${$t('pages.editVoucher')} #${current_voucher?.code ?? code}`" back-to="/marketing/vouchers" grow>
-		<div class="container w-full mx-auto">
+		<div class="container w-full mx-auto py-4">
 			<FormVoucherUpdateLoading v-if="isLoading" />
 			<FormVoucherUpdate v-else-if="current_voucher" ref="formRef" :voucher="current_voucher" />
 		</div>
 
 		<template #footer>
-			<div v-if="current_voucher" class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
+			<div v-if="current_voucher" class="w-full backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-800 shadow-md z-50">
 				<div class="mx-auto px-4 sm:px-6 py-4">
-					<!-- Desktop Layout -->
 					<div class="hidden md:flex justify-between items-center gap-3">
-						<UButton color="error" variant="ghost" size="lg" :loading="updating" class="opacity-50 hover:opacity-100 cursor-pointer" @click="deleteVoucher">
+						<UButton color="error" variant="ghost" size="lg" :loading="updating" @click="deleteVoucher">
 							<UIcon :name="ICONS.TRASH" />
 							{{ $t('common.delete') }}
 						</UButton>
 
 						<div class="flex gap-3">
-							<UButton color="neutral" variant="outline" size="lg" class="cursor-pointer" @click="cancel">{{ $t('common.cancel') }}</UButton>
+							<UButton color="neutral" variant="outline" size="lg" @click="cancel">{{ $t('common.cancel') }}</UButton>
 
-							<UButton color="success" variant="solid" size="lg" :loading="updating" class="cursor-pointer" @click="saveVoucher">
+							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="saveVoucher">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
-								{{ $t('common.save') }}
+								{{ $t('components.voucherForm.updateVoucher') }}
 							</UButton>
 						</div>
 					</div>
 
-					<!-- Mobile Layout -->
 					<div class="md:hidden flex flex-col gap-2">
-						<UButton color="success" size="md" class="w-full opacity-50 hover:opacity-100 cursor-pointer" :loading="updating" @click="saveVoucher">
-							<UIcon :name="ICONS.CHECK_ROUNDED" />
-							<span class="text-sm">{{ $t('common.save') }}</span>
+						<UButton color="success" size="md" class="w-full" :loading="updating" @click="saveVoucher">
+							<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
+							<span class="text-sm">{{ $t('components.voucherForm.updateVoucher') }}</span>
 						</UButton>
 						<div class="flex gap-2">
-							<UButton
-								color="error"
-								variant="ghost"
-								size="sm"
-								class="flex-1 opacity-50 hover:opacity-100 cursor-pointer"
-								:loading="updating"
-								@click="deleteVoucher"
-							>
+							<UButton color="error" variant="ghost" size="sm" class="flex-1" :loading="updating" @click="deleteVoucher">
 								<UIcon :name="ICONS.TRASH" class="w-4 h-4" />
 								<span class="text-xs">{{ $t('common.delete') }}</span>
 							</UButton>
-							<UButton color="neutral" variant="outline" size="sm" class="flex-1 cursor-pointer" @click="cancel">
+							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="cancel">
 								<span class="text-xs">{{ $t('common.cancel') }}</span>
 							</UButton>
 						</div>
@@ -56,6 +47,7 @@
 
 <script lang="ts" setup>
 import { ZModalConfirmation } from '#components';
+import { ICONS } from '~/utils/icons';
 
 const route = useRoute();
 const code = route.params.code as string;

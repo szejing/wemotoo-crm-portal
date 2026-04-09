@@ -1019,6 +1019,8 @@
 		},
 		"discountForm": {
 			"createDiscount": "Cipta Diskaun",
+			"updateDiscount": "Simpan perubahan",
+			"reviewSubtitleEdit": "Sahkan butiran sebelum menyimpan",
 			"validityPeriod": "Tempoh sah",
 			"validityStartsAt": "Mula pada",
 			"validityEndsAt": "Tamat pada",
@@ -1066,6 +1068,13 @@
 		},
 		"voucherForm": {
 			"createVoucher": "Cipta baucar",
+			"updateVoucher": "Kemas kini baucar",
+			"reviewTitle": "Semakan",
+			"reviewSubtitleEdit": "Ringkasan baucar ini sebelum anda simpan",
+			"statusActive": "Aktif",
+			"statusInactive": "Tidak aktif",
+			"usageLimitHint": "Pilihan: had bilangan kali baucar ini boleh ditebus",
+			"usageLimitNotSet": "Tiada had",
 			"validityPeriod": "Tempoh sah",
 			"sectionSubtitle": "Kod, nama, diskaun dipautkan dan tempoh sah",
 			"codeHint": "Kod pelanggan masukkan semasa pembayaran",

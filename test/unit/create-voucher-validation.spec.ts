@@ -37,4 +37,15 @@ describe('CreateVoucherValidation', () => {
 			}),
 		).toThrow();
 	});
+
+	it('accepts optional positive usage_limit', () => {
+		const schema = CreateVoucherValidation(t);
+		const parsed = schema.parse({
+			code: 'V1',
+			name: 'Test',
+			status: 'active',
+			usage_limit: 100,
+		});
+		expect(parsed.usage_limit).toBe(100);
+	});
 });

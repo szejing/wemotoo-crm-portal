@@ -12,6 +12,7 @@ export function CreateVoucherValidation(t: TranslateFn) {
 			discount_code: z.string().optional(),
 			starts_at: z.string().optional(),
 			ends_at: z.string().optional(),
+			usage_limit: z.number().int().positive().optional(),
 		})
 		.superRefine((data, ctx) => {
 			if (data.starts_at && data.ends_at && data.starts_at > data.ends_at) {

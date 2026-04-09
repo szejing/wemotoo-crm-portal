@@ -1020,6 +1020,8 @@
 		},
 		"discountForm": {
 			"createDiscount": "Create Discount",
+			"updateDiscount": "Save changes",
+			"reviewSubtitleEdit": "Confirm details before saving",
 			"validityPeriod": "Validity period",
 			"validityStartsAt": "Starts at",
 			"validityEndsAt": "Ends at",
@@ -1067,6 +1069,13 @@
 		},
 		"voucherForm": {
 			"createVoucher": "Create voucher",
+			"updateVoucher": "Update voucher",
+			"reviewTitle": "Review",
+			"reviewSubtitleEdit": "Summary of this voucher before you save",
+			"statusActive": "Active",
+			"statusInactive": "Inactive",
+			"usageLimitHint": "Optional cap on how many times this voucher can be redeemed",
+			"usageLimitNotSet": "No limit",
 			"validityPeriod": "Validity period",
 			"sectionSubtitle": "Code, name, linked discount, and validity",
 			"codeHint": "Code customers enter at checkout",
