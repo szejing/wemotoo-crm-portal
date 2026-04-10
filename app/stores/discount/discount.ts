@@ -6,6 +6,7 @@ import type { CreateDiscountReq } from '~/repository/modules/discount/models/req
 import type { UpdateDiscountReq } from '~/repository/modules/discount/models/request/update-discount.req';
 import { AllocationType, defaultDiscountRelations, DiscountRuleType, removeDuplicateExpands } from 'wemotoo-common';
 import type { Discount } from '~/utils/types/discount';
+import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 
 type DiscountFilter = {
 	query: string;
@@ -21,9 +22,7 @@ const initialDiscountFilter: DiscountFilter = {
 	status: undefined,
 };
 
-const initialEmptyDiscount: Partial<CreateDiscountReq> & {
-	conditions: NonNullable<CreateDiscountReq['conditions']>;
-} = {
+const initialEmptyDiscount: DiscountCreate = {
 	code: '',
 	description: '',
 	is_disabled: false,

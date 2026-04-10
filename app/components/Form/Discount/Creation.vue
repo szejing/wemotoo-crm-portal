@@ -2,16 +2,23 @@
 	<div class="w-full">
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 			<div class="lg:col-span-9">
-				<UForm ref="formRef" :schema="discountSchema" :state="formState as Record<string, unknown>" class="space-y-6 mb-6" @submit="onSubmit" @error="onError">
-					<ZInputDiscountDetailsSection :state="formState" code-disabled />
-					<ZInputDiscountRuleSection :state="formState" />
-					<ZInputDiscountConditionsSection :state="formState" />
+				<UForm
+					ref="formRef"
+					:schema="discountSchema"
+					:state="new_discount as Record<string, unknown>"
+					class="space-y-6 mb-6"
+					@submit="onSubmit"
+					@error="onError"
+				>
+					<ZInputDiscountDetailsSection :state="new_discount" />
+					<ZInputDiscountRuleSection :state="new_discount" />
+					<ZInputDiscountConditionsSection :state="new_discount" />
 				</UForm>
 			</div>
 
 			<div class="lg:col-span-3">
 				<div class="lg:sticky lg:top-4">
-					<FormDiscountReviewSummary subtitle-key="components.discountForm.reviewSubtitleEdit" :summary="reviewSummary" />
+					<FormDiscountReviewSummary :summary="reviewSummary" />
 				</div>
 			</div>
 		</div>
@@ -25,42 +32,27 @@ import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
+import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { CreateDiscountValidation } from '~/utils/schema';
-import { applyDiscountToFormState, emptyDiscountFormEditableState } from '~/utils/types/form/discount-creation';
-import type { Discount } from '~/utils/types/discount';
 
 const { t } = useI18n();
-
-const props = defineProps<{
-	discount: Discount;
-}>();
 
 const discountSchema = computed(() => CreateDiscountValidation(t));
 
 type Schema = z.infer<ReturnType<typeof CreateDiscountValidation>>;
 
 const discountStore = useDiscountStore();
-const { updating } = storeToRefs(discountStore);
+const { adding, new_discount } = storeToRefs(discountStore);
 
-const formState = reactive(emptyDiscountFormEditableState());
-
-watch(
-	() => props.discount,
-	(d) => {
-		if (!d) return;
-		applyDiscountToFormState(formState, d);
-	},
-	{ immediate: true },
-);
-
+const router = useRouter();
 const overlay = useOverlay();
 const formRef = ref();
 
 const loadingModal = overlay.create(ZModalLoading, {
-	props: { key: 'loading-discount-update' },
+	props: { key: 'loading-discount' },
 });
 
-watch(updating, (v) => {
+watch(adding, (v) => {
 	if (v) loadingModal.open();
 	else loadingModal.close();
 });
@@ -78,8 +70,8 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = formState.rule_type ?? DiscountRuleType.PERCENTAGE;
-	const rv = formState.rule_value;
+	const rt = new_discount.value.rule_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = new_discount.value.rule_value;
 	const typeName = ruleTypeLabel(rt);
 	if (rt === DiscountRuleType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
@@ -91,8 +83,8 @@ const ruleSummaryLabel = computed(() => {
 });
 
 const reviewSummary = computed(() => {
-	const s = formState.starts_at;
-	const e = formState.ends_at;
+	const s = new_discount.value.starts_at;
+	const e = new_discount.value.ends_at;
 	const notSet = t('common.notSet');
 	let validityStartsAt = notSet;
 	let validityEndsAt = notSet;
@@ -108,12 +100,12 @@ const reviewSummary = computed(() => {
 		validityEndsAt = getFormattedDate(new Date(e), 'dd-MM-yyyy');
 	}
 	return {
-		code: formState.code?.trim() ?? '',
-		description: formState.description ?? '',
+		code: new_discount.value.code?.trim() ?? '',
+		description: new_discount.value.description ?? '',
 		validityStartsAt,
 		validityEndsAt,
 		ruleSummary: ruleSummaryLabel.value,
-		conditionsCount: formState.conditions?.length ?? 0,
+		conditionsCount: new_discount.value.conditions?.length ?? 0,
 	};
 });
 
@@ -147,8 +139,12 @@ const onError = (event: FormErrorEvent) => {
 	});
 };
 
-const mapConditionsForApi = (data: Schema) =>
-	(data.conditions ?? []).map((c) => ({
+onMounted(() => {
+	discountStore.resetNewDiscount();
+});
+
+const buildCreatePayload = (data: Schema): CreateDiscountReq => {
+	const conditions = (data.conditions ?? []).map((c) => ({
 		operator: c.operator,
 		type: c.type,
 		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
@@ -158,24 +154,28 @@ const mapConditionsForApi = (data: Schema) =>
 		...(c.filter_value?.trim() ? { filter_value: c.filter_value.trim() } : {}),
 	}));
 
+	const startsAt = data.ends_at && !data.starts_at ? startOfDay(new Date()).toISOString() : data.starts_at;
+
+	return {
+		...(data.code ? { code: data.code } : {}),
+		description: data.description.trim(),
+		is_disabled: data.is_disabled,
+		starts_at: startsAt,
+		ends_at: data.ends_at,
+		usage_limit: data.usage_limit,
+		rule_type: data.rule_type,
+		rule_value: data.rule_value,
+		...(data.allocation != null ? { allocation: data.allocation } : {}),
+		...(conditions.length > 0 ? { conditions } : {}),
+	};
+};
+
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 	try {
-		const data = event.data;
-		const startsAt = data.ends_at && !data.starts_at ? startOfDay(new Date()).toISOString() : data.starts_at;
-		const body = {
-			description: data.description.trim(),
-			is_disabled: data.is_disabled,
-			starts_at: startsAt,
-			ends_at: data.ends_at,
-			usage_limit: data.usage_limit,
-			rule_type: data.rule_type,
-			rule_value: data.rule_value,
-			...(data.allocation != null ? { allocation: data.allocation } : {}),
-			conditions: mapConditionsForApi(data),
-		};
-		const result = await discountStore.updateDiscount(props.discount.code, body);
-		if (result?.discount?.code) {
-			await navigateTo('/marketing/discounts');
+		const payload = buildCreatePayload(event.data);
+		const created = await discountStore.createDiscount(payload);
+		if (created?.code) {
+			router.push('/marketing/discounts');
 		}
 	} catch {
 		// store handles error toast

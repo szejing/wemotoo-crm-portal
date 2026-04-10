@@ -1078,10 +1078,10 @@
 			"usageLimitNotSet": "No limit",
 			"validityPeriod": "Validity period",
 			"sectionSubtitle": "Code, name, linked discount, and validity",
-			"codeHint": "Code customers enter at checkout",
+			"codeHint": "Voucher code for customers enter at checkout",
 			"nameHint": "Name for this voucher",
-			"descriptionHint": "Optional. A few plain words about what this voucher is for—helps you spot it later.",
-			"discountCodeHint": "Optional: existing discount program this voucher applies"
+			"descriptionHint": "Short description (optional).",
+			"discountCodeHint": "Required. Pick a discount."
 		},
 		"orderInput": {
 			"status": "Status",

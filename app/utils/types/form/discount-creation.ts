@@ -3,7 +3,7 @@ import type { CreateDiscountConditionReq } from '~/repository/modules/discount/m
 import type { Discount, DiscountCondition } from '~/utils/types/discount';
 
 /** Editable discount form shape aligned with `CreateDiscountValidation` / create flow. */
-export type DiscountFormEditableState = {
+export type DiscountCreate = {
 	code: string;
 	description: string;
 	is_disabled: boolean;
@@ -16,7 +16,7 @@ export type DiscountFormEditableState = {
 	conditions: CreateDiscountConditionReq[];
 };
 
-function conditionFromDiscount(c: DiscountCondition): CreateDiscountConditionReq {
+const conditionFromDiscount = (c: DiscountCondition): CreateDiscountConditionReq => {
 	return {
 		operator: c.operator,
 		type: c.type,
@@ -26,9 +26,9 @@ function conditionFromDiscount(c: DiscountCondition): CreateDiscountConditionReq
 		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
 		filter_value: c.filter_value?.trim() ? c.filter_value : '',
 	};
-}
+};
 
-export function discountToFormEditableState(d: Discount): DiscountFormEditableState {
+export const discountToFormEditableState = (d: Discount): DiscountCreate => {
 	return {
 		code: d.code,
 		description: d.description ?? '',
@@ -41,9 +41,9 @@ export function discountToFormEditableState(d: Discount): DiscountFormEditableSt
 		allocation: d.allocation,
 		conditions: (d.conditions ?? []).map(conditionFromDiscount),
 	};
-}
+};
 
-export function emptyDiscountFormEditableState(): DiscountFormEditableState {
+export const emptyDiscountFormEditableState = (): DiscountCreate => {
 	return {
 		code: '',
 		description: '',
@@ -56,10 +56,10 @@ export function emptyDiscountFormEditableState(): DiscountFormEditableState {
 		allocation: AllocationType.BILL,
 		conditions: [],
 	};
-}
+};
 
 /** Apply server discount into reactive form state (replaces conditions array). */
-export function applyDiscountToFormState(target: DiscountFormEditableState, d: Discount): void {
+export const applyDiscountToFormState = (target: DiscountCreate, d: Discount): void => {
 	const next = discountToFormEditableState(d);
 	target.code = next.code;
 	target.description = next.description;
@@ -71,4 +71,4 @@ export function applyDiscountToFormState(target: DiscountFormEditableState, d: D
 	target.rule_value = next.rule_value;
 	target.allocation = next.allocation;
 	target.conditions.splice(0, target.conditions.length, ...next.conditions);
-}
+};

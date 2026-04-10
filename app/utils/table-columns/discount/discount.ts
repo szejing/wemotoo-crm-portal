@@ -3,7 +3,7 @@ import { DiscountRuleType, formatCurrency } from 'wemotoo-common';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
-import { useDiscountStore } from '~/stores/discount/discount';
+import { useDiscountStore } from '~/stores/Discount/Discount';
 
 type TranslateFn = (key: string) => string;
 
@@ -54,11 +54,7 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 				];
 				if (rt !== DiscountRuleType.FREE_SHIPPING) {
 					children.push(
-						h(
-							'span',
-							{ class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' },
-							ruleValueLabel(rt, row.original.rule_value),
-						),
+						h('span', { class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' }, ruleValueLabel(rt, row.original.rule_value)),
 					);
 				}
 				return h('div', { class: 'flex flex-col gap-1 items-start' }, children);

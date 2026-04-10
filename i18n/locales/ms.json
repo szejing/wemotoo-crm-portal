@@ -1077,10 +1077,10 @@
 			"usageLimitNotSet": "Tiada had",
 			"validityPeriod": "Tempoh sah",
 			"sectionSubtitle": "Kod, nama, diskaun dipautkan dan tempoh sah",
-			"codeHint": "Kod pelanggan masukkan semasa pembayaran",
+			"codeHint": "Kod baucar untuk pelanggan masukkan semasa pembayaran",
 			"nameHint": "Nama untuk baucar ini",
-			"descriptionHint": "Tidak wajib. Tulis beberapa perkataan mudah tentang baucar ini—senang cari nanti.",
-			"discountCodeHint": "Pilihan: program diskaun sedia ada yang baucar ini gunakan"
+			"descriptionHint": "Nota ringkas (pilihan).",
+			"discountCodeHint": "Wajib. Pilih diskaun."
 		},
 		"orderInput": {
 			"status": "Status",

@@ -9,7 +9,7 @@ export function CreateVoucherValidation(t: TranslateFn) {
 			name: z.string({ message: t('validation.voucher.nameRequired') }).min(1, t('validation.voucher.nameRequired')),
 			description: z.string().optional(),
 			status: z.string({ message: t('validation.voucher.statusRequired') }).min(1, t('validation.voucher.statusRequired')),
-			discount_code: z.string().optional(),
+			discount_code: z.string(),
 			starts_at: z.string().optional(),
 			ends_at: z.string().optional(),
 			usage_limit: z.number().int().positive().optional(),
