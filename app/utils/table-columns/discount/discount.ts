@@ -1,5 +1,6 @@
 import { UBadge, USwitch } from '#components';
-import { DiscountRuleType, formatCurrency } from 'wemotoo-common';
+import { DiscountRuleType } from 'wemotoo-common';
+import { formatDiscountRuleValue } from '~/utils/discount-rule-display';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
@@ -17,16 +18,6 @@ const RULE_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'succ
 	[DiscountRuleType.PERCENTAGE]: 'info',
 	[DiscountRuleType.FIXED]: 'primary',
 	[DiscountRuleType.FREE_SHIPPING]: 'success',
-};
-
-const ruleValueLabel = (ruleType: DiscountRuleType, ruleValue: number): string => {
-	if (ruleType === DiscountRuleType.PERCENTAGE) {
-		return `${ruleValue}%`;
-	}
-	if (ruleType === DiscountRuleType.FIXED) {
-		return formatCurrency(ruleValue, 'MYR');
-	}
-	return String(ruleValue);
 };
 
 export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
@@ -54,7 +45,7 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 				];
 				if (rt !== DiscountRuleType.FREE_SHIPPING) {
 					children.push(
-						h('span', { class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' }, ruleValueLabel(rt, row.original.rule_value)),
+						h('span', { class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' }, formatDiscountRuleValue(rt, row.original.rule_value)),
 					);
 				}
 				return h('div', { class: 'flex flex-col gap-1 items-start' }, children);

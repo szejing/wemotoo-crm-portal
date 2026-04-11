@@ -1,14 +1,15 @@
+import type { Discount } from './discount';
+
 export type Voucher = {
 	code: string;
-	name: string;
-	description: string;
-	status: string;
-	discount_code: string;
-	starts_at: string;
-	ends_at: string;
-	usage_limit: number;
+	description?: string;
+	is_disabled: boolean;
+	starts_at: Date | null;
+	ends_at: Date | null;
+	usage_limit: number | null;
 	usage_count: number;
+	usage_per_customer: number | null;
 	created_at: string;
 	updated_at: string;
-	metadata?: Record<string, unknown>;
+	discount: Discount;
 };

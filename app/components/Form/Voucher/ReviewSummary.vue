@@ -26,10 +26,6 @@
 						<dd class="font-medium text-default truncate text-right">{{ summary.code || $t('common.notSet') }}</dd>
 					</div>
 					<div class="flex justify-between gap-2">
-						<dt class="text-muted shrink-0">{{ $t('form.name') }}</dt>
-						<dd class="font-medium text-default truncate text-right">{{ summary.name || $t('common.notSet') }}</dd>
-					</div>
-					<div class="flex justify-between gap-2">
 						<dt class="text-muted shrink-0">{{ $t('form.description') }}</dt>
 						<dd class="font-medium text-default truncate text-right">{{ summary.description || $t('common.notSet') }}</dd>
 					</div>

@@ -3,7 +3,8 @@
 		<UForm ref="formRef" :schema="voucherSchema" :state="new_voucher" class="space-y-6 mb-6" @submit="onSubmit" @error="onError">
 			<ZInputVoucherDetailsSection
 				:state="new_voucherAsFormState"
-				:discount-select-items="discountSelectItems"
+				:discounts="discountOptions"
+				:none-label="t('components.discountForm.filterNone')"
 				:discount-options-loading="discountOptionsLoading"
 			/>
 			<ZInputVoucherValiditySection :state="new_voucherAsFormState" />
@@ -19,7 +20,7 @@ import type { z } from 'zod';
 import type { Discount } from '~/utils/types/discount';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import { useDiscountStore } from '~/stores/Discount/Discount';
-import { useVoucherStore } from '~/stores/voucher/voucher';
+import { useVoucherStore } from '~/stores/voucher/Voucher';
 import { CreateVoucherValidation } from '~/utils/schema';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 
@@ -36,16 +37,6 @@ const new_voucherAsFormState = computed(() => new_voucher.value as VoucherFormSt
 
 const discountOptions = ref<Discount[]>([]);
 const discountOptionsLoading = ref(false);
-
-const selectNoneValue = '__none__' as const;
-
-const discountSelectItems = computed(() => [
-	{ label: t('components.discountForm.filterNone'), value: selectNoneValue },
-	...discountOptions.value.map((d) => ({
-		label: d.description ? `${d.code} — ${d.description}` : d.code,
-		value: d.code,
-	})),
-]);
 
 const router = useRouter();
 const overlay = useOverlay();

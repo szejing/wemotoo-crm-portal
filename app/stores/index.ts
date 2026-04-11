@@ -21,7 +21,7 @@ import { useOutletStore } from './Outlet/Outlet';
 import { useTaxStore } from './Tax/Tax';
 import { useTaxGroupStore } from './TaxGroup/TaxGroup';
 import { useTaxRuleStore } from './TaxRule/TaxRule';
-import { useVoucherStore } from './voucher/voucher';
+import { useVoucherStore } from './voucher/Voucher';
 
 export {
 	useAuthStore,
@@ -31,7 +31,7 @@ export {
 	useSettingStore,
 	useProductCategoryStore,
 	useProductTagStore,
-	useProductVariationStore as useProductOptionStore,
+	useProductVariationStore,
 	useProductStore,
 	useOrderStore,
 	useSummSaleStore,

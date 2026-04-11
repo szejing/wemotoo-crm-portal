@@ -25,11 +25,6 @@
 					<UInput v-model="state.code" :disabled="codeDisabled" />
 				</UFormField>
 
-				<UFormField :label="$t('form.name')" name="name" required>
-					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.nameHint') }}</p>
-					<UInput v-model="state.name" />
-				</UFormField>
-
 				<UFormField :label="$t('form.description')" name="description">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.descriptionHint') }}</p>
 					<UInput v-model="state.description" />
@@ -37,7 +32,13 @@
 
 				<UFormField :label="$t('form.discountCode')" name="discount_code" required>
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.discountCodeHint') }}</p>
-					<USelect v-model="discountCodeSelect" :items="discountSelectItems" value-attribute="value" :loading="discountOptionsLoading" class="w-full" />
+					<ZSelectMenuDiscount
+						v-model="discountCodeSelect"
+						:discounts="discounts"
+						:none-label="noneLabel"
+						:none-value="selectNoneValue"
+						:loading="discountOptionsLoading"
+					/>
 				</UFormField>
 
 				<UFormField v-if="showUsageLimit" :label="$t('form.usageLimit')" name="usage_limit">
@@ -51,6 +52,7 @@
 
 <script lang="ts" setup>
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
+import type { Discount } from '~/utils/types/discount';
 import { ICONS } from '~/utils/icons';
 
 const selectNoneValue = '__none__' as const;
@@ -61,7 +63,8 @@ const props = withDefaults(
 		codeDisabled?: boolean;
 		showStatusSwitch?: boolean;
 		showUsageLimit?: boolean;
-		discountSelectItems: { label: string; value: string }[];
+		discounts: Discount[];
+		noneLabel: string;
 		discountOptionsLoading?: boolean;
 	}>(),
 	{

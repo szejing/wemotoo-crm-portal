@@ -8,7 +8,8 @@
 						code-disabled
 						show-status-switch
 						show-usage-limit
-						:discount-select-items="discountSelectItems"
+						:discounts="discountOptions"
+						:none-label="t('components.discountForm.filterNone')"
 						:discount-options-loading="discountOptionsLoading"
 					/>
 					<ZInputVoucherValiditySection :state="formState" />
@@ -35,13 +36,13 @@ import type { CreateVoucherReq } from '~/repository/modules/voucher/models/reque
 import { CreateVoucherValidation } from '~/utils/schema';
 import type { Voucher } from '~/utils/types/voucher';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
+import type { ErrorResponse } from '~/repository/base/error';
+import { successNotification, failedNotification } from '~/stores/AppUi/AppUi';
 
 const { t } = useI18n();
 
 const voucherSchema = computed(() => CreateVoucherValidation(t));
 type Schema = z.infer<ReturnType<typeof CreateVoucherValidation>>;
-
-const selectNoneValue = '__none__' as const;
 
 const props = defineProps<{
 	voucher: Voucher;
@@ -53,14 +54,6 @@ const { updating } = storeToRefs(voucherStore);
 
 const discountOptions = ref<Discount[]>([]);
 const discountOptionsLoading = ref(false);
-
-const discountSelectItems = computed(() => [
-	{ label: t('components.discountForm.filterNone'), value: selectNoneValue },
-	...discountOptions.value.map((d) => ({
-		label: d.description ? `${d.code} — ${d.description}` : d.code,
-		value: d.code,
-	})),
-]);
 
 const formState = reactive<VoucherFormState>({
 	code: '',
@@ -78,12 +71,11 @@ watch(
 	(v) => {
 		if (!v) return;
 		formState.code = v.code;
-		formState.name = v.name;
 		formState.description = v.description || '';
-		formState.status = v.status || 'active';
-		formState.discount_code = v.discount_code || '';
-		formState.starts_at = v.starts_at || undefined;
-		formState.ends_at = v.ends_at || undefined;
+		formState.status = v.is_disabled ? 'inactive' : 'active';
+		formState.discount_code = v.discount.code || '';
+		formState.starts_at = v.starts_at ? v.starts_at.toISOString() : undefined;
+		formState.ends_at = v.ends_at ? v.ends_at.toISOString() : undefined;
 		formState.usage_limit = v.usage_limit != null && v.usage_limit > 0 ? v.usage_limit : undefined;
 	},
 	{ immediate: true },
@@ -190,11 +182,13 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			...(d.usage_limit != null ? { usage_limit: d.usage_limit } : {}),
 		};
 		const result = await voucherStore.updateVoucher(props.voucher.code, body);
-		if (result?.code) {
+		if (result?.voucher.code) {
+			successNotification(`${result.voucher.code} - Voucher updated`);
 			await navigateTo('/marketing/vouchers');
 		}
-	} catch {
-		// store handles error toast
+	} catch (err: unknown | ErrorResponse) {
+		const message = (err as ErrorResponse).message ?? 'Failed to update voucher';
+		failedNotification(message);
 	}
 };
 

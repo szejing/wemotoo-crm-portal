@@ -97,15 +97,18 @@ export const useVoucherStore = defineStore('voucherStore', {
 			}
 		},
 
-		async getVoucherByCode(code: string) {
+		async getVoucherByCode(code: string): Promise<Voucher | undefined> {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.voucher.getSingle(code);
-				return data;
+				if (data.voucher) {
+					return data.voucher;
+				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process voucher';
 				failedNotification(message);
+				return undefined;
 			} finally {
 				this.loading = false;
 			}
@@ -148,8 +151,8 @@ export const useVoucherStore = defineStore('voucherStore', {
 			try {
 				const data = await $api.voucher.update(code, payload);
 
-				if (data.code) {
-					successNotification(`${data.code} - Voucher updated`);
+				if (data.voucher.code) {
+					successNotification(`${data.voucher.code} - Voucher updated`);
 					this.getVouchers();
 				}
 				return data;
@@ -170,10 +173,10 @@ export const useVoucherStore = defineStore('voucherStore', {
 			try {
 				const data = await $api.voucher.remove({ code });
 
-				if (data.code) {
-					successNotification(`Voucher #${data.code} deleted`);
+				if (data.voucher.code) {
+					successNotification(`Voucher #${data.voucher.code} deleted`);
 
-					const index = this.vouchers.findIndex((v) => v.code === data.code);
+					const index = this.vouchers.findIndex((v) => v.code === data.voucher.code);
 					if (index !== -1) {
 						this.vouchers.splice(index, 1);
 					}

@@ -790,6 +790,8 @@
 			"selectTaxes": "Select Taxes",
 			"selectTaxRule": "Select Tax Rule",
 			"selectTax": "Select Tax",
+			"selectDiscount": "Select discount…",
+			"searchDiscount": "Search discounts…",
 			"selectType": "Select Type",
 			"productTypeItemDesc": "Physical products you sell; track stock and inventory.",
 			"productTypeServiceDesc": "Services or maintenance; no stock to manage.",
