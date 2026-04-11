@@ -70,6 +70,7 @@
 		"addOutlet": "Tambah Cawangan",
 		"addStaff": "Tambah Kakitangan",
 		"confirm": "Konfirmasi",
+		"select": "Pilih",
 		"apply": "Guna",
 		"phoneNo": "No. telefon"
 	},
@@ -808,6 +809,10 @@
 			"selectCategory": "Pilih Kategori",
 			"selectAppointmentStatus": "Pilih Status Temujanji",
 			"selectAmountType": "Pilih Jenis Jumlah",
+			"selectDiscountFilterOperator": "Pilih operator penapis…",
+			"searchDiscountFilterOperator": "Cari operator penapis…",
+			"selectDiscountFilterCondition": "Pilih syarat penapis…",
+			"searchDiscountFilterCondition": "Cari syarat penapis…",
 			"showColumns": "Tunjuk Lajur",
 			"createLabel": "Cipta \"{term}\""
 		},
@@ -1066,7 +1071,19 @@
 			"filterOperator": "Operator penapis",
 			"filterCondition": "Medan penapis",
 			"filterValue": "Nilai penapis",
-			"filterNone": "Tiada"
+			"filterNone": "Tiada",
+			"openFilterValuePicker": "Cari",
+			"selectFilterConditionFirst": "Pilih medan penapis dahulu",
+			"filterValuePickerTitle": "Pilih {entity}",
+			"filterValuePickerDescription": "Cari, susun, dan pilih berbilang nilai. Nilai dipilih disimpan sebagai teks dipisahkan koma.",
+			"filterValuePickerSearchPlaceholder": "Cari {entity}...",
+			"filterValuePickerEmpty": "Tiada rekod sepadan ditemui.",
+			"filterValuePickerSelected": "{count} dipilih",
+			"filterValuePickerTotal": "{total} jumlah rekod",
+			"sortBy": "Susun ikut",
+			"sortDirection": "Arah susunan",
+			"sortAscending": "Menaik",
+			"sortDescending": "Menurun"
 		},
 		"voucherForm": {
 			"createVoucher": "Cipta baucar",
@@ -1082,7 +1099,9 @@
 			"codeHint": "Kod baucar untuk pelanggan masukkan semasa pembayaran",
 			"nameHint": "Nama untuk baucar ini",
 			"descriptionHint": "Nota ringkas (pilihan).",
-			"discountCodeHint": "Wajib. Pilih diskaun."
+			"discountCodeHint": "Wajib. Pilih diskaun.",
+			"linkedDiscountTitle": "Diskaun dipautkan",
+			"linkedDiscountBody": "Diskaun baharu akan menggunakan kod yang sama dengan baucar ini ({code}) dan akan dipautkan secara automatik."
 		},
 		"orderInput": {
 			"status": "Status",

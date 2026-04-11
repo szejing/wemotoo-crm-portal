@@ -1,39 +1,81 @@
 <template>
 	<div class="w-full">
-		<UForm ref="formRef" :schema="voucherSchema" :state="new_voucher" class="space-y-6 mb-6" @submit="onSubmit" @error="onError">
-			<ZInputVoucherDetailsSection
-				:state="new_voucherAsFormState"
-				:discounts="discountOptions"
-				:none-label="t('components.discountForm.filterNone')"
-				:discount-options-loading="discountOptionsLoading"
-			/>
-			<ZInputVoucherValiditySection :state="new_voucherAsFormState" />
+		<UForm ref="formRef" :schema="formSchema" :state="uFormState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="onSubmit" @error="onError">
+			<div class="lg:col-span-9 space-y-6">
+				<ZInputVoucherDetailsSection
+					:state="voucherSectionState"
+					:form-field-prefix="withBundledDiscount ? 'voucher' : ''"
+					:discounts="discountOptions"
+					:none-label="t('components.discountForm.filterNone')"
+					:discount-options-loading="discountOptionsLoading"
+					:link-discount-to-voucher-code="withBundledDiscount"
+				/>
+
+				<ZInputDiscountRuleSection :state="new_discount" form-field-prefix="discount" />
+				<ZInputDiscountConditionsSection :state="new_discount" form-field-prefix="discount" />
+			</div>
+			<div class="lg:col-span-3">
+				<div class="lg:sticky lg:top-4">
+					<FormVoucherReviewSummary :summary="voucherReviewSummary" />
+				</div>
+			</div>
 		</UForm>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
+import { DiscountRuleType } from 'wemotoo-common';
+import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
 import type { Discount } from '~/utils/types/discount';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
+import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { useDiscountStore } from '~/stores/Discount/Discount';
 import { useVoucherStore } from '~/stores/voucher/Voucher';
-import { CreateVoucherValidation } from '~/utils/schema';
+import { CreateBundledVoucherFormValidation, CreateVoucherValidation } from '~/utils/schema';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 
-const { t } = useI18n();
-const voucherSchema = computed(() => CreateVoucherValidation(t));
+const props = withDefaults(
+	defineProps<{
+		/** Create a new discount with the same code as the voucher and link it in one request. */
+		withBundledDiscount?: boolean;
+	}>(),
+	{ withBundledDiscount: false },
+);
 
-type Schema = z.infer<ReturnType<typeof CreateVoucherValidation>>;
+const { t } = useI18n();
+
+type BundledSchema = z.infer<ReturnType<typeof CreateBundledVoucherFormValidation>>;
+type VoucherSchema = z.infer<ReturnType<typeof CreateVoucherValidation>>;
+
+const formSchema = computed(() =>
+	props.withBundledDiscount ? CreateBundledVoucherFormValidation(t) : CreateVoucherValidation(t, { linkDiscountToVoucher: false }),
+);
 
 const voucherStore = useVoucherStore();
 const discountStore = useDiscountStore();
 const { adding, new_voucher } = storeToRefs(voucherStore);
+const { new_discount } = storeToRefs(discountStore);
 
 const new_voucherAsFormState = computed(() => new_voucher.value as VoucherFormState);
+
+const bundledFormModel = reactive({
+	voucher: new_voucher,
+	discount: new_discount,
+});
+
+/** UForm state is store-backed; cast for schema-aligned UForm generics. */
+const uFormState = computed(
+	(): Record<string, unknown> =>
+		props.withBundledDiscount ? (bundledFormModel as unknown as Record<string, unknown>) : (new_voucher.value as unknown as Record<string, unknown>),
+);
+
+const voucherSectionState = computed(() =>
+	props.withBundledDiscount ? (toValue(bundledFormModel.voucher) as VoucherFormState) : new_voucherAsFormState.value,
+);
 
 const discountOptions = ref<Discount[]>([]);
 const discountOptionsLoading = ref(false);
@@ -51,14 +93,47 @@ watch(adding, (v) => {
 	else loadingModal.close();
 });
 
-const fieldSectionMap: Record<string, string> = {
+const voucherFieldSectionMap: Record<string, string> = {
 	code: 'section-voucher-details',
 	name: 'section-voucher-details',
 	description: 'section-voucher-details',
 	discount_code: 'section-voucher-details',
 	status: 'section-voucher-details',
+	usage_limit: 'section-voucher-details',
 	starts_at: 'section-voucher-validity',
 	ends_at: 'section-voucher-validity',
+};
+
+const bundledDiscountFieldSectionMap: Record<string, string> = {
+	usage_limit: 'section-discount-rule',
+	rule_type: 'section-discount-rule',
+	rule_value: 'section-discount-rule',
+	allocation: 'section-discount-rule',
+};
+
+const humanizeEnum = (value: string) =>
+	value
+		.split('_')
+		.map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+		.join(' ');
+
+const resolveErrorSectionId = (errorName: string): string | undefined => {
+	if (props.withBundledDiscount) {
+		if (errorName.startsWith('voucher.')) {
+			const field = errorName.slice('voucher.'.length).split('.')[0] ?? '';
+			return voucherFieldSectionMap[field];
+		}
+		if (errorName.startsWith('discount.')) {
+			if (errorName.includes('.conditions')) {
+				return 'section-discount-conditions';
+			}
+			const field = errorName.slice('discount.'.length).split('.')[0] ?? '';
+			return bundledDiscountFieldSectionMap[field];
+		}
+		return undefined;
+	}
+	const field = errorName.split('.')[0] ?? errorName;
+	return voucherFieldSectionMap[field];
 };
 
 const onError = (event: FormErrorEvent) => {
@@ -66,8 +141,7 @@ const onError = (event: FormErrorEvent) => {
 	const errorName = firstError?.name;
 	if (!errorName) return;
 
-	const fieldName = errorName.split('.')[0] ?? errorName;
-	const sectionId = fieldSectionMap[fieldName];
+	const sectionId = resolveErrorSectionId(errorName);
 
 	if (sectionId) {
 		document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -79,29 +153,202 @@ const onError = (event: FormErrorEvent) => {
 	});
 };
 
-onMounted(async () => {
-	voucherStore.resetNewVoucher();
-	discountOptionsLoading.value = true;
-	try {
-		discountOptions.value = await discountStore.fetchDiscountsForSelect();
-	} finally {
-		discountOptionsLoading.value = false;
+const ruleTypeLabel = (rt: DiscountRuleType) =>
+	t(
+		{
+			[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
+			[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
+			[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+		}[rt],
+	);
+
+const ruleValueCurrencyCode = 'RM';
+
+const ruleSummaryLabel = computed(() => {
+	const rt = new_discount.value.rule_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = new_discount.value.rule_value;
+	const typeName = ruleTypeLabel(rt);
+	if (rt === DiscountRuleType.PERCENTAGE) {
+		return `${typeName}: ${rv}%`;
+	}
+	if (rt === DiscountRuleType.FREE_SHIPPING) {
+		return typeName;
+	}
+	return `${typeName}: ${ruleValueCurrencyCode} ${rv}`;
+});
+
+const allocationReviewLabel = computed(() => {
+	const a = new_discount.value.allocation;
+	if (a == null) return t('common.notSet');
+	return humanizeEnum(a);
+});
+
+const discountUsageLimitReviewLabel = computed(() => {
+	const ul = new_discount.value.usage_limit;
+	if (ul != null && ul > 0) return String(ul);
+	return t('components.voucherForm.usageLimitNotSet');
+});
+
+const voucherReviewSummary = computed(() => {
+	const v = new_voucher.value;
+	const s = v.starts_at;
+	const e = v.ends_at;
+	let validityStartsAt: string | undefined;
+	let validityEndsAt: string | undefined;
+	if (s && e) {
+		const start = new Date(s);
+		const endDate = new Date(e);
+		validityStartsAt = getFormattedDate(start, 'dd-MM-yyyy');
+		validityEndsAt = start.toDateString() === endDate.toDateString() ? '-' : getFormattedDate(endDate, 'dd-MM-yyyy');
+	} else if (s && !e) {
+		validityStartsAt = getFormattedDate(new Date(s), 'dd-MM-yyyy');
+	} else if (!s && e) {
+		validityStartsAt = getFormattedDate(startOfDay(new Date()), 'dd-MM-yyyy');
+		validityEndsAt = getFormattedDate(new Date(e), 'dd-MM-yyyy');
+	}
+
+	const ul = props.withBundledDiscount ? new_discount.value.usage_limit : v.usage_limit;
+	const usageLimitLabel = ul != null && ul > 0 ? String(ul) : t('components.voucherForm.usageLimitNotSet');
+
+	const codeTrim = v.code?.trim() ?? '';
+
+	const base = {
+		code: codeTrim,
+		name: (v.name?.trim() || codeTrim) ?? '',
+		description: v.description?.trim() ?? '',
+		...(validityStartsAt != null ? { validityStartsAt } : {}),
+		...(validityEndsAt != null ? { validityEndsAt } : {}),
+		usageLimitLabel,
+	};
+
+	if (!props.withBundledDiscount) {
+		return { ...base, discountDetails: undefined };
+	}
+
+	return {
+		...base,
+		discountDetails: {
+			ruleSummary: ruleSummaryLabel.value,
+			conditionsCount: new_discount.value.conditions?.length ?? 0,
+			allocationLabel: allocationReviewLabel.value,
+			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
+		},
+	};
+});
+
+/** Copy voucher identity onto bundled discount state; discount validity dates stay unset. */
+const syncBundledDiscountFromVoucher = () => {
+	if (!props.withBundledDiscount) {
+		return;
+	}
+	const c = new_voucher.value.code?.trim() ?? '';
+	const desc = new_voucher.value.description?.trim() || new_voucher.value.name?.trim() || c;
+	new_discount.value.code = c;
+	new_discount.value.description = desc;
+	new_discount.value.starts_at = undefined;
+	new_discount.value.ends_at = undefined;
+	new_discount.value.is_disabled = new_voucher.value.status === 'inactive';
+	new_voucher.value.discount_code = c;
+	const n = new_voucher.value.name?.trim();
+	if (!n) {
+		new_voucher.value.name = c;
+	}
+};
+
+watch([() => new_voucher.value.code, () => new_voucher.value.description, () => new_voucher.value.name, () => new_voucher.value.status], () => {
+	if (props.withBundledDiscount) {
+		syncBundledDiscountFromVoucher();
 	}
 });
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+onMounted(async () => {
+	voucherStore.resetNewVoucher();
+	if (props.withBundledDiscount) {
+		discountStore.resetNewDiscount();
+		syncBundledDiscountFromVoucher();
+	}
+	if (!props.withBundledDiscount) {
+		discountOptionsLoading.value = true;
+		try {
+			discountOptions.value = await discountStore.fetchDiscountsForSelect();
+		} finally {
+			discountOptionsLoading.value = false;
+		}
+	}
+});
+
+const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): CreateDiscountReq => {
+	const conditions = (data.conditions ?? []).map((c) => ({
+		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
+		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
+		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
+		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
+		...(c.filter_value?.trim() ? { filter_value: c.filter_value.trim() } : {}),
+	}));
+
+	const codeTrim = new_voucher.value.code?.trim() ?? '';
+	const description = new_voucher.value.description?.trim() || new_voucher.value.name?.trim() || codeTrim;
+
+	return {
+		code: codeTrim,
+		description,
+		is_disabled: new_voucher.value.status === 'inactive',
+		usage_limit: data.usage_limit,
+		rule_type: data.rule_type,
+		rule_value: data.rule_value,
+		...(data.allocation != null ? { allocation: data.allocation } : {}),
+		...(conditions.length > 0 ? { conditions } : {}),
+	};
+};
+
+const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) => {
 	try {
-		const d = event.data;
+		if (props.withBundledDiscount) {
+			const { voucher: d, discount: disc } = event.data as BundledSchema;
+			const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
+			const codeTrim = d.code.trim();
+			const nameTrim = (d.name?.trim() || codeTrim) as string;
+
+			const pendingDiscount = buildBundledCreateDiscountPayload(disc);
+			const { code: _omit, ...discountBody } = pendingDiscount;
+
+			const payload: CreateVoucherReq = {
+				code: codeTrim,
+				name: nameTrim,
+				status: d.status,
+				description: d.description?.trim() || nameTrim,
+				is_disabled: d.status === 'inactive',
+				discount_code: codeTrim,
+				starts_at: startsAt,
+				ends_at: d.ends_at,
+				...(disc.usage_limit != null ? { usage_limit: disc.usage_limit } : {}),
+				create_discount: discountBody,
+			};
+
+			const created = await voucherStore.createVoucher(payload);
+			if (created?.code) {
+				router.push('/marketing/vouchers');
+			}
+			return;
+		}
+
+		const d = event.data as VoucherSchema;
 		const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
+		const codeTrim = d.code.trim();
+		const nameTrim = (d.name?.trim() || codeTrim) as string;
+
 		const payload: CreateVoucherReq = {
-			code: d.code.trim(),
-			name: d.name.trim(),
+			code: codeTrim,
+			name: nameTrim,
 			status: d.status,
-			description: d.description?.trim() || undefined,
+			description: d.description?.trim() || nameTrim,
+			is_disabled: d.status === 'inactive',
 			discount_code: d.discount_code?.trim() || undefined,
 			starts_at: startsAt,
 			ends_at: d.ends_at,
+			...(d.usage_limit != null ? { usage_limit: d.usage_limit } : {}),
 		};
+
 		const created = await voucherStore.createVoucher(payload);
 		if (created?.code) {
 			router.push('/marketing/vouchers');
@@ -112,6 +359,9 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 };
 
 const submit = () => {
+	if (props.withBundledDiscount) {
+		syncBundledDiscountFromVoucher();
+	}
 	formRef.value?.submit();
 };
 

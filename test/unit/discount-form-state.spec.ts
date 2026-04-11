@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType, DiscountConditionOperator, DiscountConditionType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import {
 	applyDiscountToFormState,
 	discountToFormEditableState,
 	emptyDiscountFormEditableState,
-} from '../../app/utils/discount-form-state';
+} from '../../app/utils/types/form/discount-creation';
 import type { Discount } from '../../app/utils/types/discount';
 
 describe('discountToFormEditableState', () => {
@@ -22,8 +22,6 @@ describe('discountToFormEditableState', () => {
 			allocation: AllocationType.BILL,
 			conditions: [
 				{
-					operator: DiscountConditionOperator.IN,
-					type: DiscountConditionType.PRODUCTS,
 					min_amount: null,
 					max_amount: null,
 					filter_operator: null,
@@ -48,10 +46,7 @@ describe('discountToFormEditableState', () => {
 describe('applyDiscountToFormState', () => {
 	it('replaces conditions without sharing array reference issues', () => {
 		const target = emptyDiscountFormEditableState();
-		target.conditions.push({
-			operator: DiscountConditionOperator.IN,
-			type: DiscountConditionType.PRODUCTS,
-		});
+		target.conditions.push({});
 
 		const d: Discount = {
 			code: 'X',

@@ -24,32 +24,14 @@
 					<UButton color="error" variant="ghost" size="xs" icon="i-lucide-trash-2" :label="$t('common.delete')" @click="removeCondition(index)" />
 				</div>
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<UFormField :label="$t('components.discountForm.conditionOperator')" :name="`conditions.${index}.operator`" required>
-						<USelect
-							:model-value="cond.operator"
-							:items="conditionOperatorItems"
-							value-attribute="value"
-							class="w-full"
-							@update:model-value="(v: DiscountConditionOperator) => (cond.operator = v)"
-						/>
-					</UFormField>
-					<UFormField :label="$t('components.discountForm.conditionType')" :name="`conditions.${index}.type`" required>
-						<USelect
-							:model-value="cond.type"
-							:items="conditionTypeItems"
-							value-attribute="value"
-							class="w-full"
-							@update:model-value="(v: DiscountConditionType) => (cond.type = v)"
-						/>
-					</UFormField>
-					<UFormField :label="$t('components.discountForm.minAmount')" :name="`conditions.${index}.min_amount`">
+					<UFormField :label="$t('components.discountForm.minAmount')" :name="fieldName(`conditions.${index}.min_amount`)">
 						<UInput v-model.number="cond.min_amount" type="number" min="0" step="0.01">
 							<template #leading>
 								<span class="text-muted text-sm tabular-nums select-none">{{ ruleValueCurrencyCode }}</span>
 							</template>
 						</UInput>
 					</UFormField>
-					<UFormField :label="$t('components.discountForm.maxAmount')" :name="`conditions.${index}.max_amount`">
+					<UFormField :label="$t('components.discountForm.maxAmount')" :name="fieldName(`conditions.${index}.max_amount`)">
 						<UInput v-model.number="cond.max_amount" type="number" min="0" step="0.01">
 							<template #leading>
 								<span class="text-muted text-sm tabular-nums select-none">{{ ruleValueCurrencyCode }}</span>
@@ -60,26 +42,14 @@
 				<div class="border-t border-default pt-4 space-y-4">
 					<p class="text-xs font-medium uppercase tracking-wide text-muted">{{ $t('components.discountForm.filterOptional') }}</p>
 					<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-						<UFormField :label="$t('components.discountForm.filterOperator')" :name="`conditions.${index}.filter_operator`">
-							<USelect
-								:model-value="cond.filter_operator ?? selectNoneValue"
-								:items="filterOperatorItems"
-								value-attribute="value"
-								class="w-full"
-								@update:model-value="(v) => (cond.filter_operator = v === selectNoneValue ? undefined : (v as FilterOperator))"
-							/>
+						<UFormField :label="$t('components.discountForm.filterOperator')" :name="fieldName(`conditions.${index}.filter_operator`)">
+							<ZSelectMenuDiscountFilterOperator v-model="cond.filter_operator" />
 						</UFormField>
-						<UFormField :label="$t('components.discountForm.filterCondition')" :name="`conditions.${index}.filter_condition`">
-							<USelect
-								:model-value="cond.filter_condition ?? selectNoneValue"
-								:items="filterConditionItems"
-								value-attribute="value"
-								class="w-full"
-								@update:model-value="(v) => (cond.filter_condition = v === selectNoneValue ? undefined : (v as FilterCondition))"
-							/>
+						<UFormField :label="$t('components.discountForm.filterCondition')" :name="fieldName(`conditions.${index}.filter_condition`)">
+							<ZSelectMenuDiscountFilterCondition v-model="cond.filter_condition" @update:model-value="onFilterConditionChange(cond)" />
 						</UFormField>
-						<UFormField :label="$t('components.discountForm.filterValue')" :name="`conditions.${index}.filter_value`">
-							<UInput v-model="cond.filter_value" />
+						<UFormField :label="$t('components.discountForm.filterValue')" :name="fieldName(`conditions.${index}.filter_value`)">
+							<ZInputDiscountFilterValuePicker v-model="cond.filter_value" :filter-condition="cond.filter_condition" />
 						</UFormField>
 					</div>
 				</div>
@@ -89,49 +59,28 @@
 </template>
 
 <script lang="ts" setup>
-import { DiscountConditionOperator, DiscountConditionType, FilterCondition, FilterOperator } from 'wemotoo-common';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 import { ICONS } from '~/utils/icons';
 
-const props = defineProps<{
-	state: DiscountCreate;
-}>();
+const props = withDefaults(
+	defineProps<{
+		state: DiscountCreate;
+		/** Dot-prefix for UFormField names (e.g. `discount` → `discount.conditions.0.min_amount`). */
+		formFieldPrefix?: string;
+	}>(),
+	{ formFieldPrefix: '' },
+);
 
-const { t } = useI18n();
 const state = toRef(props, 'state');
 
-/** USelect reserves `''` for clearing; optional rows use this sentinel instead. */
-const selectNoneValue = '__none__' as const;
+const fieldName = (suffix: string) => (props.formFieldPrefix ? `${props.formFieldPrefix}.${suffix}` : suffix);
 
 /** Hardcoded until merchant currency is wired into this form. */
 const ruleValueCurrencyCode = 'RM';
 
-const humanizeEnum = (value: string) => {
-	return value
-		.split('_')
-		.map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-		.join(' ');
-};
-
-const conditionOperatorItems = computed(() => Object.values(DiscountConditionOperator).map((v) => ({ label: humanizeEnum(v), value: v })));
-
-const conditionTypeItems = computed(() => Object.values(DiscountConditionType).map((v) => ({ label: humanizeEnum(v), value: v })));
-
-const filterOperatorItems = computed(() => [
-	{ label: t('components.discountForm.filterNone'), value: selectNoneValue },
-	...Object.values(FilterOperator).map((v) => ({ label: humanizeEnum(v), value: v })),
-]);
-
-const filterConditionItems = computed(() => [
-	{ label: t('components.discountForm.filterNone'), value: selectNoneValue },
-	...Object.values(FilterCondition).map((v) => ({ label: humanizeEnum(v), value: v })),
-]);
-
 const emptyCondition = (): CreateDiscountConditionReq => {
 	return {
-		operator: DiscountConditionOperator.IN,
-		type: DiscountConditionType.PRODUCTS,
 		min_amount: undefined,
 		max_amount: undefined,
 		filter_operator: undefined,
@@ -149,5 +98,9 @@ const removeCondition = (index: number) => {
 	const list = [...(state.value.conditions ?? [])];
 	list.splice(index, 1);
 	state.value.conditions = list;
+};
+
+const onFilterConditionChange = (condition: CreateDiscountConditionReq) => {
+	condition.filter_value = '';
 };
 </script>

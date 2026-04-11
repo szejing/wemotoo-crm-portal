@@ -1,7 +1,7 @@
 <template>
 	<ZPagePanel id="vouchers-create" :title="$t('pages.createVoucher')" back-to="/marketing/vouchers" grow>
 		<div class="container w-full mx-auto py-4">
-			<FormVoucherCreation ref="formRef" />
+			<FormVoucherCreation ref="formRef" with-bundled-discount />
 		</div>
 
 		<template #footer>
@@ -36,16 +36,24 @@ const { t } = useI18n();
 useHead({ title: () => t('pages.createVoucher') });
 
 const voucherStore = useVoucherStore();
+const discountStore = useDiscountStore();
 const { adding, new_voucher } = storeToRefs(voucherStore);
+const { new_discount } = storeToRefs(discountStore);
 const formRef = ref<{ submit: () => void } | null>(null);
 
 const isDirty = computed(() => {
 	const v = new_voucher.value;
-	return !!(v.code?.trim() || v.name?.trim() || v.description?.trim() || v.discount_code?.trim());
+	const vDirty = !!(v.code?.trim() || v.name?.trim() || v.description?.trim() || v.discount_code?.trim());
+	const d = new_discount.value;
+	const dDirty = !!(d.description?.trim() || (d.conditions?.length ?? 0) > 0 || d.usage_limit != null);
+	return vDirty || dDirty;
 });
 
 useLeavePageGuard(isDirty, {
-	onLeave: () => voucherStore.resetNewVoucher(),
+	onLeave: () => {
+		voucherStore.resetNewVoucher();
+		discountStore.resetNewDiscount();
+	},
 });
 
 const onSubmit = () => {

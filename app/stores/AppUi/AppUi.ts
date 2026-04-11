@@ -67,7 +67,7 @@ const default_navigations = [
 				value: 'marketing',
 				children: [
 					{ label: 'nav.affiliates', to: '/marketing/affiliates' },
-					{ label: 'nav.discounts', to: '/marketing/discounts' },
+					// { label: 'nav.discounts', to: '/marketing/discounts' },
 					{ label: 'nav.vouchers', to: '/marketing/vouchers' },
 					// { label: 'nav.campaigns', to: '/marketing/campaigns' },
 					// { label: 'nav.automations', to: '/marketing/automations' },

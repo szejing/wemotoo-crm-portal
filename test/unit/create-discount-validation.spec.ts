@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DiscountConditionOperator, DiscountConditionType, DiscountRuleType } from 'wemotoo-common';
+import { DiscountRuleType } from 'wemotoo-common';
 import { CreateDiscountValidation } from '../../app/utils/schema/Discount/Create/CreateDiscountValidation';
 
 const t = (key: string) => key;
@@ -15,8 +15,6 @@ const basePayload = {
 	rule_value: 10,
 	allocation: undefined as undefined,
 	conditions: [] as {
-		operator: DiscountConditionOperator;
-		type: DiscountConditionType;
 		min_amount?: number;
 		max_amount?: number;
 		filter_operator?: undefined;
@@ -85,8 +83,6 @@ describe('CreateDiscountValidation', () => {
 			...basePayload,
 			conditions: [
 				{
-					operator: DiscountConditionOperator.IN,
-					type: DiscountConditionType.PRODUCTS,
 					min_amount: 100,
 					max_amount: 50,
 				},

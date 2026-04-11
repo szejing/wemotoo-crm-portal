@@ -8,10 +8,10 @@
 			</div>
 		</template>
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4">
-			<UFormField :label="$t('components.discountForm.ruleType')" name="rule_type" required>
+			<UFormField :label="$t('components.discountForm.ruleType')" :name="fieldName('rule_type')" required>
 				<USelect :model-value="state.rule_type" :items="ruleTypeItems" value-attribute="value" class="w-full" @update:model-value="onRuleTypeSelect" />
 			</UFormField>
-			<UFormField v-if="state.rule_type !== DiscountRuleType.FREE_SHIPPING" :label="$t('components.discountForm.ruleValue')" name="rule_value" required>
+			<UFormField v-if="state.rule_type !== DiscountRuleType.FREE_SHIPPING" :label="$t('components.discountForm.ruleValue')" :name="fieldName('rule_value')" required>
 				<UInput v-model.number="state.rule_value" type="number" min="0" :max="state.rule_type === DiscountRuleType.PERCENTAGE ? 100 : undefined" step="0.01">
 					<template #trailing>
 						<span class="text-muted text-sm pe-2 tabular-nums">{{ ruleValueSuffix }}</span>
@@ -23,11 +23,11 @@
 			</UFormField>
 		</div>
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4">
-			<UFormField :label="$t('components.discountForm.usageLimit')" name="usage_limit">
+			<UFormField :label="$t('components.discountForm.usageLimit')" :name="fieldName('usage_limit')">
 				<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.discountForm.usageLimitHint') }}</p>
 				<UInput v-model.number="usageLimitModel" type="number" min="1" :placeholder="$t('components.discountForm.usageLimitPlaceholder')" />
 			</UFormField>
-			<UFormField :label="$t('components.discountForm.allocation')" name="allocation">
+			<UFormField :label="$t('components.discountForm.allocation')" :name="fieldName('allocation')">
 				<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.discountForm.allocationHint') }}</p>
 				<USelect v-model="state.allocation" :items="allocationItems" value-attribute="value" class="w-full max-w-md" />
 			</UFormField>
@@ -40,12 +40,19 @@ import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 import { ICONS } from '~/utils/icons';
 
-const props = defineProps<{
-	state: DiscountCreate;
-}>();
+const props = withDefaults(
+	defineProps<{
+		state: DiscountCreate;
+		/** Dot-prefix for UFormField names (e.g. `discount` → `discount.rule_type`). */
+		formFieldPrefix?: string;
+	}>(),
+	{ formFieldPrefix: '' },
+);
 
 const { t } = useI18n();
 const state = toRef(props, 'state');
+
+const fieldName = (segment: string) => (props.formFieldPrefix ? `${props.formFieldPrefix}.${segment}` : segment);
 
 /** Hardcoded until merchant currency is wired into this form. */
 const ruleValueCurrencyCode = 'RM';

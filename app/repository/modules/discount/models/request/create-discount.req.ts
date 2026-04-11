@@ -1,16 +1,7 @@
-import type {
-	AllocationType,
-	DiscountConditionOperator,
-	DiscountConditionType,
-	DiscountRuleType,
-	FilterCondition,
-	FilterOperator,
-} from 'wemotoo-common';
+import type { AllocationType, DiscountRuleType, FilterCondition, FilterOperator } from 'wemotoo-common';
 
 /** Matches ecommerce-nestjs `CreateDiscountConditionDto` (flat filter fields). */
 export type CreateDiscountConditionReq = {
-	operator: DiscountConditionOperator;
-	type: DiscountConditionType;
 	min_amount?: number;
 	max_amount?: number;
 	filter_operator?: FilterOperator;

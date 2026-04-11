@@ -70,6 +70,7 @@
 		"addOutlet": "Add Outlet",
 		"addStaff": "Add Staff",
 		"confirm": "Confirm",
+		"select": "Select",
 		"apply": "Apply",
 		"phoneNo": "Phone No"
 	},
@@ -809,6 +810,10 @@
 			"selectCategory": "Select Category",
 			"selectAppointmentStatus": "Select Appointment Status",
 			"selectAmountType": "Select Amount Type",
+			"selectDiscountFilterOperator": "Select filter operator…",
+			"searchDiscountFilterOperator": "Search filter operators…",
+			"selectDiscountFilterCondition": "Select filter condition…",
+			"searchDiscountFilterCondition": "Search filter conditions…",
 			"showColumns": "Show Columns",
 			"createLabel": "Create \"{term}\""
 		},
@@ -1067,7 +1072,19 @@
 			"filterOperator": "Filter operator",
 			"filterCondition": "Filter field",
 			"filterValue": "Filter value",
-			"filterNone": "None"
+			"filterNone": "None",
+			"openFilterValuePicker": "Browse",
+			"selectFilterConditionFirst": "Select filter field first",
+			"filterValuePickerTitle": "Select {entity}",
+			"filterValuePickerDescription": "Search, sort, and select multiple values. Selected values are saved as comma-separated text.",
+			"filterValuePickerSearchPlaceholder": "Search {entity}...",
+			"filterValuePickerEmpty": "No matching records found.",
+			"filterValuePickerSelected": "{count} selected",
+			"filterValuePickerTotal": "{total} total records",
+			"sortBy": "Sort by",
+			"sortDirection": "Sort direction",
+			"sortAscending": "Ascending",
+			"sortDescending": "Descending"
 		},
 		"voucherForm": {
 			"createVoucher": "Create voucher",
@@ -1083,7 +1100,9 @@
 			"codeHint": "Voucher code for customers enter at checkout",
 			"nameHint": "Name for this voucher",
 			"descriptionHint": "Short description (optional).",
-			"discountCodeHint": "Required. Pick a discount."
+			"discountCodeHint": "Required. Pick a discount.",
+			"linkedDiscountTitle": "Linked discount",
+			"linkedDiscountBody": "A new discount will use the same code as this voucher ({code}) and will be linked automatically."
 		},
 		"orderInput": {
 			"status": "Status",

@@ -10,6 +10,7 @@ describe('CreateVoucherValidation', () => {
 			code: 'V1',
 			name: 'Test',
 			status: 'active',
+			discount_code: 'D1',
 		});
 		expect(parsed.code).toBe('V1');
 	});
@@ -21,6 +22,7 @@ describe('CreateVoucherValidation', () => {
 				code: '',
 				name: 'Test',
 				status: 'active',
+				discount_code: 'D1',
 			}),
 		).toThrow();
 	});
@@ -32,6 +34,7 @@ describe('CreateVoucherValidation', () => {
 				code: 'V1',
 				name: 'Test',
 				status: 'active',
+				discount_code: 'D1',
 				starts_at: '2026-02-01T00:00:00.000Z',
 				ends_at: '2026-01-01T00:00:00.000Z',
 			}),
@@ -44,6 +47,7 @@ describe('CreateVoucherValidation', () => {
 			code: 'V1',
 			name: 'Test',
 			status: 'active',
+			discount_code: 'D1',
 			usage_limit: 100,
 		});
 		expect(parsed.usage_limit).toBe(100);

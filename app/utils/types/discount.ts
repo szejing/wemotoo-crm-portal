@@ -1,4 +1,4 @@
-import type { AllocationType, DiscountConditionOperator, DiscountConditionType, DiscountRuleType, FilterOperator } from 'wemotoo-common';
+import type { AllocationType, DiscountRuleType, FilterOperator } from 'wemotoo-common';
 import type { FilterCondition } from 'wemotoo-common';
 
 export type Discount = {
@@ -19,8 +19,7 @@ export type Discount = {
 };
 
 export type DiscountCondition = {
-	operator: DiscountConditionOperator;
-	type: DiscountConditionType;
+	id?: number;
 	min_amount?: number | null;
 	max_amount?: number | null;
 	filter_operator?: FilterOperator | null;

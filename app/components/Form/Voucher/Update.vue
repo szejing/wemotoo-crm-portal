@@ -12,7 +12,6 @@
 						:none-label="t('components.discountForm.filterNone')"
 						:discount-options-loading="discountOptionsLoading"
 					/>
-					<ZInputVoucherValiditySection :state="formState" />
 				</UForm>
 			</div>
 
@@ -93,19 +92,11 @@ watch(updating, (v) => {
 	else loadingModal.close();
 });
 
-const discountLabelForReview = computed(() => {
-	const code = formState.discount_code?.trim();
-	if (!code) return t('components.discountForm.filterNone');
-	const d = discountOptions.value.find((x) => x.code === code);
-	return d?.description ? `${code} — ${d.description}` : code;
-});
-
 const reviewSummary = computed(() => {
 	const s = formState.starts_at;
 	const e = formState.ends_at;
-	const notSet = t('common.notSet');
-	let validityStartsAt = notSet;
-	let validityEndsAt = notSet;
+	let validityStartsAt: string | undefined;
+	let validityEndsAt: string | undefined;
 	if (s && e) {
 		const start = new Date(s);
 		const endDate = new Date(e);
@@ -123,9 +114,8 @@ const reviewSummary = computed(() => {
 		code: formState.code?.trim() ?? '',
 		name: formState.name?.trim() ?? '',
 		description: formState.description?.trim() ?? '',
-		discountLabel: discountLabelForReview.value,
-		validityStartsAt,
-		validityEndsAt,
+		...(validityStartsAt != null ? { validityStartsAt } : {}),
+		...(validityEndsAt != null ? { validityEndsAt } : {}),
 		usageLimitLabel,
 	};
 });

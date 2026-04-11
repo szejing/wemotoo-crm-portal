@@ -720,6 +720,18 @@ describe('VoucherModule', () => {
 		expect(lastFetch().opts.method).toBe('POST');
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Create());
 		expect(lastFetch().opts.body).toEqual(createPayload);
+
+		const bundledPayload = {
+			...createPayload,
+			create_discount: {
+				description: 'Bundle discount',
+				is_disabled: false,
+				rule_type: 'PERCENTAGE',
+				rule_value: 10,
+			},
+		};
+		await mod.create(bundledPayload);
+		expect(lastFetch().opts.body).toEqual(bundledPayload);
 		await mod.update('V1', { name: 'Updated' });
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Update('V1'));
 		expect(lastFetch().opts.method).toBe('PATCH');

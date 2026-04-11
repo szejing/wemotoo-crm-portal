@@ -29,30 +29,44 @@
 						<dt class="text-muted shrink-0">{{ $t('form.description') }}</dt>
 						<dd class="font-medium text-default truncate text-right">{{ summary.description || $t('common.notSet') }}</dd>
 					</div>
+					<template v-if="summary.validityStartsAt != null || summary.validityEndsAt != null">
+						<div class="border-t border-default/10 space-y-2.5">
+							<div v-if="summary.validityStartsAt != null" class="flex justify-between gap-2">
+								<dt class="text-muted shrink-0">{{ $t('components.discountForm.validityStartsAt') }}</dt>
+								<dd class="font-medium text-default truncate text-right">{{ summary.validityStartsAt }}</dd>
+							</div>
+							<div v-if="summary.validityEndsAt != null" class="flex justify-between gap-2">
+								<dt class="text-muted shrink-0">{{ $t('components.discountForm.validityEndsAt') }}</dt>
+								<dd class="font-medium text-default truncate text-right">{{ summary.validityEndsAt }}</dd>
+							</div>
+						</div>
+					</template>
 				</dl>
 			</section>
 
-			<section class="rounded-xl bg-elevated/60 p-4 border border-default/10">
+			<section v-if="summary.discountDetails" class="rounded-xl bg-elevated/60 p-4 border border-default/10">
 				<h4 class="text-xs font-medium uppercase tracking-wider text-muted mb-3 flex items-center gap-2">
-					<UIcon :name="ICONS.TAG" class="w-4 h-4 text-primary-500" />
-					{{ $t('form.discountCode') }}
-				</h4>
-				<p class="text-sm font-medium text-default">{{ summary.discountLabel }}</p>
-			</section>
-
-			<section class="rounded-xl bg-elevated/60 p-4 border border-default/10">
-				<h4 class="text-xs font-medium uppercase tracking-wider text-muted mb-3 flex items-center gap-2">
-					<UIcon :name="ICONS.CALENDAR" class="w-4 h-4 text-primary-500" />
-					{{ $t('components.voucherForm.validityPeriod') }}
+					<UIcon :name="ICONS.LAYERS" class="w-4 h-4 text-primary-500" />
+					{{ $t('pages.discountDetails') }}
 				</h4>
 				<dl class="space-y-2.5 text-sm">
 					<div class="flex justify-between gap-2">
-						<dt class="text-muted shrink-0">{{ $t('components.discountForm.validityStartsAt') }}</dt>
-						<dd class="font-medium text-default truncate text-right">{{ summary.validityStartsAt }}</dd>
+						<dt class="text-muted shrink-0">{{ $t('components.discountForm.ruleSection') }}</dt>
+						<dd class="font-medium text-default text-right">{{ summary.discountDetails.ruleSummary }}</dd>
 					</div>
 					<div class="flex justify-between gap-2">
-						<dt class="text-muted shrink-0">{{ $t('components.discountForm.validityEndsAt') }}</dt>
-						<dd class="font-medium text-default truncate text-right">{{ summary.validityEndsAt }}</dd>
+						<dt class="text-muted shrink-0">{{ $t('components.discountForm.allocation') }}</dt>
+						<dd class="font-medium text-default truncate text-right">{{ summary.discountDetails.allocationLabel }}</dd>
+					</div>
+					<div class="flex justify-between gap-2">
+						<dt class="text-muted shrink-0">{{ $t('components.discountForm.usageLimit') }}</dt>
+						<dd class="font-medium text-default truncate text-right">{{ summary.discountDetails.discountUsageLimitLabel }}</dd>
+					</div>
+					<div class="flex justify-between gap-2">
+						<dt class="text-muted shrink-0">{{ $t('components.discountForm.conditionsSection') }}</dt>
+						<dd class="font-medium text-default truncate text-right">
+							{{ $t('components.discountForm.reviewConditions', { count: summary.discountDetails.conditionsCount }) }}
+						</dd>
 					</div>
 				</dl>
 			</section>
@@ -71,14 +85,24 @@
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
 
+export interface VoucherReviewDiscountDetails {
+	ruleSummary: string;
+	conditionsCount: number;
+	allocationLabel: string;
+	discountUsageLimitLabel: string;
+}
+
 export interface VoucherReviewSummary {
 	code: string;
 	name: string;
 	description: string;
-	discountLabel: string;
-	validityStartsAt: string;
-	validityEndsAt: string;
+	/** Formatted voucher start; omit when voucher has no start (and no inferred start for display). */
+	validityStartsAt?: string;
+	/** Formatted voucher end; omit when voucher has no end date. */
+	validityEndsAt?: string;
 	usageLimitLabel: string;
+	/** Present when creating/updating a voucher with an inline (bundled) discount. */
+	discountDetails?: VoucherReviewDiscountDetails;
 }
 
 withDefaults(

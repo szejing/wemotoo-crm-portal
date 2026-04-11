@@ -1,12 +1,5 @@
 import { z } from 'zod';
-import {
-	AllocationType,
-	DiscountConditionOperator,
-	DiscountConditionType,
-	DiscountRuleType,
-	FilterCondition,
-	FilterOperator,
-} from 'wemotoo-common';
+import { AllocationType, DiscountRuleType, FilterCondition, FilterOperator } from 'wemotoo-common';
 
 type TranslateFn = (key: string) => string;
 
@@ -19,8 +12,6 @@ const optionalNonNegativeNumber = z.preprocess((val) => {
 
 export function CreateDiscountValidation(t: TranslateFn) {
 	const discountConditionSchema = z.object({
-		operator: z.nativeEnum(DiscountConditionOperator),
-		type: z.nativeEnum(DiscountConditionType),
 		min_amount: optionalNonNegativeNumber,
 		max_amount: optionalNonNegativeNumber,
 		filter_operator: z.nativeEnum(FilterOperator).optional(),

@@ -145,8 +145,6 @@ onMounted(() => {
 
 const buildCreatePayload = (data: Schema): CreateDiscountReq => {
 	const conditions = (data.conditions ?? []).map((c) => ({
-		operator: c.operator,
-		type: c.type,
 		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
 		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
 		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
