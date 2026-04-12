@@ -1,4 +1,5 @@
 import { KEY } from 'wemotoo-common';
+import { useAuthStore } from '~/stores';
 
 export default defineNuxtPlugin(async (_) => {
 	if (import.meta.client) {

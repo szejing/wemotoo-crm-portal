@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
+import { useAuthStore } from '~/stores';
 
 const merchantInfoStore = useMerchantInfoStore();
 const appUiStore = useAppUiStore();

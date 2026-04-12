@@ -102,6 +102,7 @@ import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import { roleLabel } from '~/utils/options/user-roles';
 import { ZModalConfirmation, ZModalLoading } from '#components';
+import { useAuthStore } from '~/stores';
 
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
