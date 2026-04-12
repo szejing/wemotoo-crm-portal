@@ -9,7 +9,7 @@
 			<div v-if="current_voucher" class="w-full backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-800 shadow-md z-50">
 				<div class="mx-auto px-4 sm:px-6 py-4">
 					<div class="hidden md:flex justify-between items-center gap-3">
-						<UButton color="error" variant="ghost" size="lg" :loading="updating" @click="deleteVoucher">
+						<UButton color="error" variant="ghost" size="lg" :loading="saving" @click="deleteVoucher">
 							<UIcon :name="ICONS.TRASH" />
 							{{ $t('common.delete') }}
 						</UButton>
@@ -17,7 +17,7 @@
 						<div class="flex gap-3">
 							<UButton color="neutral" variant="outline" size="lg" @click="cancel">{{ $t('common.cancel') }}</UButton>
 
-							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="saveVoucher">
+							<UButton color="success" variant="solid" size="lg" :loading="saving" @click="saveVoucher">
 								<UIcon :name="ICONS.CHECK_ROUNDED" />
 								{{ $t('components.voucherForm.updateVoucher') }}
 							</UButton>
@@ -25,12 +25,12 @@
 					</div>
 
 					<div class="md:hidden flex flex-col gap-2">
-						<UButton color="success" size="md" class="w-full" :loading="updating" @click="saveVoucher">
+						<UButton color="success" size="md" class="w-full" :loading="saving" @click="saveVoucher">
 							<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
 							<span class="text-sm">{{ $t('components.voucherForm.updateVoucher') }}</span>
 						</UButton>
 						<div class="flex gap-2">
-							<UButton color="error" variant="ghost" size="sm" class="flex-1" :loading="updating" @click="deleteVoucher">
+							<UButton color="error" variant="ghost" size="sm" class="flex-1" :loading="saving" @click="deleteVoucher">
 								<UIcon :name="ICONS.TRASH" class="w-4 h-4" />
 								<span class="text-xs">{{ $t('common.delete') }}</span>
 							</UButton>
@@ -54,7 +54,10 @@ const code = route.params.code as string;
 
 const overlay = useOverlay();
 const voucherStore = useVoucherStore();
+const discountStore = useDiscountStore();
 const { updating, current_voucher } = storeToRefs(voucherStore);
+const { updating: discountUpdating } = storeToRefs(discountStore);
+const saving = computed(() => updating.value || discountUpdating.value);
 const formRef = ref<{ submit: () => void } | null>(null);
 
 const isLoading = ref(!current_voucher.value);

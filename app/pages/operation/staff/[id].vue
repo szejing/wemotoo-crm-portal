@@ -100,7 +100,6 @@
 import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
-import { useAuthStore } from '~/stores/Auth/Auth';
 import { roleLabel } from '~/utils/options/user-roles';
 import { ZModalConfirmation, ZModalLoading } from '#components';
 

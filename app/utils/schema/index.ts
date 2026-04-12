@@ -38,6 +38,7 @@ import { ChangePasswordValidation } from './CRMUser/ChangePassword/ChangePasswor
 import { CreateDiscountValidation } from './Discount/Create/CreateDiscountValidation';
 import { CreateBundledVoucherFormValidation } from './Voucher/Create/CreateBundledVoucherFormValidation';
 import { CreateVoucherValidation } from './Voucher/Create/CreateVoucherValidation';
+import { UpdateVoucherFormValidation } from './Voucher/Update/UpdateVoucherFormValidation';
 
 export {
 	LoginValidation,
@@ -84,4 +85,5 @@ export {
 	CreateDiscountValidation,
 	CreateBundledVoucherFormValidation,
 	CreateVoucherValidation,
+	UpdateVoucherFormValidation,
 };

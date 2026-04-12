@@ -78,11 +78,55 @@
 				</h4>
 				<p class="text-sm font-medium text-default">{{ summary.usageLimitLabel }}</p>
 			</section>
+
+			<section
+				v-if="showPlainLanguageReview"
+				class="rounded-xl bg-primary-500/5 dark:bg-primary-400/10 p-4 border border-primary-200/50 dark:border-primary-900/40"
+			>
+				<h4 class="text-xs font-medium uppercase tracking-wider text-muted mb-3 flex items-center gap-2">
+					<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4 text-primary-600" />
+					{{ $t('components.voucherForm.reviewInShort') }}
+				</h4>
+				<div class="space-y-2.5 text-sm text-default leading-relaxed">
+					<ul v-if="summary.discountDetails?.discountApplySummary" class="list-disc ps-4 space-y-1.5">
+						<li class="font-medium">{{ summary.discountDetails.discountApplySummary }}</li>
+					</ul>
+					<template v-if="conditionReviewItems.length">
+						<p class="text-xs font-semibold text-muted mt-1 mb-0.5">{{ $t('components.voucherForm.reviewMustMatch') }}</p>
+						<ul class="list-disc ps-4 space-y-2">
+							<li v-for="(item, idx) in conditionReviewItems" :key="idx" class="text-default">
+								<template v-if="item.amountText">{{ item.amountText }}</template>
+								<template v-if="item.amountText && item.filter">&nbsp;</template>
+								<template v-if="item.filter?.kind === 'badged'">
+									<span>{{ $t(item.filter.leadKey) }}</span>
+									<span class="ms-1 inline-flex flex-wrap items-center gap-1.5 align-middle">
+										<UBadge
+											v-for="(val, bi) in item.filter.values"
+											:key="`${idx}-${bi}-${val}`"
+											color="primary"
+											variant="solid"
+											size="sm"
+											class="max-w-[min(100%,12rem)] truncate font-medium shadow-sm"
+										>
+											{{ val }}
+										</UBadge>
+									</span>
+									<span>.</span>
+								</template>
+								<template v-else-if="item.filter?.kind === 'plain'">
+									<span>{{ item.filter.text }}</span>
+								</template>
+							</li>
+						</ul>
+					</template>
+				</div>
+			</section>
 		</div>
 	</UCard>
 </template>
 
 <script lang="ts" setup>
+import type { ConditionReviewLineItem } from '~/utils/discount/discount-condition-review-lines';
 import { ICONS } from '~/utils/icons';
 
 export interface VoucherReviewDiscountDetails {
@@ -90,6 +134,10 @@ export interface VoucherReviewDiscountDetails {
 	conditionsCount: number;
 	allocationLabel: string;
 	discountUsageLimitLabel: string;
+	/** Short sentence combining rule + allocation (e.g. "10% apply to bill."). */
+	discountApplySummary?: string;
+	/** Structured rows for “Must match” (amount text + filter values as badges where applicable). */
+	conditionReviewItems?: ConditionReviewLineItem[];
 }
 
 export interface VoucherReviewSummary {
@@ -105,12 +153,19 @@ export interface VoucherReviewSummary {
 	discountDetails?: VoucherReviewDiscountDetails;
 }
 
-withDefaults(
+const props = withDefaults(
 	defineProps<{
 		summary: VoucherReviewSummary;
 		/** i18n key for subtitle under the review title */
 		subtitleKey?: string;
 	}>(),
 	{ subtitleKey: 'components.voucherForm.reviewSubtitleEdit' },
+);
+
+const conditionReviewItems = computed(() => props.summary.discountDetails?.conditionReviewItems ?? []);
+
+const showPlainLanguageReview = computed(
+	() =>
+		!!props.summary.discountDetails?.discountApplySummary || conditionReviewItems.value.length > 0,
 );
 </script>

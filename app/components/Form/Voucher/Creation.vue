@@ -36,6 +36,8 @@ import type { CreateDiscountReq } from '~/repository/modules/discount/models/req
 import { useDiscountStore } from '~/stores/Discount/Discount';
 import { useVoucherStore } from '~/stores/voucher/Voucher';
 import { CreateBundledVoucherFormValidation, CreateVoucherValidation } from '~/utils/schema';
+import { buildDiscountApplySummaryLine } from '~/utils/discount/apply-summary';
+import { buildDiscountConditionReviewItems } from '~/utils/discount/discount-condition-review-lines';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 
 const props = withDefaults(
@@ -232,6 +234,13 @@ const voucherReviewSummary = computed(() => {
 			conditionsCount: new_discount.value.conditions?.length ?? 0,
 			allocationLabel: allocationReviewLabel.value,
 			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
+			discountApplySummary: buildDiscountApplySummaryLine(t, {
+				ruleType: new_discount.value.rule_type,
+				ruleValue: new_discount.value.rule_value,
+				allocation: new_discount.value.allocation,
+				currencyCode: ruleValueCurrencyCode,
+			}),
+			conditionReviewItems: buildDiscountConditionReviewItems(new_discount.value.conditions, t, ruleValueCurrencyCode),
 		},
 	};
 });

@@ -34,7 +34,7 @@ const marketingGroups = computed(() => [
 		icon: ICONS.SPARKLES,
 		color: 'teal' as const,
 		items: [
-			{ label: t('nav.discounts'), to: '/marketing/discounts' },
+			// { label: t('nav.discounts'), to: '/marketing/discounts' },
 			{ label: t('nav.vouchers'), to: '/marketing/vouchers' },
 		],
 	},
