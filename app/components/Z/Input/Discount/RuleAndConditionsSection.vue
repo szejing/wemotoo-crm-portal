@@ -1,0 +1,190 @@
+<template>
+	<UCard id="section-discount-rule-conditions" class="shadow-md scroll-mt-4">
+		<template #header>
+			<div class="flex items-center gap-2">
+				<UIcon :name="ICONS.INFO" class="text-primary-500 w-6 h-6" />
+				<h2 class="text-xl font-semibold">{{ $t('components.discountForm.ruleAndConditionsSection') }}</h2>
+				<span class="text-red-500 text-sm">*</span>
+			</div>
+		</template>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4">
+			<UFormField :label="$t('components.discountForm.ruleType')" :name="fieldName('rule_type')" required>
+				<USelect :model-value="state.rule_type" :items="ruleTypeItems" value-attribute="value" class="w-full" @update:model-value="onRuleTypeSelect" />
+			</UFormField>
+			<UFormField
+				v-if="state.rule_type !== DiscountRuleType.FREE_SHIPPING"
+				:label="$t('components.discountForm.ruleValue')"
+				:name="fieldName('rule_value')"
+				required
+			>
+				<UInput v-model.number="state.rule_value" type="number" min="0" :max="state.rule_type === DiscountRuleType.PERCENTAGE ? 100 : undefined" step="0.01">
+					<template #trailing>
+						<span class="text-muted text-sm pe-2 tabular-nums">{{ ruleValueSuffix }}</span>
+					</template>
+				</UInput>
+				<p v-if="state.rule_type === DiscountRuleType.PERCENTAGE" class="text-xs text-muted mt-1">
+					{{ $t('components.discountForm.ruleValuePercentHint') }}
+				</p>
+			</UFormField>
+		</div>
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4">
+			<UFormField :label="$t('components.discountForm.usageLimit')" :name="fieldName('usage_limit')">
+				<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.discountForm.usageLimitHint') }}</p>
+				<UInput v-model.number="usageLimitModel" type="number" min="1" :placeholder="$t('components.discountForm.usageLimitPlaceholder')" />
+			</UFormField>
+		</div>
+
+		<div class="border-t border-default mt-2 pt-6 pb-2">
+			<div class="flex flex-wrap items-center justify-between gap-3 px-4">
+				<div class="flex items-center gap-2">
+					<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
+					<h3 class="text-lg font-semibold">{{ $t('components.discountForm.conditionsSection') }}</h3>
+				</div>
+				<UButton color="primary" variant="soft" size="sm" icon="i-lucide-plus" @click="addCondition">
+					{{ $t('components.discountForm.addCondition') }}
+				</UButton>
+			</div>
+			<p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1 px-4 mb-2">{{ $t('components.discountForm.conditionsHelp') }}</p>
+
+			<div v-if="!state.conditions?.length" class="py-4 px-4 text-sm text-muted">
+				{{ $t('components.discountForm.noConditions') }}
+			</div>
+
+			<div v-else class="space-y-6 py-2 px-4">
+				<div v-for="(cond, index) in state.conditions" :key="index" class="space-y-4">
+					<div class="flex items-center justify-between gap-2">
+						<span class="text-sm font-medium text-highlighted">{{ $t('components.discountForm.conditionRow', { n: index + 1 }) }}</span>
+						<UButton color="error" variant="ghost" size="xs" icon="i-lucide-trash-2" :label="$t('common.delete')" @click="removeCondition(index)" />
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<UFormField :label="$t('components.discountForm.minAmount')" :name="fieldName(`conditions.${index}.min_amount`)">
+							<UInput v-model.number="cond.min_amount" type="number" min="0" step="0.01">
+								<template #leading>
+									<span class="text-muted text-sm tabular-nums select-none">{{ ruleValueCurrencyCode }}</span>
+								</template>
+							</UInput>
+						</UFormField>
+						<UFormField :label="$t('components.discountForm.maxAmount')" :name="fieldName(`conditions.${index}.max_amount`)">
+							<UInput v-model.number="cond.max_amount" type="number" min="0" step="0.01">
+								<template #leading>
+									<span class="text-muted text-sm tabular-nums select-none">{{ ruleValueCurrencyCode }}</span>
+								</template>
+							</UInput>
+						</UFormField>
+					</div>
+					<div class="border-t border-default pt-4 space-y-4">
+						<p class="text-xs font-medium uppercase tracking-wide text-muted">{{ $t('components.discountForm.filterOptional') }}</p>
+						<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+							<UFormField :label="$t('components.discountForm.filterOperator')" :name="fieldName(`conditions.${index}.filter_operator`)">
+								<ZSelectMenuDiscountFilterOperator v-model="cond.filter_operator" />
+							</UFormField>
+							<UFormField :label="$t('components.discountForm.filterCondition')" :name="fieldName(`conditions.${index}.filter_condition`)">
+								<ZSelectMenuDiscountFilterCondition v-model="cond.filter_condition" @update:model-value="onFilterConditionChange(cond)" />
+							</UFormField>
+							<UFormField :label="$t('components.discountForm.filterValue')" :name="fieldName(`conditions.${index}.filter_value`)">
+								<ZInputDiscountFilterValuePicker v-model="cond.filter_value" :filter-condition="cond.filter_condition" />
+							</UFormField>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</UCard>
+</template>
+
+<script lang="ts" setup>
+import { DiscountRuleType } from 'wemotoo-common';
+import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
+import type { DiscountCreate } from '~/utils/types/form/discount-creation';
+import { ICONS } from '~/utils/icons';
+
+const props = withDefaults(
+	defineProps<{
+		state: DiscountCreate;
+		/** Dot-prefix for UFormField names (e.g. `discount` → `discount.rule_type`). */
+		formFieldPrefix?: string;
+	}>(),
+	{ formFieldPrefix: '' },
+);
+
+const { t } = useI18n();
+const state = toRef(props, 'state');
+
+const fieldName = (segment: string) => (props.formFieldPrefix ? `${props.formFieldPrefix}.${segment}` : segment);
+
+/** Hardcoded until merchant currency is wired into this form. */
+const ruleValueCurrencyCode = 'RM';
+
+const ruleTypeLabel = (rt: DiscountRuleType) =>
+	t(
+		{
+			[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
+			[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
+			[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+		}[rt],
+	);
+
+const ruleTypeItems = computed(() => Object.values(DiscountRuleType).map((v) => ({ label: ruleTypeLabel(v), value: v })));
+
+const ruleValueSuffix = computed(() => {
+	const rt = state.value.rule_type;
+	if (rt === DiscountRuleType.FIXED) return ruleValueCurrencyCode;
+	if (rt === DiscountRuleType.PERCENTAGE) return '%';
+	return '';
+});
+
+const onRuleTypeSelect = (v: DiscountRuleType) => {
+	const prev = state.value.rule_type;
+	state.value.rule_type = v;
+	if (v === DiscountRuleType.FREE_SHIPPING) {
+		state.value.rule_value = 0;
+	} else if (prev === DiscountRuleType.FREE_SHIPPING) {
+		const rv = state.value.rule_value ?? 0;
+		if (v === DiscountRuleType.PERCENTAGE && (rv <= 0 || rv > 100)) {
+			state.value.rule_value = 10;
+		} else if (v === DiscountRuleType.FIXED && rv <= 0) {
+			state.value.rule_value = 1;
+		}
+	}
+};
+
+const usageLimitModel = computed({
+	get() {
+		return state.value.usage_limit ?? '';
+	},
+	set(v: number | string) {
+		if (v === '' || v === null || v === undefined) {
+			state.value.usage_limit = undefined;
+			return;
+		}
+		const n = typeof v === 'number' ? v : Number(v);
+		state.value.usage_limit = Number.isNaN(n) ? undefined : n;
+	},
+});
+
+const emptyCondition = (): CreateDiscountConditionReq => {
+	return {
+		min_amount: undefined,
+		max_amount: undefined,
+		filter_operator: undefined,
+		filter_condition: undefined,
+		filter_value: '',
+	};
+};
+
+const addCondition = () => {
+	const list = state.value.conditions ?? [];
+	state.value.conditions = [...list, emptyCondition()];
+};
+
+const removeCondition = (index: number) => {
+	const list = [...(state.value.conditions ?? [])];
+	list.splice(index, 1);
+	state.value.conditions = list;
+};
+
+const onFilterConditionChange = (condition: CreateDiscountConditionReq) => {
+	condition.filter_value = '';
+};
+</script>

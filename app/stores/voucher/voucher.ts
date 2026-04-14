@@ -6,17 +6,21 @@ import type { CreateVoucherReq } from '~/repository/modules/voucher/models/reque
 import type { UpdateVoucherReq } from '~/repository/modules/voucher/models/request/update-voucher.req';
 import type { Voucher } from '~/utils/types/voucher';
 import { defaultVoucherRelations, removeDuplicateExpands } from 'wemotoo-common';
+import type { AllocationType } from 'wemotoo-common';
 
 type VoucherFilter = {
 	query: string;
 	page_size: number;
 	current_page: number;
+	/** When set, OData `$filter` restricts to vouchers whose linked discount has this allocation. */
+	listing_allocation: AllocationType | null;
 };
 
 const initialVoucherFilter: VoucherFilter = {
 	query: '',
 	page_size: options_page_size[0] as number,
 	current_page: 1,
+	listing_allocation: null,
 };
 
 const initialEmptyVoucher: Partial<CreateVoucherReq> = {
@@ -67,6 +71,11 @@ export const useVoucherStore = defineStore('voucherStore', {
 			this.getVouchers();
 		},
 
+		setListingAllocationFilter(allocation: AllocationType) {
+			this.filter.listing_allocation = allocation;
+			this.filter.current_page = 1;
+		},
+
 		async getVouchers() {
 			this.loading = true;
 			const { $api } = useNuxtApp();
@@ -78,6 +87,10 @@ export const useVoucherStore = defineStore('voucherStore', {
 					$expand: removeDuplicateExpands(defaultVoucherRelations).join(','),
 					$orderby: 'updated_at desc',
 				};
+
+				if (this.filter.listing_allocation != null) {
+					queryParams.$filter = `discount.allocation eq '${this.filter.listing_allocation}'`;
+				}
 
 				if (this.filter.query) {
 					queryParams.$search = this.filter.query;

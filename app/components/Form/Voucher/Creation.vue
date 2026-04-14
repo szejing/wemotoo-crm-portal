@@ -11,8 +11,7 @@
 					:link-discount-to-voucher-code="withBundledDiscount"
 				/>
 
-				<ZInputDiscountRuleSection :state="new_discount" form-field-prefix="discount" />
-				<ZInputDiscountConditionsSection :state="new_discount" form-field-prefix="discount" />
+				<ZInputDiscountRuleAndConditionsSection v-if="allocation == AllocationType.ITEM" :state="new_discount" form-field-prefix="discount" />
 			</div>
 			<div class="lg:col-span-3">
 				<div class="lg:sticky lg:top-4">
@@ -25,7 +24,7 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
@@ -44,8 +43,12 @@ const props = withDefaults(
 	defineProps<{
 		/** Create a new discount with the same code as the voucher and link it in one request. */
 		withBundledDiscount?: boolean;
+		/** Force bundled discount allocation (shop=bill, product=item). */
+		allocation?: AllocationType;
+		/** Route after successful create (shop vs product listing). */
+		postCreateListPath: string;
 	}>(),
-	{ withBundledDiscount: false },
+	{ withBundledDiscount: false, forcedAllocation: undefined },
 );
 
 const { t } = useI18n();
@@ -107,10 +110,10 @@ const voucherFieldSectionMap: Record<string, string> = {
 };
 
 const bundledDiscountFieldSectionMap: Record<string, string> = {
-	usage_limit: 'section-discount-rule',
-	rule_type: 'section-discount-rule',
-	rule_value: 'section-discount-rule',
-	allocation: 'section-discount-rule',
+	usage_limit: 'section-discount-rule-conditions',
+	rule_type: 'section-discount-rule-conditions',
+	rule_value: 'section-discount-rule-conditions',
+	allocation: 'section-discount-rule-conditions',
 };
 
 const humanizeEnum = (value: string) =>
@@ -127,7 +130,7 @@ const resolveErrorSectionId = (errorName: string): string | undefined => {
 		}
 		if (errorName.startsWith('discount.')) {
 			if (errorName.includes('.conditions')) {
-				return 'section-discount-conditions';
+				return 'section-discount-rule-conditions';
 			}
 			const field = errorName.slice('discount.'.length).split('.')[0] ?? '';
 			return bundledDiscountFieldSectionMap[field];
@@ -165,6 +168,13 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 	);
 
 const ruleValueCurrencyCode = 'RM';
+
+const applyAllocation = () => {
+	if (!props.withBundledDiscount || props.allocation == null) {
+		return;
+	}
+	new_discount.value.allocation = props.allocation;
+};
 
 const ruleSummaryLabel = computed(() => {
 	const rt = new_discount.value.rule_type ?? DiscountRuleType.PERCENTAGE;
@@ -270,11 +280,19 @@ watch([() => new_voucher.value.code, () => new_voucher.value.description, () => 
 	}
 });
 
+watch(
+	() => props.allocation,
+	() => {
+		applyAllocation();
+	},
+);
+
 onMounted(async () => {
 	voucherStore.resetNewVoucher();
 	if (props.withBundledDiscount) {
 		discountStore.resetNewDiscount();
 		syncBundledDiscountFromVoucher();
+		applyAllocation();
 	}
 	if (!props.withBundledDiscount) {
 		discountOptionsLoading.value = true;
@@ -336,7 +354,7 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) =
 
 			const created = await voucherStore.createVoucher(payload);
 			if (created?.code) {
-				router.push('/marketing/vouchers');
+				router.push(props.postCreateListPath);
 			}
 			return;
 		}
@@ -360,7 +378,7 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) =
 
 		const created = await voucherStore.createVoucher(payload);
 		if (created?.code) {
-			router.push('/marketing/vouchers');
+			router.push(props.postCreateListPath);
 		}
 	} catch {
 		// store handles error toast
@@ -370,6 +388,7 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) =
 const submit = () => {
 	if (props.withBundledDiscount) {
 		syncBundledDiscountFromVoucher();
+		applyAllocation();
 	}
 	formRef.value?.submit();
 };

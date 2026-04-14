@@ -1,13 +1,6 @@
 <template>
 	<div class="w-full">
-		<UForm
-			ref="formRef"
-			:schema="formSchema"
-			:state="uFormState"
-			class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6"
-			@submit="onSubmit"
-			@error="onError"
-		>
+		<UForm ref="formRef" :schema="formSchema" :state="uFormState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="onSubmit" @error="onError">
 			<div class="lg:col-span-9 space-y-6">
 				<ZInputVoucherDetailsSection
 					:state="formModel.voucher"
@@ -20,8 +13,7 @@
 					:link-discount-to-voucher-code="linkedBundledDiscount"
 				/>
 
-				<ZInputDiscountRuleSection :state="formModel.discount" form-field-prefix="discount" />
-				<ZInputDiscountConditionsSection :state="formModel.discount" form-field-prefix="discount" />
+				<ZInputDiscountRuleAndConditionsSection :state="formModel.discount" form-field-prefix="discount" />
 			</div>
 
 			<div class="lg:col-span-3">
@@ -35,7 +27,7 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
@@ -51,6 +43,7 @@ import type { ErrorResponse } from '~/repository/base/error';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 import { applyDiscountToFormState, emptyDiscountFormEditableState } from '~/utils/types/form/discount-creation';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
+import { voucherListingPathForAllocation } from '~/utils/voucher/create-type';
 
 const { t } = useI18n();
 
@@ -58,9 +51,7 @@ const props = defineProps<{
 	voucher: Voucher;
 }>();
 
-const linkedBundledDiscount = computed(
-	() => props.voucher.code.trim() === (props.voucher.discount?.code ?? '').trim(),
-);
+const linkedBundledDiscount = computed(() => props.voucher.code.trim() === (props.voucher.discount?.code ?? '').trim());
 
 const formSchema = computed(() => UpdateVoucherFormValidation(t, { linkDiscountToVoucher: linkedBundledDiscount.value }));
 type Schema = z.infer<ReturnType<typeof UpdateVoucherFormValidation>>;
@@ -127,12 +118,7 @@ watch(
 );
 
 watch(
-	() => [
-		formModel.voucher.code,
-		formModel.voucher.description,
-		formModel.voucher.name,
-		formModel.voucher.status,
-	] as const,
+	() => [formModel.voucher.code, formModel.voucher.description, formModel.voucher.name, formModel.voucher.status] as const,
 	() => {
 		if (linkedBundledDiscount.value) {
 			syncBundledDiscountFromVoucherForm();
@@ -268,10 +254,10 @@ const voucherFieldSectionMap: Record<string, string> = {
 };
 
 const discountFieldSectionMap: Record<string, string> = {
-	usage_limit: 'section-discount-rule',
-	rule_type: 'section-discount-rule',
-	rule_value: 'section-discount-rule',
-	allocation: 'section-discount-rule',
+	usage_limit: 'section-discount-rule-conditions',
+	rule_type: 'section-discount-rule-conditions',
+	rule_value: 'section-discount-rule-conditions',
+	allocation: 'section-discount-rule-conditions',
 };
 
 const resolveErrorSectionId = (errorName: string): string | undefined => {
@@ -281,7 +267,7 @@ const resolveErrorSectionId = (errorName: string): string | undefined => {
 	}
 	if (errorName.startsWith('discount.')) {
 		if (errorName.includes('.conditions')) {
-			return 'section-discount-conditions';
+			return 'section-discount-rule-conditions';
 		}
 		const field = errorName.slice('discount.'.length).split('.')[0] ?? '';
 		return discountFieldSectionMap[field];
@@ -365,7 +351,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			await discountStore.updateDiscount(discountFormCode, discountBody);
 		}
 
-		await navigateTo('/marketing/vouchers');
+		await navigateTo(voucherListingPathForAllocation(props.voucher.discount?.allocation ?? AllocationType.BILL));
 	} catch (err: unknown | ErrorResponse) {
 		const message = (err as ErrorResponse).message ?? 'Failed to update voucher';
 		failedNotification(message);

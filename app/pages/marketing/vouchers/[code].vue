@@ -1,5 +1,5 @@
 <template>
-	<ZPagePanel id="vouchers-edit" :title="`${$t('pages.editVoucher')} #${current_voucher?.code ?? code}`" back-to="/marketing/vouchers" grow>
+	<ZPagePanel id="vouchers-edit" :title="`${$t('pages.editVoucher')} #${current_voucher?.code ?? code}`" :back-to="listBackPath" grow>
 		<div class="container w-full mx-auto py-4">
 			<FormVoucherUpdateLoading v-if="isLoading" />
 			<FormVoucherUpdate v-else-if="current_voucher" ref="formRef" :voucher="current_voucher" />
@@ -48,6 +48,8 @@
 <script lang="ts" setup>
 import { ZModalConfirmation } from '#components';
 import { ICONS } from '~/utils/icons';
+import { AllocationType } from 'wemotoo-common';
+import { voucherListingPathForAllocation } from '~/utils/voucher/create-type';
 
 const route = useRoute();
 const code = route.params.code as string;
@@ -65,6 +67,10 @@ const isLoading = ref(!current_voucher.value);
 const { t } = useI18n();
 useHead({ title: () => `${t('pages.editVoucher')} #${current_voucher.value?.code ?? code}` });
 
+const listBackPath = computed(() =>
+	voucherListingPathForAllocation(current_voucher.value?.discount?.allocation ?? AllocationType.BILL),
+);
+
 onBeforeRouteLeave(() => {
 	current_voucher.value = undefined;
 });
@@ -76,7 +82,7 @@ onBeforeMount(async () => {
 		if (voucher) {
 			voucherStore.current_voucher = voucher;
 		} else {
-			await navigateTo('/marketing/vouchers');
+			await navigateTo(listBackPath.value);
 		}
 		isLoading.value = false;
 	} else {
@@ -100,7 +106,7 @@ const deleteVoucher = async () => {
 			onConfirm: async () => {
 				await voucherStore.deleteVoucher(current_voucher.value!.code);
 				confirmModal.close();
-				navigateTo('/marketing/vouchers');
+				navigateTo(listBackPath.value);
 			},
 			onCancel: () => {
 				confirmModal.close();

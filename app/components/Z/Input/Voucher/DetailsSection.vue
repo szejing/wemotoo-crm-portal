@@ -31,48 +31,68 @@
 				</UFormField>
 			</div>
 
-			<div id="section-voucher-validity" class="scroll-mt-4 space-y-4 border-t border-default pt-6">
-				<div>
-					<div class="flex items-center gap-2">
-						<UIcon :name="ICONS.CALENDAR" class="text-primary-500 w-6 h-6" />
-						<h3 class="text-lg font-semibold text-highlighted">{{ $t('components.voucherForm.validityPeriod') }}</h3>
+			<div class="grid grid-cols-12">
+				<div
+					id="section-voucher-validity"
+					class="col-span-12 scroll-mt-4 space-y-3 border-t border-default pt-4 lg:col-span-6"
+				>
+					<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+						<div class="flex min-w-0 items-center gap-2">
+							<UIcon :name="ICONS.CALENDAR" class="text-primary-500 w-5 h-5 shrink-0" />
+							<h3 class="text-base font-semibold text-highlighted">{{ $t('components.voucherForm.validityPeriod') }}</h3>
+						</div>
+						<p class="text-xs text-neutral-500 dark:text-neutral-400 sm:max-w-[min(100%,20rem)] sm:text-right">
+							{{ $t('components.discountForm.validityPeriodUnsetHint') }}
+						</p>
 					</div>
-					<p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{{ $t('components.discountForm.validityPeriodUnsetHint') }}</p>
-				</div>
-				<div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
-					<UFormField class="col-span-1 sm:col-span-3" :label="$t('components.discountForm.validityStartsAt')" :name="fieldName('starts_at')">
-						<UPopover v-model:open="startsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
-							<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="w-full min-w-0 justify-between group">
-								<span class="truncate">{{ startsAtButtonLabel }}</span>
-								<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
-							</UButton>
-							<template #content>
-								<div class="p-2 space-y-2">
-									<ZDatePicker v-model="startsAtAsDate" :max-date="startsAtMaxDate" @close="startsAtPopoverOpen = false" />
-									<div v-if="state.starts_at" class="flex justify-end border-t border-default pt-2">
-										<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearStartsAt" />
+					<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+						<UFormField
+							class="min-w-0 w-full sm:flex-1"
+							:name="fieldName('starts_at')"
+							:label="$t('components.discountForm.validityStartsAt')"
+							:ui="{ label: 'sr-only' }"
+						>
+							<UPopover v-model:open="startsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
+								<UButton icon="i-lucide-calendar" color="neutral" variant="outline" size="sm" class="w-full min-w-0 justify-between group">
+									<span class="truncate">{{ startsAtButtonLabel }}</span>
+									<UIcon name="i-lucide-chevron-down" class="shrink-0 size-4 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
+								</UButton>
+								<template #content>
+									<div class="p-2 space-y-2">
+										<ZDatePicker v-model="startsAtAsDate" :max-date="startsAtMaxDate" @close="startsAtPopoverOpen = false" />
+										<div v-if="state.starts_at" class="flex justify-end border-t border-default pt-2">
+											<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearStartsAt" />
+										</div>
 									</div>
-								</div>
-							</template>
-						</UPopover>
-					</UFormField>
+								</template>
+							</UPopover>
+						</UFormField>
 
-					<UFormField class="col-span-1 sm:col-span-3" :label="$t('components.discountForm.validityEndsAt')" :name="fieldName('ends_at')">
-						<UPopover v-model:open="endsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
-							<UButton icon="i-lucide-calendar" color="neutral" variant="outline" class="w-full min-w-0 justify-between group">
-								<span class="truncate">{{ endsAtButtonLabel }}</span>
-								<UIcon name="i-lucide-chevron-down" class="shrink-0 size-5 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
-							</UButton>
-							<template #content>
-								<div class="p-2 space-y-2">
-									<ZDatePicker v-model="endsAtAsDate" :min-date="endsAtMinDate" @close="endsAtPopoverOpen = false" />
-									<div v-if="state.ends_at" class="flex justify-end border-t border-default pt-2">
-										<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearEndsAt" />
+						<span class="text-center text-sm text-muted tabular-nums sm:hidden" aria-hidden="true">-</span>
+						<span class="hidden sm:inline text-sm text-muted tabular-nums shrink-0 select-none" aria-hidden="true">-</span>
+
+						<UFormField
+							class="min-w-0 w-full sm:flex-1"
+							:name="fieldName('ends_at')"
+							:label="$t('components.discountForm.validityEndsAt')"
+							:ui="{ label: 'sr-only' }"
+						>
+							<UPopover v-model:open="endsAtPopoverOpen" :content="{ align: 'start' }" :modal="true">
+								<UButton icon="i-lucide-calendar" color="neutral" variant="outline" size="sm" class="w-full min-w-0 justify-between group">
+									<span class="truncate">{{ endsAtButtonLabel }}</span>
+									<UIcon name="i-lucide-chevron-down" class="shrink-0 size-4 text-dimmed group-data-[state=open]:rotate-180 transition-transform" />
+								</UButton>
+								<template #content>
+									<div class="p-2 space-y-2">
+										<ZDatePicker v-model="endsAtAsDate" :min-date="endsAtMinDate" @close="endsAtPopoverOpen = false" />
+										<div v-if="state.ends_at" class="flex justify-end border-t border-default pt-2">
+											<UButton :label="$t('components.filter.clear')" color="neutral" variant="soft" size="sm" @click="clearEndsAt" />
+										</div>
 									</div>
-								</div>
-							</template>
-						</UPopover>
-					</UFormField>
+								</template>
+							</UPopover>
+						</UFormField>
+					</div>
 				</div>
 			</div>
 		</div>

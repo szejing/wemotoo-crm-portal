@@ -35,7 +35,8 @@ const marketingGroups = computed(() => [
 		color: 'teal' as const,
 		items: [
 			// { label: t('nav.discounts'), to: '/marketing/discounts' },
-			{ label: t('nav.vouchers'), to: '/marketing/vouchers' },
+			{ label: t('nav.shopVouchers'), to: '/marketing/vouchers/shop' },
+			{ label: t('nav.productVouchers'), to: '/marketing/vouchers/product' },
 		],
 	},
 	{

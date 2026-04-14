@@ -11,8 +11,7 @@
 					@error="onError"
 				>
 					<ZInputDiscountDetailsSection :state="new_discount" />
-					<ZInputDiscountRuleSection :state="new_discount" />
-					<ZInputDiscountConditionsSection :state="new_discount" />
+					<ZInputDiscountRuleAndConditionsSection :state="new_discount" />
 				</UForm>
 			</div>
 
@@ -115,10 +114,10 @@ const fieldSectionMap: Record<string, string> = {
 	is_disabled: 'section-discount-details',
 	starts_at: 'section-discount-details',
 	ends_at: 'section-discount-details',
-	usage_limit: 'section-discount-rule',
-	rule_type: 'section-discount-rule',
-	rule_value: 'section-discount-rule',
-	allocation: 'section-discount-rule',
+	usage_limit: 'section-discount-rule-conditions',
+	rule_type: 'section-discount-rule-conditions',
+	rule_value: 'section-discount-rule-conditions',
+	allocation: 'section-discount-rule-conditions',
 };
 
 const onError = (event: FormErrorEvent) => {
@@ -127,7 +126,7 @@ const onError = (event: FormErrorEvent) => {
 	if (!errorName) return;
 
 	const fieldName = errorName.split('.')[0] ?? errorName;
-	const sectionId = fieldSectionMap[fieldName] ?? (fieldName === 'conditions' ? 'section-discount-conditions' : undefined);
+	const sectionId = fieldSectionMap[fieldName] ?? (fieldName === 'conditions' ? 'section-discount-rule-conditions' : undefined);
 
 	if (sectionId) {
 		document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
