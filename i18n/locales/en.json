@@ -272,6 +272,7 @@
 			"fixedValuePositive": "Fixed discount amount must be greater than 0",
 			"freeShippingValueNonNegative": "Value must be zero or greater for free shipping",
 			"minAmountGtMax": "Minimum amount cannot be greater than maximum amount",
+			"atMostOneCondition": "Only one condition is allowed",
 			"endBeforeStart": "End date must be on or after the start date"
 		},
 		"voucher": {

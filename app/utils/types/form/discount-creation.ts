@@ -37,7 +37,7 @@ export const discountToFormEditableState = (d: Discount): DiscountCreate => {
 		rule_type: d.rule_type,
 		rule_value: d.rule_value,
 		allocation: d.allocation,
-		conditions: (d.conditions ?? []).map(conditionFromDiscount),
+		conditions: (d.conditions ?? []).map(conditionFromDiscount).slice(0, 1),
 	};
 };
 

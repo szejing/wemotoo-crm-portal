@@ -4,14 +4,13 @@
 			<div class="lg:col-span-9 space-y-6">
 				<ZInputVoucherDetailsSection
 					:state="voucherSectionState"
-					:form-field-prefix="withBundledDiscount ? 'voucher' : ''"
-					:discounts="discountOptions"
+					form-field-prefix="voucher"
+					:discounts="[]"
 					:none-label="t('components.discountForm.filterNone')"
-					:discount-options-loading="discountOptionsLoading"
-					:link-discount-to-voucher-code="withBundledDiscount"
+					link-discount-to-voucher-code
 				/>
 
-				<ZInputDiscountRuleAndConditionsSection v-if="allocation == AllocationType.ITEM" :state="new_discount" form-field-prefix="discount" />
+				<ZInputDiscountRuleAndConditionsSection :state="new_discount" form-field-prefix="discount" />
 			</div>
 			<div class="lg:col-span-3">
 				<div class="lg:sticky lg:top-4">
@@ -29,43 +28,35 @@ import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';
-import type { Discount } from '~/utils/types/discount';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { useDiscountStore } from '~/stores/Discount/Discount';
 import { useVoucherStore } from '~/stores/voucher/Voucher';
-import { CreateBundledVoucherFormValidation, CreateVoucherValidation } from '~/utils/schema';
+import { CreateBundledVoucherFormValidation } from '~/utils/schema';
 import { buildDiscountApplySummaryLine } from '~/utils/discount/apply-summary';
 import { buildDiscountConditionReviewItems } from '~/utils/discount/discount-condition-review-lines';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 
 const props = withDefaults(
 	defineProps<{
-		/** Create a new discount with the same code as the voucher and link it in one request. */
-		withBundledDiscount?: boolean;
-		/** Force bundled discount allocation (shop=bill, product=item). */
+		/** Discount allocation (shop=bill, product=item). */
 		allocation?: AllocationType;
 		/** Route after successful create (shop vs product listing). */
 		postCreateListPath: string;
 	}>(),
-	{ withBundledDiscount: false, forcedAllocation: undefined },
+	{},
 );
 
 const { t } = useI18n();
 
 type BundledSchema = z.infer<ReturnType<typeof CreateBundledVoucherFormValidation>>;
-type VoucherSchema = z.infer<ReturnType<typeof CreateVoucherValidation>>;
 
-const formSchema = computed(() =>
-	props.withBundledDiscount ? CreateBundledVoucherFormValidation(t) : CreateVoucherValidation(t, { linkDiscountToVoucher: false }),
-);
+const formSchema = computed(() => CreateBundledVoucherFormValidation(t));
 
 const voucherStore = useVoucherStore();
 const discountStore = useDiscountStore();
 const { adding, new_voucher } = storeToRefs(voucherStore);
 const { new_discount } = storeToRefs(discountStore);
-
-const new_voucherAsFormState = computed(() => new_voucher.value as VoucherFormState);
 
 const bundledFormModel = reactive({
 	voucher: new_voucher,
@@ -73,17 +64,9 @@ const bundledFormModel = reactive({
 });
 
 /** UForm state is store-backed; cast for schema-aligned UForm generics. */
-const uFormState = computed(
-	(): Record<string, unknown> =>
-		props.withBundledDiscount ? (bundledFormModel as unknown as Record<string, unknown>) : (new_voucher.value as unknown as Record<string, unknown>),
-);
+const uFormState = computed((): Record<string, unknown> => bundledFormModel as unknown as Record<string, unknown>);
 
-const voucherSectionState = computed(() =>
-	props.withBundledDiscount ? (toValue(bundledFormModel.voucher) as VoucherFormState) : new_voucherAsFormState.value,
-);
-
-const discountOptions = ref<Discount[]>([]);
-const discountOptionsLoading = ref(false);
+const voucherSectionState = computed(() => toValue(bundledFormModel.voucher) as VoucherFormState);
 
 const router = useRouter();
 const overlay = useOverlay();
@@ -123,22 +106,18 @@ const humanizeEnum = (value: string) =>
 		.join(' ');
 
 const resolveErrorSectionId = (errorName: string): string | undefined => {
-	if (props.withBundledDiscount) {
-		if (errorName.startsWith('voucher.')) {
-			const field = errorName.slice('voucher.'.length).split('.')[0] ?? '';
-			return voucherFieldSectionMap[field];
-		}
-		if (errorName.startsWith('discount.')) {
-			if (errorName.includes('.conditions')) {
-				return 'section-discount-rule-conditions';
-			}
-			const field = errorName.slice('discount.'.length).split('.')[0] ?? '';
-			return bundledDiscountFieldSectionMap[field];
-		}
-		return undefined;
+	if (errorName.startsWith('voucher.')) {
+		const field = errorName.slice('voucher.'.length).split('.')[0] ?? '';
+		return voucherFieldSectionMap[field];
 	}
-	const field = errorName.split('.')[0] ?? errorName;
-	return voucherFieldSectionMap[field];
+	if (errorName.startsWith('discount.')) {
+		if (errorName.includes('.conditions')) {
+			return 'section-discount-rule-conditions';
+		}
+		const field = errorName.slice('discount.'.length).split('.')[0] ?? '';
+		return bundledDiscountFieldSectionMap[field];
+	}
+	return undefined;
 };
 
 const onError = (event: FormErrorEvent) => {
@@ -170,7 +149,7 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleValueCurrencyCode = 'RM';
 
 const applyAllocation = () => {
-	if (!props.withBundledDiscount || props.allocation == null) {
+	if (props.allocation == null) {
 		return;
 	}
 	new_discount.value.allocation = props.allocation;
@@ -219,7 +198,7 @@ const voucherReviewSummary = computed(() => {
 		validityEndsAt = getFormattedDate(new Date(e), 'dd-MM-yyyy');
 	}
 
-	const ul = props.withBundledDiscount ? new_discount.value.usage_limit : v.usage_limit;
+	const ul = new_discount.value.usage_limit;
 	const usageLimitLabel = ul != null && ul > 0 ? String(ul) : t('components.voucherForm.usageLimitNotSet');
 
 	const codeTrim = v.code?.trim() ?? '';
@@ -232,10 +211,6 @@ const voucherReviewSummary = computed(() => {
 		...(validityEndsAt != null ? { validityEndsAt } : {}),
 		usageLimitLabel,
 	};
-
-	if (!props.withBundledDiscount) {
-		return { ...base, discountDetails: undefined };
-	}
 
 	return {
 		...base,
@@ -257,9 +232,6 @@ const voucherReviewSummary = computed(() => {
 
 /** Copy voucher identity onto bundled discount state; discount validity dates stay unset. */
 const syncBundledDiscountFromVoucher = () => {
-	if (!props.withBundledDiscount) {
-		return;
-	}
 	const c = new_voucher.value.code?.trim() ?? '';
 	const desc = new_voucher.value.description?.trim() || new_voucher.value.name?.trim() || c;
 	new_discount.value.code = c;
@@ -275,9 +247,7 @@ const syncBundledDiscountFromVoucher = () => {
 };
 
 watch([() => new_voucher.value.code, () => new_voucher.value.description, () => new_voucher.value.name, () => new_voucher.value.status], () => {
-	if (props.withBundledDiscount) {
-		syncBundledDiscountFromVoucher();
-	}
+	syncBundledDiscountFromVoucher();
 });
 
 watch(
@@ -289,19 +259,9 @@ watch(
 
 onMounted(async () => {
 	voucherStore.resetNewVoucher();
-	if (props.withBundledDiscount) {
-		discountStore.resetNewDiscount();
-		syncBundledDiscountFromVoucher();
-		applyAllocation();
-	}
-	if (!props.withBundledDiscount) {
-		discountOptionsLoading.value = true;
-		try {
-			discountOptions.value = await discountStore.fetchDiscountsForSelect();
-		} finally {
-			discountOptionsLoading.value = false;
-		}
-	}
+	discountStore.resetNewDiscount();
+	syncBundledDiscountFromVoucher();
+	applyAllocation();
 });
 
 const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): CreateDiscountReq => {
@@ -328,41 +288,15 @@ const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): Cre
 	};
 };
 
-const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) => {
+const onSubmit = async (event: FormSubmitEvent<BundledSchema>) => {
 	try {
-		if (props.withBundledDiscount) {
-			const { voucher: d, discount: disc } = event.data as BundledSchema;
-			const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
-			const codeTrim = d.code.trim();
-			const nameTrim = (d.name?.trim() || codeTrim) as string;
-
-			const pendingDiscount = buildBundledCreateDiscountPayload(disc);
-			const { code: _omit, ...discountBody } = pendingDiscount;
-
-			const payload: CreateVoucherReq = {
-				code: codeTrim,
-				name: nameTrim,
-				status: d.status,
-				description: d.description?.trim() || nameTrim,
-				is_disabled: d.status === 'inactive',
-				discount_code: codeTrim,
-				starts_at: startsAt,
-				ends_at: d.ends_at,
-				...(disc.usage_limit != null ? { usage_limit: disc.usage_limit } : {}),
-				create_discount: discountBody,
-			};
-
-			const created = await voucherStore.createVoucher(payload);
-			if (created?.code) {
-				router.push(props.postCreateListPath);
-			}
-			return;
-		}
-
-		const d = event.data as VoucherSchema;
+		const { voucher: d, discount: disc } = event.data;
 		const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
 		const codeTrim = d.code.trim();
 		const nameTrim = (d.name?.trim() || codeTrim) as string;
+
+		const pendingDiscount = buildBundledCreateDiscountPayload(disc);
+		const { code: _omit, ...discountBody } = pendingDiscount;
 
 		const payload: CreateVoucherReq = {
 			code: codeTrim,
@@ -370,10 +304,11 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) =
 			status: d.status,
 			description: d.description?.trim() || nameTrim,
 			is_disabled: d.status === 'inactive',
-			discount_code: d.discount_code?.trim() || undefined,
+			discount_code: codeTrim,
 			starts_at: startsAt,
 			ends_at: d.ends_at,
-			...(d.usage_limit != null ? { usage_limit: d.usage_limit } : {}),
+			...(disc.usage_limit != null ? { usage_limit: disc.usage_limit } : {}),
+			create_discount: discountBody,
 		};
 
 		const created = await voucherStore.createVoucher(payload);
@@ -386,10 +321,8 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema | VoucherSchema>) =
 };
 
 const submit = () => {
-	if (props.withBundledDiscount) {
-		syncBundledDiscountFromVoucher();
-		applyAllocation();
-	}
+	syncBundledDiscountFromVoucher();
+	applyAllocation();
 	formRef.value?.submit();
 };
 

@@ -38,7 +38,10 @@ export function CreateDiscountValidation(t: TranslateFn) {
 			rule_type: z.nativeEnum(DiscountRuleType),
 			rule_value: z.number(),
 			allocation: z.nativeEnum(AllocationType).optional(),
-			conditions: z.array(discountConditionSchema).default([]),
+			conditions: z
+				.array(discountConditionSchema)
+				.max(1, { message: t('validation.discount.atMostOneCondition') })
+				.default([]),
 		})
 		.superRefine((data, ctx) => {
 			if (data.starts_at && data.ends_at && data.starts_at > data.ends_at) {

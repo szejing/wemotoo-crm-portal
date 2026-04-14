@@ -272,6 +272,7 @@
 			"fixedValuePositive": "Amaun diskaun tetap mesti lebih daripada 0",
 			"freeShippingValueNonNegative": "Nilai mesti sifar atau lebih untuk penghantaran percuma",
 			"minAmountGtMax": "Amaun minimum tidak boleh melebihi amaun maksimum",
+			"atMostOneCondition": "Hanya satu syarat dibenarkan",
 			"endBeforeStart": "Tarikh tamat mesti pada atau selepas tarikh mula"
 		},
 		"voucher": {

@@ -41,7 +41,14 @@
 					<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
 					<h3 class="text-lg font-semibold">{{ $t('components.discountForm.conditionsSection') }}</h3>
 				</div>
-				<UButton color="primary" variant="soft" size="sm" icon="i-lucide-plus" @click="addCondition">
+				<UButton
+					v-if="canAddCondition"
+					color="primary"
+					variant="soft"
+					size="sm"
+					icon="i-lucide-plus"
+					@click="addCondition"
+				>
 					{{ $t('components.discountForm.addCondition') }}
 				</UButton>
 			</div>
@@ -53,7 +60,7 @@
 
 			<div v-else class="space-y-6 py-2 px-4">
 				<div v-for="(cond, index) in state.conditions" :key="index" class="space-y-4">
-					<div class="flex items-center justify-between gap-2">
+					<div v-if="state.allocation !== AllocationType.BILL" class="flex items-center justify-between gap-2">
 						<span class="text-sm font-medium text-highlighted">{{ $t('components.discountForm.conditionRow', { n: index + 1 }) }}</span>
 						<UButton color="error" variant="ghost" size="xs" icon="i-lucide-trash-2" :label="$t('common.delete')" @click="removeCondition(index)" />
 					</div>
@@ -73,7 +80,7 @@
 							</UInput>
 						</UFormField>
 					</div>
-					<div class="border-t border-default pt-4 space-y-4">
+					<div v-if="state.allocation !== AllocationType.BILL" class="border-t border-default pt-4 space-y-4">
 						<p class="text-xs font-medium uppercase tracking-wide text-muted">{{ $t('components.discountForm.filterOptional') }}</p>
 						<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 							<UFormField :label="$t('components.discountForm.filterOperator')" :name="fieldName(`conditions.${index}.filter_operator`)">
@@ -94,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountRuleType } from 'wemotoo-common';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 import { ICONS } from '~/utils/icons';
@@ -112,6 +119,10 @@ const { t } = useI18n();
 const state = toRef(props, 'state');
 
 const fieldName = (segment: string) => (props.formFieldPrefix ? `${props.formFieldPrefix}.${segment}` : segment);
+
+const MAX_CONDITIONS = 1;
+
+const canAddCondition = computed(() => (state.value.conditions?.length ?? 0) < MAX_CONDITIONS);
 
 /** Hardcoded until merchant currency is wired into this form. */
 const ruleValueCurrencyCode = 'RM';
@@ -175,6 +186,7 @@ const emptyCondition = (): CreateDiscountConditionReq => {
 
 const addCondition = () => {
 	const list = state.value.conditions ?? [];
+	if (list.length >= MAX_CONDITIONS) return;
 	state.value.conditions = [...list, emptyCondition()];
 };
 

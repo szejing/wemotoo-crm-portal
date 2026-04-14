@@ -1,7 +1,7 @@
 <template>
 	<ZPagePanel id="vouchers-shop-create" :title="$t('pages.createShopVoucher')" back-to="/marketing/vouchers/shop" grow>
 		<div class="container w-full mx-auto py-4">
-			<FormVoucherCreation ref="formRef" with-bundled-discount :allocation="AllocationType.BILL" post-create-list-path="/marketing/vouchers/shop" />
+			<FormVoucherCreation ref="formRef" :allocation="AllocationType.BILL" post-create-list-path="/marketing/vouchers/shop" />
 		</div>
 
 		<template #footer>

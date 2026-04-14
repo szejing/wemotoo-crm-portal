@@ -90,4 +90,13 @@ describe('CreateDiscountValidation', () => {
 		});
 		expect(result.success).toBe(false);
 	});
+
+	it('rejects more than one condition', () => {
+		const schema = CreateDiscountValidation(t);
+		const result = schema.safeParse({
+			...basePayload,
+			conditions: [{}, {}],
+		});
+		expect(result.success).toBe(false);
+	});
 });
