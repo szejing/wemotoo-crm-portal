@@ -1,11 +1,11 @@
-import { DiscountRuleType, formatCurrency } from 'wemotoo-common';
+import { DiscountType, formatCurrency } from 'wemotoo-common';
 
-export function formatDiscountRuleValue(ruleType: DiscountRuleType, ruleValue: number): string {
-	if (ruleType === DiscountRuleType.PERCENTAGE) {
-		return `${ruleValue}%`;
+export function formatDiscountDiscValue(discType: DiscountType, discValue: number): string {
+	if (discType === DiscountType.PERCENTAGE) {
+		return `${discValue}%`;
 	}
-	if (ruleType === DiscountRuleType.FIXED) {
-		return formatCurrency(ruleValue, 'MYR');
+	if (discType === DiscountType.FIXED) {
+		return formatCurrency(discValue, 'MYR');
 	}
-	return String(ruleValue);
+	return String(discValue);
 }

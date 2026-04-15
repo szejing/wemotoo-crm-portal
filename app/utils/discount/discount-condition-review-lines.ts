@@ -13,29 +13,32 @@ const formatMoneyAmount = (n: number): string => {
 	return x % 1 === 0 ? String(x) : x.toFixed(2);
 };
 
-const spendAmountSentence = (t: Translate, currency: string, cond: CreateDiscountConditionReq): string => {
-	const min = cond.min_amount;
-	const max = cond.max_amount;
-	if (min != null && max != null) {
-		return t('components.discountForm.reviewConditionSpendRange', {
-			currency,
-			min: formatMoneyAmount(min),
-			max: formatMoneyAmount(max),
-		});
-	}
+export type DiscountSpendBounds = {
+	min_order_amt?: number | null;
+	max_disc_amt?: number | null;
+};
+
+const spendAmountSentence = (t: Translate, currency: string, bounds: DiscountSpendBounds): string => {
+	const min = bounds.min_order_amt;
+	const cap = bounds.max_disc_amt;
+	const parts: string[] = [];
 	if (min != null) {
-		return t('components.discountForm.reviewConditionSpendMin', {
-			currency,
-			amount: formatMoneyAmount(min),
-		});
+		parts.push(
+			t('components.discountForm.reviewConditionSpendMin', {
+				currency,
+				amount: formatMoneyAmount(min),
+			}),
+		);
 	}
-	if (max != null) {
-		return t('components.discountForm.reviewConditionSpendMax', {
-			currency,
-			amount: formatMoneyAmount(max),
-		});
+	if (cap != null) {
+		parts.push(
+			t('components.discountForm.reviewConditionMaxDiscCap', {
+				currency,
+				amount: formatMoneyAmount(cap),
+			}),
+		);
 	}
-	return '';
+	return parts.join(' ');
 };
 
 /** Filter copy is split so `filter_value` tokens render as badges in the review UI. */
@@ -106,24 +109,37 @@ export function getConditionFilterReviewPart(cond: CreateDiscountConditionReq, t
 }
 
 /**
- * One list item per discount condition (amount sentence + optional structured filter).
+ * Review lines: optional spend bounds on the discount plus structured filter per condition row.
  */
 export function buildDiscountConditionReviewItems(
 	conditions: CreateDiscountConditionReq[] | undefined,
 	t: Translate,
 	currencyCode: string,
+	spendBounds?: DiscountSpendBounds,
 ): ConditionReviewLineItem[] {
+	const amountText = spendBounds ? spendAmountSentence(t, currencyCode, spendBounds) : '';
+
 	if (!conditions?.length) {
-		return [];
+		return amountText ? [{ amountText }] : [];
 	}
+
 	const items: ConditionReviewLineItem[] = [];
+	let index = 0;
 	for (const cond of conditions) {
-		const amountText = spendAmountSentence(t, currencyCode, cond);
 		const filter = getConditionFilterReviewPart(cond, t);
-		if (!amountText && !filter) {
-			continue;
+		const includeAmount = index === 0 && Boolean(amountText);
+		if (includeAmount || filter) {
+			items.push({
+				...(includeAmount ? { amountText } : {}),
+				...(filter ? { filter } : {}),
+			});
 		}
-		items.push({ ...(amountText ? { amountText } : {}), ...(filter ? { filter } : {}) });
+		index++;
 	}
+
+	if (amountText && items.length === 0) {
+		return [{ amountText }];
+	}
+
 	return items;
 }

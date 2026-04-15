@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import MerchantRoutes from '~/repository/routes.client';
 import { ApiErrorModel } from '~/utils/types/api-error-model';
 import { loginPayload } from '../../../test/repository-model-fixtures';
@@ -80,7 +80,7 @@ describe('DiscountModule', () => {
 			ends_at: null,
 			usage_limit: null,
 			usage_count: 0,
-			disc_type: DiscountRuleType.PERCENTAGE,
+			disc_type: DiscountType.PERCENTAGE,
 			disc_value: 10,
 			allocation: AllocationType.BILL,
 			conditions: [],
@@ -93,7 +93,7 @@ describe('DiscountModule', () => {
 		const result = await mod.create({
 			description: 'Test',
 			is_disabled: false,
-			disc_type: DiscountRuleType.PERCENTAGE,
+			disc_type: DiscountType.PERCENTAGE,
 			disc_value: 10,
 		});
 

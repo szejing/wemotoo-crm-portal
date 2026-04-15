@@ -53,7 +53,7 @@ import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
 import VoucherModule from './voucher/voucher';
 import type { CreateVoucherReq } from './voucher/models/request/create-voucher.req';
-import { DiscountRuleType } from 'wemotoo-common';
+import { DiscountType } from 'wemotoo-common';
 
 const odata: BaseODataReq = { $top: 10 };
 const dashboardRange = { start_date: '2025-01-01', end_date: '2025-01-31' };
@@ -727,7 +727,7 @@ describe('VoucherModule', () => {
 			discount: {
 				description: 'Bundle discount',
 				is_disabled: false,
-				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_type: DiscountType.PERCENTAGE,
 				disc_value: 10,
 			},
 		};

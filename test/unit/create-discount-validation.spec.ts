@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DiscountRuleType } from 'wemotoo-common';
+import { DiscountType } from 'wemotoo-common';
 import { CreateDiscountValidation } from '../../app/utils/schema/Discount/Create/CreateDiscountValidation';
 
 const t = (key: string) => key;
@@ -11,16 +11,16 @@ const basePayload = {
 	starts_at: undefined as string | undefined,
 	ends_at: undefined as string | undefined,
 	usage_limit: undefined as number | undefined,
-	disc_type: DiscountRuleType.PERCENTAGE,
+	disc_type: DiscountType.PERCENTAGE,
 	disc_value: 10,
 	allocation: undefined as undefined,
 	conditions: [] as {
-		min_amount?: number;
-		max_amount?: number;
 		filter_operator?: undefined;
 		filter_condition?: undefined;
 		filter_value?: string;
 	}[],
+	min_order_amt: undefined as number | undefined,
+	max_disc_amt: undefined as number | undefined,
 };
 
 describe('CreateDiscountValidation', () => {
@@ -61,7 +61,7 @@ describe('CreateDiscountValidation', () => {
 		const schema = CreateDiscountValidation(t);
 		const result = schema.safeParse({
 			...basePayload,
-			disc_type: DiscountRuleType.FREE_SHIPPING,
+			disc_type: DiscountType.FREE_SHIPPING,
 			disc_value: 0,
 		});
 		expect(result.success).toBe(true);
@@ -77,18 +77,14 @@ describe('CreateDiscountValidation', () => {
 		expect(result.success).toBe(false);
 	});
 
-	it('rejects when condition min_amount > max_amount', () => {
+	it('accepts min_order_amt and max_disc_amt together', () => {
 		const schema = CreateDiscountValidation(t);
 		const result = schema.safeParse({
 			...basePayload,
-			conditions: [
-				{
-					min_amount: 100,
-					max_amount: 50,
-				},
-			],
+			min_order_amt: 100,
+			max_disc_amt: 50,
 		});
-		expect(result.success).toBe(false);
+		expect(result.success).toBe(true);
 	});
 
 	it('rejects more than one condition', () => {

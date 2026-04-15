@@ -15,8 +15,6 @@ const t = ((key: string, values?: Record<string, unknown>) => {
 describe('condition cart filter summary', () => {
 	it('conditionHasCartFilter is false for empty optional filters', () => {
 		const cond: CreateDiscountConditionReq = {
-			min_amount: 1,
-			max_amount: 2,
 			filter_operator: undefined,
 			filter_condition: undefined,
 			filter_value: '',

@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { DiscountRuleType } from 'wemotoo-common';
+import { DiscountType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
@@ -64,29 +64,29 @@ watch(updating, (v) => {
 	else loadingModal.close();
 });
 
-const ruleTypeLabel = (rt: DiscountRuleType) =>
+const discTypeLabel = (rt: DiscountType) =>
 	t(
 		{
-			[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
-			[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
-			[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+			[DiscountType.FIXED]: 'components.discountForm.discTypeOptionFixed',
+			[DiscountType.PERCENTAGE]: 'components.discountForm.discTypeOptionPercentage',
+			[DiscountType.FREE_SHIPPING]: 'components.discountForm.discTypeOptionFreeShipping',
 		}[rt],
 	);
 
 /** Hardcoded until merchant currency is wired into this form (review summary). */
-const ruleValueCurrencyCode = 'RM';
+const discValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = formState.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rt = formState.disc_type ?? DiscountType.PERCENTAGE;
 	const rv = formState.disc_value;
-	const typeName = ruleTypeLabel(rt);
-	if (rt === DiscountRuleType.PERCENTAGE) {
+	const typeName = discTypeLabel(rt);
+	if (rt === DiscountType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
 	}
-	if (rt === DiscountRuleType.FREE_SHIPPING) {
+	if (rt === DiscountType.FREE_SHIPPING) {
 		return typeName;
 	}
-	return `${typeName}: ${ruleValueCurrencyCode} ${rv}`;
+	return `${typeName}: ${discValueCurrencyCode} ${rv}`;
 });
 
 const reviewSummary = computed(() => {
@@ -126,6 +126,8 @@ const fieldSectionMap: Record<string, string> = {
 	disc_type: 'section-discount-rule-conditions',
 	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
+	min_order_amt: 'section-discount-rule-conditions',
+	max_disc_amt: 'section-discount-rule-conditions',
 };
 
 const onError = (event: FormErrorEvent) => {
@@ -148,8 +150,6 @@ const onError = (event: FormErrorEvent) => {
 
 const mapConditionsForApi = (data: Schema) =>
 	(data.conditions ?? []).map((c) => ({
-		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
-		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
 		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
 		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
 		...(c.filter_value?.trim() ? { filter_value: c.filter_value.trim() } : {}),
@@ -168,6 +168,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			disc_type: data.disc_type,
 			disc_value: data.disc_value,
 			...(data.allocation != null ? { allocation: data.allocation } : {}),
+			...(data.min_order_amt != null ? { min_order_amt: data.min_order_amt } : {}),
+			...(data.max_disc_amt != null ? { max_disc_amt: data.max_disc_amt } : {}),
 			conditions: mapConditionsForApi(data),
 		};
 		const result = await discountStore.updateDiscount(props.discount.code, body);

@@ -22,7 +22,14 @@
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 				<UFormField :label="$t('form.code')" :name="fieldName('code')" :required="!codeDisabled">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.voucherForm.codeHint') }}</p>
-					<UInput v-model="state.code" :disabled="codeDisabled" />
+					<UInput
+						class="uppercase"
+						:model-value="state.code"
+						:disabled="codeDisabled"
+						autocapitalize="characters"
+						autocomplete="off"
+						@update:model-value="onVoucherCodeUpdate"
+					/>
 				</UFormField>
 
 				<UFormField :label="$t('form.description')" :name="fieldName('description')">
@@ -134,6 +141,10 @@ const { t } = useI18n();
 const state = toRef(props, 'state');
 
 const fieldName = (segment: string) => (props.formFieldPrefix ? `${props.formFieldPrefix}.${segment}` : segment);
+
+const onVoucherCodeUpdate = (value: string | number | undefined) => {
+	state.value.code = (value == null ? '' : String(value)).toUpperCase();
+};
 
 const discountCodeSelect = computed({
 	get: () => (state.value.discount_code || selectNoneValue) as string,

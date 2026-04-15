@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
@@ -163,28 +163,28 @@ const humanizeEnum = (value: string) =>
 		.map((p) => p.charAt(0).toUpperCase() + p.slice(1))
 		.join(' ');
 
-const ruleTypeLabel = (rt: DiscountRuleType) =>
+const discTypeLabel = (rt: DiscountType) =>
 	t(
 		{
-			[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
-			[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
-			[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+			[DiscountType.FIXED]: 'components.discountForm.discTypeOptionFixed',
+			[DiscountType.PERCENTAGE]: 'components.discountForm.discTypeOptionPercentage',
+			[DiscountType.FREE_SHIPPING]: 'components.discountForm.discTypeOptionFreeShipping',
 		}[rt],
 	);
 
-const ruleValueCurrencyCode = 'RM';
+const discValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = formModel.discount.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rt = formModel.discount.disc_type ?? DiscountType.PERCENTAGE;
 	const rv = formModel.discount.disc_value;
-	const typeName = ruleTypeLabel(rt);
-	if (rt === DiscountRuleType.PERCENTAGE) {
+	const typeName = discTypeLabel(rt);
+	if (rt === DiscountType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
 	}
-	if (rt === DiscountRuleType.FREE_SHIPPING) {
+	if (rt === DiscountType.FREE_SHIPPING) {
 		return typeName;
 	}
-	return `${typeName}: ${ruleValueCurrencyCode} ${rv}`;
+	return `${typeName}: ${discValueCurrencyCode} ${rv}`;
 });
 
 const allocationReviewLabel = computed(() => {
@@ -233,12 +233,15 @@ const reviewSummary = computed(() => {
 			allocationLabel: allocationReviewLabel.value,
 			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
 			discountApplySummary: buildDiscountApplySummaryLine(t, {
-				ruleType: formModel.discount.disc_type,
-				ruleValue: formModel.discount.disc_value,
+				discType: formModel.discount.disc_type,
+				discValue: formModel.discount.disc_value,
 				allocation: formModel.discount.allocation,
-				currencyCode: ruleValueCurrencyCode,
+				currencyCode: discValueCurrencyCode,
 			}),
-			conditionReviewItems: buildDiscountConditionReviewItems(formModel.discount.conditions, t, ruleValueCurrencyCode),
+			conditionReviewItems: buildDiscountConditionReviewItems(formModel.discount.conditions, t, discValueCurrencyCode, {
+				min_order_amt: formModel.discount.min_order_amt,
+				max_disc_amt: formModel.discount.max_disc_amt,
+			}),
 		},
 	};
 });
@@ -259,6 +262,8 @@ const discountFieldSectionMap: Record<string, string> = {
 	disc_type: 'section-discount-rule-conditions',
 	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
+	min_order_amt: 'section-discount-rule-conditions',
+	max_disc_amt: 'section-discount-rule-conditions',
 };
 
 const resolveErrorSectionId = (errorName: string): string | undefined => {
@@ -304,8 +309,6 @@ onMounted(async () => {
 
 const mapConditionsForApi = (conditions: CreateDiscountConditionReq[]) =>
 	conditions.map((c) => ({
-		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
-		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
 		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
 		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
 		...(c.filter_value?.trim() ? { filter_value: c.filter_value.trim() } : {}),
@@ -346,6 +349,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 				disc_type: disc.disc_type,
 				disc_value: disc.disc_value,
 				...(disc.allocation != null ? { allocation: disc.allocation } : {}),
+				...(disc.min_order_amt != null ? { min_order_amt: disc.min_order_amt } : {}),
+				...(disc.max_disc_amt != null ? { max_disc_amt: disc.max_disc_amt } : {}),
 				conditions: mapConditionsForApi(disc.conditions ?? []),
 			};
 			await discountStore.updateDiscount(discountFormCode, discountBody);

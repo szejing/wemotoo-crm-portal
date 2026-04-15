@@ -15,6 +15,17 @@ describe('CreateVoucherValidation', () => {
 		expect(parsed.code).toBe('V1');
 	});
 
+	it('normalizes code to uppercase', () => {
+		const schema = CreateVoucherValidation(t);
+		const parsed = schema.parse({
+			code: 'v1',
+			name: 'Test',
+			is_disabled: false,
+			discount_code: 'D1',
+		});
+		expect(parsed.code).toBe('V1');
+	});
+
 	it('rejects empty code', () => {
 		const schema = CreateVoucherValidation(t);
 		expect(() =>

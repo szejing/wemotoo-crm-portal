@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { DiscountRuleType } from 'wemotoo-common';
-import { formatDiscountRuleValue } from '../../app/utils/discount-rule-display';
+import { DiscountType } from 'wemotoo-common';
+import { formatDiscountDiscValue } from '../../app/utils/discount-rule-display';
 
-describe('formatDiscountRuleValue', () => {
+describe('formatDiscountDiscValue', () => {
 	it('formats percentage', () => {
-		expect(formatDiscountRuleValue(DiscountRuleType.PERCENTAGE, 12.5)).toBe('12.5%');
+		expect(formatDiscountDiscValue(DiscountType.PERCENTAGE, 12.5)).toBe('12.5%');
 	});
 
 	it('formats fixed with MYR', () => {
-		expect(formatDiscountRuleValue(DiscountRuleType.FIXED, 10)).toMatch(/10/);
+		expect(formatDiscountDiscValue(DiscountType.FIXED, 10)).toMatch(/10/);
 	});
 
 	it('stringifies other rule types', () => {
-		expect(formatDiscountRuleValue(DiscountRuleType.FREE_SHIPPING, 0)).toBe('0');
+		expect(formatDiscountDiscValue(DiscountType.FREE_SHIPPING, 0)).toBe('0');
 	});
 });

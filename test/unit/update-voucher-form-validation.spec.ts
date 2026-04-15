@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import { UpdateVoucherFormValidation } from '../../app/utils/schema/Voucher/Update/UpdateVoucherFormValidation';
 
 const t = (key: string) => key;
@@ -17,14 +17,14 @@ describe('UpdateVoucherFormValidation', () => {
 			discount: {
 				description: 'D desc',
 				is_disabled: false,
-				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_type: DiscountType.PERCENTAGE,
 				disc_value: 10,
 				allocation: AllocationType.BILL,
 				conditions: [],
 			},
 		});
 		expect(parsed.voucher.code).toBe('V1');
-		expect(parsed.discount.disc_type).toBe(DiscountRuleType.PERCENTAGE);
+		expect(parsed.discount.disc_type).toBe(DiscountType.PERCENTAGE);
 	});
 
 	it('rejects voucher end before start', () => {
@@ -42,7 +42,7 @@ describe('UpdateVoucherFormValidation', () => {
 				discount: {
 					description: 'D',
 					is_disabled: false,
-					disc_type: DiscountRuleType.PERCENTAGE,
+					disc_type: DiscountType.PERCENTAGE,
 					disc_value: 10,
 					conditions: [],
 				},

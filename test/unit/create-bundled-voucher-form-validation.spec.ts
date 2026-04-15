@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import { CreateBundledVoucherFormValidation } from '../../app/utils/schema/Voucher/Create/CreateBundledVoucherFormValidation';
 
 const t = (key: string) => key;
@@ -21,14 +21,14 @@ describe('CreateBundledVoucherFormValidation', () => {
 				description: 'Save 10',
 				is_disabled: false,
 				usage_limit: 50,
-				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_type: DiscountType.PERCENTAGE,
 				disc_value: 10,
 				allocation: AllocationType.BILL,
 				conditions: [{}],
 			},
 		});
 		expect(parsed.voucher.code).toBe('VSAVE10');
-		expect(parsed.discount.disc_type).toBe(DiscountRuleType.PERCENTAGE);
+		expect(parsed.discount.disc_type).toBe(DiscountType.PERCENTAGE);
 		expect(parsed.discount.usage_limit).toBe(50);
 	});
 
@@ -43,7 +43,7 @@ describe('CreateBundledVoucherFormValidation', () => {
 				discount: {
 					description: 'd',
 					is_disabled: false,
-					disc_type: DiscountRuleType.PERCENTAGE,
+					disc_type: DiscountType.PERCENTAGE,
 					disc_value: 101,
 				},
 			}),

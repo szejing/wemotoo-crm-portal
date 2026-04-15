@@ -1,4 +1,4 @@
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { Discount, DiscountCondition } from '~/utils/types/discount';
 
@@ -10,16 +10,16 @@ export type DiscountCreate = {
 	starts_at?: string;
 	ends_at?: string;
 	usage_limit?: number;
-	disc_type: DiscountRuleType;
+	disc_type: DiscountType;
 	disc_value: number;
 	allocation?: AllocationType;
+	min_order_amt?: number;
+	max_disc_amt?: number;
 	conditions: CreateDiscountConditionReq[];
 };
 
 const conditionFromDiscount = (c: DiscountCondition): CreateDiscountConditionReq => {
 	return {
-		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
-		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
 		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
 		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
 		filter_value: c.filter_value?.trim() ? c.filter_value : '',
@@ -37,6 +37,8 @@ export const discountToFormEditableState = (d: Discount): DiscountCreate => {
 		disc_type: d.disc_type,
 		disc_value: d.disc_value,
 		allocation: d.allocation,
+		min_order_amt: d.min_order_amt ?? undefined,
+		max_disc_amt: d.max_disc_amt ?? undefined,
 		conditions: (d.conditions ?? []).map(conditionFromDiscount).slice(0, 1),
 	};
 };
@@ -49,9 +51,11 @@ export const emptyDiscountFormEditableState = (): DiscountCreate => {
 		starts_at: undefined,
 		ends_at: undefined,
 		usage_limit: undefined,
-		disc_type: DiscountRuleType.PERCENTAGE,
+		disc_type: DiscountType.PERCENTAGE,
 		disc_value: 10,
 		allocation: AllocationType.BILL,
+		min_order_amt: undefined,
+		max_disc_amt: undefined,
 		conditions: [],
 	};
 };
@@ -68,5 +72,7 @@ export const applyDiscountToFormState = (target: DiscountCreate, d: Discount): v
 	target.disc_type = next.disc_type;
 	target.disc_value = next.disc_value;
 	target.allocation = next.allocation;
+	target.min_order_amt = next.min_order_amt;
+	target.max_disc_amt = next.max_disc_amt;
 	target.conditions.splice(0, target.conditions.length, ...next.conditions);
 };

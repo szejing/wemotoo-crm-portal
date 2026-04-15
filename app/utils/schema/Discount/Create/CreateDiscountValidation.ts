@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AllocationType, DiscountRuleType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import { AllocationType, DiscountType, FilterCondition, FilterOperator } from 'wemotoo-common';
 
 type TranslateFn = (key: string) => string;
 
@@ -12,8 +12,6 @@ const optionalNonNegativeNumber = z.preprocess((val) => {
 
 export function CreateDiscountValidation(t: TranslateFn) {
 	const discountConditionSchema = z.object({
-		min_amount: optionalNonNegativeNumber,
-		max_amount: optionalNonNegativeNumber,
 		filter_operator: z.nativeEnum(FilterOperator).optional(),
 		filter_condition: z.nativeEnum(FilterCondition).optional(),
 		filter_value: z.string().optional(),
@@ -33,9 +31,11 @@ export function CreateDiscountValidation(t: TranslateFn) {
 			starts_at: z.string().optional(),
 			ends_at: z.string().optional(),
 			usage_limit: z.number().int().positive().optional(),
-			disc_type: z.nativeEnum(DiscountRuleType),
+			disc_type: z.nativeEnum(DiscountType),
 			disc_value: z.number(),
 			allocation: z.nativeEnum(AllocationType).optional(),
+			min_order_amt: optionalNonNegativeNumber,
+			max_disc_amt: optionalNonNegativeNumber,
 			conditions: z
 				.array(discountConditionSchema)
 				.max(1, { message: t('validation.discount.atMostOneCondition') })
@@ -50,7 +50,7 @@ export function CreateDiscountValidation(t: TranslateFn) {
 				});
 			}
 
-			if (data.disc_type === DiscountRuleType.PERCENTAGE) {
+			if (data.disc_type === DiscountType.PERCENTAGE) {
 				if (data.disc_value <= 0 || data.disc_value > 100) {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,
@@ -58,7 +58,7 @@ export function CreateDiscountValidation(t: TranslateFn) {
 						path: ['disc_value'],
 					});
 				}
-			} else if (data.disc_type === DiscountRuleType.FIXED) {
+			} else if (data.disc_type === DiscountType.FIXED) {
 				if (data.disc_value <= 0) {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,
@@ -66,7 +66,7 @@ export function CreateDiscountValidation(t: TranslateFn) {
 						path: ['disc_value'],
 					});
 				}
-			} else if (data.disc_type === DiscountRuleType.FREE_SHIPPING) {
+			} else if (data.disc_type === DiscountType.FREE_SHIPPING) {
 				if (data.disc_value < 0) {
 					ctx.addIssue({
 						code: z.ZodIssueCode.custom,
@@ -75,15 +75,5 @@ export function CreateDiscountValidation(t: TranslateFn) {
 					});
 				}
 			}
-
-			data.conditions.forEach((cond, index) => {
-				if (cond.min_amount != null && cond.max_amount != null && cond.min_amount > cond.max_amount) {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: t('validation.discount.minAmountGtMax'),
-						path: ['conditions', index, 'max_amount'],
-					});
-				}
-			});
 		});
 }

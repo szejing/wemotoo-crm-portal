@@ -48,6 +48,8 @@ export const useVoucherStore = defineStore('voucherStore', {
 	actions: {
 		resetNewVoucher() {
 			this.new_voucher = structuredClone(initialEmptyVoucher);
+			const discountStore = useDiscountStore();
+			discountStore.resetNewDiscount();
 		},
 
 		async updatePageSize(size: number) {

@@ -4,7 +4,7 @@ import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { UpdateDiscountReq } from '~/repository/modules/discount/models/request/update-discount.req';
-import { AllocationType, defaultDiscountRelations, DiscountRuleType, removeDuplicateExpands } from 'wemotoo-common';
+import { AllocationType, defaultDiscountRelations, DiscountType, removeDuplicateExpands } from 'wemotoo-common';
 import type { Discount } from '~/utils/types/discount';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 
@@ -29,9 +29,11 @@ const initialEmptyDiscount: DiscountCreate = {
 	usage_limit: undefined,
 	starts_at: undefined,
 	ends_at: undefined,
-	disc_type: DiscountRuleType.PERCENTAGE,
+	disc_type: DiscountType.PERCENTAGE,
 	disc_value: 10,
 	allocation: AllocationType.BILL,
+	min_order_amt: undefined,
+	max_disc_amt: undefined,
 	conditions: [],
 };
 

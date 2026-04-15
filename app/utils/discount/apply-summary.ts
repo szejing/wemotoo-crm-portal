@@ -1,4 +1,4 @@
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 
 type Translate = (key: string, values?: Record<string, unknown>) => string;
 
@@ -12,18 +12,18 @@ const humanizeUnderscoreEnum = (value: string) =>
 export function discountRuleShortForReview(
 	t: Translate,
 	params: {
-		ruleType: DiscountRuleType | undefined;
-		ruleValue: number | undefined;
+		discType: DiscountType | undefined;
+		discValue: number | undefined;
 		currencyCode?: string;
 	},
 ): string {
 	const currencyCode = params.currencyCode ?? 'RM';
-	const rt = params.ruleType ?? DiscountRuleType.PERCENTAGE;
-	const rv = params.ruleValue ?? 0;
-	if (rt === DiscountRuleType.FREE_SHIPPING) {
-		return t('components.discountForm.ruleTypeOptionFreeShipping');
+	const rt = params.discType ?? DiscountType.PERCENTAGE;
+	const rv = params.discValue ?? 0;
+	if (rt === DiscountType.FREE_SHIPPING) {
+		return t('components.discountForm.discTypeOptionFreeShipping');
 	}
-	if (rt === DiscountRuleType.PERCENTAGE) {
+	if (rt === DiscountType.PERCENTAGE) {
 		return `${rv}%`;
 	}
 	return `${currencyCode} ${rv}`;
@@ -48,8 +48,8 @@ export function allocationLabelForApplySummary(t: Translate, allocation: Allocat
 export function buildDiscountApplySummaryLine(
 	t: Translate,
 	params: {
-		ruleType: DiscountRuleType | undefined;
-		ruleValue: number | undefined;
+		discType: DiscountType | undefined;
+		discValue: number | undefined;
 		allocation: AllocationType | undefined | null;
 		currencyCode?: string;
 	},

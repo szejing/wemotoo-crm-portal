@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { AllocationType, DiscountRuleType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import { getFormattedDate } from 'wemotoo-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
@@ -96,6 +96,8 @@ const bundledDiscountFieldSectionMap: Record<string, string> = {
 	disc_type: 'section-discount-rule-conditions',
 	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
+	min_order_amt: 'section-discount-rule-conditions',
+	max_disc_amt: 'section-discount-rule-conditions',
 };
 
 const humanizeEnum = (value: string) =>
@@ -136,16 +138,16 @@ const onError = (event: FormErrorEvent) => {
 	});
 };
 
-const ruleTypeLabel = (rt: DiscountRuleType) =>
+const discTypeLabel = (rt: DiscountType) =>
 	t(
 		{
-			[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
-			[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
-			[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+			[DiscountType.FIXED]: 'components.discountForm.discTypeOptionFixed',
+			[DiscountType.PERCENTAGE]: 'components.discountForm.discTypeOptionPercentage',
+			[DiscountType.FREE_SHIPPING]: 'components.discountForm.discTypeOptionFreeShipping',
 		}[rt],
 	);
 
-const ruleValueCurrencyCode = 'RM';
+const discValue = 'RM';
 
 const applyAllocation = () => {
 	if (props.allocation == null) {
@@ -155,16 +157,16 @@ const applyAllocation = () => {
 };
 
 const ruleSummaryLabel = computed(() => {
-	const rt = new_discount.value.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rt = new_discount.value.disc_type ?? DiscountType.PERCENTAGE;
 	const rv = new_discount.value.disc_value;
-	const typeName = ruleTypeLabel(rt);
-	if (rt === DiscountRuleType.PERCENTAGE) {
+	const typeName = discTypeLabel(rt);
+	if (rt === DiscountType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
 	}
-	if (rt === DiscountRuleType.FREE_SHIPPING) {
+	if (rt === DiscountType.FREE_SHIPPING) {
 		return typeName;
 	}
-	return `${typeName}: ${ruleValueCurrencyCode} ${rv}`;
+	return `${typeName}: ${discValue} ${rv}`;
 });
 
 const allocationReviewLabel = computed(() => {
@@ -218,12 +220,15 @@ const voucherReviewSummary = computed(() => {
 			allocationLabel: allocationReviewLabel.value,
 			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
 			discountApplySummary: buildDiscountApplySummaryLine(t, {
-				ruleType: new_discount.value.disc_type,
-				ruleValue: new_discount.value.disc_value,
+				discType: new_discount.value.disc_type,
+				discValue: new_discount.value.disc_value,
 				allocation: new_discount.value.allocation,
-				currencyCode: ruleValueCurrencyCode,
+				currencyCode: discValue,
 			}),
-			conditionReviewItems: buildDiscountConditionReviewItems(new_discount.value.conditions, t, ruleValueCurrencyCode),
+			conditionReviewItems: buildDiscountConditionReviewItems(new_discount.value.conditions, t, discValue, {
+				min_order_amt: new_discount.value.min_order_amt,
+				max_disc_amt: new_discount.value.max_disc_amt,
+			}),
 		},
 	};
 });
@@ -260,8 +265,6 @@ onMounted(async () => {
 
 const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): CreateDiscountReq => {
 	const conditions = (data.conditions ?? []).map((c) => ({
-		...(c.min_amount != null ? { min_amount: c.min_amount } : {}),
-		...(c.max_amount != null ? { max_amount: c.max_amount } : {}),
 		...(c.filter_operator != null ? { filter_operator: c.filter_operator } : {}),
 		...(c.filter_condition != null ? { filter_condition: c.filter_condition } : {}),
 		...(c.filter_value?.trim() ? { filter_value: c.filter_value.trim() } : {}),
@@ -278,6 +281,8 @@ const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): Cre
 		disc_type: data.disc_type,
 		disc_value: data.disc_value,
 		...(data.allocation != null ? { allocation: data.allocation } : {}),
+		...(data.min_order_amt != null ? { min_order_amt: data.min_order_amt } : {}),
+		...(data.max_disc_amt != null ? { max_disc_amt: data.max_disc_amt } : {}),
 		...(conditions.length > 0 ? { conditions } : {}),
 	};
 };

@@ -4,8 +4,11 @@ import type { CreateDiscountConditionReq } from '../../app/repository/modules/di
 import { buildDiscountConditionReviewItems, getConditionFilterReviewPart } from '../../app/utils/discount/discount-condition-review-lines';
 
 const t = ((key: string, values?: Record<string, unknown>) => {
-	if (key === 'components.discountForm.reviewConditionSpendRange') {
-		return `Between ${values?.currency} ${values?.min} and ${values?.currency} ${values?.max}.`;
+	if (key === 'components.discountForm.reviewConditionSpendMin') {
+		return `Min order ${values?.currency} ${values?.amount}.`;
+	}
+	if (key === 'components.discountForm.reviewConditionMaxDiscCap') {
+		return `Max disc ${values?.currency} ${values?.amount}.`;
 	}
 	if (key === 'components.discountForm.reviewFilterIncludeProductLead') return 'INCLUDE_PRODUCT_LEAD';
 	if (key === 'components.discountForm.reviewFilterExcludeCategoryLead') return 'EXCLUDE_CAT_LEAD';
@@ -17,16 +20,15 @@ describe('buildDiscountConditionReviewItems', () => {
 	it('returns amount plus badged filter with parsed values', () => {
 		const conditions: CreateDiscountConditionReq[] = [
 			{
-				min_amount: 10,
-				max_amount: 50,
 				filter_operator: FilterOperator.INCLUDE,
 				filter_condition: FilterCondition.PROD_CODE,
 				filter_value: 'A,B',
 			},
 		];
-		const items = buildDiscountConditionReviewItems(conditions, t, 'RM');
+		const items = buildDiscountConditionReviewItems(conditions, t, 'RM', { min_order_amt: 10, max_disc_amt: 50 });
 		expect(items).toHaveLength(1);
-		expect(items[0]?.amountText).toContain('Between RM 10');
+		expect(items[0]?.amountText).toContain('Min order RM 10');
+		expect(items[0]?.amountText).toContain('Max disc RM 50');
 		expect(items[0]?.filter).toEqual({
 			kind: 'badged',
 			leadKey: 'components.discountForm.reviewFilterIncludeProductLead',
@@ -36,7 +38,7 @@ describe('buildDiscountConditionReviewItems', () => {
 
 	it('skips completely empty condition rows', () => {
 		const conditions: CreateDiscountConditionReq[] = [
-			{ min_amount: undefined, max_amount: undefined, filter_operator: undefined, filter_condition: undefined, filter_value: '' },
+			{ filter_operator: undefined, filter_condition: undefined, filter_value: '' },
 		];
 		expect(buildDiscountConditionReviewItems(conditions, t, 'RM')).toEqual([]);
 	});

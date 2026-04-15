@@ -1,6 +1,6 @@
 import { UBadge, USwitch } from '#components';
-import { DiscountRuleType } from 'wemotoo-common';
-import { formatDiscountRuleValue } from '~/utils/discount-rule-display';
+import { DiscountType } from 'wemotoo-common';
+import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
@@ -8,16 +8,16 @@ import { useDiscountStore } from '~/stores/Discount/Discount';
 
 type TranslateFn = (key: string) => string;
 
-const DISC_TYPE_I18N: Record<DiscountRuleType, string> = {
-	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
-	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
-	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+const DISC_TYPE_I18N: Record<DiscountType, string> = {
+	[DiscountType.PERCENTAGE]: 'components.discountForm.discTypeOptionPercentage',
+	[DiscountType.FIXED]: 'components.discountForm.discTypeOptionFixed',
+	[DiscountType.FREE_SHIPPING]: 'components.discountForm.discTypeOptionFreeShipping',
 };
 
-const DISC_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
-	[DiscountRuleType.PERCENTAGE]: 'info',
-	[DiscountRuleType.FIXED]: 'primary',
-	[DiscountRuleType.FREE_SHIPPING]: 'success',
+const DISC_TYPE_BADGE_COLOR: Record<DiscountType, 'info' | 'primary' | 'success'> = {
+	[DiscountType.PERCENTAGE]: 'info',
+	[DiscountType.FIXED]: 'primary',
+	[DiscountType.FREE_SHIPPING]: 'success',
 };
 
 export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
@@ -43,12 +43,12 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 				const children: ReturnType<typeof h>[] = [
 					h(UBadge, { variant: 'subtle', color, class: 'capitalize w-fit' }, () => (labelKey ? t(labelKey) : String(rt))),
 				];
-				if (rt !== DiscountRuleType.FREE_SHIPPING) {
+				if (rt !== DiscountType.FREE_SHIPPING) {
 					children.push(
 						h(
 							'span',
 							{ class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' },
-							formatDiscountRuleValue(rt, row.original.disc_value),
+							formatDiscountDiscValue(rt, row.original.disc_value),
 						),
 					);
 				}

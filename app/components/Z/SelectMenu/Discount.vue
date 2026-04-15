@@ -26,15 +26,15 @@
 </template>
 
 <script lang="ts" setup>
-import { DiscountRuleType } from 'wemotoo-common';
+import { DiscountType } from 'wemotoo-common';
 import type { Discount } from '~/utils/types/discount';
 import type { DiscountSelectMenuRow } from '~/utils/types/discount-select-menu';
-import { formatDiscountRuleValue } from '~/utils/discount-rule-display';
+import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 
-const DISC_TYPE_I18N: Record<DiscountRuleType, string> = {
-	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
-	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
-	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
+const DISC_TYPE_I18N: Record<DiscountType, string> = {
+	[DiscountType.PERCENTAGE]: 'components.discountForm.discTypeOptionPercentage',
+	[DiscountType.FIXED]: 'components.discountForm.discTypeOptionFixed',
+	[DiscountType.FREE_SHIPPING]: 'components.discountForm.discTypeOptionFreeShipping',
 };
 
 const { t } = useI18n();
@@ -58,14 +58,14 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const searchTerm = ref('');
 
-function ruleTypeLabel(rt: DiscountRuleType): string {
+function discTypeLabel(rt: DiscountType): string {
 	return t(DISC_TYPE_I18N[rt]);
 }
 
 const items = computed<DiscountSelectMenuRow[]>(() => {
 	const discountRows = props.discounts.map((d) => {
-		const typeLabel = ruleTypeLabel(d.disc_type);
-		const valuePart = d.disc_type === DiscountRuleType.FREE_SHIPPING ? '' : `${formatDiscountRuleValue(d.disc_type, d.disc_value)} `;
+		const typeLabel = discTypeLabel(d.disc_type);
+		const valuePart = d.disc_type === DiscountType.FREE_SHIPPING ? '' : `${formatDiscountDiscValue(d.disc_type, d.disc_value)} `;
 		const searchText = [d.code, d.description, typeLabel, valuePart, props.noneValue].filter(Boolean).join(' ').trim();
 		return {
 			code: d.code,

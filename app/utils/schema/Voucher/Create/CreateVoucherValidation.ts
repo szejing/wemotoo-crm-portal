@@ -10,7 +10,10 @@ export type CreateVoucherValidationOptions = {
 export function CreateVoucherValidation(t: TranslateFn, opts?: CreateVoucherValidationOptions) {
 	return z
 		.object({
-			code: z.string({ message: t('validation.voucher.codeRequired') }).min(1, t('validation.voucher.codeRequired')),
+			code: z
+				.string({ message: t('validation.voucher.codeRequired') })
+				.min(1, t('validation.voucher.codeRequired'))
+				.transform((s) => s.toUpperCase()),
 			description: z.string().optional(),
 			is_disabled: z.boolean().default(false),
 			discount_code: opts?.linkDiscountToVoucher ? z.string().optional() : z.string(),
