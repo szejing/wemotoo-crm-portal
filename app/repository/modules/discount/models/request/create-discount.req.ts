@@ -17,8 +17,8 @@ export type CreateDiscountReq = {
 	starts_at?: string;
 	ends_at?: string;
 	usage_limit?: number;
-	rule_type: DiscountRuleType;
-	rule_value: number;
+	disc_type: DiscountRuleType;
+	disc_value: number;
 	allocation?: AllocationType;
 	conditions?: CreateDiscountConditionReq[];
 	metadata?: Record<string, unknown>;

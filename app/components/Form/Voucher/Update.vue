@@ -175,8 +175,8 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = formModel.discount.rule_type ?? DiscountRuleType.PERCENTAGE;
-	const rv = formModel.discount.rule_value;
+	const rt = formModel.discount.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = formModel.discount.disc_value;
 	const typeName = ruleTypeLabel(rt);
 	if (rt === DiscountRuleType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
@@ -233,8 +233,8 @@ const reviewSummary = computed(() => {
 			allocationLabel: allocationReviewLabel.value,
 			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
 			discountApplySummary: buildDiscountApplySummaryLine(t, {
-				ruleType: formModel.discount.rule_type,
-				ruleValue: formModel.discount.rule_value,
+				ruleType: formModel.discount.disc_type,
+				ruleValue: formModel.discount.disc_value,
 				allocation: formModel.discount.allocation,
 				currencyCode: ruleValueCurrencyCode,
 			}),
@@ -256,8 +256,8 @@ const voucherFieldSectionMap: Record<string, string> = {
 
 const discountFieldSectionMap: Record<string, string> = {
 	usage_limit: 'section-discount-rule-conditions',
-	rule_type: 'section-discount-rule-conditions',
-	rule_value: 'section-discount-rule-conditions',
+	disc_type: 'section-discount-rule-conditions',
+	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
 };
 
@@ -343,8 +343,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 				starts_at: discStartsAt,
 				ends_at: disc.ends_at,
 				usage_limit: disc.usage_limit,
-				rule_type: disc.rule_type,
-				rule_value: disc.rule_value,
+				disc_type: disc.disc_type,
+				disc_value: disc.disc_value,
 				...(disc.allocation != null ? { allocation: disc.allocation } : {}),
 				conditions: mapConditionsForApi(disc.conditions ?? []),
 			};

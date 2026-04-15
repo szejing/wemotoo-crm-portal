@@ -17,14 +17,14 @@ describe('UpdateVoucherFormValidation', () => {
 			discount: {
 				description: 'D desc',
 				is_disabled: false,
-				rule_type: DiscountRuleType.PERCENTAGE,
-				rule_value: 10,
+				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_value: 10,
 				allocation: AllocationType.BILL,
 				conditions: [],
 			},
 		});
 		expect(parsed.voucher.code).toBe('V1');
-		expect(parsed.discount.rule_type).toBe(DiscountRuleType.PERCENTAGE);
+		expect(parsed.discount.disc_type).toBe(DiscountRuleType.PERCENTAGE);
 	});
 
 	it('rejects voucher end before start', () => {
@@ -42,8 +42,8 @@ describe('UpdateVoucherFormValidation', () => {
 				discount: {
 					description: 'D',
 					is_disabled: false,
-					rule_type: DiscountRuleType.PERCENTAGE,
-					rule_value: 10,
+					disc_type: DiscountRuleType.PERCENTAGE,
+					disc_value: 10,
 					conditions: [],
 				},
 			}),

@@ -29,8 +29,8 @@ const initialEmptyDiscount: DiscountCreate = {
 	usage_limit: undefined,
 	starts_at: undefined,
 	ends_at: undefined,
-	rule_type: DiscountRuleType.PERCENTAGE,
-	rule_value: 10,
+	disc_type: DiscountRuleType.PERCENTAGE,
+	disc_value: 10,
 	allocation: AllocationType.BILL,
 	conditions: [],
 };

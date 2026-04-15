@@ -10,8 +10,8 @@ export type DiscountCreate = {
 	starts_at?: string;
 	ends_at?: string;
 	usage_limit?: number;
-	rule_type: DiscountRuleType;
-	rule_value: number;
+	disc_type: DiscountRuleType;
+	disc_value: number;
 	allocation?: AllocationType;
 	conditions: CreateDiscountConditionReq[];
 };
@@ -34,8 +34,8 @@ export const discountToFormEditableState = (d: Discount): DiscountCreate => {
 		starts_at: d.starts_at ?? undefined,
 		ends_at: d.ends_at ?? undefined,
 		usage_limit: d.usage_limit ?? undefined,
-		rule_type: d.rule_type,
-		rule_value: d.rule_value,
+		disc_type: d.disc_type,
+		disc_value: d.disc_value,
 		allocation: d.allocation,
 		conditions: (d.conditions ?? []).map(conditionFromDiscount).slice(0, 1),
 	};
@@ -49,8 +49,8 @@ export const emptyDiscountFormEditableState = (): DiscountCreate => {
 		starts_at: undefined,
 		ends_at: undefined,
 		usage_limit: undefined,
-		rule_type: DiscountRuleType.PERCENTAGE,
-		rule_value: 10,
+		disc_type: DiscountRuleType.PERCENTAGE,
+		disc_value: 10,
 		allocation: AllocationType.BILL,
 		conditions: [],
 	};
@@ -65,8 +65,8 @@ export const applyDiscountToFormState = (target: DiscountCreate, d: Discount): v
 	target.starts_at = next.starts_at;
 	target.ends_at = next.ends_at;
 	target.usage_limit = next.usage_limit;
-	target.rule_type = next.rule_type;
-	target.rule_value = next.rule_value;
+	target.disc_type = next.disc_type;
+	target.disc_value = next.disc_value;
 	target.allocation = next.allocation;
 	target.conditions.splice(0, target.conditions.length, ...next.conditions);
 };

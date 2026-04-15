@@ -69,8 +69,8 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = new_discount.value.rule_type ?? DiscountRuleType.PERCENTAGE;
-	const rv = new_discount.value.rule_value;
+	const rt = new_discount.value.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = new_discount.value.disc_value;
 	const typeName = ruleTypeLabel(rt);
 	if (rt === DiscountRuleType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
@@ -115,8 +115,8 @@ const fieldSectionMap: Record<string, string> = {
 	starts_at: 'section-discount-details',
 	ends_at: 'section-discount-details',
 	usage_limit: 'section-discount-rule-conditions',
-	rule_type: 'section-discount-rule-conditions',
-	rule_value: 'section-discount-rule-conditions',
+	disc_type: 'section-discount-rule-conditions',
+	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
 };
 
@@ -160,8 +160,8 @@ const buildCreatePayload = (data: Schema): CreateDiscountReq => {
 		starts_at: startsAt,
 		ends_at: data.ends_at,
 		usage_limit: data.usage_limit,
-		rule_type: data.rule_type,
-		rule_value: data.rule_value,
+		disc_type: data.disc_type,
+		disc_value: data.disc_value,
 		...(data.allocation != null ? { allocation: data.allocation } : {}),
 		...(conditions.length > 0 ? { conditions } : {}),
 	};

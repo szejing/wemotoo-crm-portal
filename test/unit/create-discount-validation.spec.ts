@@ -11,8 +11,8 @@ const basePayload = {
 	starts_at: undefined as string | undefined,
 	ends_at: undefined as string | undefined,
 	usage_limit: undefined as number | undefined,
-	rule_type: DiscountRuleType.PERCENTAGE,
-	rule_value: 10,
+	disc_type: DiscountRuleType.PERCENTAGE,
+	disc_value: 10,
 	allocation: undefined as undefined,
 	conditions: [] as {
 		min_amount?: number;
@@ -52,17 +52,17 @@ describe('CreateDiscountValidation', () => {
 		const schema = CreateDiscountValidation(t);
 		const result = schema.safeParse({
 			...basePayload,
-			rule_value: 101,
+			disc_value: 101,
 		});
 		expect(result.success).toBe(false);
 	});
 
-	it('accepts free shipping with rule_value 0', () => {
+	it('accepts free shipping with disc_value 0', () => {
 		const schema = CreateDiscountValidation(t);
 		const result = schema.safeParse({
 			...basePayload,
-			rule_type: DiscountRuleType.FREE_SHIPPING,
-			rule_value: 0,
+			disc_type: DiscountRuleType.FREE_SHIPPING,
+			disc_value: 0,
 		});
 		expect(result.success).toBe(true);
 	});

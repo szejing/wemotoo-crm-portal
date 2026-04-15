@@ -93,8 +93,8 @@ const voucherFieldSectionMap: Record<string, string> = {
 
 const bundledDiscountFieldSectionMap: Record<string, string> = {
 	usage_limit: 'section-discount-rule-conditions',
-	rule_type: 'section-discount-rule-conditions',
-	rule_value: 'section-discount-rule-conditions',
+	disc_type: 'section-discount-rule-conditions',
+	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
 };
 
@@ -155,8 +155,8 @@ const applyAllocation = () => {
 };
 
 const ruleSummaryLabel = computed(() => {
-	const rt = new_discount.value.rule_type ?? DiscountRuleType.PERCENTAGE;
-	const rv = new_discount.value.rule_value;
+	const rt = new_discount.value.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = new_discount.value.disc_value;
 	const typeName = ruleTypeLabel(rt);
 	if (rt === DiscountRuleType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
@@ -218,8 +218,8 @@ const voucherReviewSummary = computed(() => {
 			allocationLabel: allocationReviewLabel.value,
 			discountUsageLimitLabel: discountUsageLimitReviewLabel.value,
 			discountApplySummary: buildDiscountApplySummaryLine(t, {
-				ruleType: new_discount.value.rule_type,
-				ruleValue: new_discount.value.rule_value,
+				ruleType: new_discount.value.disc_type,
+				ruleValue: new_discount.value.disc_value,
 				allocation: new_discount.value.allocation,
 				currencyCode: ruleValueCurrencyCode,
 			}),
@@ -275,8 +275,8 @@ const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): Cre
 		description,
 		is_disabled: new_voucher.value.is_disabled ?? false,
 		usage_limit: data.usage_limit,
-		rule_type: data.rule_type,
-		rule_value: data.rule_value,
+		disc_type: data.disc_type,
+		disc_value: data.disc_value,
 		...(data.allocation != null ? { allocation: data.allocation } : {}),
 		...(conditions.length > 0 ? { conditions } : {}),
 	};

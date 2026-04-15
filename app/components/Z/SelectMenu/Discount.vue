@@ -31,7 +31,7 @@ import type { Discount } from '~/utils/types/discount';
 import type { DiscountSelectMenuRow } from '~/utils/types/discount-select-menu';
 import { formatDiscountRuleValue } from '~/utils/discount-rule-display';
 
-const RULE_TYPE_I18N: Record<DiscountRuleType, string> = {
+const DISC_TYPE_I18N: Record<DiscountRuleType, string> = {
 	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
 	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
 	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
@@ -59,21 +59,20 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 const searchTerm = ref('');
 
 function ruleTypeLabel(rt: DiscountRuleType): string {
-	return t(RULE_TYPE_I18N[rt]);
+	return t(DISC_TYPE_I18N[rt]);
 }
 
 const items = computed<DiscountSelectMenuRow[]>(() => {
 	const discountRows = props.discounts.map((d) => {
-		const typeLabel = ruleTypeLabel(d.rule_type);
-		const valuePart =
-			d.rule_type === DiscountRuleType.FREE_SHIPPING ? '' : `${formatDiscountRuleValue(d.rule_type, d.rule_value)} `;
+		const typeLabel = ruleTypeLabel(d.disc_type);
+		const valuePart = d.disc_type === DiscountRuleType.FREE_SHIPPING ? '' : `${formatDiscountRuleValue(d.disc_type, d.disc_value)} `;
 		const searchText = [d.code, d.description, typeLabel, valuePart, props.noneValue].filter(Boolean).join(' ').trim();
 		return {
 			code: d.code,
 			isNone: false,
 			description: d.description ?? '',
-			rule_type: d.rule_type,
-			rule_value: d.rule_value,
+			disc_type: d.disc_type,
+			disc_value: d.disc_value,
 			searchText,
 		};
 	});
@@ -85,8 +84,8 @@ const items = computed<DiscountSelectMenuRow[]>(() => {
 			code: props.noneValue,
 			isNone: true,
 			description: '',
-			rule_type: null,
-			rule_value: 0,
+			disc_type: null,
+			disc_value: 0,
 			searchText: noneSearch,
 		},
 		...discountRows,

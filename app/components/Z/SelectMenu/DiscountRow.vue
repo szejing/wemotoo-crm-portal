@@ -23,29 +23,19 @@
 			</div>
 			<div
 				:class="
-					compact
-						? 'w-full text-start text-[11px] text-neutral-500 dark:text-neutral-400 truncate'
-						: 'text-xs text-neutral-500 dark:text-neutral-400 truncate'
+					compact ? 'w-full text-start text-[11px] text-neutral-500 dark:text-neutral-400 truncate' : 'text-xs text-neutral-500 dark:text-neutral-400 truncate'
 				"
 			>
 				{{ row.description || '—' }}
 			</div>
 		</div>
-		<div
-			class="col-start-2 row-start-1 row-end-3 flex min-h-0 shrink-0 flex-col items-end justify-center"
-			:class="compact ? 'py-0.5' : 'py-1'"
-		>
+		<div class="col-start-2 row-start-1 row-end-3 flex min-h-0 shrink-0 flex-col items-end justify-center" :class="compact ? 'py-0.5' : 'py-1'">
 			<div class="flex flex-wrap items-center justify-end gap-1.5">
-				<UBadge
-					v-if="row.rule_type && row.rule_type !== DiscountRuleType.FREE_SHIPPING"
-					color="neutral"
-					variant="subtle"
-					class="shrink-0 tabular-nums"
-				>
-					{{ formatDiscountRuleValue(row.rule_type, row.rule_value) }}
+				<UBadge v-if="row.disc_type && row.disc_type !== DiscountRuleType.FREE_SHIPPING" color="neutral" variant="subtle" class="shrink-0 tabular-nums">
+					{{ formatDiscountRuleValue(row.disc_type, row.disc_value) }}
 				</UBadge>
-				<UBadge v-if="row.rule_type" :color="ruleTypeBadgeColor(row.rule_type)" variant="subtle" class="shrink-0 capitalize">
-					{{ ruleTypeLabel(row.rule_type) }}
+				<UBadge v-if="row.disc_type" :color="ruleTypeBadgeColor(row.disc_type)" variant="subtle" class="shrink-0 capitalize">
+					{{ ruleTypeLabel(row.disc_type) }}
 				</UBadge>
 			</div>
 		</div>
@@ -57,13 +47,13 @@ import { DiscountRuleType } from 'wemotoo-common';
 import type { DiscountSelectMenuRow } from '~/utils/types/discount-select-menu';
 import { formatDiscountRuleValue } from '~/utils/discount-rule-display';
 
-const RULE_TYPE_I18N: Record<DiscountRuleType, string> = {
+const DISC_TYPE_I18N: Record<DiscountRuleType, string> = {
 	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
 	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
 	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
 };
 
-const RULE_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
+const DISC_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
 	[DiscountRuleType.PERCENTAGE]: 'info',
 	[DiscountRuleType.FIXED]: 'primary',
 	[DiscountRuleType.FREE_SHIPPING]: 'success',
@@ -78,10 +68,10 @@ defineProps<{
 }>();
 
 function ruleTypeLabel(rt: DiscountRuleType): string {
-	return t(RULE_TYPE_I18N[rt]);
+	return t(DISC_TYPE_I18N[rt]);
 }
 
 function ruleTypeBadgeColor(rt: DiscountRuleType): 'info' | 'primary' | 'success' {
-	return RULE_TYPE_BADGE_COLOR[rt];
+	return DISC_TYPE_BADGE_COLOR[rt];
 }
 </script>

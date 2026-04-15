@@ -21,18 +21,18 @@ describe('CreateBundledVoucherFormValidation', () => {
 				description: 'Save 10',
 				is_disabled: false,
 				usage_limit: 50,
-				rule_type: DiscountRuleType.PERCENTAGE,
-				rule_value: 10,
+				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_value: 10,
 				allocation: AllocationType.BILL,
 				conditions: [{}],
 			},
 		});
 		expect(parsed.voucher.code).toBe('VSAVE10');
-		expect(parsed.discount.rule_type).toBe(DiscountRuleType.PERCENTAGE);
+		expect(parsed.discount.disc_type).toBe(DiscountRuleType.PERCENTAGE);
 		expect(parsed.discount.usage_limit).toBe(50);
 	});
 
-	it('rejects invalid percentage rule_value on discount', () => {
+	it('rejects invalid percentage disc_value on discount', () => {
 		const schema = CreateBundledVoucherFormValidation(t);
 		expect(() =>
 			schema.parse({
@@ -43,8 +43,8 @@ describe('CreateBundledVoucherFormValidation', () => {
 				discount: {
 					description: 'd',
 					is_disabled: false,
-					rule_type: DiscountRuleType.PERCENTAGE,
-					rule_value: 101,
+					disc_type: DiscountRuleType.PERCENTAGE,
+					disc_value: 101,
 				},
 			}),
 		).toThrow();

@@ -9,21 +9,21 @@
 		</template>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 px-4">
-			<UFormField :label="$t('components.discountForm.ruleType')" :name="fieldName('rule_type')" required>
-				<USelect :model-value="state.rule_type" :items="ruleTypeItems" value-attribute="value" class="w-full" @update:model-value="onRuleTypeSelect" />
+			<UFormField :label="$t('components.discountForm.ruleType')" :name="fieldName('disc_type')" required>
+				<USelect :model-value="state.disc_type" :items="ruleTypeItems" value-attribute="value" class="w-full" @update:model-value="onRuleTypeSelect" />
 			</UFormField>
 			<UFormField
-				v-if="state.rule_type !== DiscountRuleType.FREE_SHIPPING"
+				v-if="state.disc_type !== DiscountRuleType.FREE_SHIPPING"
 				:label="$t('components.discountForm.ruleValue')"
-				:name="fieldName('rule_value')"
+				:name="fieldName('disc_value')"
 				required
 			>
-				<UInput v-model.number="state.rule_value" type="number" min="0" :max="state.rule_type === DiscountRuleType.PERCENTAGE ? 100 : undefined" step="0.01">
+				<UInput v-model.number="state.disc_value" type="number" min="0" :max="state.disc_type === DiscountRuleType.PERCENTAGE ? 100 : undefined" step="0.01">
 					<template #trailing>
 						<span class="text-muted text-sm pe-2 tabular-nums">{{ ruleValueSuffix }}</span>
 					</template>
 				</UInput>
-				<p v-if="state.rule_type === DiscountRuleType.PERCENTAGE" class="text-xs text-muted mt-1">
+				<p v-if="state.disc_type === DiscountRuleType.PERCENTAGE" class="text-xs text-muted mt-1">
 					{{ $t('components.discountForm.ruleValuePercentHint') }}
 				</p>
 			</UFormField>
@@ -41,14 +41,7 @@
 					<UIcon :name="ICONS.LAYERS" class="text-primary-500 w-5 h-5" />
 					<h3 class="text-lg font-semibold">{{ $t('components.discountForm.conditionsSection') }}</h3>
 				</div>
-				<UButton
-					v-if="canAddCondition"
-					color="primary"
-					variant="soft"
-					size="sm"
-					icon="i-lucide-plus"
-					@click="addCondition"
-				>
+				<UButton v-if="canAddCondition" color="primary" variant="soft" size="sm" icon="i-lucide-plus" @click="addCondition">
 					{{ $t('components.discountForm.addCondition') }}
 				</UButton>
 			</div>
@@ -109,7 +102,7 @@ import { ICONS } from '~/utils/icons';
 const props = withDefaults(
 	defineProps<{
 		state: DiscountCreate;
-		/** Dot-prefix for UFormField names (e.g. `discount` → `discount.rule_type`). */
+		/** Dot-prefix for UFormField names (e.g. `discount` → `discount.disc_type`). */
 		formFieldPrefix?: string;
 	}>(),
 	{ formFieldPrefix: '' },
@@ -139,23 +132,23 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleTypeItems = computed(() => Object.values(DiscountRuleType).map((v) => ({ label: ruleTypeLabel(v), value: v })));
 
 const ruleValueSuffix = computed(() => {
-	const rt = state.value.rule_type;
+	const rt = state.value.disc_type;
 	if (rt === DiscountRuleType.FIXED) return ruleValueCurrencyCode;
 	if (rt === DiscountRuleType.PERCENTAGE) return '%';
 	return '';
 });
 
 const onRuleTypeSelect = (v: DiscountRuleType) => {
-	const prev = state.value.rule_type;
-	state.value.rule_type = v;
+	const prev = state.value.disc_type;
+	state.value.disc_type = v;
 	if (v === DiscountRuleType.FREE_SHIPPING) {
-		state.value.rule_value = 0;
+		state.value.disc_value = 0;
 	} else if (prev === DiscountRuleType.FREE_SHIPPING) {
-		const rv = state.value.rule_value ?? 0;
+		const rv = state.value.disc_value ?? 0;
 		if (v === DiscountRuleType.PERCENTAGE && (rv <= 0 || rv > 100)) {
-			state.value.rule_value = 10;
+			state.value.disc_value = 10;
 		} else if (v === DiscountRuleType.FIXED && rv <= 0) {
-			state.value.rule_value = 1;
+			state.value.disc_value = 1;
 		}
 	}
 };

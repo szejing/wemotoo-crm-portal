@@ -727,8 +727,8 @@ describe('VoucherModule', () => {
 			discount: {
 				description: 'Bundle discount',
 				is_disabled: false,
-				rule_type: DiscountRuleType.PERCENTAGE,
-				rule_value: 10,
+				disc_type: DiscountRuleType.PERCENTAGE,
+				disc_value: 10,
 			},
 		};
 		await mod.create(bundledPayload);

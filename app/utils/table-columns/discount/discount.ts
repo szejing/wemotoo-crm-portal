@@ -8,13 +8,13 @@ import { useDiscountStore } from '~/stores/Discount/Discount';
 
 type TranslateFn = (key: string) => string;
 
-const RULE_TYPE_I18N: Record<DiscountRuleType, string> = {
+const DISC_TYPE_I18N: Record<DiscountRuleType, string> = {
 	[DiscountRuleType.PERCENTAGE]: 'components.discountForm.ruleTypeOptionPercentage',
 	[DiscountRuleType.FIXED]: 'components.discountForm.ruleTypeOptionFixed',
 	[DiscountRuleType.FREE_SHIPPING]: 'components.discountForm.ruleTypeOptionFreeShipping',
 };
 
-const RULE_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
+const DISC_TYPE_BADGE_COLOR: Record<DiscountRuleType, 'info' | 'primary' | 'success'> = {
 	[DiscountRuleType.PERCENTAGE]: 'info',
 	[DiscountRuleType.FIXED]: 'primary',
 	[DiscountRuleType.FREE_SHIPPING]: 'success',
@@ -34,18 +34,22 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 			},
 		},
 		{
-			accessorKey: 'rule_type',
+			accessorKey: 'disc_type',
 			header: t('table.rule'),
 			cell: ({ row }) => {
-				const rt = row.original.rule_type;
-				const labelKey = RULE_TYPE_I18N[rt];
-				const color = RULE_TYPE_BADGE_COLOR[rt];
+				const rt = row.original.disc_type;
+				const labelKey = DISC_TYPE_I18N[rt];
+				const color = DISC_TYPE_BADGE_COLOR[rt];
 				const children: ReturnType<typeof h>[] = [
 					h(UBadge, { variant: 'subtle', color, class: 'capitalize w-fit' }, () => (labelKey ? t(labelKey) : String(rt))),
 				];
 				if (rt !== DiscountRuleType.FREE_SHIPPING) {
 					children.push(
-						h('span', { class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' }, formatDiscountRuleValue(rt, row.original.rule_value)),
+						h(
+							'span',
+							{ class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' },
+							formatDiscountRuleValue(rt, row.original.disc_value),
+						),
 					);
 				}
 				return h('div', { class: 'flex flex-col gap-1 items-start' }, children);

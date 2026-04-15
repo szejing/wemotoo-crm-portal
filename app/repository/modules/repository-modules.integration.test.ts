@@ -15,14 +15,9 @@ import DiscountModule from './discount/discount';
 const odata: BaseODataReq = { $top: 5 };
 
 /** Like `resetFetchMock` but controls the resolved / thrown value (still records `fetchLog`). */
-function setMockFetch(
-	impl: (request: string, options?: Record<string, unknown>) => Promise<unknown>,
-): void {
+function setMockFetch(impl: (request: string, options?: Record<string, unknown>) => Promise<unknown>): void {
 	fetchLog.length = 0;
-	(globalThis as unknown as { $fetch: typeof $fetch }).$fetch = (async (
-		url: string,
-		opts?: Record<string, unknown>,
-	) => {
+	(globalThis as unknown as { $fetch: typeof $fetch }).$fetch = (async (url: string, opts?: Record<string, unknown>) => {
 		const entry: FetchCall = { url, opts: opts ?? {} };
 		fetchLog.push(entry);
 		return impl(url, opts);
@@ -85,8 +80,8 @@ describe('DiscountModule', () => {
 			ends_at: null,
 			usage_limit: null,
 			usage_count: 0,
-			rule_type: DiscountRuleType.PERCENTAGE,
-			rule_value: 10,
+			disc_type: DiscountRuleType.PERCENTAGE,
+			disc_value: 10,
 			allocation: AllocationType.BILL,
 			conditions: [],
 			created_at: '2025-01-01T00:00:00.000Z',
@@ -98,8 +93,8 @@ describe('DiscountModule', () => {
 		const result = await mod.create({
 			description: 'Test',
 			is_disabled: false,
-			rule_type: DiscountRuleType.PERCENTAGE,
-			rule_value: 10,
+			disc_type: DiscountRuleType.PERCENTAGE,
+			disc_value: 10,
 		});
 
 		expect(result).toEqual(inner);

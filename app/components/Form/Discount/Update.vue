@@ -77,8 +77,8 @@ const ruleTypeLabel = (rt: DiscountRuleType) =>
 const ruleValueCurrencyCode = 'RM';
 
 const ruleSummaryLabel = computed(() => {
-	const rt = formState.rule_type ?? DiscountRuleType.PERCENTAGE;
-	const rv = formState.rule_value;
+	const rt = formState.disc_type ?? DiscountRuleType.PERCENTAGE;
+	const rv = formState.disc_value;
 	const typeName = ruleTypeLabel(rt);
 	if (rt === DiscountRuleType.PERCENTAGE) {
 		return `${typeName}: ${rv}%`;
@@ -123,8 +123,8 @@ const fieldSectionMap: Record<string, string> = {
 	starts_at: 'section-discount-details',
 	ends_at: 'section-discount-details',
 	usage_limit: 'section-discount-rule-conditions',
-	rule_type: 'section-discount-rule-conditions',
-	rule_value: 'section-discount-rule-conditions',
+	disc_type: 'section-discount-rule-conditions',
+	disc_value: 'section-discount-rule-conditions',
 	allocation: 'section-discount-rule-conditions',
 };
 
@@ -165,8 +165,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 			starts_at: startsAt,
 			ends_at: data.ends_at,
 			usage_limit: data.usage_limit,
-			rule_type: data.rule_type,
-			rule_value: data.rule_value,
+			disc_type: data.disc_type,
+			disc_value: data.disc_value,
 			...(data.allocation != null ? { allocation: data.allocation } : {}),
 			conditions: mapConditionsForApi(data),
 		};

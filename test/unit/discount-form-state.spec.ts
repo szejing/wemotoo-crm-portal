@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { AllocationType, DiscountRuleType } from 'wemotoo-common';
-import {
-	applyDiscountToFormState,
-	discountToFormEditableState,
-	emptyDiscountFormEditableState,
-} from '../../app/utils/types/form/discount-creation';
+import { applyDiscountToFormState, discountToFormEditableState, emptyDiscountFormEditableState } from '../../app/utils/types/form/discount-creation';
 import type { Discount } from '../../app/utils/types/discount';
 
 describe('discountToFormEditableState', () => {
@@ -17,8 +13,8 @@ describe('discountToFormEditableState', () => {
 			ends_at: null,
 			usage_limit: null,
 			usage_count: 0,
-			rule_type: DiscountRuleType.PERCENTAGE,
-			rule_value: 10,
+			disc_type: DiscountRuleType.PERCENTAGE,
+			disc_value: 10,
 			allocation: AllocationType.BILL,
 			conditions: [
 				{
@@ -56,8 +52,8 @@ describe('applyDiscountToFormState', () => {
 			ends_at: null,
 			usage_limit: 5,
 			usage_count: 1,
-			rule_type: DiscountRuleType.FIXED,
-			rule_value: 2,
+			disc_type: DiscountRuleType.FIXED,
+			disc_value: 2,
 			allocation: AllocationType.ITEM,
 			conditions: [],
 			created_at: '',
