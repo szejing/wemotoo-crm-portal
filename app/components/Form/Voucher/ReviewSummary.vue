@@ -142,7 +142,6 @@ export interface VoucherReviewDiscountDetails {
 
 export interface VoucherReviewSummary {
 	code: string;
-	name: string;
 	description: string;
 	/** Formatted voucher start; omit when voucher has no start (and no inferred start for display). */
 	validityStartsAt?: string;
@@ -164,8 +163,5 @@ const props = withDefaults(
 
 const conditionReviewItems = computed(() => props.summary.discountDetails?.conditionReviewItems ?? []);
 
-const showPlainLanguageReview = computed(
-	() =>
-		!!props.summary.discountDetails?.discountApplySummary || conditionReviewItems.value.length > 0,
-);
+const showPlainLanguageReview = computed(() => !!props.summary.discountDetails?.discountApplySummary || conditionReviewItems.value.length > 0);
 </script>

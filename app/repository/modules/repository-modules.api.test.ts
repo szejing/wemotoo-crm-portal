@@ -52,6 +52,8 @@ import TaxGroupModule from './tax-groups/tax-group';
 import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
 import VoucherModule from './voucher/voucher';
+import type { CreateVoucherReq } from './voucher/models/request/create-voucher.req';
+import { DiscountRuleType } from 'wemotoo-common';
 
 const odata: BaseODataReq = { $top: 10 };
 const dashboardRange = { start_date: '2025-01-01', end_date: '2025-01-31' };
@@ -704,10 +706,9 @@ describe('AffiliateModule', () => {
 
 describe('VoucherModule', () => {
 	const mod = new VoucherModule();
-	const createPayload = {
+	const createPayload: CreateVoucherReq = {
 		code: 'SUMMER10',
-		name: 'Summer voucher',
-		status: 'active',
+		description: 'Summer voucher',
 	};
 
 	it('routes', async () => {
@@ -721,21 +722,21 @@ describe('VoucherModule', () => {
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Create());
 		expect(lastFetch().opts.body).toEqual(createPayload);
 
-		const bundledPayload = {
+		const bundledPayload: CreateVoucherReq = {
 			...createPayload,
 			create_discount: {
 				description: 'Bundle discount',
 				is_disabled: false,
-				rule_type: 'PERCENTAGE',
+				rule_type: DiscountRuleType.PERCENTAGE,
 				rule_value: 10,
 			},
 		};
 		await mod.create(bundledPayload);
 		expect(lastFetch().opts.body).toEqual(bundledPayload);
-		await mod.update('V1', { name: 'Updated' });
+		await mod.update('V1', { description: 'Updated' });
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Update('V1'));
 		expect(lastFetch().opts.method).toBe('PATCH');
-		expect(lastFetch().opts.body).toEqual({ name: 'Updated' });
+		expect(lastFetch().opts.body).toEqual({ description: 'Updated' });
 		await mod.remove({ code: 'V1' });
 		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Delete('V1'));
 		expect(lastFetch().opts.method).toBe('DELETE');

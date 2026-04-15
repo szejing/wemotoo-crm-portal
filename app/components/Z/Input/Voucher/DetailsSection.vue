@@ -15,7 +15,7 @@
 
 		<div class="space-y-6 py-2 px-4">
 			<div v-if="showStatusSwitch" class="w-full flex flex-wrap items-center gap-4 justify-end">
-				<UFormField :name="fieldName('status')">
+				<UFormField :name="fieldName('is_disabled')">
 					<USwitch v-model="voucherActive" :label="voucherStatusLabel" />
 				</UFormField>
 			</div>
@@ -143,9 +143,9 @@ const discountCodeSelect = computed({
 });
 
 const voucherActive = computed({
-	get: () => state.value.status === 'active',
+	get: () => !(state.value.is_disabled ?? false),
 	set: (value: boolean) => {
-		state.value.status = value ? 'active' : 'inactive';
+		state.value.is_disabled = !value;
 	},
 });
 

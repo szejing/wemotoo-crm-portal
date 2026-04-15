@@ -3,9 +3,7 @@ import type { CreateDiscountReq } from '~/repository/modules/discount/models/req
 /** Body for POST create voucher; align with backend CreateVoucherDto. */
 export type CreateVoucherReq = {
 	code: string;
-	name: string;
 	description?: string;
-	status: string;
 	discount_code?: string;
 	is_disabled?: boolean;
 	starts_at?: string;

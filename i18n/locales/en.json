@@ -1129,7 +1129,7 @@
 			"usageLimitHint": "Optional cap on how many times this voucher can be redeemed",
 			"usageLimitNotSet": "No limit",
 			"validityPeriod": "Validity period",
-			"sectionSubtitle": "Code, name, linked discount, and validity",
+			"sectionSubtitle": "Code, description, linked discount, and validity",
 			"codeHint": "Voucher code for customers enter at checkout",
 			"nameHint": "Name for this voucher",
 			"descriptionHint": "Short description (optional).",

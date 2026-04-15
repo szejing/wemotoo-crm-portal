@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useVoucherStore } from '~/stores/voucher/Voucher';
+import { useVoucherStore } from '~/stores/Voucher/Voucher';
 
 const { t } = useI18n();
 const voucherStore = useVoucherStore();

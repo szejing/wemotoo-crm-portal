@@ -4,6 +4,7 @@ import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import type { UpdateVoucherReq } from '~/repository/modules/voucher/models/request/update-voucher.req';
+import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 import type { Voucher } from '~/utils/types/voucher';
 import { defaultVoucherRelations, removeDuplicateExpands } from 'wemotoo-common';
 import type { AllocationType } from 'wemotoo-common';
@@ -23,11 +24,10 @@ const initialVoucherFilter: VoucherFilter = {
 	listing_allocation: null,
 };
 
-const initialEmptyVoucher: Partial<CreateVoucherReq> = {
+const initialEmptyVoucher: Partial<VoucherFormState> = {
 	code: '',
-	name: '',
 	description: '',
-	status: 'active',
+	is_disabled: false,
 	discount_code: '',
 	starts_at: undefined,
 	ends_at: undefined,
@@ -136,9 +136,9 @@ export const useVoucherStore = defineStore('voucherStore', {
 			try {
 				const data = await $api.voucher.create(payload);
 
-				if (data.code) {
-					successNotification(`${data.code} - Voucher created`);
-					this.vouchers.unshift(data);
+				if (data.voucher.code) {
+					successNotification(`${data.voucher.code} - Voucher created`);
+					this.vouchers.unshift(data.voucher);
 				}
 				this.resetNewVoucher();
 				return data;
@@ -153,7 +153,7 @@ export const useVoucherStore = defineStore('voucherStore', {
 		},
 
 		async updateStatus(voucher: Voucher, status: string) {
-			await this.updateVoucher(voucher.code, { status });
+			await this.updateVoucher(voucher.code, { is_disabled: status === 'inactive' });
 		},
 
 		async updateVoucher(code: string, payload: UpdateVoucherReq) {

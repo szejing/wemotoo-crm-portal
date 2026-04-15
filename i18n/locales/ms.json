@@ -1128,7 +1128,7 @@
 			"usageLimitHint": "Pilihan: had bilangan kali baucar ini boleh ditebus",
 			"usageLimitNotSet": "Tiada had",
 			"validityPeriod": "Tempoh sah",
-			"sectionSubtitle": "Kod, nama, diskaun dipautkan dan tempoh sah",
+			"sectionSubtitle": "Kod, penerangan, diskaun dipautkan dan tempoh sah",
 			"codeHint": "Kod baucar untuk pelanggan masukkan semasa pembayaran",
 			"nameHint": "Nama untuk baucar ini",
 			"descriptionHint": "Nota ringkas (pilihan).",

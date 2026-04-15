@@ -11,7 +11,7 @@ describe('UpdateVoucherFormValidation', () => {
 			voucher: {
 				code: 'V1',
 				name: 'Test',
-				status: 'active',
+				is_disabled: false,
 				discount_code: 'D1',
 			},
 			discount: {
@@ -34,7 +34,7 @@ describe('UpdateVoucherFormValidation', () => {
 				voucher: {
 					code: 'V1',
 					name: 'Test',
-					status: 'active',
+					is_disabled: false,
 					discount_code: 'D1',
 					starts_at: '2026-02-01T00:00:00.000Z',
 					ends_at: '2026-01-01T00:00:00.000Z',

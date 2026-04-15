@@ -9,7 +9,7 @@ describe('CreateVoucherValidation', () => {
 		const parsed = schema.parse({
 			code: 'V1',
 			name: 'Test',
-			status: 'active',
+			is_disabled: false,
 			discount_code: 'D1',
 		});
 		expect(parsed.code).toBe('V1');
@@ -21,7 +21,7 @@ describe('CreateVoucherValidation', () => {
 			schema.parse({
 				code: '',
 				name: 'Test',
-				status: 'active',
+				is_disabled: false,
 				discount_code: 'D1',
 			}),
 		).toThrow();
@@ -33,7 +33,7 @@ describe('CreateVoucherValidation', () => {
 			schema.parse({
 				code: 'V1',
 				name: 'Test',
-				status: 'active',
+				is_disabled: false,
 				discount_code: 'D1',
 				starts_at: '2026-02-01T00:00:00.000Z',
 				ends_at: '2026-01-01T00:00:00.000Z',
@@ -46,7 +46,7 @@ describe('CreateVoucherValidation', () => {
 		const parsed = schema.parse({
 			code: 'V1',
 			name: 'Test',
-			status: 'active',
+			is_disabled: false,
 			discount_code: 'D1',
 			usage_limit: 100,
 		});

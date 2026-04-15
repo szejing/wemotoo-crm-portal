@@ -31,7 +31,7 @@ import type { z } from 'zod';
 import type { CreateVoucherReq } from '~/repository/modules/voucher/models/request/create-voucher.req';
 import type { CreateDiscountReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { useDiscountStore } from '~/stores/Discount/Discount';
-import { useVoucherStore } from '~/stores/voucher/Voucher';
+import { useVoucherStore } from '~/stores/Voucher/Voucher';
 import { CreateBundledVoucherFormValidation } from '~/utils/schema';
 import { buildDiscountApplySummaryLine } from '~/utils/discount/apply-summary';
 import { buildDiscountConditionReviewItems } from '~/utils/discount/discount-condition-review-lines';
@@ -83,10 +83,9 @@ watch(adding, (v) => {
 
 const voucherFieldSectionMap: Record<string, string> = {
 	code: 'section-voucher-details',
-	name: 'section-voucher-details',
 	description: 'section-voucher-details',
 	discount_code: 'section-voucher-details',
-	status: 'section-voucher-details',
+	is_disabled: 'section-voucher-details',
 	usage_limit: 'section-voucher-details',
 	starts_at: 'section-voucher-validity',
 	ends_at: 'section-voucher-validity',
@@ -205,7 +204,6 @@ const voucherReviewSummary = computed(() => {
 
 	const base = {
 		code: codeTrim,
-		name: (v.name?.trim() || codeTrim) ?? '',
 		description: v.description?.trim() ?? '',
 		...(validityStartsAt != null ? { validityStartsAt } : {}),
 		...(validityEndsAt != null ? { validityEndsAt } : {}),
@@ -233,20 +231,16 @@ const voucherReviewSummary = computed(() => {
 /** Copy voucher identity onto bundled discount state; discount validity dates stay unset. */
 const syncBundledDiscountFromVoucher = () => {
 	const c = new_voucher.value.code?.trim() ?? '';
-	const desc = new_voucher.value.description?.trim() || new_voucher.value.name?.trim() || c;
+	const desc = new_voucher.value.description?.trim() || c;
 	new_discount.value.code = c;
 	new_discount.value.description = desc;
 	new_discount.value.starts_at = undefined;
 	new_discount.value.ends_at = undefined;
-	new_discount.value.is_disabled = new_voucher.value.status === 'inactive';
+	new_discount.value.is_disabled = new_voucher.value.is_disabled ?? false;
 	new_voucher.value.discount_code = c;
-	const n = new_voucher.value.name?.trim();
-	if (!n) {
-		new_voucher.value.name = c;
-	}
 };
 
-watch([() => new_voucher.value.code, () => new_voucher.value.description, () => new_voucher.value.name, () => new_voucher.value.status], () => {
+watch([() => new_voucher.value.code, () => new_voucher.value.description, () => new_voucher.value.is_disabled], () => {
 	syncBundledDiscountFromVoucher();
 });
 
@@ -274,12 +268,12 @@ const buildBundledCreateDiscountPayload = (data: BundledSchema['discount']): Cre
 	}));
 
 	const codeTrim = new_voucher.value.code?.trim() ?? '';
-	const description = new_voucher.value.description?.trim() || new_voucher.value.name?.trim() || codeTrim;
+	const description = new_voucher.value.description?.trim() || codeTrim;
 
 	return {
 		code: codeTrim,
 		description,
-		is_disabled: new_voucher.value.status === 'inactive',
+		is_disabled: new_voucher.value.is_disabled ?? false,
 		usage_limit: data.usage_limit,
 		rule_type: data.rule_type,
 		rule_value: data.rule_value,
@@ -293,17 +287,14 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema>) => {
 		const { voucher: d, discount: disc } = event.data;
 		const startsAt = d.ends_at && !d.starts_at ? startOfDay(new Date()).toISOString() : d.starts_at;
 		const codeTrim = d.code.trim();
-		const nameTrim = (d.name?.trim() || codeTrim) as string;
 
 		const pendingDiscount = buildBundledCreateDiscountPayload(disc);
 		const { code: _omit, ...discountBody } = pendingDiscount;
 
 		const payload: CreateVoucherReq = {
 			code: codeTrim,
-			name: nameTrim,
-			status: d.status,
-			description: d.description?.trim() || nameTrim,
-			is_disabled: d.status === 'inactive',
+			description: d.description?.trim(),
+			is_disabled: d.is_disabled,
 			discount_code: codeTrim,
 			starts_at: startsAt,
 			ends_at: d.ends_at,
@@ -312,7 +303,7 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema>) => {
 		};
 
 		const created = await voucherStore.createVoucher(payload);
-		if (created?.code) {
+		if (created?.voucher.code) {
 			router.push(props.postCreateListPath);
 		}
 	} catch {

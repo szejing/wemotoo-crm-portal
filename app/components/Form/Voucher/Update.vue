@@ -44,6 +44,7 @@ import { failedNotification } from '~/stores/AppUi/AppUi';
 import { applyDiscountToFormState, emptyDiscountFormEditableState } from '~/utils/types/form/discount-creation';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import { voucherListingPathForAllocation } from '~/utils/voucher/create-type';
+import { voucherDateToFormIso } from '~/utils/voucher/date';
 
 const { t } = useI18n();
 
@@ -69,7 +70,7 @@ const formModel = reactive({
 		code: '',
 		name: '',
 		description: '',
-		status: 'active',
+		is_disabled: false,
 		discount_code: '',
 		starts_at: undefined,
 		ends_at: undefined,
@@ -89,7 +90,7 @@ const syncBundledDiscountFromVoucherForm = () => {
 	formModel.voucher.discount_code = c;
 	formModel.discount.code = c;
 	formModel.discount.description = desc;
-	formModel.discount.is_disabled = formModel.voucher.status === 'inactive';
+	formModel.discount.is_disabled = formModel.voucher.is_disabled;
 	const n = formModel.voucher.name?.trim();
 	if (!n) {
 		formModel.voucher.name = c;
@@ -102,10 +103,10 @@ watch(
 		if (!v) return;
 		formModel.voucher.code = v.code;
 		formModel.voucher.description = v.description || '';
-		formModel.voucher.status = v.is_disabled ? 'inactive' : 'active';
+		formModel.voucher.is_disabled = v.is_disabled ?? false;
 		formModel.voucher.discount_code = v.discount.code || '';
-		formModel.voucher.starts_at = v.starts_at ? v.starts_at.toISOString() : undefined;
-		formModel.voucher.ends_at = v.ends_at ? v.ends_at.toISOString() : undefined;
+		formModel.voucher.starts_at = voucherDateToFormIso(v.starts_at);
+		formModel.voucher.ends_at = voucherDateToFormIso(v.ends_at);
 		formModel.voucher.usage_limit = v.usage_limit != null && v.usage_limit > 0 ? v.usage_limit : undefined;
 		const nameFromApi = (v as Voucher & { name?: string }).name?.trim();
 		formModel.voucher.name = nameFromApi || v.description?.trim() || v.code;
@@ -118,7 +119,7 @@ watch(
 );
 
 watch(
-	() => [formModel.voucher.code, formModel.voucher.description, formModel.voucher.name, formModel.voucher.status] as const,
+	() => [formModel.voucher.code, formModel.voucher.description, formModel.voucher.name, formModel.voucher.is_disabled] as const,
 	() => {
 		if (linkedBundledDiscount.value) {
 			syncBundledDiscountFromVoucherForm();
@@ -247,7 +248,7 @@ const voucherFieldSectionMap: Record<string, string> = {
 	name: 'section-voucher-details',
 	description: 'section-voucher-details',
 	discount_code: 'section-voucher-details',
-	status: 'section-voucher-details',
+	is_disabled: 'section-voucher-details',
 	usage_limit: 'section-voucher-details',
 	starts_at: 'section-voucher-validity',
 	ends_at: 'section-voucher-validity',
@@ -319,8 +320,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		const { voucher: v, discount: disc } = event.data;
 		const startsAt = v.ends_at && !v.starts_at ? startOfDay(new Date()).toISOString() : v.starts_at;
 		const voucherBody: Partial<CreateVoucherReq> = {
-			name: v.name.trim(),
-			status: v.status,
+			is_disabled: v.is_disabled,
 			description: v.description?.trim() || undefined,
 			discount_code: v.discount_code?.trim() || undefined,
 			starts_at: startsAt,

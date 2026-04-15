@@ -45,7 +45,7 @@ const formRef = ref<{ submit: () => void } | null>(null);
 
 const isDirty = computed(() => {
 	const v = new_voucher.value;
-	const vDirty = !!(v.code?.trim() || v.name?.trim() || v.description?.trim() || v.discount_code?.trim());
+	const vDirty = !!(v.code?.trim() || v.description?.trim() || v.discount_code?.trim());
 	const d = new_discount.value;
 	const dDirty = !!(d.description?.trim() || (d.conditions?.length ?? 0) > 0 || d.usage_limit != null);
 	return vDirty || dDirty;

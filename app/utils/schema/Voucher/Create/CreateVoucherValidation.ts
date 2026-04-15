@@ -8,19 +8,11 @@ export type CreateVoucherValidationOptions = {
 };
 
 export function CreateVoucherValidation(t: TranslateFn, opts?: CreateVoucherValidationOptions) {
-	const nameSchema = opts?.linkDiscountToVoucher
-		? z
-				.string()
-				.optional()
-				.transform((v) => (typeof v === 'string' ? v.trim() : ''))
-		: z.string({ message: t('validation.voucher.nameRequired') }).min(1, t('validation.voucher.nameRequired'));
-
 	return z
 		.object({
 			code: z.string({ message: t('validation.voucher.codeRequired') }).min(1, t('validation.voucher.codeRequired')),
-			name: nameSchema,
 			description: z.string().optional(),
-			status: z.string({ message: t('validation.voucher.statusRequired') }).min(1, t('validation.voucher.statusRequired')),
+			is_disabled: z.boolean().default(false),
 			discount_code: opts?.linkDiscountToVoucher ? z.string().optional() : z.string(),
 			starts_at: z.string().optional(),
 			ends_at: z.string().optional(),

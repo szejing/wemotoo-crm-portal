@@ -12,7 +12,7 @@ describe('CreateBundledVoucherFormValidation', () => {
 				code: 'VSAVE10',
 				name: 'VSAVE10',
 				description: 'Save 10',
-				status: 'active',
+				is_disabled: false,
 				starts_at: '2026-01-01T00:00:00.000Z',
 				ends_at: '2026-12-31T23:59:59.999Z',
 			},
@@ -38,7 +38,7 @@ describe('CreateBundledVoucherFormValidation', () => {
 			schema.parse({
 				voucher: {
 					code: 'V1',
-					status: 'active',
+					is_disabled: false,
 				},
 				discount: {
 					description: 'd',
