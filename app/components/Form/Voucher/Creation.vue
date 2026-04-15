@@ -299,7 +299,7 @@ const onSubmit = async (event: FormSubmitEvent<BundledSchema>) => {
 			starts_at: startsAt,
 			ends_at: d.ends_at,
 			...(disc.usage_limit != null ? { usage_limit: disc.usage_limit } : {}),
-			create_discount: discountBody,
+			discount: discountBody,
 		};
 
 		const created = await voucherStore.createVoucher(payload);

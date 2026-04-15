@@ -11,5 +11,5 @@ export type CreateVoucherReq = {
 	usage_limit?: number;
 	metadata?: Record<string, unknown>;
 	/** When set, backend creates this discount with the same code as the voucher and links it. */
-	create_discount?: Omit<CreateDiscountReq, 'code'> & { code?: string };
+	discount?: Omit<CreateDiscountReq, 'code'> & { code?: string };
 };

@@ -724,7 +724,7 @@ describe('VoucherModule', () => {
 
 		const bundledPayload: CreateVoucherReq = {
 			...createPayload,
-			create_discount: {
+			discount: {
 				description: 'Bundle discount',
 				is_disabled: false,
 				rule_type: DiscountRuleType.PERCENTAGE,
