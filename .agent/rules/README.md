@@ -19,6 +19,8 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 
 - **`repository.mdc`** – Client API layer: `app/repository/` modules, `HttpFactory`, route definitions (`routes.client.ts`), and request/response models.
 
+- **`repository-module-creation.mdc`** – Checklist when adding a new domain under `app/repository/modules/` (folder layout, `utils/types` alignment, plugin, tests). Full workflow: skill **repository-module-creation**.
+
 ### Validation and Types
 
 - **`schema.mdc`** – Zod validation in `app/utils/schema/`. Create/Update/Filter schemas per entity; used by forms and filters.
@@ -57,6 +59,7 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 |--------------------|-----------------------------|------------------------|
 | Server API proxy   | `server/routes/merchant/*`  | server-routes.mdc      |
 | Client API         | `app/repository/*`          | repository.mdc         |
+| New repo module    | `app/repository/modules/*`  | repository-module-creation.mdc |
 | Validation         | `app/utils/schema/*`        | schema.mdc             |
 | Types / models     | `app/utils/types`, repo models | types.mdc          |
 | Pages & components | `app/pages/*`, `app/components/*` | vue-pages-components.mdc |
@@ -73,6 +76,10 @@ Project-specific skills in `.agent/skills/` (use when relevant; Cursor reads via
 - **nuxt-ui-usage** — Build UIs with @nuxt/ui v4; project theming, components, forms, tables, modals, i18n integration.
 - **i18n-translation** — Locales (en, ms), translation patterns, validation schemas, options, table columns.
 - **page-panel-layout** — ZPagePanel wrapper for dashboard pages; navbar, toolbar, footer slots.
+- **listing-page** — Index/list pages: ZCreateButton + ZSectionFilter* + ZTableToolbar + skeleton UTable + empty state + pagination + store/i18n conventions.
+- **form-creation** — Create-entity pages: Form*Creation + ZPagePanel footer submit, UForm/Zod, optional sticky review column.
 - **shareable-components** — Extract duplicate UI into reusable components; placement, API patterns, workflow.
+
+- **repository-module-creation** — Scaffold a new `HttpFactory` module: `MerchantRoutes`, `models/request` + `models/response`, typing against `~/utils/types`, unwrap helpers, `index.ts` + `01.api.ts`, integration tests.
 
 For full Nuxt UI component reference, install the official skill: `npx skills add nuxt/ui` or add in Cursor Settings > Skills: `https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui`.

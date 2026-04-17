@@ -81,6 +81,7 @@
 import { ResetPasswordValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
+import { useAuthStore } from '~/stores';
 
 const { t } = useI18n();
 const resetPasswordSchema = computed(() => ResetPasswordValidation(t));

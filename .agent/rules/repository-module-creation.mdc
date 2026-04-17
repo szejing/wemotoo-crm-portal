@@ -1,0 +1,18 @@
+---
+description: Checklist for new app/repository/modules domain (models, utils/types, plugin, tests)
+globs: app/repository/modules/**/*.ts
+alwaysApply: false
+---
+
+# New repository module
+
+When adding **`app/repository/modules/{domain}/`**:
+
+1. **Routes** — `routes.client.ts` (+ server proxy if used); use `API_PATH` / `MerchantRoutes` (see `repository.mdc`).
+2. **Layout** — `{domain}.ts` + `models/request/` (`create-`, `update-`, `{domain}.req`) + `models/response/` (`*.resp`, optional `create-*.resp`).
+3. **Types** — Request DTOs in `models/request`. If the API entity matches a domain model, type responses with **`~/utils/types/{domain}`** (avoid a parallel `*Response` with looser strings).
+4. **Module** — `extends HttpFactory`, `this.call<T>(…)`; optional `unwrap*` if the API nests the entity under `data`.
+5. **Wire** — `repository/modules/index.ts` export + `plugins/01.api.ts` on **`$api`**.
+6. **Tests** — integration test for route + unwrap when non-trivial; mock must satisfy asserted types.
+
+Full step-by-step: **`.agent/skills/repository-module-creation/SKILL.md`**.

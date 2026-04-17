@@ -42,10 +42,7 @@
 		</UDropdownMenu>
 		<template #fallback>
 			<div
-				:class="[
-					'flex w-full items-center gap-2 rounded-md px-2 py-2',
-					collapsed ? 'justify-center size-11 min-w-11 min-h-11' : 'min-h-10',
-				]"
+				:class="['flex w-full items-center gap-2 rounded-md px-2 py-2', collapsed ? 'justify-center size-11 min-w-11 min-h-11' : 'min-h-10']"
 				aria-hidden="true"
 			>
 				<USkeleton class="size-8 shrink-0 rounded-full" />
@@ -63,6 +60,7 @@
 
 <script lang="ts" setup>
 import type { DropdownMenuItem } from '@nuxt/ui';
+import { useAuthStore } from '~/stores';
 import { LOCALE_STORAGE_KEY } from '~/utils/constants/i18n';
 
 defineProps<{

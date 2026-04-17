@@ -101,8 +101,10 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 6. Actions in navbar: use `#navbar-right`
 7. Form pages with fixed actions: use `grow` + `#footer`
 8. Set `useHead({ title: () => t('...') })` in script for document title
+9. **Table / index listings** (filters + `UTable` + pagination): follow **[listing-page skill](.agent/skills/listing-page/SKILL.md)**
 
 ## References
 
+- [listing-page skill](.agent/skills/listing-page/SKILL.md) — index pages with `ZCreateButton`, `ZSectionFilter*`, `ZTableToolbar`, skeleton, empty state
 - [nuxt-ui-usage skill](.agent/skills/nuxt-ui-usage/SKILL.md) — UI components and theming
 - [i18n-translation skill](.agent/skills/i18n-translation/SKILL.md) — translation patterns

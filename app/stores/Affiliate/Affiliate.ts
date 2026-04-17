@@ -8,6 +8,7 @@ import type { CreateAffiliateReq } from '~/repository/modules/affiliate/request/
 import type { CreateAffiliateTierReq } from '~/repository/modules/affiliate/request/create-tier.req';
 import type { PatchAffiliateTierReq } from '~/repository/modules/affiliate/request/patch-tier.req';
 import type { ErrorResponse } from '~/repository/base/error';
+import { useAuthStore } from '..';
 
 type AffiliateFilter = {
 	query: string;
@@ -235,9 +236,7 @@ export const useAffiliateStore = defineStore('affiliateStore', {
 			const authStore = useAuthStore();
 			this.loading = true;
 			try {
-				const resp = await $api.affiliate.getMyReport(
-					authStore.user ? { user: { id: authStore.user.id } } : undefined,
-				);
+				const resp = await $api.affiliate.getMyReport(authStore.user ? { user: { id: authStore.user.id } } : undefined);
 				this.report = resp.report;
 				return resp.report;
 			} catch (err: unknown | ErrorResponse) {

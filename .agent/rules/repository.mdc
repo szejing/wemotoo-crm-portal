@@ -102,3 +102,7 @@ export default ProductModule;
 - ❌ Business logic or validation inside repository methods – validate in UI/schema, then call repository
 - ❌ Duplicated request/response types – define once in `models/` and reuse
 - ❌ Mixing server-only route paths with client route definitions in the same object without a clear convention
+
+## New module from scratch
+
+Follow **`.agent/skills/repository-module-creation/SKILL.md`** (checklist: routes, `models/request` + `models/response`, align entity types with `~/utils/types`, barrel + `01.api.ts`, tests). When editing under `app/repository/modules/**`, **`repository-module-creation.mdc`** applies as a short reminder.

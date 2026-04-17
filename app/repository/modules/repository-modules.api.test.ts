@@ -51,6 +51,9 @@ import OrderSummaryModule from './summ-order/summ-order';
 import TaxGroupModule from './tax-groups/tax-group';
 import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
+import VoucherModule from './voucher/voucher';
+import type { CreateVoucherReq } from './voucher/models/request/create-voucher.req';
+import { DiscountType } from 'wemotoo-common';
 
 const odata: BaseODataReq = { $top: 10 };
 const dashboardRange = { start_date: '2025-01-01', end_date: '2025-01-31' };
@@ -698,6 +701,45 @@ describe('AffiliateModule', () => {
 		await mod.getMyReport({ user: { id: 'u' } });
 		expect(lastFetch().url).toBe(MerchantRoutes.Affiliates.MyReport());
 		expect(lastFetch().opts.query).toEqual({ user: { id: 'u' } });
+	});
+});
+
+describe('VoucherModule', () => {
+	const mod = new VoucherModule();
+	const createPayload: CreateVoucherReq = {
+		code: 'SUMMER10',
+		description: 'Summer voucher',
+	};
+
+	it('routes', async () => {
+		await mod.getMany(odata);
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Many());
+		expect(lastFetch().opts.query).toEqual(odata);
+		await mod.getSingle('V1');
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Single('V1'));
+		await mod.create(createPayload);
+		expect(lastFetch().opts.method).toBe('POST');
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Create());
+		expect(lastFetch().opts.body).toEqual(createPayload);
+
+		const bundledPayload: CreateVoucherReq = {
+			...createPayload,
+			discount: {
+				description: 'Bundle discount',
+				is_disabled: false,
+				disc_type: DiscountType.PERCENTAGE,
+				disc_value: 10,
+			},
+		};
+		await mod.create(bundledPayload);
+		expect(lastFetch().opts.body).toEqual(bundledPayload);
+		await mod.update('V1', { description: 'Updated' });
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Update('V1'));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual({ description: 'Updated' });
+		await mod.remove({ code: 'V1' });
+		expect(lastFetch().url).toBe(MerchantRoutes.Vouchers.Delete('V1'));
+		expect(lastFetch().opts.method).toBe('DELETE');
 	});
 });
 

@@ -97,9 +97,9 @@ RUN if [ ! -d "node_modules/vite" ] || [ ! -f "node_modules/vite/package.json" ]
 # This ensures Nuxt config is properly set up
 RUN bun run nuxt prepare
 
-# Build Nuxt app (production) with increased memory
+# Build Nuxt app (production) with increased memory (Nitro bundling can exceed 4GB)
 # Ensure Node.js is used (not bun runtime) for vite builds to support crypto.hash
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV BUN_RUNTIME_TRANSPILER=node
 # Use node explicitly for the build to ensure crypto.hash is available
 RUN node --version && \

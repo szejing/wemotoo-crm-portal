@@ -51,6 +51,7 @@
 import { LoginValidation } from '~/utils/schema';
 import type { FormSubmitEvent, FormErrorEvent } from '#ui/types';
 import type { z } from 'zod';
+import { useAuthStore } from '~/stores';
 
 const { t } = useI18n();
 const loginSchema = computed(() => LoginValidation(t));

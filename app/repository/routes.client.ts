@@ -195,6 +195,22 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.TAX_RULES}/restore/${code}`,
 	},
+	Discounts: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/${code}`,
+		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/restore/${code}`,
+	},
+	/** Merchant vouchers / coupons (path not yet in wemotoo-common API_PATH). */
+	Vouchers: {
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/vouchers/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/vouchers/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
+	},
 	Affiliates: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}`,
 		BySlug: (slug: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/by-slug/${slug}`,

@@ -25,6 +25,8 @@ import TaxGroupModule from './tax-groups/tax-group';
 import OutletModule from './outlets/outlet';
 import MerchantInfoModule from './merchant-info/merchant-info';
 import AffiliateModule from './affiliate/affiliate';
+import DiscountModule from './discount/discount';
+import VoucherModule from './voucher/voucher';
 
 export {
 	CrmUserModule,
@@ -54,4 +56,6 @@ export {
 	OutletModule,
 	MerchantInfoModule,
 	AffiliateModule,
+	DiscountModule,
+	VoucherModule,
 };

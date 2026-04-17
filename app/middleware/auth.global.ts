@@ -1,4 +1,5 @@
 import { KEY } from '~/composables/useWemotooCommon';
+import { useAuthStore } from '~/stores';
 
 const publicPaths = ['/login', '/forgot-password', '/reset-password'];
 

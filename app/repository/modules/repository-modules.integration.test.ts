@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
+import { AllocationType, DiscountType } from 'wemotoo-common';
 import MerchantRoutes from '~/repository/routes.client';
 import { ApiErrorModel } from '~/utils/types/api-error-model';
 import { loginPayload } from '../../../test/repository-model-fixtures';
@@ -9,18 +10,14 @@ import type { CRMUser } from '~/utils/types/crm-user';
 import * as RepositoryModules from './index';
 import AuthModule from './auth/auth';
 import CrmUserModule from './crm-user/crm-user';
+import DiscountModule from './discount/discount';
 
 const odata: BaseODataReq = { $top: 5 };
 
 /** Like `resetFetchMock` but controls the resolved / thrown value (still records `fetchLog`). */
-function setMockFetch(
-	impl: (request: string, options?: Record<string, unknown>) => Promise<unknown>,
-): void {
+function setMockFetch(impl: (request: string, options?: Record<string, unknown>) => Promise<unknown>): void {
 	fetchLog.length = 0;
-	(globalThis as unknown as { $fetch: typeof $fetch }).$fetch = (async (
-		url: string,
-		opts?: Record<string, unknown>,
-	) => {
+	(globalThis as unknown as { $fetch: typeof $fetch }).$fetch = (async (url: string, opts?: Record<string, unknown>) => {
 		const entry: FetchCall = { url, opts: opts ?? {} };
 		fetchLog.push(entry);
 		return impl(url, opts);
@@ -70,6 +67,39 @@ describe('repository modules + HttpFactory ($fetch)', () => {
 		const err = await mod.getMany(odata).catch((e: unknown) => e);
 		expect(err).toBeInstanceOf(ApiErrorModel);
 		expect((err as ApiErrorModel).message).toBe('Internal Server Error');
+	});
+});
+
+describe('DiscountModule', () => {
+	it('create posts to portal discount route and unwraps nested data envelope', async () => {
+		const inner = {
+			code: 'DC-ABC12',
+			description: 'Test',
+			is_disabled: false,
+			starts_at: null,
+			ends_at: null,
+			usage_limit: null,
+			usage_count: 0,
+			disc_type: DiscountType.PERCENTAGE,
+			disc_value: 10,
+			allocation: AllocationType.BILL,
+			conditions: [],
+			created_at: '2025-01-01T00:00:00.000Z',
+			updated_at: '2025-01-01T00:00:00.000Z',
+		};
+		setMockFetch(async () => ({ data: inner }));
+
+		const mod = new DiscountModule();
+		const result = await mod.create({
+			description: 'Test',
+			is_disabled: false,
+			disc_type: DiscountType.PERCENTAGE,
+			disc_value: 10,
+		});
+
+		expect(result).toEqual(inner);
+		expect(lastFetch().url).toBe(MerchantRoutes.Discounts.Create());
+		expect(lastFetch().opts.method).toBe('POST');
 	});
 });
 

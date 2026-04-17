@@ -73,6 +73,8 @@ Project-specific skills in `.agent/skills/` (use when relevant; Cursor reads via
 - **nuxt-ui-usage** — Build UIs with @nuxt/ui v4; project theming, components, forms, tables, modals, i18n integration.
 - **i18n-translation** — Locales (en, ms), translation patterns, validation schemas, options, table columns.
 - **page-panel-layout** — ZPagePanel wrapper for dashboard pages; navbar, toolbar, footer slots.
+- **listing-page** — Index/list pages: ZCreateButton + ZSectionFilter* + ZTableToolbar + skeleton UTable + empty state + pagination + store/i18n conventions.
+- **form-creation** — Create-entity pages: Form*Creation + ZPagePanel footer submit, UForm/Zod, optional sticky review column.
 - **shareable-components** — Extract duplicate UI into reusable components; placement, API patterns, workflow.
 
 For full Nuxt UI component reference, install the official skill: `npx skills add nuxt/ui` or add in Cursor Settings > Skills: `https://github.com/nuxt/ui/tree/v4/skills/nuxt-ui`.

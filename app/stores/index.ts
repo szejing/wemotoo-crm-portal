@@ -1,3 +1,4 @@
+import { useDiscountStore } from './Discount/Discount';
 import { useProductTagStore } from './ProductTag/ProductTag';
 import { useProductCategoryStore } from './ProductCategory/ProductCategory';
 import { useProductVariationStore } from './ProductVariation/ProductVariation';
@@ -20,6 +21,7 @@ import { useOutletStore } from './Outlet/Outlet';
 import { useTaxStore } from './Tax/Tax';
 import { useTaxGroupStore } from './TaxGroup/TaxGroup';
 import { useTaxRuleStore } from './TaxRule/TaxRule';
+import { useVoucherStore } from './Voucher/Voucher';
 
 export {
 	useAuthStore,
@@ -29,7 +31,7 @@ export {
 	useSettingStore,
 	useProductCategoryStore,
 	useProductTagStore,
-	useProductVariationStore as useProductOptionStore,
+	useProductVariationStore,
 	useProductStore,
 	useOrderStore,
 	useSummSaleStore,
@@ -44,4 +46,6 @@ export {
 	useTaxStore,
 	useTaxGroupStore,
 	useTaxRuleStore,
+	useDiscountStore,
+	useVoucherStore,
 };
