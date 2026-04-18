@@ -2,6 +2,12 @@ import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import type { TaxModel } from '../models/tax.model';
 import type { Currency } from './currency';
 import type { ItemModel, PaymentModel, CustomerModel } from '../models';
+import type {
+	FulfillmentLifecycleStatusValue,
+	OrderActivity,
+	OrderFulfillment,
+	OrderShipment,
+} from './order-fulfillment-shipping';
 
 export type OrderHistory = {
 	biz_date: string;
@@ -35,4 +41,9 @@ export type OrderHistory = {
 	customer: CustomerModel;
 	taxes: TaxModel[];
 	created_at: Date;
+	fulfillment?: OrderFulfillment;
+	shipment?: OrderShipment;
+	activities?: OrderActivity[];
 };
+
+export type NextFulfillmentAction = FulfillmentLifecycleStatusValue | 'none';

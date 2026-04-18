@@ -1,0 +1,131 @@
+<template>
+	<ZPagePanel id="shipping-zone-edit" :title="panelTitle" back-to="/settings/shipping/zones" grow>
+		<div class="container w-full mx-auto py-4">
+			<div v-if="isLoading" class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700 p-4 space-y-3">
+				<USkeleton class="h-8 w-full max-w-md" />
+				<USkeleton class="h-32 w-full" />
+				<USkeleton class="h-32 w-full" />
+			</div>
+			<FormShippingZoneUpdate v-else-if="detailZone" :key="detailZone.id" ref="formRef" :zone-id="detailZone.id" :initial-zone="detailZone" @saved="onSaved" />
+		</div>
+
+		<template #footer>
+			<div v-if="detailZone" class="w-full backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-800 shadow-md z-50">
+				<div class="mx-auto px-4 sm:px-6 py-4">
+					<div class="hidden md:flex justify-between items-center gap-3">
+						<UButton color="error" variant="ghost" size="lg" :loading="removing" @click="confirmDelete">
+							<UIcon :name="ICONS.TRASH" />
+							{{ $t('common.delete') }}
+						</UButton>
+						<div class="flex gap-3">
+							<UButton color="neutral" variant="outline" size="lg" @click="goBack">{{ $t('common.cancel') }}</UButton>
+							<UButton color="success" variant="solid" size="lg" :loading="updating" @click="onSubmit">
+								<UIcon :name="ICONS.CHECK_ROUNDED" />
+								{{ $t('common.save') }}
+							</UButton>
+						</div>
+					</div>
+					<div class="md:hidden flex flex-col gap-2">
+						<UButton color="success" size="md" class="w-full" :loading="updating" @click="onSubmit">
+							<UIcon :name="ICONS.CHECK_ROUNDED" class="w-4 h-4" />
+							<span class="text-sm">{{ $t('common.save') }}</span>
+						</UButton>
+						<div class="flex gap-2">
+							<UButton color="error" variant="ghost" size="sm" class="flex-1" :loading="removing" @click="confirmDelete">
+								<UIcon :name="ICONS.TRASH" class="w-4 h-4" />
+								<span class="text-xs">{{ $t('common.delete') }}</span>
+							</UButton>
+							<UButton color="neutral" variant="outline" size="sm" class="flex-1" @click="goBack">
+								<span class="text-xs">{{ $t('common.cancel') }}</span>
+							</UButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+	</ZPagePanel>
+</template>
+
+<script lang="ts" setup>
+import { ZModalConfirmation } from '#components';
+import { ICONS } from '~/utils/icons';
+import type { ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+
+const route = useRoute();
+const id = computed(() => route.params.id as string);
+
+const overlay = useOverlay();
+const { t } = useI18n();
+const zoneStore = useShippingZoneStore();
+const { updating, removing } = storeToRefs(zoneStore);
+const formRef = ref<{ submit: () => void } | null>(null);
+
+const detailZone = ref<ShippingZoneRecord | undefined>();
+const isLoading = ref(true);
+
+const panelTitle = computed(() => {
+	const name = detailZone.value?.name;
+	if (name) {
+		return `${t('pages.editShippingZoneTitle')}: ${name}`;
+	}
+	return t('pages.editShippingZoneTitle');
+});
+
+useHead({
+	title: () => (detailZone.value ? `${t('pages.editShippingZonePageTitle')} — ${detailZone.value.name}` : t('pages.editShippingZonePageTitle')),
+});
+
+onMounted(async () => {
+	isLoading.value = true;
+	try {
+		await zoneStore.getShippingZones();
+		const z = zoneStore.getShippingZone(id.value);
+		if (z) {
+			detailZone.value = z;
+		} else {
+			await navigateTo('/settings/shipping/zones');
+		}
+	} finally {
+		isLoading.value = false;
+	}
+});
+
+const onSubmit = () => {
+	formRef.value?.submit();
+};
+
+const goBack = () => {
+	useRouter().back();
+};
+
+const onSaved = (zone: ShippingZoneRecord | undefined) => {
+	if (zone) {
+		detailZone.value = zone;
+	}
+};
+
+const confirmDelete = () => {
+	if (!detailZone.value) {
+		return;
+	}
+
+	const zoneId = detailZone.value.id;
+
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: t('components.shippingZone.confirmDelete'),
+			action: 'delete',
+			onConfirm: async () => {
+				await zoneStore.deleteShippingZone(zoneId);
+				confirmModal.close();
+				await navigateTo('/settings/shipping/zones');
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
+		},
+	});
+
+	confirmModal.open();
+};
+</script>

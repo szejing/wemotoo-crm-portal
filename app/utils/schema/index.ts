@@ -39,6 +39,7 @@ import { CreateDiscountValidation } from './Discount/Create/CreateDiscountValida
 import { CreateBundledVoucherFormValidation } from './Voucher/Create/CreateBundledVoucherFormValidation';
 import { CreateVoucherValidation } from './Voucher/Create/CreateVoucherValidation';
 import { UpdateVoucherFormValidation } from './Voucher/Update/UpdateVoucherFormValidation';
+import { CreateShippingZoneValidation, UpdateShippingZoneValidation } from './ShippingZone/Create/ShippingZoneValidation';
 
 export {
 	LoginValidation,
@@ -86,4 +87,6 @@ export {
 	CreateBundledVoucherFormValidation,
 	CreateVoucherValidation,
 	UpdateVoucherFormValidation,
+	CreateShippingZoneValidation,
+	UpdateShippingZoneValidation,
 };

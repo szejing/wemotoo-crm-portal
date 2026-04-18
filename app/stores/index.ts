@@ -22,6 +22,10 @@ import { useTaxStore } from './Tax/Tax';
 import { useTaxGroupStore } from './TaxGroup/TaxGroup';
 import { useTaxRuleStore } from './TaxRule/TaxRule';
 import { useVoucherStore } from './Voucher/Voucher';
+import { useFulfillmentStore } from './Fulfillment/Fulfillment';
+import { useShipmentStore } from './Shipment/Shipment';
+import { useShippingMethodStore } from './ShippingMethod/ShippingMethod';
+import { useShippingZoneStore } from './ShippingZone/ShippingZone';
 
 export {
 	useAuthStore,
@@ -48,4 +52,8 @@ export {
 	useTaxRuleStore,
 	useDiscountStore,
 	useVoucherStore,
+	useFulfillmentStore,
+	useShipmentStore,
+	useShippingMethodStore,
+	useShippingZoneStore,
 };

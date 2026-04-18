@@ -203,13 +203,12 @@ const MerchantRoutes = {
 		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/${code}`,
 		Restore: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.DISCOUNTS}/restore/${code}`,
 	},
-	/** Merchant vouchers / coupons (path not yet in wemotoo-common API_PATH). */
 	Vouchers: {
-		Create: () => `${prefix}/${API_PATH.MERCHANT}/vouchers/create`,
-		Many: () => `${prefix}/${API_PATH.MERCHANT}/vouchers/many`,
-		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
-		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
-		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/vouchers/${code}`,
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.VOUCHERS}/create`,
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.VOUCHERS}/many`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.VOUCHERS}/${code}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.VOUCHERS}/${code}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.VOUCHERS}/${code}`,
 	},
 	Affiliates: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}`,
@@ -221,6 +220,28 @@ const MerchantRoutes = {
 		TierUpdate: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers/${id}`,
 		TierDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/tiers/${id}`,
 		MyReport: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.AFFILIATES}/my-report`,
+	},
+	Fulfillment: {
+		Create: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/create`,
+		MarkProcessing: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/processing`,
+		MarkPacked: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/packed`,
+		MarkFulfilled: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/fulfilled`,
+	},
+	Shipment: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}`,
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}`,
+		Single: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}`,
+		Update: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}`,
+		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}`,
+		MarkDelivered: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}/delivered`,
+	},
+	ShippingMethods: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/many`,
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/create`,
+		Resolve: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/resolve`,
+		Single: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/${id}`,
+		Update: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/${id}`,
+		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/${id}`,
 	},
 };
 

@@ -43,7 +43,10 @@
 						<div class="status-badge-stack">
 							<div class="status-group">
 								<UBadge v-if="order?.status === OrderStatus.PENDING_PAYMENT" variant="subtle" color="info" size="lg">{{ $t('options.pendingPayment') }}</UBadge>
+								<UBadge v-else-if="String(order?.status) === 'paid'" color="info" size="lg">{{ $t('options.paid') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.PROCESSING" color="info" size="lg">{{ $t('options.processing') }}</UBadge>
+								<UBadge v-else-if="String(order?.status) === 'shipped'" color="primary" size="lg">{{ $t('options.shipped') }}</UBadge>
+								<UBadge v-else-if="String(order?.status) === 'delivered'" color="success" size="lg">{{ $t('options.delivered') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.COMPLETED" color="success" size="lg">{{ $t('options.completed') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.REQUIRES_ACTION" color="warning" size="lg">{{ $t('options.requiresAction') }}</UBadge>
 								<UBadge v-else-if="order?.status === OrderStatus.REFUNDED" color="error" size="lg">{{ $t('options.refunded') }}</UBadge>
@@ -133,6 +136,25 @@
 						</template>
 						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
+
+					<FulfillmentCard
+						:fulfillment="record?.fulfillment"
+						:is-read-only="isSaleReadOnly"
+						:loading="fulfillmentStore.creating || fulfillmentStore.updating"
+						@action="handleFulfillmentAction"
+					/>
+
+					<ShipmentCard
+						:shipment="record?.shipment"
+						:is-read-only="isSaleReadOnly"
+						:loading="shipmentStore.creating || shipmentStore.updating || shipmentStore.removing"
+						@create="openCreateShipmentModal"
+						@edit="openEditShipmentModal"
+						@delete="handleDeleteShipment"
+						@mark-delivered="handleMarkDelivered"
+					/>
+
+					<Activities :activities="record?.activities" />
 				</div>
 
 				<!-- Sidebar -->
@@ -202,6 +224,17 @@
 				</div>
 			</div>
 		</div>
+
+		<CreateShipmentModal
+			:open="isCreateShipmentModalOpen"
+			:methods="shipmentModalMethods"
+			:loading="shipmentStore.creating || shipmentStore.updating"
+			:title="shipmentModalTitle"
+			:submit-label="shipmentModalSubmitLabel"
+			:initial-value="shipmentModalInitialValue"
+			@update:open="isCreateShipmentModalOpen = $event"
+			@submit="handleShipmentSubmit"
+		/>
 	</ZPagePanel>
 </template>
 
@@ -212,9 +245,19 @@ import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
 import type { OrderHistory } from '~/utils/types/order-history';
+import FulfillmentCard from '~/components/Fulfillment/FulfillmentCard.vue';
+import ShipmentCard from '~/components/Shipment/ShipmentCard.vue';
+import CreateShipmentModal from '~/components/Shipment/CreateShipmentModal.vue';
+import Activities from '~/components/ActivityLog/Activities.vue';
+import { useFulfillmentStore } from '~/stores/Fulfillment/Fulfillment';
+import { useShipmentStore } from '~/stores/Shipment/Shipment';
+import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
 
 const orderStore = useOrderStore();
 const saleStore = useSaleStore();
+const fulfillmentStore = useFulfillmentStore();
+const shipmentStore = useShipmentStore();
+const shippingStore = useShippingMethodStore();
 const { updating } = storeToRefs(orderStore);
 
 const loading = computed(() => orderStore.loading || saleStore.loading);
@@ -223,8 +266,21 @@ const route = useRoute();
 const order_not_found = ref(false);
 const order_no_param = computed(() => String(route.params.order_no ?? ''));
 const type = computed(() => String(route.query.type ?? ''));
+const isSaleReadOnly = computed(() => type.value === 'sale');
 
 const order = ref<OrderHistory | undefined>();
+const isCreateShipmentModalOpen = ref(false);
+const shipmentModalMethods = ref<ShippingMethodOption[]>([]);
+const shipmentModalMode = ref<'create' | 'update'>('create');
+const shipmentModalInitialValue = ref<{
+	shipping_method_id?: string;
+	courier_name: string;
+	tracking_no: string;
+}>({
+	shipping_method_id: undefined,
+	courier_name: '',
+	tracking_no: '',
+});
 
 const record = computed(() => order.value);
 
@@ -236,6 +292,24 @@ const overlay = useOverlay();
 const new_order_status = ref<OrderStatus>(OrderStatus.PENDING_PAYMENT);
 
 const customer = computed(() => record.value?.customer);
+
+const loadShipmentMethodsForModal = async () => {
+	// const addr = customer.value?.shipping_address;
+	// if (addr?.country_code) {
+	// 	try {
+	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods({
+	// 			country_code: addr.country_code,
+	// 			state: addr.state,
+	// 			postal_code: addr.postal_code,
+	// 		});
+	// 	} catch {
+	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
+	// 	}
+	// } else {
+	// 	shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
+	// }
+};
+
 const items = computed(() => record.value?.items);
 const currency_code = computed(() => record.value?.currency.code);
 
@@ -261,6 +335,12 @@ watch(
 
 const { t } = useI18n();
 useHead({ title: () => t('pages.orderDetailTitle') + (record.value?.order_no ?? '') });
+
+const shipmentModalTitle = computed(() =>
+	shipmentModalMode.value === 'create' ? t('components.shipment.createShipment') : t('components.shipment.updateShipment'),
+);
+
+const shipmentModalSubmitLabel = computed(() => (shipmentModalMode.value === 'create' ? t('common.create') : t('common.save')));
 
 onMounted(() => {
 	checkMobile();
@@ -298,6 +378,114 @@ const getOrderDetails = async () => {
 
 const onItemsRefresh = () => {
 	return getOrderDetails();
+};
+
+const handleFulfillmentAction = async (action: 'processing' | 'packed' | 'fulfilled') => {
+	if (!record.value?.order_no || isSaleReadOnly.value) {
+		return;
+	}
+
+	if (action === 'processing') {
+		await fulfillmentStore.markProcessing(record.value.order_no);
+	} else if (action === 'packed') {
+		await fulfillmentStore.markPacked(record.value.order_no);
+	} else {
+		await fulfillmentStore.markFulfilled(record.value.order_no);
+	}
+
+	await getOrderDetails();
+};
+
+const openCreateShipmentModal = async () => {
+	if (isSaleReadOnly.value) {
+		return;
+	}
+
+	shipmentModalMode.value = 'create';
+	shipmentModalInitialValue.value = {
+		shipping_method_id: undefined,
+		courier_name: '',
+		tracking_no: '',
+	};
+	await loadShipmentMethodsForModal();
+	isCreateShipmentModalOpen.value = true;
+};
+
+const openEditShipmentModal = async () => {
+	if (!record.value?.shipment || isSaleReadOnly.value) {
+		return;
+	}
+
+	shipmentModalMode.value = 'update';
+	shipmentModalInitialValue.value = {
+		shipping_method_id: undefined,
+		courier_name: record.value.shipment.courier_name,
+		tracking_no: record.value.shipment.tracking_no,
+	};
+	await loadShipmentMethodsForModal();
+	isCreateShipmentModalOpen.value = true;
+};
+
+const handleShipmentSubmit = async (payload: { shipping_method_id?: string; courier_name: string; tracking_no: string }) => {
+	if (!record.value || isSaleReadOnly.value) {
+		return;
+	}
+
+	if (shipmentModalMode.value === 'create' && !payload.shipping_method_id) {
+		failedNotification(t('components.shipment.shippingMethod') + ' ' + t('common.required'));
+		return;
+	}
+
+	if (shipmentModalMode.value === 'create') {
+		await shipmentStore.createShipment({
+			order_no: record.value.order_no,
+			inv_no: record.value.inv_no,
+			shipping_method_id: payload.shipping_method_id!,
+			courier_name: payload.courier_name,
+			tracking_no: payload.tracking_no,
+		});
+	} else if (record.value.shipment?.id) {
+		await shipmentStore.updateShipment(record.value.shipment.id, {
+			shipping_method_id: payload.shipping_method_id,
+			courier_name: payload.courier_name,
+			tracking_no: payload.tracking_no,
+		});
+	}
+
+	isCreateShipmentModalOpen.value = false;
+	await getOrderDetails();
+};
+
+const handleDeleteShipment = async () => {
+	if (!record.value?.shipment?.id || isSaleReadOnly.value) {
+		return;
+	}
+
+	const confirmModal = overlay.create(ZModalConfirmation, {
+		props: {
+			message: t('components.shipment.confirmDelete'),
+			action: 'delete',
+			onConfirm: async () => {
+				await shipmentStore.deleteShipment(record.value!.shipment!.id);
+				confirmModal.close();
+				await getOrderDetails();
+			},
+			onCancel: () => {
+				confirmModal.close();
+			},
+		},
+	});
+
+	confirmModal.open();
+};
+
+const handleMarkDelivered = async () => {
+	if (!record.value?.shipment?.id || isSaleReadOnly.value) {
+		return;
+	}
+
+	await shipmentStore.markDelivered(record.value.shipment.id);
+	await getOrderDetails();
 };
 
 const refreshOrder = async () => {
