@@ -243,6 +243,7 @@
 		"shippingZone": {
 			"nameRequired": "Nama zon wajib",
 			"countryInvalid": "Negara mestilah kod ISO 2 huruf",
+			"stateRequired": "Negeri wajib dipilih",
 			"methodsRequired": "Pilih sekurang-kurangnya satu kaedah penghantaran"
 		},
 		"category": {
@@ -328,7 +329,7 @@
 		"orderDetailTitle": "Wemotoo CRM - Butiran Pesanan #",
 		"shippingMethods": "Kaedah Penghantaran",
 		"shippingSettingsDesc": "Konfigur pilihan penghantaran dan kadar untuk pembayaran dan pemenuhan pesanan.",
-		"shippingMethodsDesc": "Tetapkan nama, yuran, dan anggaran hari penghantaran untuk setiap pilihan.",
+		"shippingMethodsDesc": "Tetapkan jenis perkhidmatan penghantaran (nama dan keutamaan). Tetapkan yuran dan anggaran hari di bawah setiap zon penghantaran.",
 		"shippingSettingsTitle": "Wemotoo CRM - Tetapan Penghantaran",
 		"shippingMethodsPageTitle": "Wemotoo CRM - Kaedah Penghantaran",
 		"noShippingMethodsFound": "Tiada kaedah penghantaran tersedia.",
@@ -362,6 +363,7 @@
 		"createShippingZoneButton": "Cipta zon",
 		"editShippingZoneTitle": "Edit zon penghantaran",
 		"editShippingZonePageTitle": "Wemotoo CRM - Edit zon penghantaran",
+		"shippingZoneReviewSection": "Ringkasan zon",
 		"orderCustomerSummary": "Wemotoo CRM - Ringkasan Pelanggan Pesanan",
 		"orderSummaryTitle": "Wemotoo CRM - Ringkasan Pesanan",
 		"orderItemSummary": "Wemotoo CRM - Ringkasan Item Pesanan",
@@ -719,6 +721,7 @@
 		"shippingZoneName": "Zon",
 		"shippingZoneRegion": "Wilayah",
 		"shippingZoneMethods": "Kaedah",
+		"shippingZonePricing": "Harga",
 		"shippingZoneFeeOverride": "Ganti yuran",
 		"shippingZoneDaysOverride": "Anggaran hari"
 	},
@@ -978,15 +981,45 @@
 			"reviewSubtitleEdit": "Ringkasan kaedah ini sebelum anda simpan",
 			"reviewZonesCount": "{count} peraturan zon",
 			"reviewZonesAll": "Semua wilayah (tiada had zon)",
-			"detailsSectionSubtitle": "Yuran, anggaran masa penghantaran, keutamaan, dan ketersediaan.",
+			"detailsSectionSubtitle": "Namakan kaedah ini dan tetapkan keutamaan serta status. Yuran dan masa penghantaran ditetapkan bagi setiap zon penghantaran.",
 			"regionsSectionTitle": "Wilayah penghantaran",
-			"regionsSectionSubtitle": "Secara pilihan, hadkan kawasan untuk kaedah ini dan konfigurasi peraturan zon."
+			"regionsSectionSubtitle": "Secara pilihan, hadkan kawasan untuk kaedah ini dan konfigurasi peraturan zon.",
+			"fieldHints": {
+				"name": "Label dipaparkan di checkout dan pentadbiran.",
+				"priority": "Nombor lebih kecil didahulukan jika beberapa kaedah terpakai untuk satu alamat.",
+				"status": "Matikan untuk sembunyikan kaedah ini di checkout.",
+				"fee": "Tetapkan dalam setiap zon yang menawarkan kaedah ini.",
+				"estimatedDays": "Tetapkan dalam setiap zon yang menawarkan kaedah ini."
+			}
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Butiran zon",
-			"detailsSubtitle": "Nama, peraturan wilayah, ganti yuran dan hari penghantaran (pilihan), serta kaedah penghantaran yang disokong.",
+			"detailsSubtitle": "Tetapkan nama zon, wilayah, kaedah yang pelanggan boleh guna, dan yuran.",
 			"supportedMethods": "Kaedah penghantaran yang disokong",
-			"selectMethods": "Pilih kaedah"
+			"selectMethods": "Pilih kaedah",
+			"perMethodPricingTitle": "Yuran dan penghantaran mengikut kaedah",
+			"perMethodColumnMethod": "Kaedah penghantaran",
+			"perMethodColumnEstDays": "Anggaran hari",
+			"perMethodColumnFee": "Yuran",
+			"reviewTitle": "Semak",
+			"reviewSubtitleCreate": "Ringkasan sebelum anda mencipta zon ini",
+			"reviewSubtitleEdit": "Ringkasan zon ini sebelum anda simpan",
+			"reviewPostcodesLabel": "Poskod",
+			"reviewPostcodesCount": "{count} baris poskod",
+			"reviewPricingLabel": "Harga",
+			"reviewDaysSuffix": "({days} hari)",
+			"selectState": "Pilih negeri",
+			"selectStates": "Pilih negeri",
+			"fieldHints": {
+				"name": "Cara pasukan anda mengenal pasti zon ini dalam pentadbiran.",
+				"status": "Matikan untuk sembunyikan zon ini di checkout.",
+				"country": "Dua huruf (cth. MY).",
+				"state": "Negeri atau wilayah yang termasuk dalam zon ini.",
+				"postcodes": "Poskod diliputi; satu setiap baris atau dipisahkan koma.",
+				"feeOverride": "Yuran untuk kaedah ini dalam zon ini.",
+				"daysOverride": "Anggaran penghantaran pilihan untuk kaedah ini dalam zon ini.",
+				"supportedMethods": "Pilihan penghantaran untuk alamat dalam zon ini."
+			}
 		},
 		"shippingZone": {
 			"confirmDelete": "Adakah anda pasti mahu memadam zon penghantaran ini?"

@@ -10,11 +10,10 @@ describe('ZInputShippingZoneDetails', () => {
 			name: '',
 			is_active: true,
 			country_code: '',
-			state: '',
+			state: [],
 			postcodes_text: '',
-			fee_override: undefined,
-			estimated_days_override: undefined,
 			shipping_method_ids: [],
+			method_pricing: {},
 		});
 
 		const wrapper = await mountSuspended(ZInputShippingZoneDetails, {
@@ -28,5 +27,7 @@ describe('ZInputShippingZoneDetails', () => {
 		});
 
 		expect(wrapper.find('#section-shipping-zone-details').exists()).toBe(true);
+		expect(wrapper.text()).toContain('Select states');
+		expect(wrapper.text()).toContain('How your team will recognize this zone in admin.');
 	});
 });

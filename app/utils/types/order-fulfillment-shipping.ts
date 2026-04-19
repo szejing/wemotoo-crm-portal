@@ -23,14 +23,14 @@ export type ShippingZoneRule = {
 	postcode_patterns: ShippingZonePostcodePattern[];
 	rule_priority?: number;
 	is_default?: boolean;
-	fee_override?: number | null;
+	fee_override: number;
 	estimated_days_override?: number | null;
 };
 
 export type ShippingMethodZoneLink = {
 	id: string;
-	fee_override?: number | null;
-	estimated_days_override?: number | null;
+	fee: number;
+	estimated_days?: number;
 	shipping_zone?: {
 		id: string;
 		name?: string;
@@ -46,9 +46,7 @@ export type ShippingMethodOption = {
 	id: string;
 	code?: string;
 	name: string;
-	fee: number;
 	currency_code?: string;
-	estimated_days?: number;
 	priority?: number;
 	/** @deprecated Prefer method_zones */
 	zone?: Record<string, unknown>;
@@ -63,9 +61,9 @@ export type ShippingZoneMutableFields = {
 	country_code: string;
 	state?: string;
 	postcode_patterns: ShippingZonePostcodePattern[];
-	fee_override?: number | null;
-	estimated_days_override?: number | null;
-	/** Shipping methods that support delivery under this zone. */
+	/** Per-method pricing for this zone (API payload). */
+	methods: { shipping_method_id: string; fee: number; estimated_days?: number | null }[];
+	/** Shipping methods that support delivery under this zone (derived for UI). */
 	shipping_method_ids: string[];
 };
 
@@ -74,6 +72,8 @@ export type ShippingZoneRecord = ShippingZoneMutableFields & {
 	id: string;
 	created_at: string;
 	updated_at: string;
+	/** Short summary for list tables when fees differ per method. */
+	pricing_summary?: string;
 };
 
 export type OrderFulfillment = {

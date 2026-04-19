@@ -17,16 +17,8 @@ export function getShippingMethodColumns(t: TranslateFn): TableColumn<ShippingMe
 			header: t('components.shipment.shippingFee'),
 			cell: ({ row }) => {
 				const currencyCode = row.original.currency_code ?? 'MYR';
-				return h('span', { class: 'text-neutral-900 dark:text-neutral-100' }, formatCurrency(row.original.fee ?? 0, currencyCode));
+				return h('span', { class: 'text-neutral-900 dark:text-neutral-100' }, formatCurrency(row.original.method_zones?.[0]?.fee ?? 0, currencyCode));
 			},
-		},
-		{
-			accessorKey: 'estimated_days',
-			header: t('pages.estimatedDays'),
-		},
-		{
-			accessorKey: 'priority',
-			header: t('pages.shippingPriority'),
 		},
 		{
 			accessorKey: 'is_active',

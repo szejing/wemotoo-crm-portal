@@ -14,6 +14,7 @@ import DiscountModule from './discount/discount';
 import FulfillmentModule from './fulfillment/fulfillment';
 import ShipmentModule from './shipment/shipment';
 import ShippingMethodModule from './shipping-method/shipping-method';
+import ShippingZoneModule from './shipping-zone/shipping-zone';
 
 const odata: BaseODataReq = { $top: 5 };
 
@@ -215,10 +216,10 @@ describe('ShippingMethodModule', () => {
 		setMockFetch(async () => ({ method: { id: 'm1' } }));
 
 		const mod = new ShippingMethodModule();
-		const payload = { merchant_id: 'm1', code: 'STD', name: 'Standard', fee: 5 };
+		const payload = { merchant_id: 'm1', code: 'STD', name: 'Standard', priority: 1 };
 		await mod.create(payload);
 
-		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Many());
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Create());
 		expect(lastFetch().opts.method).toBe('POST');
 		expect(lastFetch().opts.body).toEqual(payload);
 	});
@@ -269,6 +270,69 @@ describe('ShippingMethodModule', () => {
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Single('m1'));
 		expect(lastFetch().opts.method).toBe('DELETE');
+	});
+});
+
+describe('ShippingZoneModule', () => {
+	it('calls shipping zones many route', async () => {
+		setMockFetch(async () => ({ shipping_zones: [], total: 0 }));
+
+		const mod = new ShippingZoneModule();
+		await mod.getMany();
+
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Many());
+		expect(lastFetch().opts.method).toBe('GET');
+	});
+
+	it('calls shipping zone create route', async () => {
+		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+
+		const mod = new ShippingZoneModule();
+		const payload = {
+			merchant_id: 'm1',
+			name: 'West',
+			country_code: 'MY',
+			methods: [{ shipping_method_id: 'sm1', fee: 5, estimated_days: 2 }],
+		};
+		await mod.create(payload);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Create());
+		expect(lastFetch().opts.method).toBe('POST');
+		expect(lastFetch().opts.body).toEqual(payload);
+	});
+
+	it('calls shipping zone single route', async () => {
+		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+
+		const mod = new ShippingZoneModule();
+		await mod.getSingle('z1');
+
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Single('z1'));
+		expect(lastFetch().opts.method).toBe('GET');
+	});
+
+	it('calls shipping zone update route', async () => {
+		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+
+		const mod = new ShippingZoneModule();
+		const payload = { merchant_id: 'm1', name: 'Renamed' };
+		await mod.update('z1', payload);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Update('z1'));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual(payload);
+	});
+
+	it('calls shipping zone delete route', async () => {
+		setMockFetch(async () => ({ ok: true }));
+
+		const mod = new ShippingZoneModule();
+		const body = { merchant_id: 'm1', user: { id: 'u1' } };
+		await mod.remove('z1', body);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Delete('z1'));
+		expect(lastFetch().opts.method).toBe('DELETE');
+		expect(lastFetch().opts.body).toEqual(body);
 	});
 });
 

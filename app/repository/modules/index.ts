@@ -30,6 +30,7 @@ import VoucherModule from './voucher/voucher';
 import FulfillmentModule from './fulfillment/fulfillment';
 import ShipmentModule from './shipment/shipment';
 import ShippingMethodModule from './shipping-method/shipping-method';
+import ShippingZoneModule from './shipping-zone/shipping-zone';
 
 export {
 	CrmUserModule,
@@ -64,4 +65,5 @@ export {
 	FulfillmentModule,
 	ShipmentModule,
 	ShippingMethodModule,
+	ShippingZoneModule,
 };

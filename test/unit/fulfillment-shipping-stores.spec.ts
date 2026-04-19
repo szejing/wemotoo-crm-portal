@@ -31,12 +31,11 @@ describe('fulfillment/shipment/shipping stores', () => {
 			markDelivered: vi.fn(),
 		},
 		shippingMethod: {
-			getMethods: vi.fn(),
+			getMany: vi.fn(),
 			getSingle: vi.fn(),
 			create: vi.fn(),
 			update: vi.fn(),
 			remove: vi.fn(),
-			resolveMethods: vi.fn(),
 		},
 	};
 
@@ -137,8 +136,8 @@ describe('fulfillment/shipment/shipping stores', () => {
 	});
 
 	it('loads shipping methods into state with OData pagination', async () => {
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
-			data: [{ id: '1', name: 'Standard', fee: 6, is_active: true }],
+		apiMock.shippingMethod.getMany.mockResolvedValue({
+			data: [{ id: '1', name: 'Standard', priority: 1, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -149,7 +148,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 		expect(store.methods[0]?.name).toBe('Standard');
 		expect(store.total_shipping_methods).toBe(1);
 		expect(store.loading).toBe(false);
-		expect(apiMock.shippingMethod.getMethods).toHaveBeenCalledWith(
+		expect(apiMock.shippingMethod.getMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				$top: store.filter.page_size,
 				$count: true,
@@ -159,8 +158,8 @@ describe('fulfillment/shipment/shipping stores', () => {
 	});
 
 	it('refetches when inactive filter is applied', async () => {
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
-			data: [{ id: '2', name: 'Express', fee: 10, is_active: false, code: 'EXP' }],
+		apiMock.shippingMethod.getMany.mockResolvedValue({
+			data: [{ id: '2', name: 'Express', priority: 2, is_active: false, code: 'EXP' }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -169,7 +168,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 		expect(store.methods).toHaveLength(1);
 		expect(store.methods[0]?.name).toBe('Express');
-		expect(apiMock.shippingMethod.getMethods).toHaveBeenCalledWith(
+		expect(apiMock.shippingMethod.getMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				$filter: 'is_active eq false',
 			}),
@@ -178,17 +177,17 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('creates a shipping method', async () => {
 		apiMock.shippingMethod.create.mockResolvedValue({
-			method: { id: '1', name: 'Standard', fee: 6, is_active: true },
+			method: { id: '1', name: 'Standard', is_active: true },
 		});
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
-			data: [{ id: '1', name: 'Standard', fee: 6, is_active: true }],
+		apiMock.shippingMethod.getMany.mockResolvedValue({
+			data: [{ id: '1', name: 'Standard', is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
 		const method = await store.createShippingMethod({
 			name: 'Standard',
-			fee: 6,
+			priority: 1,
 			is_active: true,
 		});
 
@@ -199,46 +198,25 @@ describe('fulfillment/shipment/shipping stores', () => {
 			expect.objectContaining({
 				merchant_id: 'm1',
 				name: 'Standard',
-				fee: 6,
+				priority: 1,
 				code: expect.stringMatching(/^STANDARD_/),
 			}),
 		);
 	});
 
-	it('resolves shipping methods for an address', async () => {
-		apiMock.shippingMethod.resolveMethods.mockResolvedValue({
-			resolved: [
-				{
-					matched_tier: 'global',
-					match_score: 1,
-					effective_fee: 8,
-					shipping_method: { id: '1', name: 'Std', fee: 6, is_active: true },
-				},
-			],
-		});
-		const store = useShippingMethodStore();
-
-		const out = await store.resolveShippingMethodsForAddress({ country_code: 'MY' });
-
-		expect(out[0]?.fee).toBe(8);
-		expect(apiMock.shippingMethod.resolveMethods).toHaveBeenCalledWith({
-			country_code: 'MY',
-		});
-	});
-
 	it('updates a shipping method', async () => {
 		apiMock.shippingMethod.update.mockResolvedValue({
-			method: { id: '1', name: 'Express', fee: 10, is_active: true },
+			method: { id: '1', name: 'Express', priority: 2, is_active: true },
 		});
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
-			data: [{ id: '1', name: 'Express', fee: 10, is_active: true }],
+		apiMock.shippingMethod.getMany.mockResolvedValue({
+			data: [{ id: '1', name: 'Express', priority: 2, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
 		const method = await store.updateShippingMethod('1', {
 			name: 'Express',
-			fee: 10,
+			priority: 2,
 		});
 
 		expect(method?.name).toBe('Express');
@@ -248,15 +226,15 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('updates shipping method active status from the table switch', async () => {
 		apiMock.shippingMethod.update.mockResolvedValue({
-			method: { id: '1', name: 'Express', fee: 10, is_active: false },
+			method: { id: '1', name: 'Express', priority: 2, is_active: false },
 		});
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
-			data: [{ id: '1', name: 'Express', fee: 10, is_active: false }],
+		apiMock.shippingMethod.getMany.mockResolvedValue({
+			data: [{ id: '1', name: 'Express', priority: 2, is_active: false }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
-		await store.updateStatus({ id: '1', name: 'Express', fee: 10, is_active: true }, false);
+		await store.updateStatus({ id: '1', name: 'Express', is_active: true }, false);
 
 		expect(apiMock.shippingMethod.update).toHaveBeenCalledWith('1', expect.objectContaining({ merchant_id: 'm1', is_active: false }));
 		expect(store.updating).toBe(false);
@@ -264,15 +242,15 @@ describe('fulfillment/shipment/shipping stores', () => {
 	});
 
 	it('fetches all shipping methods without replacing paginated listing', async () => {
-		apiMock.shippingMethod.getMethods
+		apiMock.shippingMethod.getMany
 			.mockResolvedValueOnce({
-				data: [{ id: '1', name: 'Standard', fee: 6, is_active: true }],
+				data: [{ id: '1', name: 'Standard', priority: 1, is_active: true }],
 				count: 1,
 			})
 			.mockResolvedValueOnce({
 				data: [
-					{ id: '1', name: 'Standard', fee: 6, is_active: true },
-					{ id: '2', name: 'Express', fee: 10, is_active: true },
+					{ id: '1', name: 'Standard', priority: 1, is_active: true },
+					{ id: '2', name: 'Express', priority: 2, is_active: true },
 				],
 				count: 2,
 			});
@@ -288,14 +266,14 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('deletes a shipping method', async () => {
 		apiMock.shippingMethod.remove.mockResolvedValue({
-			method: { id: '1', name: 'Standard', fee: 6, is_active: true },
+			method: { id: '1', name: 'Standard', priority: 1, is_active: true },
 		});
-		apiMock.shippingMethod.getMethods.mockResolvedValue({
+		apiMock.shippingMethod.getMany.mockResolvedValue({
 			data: [],
 			count: 0,
 		});
 		const store = useShippingMethodStore();
-		store.methods = [{ id: '1', name: 'Standard', fee: 6, is_active: true }];
+		store.methods = [{ id: '1', name: 'Standard', priority: 1, is_active: true }];
 
 		await store.deleteShippingMethod('1');
 
@@ -305,7 +283,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 	});
 
 	it('handles shipping methods API errors', async () => {
-		apiMock.shippingMethod.getMethods.mockRejectedValue({
+		apiMock.shippingMethod.getMany.mockRejectedValue({
 			message: 'failed',
 		});
 		const store = useShippingMethodStore();

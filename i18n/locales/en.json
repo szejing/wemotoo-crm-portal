@@ -243,6 +243,7 @@
 		"shippingZone": {
 			"nameRequired": "Zone name is required",
 			"countryInvalid": "Country must be a 2-letter ISO code",
+			"stateRequired": "State is required",
 			"methodsRequired": "Select at least one shipping method"
 		},
 		"category": {
@@ -328,7 +329,7 @@
 		"orderDetailTitle": "Wemotoo CRM - Order Detail #",
 		"shippingMethods": "Shipping Methods",
 		"shippingSettingsDesc": "Configure delivery options and rates for checkout and fulfillment.",
-		"shippingMethodsDesc": "Define names, fees, and delivery estimates for each shipping option.",
+		"shippingMethodsDesc": "Define shipping service types (names and priority). Set fees and delivery estimates under each shipping zone.",
 		"shippingSettingsTitle": "Wemotoo CRM - Shipping Settings",
 		"shippingMethodsPageTitle": "Wemotoo CRM - Shipping Methods",
 		"noShippingMethodsFound": "No shipping methods available.",
@@ -362,6 +363,7 @@
 		"createShippingZoneButton": "Create zone",
 		"editShippingZoneTitle": "Edit shipping zone",
 		"editShippingZonePageTitle": "Wemotoo CRM - Edit shipping zone",
+		"shippingZoneReviewSection": "Zone summary",
 		"orderCustomerSummary": "Wemotoo CRM - Order Customer Summary",
 		"orderSummaryTitle": "Wemotoo CRM - Order Summary",
 		"orderItemSummary": "Wemotoo CRM - Order Item Summary",
@@ -720,6 +722,7 @@
 		"shippingZoneName": "Zone",
 		"shippingZoneRegion": "Region",
 		"shippingZoneMethods": "Methods",
+		"shippingZonePricing": "Pricing",
 		"shippingZoneFeeOverride": "Fee override",
 		"shippingZoneDaysOverride": "Est. days"
 	},
@@ -979,15 +982,45 @@
 			"reviewSubtitleEdit": "Summary of this method before you save",
 			"reviewZonesCount": "{count} zone rule(s)",
 			"reviewZonesAll": "All regions (no zone restrictions)",
-			"detailsSectionSubtitle": "Fee, estimated delivery time, priority, and availability.",
+			"detailsSectionSubtitle": "Name this method and set priority and status. Fees and delivery times are set per shipping zone.",
 			"regionsSectionTitle": "Shipping regions",
-			"regionsSectionSubtitle": "Optionally limit where this method applies and configure zone rules."
+			"regionsSectionSubtitle": "Optionally limit where this method applies and configure zone rules.",
+			"fieldHints": {
+				"name": "Label shown in checkout and admin.",
+				"priority": "Lower numbers rank first when several methods apply to an address.",
+				"status": "Turn off to hide this method from checkout.",
+				"fee": "Set in each zone that offers this method.",
+				"estimatedDays": "Set in each zone that offers this method."
+			}
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Zone details",
-			"detailsSubtitle": "Name, region rules, optional fee and delivery overrides, and supported shipping methods.",
+			"detailsSubtitle": "Set the zone name, region, methods customers can use, and fees.",
 			"supportedMethods": "Supported shipping methods",
-			"selectMethods": "Select methods"
+			"selectMethods": "Select methods",
+			"perMethodPricingTitle": "Fee and delivery by method",
+			"perMethodColumnMethod": "Shipping method",
+			"perMethodColumnEstDays": "Est. days",
+			"perMethodColumnFee": "Fee",
+			"reviewTitle": "Review",
+			"reviewSubtitleCreate": "Summary before you create this zone",
+			"reviewSubtitleEdit": "Summary of this zone before you save",
+			"reviewPostcodesLabel": "Postcodes",
+			"reviewPostcodesCount": "{count} postcode line(s)",
+			"reviewPricingLabel": "Pricing",
+			"reviewDaysSuffix": "({days} days)",
+			"selectState": "Select state",
+			"selectStates": "Select states",
+			"fieldHints": {
+				"name": "How your team will recognize this zone in admin.",
+				"status": "Turn off to hide this zone at checkout.",
+				"country": "2-letter code (e.g. MY).",
+				"state": "States or regions included in this zone.",
+				"postcodes": "Postcodes served; one per line or comma-separated.",
+				"feeOverride": "Fee for this method in this zone.",
+				"daysOverride": "Optional delivery estimate for this method in this zone.",
+				"supportedMethods": "Shipping options shown for addresses in this zone."
+			}
 		},
 		"shippingZone": {
 			"confirmDelete": "Are you sure you want to delete this shipping zone?"

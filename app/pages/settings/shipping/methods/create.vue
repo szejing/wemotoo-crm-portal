@@ -49,7 +49,7 @@ const goBack = () => {
 };
 
 const onSaved = async (_method: ShippingMethodOption | undefined) => {
-	await navigateTo('/settings/shipping-methods/listing');
+	await navigateTo('/settings/shipping/methods');
 };
 </script>
 

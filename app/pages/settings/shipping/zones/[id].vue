@@ -78,8 +78,7 @@ useHead({
 onMounted(async () => {
 	isLoading.value = true;
 	try {
-		await zoneStore.getShippingZones();
-		const z = zoneStore.getShippingZone(id.value);
+		const z = await zoneStore.loadShippingZoneById(id.value, { forceRefresh: true });
 		if (z) {
 			detailZone.value = z;
 		} else {

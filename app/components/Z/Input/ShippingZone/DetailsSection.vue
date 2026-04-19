@@ -64,19 +64,10 @@
 							</div>
 							<span v-else class="text-neutral-400 text-sm">{{ $t('components.shippingZoneForm.selectStates') }}</span>
 						</template>
-						<template #item="{ item }">
-							<UBadge color="primary" variant="subtle" class="truncate">
-								{{ item.label }}
-							</UBadge>
-						</template>
 					</USelectMenu>
 				</UFormField>
 
-				<UFormField
-					v-if="SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS"
-					name="postcodes_text"
-					:label="$t('pages.shippingZonePostcodes')"
-				>
+				<UFormField v-if="SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS" name="postcodes_text" :label="$t('pages.shippingZonePostcodes')">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.postcodes') }}</p>
 					<UTextarea v-model="state.postcodes_text" :rows="3" autoresize />
 				</UFormField>
@@ -112,33 +103,96 @@
 							</div>
 							<span v-else class="text-neutral-400 text-sm">{{ $t('components.shippingZoneForm.selectMethods') }}</span>
 						</template>
-
-						<template #item="{ item }">
-							<UBadge color="primary" variant="subtle" class="truncate">
-								{{ item.label }}
-							</UBadge>
-						</template>
 					</USelectMenu>
 				</UFormField>
 
 				<div v-if="state.shipping_method_ids.length > 0" class="space-y-4">
-					<p class="text-sm font-medium text-neutral-700 dark:text-neutral-200">
+					<h4 class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
 						{{ $t('components.shippingZoneForm.perMethodPricingTitle') }}
-					</p>
-					<div
-						v-for="mid in state.shipping_method_ids"
-						:key="mid"
-						class="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-lg border border-default/40 p-4 bg-elevated/30"
-					>
-						<p class="sm:col-span-2 text-sm font-medium text-primary-600 dark:text-primary-400">
-							{{ methodLabel(mid) }}
-						</p>
-						<UFormField :name="`method_pricing.${mid}.fee`" :label="$t('pages.shippingZoneFeeOverride')">
-							<UInput v-model.number="state.method_pricing[mid]!.fee" type="number" min="0" step="0.01" />
-						</UFormField>
-						<UFormField :name="`method_pricing.${mid}.estimated_days`" :label="$t('pages.shippingZoneDaysOverride')">
-							<UInput v-model.number="state.method_pricing[mid]!.estimated_days" type="number" min="0" step="1" />
-						</UFormField>
+					</h4>
+
+					<div class="flex flex-wrap items-center gap-3">
+						<UInput
+							v-model="applyAllFee"
+							:placeholder="$t('components.variantList.pricePlaceholder')"
+							type="number"
+							size="sm"
+							class="max-w-44"
+							:ui="{ base: 'ps-12' }"
+						>
+							<template #leading>
+								<span class="text-xs text-neutral-400">{{ props.feeCurrencyPrefix }}</span>
+							</template>
+						</UInput>
+						<UButton color="primary" variant="soft" size="sm" @click="applyFeeToAll">
+							{{ $t('components.variantList.applyToAll') }}
+						</UButton>
+					</div>
+
+					<div class="border border-neutral-200 dark:border-neutral-700 rounded-lg overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead class="bg-neutral-50 dark:bg-neutral-900/40 border-b border-neutral-200 dark:border-neutral-700">
+								<tr>
+									<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+										<div class="flex items-center gap-1">
+											<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0" />
+											{{ $t('components.shippingZoneForm.perMethodColumnMethod') }}
+										</div>
+									</th>
+									<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+										<div class="flex items-center gap-1">
+											<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0" />
+											{{ $t('components.shippingZoneForm.perMethodColumnEstDays') }}
+										</div>
+									</th>
+									<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700 dark:text-neutral-200">
+										<span class="text-red-500">*</span> {{ $t('components.shippingZoneForm.perMethodColumnFee') }}
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr
+									v-for="mid in state.shipping_method_ids"
+									:key="mid"
+									class="border-b border-neutral-100 dark:border-neutral-800 last:border-b-0 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/30"
+								>
+									<td class="px-3 py-2 text-neutral-900 dark:text-neutral-100 font-medium align-middle">
+										{{ methodLabel(mid) }}
+									</td>
+									<td class="px-3 py-2 align-top">
+										<UFormField v-slot="{ error }" :name="`method_pricing.${mid}.estimated_days`" :label="undefined" class="[&_.ui-form-field-label]:sr-only">
+											<UInput
+												v-model.number="state.method_pricing[mid]!.estimated_days"
+												type="number"
+												min="0"
+												step="1"
+												size="sm"
+												class="max-w-32"
+												:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+											/>
+										</UFormField>
+									</td>
+									<td class="px-3 py-2 align-top">
+										<UFormField v-slot="{ error }" :name="`method_pricing.${mid}.fee`" :label="undefined" class="[&_.ui-form-field-label]:sr-only">
+											<UInput
+												v-model.number="state.method_pricing[mid]!.fee"
+												type="number"
+												min="0"
+												step="0.01"
+												size="sm"
+												class="max-w-44"
+												:ui="{ base: 'ps-12' }"
+												:trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined"
+											>
+												<template #leading>
+													<span class="text-xs text-neutral-400">{{ props.feeCurrencyPrefix }}</span>
+												</template>
+											</UInput>
+										</UFormField>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -158,13 +212,31 @@ export type ShippingZoneFormState = {
 	state: string[];
 	postcodes_text: string;
 	shipping_method_ids: string[];
-	method_pricing: Record<string, { fee: number; estimated_days?: number }>;
+	method_pricing: Record<string, { fee: number; estimated_days: number | undefined }>;
 };
 
-const props = defineProps<{
-	state: ShippingZoneFormState;
-	methodOptions: { label: string; value: string }[];
-}>();
+const props = withDefaults(
+	defineProps<{
+		state: ShippingZoneFormState;
+		methodOptions: { label: string; value: string }[];
+		/** Display prefix on fee inputs (e.g. RM). */
+		feeCurrencyPrefix?: string;
+	}>(),
+	{ feeCurrencyPrefix: 'RM' },
+);
+
+const applyAllFee = ref<number | undefined>(undefined);
+
+function applyFeeToAll() {
+	const v = applyAllFee.value;
+	if (v === undefined || v === null) return;
+	const n = Number(v);
+	if (Number.isNaN(n)) return;
+	for (const mid of props.state.shipping_method_ids) {
+		const mp = props.state.method_pricing[mid];
+		if (mp) mp.fee = n;
+	}
+}
 
 function methodLabel(value: string): string {
 	return props.methodOptions.find((o) => o.value === value)?.label ?? value;

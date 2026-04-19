@@ -1,17 +1,27 @@
 <template>
 	<div class="w-full">
-		<UForm ref="formRef" :schema="schema" :state="formState" class="space-y-6 mb-6" @submit="submitForm">
-			<ZInputShippingZoneDetails :state="formState" :method-options="methodOptions" />
+		<UForm ref="formRef" :schema="schema" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
+			<div class="lg:col-span-9 space-y-6">
+				<ZInputShippingZoneDetailsSection :state="formState" :method-options="methodOptions" />
+			</div>
+
+			<div class="lg:col-span-3">
+				<div class="lg:sticky lg:top-4">
+					<FormShippingZoneReviewSummary :summary="reviewSummary" subtitle-key="components.shippingZoneForm.reviewSubtitleEdit" />
+				</div>
+			</div>
 		</UForm>
 	</div>
 </template>
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types';
+import { formatCurrency } from 'wemotoo-common';
 import type { z } from 'zod';
 import { UpdateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern, ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
-import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/Details.vue';
+import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
+import { parseStatesFromApi, serializeStatesForApi } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
 	zoneId: string;
@@ -43,26 +53,97 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 		.join('\n');
 };
 
+const pricingFromMethods = (z: ShippingZoneRecord): ShippingZoneFormState['method_pricing'] => {
+	const out: ShippingZoneFormState['method_pricing'] = {};
+	for (const m of z.methods ?? []) {
+		out[m.shipping_method_id] = {
+			fee: m.fee,
+			estimated_days: m.estimated_days ?? undefined,
+		};
+	}
+	return out;
+};
+
 const applyFromZone = (z: ShippingZoneRecord) => {
 	formState.name = z.name;
 	formState.is_active = z.is_active;
-	formState.country_code = z.country_code;
-	formState.state = z.state ?? '';
+	formState.country_code = 'MY';
+	formState.state = parseStatesFromApi(z.state);
 	formState.postcodes_text = patternsToText(z.postcode_patterns);
-	formState.fee_override = z.fee_override ?? undefined;
-	formState.estimated_days_override = z.estimated_days_override ?? undefined;
 	formState.shipping_method_ids = [...z.shipping_method_ids];
+	formState.method_pricing = pricingFromMethods(z);
 };
 
 const formState = reactive<ShippingZoneFormState>({
 	name: '',
 	is_active: true,
-	country_code: '',
-	state: '',
+	country_code: 'MY',
+	state: [],
 	postcodes_text: '',
-	fee_override: undefined,
-	estimated_days_override: undefined,
 	shipping_method_ids: [],
+	method_pricing: {},
+});
+
+const currencyCode = 'MYR';
+
+const countPostcodeLines = (text: string) =>
+	text
+		.split('\n')
+		.map((line) => line.trim())
+		.filter(Boolean).length;
+
+const methodsSummaryLabel = (ids: string[], options: { label: string; value: string }[]) => {
+	if (!ids.length) {
+		return t('common.notSet');
+	}
+	const labels = ids
+		.map((id) => options.find((o) => o.value === id)?.label)
+		.filter((x): x is string => Boolean(x));
+	if (!labels.length) {
+		return t('common.notSet');
+	}
+	return labels.join(', ');
+};
+
+const reviewSummary = computed(() => {
+	const n = countPostcodeLines(formState.postcodes_text ?? '');
+	const postcodesSummaryLabel = t('components.shippingZoneForm.reviewPostcodesCount', { count: n });
+
+	const pricingLines =
+		formState.shipping_method_ids.length === 0
+			? undefined
+			: formState.shipping_method_ids.map((id) => {
+					const label = methodOptions.value.find((o) => o.value === id)?.label ?? id;
+					const row = formState.method_pricing[id];
+					const feeStr =
+						row != null && !Number.isNaN(row.fee)
+							? formatCurrency(Number(row.fee), currencyCode)
+							: t('common.notSet');
+					const d = row?.estimated_days;
+					const daysStr =
+						d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
+					return `${label}: ${feeStr}${daysStr ? ` ${daysStr}` : ''}`;
+				});
+
+	const pricingSummaryLabel =
+		!pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
+
+	const methodLabelsResolved = formState.shipping_method_ids
+		.map((id) => methodOptions.value.find((o) => o.value === id)?.label)
+		.filter((x): x is string => Boolean(x));
+	const methodLabels = methodLabelsResolved.length ? methodLabelsResolved : undefined;
+
+	return {
+		name: formState.name.trim(),
+		statusLabel: t(formState.is_active ? 'common.active' : 'common.inactive'),
+		countryLabel: formState.country_code.trim().toUpperCase(),
+		stateLabel: formState.state.length ? formState.state.join(', ') : '',
+		postcodesSummaryLabel,
+		pricingSummaryLabel,
+		pricingLines,
+		methodsLabel: methodsSummaryLabel(formState.shipping_method_ids, methodOptions.value),
+		methodLabels,
+	};
 });
 
 watch(
@@ -85,18 +166,22 @@ const buildPostcodePatterns = (text: string): ShippingZonePostcodePattern[] => {
 
 const submitForm = async (event: FormSubmitEvent<Schema>) => {
 	const data = event.data;
+	const methods = data.shipping_method_ids.map((id) => ({
+		shipping_method_id: id,
+		fee: data.method_pricing[id]?.fee ?? 0,
+		estimated_days:
+			data.method_pricing[id]?.estimated_days != null &&
+			!Number.isNaN(data.method_pricing[id]!.estimated_days!)
+				? data.method_pricing[id]!.estimated_days!
+				: null,
+	}));
 	const payload = {
 		name: data.name.trim(),
 		is_active: data.is_active,
-		country_code: data.country_code,
-		state: data.state?.trim() || undefined,
+		country_code: 'MY',
+		state: serializeStatesForApi(data.state),
 		postcode_patterns: buildPostcodePatterns(data.postcodes_text ?? ''),
-		fee_override:
-			data.fee_override != null && !Number.isNaN(data.fee_override) ? data.fee_override : null,
-		estimated_days_override:
-			data.estimated_days_override != null && !Number.isNaN(data.estimated_days_override)
-				? data.estimated_days_override
-				: null,
+		methods,
 		shipping_method_ids: [...data.shipping_method_ids],
 	};
 
@@ -122,3 +207,15 @@ onMounted(async () => {
 	}
 });
 </script>
+
+<style scoped>
+html {
+	scroll-behavior: smooth;
+}
+
+@media (max-width: 640px) {
+	.space-y-6 > * + * {
+		margin-top: 1.5rem;
+	}
+}
+</style>

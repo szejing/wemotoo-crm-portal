@@ -86,10 +86,10 @@ onMounted(async () => {
 		if (m) {
 			detailMethod.value = m;
 		} else {
-			await navigateTo('/settings/shipping-methods/listing');
+			await navigateTo('/settings/shipping/methods');
 		}
 	} catch {
-		await navigateTo('/settings/shipping-methods/listing');
+		await navigateTo('/settings/shipping/methods');
 	} finally {
 		isLoading.value = false;
 	}
@@ -123,7 +123,7 @@ const confirmDelete = () => {
 			onConfirm: async () => {
 				await shippingStore.deleteShippingMethod(methodId);
 				confirmModal.close();
-				await navigateTo('/settings/shipping-methods/listing');
+				await navigateTo('/settings/shipping/methods');
 			},
 			onCancel: () => {
 				confirmModal.close();

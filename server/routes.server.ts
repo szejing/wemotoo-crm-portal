@@ -230,4 +230,11 @@ export const Routes = {
 		Update: (id: string) => `${API_PATH.SHIPPING_METHODS}/${id}`,
 		Delete: (id: string) => `${API_PATH.SHIPPING_METHODS}/${id}`,
 	},
+	ShippingZones: {
+		Many: () => `${API_PATH.SHIPPING_ZONES}/many`,
+		Create: () => `${API_PATH.SHIPPING_ZONES}/`,
+		Single: (id: string) => `${API_PATH.SHIPPING_ZONES}/${id}`,
+		Update: (id: string) => `${API_PATH.SHIPPING_ZONES}/${id}`,
+		Delete: (id: string) => `${API_PATH.SHIPPING_ZONES}/${id}`,
+	},
 };

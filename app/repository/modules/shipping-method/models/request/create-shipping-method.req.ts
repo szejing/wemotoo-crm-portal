@@ -5,8 +5,6 @@ export type CreateShippingMethodReq = {
 	/** If omitted, the client may generate a unique code from the name. */
 	code?: string;
 	name: string;
-	fee: number;
-	estimated_days?: number;
 	priority?: number;
 	zone?: Record<string, unknown>;
 	zones?: ShippingZoneRule[];

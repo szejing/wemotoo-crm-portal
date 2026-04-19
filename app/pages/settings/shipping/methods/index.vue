@@ -1,7 +1,7 @@
 <template>
 	<ZPagePanel id="settings-shipping-methods" :title="$t('pages.shippingMethods')" back-to="/settings/shipping">
 		<template #navbar-right>
-			<ZCreateButton to="/settings/shipping-methods/create" :label="$t('common.create')" />
+			<ZCreateButton to="/settings/shipping/methods/create" :label="$t('common.create')" />
 		</template>
 		<template #toolbar>
 			<ZSectionFilterShippingMethods />
@@ -60,7 +60,7 @@ const { loading, getDisplayMethods, total_shipping_methods, filter, exporting } 
 const initialize = ref(true);
 
 const selectMethod = (_e: Event, row: TableRow<ShippingMethodOption>) => {
-	void navigateTo(`/settings/shipping-methods/${row.original.id}`);
+	void navigateTo(`/settings/shipping/methods/${row.original.id}`);
 };
 
 const updatePage = async (page: number) => {
