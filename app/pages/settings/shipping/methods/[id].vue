@@ -68,21 +68,25 @@ const detailMethod = ref<ShippingMethodOption | undefined>();
 const isLoading = ref(true);
 
 const panelTitle = computed(() => {
-	const name = detailMethod.value?.name;
-	if (name) {
-		return `${t('pages.editShippingMethodTitle')}: ${name}`;
+	const label = detailMethod.value?.description;
+	if (label) {
+		return `${t('pages.editShippingMethodTitle')}: ${label}`;
 	}
 	return t('pages.editShippingMethodTitle');
 });
 
 useHead({
-	title: () => (detailMethod.value ? `${t('pages.editShippingMethodPageTitle')} — ${detailMethod.value.name}` : t('pages.editShippingMethodPageTitle')),
+	title: () =>
+		detailMethod.value
+			? `${t('pages.editShippingMethodPageTitle')} — ${detailMethod.value.description}`
+			: t('pages.editShippingMethodPageTitle'),
 });
 
 onMounted(async () => {
 	isLoading.value = true;
 	try {
 		const m = await shippingStore.getShippingMethod(id.value);
+
 		if (m) {
 			detailMethod.value = m;
 		} else {

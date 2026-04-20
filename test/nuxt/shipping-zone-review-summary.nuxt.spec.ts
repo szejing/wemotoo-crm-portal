@@ -7,7 +7,9 @@ describe('FormShippingZoneReviewSummary', () => {
 		const wrapper = await mountSuspended(FormShippingZoneReviewSummary, {
 			props: {
 				summary: {
-					name: 'West',
+					code: 'west',
+					description: 'West',
+					rule: 0,
 					statusLabel: 'Active',
 					countryLabel: 'MY',
 					stateLabel: 'Selangor',
@@ -28,7 +30,9 @@ describe('FormShippingZoneReviewSummary', () => {
 		const wrapper = await mountSuspended(FormShippingZoneReviewSummary, {
 			props: {
 				summary: {
-					name: 'Zone A',
+					code: 'zone-a',
+					description: 'Zone A',
+					rule: 1,
 					statusLabel: 'Active',
 					countryLabel: 'MY',
 					stateLabel: 'KL',

@@ -22,8 +22,8 @@
 				</h4>
 				<dl class="space-y-2.5 text-sm">
 					<div class="flex justify-between gap-2">
-						<dt class="text-muted shrink-0">{{ $t('common.name') }}</dt>
-						<dd class="font-medium text-default truncate text-right">{{ summary.name || $t('common.notSet') }}</dd>
+						<dt class="text-muted shrink-0">{{ $t('common.description') }}</dt>
+						<dd class="font-medium text-default truncate text-right">{{ summary.description || $t('common.notSet') }}</dd>
 					</div>
 					<div class="flex justify-between gap-2">
 						<dt class="text-muted shrink-0">{{ $t('pages.shippingPriority') }}</dt>
@@ -43,7 +43,7 @@
 import { ICONS } from '~/utils/icons';
 
 export interface ShippingMethodReviewSummary {
-	name: string;
+	description: string;
 	priorityLabel: string;
 	statusLabel: string;
 }

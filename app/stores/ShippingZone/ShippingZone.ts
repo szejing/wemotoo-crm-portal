@@ -35,22 +35,27 @@ function mapShippingZoneFromApi(raw: Record<string, unknown>): ShippingZoneRecor
 		};
 	});
 	const shipping_method_ids = methods.map((m) => m.shipping_method_id);
-	const pricing_summary = links
+		const pricing_summary = links
 		.map((l) => {
 			const sm = l.shipping_method as Record<string, unknown> | undefined;
-			const name = String(sm?.name ?? '');
+			const label = String(sm?.description ?? sm?.name ?? '');
 			const feeRaw = l.fee ?? l.fee_override;
 			const fee = typeof feeRaw === 'string' ? Number(feeRaw) : Number(feeRaw ?? 0);
-			return name ? `${name}: ${fee}` : String(fee);
+			return label ? `${label}: ${fee}` : String(fee);
 		})
 		.join(' · ');
 
 	const activeRaw = raw.is_active;
 	const is_active = activeRaw === false || activeRaw === 0 ? false : true;
 
+	const ruleRaw = raw.rule ?? raw.rule_priority;
+	const rule = typeof ruleRaw === 'number' && !Number.isNaN(ruleRaw) ? ruleRaw : Number(ruleRaw ?? 0);
+
 	return {
 		id: String(raw.id),
-		name: String(raw.name ?? ''),
+		code: String(raw.code ?? ''),
+		description: raw.description != null ? String(raw.description) : undefined,
+		rule,
 		is_active,
 		country_code: String(raw.country_code ?? 'MY').toUpperCase(),
 		state: raw.state != null ? String(raw.state) : undefined,
@@ -108,10 +113,11 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 				const q = this.filter.query.trim().toLowerCase();
 				if (q) {
 					list = list.filter((z) => {
-						const name = z.name.toLowerCase();
+						const code = z.code.toLowerCase();
+						const desc = (z.description ?? '').toLowerCase();
 						const cc = z.country_code.toLowerCase();
 						const st = (z.state ?? '').toLowerCase();
-						return name.includes(q) || cc.includes(q) || st.includes(q);
+						return code.includes(q) || desc.includes(q) || cc.includes(q) || st.includes(q);
 					});
 				}
 				if (this.filter.status === 'active') {

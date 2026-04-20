@@ -32,14 +32,14 @@ const shippingStore = useShippingMethodStore();
 const { t } = useI18n();
 
 type ShippingMethodFormState = {
-	name: string;
+	description: string;
 	priority: number;
 	is_active: boolean;
 	zone_rows: unknown[];
 };
 
 const formState = reactive<ShippingMethodFormState>({
-	name: '',
+	description: '',
 	priority: 1,
 	is_active: true,
 	zone_rows: [],
@@ -52,7 +52,7 @@ const reviewSubtitleKey = computed(() =>
 );
 
 const reviewSummary = computed(() => ({
-	name: formState.name.trim(),
+	description: formState.description.trim(),
 	priorityLabel: String(Number(formState.priority) || 1),
 	statusLabel: t(formState.is_active ? 'common.active' : 'common.inactive'),
 }));
@@ -62,13 +62,13 @@ const formRef = ref<{ submit: () => void } | null>(null);
 const isEditing = computed(() => props.mode === 'edit' && Boolean(props.methodId));
 
 const applyFromMethod = (m: ShippingMethodOption) => {
-	formState.name = m.name;
+	formState.description = m.description;
 	formState.priority = m.priority ?? 1;
 	formState.is_active = m.is_active;
 };
 
 const resetForCreate = () => {
-	formState.name = '';
+	formState.description = '';
 	formState.priority = 1;
 	formState.is_active = true;
 };
@@ -95,7 +95,7 @@ watch(
 
 const submitForm = async (_event: FormSubmitEvent<ShippingMethodFormState>) => {
 	const payload = {
-		name: formState.name.trim(),
+		description: formState.description.trim(),
 		priority: Number(formState.priority) || 1,
 		is_active: formState.is_active,
 	};

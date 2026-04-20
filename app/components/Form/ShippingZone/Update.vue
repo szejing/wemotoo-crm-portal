@@ -65,7 +65,9 @@ const pricingFromMethods = (z: ShippingZoneRecord): ShippingZoneFormState['metho
 };
 
 const applyFromZone = (z: ShippingZoneRecord) => {
-	formState.name = z.name;
+	formState.code = z.code;
+	formState.description = z.description ?? '';
+	formState.rule = z.rule ?? 0;
 	formState.is_active = z.is_active;
 	formState.country_code = 'MY';
 	formState.state = parseStatesFromApi(z.state);
@@ -75,7 +77,9 @@ const applyFromZone = (z: ShippingZoneRecord) => {
 };
 
 const formState = reactive<ShippingZoneFormState>({
-	name: '',
+	code: '',
+	description: '',
+	rule: 0,
 	is_active: true,
 	country_code: 'MY',
 	state: [],
@@ -134,7 +138,9 @@ const reviewSummary = computed(() => {
 	const methodLabels = methodLabelsResolved.length ? methodLabelsResolved : undefined;
 
 	return {
-		name: formState.name.trim(),
+		code: formState.code.trim(),
+		description: formState.description.trim(),
+		rule: Number(formState.rule) || 0,
 		statusLabel: t(formState.is_active ? 'common.active' : 'common.inactive'),
 		countryLabel: formState.country_code.trim().toUpperCase(),
 		stateLabel: formState.state.length ? formState.state.join(', ') : '',
@@ -176,7 +182,9 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 				: null,
 	}));
 	const payload = {
-		name: data.name.trim(),
+		code: data.code.trim(),
+		description: data.description.trim() || undefined,
+		rule: data.rule ?? 0,
 		is_active: data.is_active,
 		country_code: 'MY',
 		state: serializeStatesForApi(data.state),
@@ -199,7 +207,7 @@ onMounted(async () => {
 	try {
 		const methods = await shippingMethodStore.fetchAllShippingMethods();
 		methodOptions.value = methods.map((m) => ({
-			label: m.name,
+			label: m.description,
 			value: m.id,
 		}));
 	} catch {

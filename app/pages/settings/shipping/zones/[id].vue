@@ -64,15 +64,18 @@ const detailZone = ref<ShippingZoneRecord | undefined>();
 const isLoading = ref(true);
 
 const panelTitle = computed(() => {
-	const name = detailZone.value?.name;
-	if (name) {
-		return `${t('pages.editShippingZoneTitle')}: ${name}`;
+	const label = detailZone.value?.description || detailZone.value?.code;
+	if (label) {
+		return `${t('pages.editShippingZoneTitle')}: ${label}`;
 	}
 	return t('pages.editShippingZoneTitle');
 });
 
 useHead({
-	title: () => (detailZone.value ? `${t('pages.editShippingZonePageTitle')} — ${detailZone.value.name}` : t('pages.editShippingZonePageTitle')),
+	title: () =>
+		detailZone.value
+			? `${t('pages.editShippingZonePageTitle')} — ${detailZone.value.description || detailZone.value.code}`
+			: t('pages.editShippingZonePageTitle'),
 });
 
 onMounted(async () => {

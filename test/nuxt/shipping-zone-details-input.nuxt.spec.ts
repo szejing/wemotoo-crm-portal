@@ -7,7 +7,9 @@ import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/De
 describe('ZInputShippingZoneDetails', () => {
 	it('renders zone details section', async () => {
 		const state = reactive<ShippingZoneFormState>({
-			name: '',
+			code: '',
+			description: '',
+			rule: 0,
 			is_active: true,
 			country_code: '',
 			state: [],
@@ -28,6 +30,6 @@ describe('ZInputShippingZoneDetails', () => {
 
 		expect(wrapper.find('#section-shipping-zone-details').exists()).toBe(true);
 		expect(wrapper.text()).toContain('Select states');
-		expect(wrapper.text()).toContain('How your team will recognize this zone in admin.');
+		expect(wrapper.text()).toContain('Stable identifier for this zone');
 	});
 });

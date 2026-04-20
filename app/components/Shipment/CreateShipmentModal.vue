@@ -50,7 +50,10 @@ const applyInitialValue = () => {
 
 const methodOptions = computed(() =>
 	props.methods.map((method) => ({
-		label: `${method.name} (${method.fee})`,
+		label:
+			method.fee != null && !Number.isNaN(Number(method.fee))
+				? `${method.description} (${method.fee})`
+				: method.description,
 		value: method.id,
 	})),
 );

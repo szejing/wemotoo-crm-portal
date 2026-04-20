@@ -22,8 +22,16 @@
 				</h4>
 				<dl class="space-y-0 text-sm divide-y divide-default/10">
 					<div class="py-3.5 first:pt-0 last:pb-0">
-						<dt class="text-xs font-medium text-muted mb-1.5">{{ $t('common.name') }}</dt>
-						<dd class="font-medium text-default leading-relaxed wrap-break-word">{{ summary.name || $t('common.notSet') }}</dd>
+						<dt class="text-xs font-medium text-muted mb-1.5">{{ $t('common.code') }}</dt>
+						<dd class="font-medium text-default leading-relaxed wrap-break-word font-mono">{{ summary.code || $t('common.notSet') }}</dd>
+					</div>
+					<div class="py-3.5 first:pt-0 last:pb-0">
+						<dt class="text-xs font-medium text-muted mb-1.5">{{ $t('common.description') }}</dt>
+						<dd class="font-medium text-default leading-relaxed wrap-break-word">{{ summary.description || $t('common.notSet') }}</dd>
+					</div>
+					<div class="py-3.5 first:pt-0 last:pb-0">
+						<dt class="text-xs font-medium text-muted mb-1.5">{{ $t('pages.shippingZoneRule') }}</dt>
+						<dd class="font-medium text-default leading-relaxed wrap-break-word">{{ summary.rule }}</dd>
 					</div>
 					<div class="py-3.5 first:pt-0 last:pb-0">
 						<dt class="text-xs font-medium text-muted mb-1.5">{{ $t('common.status') }}</dt>
@@ -65,7 +73,9 @@ import { SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS } from '~/utils/data/mal
 import { ICONS } from '~/utils/icons';
 
 export interface ShippingZoneReviewSummary {
-	name: string;
+	code: string;
+	description: string;
+	rule: number;
 	statusLabel: string;
 	countryLabel: string;
 	stateLabel: string;

@@ -241,7 +241,8 @@
 			"descriptionRequired": "Description is required"
 		},
 		"shippingZone": {
-			"nameRequired": "Zone name is required",
+			"codeRequired": "Zone code is required",
+			"codeMax32": "Zone code must be at most 32 characters",
 			"countryInvalid": "Country must be a 2-letter ISO code",
 			"stateRequired": "State is required",
 			"methodsRequired": "Select at least one shipping method"
@@ -342,6 +343,7 @@
 		"shippingZoneState": "State / province",
 		"shippingZonePostcodes": "Postcodes (one per line, exact match)",
 		"shippingZoneRulePriority": "Rule priority",
+		"shippingZoneRule": "Rule (tie-break)",
 		"shippingZoneDefault": "Country-wide default (no state/postcodes)",
 		"shippingZoneFeeOverride": "Fee override (optional)",
 		"shippingZoneDaysOverride": "Estimated days override (optional)",
@@ -982,11 +984,11 @@
 			"reviewSubtitleEdit": "Summary of this method before you save",
 			"reviewZonesCount": "{count} zone rule(s)",
 			"reviewZonesAll": "All regions (no zone restrictions)",
-			"detailsSectionSubtitle": "Name this method and set priority and status. Fees and delivery times are set per shipping zone.",
+			"detailsSectionSubtitle": "Describe this method and set priority and status. Fees and delivery times are set per shipping zone.",
 			"regionsSectionTitle": "Shipping regions",
 			"regionsSectionSubtitle": "Optionally limit where this method applies and configure zone rules.",
 			"fieldHints": {
-				"name": "Label shown in checkout and admin.",
+				"description": "Label shown in checkout and admin.",
 				"priority": "Lower numbers rank first when several methods apply to an address.",
 				"status": "Turn off to hide this method from checkout.",
 				"fee": "Set in each zone that offers this method.",
@@ -995,7 +997,7 @@
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Zone details",
-			"detailsSubtitle": "Set the zone name, region, methods customers can use, and fees.",
+			"detailsSubtitle": "Set the zone code, region, methods customers can use, and fees.",
 			"supportedMethods": "Supported shipping methods",
 			"selectMethods": "Select methods",
 			"perMethodPricingTitle": "Fee and delivery by method",
@@ -1012,7 +1014,9 @@
 			"selectState": "Select state",
 			"selectStates": "Select states",
 			"fieldHints": {
-				"name": "How your team will recognize this zone in admin.",
+				"code": "Stable identifier for this zone (unique). Used in APIs and imports.",
+				"description": "Optional label your team sees in admin and pricing summaries.",
+				"rule": "Higher values win when two zone rules match the same address specificity.",
 				"status": "Turn off to hide this zone at checkout.",
 				"country": "2-letter code (e.g. MY).",
 				"state": "States or regions included in this zone.",

@@ -241,7 +241,8 @@
 			"descriptionRequired": "Keterangan wajib"
 		},
 		"shippingZone": {
-			"nameRequired": "Nama zon wajib",
+			"codeRequired": "Kod zon wajib",
+			"codeMax32": "Kod zon mestilah tidak melebihi 32 aksara",
 			"countryInvalid": "Negara mestilah kod ISO 2 huruf",
 			"stateRequired": "Negeri wajib dipilih",
 			"methodsRequired": "Pilih sekurang-kurangnya satu kaedah penghantaran"
@@ -342,6 +343,7 @@
 		"shippingZoneState": "Negeri / wilayah",
 		"shippingZonePostcodes": "Poskod (satu setiap baris, padanan tepat)",
 		"shippingZoneRulePriority": "Keutamaan peraturan",
+		"shippingZoneRule": "Peraturan (tie-break)",
 		"shippingZoneDefault": "Lalai seluruh negara (tiada negeri/poskod)",
 		"shippingZoneFeeOverride": "Ganti yuran (pilihan)",
 		"shippingZoneDaysOverride": "Ganti anggaran hari (pilihan)",
@@ -981,11 +983,11 @@
 			"reviewSubtitleEdit": "Ringkasan kaedah ini sebelum anda simpan",
 			"reviewZonesCount": "{count} peraturan zon",
 			"reviewZonesAll": "Semua wilayah (tiada had zon)",
-			"detailsSectionSubtitle": "Namakan kaedah ini dan tetapkan keutamaan serta status. Yuran dan masa penghantaran ditetapkan bagi setiap zon penghantaran.",
+			"detailsSectionSubtitle": "Terangkan kaedah ini dan tetapkan keutamaan serta status. Yuran dan masa penghantaran ditetapkan bagi setiap zon penghantaran.",
 			"regionsSectionTitle": "Wilayah penghantaran",
 			"regionsSectionSubtitle": "Secara pilihan, hadkan kawasan untuk kaedah ini dan konfigurasi peraturan zon.",
 			"fieldHints": {
-				"name": "Label dipaparkan di checkout dan pentadbiran.",
+				"description": "Label dipaparkan di checkout dan pentadbiran.",
 				"priority": "Nombor lebih kecil didahulukan jika beberapa kaedah terpakai untuk satu alamat.",
 				"status": "Matikan untuk sembunyikan kaedah ini di checkout.",
 				"fee": "Tetapkan dalam setiap zon yang menawarkan kaedah ini.",
@@ -994,7 +996,7 @@
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Butiran zon",
-			"detailsSubtitle": "Tetapkan nama zon, wilayah, kaedah yang pelanggan boleh guna, dan yuran.",
+			"detailsSubtitle": "Tetapkan kod zon, wilayah, kaedah yang pelanggan boleh guna, dan yuran.",
 			"supportedMethods": "Kaedah penghantaran yang disokong",
 			"selectMethods": "Pilih kaedah",
 			"perMethodPricingTitle": "Yuran dan penghantaran mengikut kaedah",
@@ -1011,7 +1013,9 @@
 			"selectState": "Pilih negeri",
 			"selectStates": "Pilih negeri",
 			"fieldHints": {
-				"name": "Cara pasukan anda mengenal pasti zon ini dalam pentadbiran.",
+				"code": "Pengecam stabil untuk zon ini (unik). Digunakan dalam API dan import.",
+				"description": "Label pilihan pasukan anda lihat dalam pentadbiran dan ringkasan harga.",
+				"rule": "Nilai lebih tinggi menang jika dua peraturan zon sepadan dengan spesifisiti alamat yang sama.",
 				"status": "Matikan untuk sembunyikan zon ini di checkout.",
 				"country": "Dua huruf (cth. MY).",
 				"state": "Negeri atau wilayah yang termasuk dalam zon ini.",

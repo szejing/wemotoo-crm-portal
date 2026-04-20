@@ -39,7 +39,9 @@ const formRef = ref<{ submit: () => void } | null>(null);
 const methodOptions = ref<{ label: string; value: string }[]>([]);
 
 const emptyState = (): ShippingZoneFormState => ({
-	name: '',
+	code: '',
+	description: '',
+	rule: 0,
 	is_active: true,
 	country_code: 'MY',
 	state: [],
@@ -98,7 +100,9 @@ const reviewSummary = computed(() => {
 	const methodLabels = methodLabelsResolved.length ? methodLabelsResolved : undefined;
 
 	return {
-		name: formState.name.trim(),
+		code: formState.code.trim(),
+		description: formState.description.trim(),
+		rule: Number(formState.rule) || 0,
 		statusLabel: t(formState.is_active ? 'common.active' : 'common.inactive'),
 		countryLabel: formState.country_code.trim().toUpperCase(),
 		stateLabel: formState.state.length ? formState.state.join(', ') : '',
@@ -130,7 +134,9 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 				: null,
 	}));
 	const payload = {
-		name: data.name.trim(),
+		code: data.code.trim(),
+		description: data.description.trim() || undefined,
+		rule: data.rule ?? 0,
 		is_active: data.is_active,
 		country_code: 'MY',
 		state: serializeStatesForApi(data.state),
@@ -154,7 +160,7 @@ onMounted(async () => {
 	try {
 		const methods = await shippingMethodStore.fetchAllShippingMethods();
 		methodOptions.value = methods.map((m) => ({
-			label: m.name,
+			label: m.description,
 			value: m.id,
 		}));
 	} catch {

@@ -6,7 +6,7 @@ import ZInputShippingMethodDetailsSection from '~/components/Z/Input/ShippingMet
 describe('ZInputShippingMethodDetailsSection', () => {
 	it('renders the shipping method details section and field hints', async () => {
 		const state = reactive({
-			name: '',
+			description: '',
 			priority: 1,
 			is_active: true,
 			zone_rows: [],

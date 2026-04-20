@@ -17,11 +17,12 @@ export type ShippingZonePostcodePattern = {
 };
 
 export type ShippingZoneRule = {
-	name?: string;
+	code: string;
+	description?: string | null;
 	country_code: string;
 	state?: string;
 	postcode_patterns: ShippingZonePostcodePattern[];
-	rule_priority?: number;
+	rule?: number;
 	is_default?: boolean;
 	fee_override: number;
 	estimated_days_override?: number | null;
@@ -33,11 +34,12 @@ export type ShippingMethodZoneLink = {
 	estimated_days?: number;
 	shipping_zone?: {
 		id: string;
-		name?: string;
+		code: string;
+		description?: string;
 		country_code: string;
 		state?: string;
 		postcode_patterns: ShippingZonePostcodePattern[];
-		rule_priority: number;
+		rule: number;
 		is_default: boolean;
 	};
 };
@@ -45,7 +47,9 @@ export type ShippingMethodZoneLink = {
 export type ShippingMethodOption = {
 	id: string;
 	code?: string;
-	name: string;
+	description: string;
+	/** Present when methods are enriched for shipment UI (e.g. resolved fee). */
+	fee?: number;
 	currency_code?: string;
 	priority?: number;
 	/** @deprecated Prefer method_zones */
@@ -56,7 +60,9 @@ export type ShippingMethodOption = {
 
 /** Editable fields for a merchant shipping zone (standalone CRUD). */
 export type ShippingZoneMutableFields = {
-	name: string;
+	code: string;
+	description?: string;
+	rule?: number;
 	is_active: boolean;
 	country_code: string;
 	state?: string;

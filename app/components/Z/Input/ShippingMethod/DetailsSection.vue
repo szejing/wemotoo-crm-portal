@@ -15,9 +15,9 @@
 
 			<div class="space-y-6 py-2 px-4">
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<UFormField :label="$t('common.name')">
-						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.name') }}</p>
-						<UInput v-model="state.name" />
+					<UFormField :label="$t('common.description')">
+						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.description') }}</p>
+						<UInput v-model="state.description" />
 					</UFormField>
 
 					<UFormField :label="$t('pages.shippingPriority')">
@@ -41,7 +41,7 @@ import { ICONS } from '~/utils/icons';
 
 /** Parent forms may still carry zone_rows for submit; this component only edits core method fields. */
 type ShippingMethodFormState = {
-	name: string;
+	description: string;
 	priority: number;
 	is_active: boolean;
 	zone_rows: unknown[];

@@ -216,7 +216,7 @@ describe('ShippingMethodModule', () => {
 		setMockFetch(async () => ({ method: { id: 'm1' } }));
 
 		const mod = new ShippingMethodModule();
-		const payload = { merchant_id: 'm1', code: 'STD', name: 'Standard', priority: 1 };
+		const payload = { merchant_id: 'm1', code: 'STD', description: 'Standard', priority: 1 };
 		await mod.create(payload);
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Create());
@@ -254,7 +254,7 @@ describe('ShippingMethodModule', () => {
 		setMockFetch(async () => ({ method: { id: 'm1' } }));
 
 		const mod = new ShippingMethodModule();
-		const payload = { merchant_id: 'merchant-1', name: 'Express' };
+		const payload = { merchant_id: 'merchant-1', description: 'Express' };
 		await mod.update('m1', payload);
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Single('m1'));
@@ -290,7 +290,8 @@ describe('ShippingZoneModule', () => {
 		const mod = new ShippingZoneModule();
 		const payload = {
 			merchant_id: 'm1',
-			name: 'West',
+			code: 'west-my',
+			description: 'West',
 			country_code: 'MY',
 			methods: [{ shipping_method_id: 'sm1', fee: 5, estimated_days: 2 }],
 		};
@@ -315,7 +316,7 @@ describe('ShippingZoneModule', () => {
 		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
 
 		const mod = new ShippingZoneModule();
-		const payload = { merchant_id: 'm1', name: 'Renamed' };
+		const payload = { merchant_id: 'm1', description: 'Renamed' };
 		await mod.update('z1', payload);
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Update('z1'));

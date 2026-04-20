@@ -137,7 +137,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('loads shipping methods into state with OData pagination', async () => {
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', name: 'Standard', priority: 1, is_active: true }],
+			data: [{ id: '1', description: 'Standard', priority: 1, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -145,7 +145,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 		await store.getShippingMethods();
 
 		expect(store.getDisplayMethods).toHaveLength(1);
-		expect(store.methods[0]?.name).toBe('Standard');
+		expect(store.methods[0]?.description).toBe('Standard');
 		expect(store.total_shipping_methods).toBe(1);
 		expect(store.loading).toBe(false);
 		expect(apiMock.shippingMethod.getMany).toHaveBeenCalledWith(
@@ -159,7 +159,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('refetches when inactive filter is applied', async () => {
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '2', name: 'Express', priority: 2, is_active: false, code: 'EXP' }],
+			data: [{ id: '2', description: 'Express', priority: 2, is_active: false, code: 'EXP' }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -167,7 +167,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 		await store.getShippingMethods();
 
 		expect(store.methods).toHaveLength(1);
-		expect(store.methods[0]?.name).toBe('Express');
+		expect(store.methods[0]?.description).toBe('Express');
 		expect(apiMock.shippingMethod.getMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				$filter: 'is_active eq false',
@@ -177,27 +177,27 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('creates a shipping method', async () => {
 		apiMock.shippingMethod.create.mockResolvedValue({
-			method: { id: '1', name: 'Standard', is_active: true },
+			shipping_method: { id: '1', description: 'Standard', is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', name: 'Standard', is_active: true }],
+			data: [{ id: '1', description: 'Standard', is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
 		const method = await store.createShippingMethod({
-			name: 'Standard',
+			description: 'Standard',
 			priority: 1,
 			is_active: true,
 		});
 
-		expect(method?.name).toBe('Standard');
+		expect(method?.description).toBe('Standard');
 		expect(store.adding).toBe(false);
 		expect(successNotification).toHaveBeenCalled();
 		expect(apiMock.shippingMethod.create).toHaveBeenCalledWith(
 			expect.objectContaining({
 				merchant_id: 'm1',
-				name: 'Standard',
+				description: 'Standard',
 				priority: 1,
 				code: expect.stringMatching(/^STANDARD_/),
 			}),
@@ -206,35 +206,35 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('updates a shipping method', async () => {
 		apiMock.shippingMethod.update.mockResolvedValue({
-			method: { id: '1', name: 'Express', priority: 2, is_active: true },
+			shipping_method: { id: '1', description: 'Express', priority: 2, is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', name: 'Express', priority: 2, is_active: true }],
+			data: [{ id: '1', description: 'Express', priority: 2, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
 		const method = await store.updateShippingMethod('1', {
-			name: 'Express',
+			description: 'Express',
 			priority: 2,
 		});
 
-		expect(method?.name).toBe('Express');
+		expect(method?.description).toBe('Express');
 		expect(store.updating).toBe(false);
 		expect(successNotification).toHaveBeenCalled();
 	});
 
 	it('updates shipping method active status from the table switch', async () => {
 		apiMock.shippingMethod.update.mockResolvedValue({
-			method: { id: '1', name: 'Express', priority: 2, is_active: false },
+			shipping_method: { id: '1', description: 'Express', priority: 2, is_active: false },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', name: 'Express', priority: 2, is_active: false }],
+			data: [{ id: '1', description: 'Express', priority: 2, is_active: false }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
 
-		await store.updateStatus({ id: '1', name: 'Express', is_active: true }, false);
+		await store.updateStatus({ id: '1', description: 'Express', is_active: true }, false);
 
 		expect(apiMock.shippingMethod.update).toHaveBeenCalledWith('1', expect.objectContaining({ merchant_id: 'm1', is_active: false }));
 		expect(store.updating).toBe(false);
@@ -244,13 +244,13 @@ describe('fulfillment/shipment/shipping stores', () => {
 	it('fetches all shipping methods without replacing paginated listing', async () => {
 		apiMock.shippingMethod.getMany
 			.mockResolvedValueOnce({
-				data: [{ id: '1', name: 'Standard', priority: 1, is_active: true }],
+				data: [{ id: '1', description: 'Standard', priority: 1, is_active: true }],
 				count: 1,
 			})
 			.mockResolvedValueOnce({
 				data: [
-					{ id: '1', name: 'Standard', priority: 1, is_active: true },
-					{ id: '2', name: 'Express', priority: 2, is_active: true },
+					{ id: '1', description: 'Standard', priority: 1, is_active: true },
+					{ id: '2', description: 'Express', priority: 2, is_active: true },
 				],
 				count: 2,
 			});
@@ -266,14 +266,14 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('deletes a shipping method', async () => {
 		apiMock.shippingMethod.remove.mockResolvedValue({
-			method: { id: '1', name: 'Standard', priority: 1, is_active: true },
+			shipping_method: { id: '1', description: 'Standard', priority: 1, is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
 			data: [],
 			count: 0,
 		});
 		const store = useShippingMethodStore();
-		store.methods = [{ id: '1', name: 'Standard', priority: 1, is_active: true }];
+		store.methods = [{ id: '1', description: 'Standard', priority: 1, is_active: true }];
 
 		await store.deleteShippingMethod('1');
 

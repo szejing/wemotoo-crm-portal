@@ -31,7 +31,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 		exporting: false as boolean,
 		methods: [] as ShippingMethodOption[],
 		total_shipping_methods: 0 as number,
-		lastMethod: undefined as ShippingMethodOption | undefined,
+		current_shipping_method: undefined as ShippingMethodOption | undefined,
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
@@ -55,7 +55,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			await this.getShippingMethods();
 		},
 
-		async fetchShippingMethods(append = false) {
+		async getShippingMethods(append = false) {
 			const { $api } = useNuxtApp();
 
 			try {
@@ -63,7 +63,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
-					$orderby: 'updated_at desc',
+					$orderby: 'priority desc',
 				};
 
 				const q = this.filter.query.trim();
@@ -92,16 +92,6 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			}
 		},
 
-		async getShippingMethods() {
-			this.loading = true;
-
-			try {
-				await this.fetchShippingMethods(false);
-			} finally {
-				this.loading = false;
-			}
-		},
-
 		async loadMoreShippingMethods() {
 			if (this.loading || this.methods.length >= this.total_shipping_methods) return;
 
@@ -109,7 +99,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			this.filter.current_page += 1;
 
 			try {
-				await this.fetchShippingMethods(true);
+				await this.getShippingMethods(true);
 			} finally {
 				this.loading = false;
 			}
@@ -123,7 +113,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 				const resp = await $api.shippingMethod.getMany({
 					$top: 500,
 					$count: true,
-					$orderby: 'name asc',
+					$orderby: 'description asc',
 				});
 				return resp.data ?? resp.value ?? [];
 			} catch (err: unknown | ErrorResponse) {
@@ -166,8 +156,8 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 				const response = await $api.shippingMethod.getSingle(id, {
 					defaultRelations: ['method_zones', 'method_zones.shipping_zone'],
 				});
-				this.lastMethod = response.method;
-				return response.method;
+				this.current_shipping_method = response.shipping_method;
+				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load shipping method';
 				failedNotification(message);
@@ -182,8 +172,8 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.adding = true;
 
-			const buildShippingMethodCode = (name: string): string => {
-				const core = name
+			const buildShippingMethodCode = (description: string): string => {
+				const core = description
 					.trim()
 					.toUpperCase()
 					.replace(/[^A-Z0-9]+/g, '_')
@@ -197,12 +187,12 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 				const response = await $api.shippingMethod.create({
 					merchant_id: String(merchant_id ?? ''),
 					...payload,
-					code: payload.code ?? buildShippingMethodCode(payload.name),
+					code: payload.code ?? buildShippingMethodCode(payload.description),
 				});
-				this.lastMethod = response.method;
+				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
 				successNotification('Shipping method created');
-				return response.method;
+				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to create shipping method';
 				failedNotification(message);
@@ -226,10 +216,10 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 					merchant_id: String(merchant_id ?? ''),
 					...payload,
 				});
-				this.lastMethod = response.method;
+				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
 				successNotification('Shipping method updated');
-				return response.method;
+				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to update shipping method';
 				failedNotification(message);
@@ -245,10 +235,10 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 
 			try {
 				const response = await $api.shippingMethod.remove(id);
-				this.lastMethod = response.method;
+				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
 				successNotification('Shipping method deleted');
-				return response.method;
+				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to delete shipping method';
 				failedNotification(message);

@@ -2,9 +2,9 @@ import type { ShippingZoneRule } from '~/utils/types/order-fulfillment-shipping'
 
 export type CreateShippingMethodReq = {
 	merchant_id: string;
-	/** If omitted, the client may generate a unique code from the name. */
+	/** If omitted, the client may generate a unique code from the description. */
 	code?: string;
-	name: string;
+	description: string;
 	priority?: number;
 	zone?: Record<string, unknown>;
 	zones?: ShippingZoneRule[];

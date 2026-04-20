@@ -13,9 +13,34 @@ const DEFAULT_ZONE_CURRENCY = 'MYR';
 export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZoneRecord>[] {
 	return [
 		{
-			accessorKey: 'name',
-			/** Call `t` when the header renders so lazy-loaded locale messages are available. */
-			header: () => t('table.shippingZoneName'),
+			id: 'code_description',
+			accessorKey: 'code',
+			header: () => `${t('common.code')} / ${t('common.description')}`,
+			cell: ({ row }) => {
+				const code = row.original.code?.trim();
+				const description = row.original.description?.trim();
+				const children: ReturnType<typeof h>[] = [];
+				if (code) {
+					children.push(
+						h(
+							UBadge,
+							{
+								variant: 'subtle',
+								color: 'neutral',
+								size: 'sm',
+								class: 'shrink-0 font-mono uppercase tracking-wide',
+							},
+							() => code,
+						),
+					);
+				} else {
+					children.push(h('span', { class: 'text-muted' }, '—'));
+				}
+				if (description) {
+					children.push(h('span', {}, description));
+				}
+				return h('div', { class: 'flex flex-col gap-1 items-start min-w-0' }, children);
+			},
 		},
 		{
 			id: 'region',
