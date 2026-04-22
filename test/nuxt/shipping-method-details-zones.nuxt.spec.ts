@@ -18,7 +18,7 @@ describe('ZInputShippingMethodDetailsSection', () => {
 
 		expect(wrapper.find('#section-shipping-method-details').exists()).toBe(true);
 		expect(wrapper.text()).toContain('Priority');
-		expect(wrapper.text()).toContain('Label shown in checkout and admin.');
-		expect(wrapper.text()).toContain('Lower numbers rank first when several methods apply to an address.');
+		expect(wrapper.text()).toContain('The name customers see at checkout. Staff see the same in the admin.');
+		expect(wrapper.text()).toContain('Lower number = higher in the list when more than one method applies to an order.');
 	});
 });

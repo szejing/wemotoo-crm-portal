@@ -984,13 +984,13 @@
 			"reviewSubtitleEdit": "Summary of this method before you save",
 			"reviewZonesCount": "{count} zone rule(s)",
 			"reviewZonesAll": "All regions (no zone restrictions)",
-			"detailsSectionSubtitle": "Describe this method and set priority and status. Fees and delivery times are set per shipping zone.",
+			"detailsSectionSubtitle": "Name this option, control the order in lists, and turn it on or off. Shipping fees and delivery times are set in each zone.",
 			"regionsSectionTitle": "Shipping regions",
 			"regionsSectionSubtitle": "Optionally limit where this method applies and configure zone rules.",
 			"fieldHints": {
-				"description": "Label shown in checkout and admin.",
-				"priority": "Lower numbers rank first when several methods apply to an address.",
-				"status": "Turn off to hide this method from checkout.",
+				"description": "The name customers see at checkout. Staff see the same in the admin.",
+				"priority": "Lower number = higher in the list when more than one method applies to an order.",
+				"status": "When inactive, this method is hidden and cannot be selected at checkout.",
 				"fee": "Set in each zone that offers this method.",
 				"estimatedDays": "Set in each zone that offers this method."
 			}

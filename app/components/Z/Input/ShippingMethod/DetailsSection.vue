@@ -29,7 +29,6 @@
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.status') }}</p>
 						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
 					</UFormField>
-
 				</div>
 			</div>
 		</UCard>
