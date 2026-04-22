@@ -7,36 +7,37 @@
 				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.taxManagementDesc') }}</p>
 			</div>
 
-			<!-- Tax Configuration Section -->
-			<ZMenu
-				:title="$t('pages.taxConfiguration')"
-				:icon="ICONS.TAX"
-				:description="$t('pages.taxConfigurationDesc')"
-				color="red"
-				:navigations="tax_navigations"
-			/>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<ZSettingsGroup
+					v-for="group in taxGroups"
+					:key="group.title"
+					:title="group.title"
+					:description="group.description"
+					:icon="group.icon"
+					:color="group.color"
+					:items="group.items"
+				/>
+			</div>
 		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
+import { ICONS } from '~/utils/icons';
+
 const { t } = useI18n();
 useHead({ title: () => t('pages.taxesTitle') });
 
-const tax_navigations = computed(() => [
+const taxGroups = computed(() => [
 	{
-		title: t('nav.taxCodes'),
+		title: t('pages.taxConfiguration'),
+		description: t('pages.taxConfigurationDesc'),
 		icon: ICONS.TAX,
-		to: '/settings/taxes/codes',
-		description: t('pages.taxCodesDesc'),
-	},
-	{
-		title: t('nav.taxRules'),
-		icon: ICONS.TAX,
-		to: '/settings/taxes/rules',
-		description: t('pages.taxRulesDesc'),
+		color: 'red' as const,
+		items: [
+			{ label: t('nav.taxCodes'), to: '/settings/taxes/codes' },
+			{ label: t('nav.taxRules'), to: '/settings/taxes/rules' },
+		],
 	},
 ]);
 </script>
-
-<style scoped></style>
