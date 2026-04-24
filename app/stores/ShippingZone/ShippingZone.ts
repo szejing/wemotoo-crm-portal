@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { defaultShippingZoneRelations, KEY, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ShippingZoneMutableFields } from '~/utils/types/order-fulfillment-shipping';
@@ -70,6 +70,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$expand: removeDuplicateExpands(defaultShippingZoneRelations).join(','),
 					$orderby: 'updated_at desc',
 				};
 

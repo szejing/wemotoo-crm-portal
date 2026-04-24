@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { defaultShippingMethodRelations, KEY, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
@@ -63,6 +63,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 					$top: this.filter.page_size,
 					$count: true,
 					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$expand: removeDuplicateExpands(defaultShippingMethodRelations).join(','),
 					$orderby: 'priority desc',
 				};
 
