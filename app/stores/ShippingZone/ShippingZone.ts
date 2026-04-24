@@ -39,6 +39,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		exporting: false as boolean,
 		zones: [] as ShippingZoneListItem[],
 		total_shipping_zones: 0 as number,
+		current_shipping_zone: undefined as ShippingZoneListItem | undefined,
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
@@ -93,6 +94,24 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? (err instanceof Error ? err.message : 'Failed to load shipping zones');
+				failedNotification(message);
+				throw err;
+			} finally {
+				this.loading = false;
+			}
+		},
+
+		async getShippingZone(id: string): Promise<ShippingZoneListItem | undefined> {
+			const { $api } = useNuxtApp();
+			this.loading = true;
+
+			try {
+				const response = await $api.shippingZone.getSingle(id);
+
+				this.current_shipping_zone = response.shipping_zone;
+				return response.shipping_zone;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load shipping method';
 				failedNotification(message);
 				throw err;
 			} finally {

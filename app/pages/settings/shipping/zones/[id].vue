@@ -6,11 +6,18 @@
 				<USkeleton class="h-32 w-full" />
 				<USkeleton class="h-32 w-full" />
 			</div>
-			<FormShippingZoneUpdate v-else-if="detailZone" :key="detailZone.id" ref="formRef" :zone-id="detailZone.id" :initial-zone="detailZone" @saved="onSaved" />
+			<FormShippingZoneUpdate
+				v-else-if="current_shipping_zone"
+				:key="current_shipping_zone.id"
+				ref="formRef"
+				:zone-id="current_shipping_zone.id"
+				:initial-zone="current_shipping_zone"
+				@saved="onSaved"
+			/>
 		</div>
 
 		<template #footer>
-			<div v-if="detailZone" class="w-full backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-800 shadow-md z-50">
+			<div v-if="current_shipping_zone" class="w-full backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-800 shadow-md z-50">
 				<div class="mx-auto px-4 sm:px-6 py-4">
 					<div class="hidden md:flex justify-between items-center gap-3">
 						<UButton color="error" variant="ghost" size="lg" :loading="removing" @click="confirmDelete">
@@ -56,15 +63,14 @@ const id = computed(() => route.params.id as string);
 
 const overlay = useOverlay();
 const { t } = useI18n();
-const zoneStore = useShippingZoneStore();
-const { updating, removing } = storeToRefs(zoneStore);
+const shippingZoneStore = useShippingZoneStore();
+const { updating, removing, current_shipping_zone } = storeToRefs(shippingZoneStore);
 const formRef = ref<{ submit: () => void } | null>(null);
 
-const detailZone = ref<ShippingZoneListItem | undefined>();
 const isLoading = ref(true);
 
 const panelTitle = computed(() => {
-	const label = detailZone.value?.description || detailZone.value?.code;
+	const label = current_shipping_zone.value?.description || current_shipping_zone.value?.code;
 	if (label) {
 		return `${t('pages.editShippingZoneTitle')}: ${label}`;
 	}
@@ -73,17 +79,17 @@ const panelTitle = computed(() => {
 
 useHead({
 	title: () =>
-		detailZone.value
-			? `${t('pages.editShippingZonePageTitle')} — ${detailZone.value.description || detailZone.value.code}`
+		current_shipping_zone.value
+			? `${t('pages.editShippingZonePageTitle')} — ${current_shipping_zone.value.description || current_shipping_zone.value.code}`
 			: t('pages.editShippingZonePageTitle'),
 });
 
 onMounted(async () => {
 	isLoading.value = true;
 	try {
-		const z = await zoneStore.loadShippingZoneById(id.value, { forceRefresh: true });
-		if (z) {
-			detailZone.value = z;
+		const zone = await shippingZoneStore.getShippingZone(id.value);
+		if (zone) {
+			shippingZoneStore.current_shipping_zone = zone;
 		} else {
 			await navigateTo('/settings/shipping/zones');
 		}
@@ -102,23 +108,23 @@ const goBack = () => {
 
 const onSaved = (zone: ShippingZoneListItem | undefined) => {
 	if (zone) {
-		detailZone.value = zone;
+		shippingZoneStore.current_shipping_zone = zone;
 	}
 };
 
 const confirmDelete = () => {
-	if (!detailZone.value) {
+	if (!current_shipping_zone.value) {
 		return;
 	}
 
-	const zoneId = detailZone.value.id;
+	const zoneId = current_shipping_zone.value.id;
 
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
 			message: t('components.shippingZone.confirmDelete'),
 			action: 'delete',
 			onConfirm: async () => {
-				await zoneStore.deleteShippingZone(zoneId);
+				await shippingZoneStore.deleteShippingZone(zoneId);
 				confirmModal.close();
 				await navigateTo('/settings/shipping/zones');
 			},
