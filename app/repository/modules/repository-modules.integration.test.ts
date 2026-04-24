@@ -275,13 +275,15 @@ describe('ShippingMethodModule', () => {
 
 describe('ShippingZoneModule', () => {
 	it('calls shipping zones many route', async () => {
-		setMockFetch(async () => ({ shipping_zones: [], total: 0 }));
+		setMockFetch(async () => ({ data: [], value: [], count: 0 }));
 
 		const mod = new ShippingZoneModule();
-		await mod.getMany();
+		const query = { $top: 10, $count: true };
+		await mod.getMany(query);
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Many());
 		expect(lastFetch().opts.method).toBe('GET');
+		expect(lastFetch().opts.query).toEqual(query);
 	});
 
 	it('calls shipping zone create route', async () => {

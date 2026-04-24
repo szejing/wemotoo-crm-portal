@@ -19,17 +19,18 @@ import type { FormSubmitEvent } from '#ui/types';
 import { formatCurrency } from 'wemotoo-common';
 import type { z } from 'zod';
 import { UpdateShippingZoneValidation } from '~/utils/schema';
-import type { ShippingZonePostcodePattern, ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
 import { parseStatesFromApi, serializeStatesForApi } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
 	zoneId: string;
-	initialZone: ShippingZoneRecord;
+	initialZone: ShippingZoneListItem;
 }>();
 
 const emit = defineEmits<{
-	saved: [zone: ShippingZoneRecord | undefined];
+	saved: [zone: ShippingZoneListItem | undefined];
 }>();
 
 const { t } = useI18n();
@@ -53,18 +54,28 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 		.join('\n');
 };
 
-const pricingFromMethods = (z: ShippingZoneRecord): ShippingZoneFormState['method_pricing'] => {
+const linkShippingMethodId = (l: NonNullable<ShippingZoneListItem['method_links']>[number]) =>
+	l.shipping_method?.id ?? (l as { shipping_method_id?: string }).shipping_method_id ?? '';
+
+const pricingFromMethodLinks = (z: ShippingZoneListItem): ShippingZoneFormState['method_pricing'] => {
 	const out: ShippingZoneFormState['method_pricing'] = {};
-	for (const m of z.methods ?? []) {
-		out[m.shipping_method_id] = {
-			fee: m.fee,
-			estimated_days: m.estimated_days ?? undefined,
+	for (const l of z.method_links ?? []) {
+		const sid = linkShippingMethodId(l);
+		if (!sid) {
+			continue;
+		}
+		out[sid] = {
+			fee: l.fee,
+			estimated_days: l.estimated_days ?? undefined,
 		};
 	}
 	return out;
 };
 
-const applyFromZone = (z: ShippingZoneRecord) => {
+const shippingMethodIdsFromLinks = (z: ShippingZoneListItem): string[] =>
+	(z.method_links ?? []).map(linkShippingMethodId).filter((id): id is string => Boolean(id));
+
+const applyFromZone = (z: ShippingZoneListItem) => {
 	formState.code = z.code;
 	formState.description = z.description ?? '';
 	formState.rule = z.rule ?? 0;
@@ -72,8 +83,8 @@ const applyFromZone = (z: ShippingZoneRecord) => {
 	formState.country_code = 'MY';
 	formState.state = parseStatesFromApi(z.state);
 	formState.postcodes_text = patternsToText(z.postcode_patterns);
-	formState.shipping_method_ids = [...z.shipping_method_ids];
-	formState.method_pricing = pricingFromMethods(z);
+	formState.shipping_method_ids = shippingMethodIdsFromLinks(z);
+	formState.method_pricing = pricingFromMethodLinks(z);
 };
 
 const formState = reactive<ShippingZoneFormState>({
@@ -100,9 +111,7 @@ const methodsSummaryLabel = (ids: string[], options: { label: string; value: str
 	if (!ids.length) {
 		return t('common.notSet');
 	}
-	const labels = ids
-		.map((id) => options.find((o) => o.value === id)?.label)
-		.filter((x): x is string => Boolean(x));
+	const labels = ids.map((id) => options.find((o) => o.value === id)?.label).filter((x): x is string => Boolean(x));
 	if (!labels.length) {
 		return t('common.notSet');
 	}
@@ -119,18 +128,13 @@ const reviewSummary = computed(() => {
 			: formState.shipping_method_ids.map((id) => {
 					const label = methodOptions.value.find((o) => o.value === id)?.label ?? id;
 					const row = formState.method_pricing[id];
-					const feeStr =
-						row != null && !Number.isNaN(row.fee)
-							? formatCurrency(Number(row.fee), currencyCode)
-							: t('common.notSet');
+					const feeStr = row != null && !Number.isNaN(row.fee) ? formatCurrency(Number(row.fee), currencyCode) : t('common.notSet');
 					const d = row?.estimated_days;
-					const daysStr =
-						d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
+					const daysStr = d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
 					return `${label}: ${feeStr}${daysStr ? ` ${daysStr}` : ''}`;
 				});
 
-	const pricingSummaryLabel =
-		!pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
+	const pricingSummaryLabel = !pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
 
 	const methodLabelsResolved = formState.shipping_method_ids
 		.map((id) => methodOptions.value.find((o) => o.value === id)?.label)
@@ -176,8 +180,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		shipping_method_id: id,
 		fee: data.method_pricing[id]?.fee ?? 0,
 		estimated_days:
-			data.method_pricing[id]?.estimated_days != null &&
-			!Number.isNaN(data.method_pricing[id]!.estimated_days!)
+			data.method_pricing[id]?.estimated_days != null && !Number.isNaN(data.method_pricing[id]!.estimated_days!)
 				? data.method_pricing[id]!.estimated_days!
 				: null,
 	}));
@@ -205,7 +208,7 @@ defineExpose({ submit });
 
 onMounted(async () => {
 	try {
-		const methods = await shippingMethodStore.fetchAllShippingMethods();
+		const methods = await shippingMethodStore.getShippingMethods();
 		methodOptions.value = methods.map((m) => ({
 			label: m.description,
 			value: m.id,

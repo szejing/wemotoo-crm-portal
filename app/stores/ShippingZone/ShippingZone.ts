@@ -2,9 +2,12 @@ import { defineStore } from 'pinia';
 import { KEY } from 'wemotoo-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
-import { useAuthStore } from '../Auth/Auth';
-import type { ShippingZoneMutableFields, ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneMutableFields } from '~/utils/types/order-fulfillment-shipping';
 import type { ErrorResponse } from '~/repository/base/error';
+import type { BaseODataReq } from '~/repository/base/base.req';
+import type { ShippingZone, ShippingZoneListItem } from '~/utils/types/shipping-zone';
+import type { CreateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/create-shipping-zone.req';
+import type { UpdateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/update-shipping-zone.req';
 
 type ShippingZoneFilter = {
 	query: string;
@@ -20,53 +23,12 @@ const initialEmptyFilter: ShippingZoneFilter = {
 	page_size: options_page_size[0] as number,
 };
 
-function mapShippingZoneFromApi(raw: Record<string, unknown>): ShippingZoneRecord {
-	const links = (raw.method_links as Record<string, unknown>[] | undefined) ?? [];
-	const methods = links.map((l) => {
-		const sm = l.shipping_method as Record<string, unknown> | undefined;
-		const sid = (sm?.id as string) ?? (l.shipping_method_id as string);
-		const feeRaw = l.fee ?? l.fee_override;
-		const fee = typeof feeRaw === 'string' ? Number(feeRaw) : Number(feeRaw ?? 0);
-		const ed = l.estimated_days ?? l.estimated_days_override;
-		return {
-			shipping_method_id: sid,
-			fee,
-			estimated_days: ed != null && !Number.isNaN(Number(ed)) ? Number(ed) : null,
-		};
-	});
-	const shipping_method_ids = methods.map((m) => m.shipping_method_id);
-		const pricing_summary = links
-		.map((l) => {
-			const sm = l.shipping_method as Record<string, unknown> | undefined;
-			const label = String(sm?.description ?? sm?.name ?? '');
-			const feeRaw = l.fee ?? l.fee_override;
-			const fee = typeof feeRaw === 'string' ? Number(feeRaw) : Number(feeRaw ?? 0);
-			return label ? `${label}: ${fee}` : String(fee);
-		})
-		.join(' · ');
-
-	const activeRaw = raw.is_active;
-	const is_active = activeRaw === false || activeRaw === 0 ? false : true;
-
-	const ruleRaw = raw.rule ?? raw.rule_priority;
-	const rule = typeof ruleRaw === 'number' && !Number.isNaN(ruleRaw) ? ruleRaw : Number(ruleRaw ?? 0);
-
-	return {
-		id: String(raw.id),
-		code: String(raw.code ?? ''),
-		description: raw.description != null ? String(raw.description) : undefined,
-		rule,
-		is_active,
-		country_code: String(raw.country_code ?? 'MY').toUpperCase(),
-		state: raw.state != null ? String(raw.state) : undefined,
-		postcode_patterns: (raw.postcode_patterns as ShippingZoneRecord['postcode_patterns']) ?? [],
-		methods,
-		shipping_method_ids,
-		pricing_summary,
-		created_at: String(raw.created_at ?? new Date().toISOString()),
-		updated_at: String(raw.updated_at ?? new Date().toISOString()),
-	};
-}
+/** Form submit + partial updates: API fields plus `shipping_method_ids` (stripped). */
+type UpdateShippingZoneStorePayload = Partial<Omit<ShippingZoneListItem, 'id' | 'pricing_summary'>> & {
+	methods?: CreateShippingZoneReq['methods'];
+	/** Not sent to the API; used by create/update forms when building the payload. */
+	shipping_method_ids?: string[];
+};
 
 export const useShippingZoneStore = defineStore('shippingZoneStore', {
 	state: () => ({
@@ -75,14 +37,14 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		updating: false as boolean,
 		removing: false as boolean,
 		exporting: false as boolean,
-		zones: [] as ShippingZoneRecord[],
+		zones: [] as ShippingZoneListItem[],
 		total_shipping_zones: 0 as number,
-		allZones: [] as ShippingZoneRecord[],
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
 	getters: {
 		getDisplayZones: (state) => state.zones,
+		allZones: (state) => state.zones,
 	},
 	actions: {
 		async updatePageSize(size: number) {
@@ -99,38 +61,36 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			await this.getShippingZones();
 		},
 
-		async getShippingZones() {
+		async getShippingZones(append = false) {
 			this.loading = true;
 			try {
 				const { $api } = useNuxtApp();
-				const resp = await $api.shippingZone.getMany();
-				const rows = ((resp.shipping_zones ?? []) as Record<string, unknown>[]).map((z) =>
-					mapShippingZoneFromApi(z),
-				);
-				this.allZones = rows;
+				const queryParams: BaseODataReq = {
+					$top: this.filter.page_size,
+					$count: true,
+					$skip: (this.filter.current_page - 1) * this.filter.page_size,
+					$orderby: 'updated_at desc',
+				};
 
-				let list = [...this.allZones];
-				const q = this.filter.query.trim().toLowerCase();
+				const q = this.filter.query.trim();
 				if (q) {
-					list = list.filter((z) => {
-						const code = z.code.toLowerCase();
-						const desc = (z.description ?? '').toLowerCase();
-						const cc = z.country_code.toLowerCase();
-						const st = (z.state ?? '').toLowerCase();
-						return code.includes(q) || desc.includes(q) || cc.includes(q) || st.includes(q);
-					});
+					queryParams.$search = q;
 				}
+
 				if (this.filter.status === 'active') {
-					list = list.filter((z) => z.is_active);
+					queryParams.$filter = 'is_active eq true';
 				} else if (this.filter.status === 'inactive') {
-					list = list.filter((z) => !z.is_active);
+					queryParams.$filter = 'is_active eq false';
 				}
 
-				list.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+				const response = await $api.shippingZone.getMany(queryParams);
+				const data = response.data ?? response.value ?? [];
+				const total = response['@odata.count'] ?? response.count ?? 0;
 
-				this.total_shipping_zones = list.length;
-				const start = (this.filter.current_page - 1) * this.filter.page_size;
-				this.zones = list.slice(start, start + this.filter.page_size);
+				if (data) {
+					this.zones = append ? [...this.zones, ...data] : data;
+					this.total_shipping_zones = total ?? 0;
+				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? (err instanceof Error ? err.message : 'Failed to load shipping zones');
 				failedNotification(message);
@@ -140,32 +100,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		getShippingZone(id: string): ShippingZoneRecord | undefined {
-			return this.allZones.find((z) => z.id === id);
-		},
-
-		async loadShippingZoneById(id: string, opts?: { forceRefresh?: boolean }): Promise<ShippingZoneRecord | undefined> {
-			if (!opts?.forceRefresh) {
-				await this.getShippingZones();
-				const cached = this.getShippingZone(id);
-				if (cached) {
-					return cached;
-				}
-			}
-			const { $api } = useNuxtApp();
-			try {
-				const resp = await $api.shippingZone.getSingle(id);
-				const row = mapShippingZoneFromApi(resp.shipping_zone as Record<string, unknown>);
-				this.allZones = [row, ...this.allZones.filter((z) => z.id !== row.id)];
-				return row;
-			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Shipping zone not found';
-				failedNotification(message);
-				return undefined;
-			}
-		},
-
-		async createShippingZone(payload: ShippingZoneMutableFields): Promise<ShippingZoneRecord | undefined> {
+		async createShippingZone(payload: ShippingZoneMutableFields): Promise<ShippingZoneListItem | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.adding = true;
@@ -175,11 +110,11 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 					merchant_id,
 					...body,
 				});
-				const row = mapShippingZoneFromApi(resp.shipping_zone as Record<string, unknown>);
-				this.allZones = [row, ...this.allZones.filter((z) => z.id !== row.id)];
+				// const row = enrichShippingZone(resp.shipping_zone);
+				// this.zones = [row, ...this.zones.filter((z) => z.id !== row.id)];
 				successNotification('Shipping zone created');
 				await this.getShippingZones();
-				return row;
+				return resp.shipping_zone;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to create shipping zone';
 				failedNotification(message);
@@ -189,34 +124,28 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateShippingZone(
-			id: string,
-			payload: Partial<Omit<ShippingZoneRecord, 'id' | 'created_at'>>,
-		): Promise<ShippingZoneRecord | undefined> {
+		async updateShippingZone(id: string, payload: UpdateShippingZoneStorePayload): Promise<ShippingZoneListItem | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.updating = true;
 			try {
 				const body = { ...payload } as Record<string, unknown>;
-				delete body.shipping_method_ids;
 				delete body.pricing_summary;
+				delete body.method_links;
+				delete body.shipping_method_ids;
 				delete body.id;
-				delete body.created_at;
-				delete body.updated_at;
-				const resp = await $api.shippingZone.update(id, {
-					merchant_id,
-					...(body as Omit<ShippingZoneRecord, 'id' | 'created_at' | 'shipping_method_ids' | 'pricing_summary'>),
-				});
-				const row = mapShippingZoneFromApi(resp.shipping_zone as Record<string, unknown>);
-				const idx = this.allZones.findIndex((z) => z.id === id);
-				if (idx === -1) {
-					this.allZones = [row, ...this.allZones];
-				} else {
-					this.allZones = [...this.allZones.slice(0, idx), row, ...this.allZones.slice(idx + 1)];
-				}
+				const req = { merchant_id, ...body } as UpdateShippingZoneReq;
+				const resp = await $api.shippingZone.update(id, req);
+				// const row = enrichShippingZone(resp.shipping_zone);
+				// const idx = this.zones.findIndex((z) => z.id === id);
+				// if (idx === -1) {
+				// 	this.zones = [row, ...this.zones];
+				// } else {
+				// 	this.zones = [...this.zones.slice(0, idx), row, ...this.zones.slice(idx + 1)];
+				// }
 				successNotification('Shipping zone updated');
 				await this.getShippingZones();
-				return row;
+				return resp.shipping_zone;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to update shipping zone';
 				failedNotification(message);
@@ -226,21 +155,16 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateZoneStatus(zone: ShippingZoneRecord, is_active: boolean) {
+		async updateZoneStatus(zone: ShippingZoneListItem, is_active: boolean) {
 			await this.updateShippingZone(zone.id, { is_active });
 		},
 
 		async deleteShippingZone(id: string): Promise<void> {
 			const { $api } = useNuxtApp();
-			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
-			const authStore = useAuthStore();
 			this.removing = true;
 			try {
-				await $api.shippingZone.remove(id, {
-					merchant_id,
-					user: authStore.user ? { id: authStore.user.id } : { id: '' },
-				});
-				this.allZones = this.allZones.filter((z) => z.id !== id);
+				await $api.shippingZone.remove(id);
+				this.zones = this.zones.filter((z) => z.id !== id);
 				successNotification('Shipping zone deleted');
 				await this.getShippingZones();
 			} catch (err: unknown | ErrorResponse) {

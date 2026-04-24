@@ -34,6 +34,7 @@ describe('useShippingZoneStore', () => {
 		code: 'west-my',
 		description: 'West Malaysia',
 		rule: 0,
+		is_default: false,
 		is_active: true,
 		country_code: 'MY',
 		state: 'Selangor',
@@ -58,6 +59,11 @@ describe('useShippingZoneStore', () => {
 		(globalThis as unknown as { useCookie: (key: string) => { value: string } }).useCookie = () => ({ value: 'm1' });
 	});
 
+	const odataList = (rows: Record<string, unknown>[], total?: number) => {
+		const t = total ?? rows.length;
+		return { data: rows, value: rows, count: t, '@odata.count': t };
+	};
+
 	const samplePayload = () => ({
 		code: 'west-my',
 		description: 'West Malaysia',
@@ -72,7 +78,7 @@ describe('useShippingZoneStore', () => {
 
 	it('creates a zone and lists it', async () => {
 		apiMock.shippingZone.create.mockResolvedValue({ shipping_zone: zoneApiRow() });
-		apiMock.shippingZone.getMany.mockResolvedValue({ shipping_zones: [zoneApiRow()], total: 1 });
+		apiMock.shippingZone.getMany.mockResolvedValue(odataList([zoneApiRow()], 1));
 
 		const store = useShippingZoneStore();
 		const row = await store.createShippingZone(samplePayload());
@@ -98,31 +104,31 @@ describe('useShippingZoneStore', () => {
 				shipping_zone: zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
 			});
 		apiMock.shippingZone.getMany
-			.mockResolvedValueOnce({
-				shipping_zones: [
+			.mockResolvedValueOnce(
+				odataList([
 					zoneApiRow({
 						id: 'za',
 						code: 'zone-a',
 						description: 'Zone A',
 						country_code: 'SG',
 					}),
-				],
-				total: 1,
-			})
-			.mockResolvedValueOnce({
-				shipping_zones: [
-					zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' }),
-					zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
-				],
-				total: 2,
-			})
-			.mockResolvedValueOnce({
-				shipping_zones: [
-					zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' }),
-					zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
-				],
-				total: 2,
-			});
+				], 1),
+			)
+			.mockResolvedValueOnce(
+				odataList(
+					[
+						zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' }),
+						zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
+					],
+					2,
+				),
+			)
+			.mockResolvedValueOnce(
+				odataList(
+					[zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' })],
+					1,
+				),
+			);
 
 		const store = useShippingZoneStore();
 		await store.createShippingZone({ ...samplePayload(), code: 'zone-a', description: 'Zone A', country_code: 'SG' });
@@ -141,8 +147,8 @@ describe('useShippingZoneStore', () => {
 			shipping_zone: zoneApiRow({ description: 'Renamed' }),
 		});
 		apiMock.shippingZone.getMany
-			.mockResolvedValueOnce({ shipping_zones: [zoneApiRow()], total: 1 })
-			.mockResolvedValueOnce({ shipping_zones: [zoneApiRow({ description: 'Renamed' })], total: 1 });
+			.mockResolvedValueOnce(odataList([zoneApiRow()], 1))
+			.mockResolvedValueOnce(odataList([zoneApiRow({ description: 'Renamed' })], 1));
 
 		const store = useShippingZoneStore();
 		const created = await store.createShippingZone(samplePayload());
@@ -155,8 +161,8 @@ describe('useShippingZoneStore', () => {
 		apiMock.shippingZone.create.mockResolvedValue({ shipping_zone: zoneApiRow() });
 		apiMock.shippingZone.remove.mockResolvedValue({ ok: true });
 		apiMock.shippingZone.getMany
-			.mockResolvedValueOnce({ shipping_zones: [zoneApiRow()], total: 1 })
-			.mockResolvedValueOnce({ shipping_zones: [], total: 0 });
+			.mockResolvedValueOnce(odataList([zoneApiRow()], 1))
+			.mockResolvedValueOnce(odataList([], 0));
 
 		const store = useShippingZoneStore();
 		const created = await store.createShippingZone(samplePayload());

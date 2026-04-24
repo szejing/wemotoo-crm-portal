@@ -49,7 +49,7 @@
 <script lang="ts" setup>
 import { ZModalConfirmation } from '#components';
 import { ICONS } from '~/utils/icons';
-import type { ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 
 const route = useRoute();
 const id = computed(() => route.params.id as string);
@@ -60,7 +60,7 @@ const zoneStore = useShippingZoneStore();
 const { updating, removing } = storeToRefs(zoneStore);
 const formRef = ref<{ submit: () => void } | null>(null);
 
-const detailZone = ref<ShippingZoneRecord | undefined>();
+const detailZone = ref<ShippingZoneListItem | undefined>();
 const isLoading = ref(true);
 
 const panelTitle = computed(() => {
@@ -100,7 +100,7 @@ const goBack = () => {
 	useRouter().back();
 };
 
-const onSaved = (zone: ShippingZoneRecord | undefined) => {
+const onSaved = (zone: ShippingZoneListItem | undefined) => {
 	if (zone) {
 		detailZone.value = zone;
 	}

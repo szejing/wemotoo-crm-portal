@@ -51,7 +51,7 @@ import type { TableRow } from '@nuxt/ui';
 import { ICONS } from '~/utils/icons';
 import { options_page_size } from '~/utils/options';
 import { getShippingZoneColumns } from '~/utils/table-columns';
-import type { ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 
 const { t, locale, messages } = useI18n();
 const zoneStore = useShippingZoneStore();
@@ -59,7 +59,7 @@ const { loading, getDisplayZones, total_shipping_zones, filter, exporting } = st
 
 const initialize = ref(true);
 
-const selectZone = (_e: Event, row: TableRow<ShippingZoneRecord>) => {
+const selectZone = (_e: Event, row: TableRow<ShippingZoneListItem>) => {
 	void navigateTo(`/settings/shipping/zones/${row.original.id}`);
 };
 

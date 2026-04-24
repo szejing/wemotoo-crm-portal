@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { ICONS } from '~/utils/icons';
-import type { ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 
 const { t } = useI18n();
 const zoneStore = useShippingZoneStore();
@@ -48,7 +48,7 @@ const goBack = () => {
 	useRouter().back();
 };
 
-const onSaved = async (_zone: ShippingZoneRecord | undefined) => {
+const onSaved = async (_zone: ShippingZoneListItem | undefined) => {
 	await navigateTo('/settings/shipping/zones');
 };
 </script>

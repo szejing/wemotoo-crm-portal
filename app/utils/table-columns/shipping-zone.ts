@@ -2,7 +2,7 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { formatCurrency } from 'wemotoo-common';
-import type { ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 import { parsePricingSummarySegments } from '~/utils/shipping-zone-pricing-summary';
 import { UBadge, USwitch } from '#components';
 
@@ -10,7 +10,7 @@ type TranslateFn = (key: string) => string;
 
 const DEFAULT_ZONE_CURRENCY = 'MYR';
 
-export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZoneRecord>[] {
+export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZoneListItem>[] {
 	return [
 		{
 			id: 'code_description',

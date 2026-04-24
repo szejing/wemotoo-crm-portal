@@ -105,24 +105,6 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			}
 		},
 
-		/** Full list for pickers / fallbacks (does not replace paginated listing state). */
-		async fetchAllShippingMethods(): Promise<ShippingMethodOption[]> {
-			const { $api } = useNuxtApp();
-
-			try {
-				const resp = await $api.shippingMethod.getMany({
-					$top: 500,
-					$count: true,
-					$orderby: 'description asc',
-				});
-				return resp.data ?? resp.value ?? [];
-			} catch (err: unknown | ErrorResponse) {
-				const message = (err as ErrorResponse).message ?? 'Failed to load shipping methods';
-				failedNotification(message);
-				throw err;
-			}
-		},
-
 		// async resolveShippingMethodsForAddress(params: { country_code?: string; state?: string; postal_code?: string }): Promise<ShippingMethodOption[]> {
 		// 	const { $api } = useNuxtApp();
 		// 	try {
@@ -153,9 +135,8 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			this.loading = true;
 
 			try {
-				const response = await $api.shippingMethod.getSingle(id, {
-					defaultRelations: ['method_zones', 'method_zones.shipping_zone'],
-				});
+				const response = await $api.shippingMethod.getSingle(id);
+
 				this.current_shipping_method = response.shipping_method;
 				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {

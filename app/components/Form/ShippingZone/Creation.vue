@@ -19,12 +19,13 @@ import type { FormSubmitEvent } from '#ui/types';
 import { formatCurrency } from 'wemotoo-common';
 import type { z } from 'zod';
 import { CreateShippingZoneValidation } from '~/utils/schema';
-import type { ShippingZonePostcodePattern, ShippingZoneRecord } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 import { serializeStatesForApi } from '~/utils/data/malaysia-states';
 import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
 
 const emit = defineEmits<{
-	saved: [zone: ShippingZoneRecord | undefined];
+	saved: [zone: ShippingZoneListItem | undefined];
 }>();
 
 const { t } = useI18n();
@@ -81,18 +82,13 @@ const reviewSummary = computed(() => {
 			: formState.shipping_method_ids.map((id) => {
 					const label = methodOptions.value.find((o) => o.value === id)?.label ?? id;
 					const row = formState.method_pricing[id];
-					const feeStr =
-						row != null && !Number.isNaN(row.fee)
-							? formatCurrency(Number(row.fee), currencyCode)
-							: t('common.notSet');
+					const feeStr = row != null && !Number.isNaN(row.fee) ? formatCurrency(Number(row.fee), currencyCode) : t('common.notSet');
 					const d = row?.estimated_days;
-					const daysStr =
-						d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
+					const daysStr = d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
 					return `${label}: ${feeStr}${daysStr ? ` ${daysStr}` : ''}`;
 				});
 
-	const pricingSummaryLabel =
-		!pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
+	const pricingSummaryLabel = !pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
 
 	const methodLabelsResolved = formState.shipping_method_ids
 		.map((id) => methodOptions.value.find((o) => o.value === id)?.label)
@@ -128,8 +124,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		shipping_method_id: id,
 		fee: data.method_pricing[id]?.fee ?? 0,
 		estimated_days:
-			data.method_pricing[id]?.estimated_days != null &&
-			!Number.isNaN(data.method_pricing[id]!.estimated_days!)
+			data.method_pricing[id]?.estimated_days != null && !Number.isNaN(data.method_pricing[id]!.estimated_days!)
 				? data.method_pricing[id]!.estimated_days!
 				: null,
 	}));
@@ -158,7 +153,7 @@ defineExpose({ submit });
 
 onMounted(async () => {
 	try {
-		const methods = await shippingMethodStore.fetchAllShippingMethods();
+		const methods = await shippingMethodStore.getShippingMethods();
 		methodOptions.value = methods.map((m) => ({
 			label: m.description,
 			value: m.id,

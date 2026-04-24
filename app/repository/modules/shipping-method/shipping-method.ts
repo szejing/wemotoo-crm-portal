@@ -20,11 +20,10 @@ class ShippingMethodModule extends HttpFactory {
 		return data;
 	}
 
-	async getSingle(id: string, query?: Record<string, string | string[] | undefined>): Promise<ShippingMethodResp> {
+	async getSingle(id: string): Promise<ShippingMethodResp> {
 		return await this.call<ShippingMethodResp>({
 			method: 'GET',
 			url: this.RESOURCE.Single(id),
-			query,
 		});
 	}
 
