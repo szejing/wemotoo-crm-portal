@@ -28,7 +28,13 @@
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<UFormField name="code" :label="$t('common.code')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.code') }}</p>
-						<UInput v-model="state.code" maxlength="32" />
+						<UInput
+							:model-value="state.code"
+							maxlength="32"
+							:disabled="codeReadonly"
+							:class="codeForceUppercase ? 'uppercase' : undefined"
+							@update:model-value="onCodeModelUpdate"
+						/>
 					</UFormField>
 
 					<UFormField name="description" :label="$t('common.description')">
@@ -216,11 +222,19 @@ const props = withDefaults(
 	defineProps<{
 		state: ShippingZoneFormFields;
 		methodOptions: { label: string; value: string }[];
+		/** When true, zone code is display-only (e.g. edit flow). */
+		codeReadonly?: boolean;
+		/** When true, coerces zone code to uppercase on input (e.g. create flow). */
+		codeForceUppercase?: boolean;
 		/** Display prefix on fee inputs (e.g. RM). */
 		feeCurrencyPrefix?: string;
 	}>(),
-	{ feeCurrencyPrefix: 'RM' },
+	{ feeCurrencyPrefix: 'RM', codeReadonly: false, codeForceUppercase: false },
 );
+
+function onCodeModelUpdate(v: string) {
+	props.state.code = props.codeForceUppercase ? v.toUpperCase() : v;
+}
 
 const applyAllFee = ref<number | undefined>(undefined);
 

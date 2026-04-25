@@ -2,8 +2,7 @@ import type { ShippingZonePostcodePattern } from './order-fulfillment-shipping';
 
 /** Mirrors `ShippingMethodBriefDto` in ecommerce-nestjs shipping-zone response DTO. */
 export type ShippingMethodBrief = {
-	id: string;
-	code: string;
+	id: number;
 	description: string;
 };
 
@@ -17,7 +16,6 @@ export type ShippingMethodZoneWithMethod = {
 
 /** Mirrors `ShippingZoneWithLinksDto` in ecommerce-nestjs shipping-zone response DTO. */
 export type ShippingZone = {
-	id: string;
 	code: string;
 	description?: string;
 	country_code: string;

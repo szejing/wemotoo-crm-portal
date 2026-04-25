@@ -60,7 +60,7 @@ const { loading, getDisplayZones, total_shipping_zones, filter, exporting } = st
 const initialize = ref(true);
 
 const selectZone = (_e: Event, row: TableRow<ShippingZone>) => {
-	void navigateTo(`/settings/shipping/zones/${row.original.id}`);
+	void navigateTo(`/settings/shipping/zones/${encodeURIComponent(row.original.code)}`);
 };
 
 const updatePage = async (page: number) => {

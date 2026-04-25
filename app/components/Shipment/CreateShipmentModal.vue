@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from '#ui/types';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
 
 type ShipmentFormState = {
-	shipping_method_id?: string;
+	shipping_method_id?: number;
 	courier_name: string;
 	tracking_no: string;
 };

@@ -30,7 +30,6 @@ describe('useShippingZoneStore', () => {
 	};
 
 	const zoneApiRow = (overrides: Record<string, unknown> = {}) => ({
-		id: 'z1',
 		code: 'west-my',
 		description: 'West Malaysia',
 		rule: 0,
@@ -94,21 +93,19 @@ describe('useShippingZoneStore', () => {
 		apiMock.shippingZone.create
 			.mockResolvedValueOnce({
 				shipping_zone: zoneApiRow({
-					id: 'za',
 					code: 'zone-a',
 					description: 'Zone A',
 					country_code: 'SG',
 				}),
 			})
 			.mockResolvedValueOnce({
-				shipping_zone: zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
+				shipping_zone: zoneApiRow({ code: 'zone-b', description: 'Zone B' }),
 			});
 		apiMock.shippingZone.getMany
 			.mockResolvedValueOnce(
 				odataList(
 					[
 						zoneApiRow({
-							id: 'za',
 							code: 'zone-a',
 							description: 'Zone A',
 							country_code: 'SG',
@@ -120,13 +117,13 @@ describe('useShippingZoneStore', () => {
 			.mockResolvedValueOnce(
 				odataList(
 					[
-						zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' }),
-						zoneApiRow({ id: 'zb', code: 'zone-b', description: 'Zone B' }),
+						zoneApiRow({ code: 'zone-a', description: 'Zone A', country_code: 'SG' }),
+						zoneApiRow({ code: 'zone-b', description: 'Zone B' }),
 					],
 					2,
 				),
 			)
-			.mockResolvedValueOnce(odataList([zoneApiRow({ id: 'za', code: 'zone-a', description: 'Zone A', country_code: 'SG' })], 1));
+			.mockResolvedValueOnce(odataList([zoneApiRow({ code: 'zone-a', description: 'Zone A', country_code: 'SG' })], 1));
 
 		const store = useShippingZoneStore();
 		await store.createShippingZone({ ...samplePayload(), code: 'zone-a', description: 'Zone A', country_code: 'SG' });
@@ -151,7 +148,7 @@ describe('useShippingZoneStore', () => {
 		const store = useShippingZoneStore();
 		const created = await store.createShippingZone(samplePayload());
 		expect(created).toBeDefined();
-		const updated = await store.updateShippingZone(created!.id, { description: 'Renamed' });
+		const updated = await store.updateShippingZone(created!.code, { description: 'Renamed' });
 		expect(updated?.description).toBe('Renamed');
 	});
 
@@ -162,7 +159,7 @@ describe('useShippingZoneStore', () => {
 
 		const store = useShippingZoneStore();
 		const created = await store.createShippingZone(samplePayload());
-		await store.deleteShippingZone(created!.id);
+		await store.deleteShippingZone(created!.code);
 		expect(store.allZones).toHaveLength(0);
 	});
 });

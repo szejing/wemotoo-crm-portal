@@ -33,7 +33,6 @@ export type ShippingMethodZoneLink = {
 	fee: number;
 	estimated_days?: number;
 	shipping_zone?: {
-		id: string;
 		code: string;
 		description?: string;
 		country_code: string;
@@ -45,8 +44,7 @@ export type ShippingMethodZoneLink = {
 };
 
 export type ShippingMethodOption = {
-	id: string;
-	code?: string;
+	id: number;
 	description: string;
 	/** Present when methods are enriched for shipment UI (e.g. resolved fee). */
 	fee?: number;
@@ -68,14 +66,13 @@ export type ShippingZoneMutableFields = {
 	state?: string;
 	postcode_patterns: ShippingZonePostcodePattern[];
 	/** Per-method pricing for this zone (API payload). */
-	methods: { shipping_method_id: string; fee: number; estimated_days?: number | null }[];
+	methods: { shipping_method_id: number; fee: number; estimated_days?: number | null }[];
 	/** Shipping methods that support delivery under this zone (derived for UI). */
 	shipping_method_ids: string[];
 };
 
 /** Persisted shipping zone row. TODO(api): load/save via API instead of in-memory store. */
 export type ShippingZoneRecord = ShippingZoneMutableFields & {
-	id: string;
 	created_at: string;
 	updated_at: string;
 	/** Short summary for list tables when fees differ per method. */

@@ -2,7 +2,7 @@
 	<div class="w-full">
 		<UForm ref="formRef" :schema="schema" :state="new_shipping_zone" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
 			<div class="lg:col-span-9 space-y-6">
-				<ZInputShippingZoneDetailsSection :state="new_shipping_zone" :method-options="methodOptions" />
+				<ZInputShippingZoneDetailsSection :state="new_shipping_zone" :method-options="methodOptions" code-force-uppercase />
 			</div>
 
 			<div class="lg:col-span-3">
@@ -103,7 +103,7 @@ const buildPostcodePatterns = (text: string): ShippingZonePostcodePattern[] => {
 const submitForm = async (event: FormSubmitEvent<Schema>) => {
 	const data = event.data;
 	const methods = data.shipping_method_ids.map((id) => ({
-		shipping_method_id: id,
+		shipping_method_id: Number(id),
 		fee: data.method_pricing[id]?.fee ?? 0,
 		estimated_days:
 			data.method_pricing[id]?.estimated_days != null && !Number.isNaN(data.method_pricing[id]!.estimated_days!)
@@ -111,7 +111,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 				: null,
 	}));
 	const payload = {
-		code: data.code.trim(),
+		code: data.code.trim().toUpperCase(),
 		description: data.description.trim() || undefined,
 		rule: data.rule ?? 0,
 		is_active: data.is_active,
@@ -141,7 +141,7 @@ onMounted(async () => {
 		await shippingMethodStore.getShippingMethods();
 		methodOptions.value = shippingMethodStore.methods.map((m) => ({
 			label: m.description,
-			value: m.id,
+			value: String(m.id),
 		}));
 	} catch {
 		methodOptions.value = [];

@@ -137,7 +137,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('loads shipping methods into state with OData pagination', async () => {
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', description: 'Standard', priority: 1, is_active: true }],
+			data: [{ id: 1, description: 'Standard', priority: 1, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -159,7 +159,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('refetches when inactive filter is applied', async () => {
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '2', description: 'Express', priority: 2, is_active: false, code: 'EXP' }],
+			data: [{ id: 2, description: 'Express', priority: 2, is_active: false }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -177,10 +177,10 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('creates a shipping method', async () => {
 		apiMock.shippingMethod.create.mockResolvedValue({
-			shipping_method: { id: '1', description: 'Standard', is_active: true },
+			shipping_method: { id: 1, description: 'Standard', is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', description: 'Standard', is_active: true }],
+			data: [{ id: 1, description: 'Standard', is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -199,17 +199,16 @@ describe('fulfillment/shipment/shipping stores', () => {
 				merchant_id: 'm1',
 				description: 'Standard',
 				priority: 1,
-				code: expect.stringMatching(/^STANDARD_/),
 			}),
 		);
 	});
 
 	it('updates a shipping method', async () => {
 		apiMock.shippingMethod.update.mockResolvedValue({
-			shipping_method: { id: '1', description: 'Express', priority: 2, is_active: true },
+			shipping_method: { id: 1, description: 'Express', priority: 2, is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
-			data: [{ id: '1', description: 'Express', priority: 2, is_active: true }],
+			data: [{ id: 1, description: 'Express', priority: 2, is_active: true }],
 			count: 1,
 		});
 		const store = useShippingMethodStore();
@@ -234,7 +233,7 @@ describe('fulfillment/shipment/shipping stores', () => {
 		});
 		const store = useShippingMethodStore();
 
-		await store.updateStatus({ id: '1', description: 'Express', is_active: true }, false);
+		await store.updateStatus({ id: 1, description: 'Express', is_active: true }, false);
 
 		expect(apiMock.shippingMethod.update).toHaveBeenCalledWith('1', expect.objectContaining({ merchant_id: 'm1', is_active: false }));
 		expect(store.updating).toBe(false);
@@ -244,13 +243,13 @@ describe('fulfillment/shipment/shipping stores', () => {
 	it('fetches all shipping methods without replacing paginated listing', async () => {
 		apiMock.shippingMethod.getMany
 			.mockResolvedValueOnce({
-				data: [{ id: '1', description: 'Standard', priority: 1, is_active: true }],
+				data: [{ id: 1, description: 'Standard', priority: 1, is_active: true }],
 				count: 1,
 			})
 			.mockResolvedValueOnce({
 				data: [
-					{ id: '1', description: 'Standard', priority: 1, is_active: true },
-					{ id: '2', description: 'Express', priority: 2, is_active: true },
+					{ id: 1, description: 'Standard', priority: 1, is_active: true },
+					{ id: 2, description: 'Express', priority: 2, is_active: true },
 				],
 				count: 2,
 			});
@@ -266,14 +265,14 @@ describe('fulfillment/shipment/shipping stores', () => {
 
 	it('deletes a shipping method', async () => {
 		apiMock.shippingMethod.remove.mockResolvedValue({
-			shipping_method: { id: '1', description: 'Standard', priority: 1, is_active: true },
+			shipping_method: { id: 1, description: 'Standard', priority: 1, is_active: true },
 		});
 		apiMock.shippingMethod.getMany.mockResolvedValue({
 			data: [],
 			count: 0,
 		});
 		const store = useShippingMethodStore();
-		store.methods = [{ id: '1', description: 'Standard', priority: 1, is_active: true }];
+		store.methods = [{ id: 1, description: 'Standard', priority: 1, is_active: true }];
 
 		await store.deleteShippingMethod('1');
 

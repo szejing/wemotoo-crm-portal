@@ -273,7 +273,7 @@ const isCreateShipmentModalOpen = ref(false);
 const shipmentModalMethods = ref<ShippingMethodOption[]>([]);
 const shipmentModalMode = ref<'create' | 'update'>('create');
 const shipmentModalInitialValue = ref<{
-	shipping_method_id?: string;
+	shipping_method_id?: number;
 	courier_name: string;
 	tracking_no: string;
 }>({
@@ -426,12 +426,12 @@ const openEditShipmentModal = async () => {
 	isCreateShipmentModalOpen.value = true;
 };
 
-const handleShipmentSubmit = async (payload: { shipping_method_id?: string; courier_name: string; tracking_no: string }) => {
+const handleShipmentSubmit = async (payload: { shipping_method_id?: number; courier_name: string; tracking_no: string }) => {
 	if (!record.value || isSaleReadOnly.value) {
 		return;
 	}
 
-	if (shipmentModalMode.value === 'create' && !payload.shipping_method_id) {
+	if (shipmentModalMode.value === 'create' && payload.shipping_method_id == null) {
 		failedNotification(t('components.shipment.shippingMethod') + ' ' + t('common.required'));
 		return;
 	}
@@ -440,7 +440,7 @@ const handleShipmentSubmit = async (payload: { shipping_method_id?: string; cour
 		await shipmentStore.createShipment({
 			order_no: record.value.order_no,
 			inv_no: record.value.inv_no,
-			shipping_method_id: payload.shipping_method_id!,
+			shipping_method_id: Number(payload.shipping_method_id),
 			courier_name: payload.courier_name,
 			tracking_no: payload.tracking_no,
 		});

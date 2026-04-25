@@ -32,4 +32,56 @@ describe('ZInputShippingZoneDetailsSection', () => {
 		expect(wrapper.text()).toContain('Select states');
 		expect(wrapper.text()).toContain('Stable identifier for this zone');
 	});
+
+	it('disables code input when codeReadonly is true', async () => {
+		const state = reactive<ShippingZoneFormFields>({
+			code: 'ZONE_A',
+			description: '',
+			rule: 0,
+			is_active: true,
+			country_code: '',
+			state: ['Johor'],
+			postcodes_text: '',
+			shipping_method_ids: [],
+			method_pricing: {},
+		});
+
+		const wrapper = await mountSuspended(ZInputShippingZoneDetailsSection, {
+			props: {
+				state,
+				methodOptions: [],
+				codeReadonly: true,
+			},
+		});
+
+		const codeInput = wrapper.find('input[maxlength="32"]');
+		expect(codeInput.exists()).toBe(true);
+		expect((codeInput.element as HTMLInputElement).disabled).toBe(true);
+	});
+
+	it('uppercases code when codeForceUppercase is true', async () => {
+		const state = reactive<ShippingZoneFormFields>({
+			code: '',
+			description: '',
+			rule: 0,
+			is_active: true,
+			country_code: '',
+			state: ['Johor'],
+			postcodes_text: '',
+			shipping_method_ids: [],
+			method_pricing: {},
+		});
+
+		const wrapper = await mountSuspended(ZInputShippingZoneDetailsSection, {
+			props: {
+				state,
+				methodOptions: [],
+				codeForceUppercase: true,
+			},
+		});
+
+		const codeInput = wrapper.get('input[maxlength="32"]');
+		await codeInput.setValue('my_zone');
+		expect(state.code).toBe('MY_ZONE');
+	});
 });

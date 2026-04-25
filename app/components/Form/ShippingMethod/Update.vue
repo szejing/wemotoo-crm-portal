@@ -22,7 +22,7 @@ import type { ShippingMethodFormFields } from '~/utils/types/form/shipping-metho
 import { UpdateShippingMethodFormValidation } from '~/utils/schema';
 
 const props = defineProps<{
-	methodId: string;
+	methodId: string | number;
 	initialMethod: ShippingMethodOption;
 }>();
 

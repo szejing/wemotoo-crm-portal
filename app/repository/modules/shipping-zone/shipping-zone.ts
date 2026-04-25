@@ -18,10 +18,10 @@ class ShippingZoneModule extends HttpFactory {
 		});
 	}
 
-	async getSingle(id: string): Promise<ShippingZoneResp> {
+	async getSingle(zoneCode: string): Promise<ShippingZoneResp> {
 		return await this.call<ShippingZoneResp>({
 			method: 'GET',
-			url: this.RESOURCE.Single(id),
+			url: this.RESOURCE.Single(zoneCode),
 		});
 	}
 
@@ -33,18 +33,18 @@ class ShippingZoneModule extends HttpFactory {
 		});
 	}
 
-	async update(id: string, body: UpdateShippingZoneReq): Promise<ShippingZoneResp> {
+	async update(zoneCode: string, body: UpdateShippingZoneReq): Promise<ShippingZoneResp> {
 		return await this.call<ShippingZoneResp>({
 			method: 'PATCH',
-			url: this.RESOURCE.Update(id),
+			url: this.RESOURCE.Update(zoneCode),
 			body,
 		});
 	}
 
-	async remove(id: string): Promise<ShippingZoneResp> {
+	async remove(zoneCode: string): Promise<ShippingZoneResp> {
 		return await this.call<ShippingZoneResp>({
 			method: 'DELETE',
-			url: this.RESOURCE.Delete(id),
+			url: this.RESOURCE.Delete(zoneCode),
 		});
 	}
 }

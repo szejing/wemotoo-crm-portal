@@ -112,12 +112,12 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async getShippingZone(id: string): Promise<ShippingZone | undefined> {
+		async getShippingZone(code: string): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			this.loading = true;
 
 			try {
-				const response = await $api.shippingZone.getSingle(id);
+				const response = await $api.shippingZone.getSingle(code);
 
 				this.current_shipping_zone = response.shipping_zone;
 				return response.shipping_zone;
@@ -155,7 +155,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateShippingZone(id: string, payload: ShippingZoneUpdateStorePayload): Promise<ShippingZone | undefined> {
+		async updateShippingZone(zoneCode: string, payload: ShippingZoneUpdateStorePayload): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.updating = true;
@@ -163,9 +163,8 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 				const body = { ...payload } as Record<string, unknown>;
 				delete body.pricing_summary;
 				delete body.shipping_method_ids;
-				delete body.id;
 				const req = { merchant_id, ...body } as UpdateShippingZoneReq;
-				const resp = await $api.shippingZone.update(id, req);
+				const resp = await $api.shippingZone.update(zoneCode, req);
 				// const row = enrichShippingZone(resp.shipping_zone);
 				// const idx = this.zones.findIndex((z) => z.id === id);
 				// if (idx === -1) {
@@ -186,15 +185,15 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		},
 
 		async updateZoneStatus(zone: ShippingZone, is_active: boolean) {
-			await this.updateShippingZone(zone.id, { is_active });
+			await this.updateShippingZone(zone.code, { is_active });
 		},
 
-		async deleteShippingZone(id: string): Promise<void> {
+		async deleteShippingZone(zoneCode: string): Promise<void> {
 			const { $api } = useNuxtApp();
 			this.removing = true;
 			try {
-				await $api.shippingZone.remove(id);
-				this.zones = this.zones.filter((z) => z.id !== id);
+				await $api.shippingZone.remove(zoneCode);
+				this.zones = this.zones.filter((z) => z.code !== zoneCode);
 				successNotification('Shipping zone deleted');
 				await this.getShippingZones();
 			} catch (err: unknown | ErrorResponse) {

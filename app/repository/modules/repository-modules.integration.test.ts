@@ -169,7 +169,7 @@ describe('ShipmentModule', () => {
 			inv_no: 'INV-1',
 			courier_name: 'J&T',
 			tracking_no: 'TRK-1',
-			shipping_method_id: '1',
+			shipping_method_id: 1,
 		};
 		await mod.create(payload);
 
@@ -216,7 +216,7 @@ describe('ShippingMethodModule', () => {
 		setMockFetch(async () => ({ method: { id: 'm1' } }));
 
 		const mod = new ShippingMethodModule();
-		const payload = { merchant_id: 'm1', code: 'STD', description: 'Standard', priority: 1 };
+		const payload = { merchant_id: 'm1', description: 'Standard', priority: 1 };
 		await mod.create(payload);
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingMethods.Create());
@@ -287,7 +287,7 @@ describe('ShippingZoneModule', () => {
 	});
 
 	it('calls shipping zone create route', async () => {
-		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+		setMockFetch(async () => ({ shipping_zone: { code: 'west-my' } }));
 
 		const mod = new ShippingZoneModule();
 		const payload = {
@@ -295,7 +295,7 @@ describe('ShippingZoneModule', () => {
 			code: 'west-my',
 			description: 'West',
 			country_code: 'MY',
-			methods: [{ shipping_method_id: 'sm1', fee: 5, estimated_days: 2 }],
+			methods: [{ shipping_method_id: 1, fee: 5, estimated_days: 2 }],
 		};
 		await mod.create(payload);
 
@@ -305,7 +305,7 @@ describe('ShippingZoneModule', () => {
 	});
 
 	it('calls shipping zone single route', async () => {
-		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+		setMockFetch(async () => ({ shipping_zone: { code: 'z1' } }));
 
 		const mod = new ShippingZoneModule();
 		await mod.getSingle('z1');
@@ -315,7 +315,7 @@ describe('ShippingZoneModule', () => {
 	});
 
 	it('calls shipping zone update route', async () => {
-		setMockFetch(async () => ({ shipping_zone: { id: 'z1' } }));
+		setMockFetch(async () => ({ shipping_zone: { code: 'z1' } }));
 
 		const mod = new ShippingZoneModule();
 		const payload = { merchant_id: 'm1', description: 'Renamed' };
@@ -330,12 +330,10 @@ describe('ShippingZoneModule', () => {
 		setMockFetch(async () => ({ ok: true }));
 
 		const mod = new ShippingZoneModule();
-		const body = { merchant_id: 'm1', user: { id: 'u1' } };
-		await mod.remove('z1', body);
+		await mod.remove('z1');
 
 		expect(lastFetch().url).toBe(MerchantRoutes.ShippingZones.Delete('z1'));
 		expect(lastFetch().opts.method).toBe('DELETE');
-		expect(lastFetch().opts.body).toEqual(body);
 	});
 });
 

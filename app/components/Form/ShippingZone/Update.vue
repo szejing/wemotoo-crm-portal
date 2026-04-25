@@ -2,7 +2,7 @@
 	<div class="w-full">
 		<UForm ref="formRef" :schema="schema" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
 			<div class="lg:col-span-9 space-y-6">
-				<ZInputShippingZoneDetailsSection :state="formState" :method-options="methodOptions" />
+				<ZInputShippingZoneDetailsSection :state="formState" :method-options="methodOptions" code-readonly />
 			</div>
 
 			<div class="lg:col-span-3">
@@ -25,7 +25,7 @@ import type { ShippingZoneFormFields } from '~/utils/types/form/shipping-zone-fo
 import { parseStatesFromApi, serializeStatesForApi } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
-	zoneId: string;
+	zoneCode: string;
 	initialZone: ShippingZone;
 }>();
 
@@ -50,8 +50,10 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 		.join('\n');
 };
 
-const linkShippingMethodId = (l: NonNullable<ShippingZone['methods']>[number]) =>
-	l.shipping_method?.id ?? (l as { shipping_method_id?: string }).shipping_method_id ?? '';
+const linkShippingMethodId = (l: NonNullable<ShippingZone['methods']>[number]) => {
+	const raw = l.shipping_method?.id ?? (l as { shipping_method_id?: number }).shipping_method_id;
+	return raw != null ? String(raw) : '';
+};
 
 const pricingFromMethodLinks = (z: ShippingZone): ShippingZoneFormFields['method_pricing'] => {
 	const out: ShippingZoneFormFields['method_pricing'] = {};
@@ -172,7 +174,7 @@ const buildPostcodePatterns = (text: string): ShippingZonePostcodePattern[] => {
 const submitForm = async (event: FormSubmitEvent<Schema>) => {
 	const data = event.data;
 	const methods = data.shipping_method_ids.map((id) => ({
-		shipping_method_id: id,
+		shipping_method_id: Number(id),
 		fee: data.method_pricing[id]?.fee ?? 0,
 		estimated_days:
 			data.method_pricing[id]?.estimated_days != null && !Number.isNaN(data.method_pricing[id]!.estimated_days!)
@@ -180,7 +182,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 				: null,
 	}));
 	const payload = {
-		code: data.code.trim(),
+		code: props.zoneCode.trim(),
 		description: data.description.trim() || undefined,
 		rule: data.rule ?? 0,
 		is_active: data.is_active,
@@ -191,7 +193,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		shipping_method_ids: [...data.shipping_method_ids],
 	};
 
-	const success = await zoneStore.updateShippingZone(props.zoneId, payload);
+	const success = await zoneStore.updateShippingZone(props.zoneCode, payload);
 
 	if (success) {
 		// const product = await productStore.getProduct(formState.value.code!);
@@ -212,7 +214,7 @@ onMounted(async () => {
 		await shippingMethodStore.getShippingMethods();
 		methodOptions.value = shippingMethodStore.methods.map((m) => ({
 			label: m.description,
-			value: m.id,
+			value: String(m.id),
 		}));
 	} catch {
 		methodOptions.value = [];

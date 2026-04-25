@@ -165,22 +165,10 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.adding = true;
 
-			const buildShippingMethodCode = (description: string): string => {
-				const core = description
-					.trim()
-					.toUpperCase()
-					.replace(/[^A-Z0-9]+/g, '_')
-					.replace(/^_+|_+$/g, '')
-					.slice(0, 24);
-				const suffix = Date.now().toString(36).toUpperCase().slice(-4);
-				return `${core || 'SM'}_${suffix}`.slice(0, 32);
-			};
-
 			try {
 				const response = await $api.shippingMethod.create({
 					merchant_id: String(merchant_id ?? ''),
 					...payload,
-					code: payload.code ?? buildShippingMethodCode(payload.description),
 				});
 				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
@@ -197,16 +185,19 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 		},
 
 		async updateStatus(method: ShippingMethodOption, is_active: boolean) {
-			await this.updateShippingMethod(method.id, { is_active });
+			await this.updateShippingMethod(String(method.id), { is_active });
 		},
 
-		async updateShippingMethod(id: string, payload: ShippingMethodUpdateBody): Promise<ShippingMethodOption | undefined> {
+		async updateShippingMethod(
+			id: string | number,
+			payload: ShippingMethodUpdateBody,
+		): Promise<ShippingMethodOption | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.updating = true;
 
 			try {
-				const response = await $api.shippingMethod.update(id, {
+				const response = await $api.shippingMethod.update(String(id), {
 					merchant_id: String(merchant_id ?? ''),
 					...payload,
 				});
@@ -223,12 +214,12 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			}
 		},
 
-		async deleteShippingMethod(id: string): Promise<ShippingMethodOption | undefined> {
+		async deleteShippingMethod(id: string | number): Promise<ShippingMethodOption | undefined> {
 			const { $api } = useNuxtApp();
 			this.removing = true;
 
 			try {
-				const response = await $api.shippingMethod.remove(id);
+				const response = await $api.shippingMethod.remove(String(id));
 				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
 				successNotification('Shipping method deleted');

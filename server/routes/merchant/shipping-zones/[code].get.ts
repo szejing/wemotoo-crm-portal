@@ -3,17 +3,15 @@ import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const id = getRouterParams(event).id;
-		if (!id) {
+		const code = getRouterParams(event).code;
+		if (!code) {
 			throw createError({
 				statusCode: 400,
-				statusMessage: 'Shipping zone id is required',
+				statusMessage: 'Shipping zone code is required',
 			});
 		}
-		const body = await readBody(event);
-		const result = await signedFetch(event, Routes.ShippingZones.Delete(id), {
-			method: 'DELETE',
-			body,
+		const result = await signedFetch(event, Routes.ShippingZones.Single(code), {
+			method: 'GET',
 		});
 		return result;
 	} catch (err) {

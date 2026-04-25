@@ -2,40 +2,19 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
-import { UBadge, USwitch } from '#components';
+import { USwitch } from '#components';
 
 type TranslateFn = (key: string) => string;
 
 export function getShippingMethodColumns(t: TranslateFn): TableColumn<ShippingMethodOption>[] {
 	return [
 		{
-			id: 'code_description',
-			accessorKey: 'code',
-			header: `${t('common.code')} / ${t('common.description')}`,
+			id: 'description',
+			accessorKey: 'description',
+			header: t('common.description'),
 			cell: ({ row }) => {
-				const code = row.original.code?.trim();
-				const description = row.original.description?.trim();
-				const children: ReturnType<typeof h>[] = [];
-				if (code) {
-					children.push(
-						h(
-							UBadge,
-							{
-								variant: 'subtle',
-								color: 'neutral',
-								size: 'sm',
-								class: 'shrink-0 font-mono uppercase tracking-wide',
-							},
-							() => code,
-						),
-					);
-				} else {
-					children.push(h('span', { class: 'text-muted' }, '—'));
-				}
-				if (description) {
-					children.push(h('span', {}, description));
-				}
-				return h('div', { class: 'flex flex-col gap-1 items-start min-w-0' }, children);
+				const description = row.original.description?.trim() ?? '';
+				return h('span', { class: 'min-w-0' }, description);
 			},
 		},
 

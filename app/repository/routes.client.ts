@@ -246,9 +246,12 @@ const MerchantRoutes = {
 	ShippingZones: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/many`,
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}`,
-		Single: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${id}`,
-		Update: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${id}`,
-		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${id}`,
+		Single: (code: string) =>
+			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
+		Update: (code: string) =>
+			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
+		Delete: (code: string) =>
+			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
 	},
 };
 

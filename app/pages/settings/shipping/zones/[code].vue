@@ -4,9 +4,9 @@
 			<FormShippingZoneUpdateLoading v-if="isLoading" />
 			<FormShippingZoneUpdate
 				v-else-if="current_shipping_zone"
-				:key="current_shipping_zone.id"
+				:key="current_shipping_zone.code"
 				ref="formRef"
-				:zone-id="current_shipping_zone.id"
+				:zone-code="current_shipping_zone.code"
 				:initial-zone="current_shipping_zone"
 			/>
 		</div>
@@ -54,7 +54,7 @@ import { ICONS } from '~/utils/icons';
 import type { ShippingZone } from '~/utils/types/shipping-zone';
 
 const route = useRoute();
-const id = computed(() => route.params.id as string);
+const code = computed(() => route.params.code as string);
 
 const overlay = useOverlay();
 const { t } = useI18n();
@@ -82,7 +82,7 @@ useHead({
 onMounted(async () => {
 	isLoading.value = true;
 	try {
-		const zone = await shippingZoneStore.getShippingZone(id.value);
+		const zone = await shippingZoneStore.getShippingZone(String(code.value));
 		if (zone) {
 			shippingZoneStore.current_shipping_zone = zone;
 		} else {
@@ -106,14 +106,14 @@ const confirmDelete = () => {
 		return;
 	}
 
-	const zoneId = current_shipping_zone.value.id;
+	const zoneKey = current_shipping_zone.value.code;
 
 	const confirmModal = overlay.create(ZModalConfirmation, {
 		props: {
 			message: t('components.shippingZone.confirmDelete'),
 			action: 'delete',
 			onConfirm: async () => {
-				await shippingZoneStore.deleteShippingZone(zoneId);
+				await shippingZoneStore.deleteShippingZone(zoneKey);
 				confirmModal.close();
 				await navigateTo('/settings/shipping/zones');
 			},
