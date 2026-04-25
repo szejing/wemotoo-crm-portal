@@ -1,12 +1,13 @@
 <template>
 	<USelectMenu
-		v-model="country?.iso2"
+		v-model="selectedIso2"
 		v-model:search-term="searchTerm"
 		:items="countryItems"
 		:search-input="{
 			placeholder: 'Search country…',
 			icon: 'i-lucide-search',
 		}"
+		:filter-fields="['display_name', 'iso2', 'dial_code']"
 		size="md"
 		:placeholder="$t('components.selectMenu.selectCountry')"
 		value-key="iso2"
@@ -19,24 +20,35 @@ import type { Country } from '~/utils/types/country';
 
 const searchTerm = ref('');
 const dataStore = useDataStore();
-const { countries } = storeToRefs(dataStore);
 
 const props = defineProps<{ country: Country | undefined }>();
+
+const emit = defineEmits<{
+	'update:country': [value: Country | undefined];
+}>();
+
+onMounted(() => {
+	if (dataStore.countries.length === 0) {
+		void dataStore.getCountries();
+	}
+});
 
 const countryItems = computed(() => {
 	return dataStore.countries.map((country) => ({
 		...country,
-		label: country.iso2,
+		label: country.display_name,
 	}));
 });
-const emit = defineEmits(['update:country']);
 
-const country = computed({
-	get() {
-		return props.country ?? undefined;
-	},
-	set(value) {
-		emit('update:country', JSON.parse(JSON.stringify(value)));
+const selectedIso2 = computed({
+	get: () => props.country?.iso2,
+	set: (iso2: string | undefined) => {
+		if (!iso2) {
+			emit('update:country', undefined);
+			return;
+		}
+		const c = dataStore.countries.find((x) => x.iso2 === iso2);
+		emit('update:country', c ? (JSON.parse(JSON.stringify(c)) as Country) : undefined);
 	},
 });
 </script>

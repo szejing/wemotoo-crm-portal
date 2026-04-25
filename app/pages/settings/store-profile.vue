@@ -128,10 +128,13 @@
 									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
 								/>
 							</UFormField>
+							<UFormField :label="$t('pages.storeProfilePage.country')">
+								<ZSelectMenuCountry :country="addressCountry" @update:country="onAddressCountry" />
+							</UFormField>
 							<UFormField :label="$t('pages.storeProfilePage.state')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
+								<ZSelectMenuState
+									:state-name="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
+									@update:state-name="(v: string) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
 								/>
 							</UFormField>
 							<UFormField :label="$t('pages.storeProfilePage.postalCode')">
@@ -140,40 +143,18 @@
 									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.country')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, v)"
-								/>
-							</UFormField>
 						</div>
 					</div>
 
-					<!-- Operating hours & off days -->
-					<div class="space-y-4">
-						<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
-						<div class="grid gap-4 sm:grid-cols-2">
-							<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
-								<ZSelectMenuDays :days="operationOffDaysArray" @update:days="onOperationOffDaysUpdate" />
-							</UFormField>
-							<UFormField :label="$t('components.zInput.startTime')">
-								<ZSelectMenuTime
-									:title="$t('components.zInput.selectTime')"
-									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
-									type="start"
-									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
-								/>
-							</UFormField>
-							<UFormField :label="$t('components.zInput.endTime')">
-								<ZSelectMenuTime
-									:title="$t('components.zInput.selectTime')"
-									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
-									type="end"
-									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
-								/>
-							</UFormField>
-						</div>
-					</div>
+					<ZFormStoreOperatingHours
+						:off-days="operationOffDaysArray"
+						:start-time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
+						:end-time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
+						:time-select-title="$t('components.zInput.selectTime')"
+						@update:off-days="onOperationOffDaysUpdate"
+						@update:start-time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
+						@update:end-time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
+					/>
 				</div>
 			</UCard>
 		</div>
@@ -183,6 +164,8 @@
 <script lang="ts" setup>
 import { ZModalLoading } from '#components';
 import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
+import { useDataStore } from '~/stores/Data/Data';
+import type { Country } from '~/utils/types/country';
 import { ICONS } from '~/utils/icons';
 import { accountTypeLabel } from '~/utils/options/account-type';
 
@@ -191,6 +174,7 @@ useHead({ title: () => `${t('common.appName')} - ${t('nav.storeProfile')}` });
 
 const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
+const dataStore = useDataStore();
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
 const { updatedInfo, updating, merchant } = storeToRefs(merchantInfoStore);
@@ -235,6 +219,27 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 		set_value: value ?? '',
 	});
 };
+
+const addressCountry = computed((): Country | undefined => {
+	const iso2 = getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)?.trim();
+	if (!iso2) return undefined;
+	return dataStore.countries.find((c) => c.iso2 === iso2);
+});
+
+const onAddressCountry = (c: Country | undefined) => {
+	const prevIso2 = getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY);
+	const nextIso2 = c?.iso2 ?? '';
+	setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, nextIso2);
+	if (nextIso2 !== prevIso2) {
+		setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, '');
+	}
+};
+
+onMounted(() => {
+	if (dataStore.countries.length === 0) {
+		void dataStore.getCountries();
+	}
+});
 
 /** Off days from merchant info (OPERATION_OFF_DAYS) as comma-separated "Mon, Tue, Wed". */
 const operationOffDaysArray = computed(() => {

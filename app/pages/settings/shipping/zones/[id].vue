@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 import { ZModalConfirmation } from '#components';
 import { ICONS } from '~/utils/icons';
-import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
+import type { ShippingZone } from '~/utils/types/shipping-zone';
 
 const route = useRoute();
 const id = computed(() => route.params.id as string);
@@ -106,7 +106,7 @@ const goBack = () => {
 	useRouter().back();
 };
 
-const onSaved = (zone: ShippingZoneListItem | undefined) => {
+const onSaved = (zone: ShippingZone | undefined) => {
 	if (zone) {
 		shippingZoneStore.current_shipping_zone = zone;
 	}

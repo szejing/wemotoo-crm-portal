@@ -2,15 +2,15 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { formatCurrency } from 'wemotoo-common';
-import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 import { parsePricingSummarySegments } from '~/utils/shipping-zone-pricing-summary';
 import { UBadge, USwitch } from '#components';
+import type { ShippingZone } from '../types/shipping-zone';
 
 type TranslateFn = (key: string) => string;
 
 const DEFAULT_ZONE_CURRENCY = 'MYR';
 
-export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZoneListItem>[] {
+export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZone>[] {
 	return [
 		{
 			id: 'code_description',
@@ -68,9 +68,7 @@ export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZone
 					);
 				}
 				if (state) {
-					regionParts.push(
-						h('span', { class: 'text-sm font-medium text-neutral-900 dark:text-neutral-100 leading-snug min-w-0' }, state),
-					);
+					regionParts.push(h('span', { class: 'text-sm font-medium text-neutral-900 dark:text-neutral-100 leading-snug min-w-0' }, state));
 				}
 				return h('div', { class: 'flex items-start gap-2 min-w-0' }, regionParts);
 			},
@@ -79,7 +77,7 @@ export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZone
 			id: 'pricing_summary',
 			header: () => t('table.shippingZonePricing'),
 			cell: ({ row }) => {
-				const text = row.original.pricing_summary?.trim();
+				const text = row.original.methods?.[0]?.fee.toFixed(2);
 				if (!text) {
 					return h('span', { class: 'text-muted' }, '—');
 				}
@@ -90,35 +88,21 @@ export function getShippingZoneColumns(t: TranslateFn): TableColumn<ShippingZone
 				return h(
 					'div',
 					{
-						class:
-							'flex flex-col gap-1 items-start pr-8 min-w-0',
+						class: 'flex flex-col gap-1 items-start pr-8 min-w-0',
 					},
 					segments.map((seg) => {
 						const amount = formatCurrency(seg.fee, DEFAULT_ZONE_CURRENCY);
 						if (!seg.label) {
-							return h(
-								'span',
-								{ class: 'text-sm font-medium tabular-nums text-neutral-900 dark:text-neutral-100' },
-								amount,
-							);
+							return h('span', { class: 'text-sm font-medium tabular-nums text-neutral-900 dark:text-neutral-100' }, amount);
 						}
 						return h(
 							'div',
 							{
-								class:
-									'flex w-fit max-w-full items-baseline gap-2 text-sm',
+								class: 'flex w-fit max-w-full items-baseline gap-2 text-sm',
 							},
 							[
-								h(
-									'span',
-									{ class: 'min-w-0 break-words text-neutral-600 dark:text-neutral-400' },
-									seg.label,
-								),
-								h(
-									'span',
-									{ class: 'font-medium tabular-nums text-neutral-900 dark:text-neutral-100 shrink-0' },
-									amount,
-								),
+								h('span', { class: 'min-w-0 break-words text-neutral-600 dark:text-neutral-400' }, seg.label),
+								h('span', { class: 'font-medium tabular-nums text-neutral-900 dark:text-neutral-100 shrink-0' }, amount),
 							],
 						);
 					}),

@@ -1,63 +1,91 @@
 <template>
-	<UFormField name="categories" class="mt-2">
-		<USelectMenu
-			v-model:search-term="searchTerm"
-			:items="categoryItems"
-			:search-input="{
-				placeholder: 'Search state…',
-				icon: 'i-lucide-search',
-			}"
-			size="md"
-			:placeholder="$t('components.selectMenu.selectCategory')"
-			value-key="code"
-		>
-			<template #default>
-				<span v-if="category" class="truncate">
-					<div class="flex items-center gap-2">
-						<p class="text-neutral-700 font-semibold">[{{ category.code }}] - {{ category.description }}</p>
-					</div>
-				</span>
-				<span v-else>{{ $t('components.selectMenu.selectCategory') }}</span>
-			</template>
-
-			<template #item="{ item: catg }">
-				<div class="flex items-center gap-2">
-					<p class="text-neutral-300 font-light">[{{ catg.code }}]</p>
-					<p class="text-neutral-700 font-semibold">{{ catg.description }}</p>
-				</div>
-			</template>
-		</USelectMenu>
-	</UFormField>
+	<USelectMenu
+		v-model="selectedValue"
+		:items="stateOptions"
+		:multiple="multiple"
+		value-key="value"
+		label-key="label"
+		size="md"
+		class="w-full"
+		:placeholder="placeholderText"
+	>
+		<template v-if="slots.default" #default>
+			<slot
+				:values="displayValues"
+				:state-label="stateLabel"
+				:deselect="deselect"
+				:placeholder="placeholderText"
+			/>
+		</template>
+	</USelectMenu>
 </template>
 
 <script lang="ts" setup>
-import type { Category } from '~/utils/types/category';
+import { mergeMalaysiaStateOptions } from '~/utils/data/malaysia-states';
 
-const searchTerm = ref('');
-const categoryStore = useProductCategoryStore();
-const { categories } = storeToRefs(categoryStore);
-
-const props = defineProps<{ category: Category | undefined; ignoreCodes?: string[] }>();
-
-const availableCategories = computed(() => {
-	return categories.value.filter((catg) => !props.ignoreCodes?.includes(catg.code));
-});
-
-const categoryItems = computed(() => {
-	return availableCategories.value.map((category) => ({
-		...category,
-		label: category.code,
-	}));
-});
-
-const emit = defineEmits(['update:category']);
-
-const category = computed({
-	get() {
-		return props.category ?? undefined;
+const props = withDefaults(
+	defineProps<{
+		/** Malaysia state/territory name; must match a built-in or merged option value. */
+		stateName?: string;
+		/** When `multiple` is true, the selected list (e.g. shipping zone). */
+		stateNames?: string[];
+		multiple?: boolean;
+		/** Shown in the trigger and passed to the default slot; defaults to the single-state i18n string. */
+		placeholder?: string;
+	}>(),
+	{
+		stateName: '',
+		stateNames: () => [],
+		multiple: false,
 	},
-	set(value) {
-		emit('update:category', JSON.parse(JSON.stringify(value)));
+);
+
+const emit = defineEmits<{
+	'update:stateName': [value: string];
+	'update:stateNames': [value: string[]];
+}>();
+
+const { t } = useI18n();
+const slots = useSlots();
+
+const displayValues = computed(() =>
+	props.multiple ? [...props.stateNames] : props.stateName ? [props.stateName] : [],
+);
+
+const stateOptions = computed(() => mergeMalaysiaStateOptions(displayValues.value));
+
+function stateLabel(value: string): string {
+	return stateOptions.value.find((o) => o.value === value)?.label ?? value;
+}
+
+const placeholderText = computed(() => props.placeholder ?? t('components.selectMenu.selectState'));
+
+function deselect(v: string) {
+	if (props.multiple) {
+		emit(
+			'update:stateNames',
+			props.stateNames.filter((x) => x !== v),
+		);
+	} else if (v === props.stateName) {
+		emit('update:stateName', '');
+	}
+}
+
+const selectedValue = computed({
+	get: () => {
+		if (props.multiple) {
+			return props.stateNames;
+		}
+		return props.stateName || undefined;
+	},
+	set: (v: string | string[] | undefined) => {
+		if (props.multiple) {
+			const next = Array.isArray(v) ? v : v ? [v] : [];
+			emit('update:stateNames', next);
+		} else {
+			const s = (typeof v === 'string' ? v : Array.isArray(v) ? (v[0] ?? '') : '').trim();
+			emit('update:stateName', s);
+		}
 	},
 });
 </script>

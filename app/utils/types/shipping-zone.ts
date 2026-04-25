@@ -26,7 +26,7 @@ export type ShippingZone = {
 	rule: number;
 	is_default: boolean;
 	is_active: boolean;
-	method?: ShippingMethodZoneWithMethod[];
+	methods?: ShippingMethodZoneWithMethod[];
 };
 
 /** Mirrors `GetShippingZoneResponseDto` in ecommerce-nestjs shipping-zone response DTO. */
@@ -39,6 +39,3 @@ export type GetShippingZonesResponse = {
 	shipping_zones: ShippingZone[];
 	total: number;
 };
-
-/** List/table row: API zone plus denormalized pricing text for the listing column. */
-export type ShippingZoneListItem = ShippingZone & { pricing_summary?: string };

@@ -8,7 +8,7 @@ export const useDataStore = defineStore('dataStore', {
 		async getCountries() {
 			const { $api } = useNuxtApp();
 			const { data } = await $api.country.getCountries({
-				$top: 10,
+				$top: 500,
 			});
 			this.countries = data;
 		},

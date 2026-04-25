@@ -20,17 +20,17 @@ import { formatCurrency } from 'wemotoo-common';
 import type { z } from 'zod';
 import { UpdateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
-import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
+import type { ShippingZone } from '~/utils/types/shipping-zone';
 import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
 import { parseStatesFromApi, serializeStatesForApi } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
 	zoneId: string;
-	initialZone: ShippingZoneListItem;
+	initialZone: ShippingZone;
 }>();
 
 const emit = defineEmits<{
-	saved: [zone: ShippingZoneListItem | undefined];
+	saved: [zone: ShippingZone | undefined];
 }>();
 
 const { t } = useI18n();
@@ -54,12 +54,12 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 		.join('\n');
 };
 
-const linkShippingMethodId = (l: NonNullable<ShippingZoneListItem['method']>[number]) =>
+const linkShippingMethodId = (l: NonNullable<ShippingZone['methods']>[number]) =>
 	l.shipping_method?.id ?? (l as { shipping_method_id?: string }).shipping_method_id ?? '';
 
-const pricingFromMethodLinks = (z: ShippingZoneListItem): ShippingZoneFormState['method_pricing'] => {
+const pricingFromMethodLinks = (z: ShippingZone): ShippingZoneFormState['method_pricing'] => {
 	const out: ShippingZoneFormState['method_pricing'] = {};
-	for (const l of z.method ?? []) {
+	for (const l of z.methods ?? []) {
 		const sid = linkShippingMethodId(l);
 		if (!sid) {
 			continue;
@@ -72,9 +72,9 @@ const pricingFromMethodLinks = (z: ShippingZoneListItem): ShippingZoneFormState[
 	return out;
 };
 
-const shippingMethodIdsFromLinks = (z: ShippingZoneListItem): string[] => (z.method ?? []).map(linkShippingMethodId).filter((id): id is string => Boolean(id));
+const shippingMethodIdsFromLinks = (z: ShippingZone): string[] => (z.methods ?? []).map(linkShippingMethodId).filter((id): id is string => Boolean(id));
 
-const applyFromZone = (z: ShippingZoneListItem) => {
+const applyFromZone = (z: ShippingZone) => {
 	formState.code = z.code;
 	formState.description = z.description ?? '';
 	formState.rule = z.rule ?? 0;
@@ -206,15 +206,15 @@ const submit = () => {
 defineExpose({ submit });
 
 onMounted(async () => {
-	// try {
-	// 	const methods = await shippingMethodStore.getShippingMethods();
-	// 	methodOptions.value = (methods ?? []).map((m) => ({
-	// 		label: (m as ShippingMethodBrief).description,
-	// 		value: m.id,
-	// 	}));
-	// } catch {
-	// 	methodOptions.value = [];
-	// }
+	try {
+		await shippingMethodStore.getShippingMethods();
+		methodOptions.value = shippingMethodStore.methods.map((m) => ({
+			label: m.description,
+			value: m.id,
+		}));
+	} catch {
+		methodOptions.value = [];
+	}
 });
 </script>
 

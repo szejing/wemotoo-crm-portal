@@ -5,7 +5,7 @@ import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ShippingZoneMutableFields } from '~/utils/types/order-fulfillment-shipping';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type { ShippingZone, ShippingZoneListItem } from '~/utils/types/shipping-zone';
+import type { ShippingZone } from '~/utils/types/shipping-zone';
 import type { CreateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/create-shipping-zone.req';
 import type { UpdateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/update-shipping-zone.req';
 
@@ -24,7 +24,7 @@ const initialEmptyFilter: ShippingZoneFilter = {
 };
 
 /** Form submit + partial updates: API fields plus `shipping_method_ids` (stripped). */
-type UpdateShippingZoneStorePayload = Partial<Omit<ShippingZoneListItem, 'id' | 'pricing_summary'>> & {
+type UpdateShippingZoneStorePayload = Partial<Omit<ShippingZone, 'id' | 'pricing_summary' | 'methods'>> & {
 	methods?: CreateShippingZoneReq['methods'];
 	/** Not sent to the API; used by create/update forms when building the payload. */
 	shipping_method_ids?: string[];
@@ -37,9 +37,9 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		updating: false as boolean,
 		removing: false as boolean,
 		exporting: false as boolean,
-		zones: [] as ShippingZoneListItem[],
+		zones: [] as ShippingZone[],
 		total_shipping_zones: 0 as number,
-		current_shipping_zone: undefined as ShippingZoneListItem | undefined,
+		current_shipping_zone: undefined as ShippingZone | undefined,
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
@@ -102,7 +102,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async getShippingZone(id: string): Promise<ShippingZoneListItem | undefined> {
+		async getShippingZone(id: string): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			this.loading = true;
 
@@ -120,7 +120,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async createShippingZone(payload: ShippingZoneMutableFields): Promise<ShippingZoneListItem | undefined> {
+		async createShippingZone(payload: ShippingZoneMutableFields): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.adding = true;
@@ -144,7 +144,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateShippingZone(id: string, payload: UpdateShippingZoneStorePayload): Promise<ShippingZoneListItem | undefined> {
+		async updateShippingZone(id: string, payload: UpdateShippingZoneStorePayload): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.updating = true;
@@ -175,7 +175,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateZoneStatus(zone: ShippingZoneListItem, is_active: boolean) {
+		async updateZoneStatus(zone: ShippingZone, is_active: boolean) {
 			await this.updateShippingZone(zone.id, { is_active });
 		},
 

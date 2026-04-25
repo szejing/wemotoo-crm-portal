@@ -53,30 +53,25 @@
 
 				<UFormField v-else name="state" :label="$t('pages.shippingZoneState')">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.state') }}</p>
-					<USelectMenu
-						v-model="state.state"
-						:items="stateOptions"
+					<ZSelectMenuState
+						v-model:state-names="state.state"
 						multiple
-						value-key="value"
-						label-key="label"
-						size="md"
-						class="w-full"
 						:placeholder="$t('components.shippingZoneForm.selectStates')"
 					>
-						<template #default>
-							<div v-if="state.state.length > 0" class="flex flex-wrap gap-1.5">
-								<UBadge v-for="st in state.state" :key="st" color="primary" variant="subtle" class="inline-flex max-w-[min(100%,12rem)] items-center gap-1">
+						<template #default="{ values, stateLabel, deselect, placeholder }">
+							<div v-if="values.length > 0" class="flex flex-wrap gap-1.5">
+								<UBadge v-for="st in values" :key="st" color="primary" variant="subtle" class="inline-flex max-w-[min(100%,12rem)] items-center gap-1">
 									<span class="min-w-0 truncate">{{ stateLabel(st) }}</span>
 									<UIcon
 										:name="ICONS.CROSS"
 										class="w-3.5 h-3.5 shrink-0 text-error-500 dark:text-error-400 hover:text-error-600 dark:hover:text-error-300 cursor-pointer"
-										@click.stop="removeState(st)"
+										@click.stop="deselect(st)"
 									/>
 								</UBadge>
 							</div>
-							<span v-else class="text-neutral-400 text-sm">{{ $t('components.shippingZoneForm.selectStates') }}</span>
+							<span v-else class="text-neutral-400 text-sm">{{ placeholder }}</span>
 						</template>
-					</USelectMenu>
+					</ZSelectMenuState>
 				</UFormField>
 
 				<UFormField v-if="SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS" name="postcodes_text" :label="$t('pages.shippingZonePostcodes')">
@@ -213,7 +208,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS, mergeMalaysiaStateOptions } from '~/utils/data/malaysia-states';
+import { SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS } from '~/utils/data/malaysia-states';
 import { ICONS } from '~/utils/icons';
 
 export type ShippingZoneFormState = {
@@ -278,16 +273,6 @@ watch(
 	},
 	{ deep: true },
 );
-
-function removeState(value: string) {
-	props.state.state = props.state.state.filter((x) => x !== value);
-}
-
-const stateOptions = computed(() => mergeMalaysiaStateOptions(props.state.state));
-
-function stateLabel(value: string): string {
-	return stateOptions.value.find((o) => o.value === value)?.label ?? value;
-}
 
 /** When country/postcode fields are shown, `state` is a single free-text value in one slot. */
 const stateTextSingleMode = computed({

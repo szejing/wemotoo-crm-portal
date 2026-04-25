@@ -20,12 +20,12 @@ import { formatCurrency } from 'wemotoo-common';
 import type { z } from 'zod';
 import { CreateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
-import type { ShippingZoneListItem } from '~/utils/types/shipping-zone';
 import { serializeStatesForApi } from '~/utils/data/malaysia-states';
 import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
+import type { ShippingZone } from '~/utils/types/shipping-zone';
 
 const emit = defineEmits<{
-	saved: [zone: ShippingZoneListItem | undefined];
+	saved: [zone: ShippingZone | undefined];
 }>();
 
 const { t } = useI18n();
@@ -153,8 +153,8 @@ defineExpose({ submit });
 
 onMounted(async () => {
 	try {
-		const methods = await shippingMethodStore.getShippingMethods();
-		methodOptions.value = methods.map((m) => ({
+		await shippingMethodStore.getShippingMethods();
+		methodOptions.value = shippingMethodStore.methods.map((m) => ({
 			label: m.description,
 			value: m.id,
 		}));
