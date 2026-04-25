@@ -1,7 +1,5 @@
-import type { CreateShippingMethodReq } from './create-shipping-method.req';
+import type { ShippingMethodUpdateBody } from './create-shipping-method.req';
 
-export type UpdateShippingMethodReq = Partial<
-	Omit<CreateShippingMethodReq, 'merchant_id'>
-> & {
+export type UpdateShippingMethodReq = ShippingMethodUpdateBody & {
 	merchant_id: string;
 };

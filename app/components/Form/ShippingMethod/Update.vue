@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full">
-		<UForm ref="formRef" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
+		<UForm ref="formRef" :schema="shippingMethodSchema" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
 			<div class="lg:col-span-9 space-y-6">
 				<ZInputShippingMethodDetailsSection :state="formState" :currency-code="currencyCode" />
 			</div>
@@ -16,7 +16,10 @@
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types';
+import type { z } from 'zod';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
+import type { ShippingMethodFormFields } from '~/utils/types/form/shipping-method-form';
+import { UpdateShippingMethodFormValidation } from '~/utils/schema';
 
 const props = defineProps<{
 	methodId: string;
@@ -26,13 +29,11 @@ const props = defineProps<{
 const shippingStore = useShippingMethodStore();
 const { t } = useI18n();
 
-type ShippingMethodFormState = {
-	description: string;
-	priority: number;
-	is_active: boolean;
-};
+const shippingMethodSchema = computed(() => UpdateShippingMethodFormValidation(t));
 
-const formState = reactive<ShippingMethodFormState>({
+type Schema = z.infer<ReturnType<typeof UpdateShippingMethodFormValidation>>;
+
+const formState = reactive<ShippingMethodFormFields>({
 	description: '',
 	priority: 1,
 	is_active: true,
@@ -64,14 +65,14 @@ watch(
 	{ immediate: true },
 );
 
-const submitForm = async (_event: FormSubmitEvent<ShippingMethodFormState>) => {
-	const payload = {
-		description: formState.description.trim(),
-		priority: Number(formState.priority) || 1,
-		is_active: formState.is_active,
-	};
+const submitForm = async (event: FormSubmitEvent<Schema>) => {
+	const { description, priority, is_active } = event.data;
 
-	const result = await shippingStore.updateShippingMethod(props.methodId, payload);
+	const result = await shippingStore.updateShippingMethod(props.methodId, {
+		description,
+		priority,
+		is_active,
+	});
 
 	if (result) {
 		navigateTo(`/settings/shipping/methods`);

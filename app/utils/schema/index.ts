@@ -40,6 +40,7 @@ import { CreateBundledVoucherFormValidation } from './Voucher/Create/CreateBundl
 import { CreateVoucherValidation } from './Voucher/Create/CreateVoucherValidation';
 import { UpdateVoucherFormValidation } from './Voucher/Update/UpdateVoucherFormValidation';
 import { CreateShippingZoneValidation, UpdateShippingZoneValidation } from './ShippingZone/Create/ShippingZoneValidation';
+import { CreateShippingMethodValidation, UpdateShippingMethodFormValidation } from './ShippingMethod/ShippingMethodFormValidation';
 
 export {
 	LoginValidation,
@@ -89,4 +90,6 @@ export {
 	UpdateVoucherFormValidation,
 	CreateShippingZoneValidation,
 	UpdateShippingZoneValidation,
+	CreateShippingMethodValidation,
+	UpdateShippingMethodFormValidation,
 };

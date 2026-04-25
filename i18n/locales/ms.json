@@ -248,6 +248,10 @@
 			"stateRequired": "Negeri wajib dipilih",
 			"methodsRequired": "Pilih sekurang-kurangnya satu kaedah penghantaran"
 		},
+		"shippingMethod": {
+			"descriptionRequired": "Keterangan wajib",
+			"priorityMin": "Keutamaan mestilah sifar atau lebih besar"
+		},
 		"category": {
 			"codeRequired": "Kod wajib",
 			"descriptionRequired": "Keterangan wajib"

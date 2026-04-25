@@ -5,8 +5,8 @@ import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
-import type { CreateShippingMethodReq } from '~/repository/modules/shipping-method/models/request/create-shipping-method.req';
-import type { UpdateShippingMethodReq } from '~/repository/modules/shipping-method/models/request/update-shipping-method.req';
+import type { ShippingMethodUpdateBody, ShippingMethodWriteBody } from '~/repository/modules/shipping-method/models/request/create-shipping-method.req';
+import type { ShippingMethodFormFields } from '~/utils/types/form/shipping-method-form';
 
 type ShippingMethodFilter = {
 	query: string;
@@ -22,6 +22,12 @@ const initialEmptyFilter: ShippingMethodFilter = {
 	page_size: options_page_size[0] as number,
 };
 
+const initialEmptyNewShippingMethod: ShippingMethodFormFields = {
+	description: '',
+	priority: 1,
+	is_active: true,
+};
+
 export const useShippingMethodStore = defineStore('shippingMethodStore', {
 	state: () => ({
 		loading: false as boolean,
@@ -32,6 +38,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 		methods: [] as ShippingMethodOption[],
 		total_shipping_methods: 0 as number,
 		current_shipping_method: undefined as ShippingMethodOption | undefined,
+		new_shipping_method: structuredClone(initialEmptyNewShippingMethod),
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
@@ -39,6 +46,10 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 		getDisplayMethods: (state) => state.methods,
 	},
 	actions: {
+		resetNewShippingMethod() {
+			this.new_shipping_method = structuredClone(initialEmptyNewShippingMethod);
+		},
+
 		async updatePageSize(size: number) {
 			this.filter.page_size = size;
 			this.filter.current_page = 1;
@@ -149,7 +160,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			}
 		},
 
-		async createShippingMethod(payload: Omit<CreateShippingMethodReq, 'merchant_id'>): Promise<ShippingMethodOption | undefined> {
+		async createShippingMethod(payload: ShippingMethodWriteBody): Promise<ShippingMethodOption | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.adding = true;
@@ -173,6 +184,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 				});
 				this.current_shipping_method = response.shipping_method;
 				await this.getShippingMethods();
+				this.resetNewShippingMethod();
 				successNotification('Shipping method created');
 				return response.shipping_method;
 			} catch (err: unknown | ErrorResponse) {
@@ -188,7 +200,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			await this.updateShippingMethod(method.id, { is_active });
 		},
 
-		async updateShippingMethod(id: string, payload: Omit<UpdateShippingMethodReq, 'merchant_id'>): Promise<ShippingMethodOption | undefined> {
+		async updateShippingMethod(id: string, payload: ShippingMethodUpdateBody): Promise<ShippingMethodOption | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.updating = true;

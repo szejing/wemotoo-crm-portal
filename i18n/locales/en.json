@@ -248,6 +248,10 @@
 			"stateRequired": "State is required",
 			"methodsRequired": "Select at least one shipping method"
 		},
+		"shippingMethod": {
+			"descriptionRequired": "Description is required",
+			"priorityMin": "Priority must be zero or greater"
+		},
 		"category": {
 			"codeRequired": "Code is required",
 			"descriptionRequired": "Description is required"

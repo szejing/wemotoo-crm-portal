@@ -15,19 +15,19 @@
 
 			<div class="space-y-6 py-2 px-4">
 				<div class="w-full flex flex-wrap items-center gap-4 justify-end">
-					<UFormField :label="$t('common.status')">
+					<UFormField name="is_active" :label="$t('common.status')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.status') }}</p>
 						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
 					</UFormField>
 				</div>
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<UFormField :label="$t('common.description')">
+					<UFormField name="description" :label="$t('common.description')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.description') }}</p>
 						<UInput v-model="state.description" />
 					</UFormField>
 
-					<UFormField :label="$t('pages.shippingPriority')">
+					<UFormField name="priority" :label="$t('pages.shippingPriority')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.priority') }}</p>
 						<UInput v-model.number="state.priority" type="number" min="0" step="1" />
 					</UFormField>
@@ -39,17 +39,11 @@
 
 <script setup lang="ts">
 import { ICONS } from '~/utils/icons';
-
-/** Parent forms may still carry zone_rows for submit; this component only edits core method fields. */
-type ShippingMethodFormState = {
-	description: string;
-	priority: number;
-	is_active: boolean;
-};
+import type { ShippingMethodFormFields } from '~/utils/types/form/shipping-method-form';
 
 const props = withDefaults(
 	defineProps<{
-		state: ShippingMethodFormState;
+		state: ShippingMethodFormFields;
 		/** ISO currency code for the fee field prefix (matches merchant / review formatting). */
 		currencyCode?: string;
 	}>(),
