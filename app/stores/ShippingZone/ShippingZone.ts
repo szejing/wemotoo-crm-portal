@@ -151,7 +151,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			try {
 				const body = { ...payload } as Record<string, unknown>;
 				delete body.pricing_summary;
-				delete body.method_links;
+				delete body.methods;
 				delete body.shipping_method_ids;
 				delete body.id;
 				const req = { merchant_id, ...body } as UpdateShippingZoneReq;

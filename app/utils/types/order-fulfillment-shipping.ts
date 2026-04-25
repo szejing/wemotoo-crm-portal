@@ -24,8 +24,8 @@ export type ShippingZoneRule = {
 	postcode_patterns: ShippingZonePostcodePattern[];
 	rule?: number;
 	is_default?: boolean;
-	fee_override: number;
-	estimated_days_override?: number | null;
+	fee: number;
+	estimated_days?: number | null;
 };
 
 export type ShippingMethodZoneLink = {

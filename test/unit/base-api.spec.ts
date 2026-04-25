@@ -43,10 +43,10 @@ describe('pathForSignature (signed upstream path)', () => {
 
 	it('serializes array query values as repeated keys to match upstream URL', () => {
 		const signedPath = pathForSignature('shipping-methods/id-1', {
-			defaultRelations: ['method_zones', 'method_zones.shipping_zone'],
+			defaultRelations: ['zones', 'zones.shipping_zone'],
 		});
 		expect(signedPath).toBe(
-			'/api/shipping-methods/id-1?defaultRelations=method_zones&defaultRelations=method_zones.shipping_zone',
+			'/api/shipping-methods/id-1?defaultRelations=zones&defaultRelations=zones.shipping_zone',
 		);
 	});
 });

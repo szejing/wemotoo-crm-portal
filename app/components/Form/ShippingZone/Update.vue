@@ -54,12 +54,12 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 		.join('\n');
 };
 
-const linkShippingMethodId = (l: NonNullable<ShippingZoneListItem['method_links']>[number]) =>
+const linkShippingMethodId = (l: NonNullable<ShippingZoneListItem['method']>[number]) =>
 	l.shipping_method?.id ?? (l as { shipping_method_id?: string }).shipping_method_id ?? '';
 
 const pricingFromMethodLinks = (z: ShippingZoneListItem): ShippingZoneFormState['method_pricing'] => {
 	const out: ShippingZoneFormState['method_pricing'] = {};
-	for (const l of z.method_links ?? []) {
+	for (const l of z.method ?? []) {
 		const sid = linkShippingMethodId(l);
 		if (!sid) {
 			continue;
@@ -72,8 +72,7 @@ const pricingFromMethodLinks = (z: ShippingZoneListItem): ShippingZoneFormState[
 	return out;
 };
 
-const shippingMethodIdsFromLinks = (z: ShippingZoneListItem): string[] =>
-	(z.method_links ?? []).map(linkShippingMethodId).filter((id): id is string => Boolean(id));
+const shippingMethodIdsFromLinks = (z: ShippingZoneListItem): string[] => (z.method ?? []).map(linkShippingMethodId).filter((id): id is string => Boolean(id));
 
 const applyFromZone = (z: ShippingZoneListItem) => {
 	formState.code = z.code;
@@ -207,15 +206,15 @@ const submit = () => {
 defineExpose({ submit });
 
 onMounted(async () => {
-	try {
-		const methods = await shippingMethodStore.getShippingMethods();
-		methodOptions.value = methods.map((m) => ({
-			label: m.description,
-			value: m.id,
-		}));
-	} catch {
-		methodOptions.value = [];
-	}
+	// try {
+	// 	const methods = await shippingMethodStore.getShippingMethods();
+	// 	methodOptions.value = (methods ?? []).map((m) => ({
+	// 		label: (m as ShippingMethodBrief).description,
+	// 		value: m.id,
+	// 	}));
+	// } catch {
+	// 	methodOptions.value = [];
+	// }
 });
 </script>
 

@@ -26,7 +26,7 @@ export type ShippingZone = {
 	rule: number;
 	is_default: boolean;
 	is_active: boolean;
-	method_links?: ShippingMethodZoneWithMethod[];
+	method?: ShippingMethodZoneWithMethod[];
 };
 
 /** Mirrors `GetShippingZoneResponseDto` in ecommerce-nestjs shipping-zone response DTO. */
