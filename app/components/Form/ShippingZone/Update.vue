@@ -29,10 +29,6 @@ const props = defineProps<{
 	initialZone: ShippingZone;
 }>();
 
-const emit = defineEmits<{
-	saved: [zone: ShippingZone | undefined];
-}>();
-
 const { t } = useI18n();
 const schema = computed(() => UpdateShippingZoneValidation(t));
 type Schema = z.output<ReturnType<typeof UpdateShippingZoneValidation>>;
@@ -195,8 +191,14 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		shipping_method_ids: [...data.shipping_method_ids],
 	};
 
-	const result = await zoneStore.updateShippingZone(props.zoneId, payload);
-	emit('saved', result);
+	const success = await zoneStore.updateShippingZone(props.zoneId, payload);
+
+	if (success) {
+		// const product = await productStore.getProduct(formState.value.code!);
+		// productStore.current_product = product;
+
+		navigateTo(`/settings/shipping/zones`);
+	}
 };
 
 const submit = () => {

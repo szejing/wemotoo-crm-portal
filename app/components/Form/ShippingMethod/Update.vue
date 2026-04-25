@@ -7,7 +7,7 @@
 
 			<div class="lg:col-span-3">
 				<div class="lg:sticky lg:top-4">
-					<FormShippingMethodReviewSummary :summary="reviewSummary" :subtitle-key="reviewSubtitleKey" />
+					<FormShippingMethodReviewSummary :summary="reviewSummary" subtitle-key="components.shippingMethodForm.reviewSubtitleEdit" />
 				</div>
 			</div>
 		</UForm>
@@ -19,13 +19,8 @@ import type { FormSubmitEvent } from '#ui/types';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
 
 const props = defineProps<{
-	mode: 'create' | 'edit';
-	methodId?: string;
-	initialMethod?: ShippingMethodOption;
-}>();
-
-const emit = defineEmits<{
-	saved: [method: ShippingMethodOption | undefined];
+	methodId: string;
+	initialMethod: ShippingMethodOption;
 }>();
 
 const shippingStore = useShippingMethodStore();
@@ -35,21 +30,15 @@ type ShippingMethodFormState = {
 	description: string;
 	priority: number;
 	is_active: boolean;
-	zone_rows: unknown[];
 };
 
 const formState = reactive<ShippingMethodFormState>({
 	description: '',
 	priority: 1,
 	is_active: true,
-	zone_rows: [],
 });
 
-const currencyCode = computed(() => props.initialMethod?.currency_code ?? 'MYR');
-
-const reviewSubtitleKey = computed(() =>
-	props.mode === 'create' ? 'components.shippingMethodForm.reviewSubtitleCreate' : 'components.shippingMethodForm.reviewSubtitleEdit',
-);
+const currencyCode = computed(() => props.initialMethod.currency_code ?? 'MYR');
 
 const reviewSummary = computed(() => ({
 	description: formState.description.trim(),
@@ -59,35 +48,17 @@ const reviewSummary = computed(() => ({
 
 const formRef = ref<{ submit: () => void } | null>(null);
 
-const isEditing = computed(() => props.mode === 'edit' && Boolean(props.methodId));
-
 const applyFromMethod = (m: ShippingMethodOption) => {
 	formState.description = m.description;
 	formState.priority = m.priority ?? 1;
 	formState.is_active = m.is_active;
 };
 
-const resetForCreate = () => {
-	formState.description = '';
-	formState.priority = 1;
-	formState.is_active = true;
-};
-
 watch(
 	() => props.initialMethod,
 	(m) => {
-		if (props.mode === 'edit' && m) {
+		if (m) {
 			applyFromMethod(m);
-		}
-	},
-	{ immediate: true },
-);
-
-watch(
-	() => props.mode,
-	(mode) => {
-		if (mode === 'create') {
-			resetForCreate();
 		}
 	},
 	{ immediate: true },
@@ -100,14 +71,11 @@ const submitForm = async (_event: FormSubmitEvent<ShippingMethodFormState>) => {
 		is_active: formState.is_active,
 	};
 
-	let result: ShippingMethodOption | undefined;
-	if (isEditing.value && props.methodId) {
-		result = await shippingStore.updateShippingMethod(props.methodId, payload);
-	} else {
-		result = await shippingStore.createShippingMethod(payload);
-	}
+	const result = await shippingStore.updateShippingMethod(props.methodId, payload);
 
-	emit('saved', result);
+	if (result) {
+		navigateTo(`/settings/shipping/methods`);
+	}
 };
 
 const submit = () => {

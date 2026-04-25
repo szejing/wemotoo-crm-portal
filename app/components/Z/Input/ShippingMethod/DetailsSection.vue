@@ -14,6 +14,13 @@
 			</template>
 
 			<div class="space-y-6 py-2 px-4">
+				<div class="w-full flex flex-wrap items-center gap-4 justify-end">
+					<UFormField :label="$t('common.status')">
+						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.status') }}</p>
+						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
+					</UFormField>
+				</div>
+
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<UFormField :label="$t('common.description')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.description') }}</p>
@@ -23,11 +30,6 @@
 					<UFormField :label="$t('pages.shippingPriority')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.priority') }}</p>
 						<UInput v-model.number="state.priority" type="number" min="0" step="1" />
-					</UFormField>
-
-					<UFormField :label="$t('common.status')">
-						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingMethodForm.fieldHints.status') }}</p>
-						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
 					</UFormField>
 				</div>
 			</div>
@@ -43,7 +45,6 @@ type ShippingMethodFormState = {
 	description: string;
 	priority: number;
 	is_active: boolean;
-	zone_rows: unknown[];
 };
 
 const props = withDefaults(

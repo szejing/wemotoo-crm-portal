@@ -16,29 +16,33 @@
 			</template>
 
 			<div class="space-y-6 py-2 px-4">
-				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<UFormField name="code" :label="$t('common.code')">
-						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.code') }}</p>
-						<UInput v-model="state.code" class="font-mono" maxlength="32" />
-					</UFormField>
-
-					<UFormField name="is_active" :label="$t('common.status')">
+				<div class="w-full flex flex-wrap items-center gap-4 justify-end">
+					<!-- <UFormField name="status" :label="$t('components.selectMenu.selectProductStatus')" class="min-w-0 flex-1 sm:flex-initial">
+						<ZSelectMenuProductStatus v-model:status="state.status" />
+					</UFormField> -->
+					<UFormField>
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.status') }}</p>
 						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
 					</UFormField>
 				</div>
-
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<UFormField name="code" :label="$t('common.code')">
+						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.code') }}</p>
+						<UInput v-model="state.code" maxlength="32" />
+					</UFormField>
+
 					<UFormField name="description" :label="$t('common.description')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.description') }}</p>
 						<UInput v-model="state.description" />
 					</UFormField>
+				</div>
 
+				<!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<UFormField name="rule" :label="$t('pages.shippingZoneRule')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.rule') }}</p>
 						<UInput v-model.number="state.rule" type="number" min="0" step="1" />
 					</UFormField>
-				</div>
+				</div> -->
 
 				<div v-if="SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<UFormField name="country_code" :label="$t('pages.shippingZoneCountry')">
@@ -53,11 +57,7 @@
 
 				<UFormField v-else name="state" :label="$t('pages.shippingZoneState')">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.state') }}</p>
-					<ZSelectMenuState
-						v-model:state-names="state.state"
-						multiple
-						:placeholder="$t('components.shippingZoneForm.selectStates')"
-					>
+					<ZSelectMenuState v-model:state-names="state.state" multiple :placeholder="$t('components.shippingZoneForm.selectStates')">
 						<template #default="{ values, stateLabel, deselect, placeholder }">
 							<div v-if="values.length > 0" class="flex flex-wrap gap-1.5">
 								<UBadge v-for="st in values" :key="st" color="primary" variant="subtle" class="inline-flex max-w-[min(100%,12rem)] items-center gap-1">

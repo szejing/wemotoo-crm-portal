@@ -6,7 +6,5 @@ export type CreateShippingMethodReq = {
 	code?: string;
 	description: string;
 	priority?: number;
-	zone?: Record<string, unknown>;
-	zones?: ShippingZoneRule[];
 	is_active?: boolean;
 };

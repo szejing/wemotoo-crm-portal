@@ -24,10 +24,6 @@ import { serializeStatesForApi } from '~/utils/data/malaysia-states';
 import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
 import type { ShippingZone } from '~/utils/types/shipping-zone';
 
-const emit = defineEmits<{
-	saved: [zone: ShippingZone | undefined];
-}>();
-
 const { t } = useI18n();
 const schema = computed(() => CreateShippingZoneValidation(t));
 type Schema = z.output<ReturnType<typeof CreateShippingZoneValidation>>;
@@ -140,9 +136,11 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		shipping_method_ids: [...data.shipping_method_ids],
 	};
 
-	const result = await zoneStore.createShippingZone(payload);
-	emit('saved', result);
-	Object.assign(formState, emptyState());
+	const success = await zoneStore.createShippingZone(payload);
+
+	if (success) {
+		navigateTo(`/settings/shipping/zones`);
+	}
 };
 
 const submit = () => {

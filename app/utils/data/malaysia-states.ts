@@ -18,9 +18,9 @@ export const MALAYSIA_STATE_OPTIONS: MalaysiaStateOption[] = [
 	{ label: 'Sarawak', value: 'Sarawak' },
 	{ label: 'Selangor', value: 'Selangor' },
 	{ label: 'Terengganu', value: 'Terengganu' },
-	{ label: 'Wilayah Persekutuan Kuala Lumpur', value: 'Wilayah Persekutuan Kuala Lumpur' },
-	{ label: 'Wilayah Persekutuan Labuan', value: 'Wilayah Persekutuan Labuan' },
-	{ label: 'Wilayah Persekutuan Putrajaya', value: 'Wilayah Persekutuan Putrajaya' },
+	{ label: 'WP Kuala Lumpur', value: 'WP Kuala Lumpur' },
+	{ label: 'WP Labuan', value: 'WP Labuan' },
+	{ label: 'WP Putrajaya', value: 'WP Putrajaya' },
 ];
 
 /** Multiple states are stored in API `state` joined by `|` (names do not contain `|`). */

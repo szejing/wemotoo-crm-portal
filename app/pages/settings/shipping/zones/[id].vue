@@ -1,18 +1,13 @@
 <template>
 	<ZPagePanel id="shipping-zone-edit" :title="panelTitle" back-to="/settings/shipping/zones" grow>
 		<div class="container w-full mx-auto">
-			<div v-if="isLoading" class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700 p-4 space-y-3">
-				<USkeleton class="h-8 w-full max-w-md" />
-				<USkeleton class="h-32 w-full" />
-				<USkeleton class="h-32 w-full" />
-			</div>
+			<FormShippingZoneUpdateLoading v-if="isLoading" />
 			<FormShippingZoneUpdate
 				v-else-if="current_shipping_zone"
 				:key="current_shipping_zone.id"
 				ref="formRef"
 				:zone-id="current_shipping_zone.id"
 				:initial-zone="current_shipping_zone"
-				@saved="onSaved"
 			/>
 		</div>
 
@@ -104,12 +99,6 @@ const onSubmit = () => {
 
 const goBack = () => {
 	useRouter().back();
-};
-
-const onSaved = (zone: ShippingZone | undefined) => {
-	if (zone) {
-		shippingZoneStore.current_shipping_zone = zone;
-	}
 };
 
 const confirmDelete = () => {

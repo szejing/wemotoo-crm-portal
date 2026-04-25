@@ -986,15 +986,15 @@
 			"reviewSubtitleEdit": "Ringkasan kaedah ini sebelum anda simpan",
 			"reviewZonesCount": "{count} peraturan zon",
 			"reviewZonesAll": "Semua wilayah (tiada had zon)",
-			"detailsSectionSubtitle": "Namakan pilihan ini, kawal susunan dalam senarai, dan aktifkan atau matikan. Yuran dan masa penghantaran ditetapkan dalam setiap zon.",
+			"detailsSectionSubtitle": "Nama, susunan, dan dayakan kaedah ini. Yuran dan penghantaran ditetapkan setiap zon.",
 			"regionsSectionTitle": "Wilayah penghantaran",
 			"regionsSectionSubtitle": "Secara pilihan, hadkan kawasan untuk kaedah ini dan konfigurasi peraturan zon.",
 			"fieldHints": {
-				"description": "Nama yang pelanggan lihat di checkout. Staf lihat yang sama di pentadbiran.",
-				"priority": "Nombor lebih kecil = lebih tinggi dalam senarai bila lebih daripada satu kaedah tersedia untuk pesanan.",
-				"status": "Bila tidak aktif, kaedah ini disembunyikan dan tidak boleh dipilih di checkout.",
-				"fee": "Tetapkan dalam setiap zon yang menawarkan kaedah ini.",
-				"estimatedDays": "Tetapkan dalam setiap zon yang menawarkan kaedah ini."
+				"description": "Dipaparkan di checkout dan pentadbiran.",
+				"priority": "Nombor lebih kecil muncul dahulu dalam senarai.",
+				"status": "Matikan untuk sembunyikan kaedah ini di checkout.",
+				"fee": "Tetapkan setiap zon yang menawarkan kaedah ini.",
+				"estimatedDays": "Tetapkan setiap zon yang menawarkan kaedah ini."
 			}
 		},
 		"shippingZoneForm": {

@@ -6,7 +6,6 @@
 				v-else-if="detailMethod"
 				:key="detailMethod.id"
 				ref="formRef"
-				mode="edit"
 				:method-id="detailMethod.id"
 				:initial-method="detailMethod"
 				@saved="onSaved"
