@@ -21,7 +21,7 @@ import type { z } from 'zod';
 import { UpdateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
 import type { ShippingZone } from '~/utils/types/shipping-zone';
-import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
+import type { ShippingZoneFormFields } from '~/utils/types/form/shipping-zone-form';
 import { parseStatesFromApi, serializeStatesForApi } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
@@ -53,8 +53,8 @@ const patternsToText = (patterns: ShippingZonePostcodePattern[] | undefined) => 
 const linkShippingMethodId = (l: NonNullable<ShippingZone['methods']>[number]) =>
 	l.shipping_method?.id ?? (l as { shipping_method_id?: string }).shipping_method_id ?? '';
 
-const pricingFromMethodLinks = (z: ShippingZone): ShippingZoneFormState['method_pricing'] => {
-	const out: ShippingZoneFormState['method_pricing'] = {};
+const pricingFromMethodLinks = (z: ShippingZone): ShippingZoneFormFields['method_pricing'] => {
+	const out: ShippingZoneFormFields['method_pricing'] = {};
 	for (const l of z.methods ?? []) {
 		const sid = linkShippingMethodId(l);
 		if (!sid) {
@@ -82,7 +82,7 @@ const applyFromZone = (z: ShippingZone) => {
 	formState.method_pricing = pricingFromMethodLinks(z);
 };
 
-const formState = reactive<ShippingZoneFormState>({
+const formState = reactive<ShippingZoneFormFields>({
 	code: '',
 	description: '',
 	rule: 0,

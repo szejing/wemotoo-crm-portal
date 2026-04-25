@@ -2,16 +2,6 @@ import { z } from 'zod';
 
 type TranslateFn = (key: string) => string;
 
-const optionalNonNegativeNumber = z.preprocess((v) => {
-	if (v === undefined || v === null || v === '') {
-		return undefined;
-	}
-	if (typeof v === 'number' && Number.isNaN(v)) {
-		return undefined;
-	}
-	return v;
-}, z.number().nonnegative().optional());
-
 const optionalNonNegativeInt = z.preprocess((v) => {
 	if (v === undefined || v === null || v === '') {
 		return undefined;
@@ -30,11 +20,7 @@ const methodPricingRow = z.object({
 export function CreateShippingZoneValidation(t: TranslateFn) {
 	return z
 		.object({
-			code: z
-				.string()
-				.trim()
-				.min(1, t('validation.shippingZone.codeRequired'))
-				.max(32, t('validation.shippingZone.codeMax32')),
+			code: z.string().trim().min(1, t('validation.shippingZone.codeRequired')).max(32, t('validation.shippingZone.codeMax32')),
 			description: z.string().trim().optional().default(''),
 			rule: z.coerce.number().int().min(0).max(999_999).default(0),
 			is_active: z.boolean(),

@@ -1,8 +1,8 @@
 <template>
 	<div class="w-full">
-		<UForm ref="formRef" :schema="schema" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
+		<UForm ref="formRef" :schema="schema" :state="new_shipping_zone" class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6" @submit="submitForm">
 			<div class="lg:col-span-9 space-y-6">
-				<ZInputShippingZoneDetailsSection :state="formState" :method-options="methodOptions" />
+				<ZInputShippingZoneDetailsSection :state="new_shipping_zone" :method-options="methodOptions" />
 			</div>
 
 			<div class="lg:col-span-3">
@@ -21,33 +21,18 @@ import type { z } from 'zod';
 import { CreateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
 import { serializeStatesForApi } from '~/utils/data/malaysia-states';
-import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
-import type { ShippingZone } from '~/utils/types/shipping-zone';
 
 const { t } = useI18n();
 const schema = computed(() => CreateShippingZoneValidation(t));
 type Schema = z.output<ReturnType<typeof CreateShippingZoneValidation>>;
 
 const zoneStore = useShippingZoneStore();
+const { new_shipping_zone } = storeToRefs(zoneStore);
 const shippingMethodStore = useShippingMethodStore();
 
 const formRef = ref<{ submit: () => void } | null>(null);
 
 const methodOptions = ref<{ label: string; value: string }[]>([]);
-
-const emptyState = (): ShippingZoneFormState => ({
-	code: '',
-	description: '',
-	rule: 0,
-	is_active: true,
-	country_code: 'MY',
-	state: [],
-	postcodes_text: '',
-	shipping_method_ids: [],
-	method_pricing: {},
-});
-
-const formState = reactive<ShippingZoneFormState>(emptyState());
 
 const currencyCode = 'MYR';
 
@@ -69,15 +54,16 @@ const methodsSummaryLabel = (ids: string[], options: { label: string; value: str
 };
 
 const reviewSummary = computed(() => {
-	const n = countPostcodeLines(formState.postcodes_text ?? '');
+	const z = new_shipping_zone.value;
+	const n = countPostcodeLines(z.postcodes_text ?? '');
 	const postcodesSummaryLabel = t('components.shippingZoneForm.reviewPostcodesCount', { count: n });
 
 	const pricingLines =
-		formState.shipping_method_ids.length === 0
+		z.shipping_method_ids.length === 0
 			? undefined
-			: formState.shipping_method_ids.map((id) => {
+			: z.shipping_method_ids.map((id) => {
 					const label = methodOptions.value.find((o) => o.value === id)?.label ?? id;
-					const row = formState.method_pricing[id];
+					const row = z.method_pricing[id];
 					const feeStr = row != null && !Number.isNaN(row.fee) ? formatCurrency(Number(row.fee), currencyCode) : t('common.notSet');
 					const d = row?.estimated_days;
 					const daysStr = d != null && !Number.isNaN(d) ? t('components.shippingZoneForm.reviewDaysSuffix', { days: d }) : '';
@@ -86,22 +72,22 @@ const reviewSummary = computed(() => {
 
 	const pricingSummaryLabel = !pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
 
-	const methodLabelsResolved = formState.shipping_method_ids
+	const methodLabelsResolved = z.shipping_method_ids
 		.map((id) => methodOptions.value.find((o) => o.value === id)?.label)
 		.filter((x): x is string => Boolean(x));
 	const methodLabels = methodLabelsResolved.length ? methodLabelsResolved : undefined;
 
 	return {
-		code: formState.code.trim(),
-		description: formState.description.trim(),
-		rule: Number(formState.rule) || 0,
-		statusLabel: t(formState.is_active ? 'common.active' : 'common.inactive'),
-		countryLabel: formState.country_code.trim().toUpperCase(),
-		stateLabel: formState.state.length ? formState.state.join(', ') : '',
+		code: z.code.trim(),
+		description: z.description.trim(),
+		rule: Number(z.rule) || 0,
+		statusLabel: t(z.is_active ? 'common.active' : 'common.inactive'),
+		countryLabel: z.country_code.trim().toUpperCase(),
+		stateLabel: z.state.length ? z.state.join(', ') : '',
 		postcodesSummaryLabel,
 		pricingSummaryLabel,
 		pricingLines,
-		methodsLabel: methodsSummaryLabel(formState.shipping_method_ids, methodOptions.value),
+		methodsLabel: methodsSummaryLabel(z.shipping_method_ids, methodOptions.value),
 		methodLabels,
 	};
 });
@@ -150,6 +136,7 @@ const submit = () => {
 defineExpose({ submit });
 
 onMounted(async () => {
+	zoneStore.resetNewShippingZone();
 	try {
 		await shippingMethodStore.getShippingMethods();
 		methodOptions.value = shippingMethodStore.methods.map((m) => ({

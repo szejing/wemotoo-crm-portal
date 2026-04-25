@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 import { defaultShippingZoneRelations, KEY, removeDuplicateExpands } from 'wemotoo-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
-import type { ShippingZoneMutableFields } from '~/utils/types/order-fulfillment-shipping';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { ShippingZone } from '~/utils/types/shipping-zone';
-import type { CreateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/create-shipping-zone.req';
-import type { UpdateShippingZoneReq } from '~/repository/modules/shipping-zone/models/request/update-shipping-zone.req';
+import type { ShippingZoneCreateStorePayload } from '~/repository/modules/shipping-zone/models/request/create-shipping-zone.req';
+import type { UpdateShippingZoneReq, ShippingZoneUpdateStorePayload } from '~/repository/modules/shipping-zone/models/request/update-shipping-zone.req';
+import type { ShippingZoneFormFields } from '~/utils/types/form/shipping-zone-form';
 
 type ShippingZoneFilter = {
 	query: string;
@@ -23,11 +23,16 @@ const initialEmptyFilter: ShippingZoneFilter = {
 	page_size: options_page_size[0] as number,
 };
 
-/** Form submit + partial updates: API fields plus `shipping_method_ids` (stripped). */
-type UpdateShippingZoneStorePayload = Partial<Omit<ShippingZone, 'id' | 'pricing_summary' | 'methods'>> & {
-	methods?: CreateShippingZoneReq['methods'];
-	/** Not sent to the API; used by create/update forms when building the payload. */
-	shipping_method_ids?: string[];
+const initialEmptyNewShippingZone: ShippingZoneFormFields = {
+	code: '',
+	description: '',
+	rule: 0,
+	is_active: true,
+	country_code: 'MY',
+	state: [],
+	postcodes_text: '',
+	shipping_method_ids: [],
+	method_pricing: {},
 };
 
 export const useShippingZoneStore = defineStore('shippingZoneStore', {
@@ -40,6 +45,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		zones: [] as ShippingZone[],
 		total_shipping_zones: 0 as number,
 		current_shipping_zone: undefined as ShippingZone | undefined,
+		new_shipping_zone: structuredClone(initialEmptyNewShippingZone),
 		filter: initialEmptyFilter,
 		errors: [] as string[],
 	}),
@@ -48,6 +54,10 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 		allZones: (state) => state.zones,
 	},
 	actions: {
+		resetNewShippingZone() {
+			this.new_shipping_zone = structuredClone(initialEmptyNewShippingZone);
+		},
+
 		async updatePageSize(size: number) {
 			this.filter.page_size = size;
 			this.filter.current_page = 1;
@@ -120,7 +130,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async createShippingZone(payload: ShippingZoneMutableFields): Promise<ShippingZone | undefined> {
+		async createShippingZone(payload: ShippingZoneCreateStorePayload): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.adding = true;
@@ -134,6 +144,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 				// this.zones = [row, ...this.zones.filter((z) => z.id !== row.id)];
 				successNotification('Shipping zone created');
 				await this.getShippingZones();
+				this.resetNewShippingZone();
 				return resp.shipping_zone;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to create shipping zone';
@@ -144,14 +155,13 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 			}
 		},
 
-		async updateShippingZone(id: string, payload: UpdateShippingZoneStorePayload): Promise<ShippingZone | undefined> {
+		async updateShippingZone(id: string, payload: ShippingZoneUpdateStorePayload): Promise<ShippingZone | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = String(useCookie(KEY.X_MERCHANT_ID).value ?? '');
 			this.updating = true;
 			try {
 				const body = { ...payload } as Record<string, unknown>;
 				delete body.pricing_summary;
-				delete body.methods;
 				delete body.shipping_method_ids;
 				delete body.id;
 				const req = { merchant_id, ...body } as UpdateShippingZoneReq;

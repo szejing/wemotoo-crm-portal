@@ -20,7 +20,7 @@
 					<!-- <UFormField name="status" :label="$t('components.selectMenu.selectProductStatus')" class="min-w-0 flex-1 sm:flex-initial">
 						<ZSelectMenuProductStatus v-model:status="state.status" />
 					</UFormField> -->
-					<UFormField>
+					<UFormField name="is_active">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.status') }}</p>
 						<USwitch v-model="state.is_active" :label="$t(state.is_active ? 'common.active' : 'common.inactive')" />
 					</UFormField>
@@ -210,23 +210,11 @@
 <script lang="ts" setup>
 import { SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS } from '~/utils/data/malaysia-states';
 import { ICONS } from '~/utils/icons';
-
-export type ShippingZoneFormState = {
-	code: string;
-	description: string;
-	rule: number;
-	is_active: boolean;
-	country_code: string;
-	/** Malaysia mode: multiple ISO-style names; full mode: zero or one entry synced from text input. */
-	state: string[];
-	postcodes_text: string;
-	shipping_method_ids: string[];
-	method_pricing: Record<string, { fee: number; estimated_days: number | undefined }>;
-};
+import type { ShippingZoneFormFields } from '~/utils/types/form/shipping-zone-form';
 
 const props = withDefaults(
 	defineProps<{
-		state: ShippingZoneFormState;
+		state: ShippingZoneFormFields;
 		methodOptions: { label: string; value: string }[];
 		/** Display prefix on fee inputs (e.g. RM). */
 		feeCurrencyPrefix?: string;

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { reactive } from 'vue';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
-import ZInputShippingZoneDetails from '~/components/Z/Input/ShippingZone/Details.vue';
-import type { ShippingZoneFormState } from '~/components/Z/Input/ShippingZone/Details.vue';
+import ZInputShippingZoneDetailsSection from '~/components/Z/Input/ShippingZone/DetailsSection.vue';
+import type { ShippingZoneFormFields } from '~/utils/types/form/shipping-zone-form';
 
-describe('ZInputShippingZoneDetails', () => {
+describe('ZInputShippingZoneDetailsSection', () => {
 	it('renders zone details section', async () => {
-		const state = reactive<ShippingZoneFormState>({
+		const state = reactive<ShippingZoneFormFields>({
 			code: '',
 			description: '',
 			rule: 0,
@@ -18,7 +18,7 @@ describe('ZInputShippingZoneDetails', () => {
 			method_pricing: {},
 		});
 
-		const wrapper = await mountSuspended(ZInputShippingZoneDetails, {
+		const wrapper = await mountSuspended(ZInputShippingZoneDetailsSection, {
 			props: {
 				state,
 				methodOptions: [
