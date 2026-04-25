@@ -28,6 +28,10 @@ import {
 	AffiliateModule,
 	DiscountModule,
 	VoucherModule,
+	FulfillmentModule,
+	ShipmentModule,
+	ShippingMethodModule,
+	ShippingZoneModule,
 } from '../repository/modules';
 
 interface IApiInstance {
@@ -60,6 +64,10 @@ interface IApiInstance {
 	affiliate: AffiliateModule;
 	discount: DiscountModule;
 	voucher: VoucherModule;
+	fulfillment: FulfillmentModule;
+	shipment: ShipmentModule;
+	shippingMethod: ShippingMethodModule;
+	shippingZone: ShippingZoneModule;
 }
 
 export default defineNuxtPlugin((_) => {
@@ -103,6 +111,10 @@ export default defineNuxtPlugin((_) => {
 	const affiliateModule = new AffiliateModule();
 	const discountModule = new DiscountModule();
 	const voucherModule = new VoucherModule();
+	const fulfillmentModule = new FulfillmentModule();
+	const shipmentModule = new ShipmentModule();
+	const shippingMethodModule = new ShippingMethodModule();
+	const shippingZoneModule = new ShippingZoneModule();
 
 	const modules: IApiInstance = {
 		auth: authModule,
@@ -134,6 +146,10 @@ export default defineNuxtPlugin((_) => {
 		affiliate: affiliateModule,
 		discount: discountModule,
 		voucher: voucherModule,
+		fulfillment: fulfillmentModule,
+		shipment: shipmentModule,
+		shippingMethod: shippingMethodModule,
+		shippingZone: shippingZoneModule,
 	};
 
 	return {

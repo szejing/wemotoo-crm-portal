@@ -60,5 +60,15 @@ const settingsGroups = computed(() => [
 		color: 'slate' as const,
 		items: [{ label: t('nav.configuration'), to: '/settings/configuration' }],
 	},
+	{
+		title: t('nav.shippingSettings'),
+		description: t('pages.shippingSettingsDesc'),
+		icon: ICONS.ORDER,
+		color: 'green' as const,
+		items: [
+			{ label: t('pages.shippingMethods'), to: '/settings/shipping/methods' },
+			{ label: t('nav.shippingZones'), to: '/settings/shipping/zones' },
+		],
+	},
 ]);
 </script>

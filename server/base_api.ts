@@ -1,6 +1,31 @@
-import { KEY, buildCanonicalString, canonicalPathAndQueryFromParts, hashBody, signRequest } from 'wemotoo-common';
+import { KEY, buildCanonicalString, hashBody, signRequest } from 'wemotoo-common';
 
 const API_PATH_PREFIX = '/api';
+
+function canonicalPathAndQueryForSignature(pathname: string, query?: Record<string, any>): string {
+	const pathNormalized = (pathname || '/').replace(/\/+$/, '') || '/';
+	if (!query || Object.keys(query).length === 0) {
+		return pathNormalized;
+	}
+
+	const entries: [string, string][] = [];
+	for (const key of Object.keys(query).sort((a, b) => a.localeCompare(b))) {
+		const value = query[key];
+		if (Array.isArray(value)) {
+			for (const item of value) {
+				entries.push([key, item == null ? '' : String(item)]);
+			}
+		} else {
+			entries.push([key, value == null ? '' : String(value)]);
+		}
+	}
+
+	entries.sort((a, b) => a[0].localeCompare(b[0]));
+	const queryString = entries
+		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+		.join('&');
+	return `${pathNormalized}?${queryString}`;
+}
 
 function getSignatureHeaders(event: any, method: string, pathForSignature: string, body: string | undefined | null): Record<string, string> {
 	const config = useRuntimeConfig(event);
@@ -20,10 +45,54 @@ function getSignatureHeaders(event: any, method: string, pathForSignature: strin
 
 /**
  * Build canonical path+query as used for X-Signature (path no trailing slash, query keys sorted).
+ * Must match Nest `request.originalUrl`: the CRM sends `/api/auth/login`, `/api/shipping-methods/...`, etc.
+ * RouterMiddleware rewrites `req.url` to `/merchant/...` for routing, but `originalUrl` stays `/api/...`
+ * (see ecommerce-nestjs RouterMiddleware + SignatureGuard).
  */
 export function pathForSignature(pathSegment: string, query?: Record<string, any>): string {
-	const pathname = `${API_PATH_PREFIX}/${pathSegment.replace(/^\//, '').replace(/\/+$/, '')}`;
-	return canonicalPathAndQueryFromParts(pathname, query);
+	const trimmed = pathSegment.replace(/^\//, '').replace(/\/+$/, '');
+	const rest = trimmed.replace(/^merchant\//, '');
+	const pathname = `${API_PATH_PREFIX}/${rest}`;
+	return canonicalPathAndQueryForSignature(pathname, query);
+}
+
+/**
+ * Raw body bytes used for X-Signature body hash (passed to hashBody).
+ * Must match ecommerce-nestjs SignatureGuard: DELETE uses empty hash, not JSON body.
+ */
+export function rawBodyForSignature(method: string, body: unknown): string | undefined {
+	const m = (method || 'GET').toUpperCase();
+	if (m === 'GET' || m === 'HEAD' || m === 'OPTIONS' || m === 'DELETE') {
+		return undefined;
+	}
+	if (body === undefined || body === null) {
+		return '';
+	}
+	if (typeof body === 'string') {
+		return body;
+	}
+	return JSON.stringify(body);
+}
+
+/**
+ * Body bytes sent upstream. For POST/PUT/PATCH, plain objects are JSON.stringify'd once so the
+ * signature matches Nest's `req.rawBody` (SignatureGuard hashes raw bytes, not a re-stringified object).
+ */
+export function upstreamFetchBody(method: string, body: unknown): unknown {
+	const m = (method || 'GET').toUpperCase();
+	if (m === 'GET' || m === 'HEAD' || m === 'OPTIONS') {
+		return undefined;
+	}
+	if (m === 'DELETE') {
+		return body;
+	}
+	if (body === undefined || body === null) {
+		return body;
+	}
+	if (typeof body === 'string') {
+		return body;
+	}
+	return JSON.stringify(body);
 }
 
 /**
@@ -52,14 +121,8 @@ export async function signedFetch(
 		.replace(/^api\//, '')
 		.replace(/^merchant\//, '');
 	const pathForSig = pathForSignature(normalizedSegment, query);
-	const bodyForHash =
-		method === 'GET' || method === 'HEAD' || method === 'OPTIONS'
-			? undefined
-			: options.body === undefined || options.body === null
-				? ''
-				: typeof options.body === 'string'
-					? options.body
-					: JSON.stringify(options.body);
+	const fetchBody = upstreamFetchBody(method, options.body);
+	const bodyForHash = rawBodyForSignature(method, fetchBody);
 	const sigHeaders = getSignatureHeaders(event, method, pathForSig, bodyForHash);
 	const cookie_merchant_id = getCookie(event, KEY.X_MERCHANT_ID) || '';
 	const merchant_id =
@@ -70,7 +133,7 @@ export async function signedFetch(
 				: cookie_merchant_id;
 	const baseHeaders = generateHeaders(event, options.includeAccessToken !== false, merchant_id);
 	const headers = { ...baseHeaders, ...sigHeaders, ...(options.headers || {}) };
-	const { includeAccessToken, merchant_id: _omit, method: _method, ...fetchOptions } = options;
+	const { includeAccessToken, merchant_id: _omit, method: _method, body: _body, ...fetchOptions } = options;
 	// Request path must match what we signed (/api/...). Avoid double "api" when baseURL already includes /api.
 	const basePath = (baseURL || '').replace(/\/+$/, '');
 	const baseHasApi = basePath.endsWith('/api');
@@ -80,6 +143,7 @@ export async function signedFetch(
 		baseURL,
 		method: method as 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS',
 		headers,
+		body: fetchBody,
 	});
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="vouchers-shop-create" :title="$t('pages.createShopVoucher')" back-to="/marketing/vouchers/shop" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormVoucherCreation ref="formRef" :allocation="AllocationType.BILL" post-create-list-path="/marketing/vouchers/shop" />
 		</div>
 

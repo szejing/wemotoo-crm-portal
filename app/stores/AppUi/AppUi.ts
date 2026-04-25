@@ -97,6 +97,13 @@ const default_navigations = [
 				icon: ICONS.SETTINGS_ROUNDED,
 				to: '/settings',
 				value: 'settings',
+				children: [
+					{ label: 'nav.storeProfile', to: '/settings/store-profile' },
+					{ label: 'nav.configuration', to: '/settings/configuration' },
+					{ label: 'nav.paymentSettings', to: '/settings/payment' },
+					{ label: 'nav.taxSettings', to: '/settings/taxes' },
+					{ label: 'nav.shippingSettings', to: '/settings/shipping' },
+				],
 			},
 		],
 	},

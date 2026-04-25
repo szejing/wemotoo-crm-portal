@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="discounts-edit" :title="`${$t('pages.editDiscount')} #${current_discount?.code ?? code}`" back-to="/marketing/discounts" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormDiscountUpdateLoading v-if="isLoading" />
 			<FormDiscountUpdate v-else-if="current_discount" ref="formRef" :discount="current_discount" />
 		</div>

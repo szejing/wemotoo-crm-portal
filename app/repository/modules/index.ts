@@ -27,6 +27,10 @@ import MerchantInfoModule from './merchant-info/merchant-info';
 import AffiliateModule from './affiliate/affiliate';
 import DiscountModule from './discount/discount';
 import VoucherModule from './voucher/voucher';
+import FulfillmentModule from './fulfillment/fulfillment';
+import ShipmentModule from './shipment/shipment';
+import ShippingMethodModule from './shipping-method/shipping-method';
+import ShippingZoneModule from './shipping-zone/shipping-zone';
 
 export {
 	CrmUserModule,
@@ -58,4 +62,8 @@ export {
 	AffiliateModule,
 	DiscountModule,
 	VoucherModule,
+	FulfillmentModule,
+	ShipmentModule,
+	ShippingMethodModule,
+	ShippingZoneModule,
 };

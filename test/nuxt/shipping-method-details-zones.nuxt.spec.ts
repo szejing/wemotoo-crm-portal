@@ -1,0 +1,24 @@
+import { describe, expect, it } from 'vitest';
+import { reactive } from 'vue';
+import { mountSuspended } from '@nuxt/test-utils/runtime';
+import ZInputShippingMethodDetailsSection from '~/components/Z/Input/ShippingMethod/DetailsSection.vue';
+
+describe('ZInputShippingMethodDetailsSection', () => {
+	it('renders the shipping method details section and field hints', async () => {
+		const state = reactive({
+			description: '',
+			priority: 1,
+			is_active: true,
+			zone_rows: [],
+		});
+
+		const wrapper = await mountSuspended(ZInputShippingMethodDetailsSection, {
+			props: { state },
+		});
+
+		expect(wrapper.find('#section-shipping-method-details').exists()).toBe(true);
+		expect(wrapper.text()).toContain('Priority');
+		expect(wrapper.text()).toContain('The name customers see at checkout. Staff see the same in the admin.');
+		expect(wrapper.text()).toContain('Lower number = higher in the list when more than one method applies to an order.');
+	});
+});

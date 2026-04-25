@@ -7,36 +7,34 @@
 				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.paymentManagementDesc') }}</p>
 			</div>
 
-			<!-- Payment Configuration Section -->
-			<ZMenu
-				:title="$t('pages.paymentConfiguration')"
-				:icon="ICONS.PAYMENT_METHODS"
-				:description="$t('pages.paymentConfigurationDesc')"
-				color="green"
-				:navigations="payment_navigations"
-			/>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<ZSettingsGroup
+					v-for="group in paymentGroups"
+					:key="group.title"
+					:title="group.title"
+					:description="group.description"
+					:icon="group.icon"
+					:color="group.color"
+					:items="group.items"
+				/>
+			</div>
 		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
+import { ICONS } from '~/utils/icons';
+
 const { t } = useI18n();
 useHead({ title: () => t('pages.paymentTitle') });
 
-const payment_navigations = computed(() => [
-	// {
-	// 	title: t('pages.paymentType'),
-	// 	icon: ICONS.PAYMENT_METHODS,
-	// 	to: '/settings/payment/types',
-	// 	description: t('pages.paymentTypeDesc'),
-	// },
+const paymentGroups = computed(() => [
 	{
-		title: t('pages.paymentMethod'),
+		title: t('pages.paymentConfiguration'),
+		description: t('pages.paymentConfigurationDesc'),
 		icon: ICONS.PAYMENT_METHODS,
-		to: '/settings/payment/methods',
-		description: t('pages.paymentMethodDesc'),
+		color: 'green' as const,
+		items: [{ label: t('pages.paymentMethod'), to: '/settings/payment/methods' }],
 	},
 ]);
 </script>
-
-<style scoped></style>

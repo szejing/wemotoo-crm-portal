@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="settings-store-profile" :title="$t('nav.storeProfile')" back-to="/settings">
-		<template #navbar-right>
+		<template v-if="isPageContentReady" #navbar-right>
 			<UButton color="neutral" variant="ghost" @click="onCancel">{{ $t('common.cancel') }}</UButton>
 			<UButton color="success" :loading="merchantInfoStore.loading" @click="onSave" :disabled="!isDirty">
 				<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
@@ -8,7 +8,49 @@
 			</UButton>
 		</template>
 
-		<div class="p-6 space-y-6">
+		<div v-if="!isPageContentReady" class="space-y-6 p-6">
+			<div class="space-y-2">
+				<USkeleton class="h-9 w-64 max-w-full" />
+				<USkeleton class="h-4 w-full max-w-lg" />
+			</div>
+			<div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+				<div v-for="i in 4" :key="i" class="flex min-w-0 flex-col gap-2.5 rounded-xl border border-default p-4">
+					<USkeleton class="h-3 w-20" />
+					<USkeleton class="h-6 w-full" />
+				</div>
+			</div>
+			<UCard :ui="{ body: 'p-6' }">
+				<div class="space-y-6">
+					<USkeleton class="h-6 w-48" />
+					<div class="max-w-full sm:max-w-[200px]">
+						<USkeleton class="h-4 w-24 mb-2" />
+						<USkeleton class="aspect-square w-full rounded-lg" />
+					</div>
+					<div class="grid gap-4 sm:grid-cols-2">
+						<div v-for="j in 6" :key="j" class="space-y-2">
+							<USkeleton class="h-4 w-24" />
+							<USkeleton class="h-10 w-full" />
+						</div>
+					</div>
+					<div class="space-y-4">
+						<USkeleton class="h-4 w-20" />
+						<div class="grid gap-4 sm:grid-cols-2">
+							<div v-for="k in 7" :key="k" class="space-y-2">
+								<USkeleton class="h-4 w-28" />
+								<USkeleton class="h-10 w-full" />
+							</div>
+						</div>
+					</div>
+					<div class="grid gap-4 sm:grid-cols-2">
+						<div v-for="n in 2" :key="n" class="space-y-2">
+							<USkeleton class="h-4 w-20" />
+							<USkeleton class="h-10 w-full" />
+						</div>
+					</div>
+				</div>
+			</UCard>
+		</div>
+		<div v-else class="p-6 space-y-6">
 			<div class="space-y-2">
 				<h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('nav.storeProfile') }}</h2>
 				<p class="text-gray-600 dark:text-gray-400">{{ $t('pages.storeProfileDesc') }}</p>
@@ -128,52 +170,35 @@
 									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.state')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
-								/>
-							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.postalCode')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
-								/>
-							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.country')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, v)"
-								/>
-							</UFormField>
+							<div class="col-span-full grid grid-cols-1 gap-4 md:grid-cols-3">
+								<UFormField :label="$t('pages.storeProfilePage.postalCode')">
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
+									/>
+								</UFormField>
+								<UFormField :label="$t('pages.storeProfilePage.state')">
+									<ZSelectMenuState
+										:state-name="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
+										@update:state-name="(v: string) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
+									/>
+								</UFormField>
+								<UFormField :label="$t('pages.storeProfilePage.country')">
+									<ZSelectMenuCountry :country="addressCountry" @update:country="onAddressCountry" />
+								</UFormField>
+							</div>
 						</div>
 					</div>
 
-					<!-- Operating hours & off days -->
-					<div class="space-y-4">
-						<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}</h4>
-						<div class="grid gap-4 sm:grid-cols-2">
-							<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
-								<ZSelectMenuDays :days="operationOffDaysArray" @update:days="onOperationOffDaysUpdate" />
-							</UFormField>
-							<UFormField :label="$t('components.zInput.startTime')">
-								<ZSelectMenuTime
-									:title="$t('components.zInput.selectTime')"
-									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
-									type="start"
-									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
-								/>
-							</UFormField>
-							<UFormField :label="$t('components.zInput.endTime')">
-								<ZSelectMenuTime
-									:title="$t('components.zInput.selectTime')"
-									:time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
-									type="end"
-									@update:time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
-								/>
-							</UFormField>
-						</div>
-					</div>
+					<ZFormStoreOperatingHours
+						:off-days="operationOffDaysArray"
+						:start-time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME) || null"
+						:end-time="getMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME) || null"
+						:time-select-title="$t('components.zInput.selectTime')"
+						@update:off-days="onOperationOffDaysUpdate"
+						@update:start-time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_START_TIME, v)"
+						@update:end-time="(v: string) => setMerchantValue(GROUP_CODE.INFO, MERCHANT.OPERATION_END_TIME, v)"
+					/>
 				</div>
 			</UCard>
 		</div>
@@ -183,17 +208,38 @@
 <script lang="ts" setup>
 import { ZModalLoading } from '#components';
 import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
+import { useDataStore } from '~/stores/Data/Data';
+import type { Country } from '~/utils/types/country';
 import { ICONS } from '~/utils/icons';
 import { accountTypeLabel } from '~/utils/options/account-type';
+
+definePageMeta({ ssr: false });
 
 const { t } = useI18n();
 useHead({ title: () => `${t('common.appName')} - ${t('nav.storeProfile')}` });
 
 const overlay = useOverlay();
 const merchantInfoStore = useMerchantInfoStore();
+const dataStore = useDataStore();
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
 const { updatedInfo, updating, merchant } = storeToRefs(merchantInfoStore);
+
+/** Shown until the merchant info request has finished (same as `merchantInfoStore.loading` after `getMerchantInfos`). */
+const isPageContentReady = ref(false);
+
+onMounted(() => {
+	watch(
+		() => merchantInfoStore.loading,
+		(loading) => {
+			if (!loading) isPageContentReady.value = true;
+		},
+		{ immediate: true },
+	);
+	if (dataStore.countries.length === 0) {
+		void dataStore.getCountries();
+	}
+});
 
 const isDirty = computed(() => updatedInfo.value.length > 0);
 
@@ -234,6 +280,21 @@ const setMerchantValue = (groupCode: string, setCode: string, value: string) => 
 		set_code: setCode,
 		set_value: value ?? '',
 	});
+};
+
+const addressCountry = computed((): Country | undefined => {
+	const iso2 = getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY)?.trim();
+	if (!iso2) return undefined;
+	return dataStore.countries.find((c) => c.iso2 === iso2);
+});
+
+const onAddressCountry = (c: Country | undefined) => {
+	const prevIso2 = getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY);
+	const nextIso2 = c?.iso2 ?? '';
+	setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_COUNTRY, nextIso2);
+	if (nextIso2 !== prevIso2) {
+		setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, '');
+	}
 };
 
 /** Off days from merchant info (OPERATION_OFF_DAYS) as comma-separated "Mon, Tue, Wed". */

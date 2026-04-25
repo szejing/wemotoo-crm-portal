@@ -1,0 +1,16 @@
+---
+description: Product CRUD implementation pattern for store, pages, forms, and payload types
+globs: app/stores/Product/**/*.ts, app/pages/products/**/*.vue, app/components/Form/Product/**/*.vue, app/utils/types/form/product-creation.ts
+alwaysApply: false
+---
+
+# Product CRUD Rule
+
+- Keep Product CRUD business logic in `useProductStore` actions; keep pages/components focused on UI composition.
+- Use `ProductCreate` for create flows and `ProductUpdate` for patch flows; do not collapse them into a single ambiguous type.
+- For update payloads, only send defined fields; treat `undefined` as "no change".
+- Keep image handling consistent with existing store behavior (`File` upload then map to `{ id, url }`).
+- Keep create page footer as the submit trigger via exposed form `submit()`; avoid duplicating submit logic in page and form.
+- Preserve zero `orig_sell_price` confirmation guard before create/update.
+- Keep relation mapping explicit: map UI objects to `category_codes`, `tag_ids`, and `brand_codes` just before submit.
+- Use `successNotification`/`failedNotification` and loading flags (`loading`, `adding`, `updating`) for every CRUD action path.

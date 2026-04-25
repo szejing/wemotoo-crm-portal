@@ -6,6 +6,17 @@ import { options_payment_status, getPaymentStatusColor, getPaymentStatusOptions 
 import { options_page_size } from './page-size';
 import { options_appointment_status, getAppointmentStatusColor, getAppointmentStatusOptions } from './appointment-status';
 import { options_amount_type, getAmountTypeOptions } from './amount-type';
+import {
+	options_fulfillment_status,
+	getFulfillmentStatusColor,
+	getFulfillmentStatusOptions,
+} from './fulfillment-status';
+import {
+	options_shipment_status,
+	getShipmentStatusColor,
+	getShipmentStatusOptions,
+} from './shipment-status';
+import { SHIPPING_ZONE_STATUS_FILTER_ALL, getShippingZoneStatusFilterItems } from './shipping-zone-filter';
 
 export {
 	options_page_size,
@@ -28,4 +39,12 @@ export {
 	getAppointmentStatusOptions,
 	options_amount_type,
 	getAmountTypeOptions,
+	options_fulfillment_status,
+	getFulfillmentStatusColor,
+	getFulfillmentStatusOptions,
+	options_shipment_status,
+	getShipmentStatusColor,
+	getShipmentStatusOptions,
+	SHIPPING_ZONE_STATUS_FILTER_ALL,
+	getShippingZoneStatusFilterItems,
 };

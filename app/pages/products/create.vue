@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="product-create" :title="$t('pages.addNewProduct')" back-to="/products" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormProductCreation ref="formRef" />
 		</div>
 
