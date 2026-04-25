@@ -12,6 +12,7 @@
 	},
 	"common": {
 		"appName": "Wemotoo CRM",
+		"loading": "Memuatkan…",
 		"submit": "Hantar",
 		"cancel": "Batal",
 		"save": "Simpan",

@@ -116,7 +116,6 @@ export const useMerchantInfoStore = defineStore('merchantInfoStore', {
 					$top: 1000,
 				});
 
-				console.log('merchant infos', data);
 				if (data) {
 					this.merchant = data.map((info) => new MerchantInfo(info));
 				}

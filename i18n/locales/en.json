@@ -12,6 +12,7 @@
 	},
 	"common": {
 		"appName": "Wemotoo CRM",
+		"loading": "Loading…",
 		"submit": "Submit",
 		"cancel": "Cancel",
 		"save": "Save",
