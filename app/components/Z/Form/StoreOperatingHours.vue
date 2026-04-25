@@ -3,8 +3,8 @@
 		<h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">
 			{{ $t('pages.storeProfilePage.operatingHoursAndOffDays') }}
 		</h4>
-		<div class="grid gap-4 sm:grid-cols-2">
-			<UFormField :label="$t('components.zInput.offDay')" class="sm:col-span-2">
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+			<UFormField :label="$t('components.zInput.offDay')">
 				<ZSelectMenuDays :days="offDays" @update:days="(d: string[]) => $emit('update:offDays', d)" />
 			</UFormField>
 			<UFormField :label="$t('components.zInput.startTime')">

@@ -170,21 +170,23 @@
 									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_CITY, v)"
 								/>
 							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.country')">
-								<ZSelectMenuCountry :country="addressCountry" @update:country="onAddressCountry" />
-							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.state')">
-								<ZSelectMenuState
-									:state-name="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
-									@update:state-name="(v: string) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
-								/>
-							</UFormField>
-							<UFormField :label="$t('pages.storeProfilePage.postalCode')">
-								<UInput
-									:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
-									@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
-								/>
-							</UFormField>
+							<div class="col-span-full grid grid-cols-1 gap-4 md:grid-cols-3">
+								<UFormField :label="$t('pages.storeProfilePage.postalCode')">
+									<UInput
+										:model-value="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE)"
+										@update:model-value="(v) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_POSTAL_CODE, v)"
+									/>
+								</UFormField>
+								<UFormField :label="$t('pages.storeProfilePage.state')">
+									<ZSelectMenuState
+										:state-name="getMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE)"
+										@update:state-name="(v: string) => setMerchantValue(GROUP_CODE.ADDRESS, MERCHANT.ADDRESS_STATE, v)"
+									/>
+								</UFormField>
+								<UFormField :label="$t('pages.storeProfilePage.country')">
+									<ZSelectMenuCountry :country="addressCountry" @update:country="onAddressCountry" />
+								</UFormField>
+							</div>
 						</div>
 					</div>
 

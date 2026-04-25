@@ -9,6 +9,7 @@
 		}"
 		:filter-fields="['display_name', 'iso2', 'dial_code']"
 		size="md"
+		class="w-full"
 		:placeholder="$t('components.selectMenu.selectCountry')"
 		value-key="iso2"
 	/>
