@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="shipping-method-create" :title="$t('pages.createShippingMethodTitle')" back-to="/settings/shipping/methods" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormShippingMethodCreation ref="formRef" mode="create" @saved="onSaved" />
 		</div>
 

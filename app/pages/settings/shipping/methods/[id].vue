@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="shipping-method-edit" :title="panelTitle" back-to="/settings/shipping/methods" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormShippingMethodUpdateLoading v-if="isLoading" />
 			<FormShippingMethodUpdate
 				v-else-if="detailMethod"
@@ -76,10 +76,7 @@ const panelTitle = computed(() => {
 });
 
 useHead({
-	title: () =>
-		detailMethod.value
-			? `${t('pages.editShippingMethodPageTitle')} — ${detailMethod.value.description}`
-			: t('pages.editShippingMethodPageTitle'),
+	title: () => (detailMethod.value ? `${t('pages.editShippingMethodPageTitle')} — ${detailMethod.value.description}` : t('pages.editShippingMethodPageTitle')),
 });
 
 onMounted(async () => {

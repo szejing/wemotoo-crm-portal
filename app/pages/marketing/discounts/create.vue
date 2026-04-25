@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="discounts-create" :title="$t('pages.createDiscount')" back-to="/marketing/discounts" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormDiscountCreation ref="formRef" />
 		</div>
 
@@ -41,12 +41,7 @@ const formRef = ref<{ submit: () => void } | null>(null);
 
 const isDirty = computed(() => {
 	const d = new_discount.value;
-	return !!(
-		d.code?.trim() ||
-		d.description?.trim() ||
-		(d.conditions?.length ?? 0) > 0 ||
-		d.usage_limit != null
-	);
+	return !!(d.code?.trim() || d.description?.trim() || (d.conditions?.length ?? 0) > 0 || d.usage_limit != null);
 });
 
 useLeavePageGuard(isDirty, {

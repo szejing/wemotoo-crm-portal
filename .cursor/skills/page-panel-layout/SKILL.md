@@ -11,22 +11,22 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 
 ## Props
 
-| Prop | Type | Required | Description |
-|------|-----|----------|-------------|
-| `id` | string | yes | Panel id (maps to `UDashboardPanel` id) |
-| `title` | string | yes | Navbar title (use `$t()` for i18n) |
-| `backTo` | string | no | When set, shows labeled `ZBackButton` in toolbar with this fallback path |
-| `grow` | boolean | no | When true, panel grows to fill space (default: false) |
+| Prop     | Type    | Required | Description                                                              |
+| -------- | ------- | -------- | ------------------------------------------------------------------------ |
+| `id`     | string  | yes      | Panel id (maps to `UDashboardPanel` id)                                  |
+| `title`  | string  | yes      | Navbar title (use `$t()` for i18n)                                       |
+| `backTo` | string  | no       | When set, shows labeled `ZBackButton` in toolbar with this fallback path |
+| `grow`   | boolean | no       | When true, panel grows to fill space (default: false)                    |
 
 ## Slots
 
-| Slot | Description |
-|------|-------------|
-| `default` | Body content |
-| `navbar-right` | Right side of navbar (actions, date picker, etc.) |
-| `toolbar` | Content in `UDashboardToolbar#left` (filters, back button area) |
-| `leading` | Override navbar leading area (replaces default; use sparingly) |
-| `footer` | Fixed footer (e.g. form actions on product create/edit) |
+| Slot           | Description                                                     |
+| -------------- | --------------------------------------------------------------- |
+| `default`      | Body content                                                    |
+| `navbar-right` | Right side of navbar (actions, date picker, etc.)               |
+| `toolbar`      | Content in `UDashboardToolbar#left` (filters, back button area) |
+| `leading`      | Override navbar leading area (replaces default; use sparingly)  |
+| `footer`       | Fixed footer (e.g. form actions on product create/edit)         |
 
 ## Patterns
 
@@ -34,19 +34,19 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 
 ```vue
 <template>
-  <ZPagePanel id="affiliates" :title="$t('nav.affiliates')">
-    <template #navbar-right>
-      <UButton variant="outline" color="neutral" @click="navigateTo('/affiliates/tiers')">
-        {{ $t('affiliate.tiers') }}
-      </UButton>
-    </template>
-    <template #toolbar>
-      <ZSectionFilterAffiliates />
-    </template>
-    <div class="space-y-6">
-      <!-- table, cards, etc. -->
-    </div>
-  </ZPagePanel>
+	<ZPagePanel id="affiliates" :title="$t('nav.affiliates')">
+		<template #navbar-right>
+			<UButton variant="outline" color="neutral" @click="navigateTo('/affiliates/tiers')">
+				{{ $t('affiliate.tiers') }}
+			</UButton>
+		</template>
+		<template #toolbar>
+			<ZSectionFilterAffiliates />
+		</template>
+		<div class="space-y-6">
+			<!-- table, cards, etc. -->
+		</div>
+	</ZPagePanel>
 </template>
 ```
 
@@ -54,11 +54,11 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 
 ```vue
 <template>
-  <ZPagePanel id="affiliate-tiers" :title="$t('affiliate.tiers')" back-to="/affiliates">
-    <div class="space-y-6 max-w-3xl">
-      <!-- content -->
-    </div>
-  </ZPagePanel>
+	<ZPagePanel id="affiliate-tiers" :title="$t('affiliate.tiers')" back-to="/affiliates">
+		<div class="space-y-6 max-w-3xl">
+			<!-- content -->
+		</div>
+	</ZPagePanel>
 </template>
 ```
 
@@ -66,16 +66,16 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 
 ```vue
 <template>
-  <ZPagePanel id="product-create" :title="$t('pages.addNewProduct')" back-to="/products" grow>
-    <div class="container w-full mx-auto py-4">
-      <FormProductCreation ref="formRef" />
-    </div>
-    <template #footer>
-      <div class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
-        <!-- Save / Cancel / Create buttons -->
-      </div>
-    </template>
-  </ZPagePanel>
+	<ZPagePanel id="product-create" :title="$t('pages.addNewProduct')" back-to="/products" grow>
+		<div class="container w-full mx-auto">
+			<FormProductCreation ref="formRef" />
+		</div>
+		<template #footer>
+			<div class="w-full backdrop-blur-sm border-t border-neutral-200 shadow-md z-50">
+				<!-- Save / Cancel / Create buttons -->
+			</div>
+		</template>
+	</ZPagePanel>
 </template>
 ```
 
@@ -83,11 +83,11 @@ Use `ZPagePanel` for all dashboard pages. It provides `UDashboardPanel` + `UDash
 
 ```vue
 <template>
-  <ZPagePanel id="reports" :title="$t('nav.reports')">
-    <div class="space-y-6">
-      <!-- content -->
-    </div>
-  </ZPagePanel>
+	<ZPagePanel id="reports" :title="$t('nav.reports')">
+		<div class="space-y-6">
+			<!-- content -->
+		</div>
+	</ZPagePanel>
 </template>
 ```
 

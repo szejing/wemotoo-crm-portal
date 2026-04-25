@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="shipping-zone-edit" :title="panelTitle" back-to="/settings/shipping/zones" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<div v-if="isLoading" class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700 p-4 space-y-3">
 				<USkeleton class="h-8 w-full max-w-md" />
 				<USkeleton class="h-32 w-full" />

@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="vouchers-edit" :title="`${$t('pages.editVoucher')} #${current_voucher?.code ?? code}`" :back-to="listBackPath" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormVoucherUpdateLoading v-if="isLoading" />
 			<FormVoucherUpdate v-else-if="current_voucher" ref="formRef" :voucher="current_voucher" />
 		</div>
@@ -67,9 +67,7 @@ const isLoading = ref(!current_voucher.value);
 const { t } = useI18n();
 useHead({ title: () => `${t('pages.editVoucher')} #${current_voucher.value?.code ?? code}` });
 
-const listBackPath = computed(() =>
-	voucherListingPathForAllocation(current_voucher.value?.discount?.allocation ?? AllocationType.BILL),
-);
+const listBackPath = computed(() => voucherListingPathForAllocation(current_voucher.value?.discount?.allocation ?? AllocationType.BILL));
 
 onBeforeRouteLeave(() => {
 	current_voucher.value = undefined;

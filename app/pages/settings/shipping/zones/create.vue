@@ -1,6 +1,6 @@
 <template>
 	<ZPagePanel id="shipping-zone-create" :title="$t('pages.createShippingZoneTitle')" back-to="/settings/shipping/zones" grow>
-		<div class="container w-full mx-auto py-4">
+		<div class="container w-full mx-auto">
 			<FormShippingZoneCreation ref="formRef" @saved="onSaved" />
 		</div>
 
