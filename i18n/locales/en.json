@@ -479,6 +479,10 @@
 		"crmUser": "CRM User",
 		"crmUserCreate": "Create CRM User",
 		"outletsTitle": "Wemotoo CRM - Outlets",
+		"createOutletTitle": "Add outlet",
+		"createOutletPageTitle": "Wemotoo CRM - Add outlet",
+		"editOutletTitle": "Edit outlet",
+		"editOutletPageTitle": "Wemotoo CRM - Edit outlet",
 		"paymentTitle": "Wemotoo CRM - Payment",
 		"paymentManagement": "Payment Management",
 		"paymentManagementDesc": "Configure payment types and methods for your business",
@@ -1179,7 +1183,16 @@
 		"outletForm": {
 			"addressAndLocation": "Address & Location",
 			"taxConfiguration": "Tax Configuration",
-			"createOutlet": "Create Outlet"
+			"createOutlet": "Create Outlet",
+			"reviewTitle": "Review this outlet",
+			"reviewSubtitleCreate": "Confirm details before creating",
+			"reviewSubtitleEdit": "Confirm details before saving",
+			"reviewSectionGeneral": "General",
+			"reviewSectionAddress": "Address & location",
+			"reviewCoordinates": "Coordinates",
+			"reviewCountry": "Country",
+			"reviewMapPreviewTitle": "Location preview (Google Maps)",
+			"confirmDelete": "Are you sure you want to delete this outlet?"
 		},
 		"discountForm": {
 			"createDiscount": "Create Discount",

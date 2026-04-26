@@ -5,7 +5,7 @@ description: Build and update Product CRUD flows in the Wemotoo CRM Portal using
 
 # Product CRUD (portal)
 
-Use this skill when working on product create/read/update/delete behavior so new code follows the established product implementation.
+Use this skill when working on product create/read/update/delete behavior so new code follows the established product implementation. For **generic** portal patterns (thin pages, Zod in `~/utils/schema`, `Form*Update`, review summary, delete modal), see **`crud-ui-pages`**.
 
 ## Reference files
 

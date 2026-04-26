@@ -38,9 +38,11 @@ export const useOutletStore = defineStore('outletStore', {
 		loading: false as boolean,
 		adding: false as boolean,
 		updating: false as boolean,
+		removing: false as boolean,
 		exporting: false as boolean,
 		outlets: [] as Outlet[],
 		total_outlets: 0 as number,
+		current_outlet: undefined as Outlet | undefined,
 		new_outlet: structuredClone(initialEmptyOutlet),
 		errors: [] as string[],
 		filter: initialEmptyOutletFilter,
@@ -101,16 +103,22 @@ export const useOutletStore = defineStore('outletStore', {
 			}
 		},
 
-		async getOutletByCode(code: string) {
+		async getOutletByCode(code: string): Promise<Outlet | undefined> {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
 				const data = await $api.outlet.getSingle(code);
-
-				return data.outlet;
+				if (data.outlet) {
+					this.current_outlet = data.outlet;
+					return data.outlet;
+				}
+				this.current_outlet = undefined;
+				return undefined;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
+				this.current_outlet = undefined;
+				return undefined;
 			} finally {
 				this.loading = false;
 			}
@@ -142,7 +150,7 @@ export const useOutletStore = defineStore('outletStore', {
 			}
 		},
 
-		async updateOutlet(code: string, outlet: Outlet) {
+		async updateOutlet(code: string, outlet: Outlet): Promise<boolean> {
 			this.updating = true;
 
 			const { $api } = useNuxtApp();
@@ -167,19 +175,23 @@ export const useOutletStore = defineStore('outletStore', {
 				});
 
 				if (data.outlet) {
+					this.current_outlet = data.outlet;
 					successNotification(`Outlet Updated !`);
 					this.getOutlets();
+					return true;
 				}
+				return false;
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
+				return false;
 			} finally {
 				this.updating = false;
 			}
 		},
 
 		async deleteOutlet(code: string) {
-			this.loading = true;
+			this.removing = true;
 
 			const { $api } = useNuxtApp();
 
@@ -191,12 +203,15 @@ export const useOutletStore = defineStore('outletStore', {
 
 					const index = this.outlets.findIndex((t) => t.code === data.outlet.code);
 					this.outlets.splice(index, 1);
+					if (this.current_outlet?.code === data.outlet.code) {
+						this.current_outlet = undefined;
+					}
 				}
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to process outlet';
 				failedNotification(message);
 			} finally {
-				this.loading = false;
+				this.removing = false;
 			}
 		},
 	},

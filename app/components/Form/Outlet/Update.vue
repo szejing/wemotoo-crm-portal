@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full">
-		<UForm ref="formRef" :schema="outletSchema" :state="new_outlet" class="grid grid-cols-1 lg:grid-cols-12 gap-6" @submit="onSubmit">
+		<UForm ref="formRef" :schema="outletSchema" :state="formState" class="grid grid-cols-1 lg:grid-cols-12 gap-6" @submit="onSubmit">
 			<div class="lg:col-span-9 space-y-6">
 				<div class="space-y-3">
 					<div class="flex items-center gap-2">
@@ -9,10 +9,11 @@
 					</div>
 					<div class="pl-7">
 						<ZInputOutletGeneralInfo
-							v-model:code="new_outlet.code"
-							v-model:description="new_outlet.description"
-							v-model:dial-code="new_outlet.dial_code"
-							v-model:phone-no="new_outlet.phone_no"
+							v-model:code="formState.code"
+							v-model:description="formState.description"
+							v-model:dial-code="formState.dial_code"
+							v-model:phone-no="formState.phone_no"
+							is-update
 						/>
 					</div>
 				</div>
@@ -24,15 +25,15 @@
 					</div>
 					<div class="pl-7">
 						<ZInputAddress
-							v-model:address1="new_outlet.address1"
-							v-model:address2="new_outlet.address2"
-							v-model:address3="new_outlet.address3"
-							v-model:city="new_outlet.city"
-							v-model:postal-code="new_outlet.postal_code"
-							v-model:state-name="new_outlet.state"
-							v-model:country-code="new_outlet.country_code"
-							v-model:longitude="new_outlet.longitude"
-							v-model:latitude="new_outlet.latitude"
+							v-model:address1="formState.address1"
+							v-model:address2="formState.address2"
+							v-model:address3="formState.address3"
+							v-model:city="formState.city"
+							v-model:postal-code="formState.postal_code"
+							v-model:state-name="formState.state"
+							v-model:country-code="formState.country_code"
+							v-model:longitude="formState.longitude"
+							v-model:latitude="formState.latitude"
 							state-field-name="state"
 							required-lat-lng
 						/>
@@ -45,14 +46,18 @@
 						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('components.outletForm.taxConfiguration') }}</h3>
 					</div>
 					<div class="pl-7">
-						<ZSelectMenuTaxRule v-model:tax-rule="new_outlet.tax_rule_code" class="sm:w-[50%] w-full" @update:tax-rule="updateTaxRule" />
+						<ZSelectMenuTaxRule
+							:tax-rule="formState.tax_rule"
+							class="sm:w-[50%] w-full"
+							@update:tax-rule="updateTaxRule"
+						/>
 					</div>
 				</div>
 			</div>
 
 			<div class="lg:col-span-3">
 				<div class="lg:sticky lg:top-4">
-					<FormOutletReviewSummary :summary="reviewSummary" subtitle-key="components.outletForm.reviewSubtitleCreate" />
+					<FormOutletReviewSummary :summary="reviewSummary" />
 				</div>
 			</div>
 		</UForm>
@@ -62,30 +67,74 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import { CreateOutletValidation } from '~/utils/schema';
+import { UpdateOutletValidation } from '~/utils/schema';
 import { ICONS } from '~/utils/icons';
 import type { Outlet } from '~/utils/types/outlet';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import { formatOutletCoordinatesLabel, isOutletCoordPairAtOrigin, parseOutletMapCoords } from '~/utils/outlet-review-map';
-import type { OutletReviewSummary } from '~/components/Form/Outlet/ReviewSummary.vue';
+import type { OutletReviewSummary } from './ReviewSummary.vue';
+
+const props = defineProps<{
+	outletCode: string;
+	initialOutlet: Outlet;
+}>();
 
 const emit = defineEmits<{
-	saved: [outlet: Outlet];
+	saved: [];
 }>();
 
 const { t } = useI18n();
-const outletSchema = computed(() => CreateOutletValidation(t));
-
-type Schema = z.infer<ReturnType<typeof CreateOutletValidation>>;
+const outletSchema = computed(() => UpdateOutletValidation(t));
+type Schema = z.infer<ReturnType<typeof UpdateOutletValidation>>;
 
 const outletStore = useOutletStore();
-const { adding, new_outlet } = storeToRefs(outletStore);
 
 const formRef = ref<{ submit: () => void } | null>(null);
 
-onMounted(() => {
-	outletStore.resetNewOutlet();
+const emptyState = () => ({
+	code: '',
+	description: '',
+	dial_code: '+60',
+	phone_no: '',
+	address1: '',
+	address2: '' as string | undefined,
+	address3: '' as string | undefined,
+	city: '',
+	country_code: '',
+	state: '',
+	postal_code: '',
+	longitude: undefined as number | string | undefined,
+	latitude: undefined as number | string | undefined,
+	tax_rule: undefined as string | undefined,
 });
+
+const formState = reactive(emptyState());
+
+const applyFromOutlet = (o: Outlet) => {
+	Object.assign(formState, emptyState());
+	formState.code = o.code;
+	formState.description = o.description;
+	formState.dial_code = o.dial_code;
+	formState.phone_no = o.phone_no;
+	formState.address1 = o.address1;
+	formState.address2 = o.address2;
+	formState.address3 = o.address3;
+	formState.city = o.city;
+	formState.country_code = o.country_code;
+	formState.state = o.state;
+	formState.postal_code = o.postal_code;
+	formState.longitude = o.longitude ?? undefined;
+	formState.latitude = o.latitude ?? undefined;
+	formState.tax_rule = o.tax_rule?.code;
+};
+
+watch(
+	() => props.initialOutlet,
+	(v) => {
+		applyFromOutlet(v);
+	},
+	{ immediate: true },
+);
 
 const buildAddressBlock = (o: {
 	address1: string;
@@ -104,13 +153,13 @@ const buildAddressBlock = (o: {
 };
 
 const reviewSummary = computed((): OutletReviewSummary => {
-	const o = new_outlet.value;
+	const o = formState;
 	const map = parseOutletMapCoords(o.latitude, o.longitude);
 	return {
 		code: o.code?.trim() ?? '',
 		description: o.description?.trim() ?? '',
 		phoneLabel: [o.dial_code, o.phone_no].filter(Boolean).join(' ').trim(),
-		taxRuleLabel: o.tax_rule_code?.trim() ?? '',
+		taxRuleLabel: o.tax_rule?.trim() ?? '',
 		addressBlock: buildAddressBlock(o as Parameters<typeof buildAddressBlock>[0]),
 		countryLabel: o.country_code?.trim().toUpperCase() ?? '',
 		coordinatesLabel: formatOutletCoordinatesLabel(o.latitude, o.longitude),
@@ -120,14 +169,28 @@ const reviewSummary = computed((): OutletReviewSummary => {
 });
 
 const updateTaxRule = (tax_rule: TaxRule | undefined) => {
-	new_outlet.value.tax_rule_code = tax_rule?.code;
+	formState.tax_rule = tax_rule?.code;
 };
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { code, description, dial_code, phone_no, address1, address2, address3, city, country_code, state, postal_code, longitude, latitude } = event.data;
-	const taxCode = event.data.tax_rule ?? new_outlet.value.tax_rule_code;
+	const {
+		code,
+		description,
+		dial_code,
+		phone_no,
+		address1,
+		address2,
+		address3,
+		city,
+		country_code,
+		state,
+		postal_code,
+		longitude,
+		latitude,
+		tax_rule,
+	} = event.data;
 
-	new_outlet.value = {
+	const payload = {
 		code,
 		description,
 		dial_code,
@@ -139,15 +202,14 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		country_code,
 		state,
 		postal_code,
-		longitude: Number(longitude) || undefined,
-		latitude: Number(latitude) || undefined,
-		tax_rule_code: taxCode || undefined,
-	};
+		longitude,
+		latitude,
+		tax_rule: tax_rule as Outlet['tax_rule'],
+	} as Outlet;
 
-	const outlet = await outletStore.createOutlet();
-
-	if (outlet) {
-		emit('saved', outlet);
+	const ok = await outletStore.updateOutlet(props.outletCode, payload);
+	if (ok) {
+		emit('saved');
 	}
 };
 
@@ -157,5 +219,3 @@ const submit = () => {
 
 defineExpose({ submit });
 </script>
-
-<style scoped></style>

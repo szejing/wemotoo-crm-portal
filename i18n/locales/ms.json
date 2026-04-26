@@ -478,6 +478,10 @@
 		"crmUser": "Pengguna CRM",
 		"crmUserCreate": "Cipta Pengguna CRM",
 		"outletsTitle": "Wemotoo CRM - Cawangan",
+		"createOutletTitle": "Tambah cawangan",
+		"createOutletPageTitle": "Wemotoo CRM - Tambah cawangan",
+		"editOutletTitle": "Edit cawangan",
+		"editOutletPageTitle": "Wemotoo CRM - Edit cawangan",
 		"paymentTitle": "Wemotoo CRM - Pembayaran",
 		"paymentManagement": "Pengurusan Pembayaran",
 		"paymentManagementDesc": "Konfigurasi jenis dan kaedah pembayaran untuk perniagaan anda",
@@ -1178,7 +1182,16 @@
 		"outletForm": {
 			"addressAndLocation": "Alamat & Lokasi",
 			"taxConfiguration": "Konfigurasi Cukai",
-			"createOutlet": "Cipta Cawangan"
+			"createOutlet": "Cipta Cawangan",
+			"reviewTitle": "Semak cawangan ini",
+			"reviewSubtitleCreate": "Sahkan butiran sebelum mencipta",
+			"reviewSubtitleEdit": "Sahkan butiran sebelum menyimpan",
+			"reviewSectionGeneral": "Am",
+			"reviewSectionAddress": "Alamat & lokasi",
+			"reviewCoordinates": "Koordinat",
+			"reviewCountry": "Negara",
+			"reviewMapPreviewTitle": "Pratonton lokasi (Google Maps)",
+			"confirmDelete": "Adakah anda pasti mahu memadam cawangan ini?"
 		},
 		"discountForm": {
 			"createDiscount": "Cipta Diskaun",

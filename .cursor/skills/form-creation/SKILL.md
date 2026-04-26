@@ -8,7 +8,7 @@ description: >-
 
 Standard pattern for **creating** a resource in the portal: a dedicated **`Form…Creation`** component (form + validation + optional review) and a **page** that hosts it with **`ZPagePanel`**, **`grow`**, and a **fixed footer** that triggers submit.
 
-Pair with **`page-panel-layout`** (shell), **`nuxt-ui-usage`** (UForm / UCard / buttons), **`i18n-translation`** (keys), and **`implementation-and-tests`** (tests).
+Pair with **`page-panel-layout`** (shell), **`nuxt-ui-usage`** (UForm / UCard / buttons), **`i18n-translation`** (keys), **`crud-ui-pages`** (full CRUD: edit routes, Zod, review summary, delete), and **`implementation-and-tests`** (tests).
 
 ## Reference implementations
 
@@ -17,8 +17,9 @@ Pair with **`page-panel-layout`** (shell), **`nuxt-ui-usage`** (UForm / UCard / 
 | Simple (form + sticky review, no section nav) | `app/components/Form/DiscountCreation.vue` | `app/pages/marketing/discounts/create.vue` |
 | Review card styling | `app/components/Form/Discount/ReviewSummary.vue` | — |
 | Complex (multi-section, optional sidebar nav) | `app/components/Form/Product/Creation.vue` | `app/pages/products/create.vue` |
+| End-to-end CRUD (create + edit + Zod + review) | `app/components/Form/ShippingZone/Creation.vue` | `app/pages/settings/shipping/zones/create.vue` (see **`crud-ui-pages`**) |
 
-Use the **simple** pattern by default. Use the **product** pattern only when there are multiple long sections and section navigation is required.
+Use the **simple** pattern by default. Use the **product** pattern only when there are multiple long sections and section navigation is required. For **update flows and delete on edit pages**, follow **`crud-ui-pages`**, not this file alone.
 
 ## Page (`app/pages/.../create.vue`)
 
@@ -77,7 +78,7 @@ Prefer **`UInput`** for short text (including description) unless multiline is e
 - Add **`form.code`**, **`form.name`**, **`form.description`** if not present (EN + MS).
 - Add **`components.<entity>Form.*`** for create button label, section subtitle, hints, review title/subtitle as needed.
 
-## When not to use this skill
+## When not to use this skill alone
 
-- **Edit/update** flows may reuse pieces (card, `UForm`) but often differ (load by id, patch, no `resetNew*`).
+- **Edit/update, delete, and full CRUD** — use **`crud-ui-pages`**: it covers `Form…Update`, `[id|code]` load + footer + `ZModalConfirmation` delete, and pairs create/update Zod with the review column.
 - **Modals** or inline creates without a full page: adapt layout; keep validation and store patterns consistent.

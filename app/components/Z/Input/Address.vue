@@ -58,8 +58,8 @@ const props = defineProps<{
 	/** Form field name for state (e.g. "state" for outlet schema). */
 	stateFieldName?: string;
 	requiredLatLng?: boolean;
-	longitude?: number;
-	latitude?: number;
+	longitude?: number | string | undefined;
+	latitude?: number | string | undefined;
 }>();
 
 const stateFieldName = computed(() => props.stateFieldName ?? 'state_name');

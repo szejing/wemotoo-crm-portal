@@ -30,7 +30,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="selectOutlet">
+			<UTable v-else :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="openOutlet">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
@@ -49,13 +49,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation, ZModalOutletDetail } from '#components';
 import { getOutletColumns } from '~/utils/table-columns';
 import type { Outlet } from '~/utils/types/outlet';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
-const overlay = useOverlay();
 const outletStore = useOutletStore();
 const { t } = useI18n();
 const outlet_columns = computed(() => getOutletColumns(t));
@@ -74,46 +72,10 @@ onMounted(async () => {
 	}
 });
 
-const deleteOutlet = async (code: string) => {
-	const confirmModal = overlay.create(ZModalConfirmation, {
-		props: {
-			message: 'Are you sure you want to delete this outlet?',
-			action: 'delete',
-			onConfirm: async () => {
-				await outletStore.deleteOutlet(code);
-				confirmModal.close();
-			},
-			onCancel: () => {
-				confirmModal.close();
-			},
-		},
-	});
-
-	confirmModal.open();
-};
-
-const selectOutlet = async (e: Event, row: TableRow<Outlet>) => {
+const openOutlet = (_e: Event, row: TableRow<Outlet>) => {
 	const outlet = row.original;
 	if (!outlet) return;
-
-	const outletModal = overlay.create(ZModalOutletDetail, {
-		props: {
-			outlet: JSON.parse(JSON.stringify(outlet)),
-			onUpdate: async (_outlet: Outlet) => {
-				await outletStore.updateOutlet(outlet.code, _outlet);
-				outletModal.close();
-			},
-			onDelete: async () => {
-				outletModal.close();
-				await deleteOutlet(outlet.code);
-			},
-			onCancel: () => {
-				outletModal.close();
-			},
-		},
-	});
-
-	outletModal.open();
+	navigateTo(`/operation/outlets/${encodeURIComponent(outlet.code)}`);
 };
 
 const updatePage = async (page: number) => {
