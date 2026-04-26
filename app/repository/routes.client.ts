@@ -227,6 +227,10 @@ const MerchantRoutes = {
 		MarkPacked: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/packed`,
 		MarkFulfilled: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/fulfillment/${order_no}/fulfilled`,
 	},
+	/** Server-side Nominatim proxy (OpenStreetMap); no extra API key. */
+	Geocode: {
+		Search: () => `${prefix}/${API_PATH.MERCHANT}/geocode/search`,
+	},
 	Shipment: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}`,
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}`,

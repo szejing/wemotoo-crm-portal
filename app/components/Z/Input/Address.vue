@@ -51,13 +51,34 @@
 
 		<div v-if="requiredLatLng" class="space-y-2">
 			<p class="text-xs text-neutral-500 dark:text-neutral-400">{{ $t('components.zInput.addressCoordinatesHint') }}</p>
+			<div class="flex flex-wrap items-center gap-2">
+				<UButton
+					color="primary"
+					variant="soft"
+					size="sm"
+					:loading="geocodingLoading"
+					:disabled="geocodingLoading"
+					@click="onFillCoordsFromAddress"
+				>
+					{{ $t('components.zInput.fillCoordsFromAddress') }}
+				</UButton>
+				<UButton variant="outline" size="sm" :disabled="!addressQueryForMaps" @click="onOpenInGoogleMaps">
+					{{ $t('components.zInput.openInGoogleMaps') }}
+				</UButton>
+				<UButton variant="outline" size="sm" :disabled="geocodingLoading" @click="onUseMyLocation">
+					{{ $t('components.zInput.useMyLocation') }}
+				</UButton>
+			</div>
+			<p class="text-xs text-neutral-500 dark:text-neutral-400">
+				{{ $t('components.zInput.osmAttribution') }}
+			</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-				<UFormField v-slot="{ error }" :label="$t('components.zInput.longitude')" name="longitude">
-					<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.longitude')" />
-				</UFormField>
-
 				<UFormField v-slot="{ error }" :label="$t('components.zInput.latitude')" name="latitude">
 					<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.latitude')" />
+				</UFormField>
+
+				<UFormField v-slot="{ error }" :label="$t('components.zInput.longitude')" name="longitude">
+					<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.longitude')" />
 				</UFormField>
 			</div>
 		</div>
@@ -66,7 +87,9 @@
 
 <script lang="ts" setup>
 import { findPostcode } from 'malaysia-postcodes';
+import MerchantRoutes from '~/repository/routes.client';
 import { useDataStore } from '~/stores/Data/Data';
+import { buildOutletAddressSearchQuery, googleMapsWebSearchUrl } from '~/utils/address-geocode';
 import { mergeMalaysiaStateOptions } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
@@ -98,7 +121,73 @@ const emit = defineEmits([
 
 const stateFieldName = computed(() => props.stateFieldName ?? 'state_name');
 
+const { t } = useI18n();
+const toast = useToast();
 const dataStore = useDataStore();
+const geocodingLoading = ref(false);
+
+const addressQueryForMaps = computed(() =>
+	buildOutletAddressSearchQuery({
+		address1: props.address1,
+		address2: props.address2,
+		address3: props.address3,
+		postalCode: props.postalCode,
+		city: props.city,
+		stateName: props.stateName,
+		countryCode: props.countryCode,
+	}),
+);
+
+function onOpenInGoogleMaps() {
+	const q = addressQueryForMaps.value.trim();
+	if (!q) return;
+	window.open(googleMapsWebSearchUrl(q), '_blank', 'noopener,noreferrer');
+}
+
+async function onFillCoordsFromAddress() {
+	const q = addressQueryForMaps.value.trim();
+	if (q.length < 5) {
+		toast.add({ title: t('components.zInput.geocodeNeedAddress'), color: 'warning' });
+		return;
+	}
+	geocodingLoading.value = true;
+	try {
+		const { latitude, longitude } = await $fetch<{ latitude: number; longitude: number }>(MerchantRoutes.Geocode.Search(), {
+			query: { q },
+		});
+		emit('update:latitude', latitude);
+		emit('update:longitude', longitude);
+		toast.add({ title: t('components.zInput.geocodeSuccess'), color: 'success' });
+	} catch (err: unknown) {
+		const status =
+			err && typeof err === 'object' && 'statusCode' in err ? (err as { statusCode?: number }).statusCode : undefined;
+		if (status === 404) {
+			toast.add({ title: t('components.zInput.geocodeNoResults'), color: 'warning' });
+		} else {
+			toast.add({ title: t('components.zInput.geocodeFailed'), color: 'error' });
+		}
+	} finally {
+		geocodingLoading.value = false;
+	}
+}
+
+function onUseMyLocation() {
+	if (typeof navigator === 'undefined' || !navigator.geolocation) {
+		toast.add({ title: t('components.zInput.geolocationUnavailable'), color: 'warning' });
+		return;
+	}
+	navigator.geolocation.getCurrentPosition(
+		(pos) => {
+			emit('update:latitude', pos.coords.latitude);
+			emit('update:longitude', pos.coords.longitude);
+			toast.add({ title: t('components.zInput.geolocationSuccess'), color: 'success' });
+		},
+		() => {
+			toast.add({ title: t('components.zInput.geolocationDenied'), color: 'warning' });
+		},
+		{ enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
+	);
+}
 
 onMounted(() => {
 	if (dataStore.countries.length === 0) {
