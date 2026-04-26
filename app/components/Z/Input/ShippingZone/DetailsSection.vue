@@ -51,13 +51,13 @@
 				</div> -->
 
 				<div v-if="SHIPPING_ZONE_SHOW_COUNTRY_AND_POSTCODE_FIELDS" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<UFormField name="country_code" :label="$t('pages.shippingZoneCountry')">
-						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.country') }}</p>
-						<UInput v-model="state.country_code" maxlength="2" class="uppercase" />
-					</UFormField>
 					<UFormField name="state" :label="$t('pages.shippingZoneState')">
 						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.state') }}</p>
 						<UInput v-model="stateTextSingleMode" />
+					</UFormField>
+					<UFormField name="country_code" :label="$t('pages.shippingZoneCountry')">
+						<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.country') }}</p>
+						<UInput v-model="state.country_code" maxlength="2" class="uppercase" />
 					</UFormField>
 				</div>
 

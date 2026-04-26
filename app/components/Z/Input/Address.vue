@@ -1,6 +1,7 @@
 <template>
 	<div class="space-y-4">
 		<UFormField v-slot="{ error }" :label="$t('components.zInput.address1')" name="address1" required>
+			<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.zInput.addressLine1Hint') }}</p>
 			<UInput v-model="address1" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.address1')" />
 		</UFormField>
 
@@ -13,39 +14,60 @@
 		</UFormField>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.postalCode')" name="postal_code" required>
-				<UInput v-model="postal_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.postalCode')" />
-			</UFormField>
-
 			<UFormField v-slot="{ error }" :label="$t('components.zInput.city')" name="city" required>
 				<UInput v-model="city" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.city')" />
+			</UFormField>
+
+			<UFormField v-slot="{ error }" :label="$t('components.zInput.postalCode')" name="postal_code" required>
+				<UInput v-model="postal_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.postalCode')" />
 			</UFormField>
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.state')" :name="stateFieldName" required>
-				<UInput v-model="state_name" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.state')" />
+			<UFormField :label="$t('components.zInput.state')" :name="stateFieldName" required>
+				<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.zInput.addressStateHint') }}</p>
+				<USelect
+					:model-value="stateSelectValue"
+					:items="stateItems"
+					value-attribute="value"
+					class="w-full"
+					:placeholder="$t('components.selectMenu.selectState')"
+					@update:model-value="onStateSelect"
+				/>
 			</UFormField>
 
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.countryCode')" name="country_code" required>
-				<UInput v-model="country_code" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.countryCode')" />
+			<UFormField :label="$t('components.zInput.countryCode')" name="country_code" required>
+				<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.zInput.addressCountryHint') }}</p>
+				<USelect
+					:model-value="countrySelectValue"
+					:items="countryItems"
+					value-attribute="value"
+					class="w-full"
+					:placeholder="$t('components.selectMenu.selectCountry')"
+					@update:model-value="onCountrySelect"
+				/>
 			</UFormField>
 		</div>
 
-		<div v-if="requiredLatLng" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.longitude')" name="longitude">
-				<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.longitude')" />
-			</UFormField>
+		<div v-if="requiredLatLng" class="space-y-2">
+			<p class="text-xs text-neutral-500 dark:text-neutral-400">{{ $t('components.zInput.addressCoordinatesHint') }}</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<UFormField v-slot="{ error }" :label="$t('components.zInput.longitude')" name="longitude">
+					<UInput v-model="longitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.longitude')" />
+				</UFormField>
 
-			<UFormField v-slot="{ error }" :label="$t('components.zInput.latitude')" name="latitude">
-				<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.latitude')" />
-			</UFormField>
+				<UFormField v-slot="{ error }" :label="$t('components.zInput.latitude')" name="latitude">
+					<UInput v-model="latitude" :trailing-icon="error ? ICONS.ERROR_OUTLINE : undefined" :placeholder="$t('components.zInput.latitude')" />
+				</UFormField>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { findPostcode } from 'malaysia-postcodes';
+import { useDataStore } from '~/stores/Data/Data';
+import { mergeMalaysiaStateOptions } from '~/utils/data/malaysia-states';
 
 const props = defineProps<{
 	address1?: string;
@@ -62,8 +84,6 @@ const props = defineProps<{
 	latitude?: number | string | undefined;
 }>();
 
-const stateFieldName = computed(() => props.stateFieldName ?? 'state_name');
-
 const emit = defineEmits([
 	'update:address1',
 	'update:address2',
@@ -75,6 +95,39 @@ const emit = defineEmits([
 	'update:longitude',
 	'update:latitude',
 ]);
+
+const stateFieldName = computed(() => props.stateFieldName ?? 'state_name');
+
+const dataStore = useDataStore();
+
+onMounted(() => {
+	if (dataStore.countries.length === 0) {
+		void dataStore.getCountries();
+	}
+});
+
+const stateItems = computed(() => mergeMalaysiaStateOptions(props.stateName?.trim() ? [props.stateName.trim()] : []));
+
+const stateSelectValue = computed(() => props.stateName?.trim() || undefined);
+
+function onStateSelect(v: string | undefined) {
+	emit('update:stateName', v?.trim() ?? '');
+}
+
+const countryItems = computed(() => {
+	const rows = dataStore.countries.map((c) => ({ label: c.display_name, value: c.iso2 }));
+	const code = props.countryCode?.trim().toUpperCase();
+	if (code && !rows.some((r) => r.value === code)) {
+		return [{ label: code, value: code }, ...rows];
+	}
+	return rows;
+});
+
+const countrySelectValue = computed(() => props.countryCode?.trim().toUpperCase() || undefined);
+
+function onCountrySelect(v: string | undefined) {
+	emit('update:countryCode', v?.trim().toUpperCase() ?? '');
+}
 
 const address1 = computed({
 	get() {
@@ -123,24 +176,6 @@ const postal_code = computed({
 			emit('update:stateName', location.state);
 		}
 		emit('update:postalCode', value);
-	},
-});
-
-const state_name = computed({
-	get() {
-		return props.stateName;
-	},
-	set(value) {
-		emit('update:stateName', value);
-	},
-});
-
-const country_code = computed({
-	get() {
-		return props.countryCode;
-	},
-	set(value) {
-		emit('update:countryCode', value);
 	},
 });
 
