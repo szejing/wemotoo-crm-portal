@@ -1,4 +1,4 @@
-import { useDiscountStore } from './Discount/Discount';
+import { useDiscountStore } from './discount/discount';
 import { useProductTagStore } from './ProductTag/ProductTag';
 import { useProductCategoryStore } from './ProductCategory/ProductCategory';
 import { useProductVariationStore } from './ProductVariation/ProductVariation';
@@ -21,7 +21,7 @@ import { useOutletStore } from './Outlet/Outlet';
 import { useTaxStore } from './Tax/Tax';
 import { useTaxGroupStore } from './TaxGroup/TaxGroup';
 import { useTaxRuleStore } from './TaxRule/TaxRule';
-import { useVoucherStore } from './Voucher/Voucher';
+import { useVoucherStore } from './voucher/voucher';
 import { useFulfillmentStore } from './Fulfillment/Fulfillment';
 import { useShipmentStore } from './Shipment/Shipment';
 import { useShippingMethodStore } from './ShippingMethod/ShippingMethod';

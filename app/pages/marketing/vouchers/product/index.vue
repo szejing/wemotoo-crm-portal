@@ -53,7 +53,7 @@ import type { TableRow } from '@nuxt/ui';
 import type { Voucher } from '~/utils/types/voucher';
 import { options_page_size } from '~/utils/options';
 import { ICONS } from '~/utils/icons';
-import { useVoucherStore } from '~/stores/Voucher/Voucher';
+import { useVoucherStore } from '~/stores/voucher/voucher';
 
 const { t } = useI18n();
 const voucher_columns = computed(() => getVoucherColumns(t));

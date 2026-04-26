@@ -4,7 +4,7 @@ import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
-import { useDiscountStore } from '~/stores/Discount/Discount';
+import { useDiscountStore } from '~/stores/discount/discount';
 
 type TranslateFn = (key: string) => string;
 
