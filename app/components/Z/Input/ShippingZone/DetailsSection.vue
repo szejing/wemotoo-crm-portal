@@ -64,16 +64,18 @@
 				<UFormField v-else name="state" :label="$t('pages.shippingZoneState')">
 					<p class="text-xs text-neutral-500 dark:text-neutral-400 my-1">{{ $t('components.shippingZoneForm.fieldHints.state') }}</p>
 					<ZSelectMenuState v-model:state-names="state.state" multiple :placeholder="$t('components.shippingZoneForm.selectStates')">
-						<template #default="{ values, stateLabel, deselect, placeholder }">
-							<div v-if="values.length > 0" class="flex flex-wrap gap-1.5">
-								<UBadge v-for="st in values" :key="st" color="primary" variant="subtle" class="inline-flex max-w-[min(100%,12rem)] items-center gap-1">
-									<span class="min-w-0 truncate">{{ stateLabel(st) }}</span>
-									<UIcon
-										:name="ICONS.CROSS"
-										class="w-3.5 h-3.5 shrink-0 text-error-500 dark:text-error-400 hover:text-error-600 dark:hover:text-error-300 cursor-pointer"
-										@click.stop="deselect(st)"
-									/>
-								</UBadge>
+						<template #default="{ values, stateLabel, deselect, clearAll, placeholder }">
+							<div v-if="values.length > 0" class="flex flex-wrap items-center gap-2">
+								<div class="flex flex-wrap gap-1.5 min-w-0 flex-1">
+									<UBadge v-for="st in values" :key="st" color="primary" variant="subtle" class="inline-flex max-w-[min(100%,12rem)] items-center gap-1">
+										<span class="min-w-0 truncate">{{ stateLabel(st) }}</span>
+										<UIcon
+											:name="ICONS.CROSS"
+											class="w-3.5 h-3.5 shrink-0 text-error-500 dark:text-error-400 hover:text-error-600 dark:hover:text-error-300 cursor-pointer"
+											@click.stop="deselect(st)"
+										/>
+									</UBadge>
+								</div>
 							</div>
 							<span v-else class="text-neutral-400 text-sm">{{ placeholder }}</span>
 						</template>

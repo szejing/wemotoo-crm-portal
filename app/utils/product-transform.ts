@@ -1,11 +1,18 @@
 import type { Product } from '~/utils/types/product';
 import type { ProductUpdate } from '~/utils/types/form/product-creation';
+import type { MerchantProductTypeLike } from '~/utils/product-type-resolve';
+import { merchantTypeIdForKind } from '~/utils/product-type-resolve';
 
 /** Transform Product (with populated relations) to ProductUpdate for API. */
-export function transformProductToUpdate(product: Product): ProductUpdate {
+export function transformProductToUpdate(
+	product: Product,
+	prodTypes: MerchantProductTypeLike[],
+): ProductUpdate {
 	if (!product) {
 		throw new Error('Product is required for transformation');
 	}
+	const type_id = merchantTypeIdForKind(product.type, prodTypes);
+
 	return {
 		code: product.code,
 		name: product.name,
@@ -15,7 +22,7 @@ export function transformProductToUpdate(product: Product): ProductUpdate {
 		is_giftcard: product.is_giftcard,
 		is_active: product.is_active,
 		status: product.status,
-		type_id: product.type,
+		type_id,
 		category_codes:
 			product.categories
 				?.filter((cat) => cat != null && cat.code != null)

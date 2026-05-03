@@ -164,6 +164,7 @@ export const useShippingZoneStore = defineStore('shippingZoneStore', {
 				delete body.pricing_summary;
 				delete body.shipping_method_ids;
 				const req = { merchant_id, ...body } as UpdateShippingZoneReq;
+
 				const resp = await $api.shippingZone.update(zoneCode, req);
 				// const row = enrichShippingZone(resp.shipping_zone);
 				// const idx = this.zones.findIndex((z) => z.id === id);

@@ -101,6 +101,7 @@ import { ZModalConfirmation, ZModalLoading } from '#components';
 import type { Image } from '~/utils/types/image';
 import type { FormErrorEvent } from '#ui/types';
 import type { ProductVariationInput } from '~/utils/types/product-variation';
+import { transformProductToUpdate as buildProductUpdate } from '~/utils/product-transform';
 
 const { t } = useI18n();
 const updateProductSchema = computed(() => createUpdateProductValidation(t));
@@ -113,113 +114,9 @@ const props = defineProps({
 	},
 });
 
-// Transform Product (with populated relations) to ProductUpdate (with codes/IDs)
-const transformProductToUpdate = (product: Product): ProductUpdate => {
-	// Safety check: ensure product is defined
-	if (!product) {
-		throw new Error('Product is required for transformation');
-	}
-
-	return {
-		code: product.code,
-		name: product.name,
-		short_desc: product.short_desc,
-		long_desc: product.long_desc,
-		is_discountable: product.is_discountable,
-		is_giftcard: product.is_giftcard,
-		is_active: product.is_active,
-		status: product.status,
-		type_id: product.type,
-		// Transform populated relations to codes/IDs
-		category_codes:
-			product.categories
-				?.filter((cat) => cat != null && cat.code != null)
-				.map((cat) => cat.code!)
-				.filter((code): code is string => code != null) ?? [],
-		tag_ids:
-			product.tags
-				?.filter((tag) => tag != null && tag.id != null)
-				.map((tag) => tag.id!)
-				.filter((id): id is number => id != null) ?? undefined,
-		brand_codes:
-			product.brands
-				?.filter((brand) => brand != null && brand.code != null)
-				.map((brand) => brand.code!)
-				.filter((code): code is string => code != null) ?? undefined,
-		// Transform Price[] to PriceInput[]
-		price_types:
-			product.price_types
-				?.filter((price) => price != null)
-				.map((price) => ({
-					id: price.id,
-					currency_code: price.currency_code,
-					orig_sell_price: price.orig_sell_price,
-					cost_price: price.cost_price,
-					sale_price: price.sale_price,
-				})) ?? [],
-		variations:
-			product.variations
-				?.filter((variation) => variation != null)
-				.map((variation) => ({
-					id: variation.id,
-					name: variation.name,
-					options:
-						variation.options
-							?.filter((option) => option != null)
-							.map((option) => ({
-								id: option.id,
-								variation_id: option.variation_id,
-								value: option.value,
-							})) ?? [],
-				})) ?? [],
-		// Transform ProductVariant[] to ProductVariantInput[]
-		variants:
-			product.variants
-				?.filter((variant) => variant != null)
-				.map((variant) => ({
-					variant_code: variant.variant_code,
-					product_code: variant.product_code,
-					name: variant.name,
-					sku: variant.sku,
-					ean: variant.ean,
-					upc: variant.upc,
-					barcode: variant.barcode,
-					hs_code: variant.hs_code,
-					inventory_quantity: variant.inventory_quantity,
-					allow_backorder: variant.allow_backorder,
-					manage_inventory: variant.manage_inventory,
-					weight: variant.weight,
-					length: variant.length,
-					height: variant.height,
-					width: variant.width,
-					origin_country: variant.origin_country,
-					material: variant.material,
-					price_types:
-						variant.price_types
-							?.filter((price) => price != null)
-							.map((price) => ({
-								id: price.id,
-								currency_code: price.currency_code,
-								orig_sell_price: price.orig_sell_price,
-								cost_price: price.cost_price,
-								sale_price: price.sale_price,
-							})) ?? [],
-					options:
-						variant.options
-							?.filter((option) => option != null)
-							.map((option) => ({
-								id: option.id,
-								option_id: option.variation_id,
-								value: option.value,
-							})) ?? [],
-					metadata: variant.metadata,
-				})) ?? [],
-		// Keep images as-is (can be Image or File)
-		thumbnail: product.thumbnail,
-		images: product.images,
-		metadata: product.metadata,
-	};
-};
+const productTypeStore = useProductTypeStore();
+const transformProductToUpdate = (product: Product): ProductUpdate =>
+	buildProductUpdate(product, productTypeStore.prod_types);
 
 // Categories, tags, brands state (for UI binding) - declared before watch
 const categories = ref<Category[]>(props.product.categories ?? []);

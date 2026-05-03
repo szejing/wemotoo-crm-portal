@@ -66,7 +66,7 @@ export const createUpdateProductValidation = (t: TranslateFn) => {
 		price_types: z.array(Price).min(1, t('validation.product.priceRequired')),
 		variations: z.array(Variation).optional().nullable(),
 		variants: z.array(Variant).optional().nullable(),
-		type: z.number().default(1),
+		type_id: z.number().default(1),
 	});
 	return base.superRefine((data, ctx) => {
 		const variants = data.variants ?? [];
@@ -133,5 +133,5 @@ export const UpdateProductValidation = z.object({
 	price_types: z.array(PriceLegacy).min(1, 'At least one price is required'),
 	variations: z.array(Variation).optional().nullable(),
 	variants: z.array(VariantLegacy).optional().nullable(),
-	type: z.number().default(1),
+	type_id: z.number().default(1),
 });

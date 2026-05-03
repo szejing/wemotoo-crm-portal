@@ -3,7 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
-import { formatCurrency, getFormattedDate } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate, ProductType } from 'wemotoo-common';
 import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
@@ -53,14 +53,39 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			header: ({ column }) => getSortableHeader(column, t('table.type')),
 			cell: ({ row }) => {
 				const productTypeStore = useProductTypeStore();
-				const typeId = row.original.type;
-				const typeLabel = productTypeStore.prod_types.find((pt) => pt.id === typeId)?.value ?? (typeId != null ? `Type ${typeId}` : '—');
+				const kind = row.original.type;
+
+				let typeLabel: string;
+				if (typeof kind === 'string') {
+					const byKind = productTypeStore.prod_types.find((pt) => pt.value === kind);
+					typeLabel = byKind?.value ?? kind;
+				} else {
+					typeLabel = kind != null ? `Type ${kind}` : '—';
+				}
+
 				const metadata = row.original.metadata as { duration?: string } | undefined;
 				const duration = metadata?.duration;
-				const isService = typeId === 2 || (typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('service'));
+
+				let isService = false;
+				if (typeof kind === 'string') {
+					isService = kind === ProductType.SERVICE;
+				}
+
+				isService ||= typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('service');
 
 				const typeColors = ['primary', 'success', 'warning', 'error', 'info', 'secondary'] as const;
-				const badgeColor = typeId != null ? typeColors[typeId % typeColors.length] : 'neutral';
+				let badgeColor: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'neutral' =
+					'neutral';
+
+				if (typeof kind === 'string') {
+					const badgeColorIdx = Object.values(ProductType).indexOf(kind as ProductType);
+					if (badgeColorIdx >= 0) {
+						const picked = typeColors[badgeColorIdx % typeColors.length];
+						if (picked !== undefined) {
+							badgeColor = picked;
+						}
+					}
+				}
 
 				const children: ReturnType<typeof h>[] = [h(UBadge, { class: 'capitalize', variant: 'subtle', color: badgeColor }, () => typeLabel)];
 				if (isService && duration) {
@@ -85,7 +110,8 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 							'class': 'size-4 cursor-pointer',
 							'modelValue': row.original.is_active,
 							'disabled': false,
-							'onUpdate:modelValue': (value: boolean) => productStore.updateStatus(row.original, value),
+							'onUpdate:modelValue': (value: unknown) =>
+								void productStore.updateStatus(row.original, value === true),
 						}),
 					],
 				);

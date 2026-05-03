@@ -181,13 +181,15 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 				? data.method_pricing[id]!.estimated_days!
 				: null,
 	}));
+	const serializedState = serializeStatesForApi(data.state);
+
 	const payload = {
 		code: props.zoneCode.trim(),
 		description: data.description.trim() || undefined,
 		rule: data.rule ?? 0,
 		is_active: data.is_active,
 		country_code: 'MY',
-		state: serializeStatesForApi(data.state),
+		state: serializedState === undefined ? null : serializedState,
 		postcode_patterns: buildPostcodePatterns(data.postcodes_text ?? ''),
 		methods,
 		shipping_method_ids: [...data.shipping_method_ids],

@@ -1,4 +1,4 @@
-import type { ProductStatus } from 'wemotoo-common';
+import type { ProductStatus, ProductType as ProductKind } from 'wemotoo-common';
 import type { Price, PriceInput } from './price';
 import type { Category } from './category';
 import type { Tag } from './tag';
@@ -72,7 +72,7 @@ export type Product = {
 	brands?: Brand[];
 	categories?: Category[];
 	tags?: Tag[];
-	type?: number;
+	type?: ProductKind;
 
 	// Images (URLs from backend)
 	thumbnail?: Image | undefined;

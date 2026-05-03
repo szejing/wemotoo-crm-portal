@@ -63,8 +63,8 @@ const createProductBase = z.object({
 	variations: z.array(Variation).optional(),
 	// variants
 	variants: z.array(Variant).optional(),
-	// type
-	type: z.number().default(1),
+	// FK to merchant product_types (BasicInfo uses type_id)
+	type_id: z.number().default(1),
 });
 
 const VARIANT_PRICE_REQUIRED_MSG = 'Price is required for this variant';

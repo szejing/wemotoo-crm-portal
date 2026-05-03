@@ -14,6 +14,7 @@
 				:values="displayValues"
 				:state-label="stateLabel"
 				:deselect="deselect"
+				:clear-all="clearAll"
 				:placeholder="placeholderText"
 			/>
 		</template>
@@ -67,6 +68,14 @@ function deselect(v: string) {
 			props.stateNames.filter((x) => x !== v),
 		);
 	} else if (v === props.stateName) {
+		emit('update:stateName', '');
+	}
+}
+
+function clearAll() {
+	if (props.multiple) {
+		emit('update:stateNames', []);
+	} else {
 		emit('update:stateName', '');
 	}
 }

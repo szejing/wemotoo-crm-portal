@@ -64,6 +64,7 @@
 import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 import type { ProductVariationInput } from '~/utils/types/product-variation';
+import { ProductType } from 'wemotoo-common';
 
 const props = defineProps({
 	product: {
@@ -74,6 +75,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:variations', 'update:variants', 'delete:variant', 'update:metadata']);
 const { t } = useI18n();
+const productTypeStore = useProductTypeStore();
 
 const product = computed({
 	get() {
@@ -82,10 +84,17 @@ const product = computed({
 	set(_) {},
 });
 
-// Check if service section should be shown (only for services, type_id/type === 2)
+// Show service tab when canonical kind is SERVICE (merchant type matched by enum value).
 const shouldShowService = computed(() => {
-	const typeId = 'type_id' in product.value ? product.value.type_id : product.value.type;
-	return typeId === 2;
+	const p = product.value as ProductCreate | Product;
+	let kind: string | undefined;
+
+	if ('type_id' in p && p.type_id != null) {
+		kind = productTypeStore.prod_types.find((pt) => pt.id === p.type_id)?.value;
+	} else if ('type' in p && typeof p.type === 'string') {
+		kind = p.type as string;
+	}
+	return kind === ProductType.SERVICE;
 });
 
 // Build tabs array with dynamic badges
@@ -98,7 +107,7 @@ const product_additional_info = computed(() => {
 		icon: ICONS.LAYERS,
 	});
 
-	// Conditionally add service for type 2 (Services)
+	// Conditionally add service for kind SERVICE
 	if (shouldShowService.value) {
 		tabs.push({
 			label: t('components.productUpdate.serviceTab'),
