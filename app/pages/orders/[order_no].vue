@@ -21,10 +21,16 @@
 						<div v-if="record?.inv_no" class="metadata-item">
 							<p class="text-base text-neutral-400 italic">{{ record?.inv_no }}</p>
 						</div>
-						<div v-if="record?.ref_no" class="metadata-item">
-							<p>{{ $t('components.orderDetail.refLabel') }}: {{ record?.ref_no }}</p>
-						</div>
+					<div v-if="record?.ref_no" class="metadata-item">
+						<p>{{ $t('components.orderDetail.refLabel') }}: {{ record?.ref_no }}</p>
 					</div>
+					<div v-if="record?.shipping_method_id" class="metadata-item">
+						<UIcon name="i-heroicons-truck" class="w-4 h-4 text-main" />
+						<UBadge color="primary" variant="subtle" size="sm">
+							{{ record.shipping_method?.description ?? `#${record.shipping_method_id}` }}
+						</UBadge>
+					</div>
+				</div>
 				</div>
 				<div class="order-header-right">
 					<div class="status-badges">
@@ -137,22 +143,26 @@
 						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
 
-					<FulfillmentCard
-						:fulfillment="record?.fulfillment"
-						:is-read-only="isSaleReadOnly"
-						:loading="fulfillmentStore.creating || fulfillmentStore.updating"
-						@action="handleFulfillmentAction"
-					/>
+					<div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+						<FulfillmentCard
+							class="lg:col-span-6"
+							:fulfillment="record?.fulfillment"
+							:is-read-only="isSaleReadOnly"
+							:loading="fulfillmentStore.creating || fulfillmentStore.updating"
+							@action="handleFulfillmentAction"
+						/>
 
-					<ShipmentCard
-						:shipment="record?.shipment"
-						:is-read-only="isSaleReadOnly"
-						:loading="shipmentStore.creating || shipmentStore.updating || shipmentStore.removing"
-						@create="openCreateShipmentModal"
-						@edit="openEditShipmentModal"
-						@delete="handleDeleteShipment"
-						@mark-delivered="handleMarkDelivered"
-					/>
+						<ShipmentCard
+							class="lg:col-span-6"
+							:shipment="record?.shipment"
+							:is-read-only="isSaleReadOnly"
+							:loading="shipmentStore.creating || shipmentStore.updating || shipmentStore.removing"
+							@create="openCreateShipmentModal"
+							@edit="openEditShipmentModal"
+							@delete="handleDeleteShipment"
+							@mark-delivered="handleMarkDelivered"
+						/>
+					</div>
 
 					<Activities :activities="record?.activities" />
 				</div>

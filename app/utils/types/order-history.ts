@@ -44,6 +44,8 @@ export type OrderHistory = {
 	fulfillment?: OrderFulfillment;
 	shipment?: OrderShipment;
 	activities?: OrderActivity[];
+	shipping_method_id?: number;
+	shipping_method?: { id: number; description: string };
 };
 
 export type NextFulfillmentAction = FulfillmentLifecycleStatusValue | 'none';
