@@ -29,6 +29,32 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 			},
 		},
 		{
+			id: 'order_type',
+			accessorFn: (row) => ((row.order_type ?? 'pickup') === 'delivery' ? 1 : 0),
+			header: ({ column }) => getSortableHeader(column, t('table.orderType')),
+			cell: ({ row }) => {
+				const orderType = row.original.order_type ?? 'pickup';
+				const orderTypeLabel = orderType === 'delivery' ? t('components.orderDetail.orderTypeDelivery') : t('components.orderDetail.orderTypePickup');
+
+				return h(
+					UBadge,
+					{
+						size: 'lg',
+						variant: 'subtle',
+						class: 'capitalize',
+						color: 'primary',
+					},
+					() => orderTypeLabel,
+				);
+			},
+			meta: {
+				class: {
+					th: 'text-center',
+					td: 'text-center',
+				},
+			},
+		},
+		{
 			id: 'customer',
 			accessorFn: (row) => row.customer?.name ?? '',
 			header: ({ column }) => getSortableHeader(column, t('table.customer')),
@@ -61,7 +87,7 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 					[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
 				}[row.original.status as string];
 
-				return h(UBadge, { class: 'capitalize ', variant: 'subtle', color }, () => value);
+				return h(UBadge, { class: 'capitalize ', size: 'lg', variant: 'subtle', color }, () => value);
 			},
 			meta: {
 				class: {

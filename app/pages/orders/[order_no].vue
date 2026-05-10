@@ -21,16 +21,28 @@
 						<div v-if="record?.inv_no" class="metadata-item">
 							<p class="text-base text-neutral-400 italic">{{ record?.inv_no }}</p>
 						</div>
-					<div v-if="record?.ref_no" class="metadata-item">
-						<p>{{ $t('components.orderDetail.refLabel') }}: {{ record?.ref_no }}</p>
+						<div v-if="record?.ref_no" class="metadata-item">
+							<p>{{ $t('components.orderDetail.refLabel') }}: {{ record?.ref_no }}</p>
+						</div>
+						<div v-if="record" class="metadata-item fulfillment-meta mt-2">
+							<UIcon
+								:name="(record?.order_type ?? 'pickup') === 'delivery' ? 'i-heroicons-truck' : 'i-heroicons-building-storefront'"
+								class="w-4 h-4 shrink-0 text-main"
+							/>
+							<div class="flex flex-wrap items-center gap-1.5">
+								<UBadge color="primary" variant="subtle" size="md">
+									{{
+										(record?.order_type ?? 'pickup') === 'delivery'
+											? $t('components.orderDetail.orderTypeDelivery')
+											: $t('components.orderDetail.orderTypePickup')
+									}}
+								</UBadge>
+								<UBadge v-if="record?.shipping_method_id" color="neutral" variant="subtle" size="md">
+									{{ record.shipping_method?.description ?? `#${record.shipping_method_id}` }}
+								</UBadge>
+							</div>
+						</div>
 					</div>
-					<div v-if="record?.shipping_method_id" class="metadata-item">
-						<UIcon name="i-heroicons-truck" class="w-4 h-4 text-main" />
-						<UBadge color="primary" variant="subtle" size="sm">
-							{{ record.shipping_method?.description ?? `#${record.shipping_method_id}` }}
-						</UBadge>
-					</div>
-				</div>
 				</div>
 				<div class="order-header-right">
 					<div class="status-badges">
@@ -143,7 +155,10 @@
 						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
 
-					<div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+					<div
+						class="grid grid-cols-1 gap-6 lg:grid-cols-12"
+						v-if="(record?.order_type ?? 'pickup') === 'delivery'"
+					>
 						<FulfillmentCard
 							class="lg:col-span-6"
 							:fulfillment="record?.fulfillment"

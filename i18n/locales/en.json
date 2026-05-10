@@ -666,6 +666,7 @@
 		"bizDate": "Business date",
 		"dateTime": "Date & time",
 		"orderNo": "Order No",
+		"orderType": "Order type",
 		"customer": "Customer",
 		"status": "Status",
 		"grossAmt": "Gross Amt",
@@ -967,7 +968,9 @@
 			"statusUpdateFailed": "Failed to update order status",
 			"error": "Error",
 			"waitSeconds": "Wait {n}s",
-			"refresh": "Refresh"
+			"refresh": "Refresh",
+			"orderTypePickup": "Pickup",
+			"orderTypeDelivery": "Delivery"
 		},
 		"fulfillment": {
 			"title": "Fulfillment",

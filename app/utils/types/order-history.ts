@@ -46,6 +46,8 @@ export type OrderHistory = {
 	activities?: OrderActivity[];
 	shipping_method_id?: number;
 	shipping_method?: { id: number; description: string };
+	/** Pickup vs delivery (defaults to pickup on API when omitted) */
+	order_type?: 'pickup' | 'delivery';
 };
 
 export type NextFulfillmentAction = FulfillmentLifecycleStatusValue | 'none';

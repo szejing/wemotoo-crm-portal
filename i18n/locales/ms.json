@@ -665,6 +665,7 @@
 		"bizDate": "Tarikh perniagaan",
 		"dateTime": "Tarikh & masa",
 		"orderNo": "No. Pesanan",
+		"orderType": "Jenis pesanan",
 		"customer": "Pelanggan",
 		"status": "Status",
 		"grossAmt": "Jumlah Kasar",
@@ -966,7 +967,9 @@
 			"statusUpdateFailed": "Gagal mengemas kini status pesanan",
 			"error": "Ralat",
 			"waitSeconds": "Tunggu {n}s",
-			"refresh": "Muat semula"
+			"refresh": "Muat semula",
+			"orderTypePickup": "Ambil sendiri",
+			"orderTypeDelivery": "Penghantaran"
 		},
 		"fulfillment": {
 			"title": "Pemenuhan",
