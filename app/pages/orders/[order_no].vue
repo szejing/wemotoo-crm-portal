@@ -37,9 +37,6 @@
 											: $t('components.orderDetail.orderTypePickup')
 									}}
 								</UBadge>
-								<UBadge v-if="record?.shipping_method_id" color="neutral" variant="subtle" size="md">
-									{{ record.shipping_method?.description ?? `#${record.shipping_method_id}` }}
-								</UBadge>
 							</div>
 						</div>
 					</div>
@@ -155,30 +152,6 @@
 						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
 
-					<div
-						class="grid grid-cols-1 gap-6 lg:grid-cols-12"
-						v-if="(record?.order_type ?? 'pickup') === 'delivery'"
-					>
-						<FulfillmentCard
-							class="lg:col-span-6"
-							:fulfillment="record?.fulfillment"
-							:is-read-only="isSaleReadOnly"
-							:loading="fulfillmentStore.creating || fulfillmentStore.updating"
-							@action="handleFulfillmentAction"
-						/>
-
-						<ShipmentCard
-							class="lg:col-span-6"
-							:shipment="record?.shipment"
-							:is-read-only="isSaleReadOnly"
-							:loading="shipmentStore.creating || shipmentStore.updating || shipmentStore.removing"
-							@create="openCreateShipmentModal"
-							@edit="openEditShipmentModal"
-							@delete="handleDeleteShipment"
-							@mark-delivered="handleMarkDelivered"
-						/>
-					</div>
-
 					<Activities :activities="record?.activities" />
 				</div>
 
@@ -206,83 +179,35 @@
 							</div>
 						</UCard>
 
-						<!-- Payment Information -->
-						<UCard class="payment-info-card">
-							<template #header>
-								<div class="card-header-sidebar">
-									<h3 class="sidebar-title">{{ $t('components.orderDetail.paymentInformation') }}</h3>
-									<UButton v-if="record.payments?.length == 0" variant="ghost" size="xs" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo" />
-									<div v-if="record?.payment_status === PaymentStatus.PAID" class="status-group">
-										<UBadge color="success" size="lg">
-											<UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
-											{{ $t('components.orderDetail.paid') }}
-										</UBadge>
-									</div>
-								</div>
-							</template>
+						<ZSectionOrderDetailPayment :order="orderForModal" @refresh="refreshOrder" />
 
-							<div v-if="record.payments && record.payments.length > 0" class="payments-list">
-								<div v-for="payment in record.payments" :key="payment.payment_line" class="payment-item" @click="viewPaymentInfo(payment)">
-									<div class="payment-header">
-										<span class="payment-type">{{ payment.payment_type_desc }}</span>
-										<span class="payment-amount">{{ payment.currency_code }} {{ payment.payment_amt?.toFixed(2) }}</span>
-									</div>
-									<div v-if="payment.ref_no1" class="payment-ref">
-										<span class="payment-ref-label">{{ $t('components.orderDetail.refLabel') }}:</span>
-										<span class="payment-ref-value">{{ payment.ref_no1 }}</span>
-									</div>
-									<div class="payment-date">
-										<UIcon name="i-heroicons-clock" class="w-3 h-3" />
-										{{ getFormattedDate(payment.payment_date_time, 'dd MMM yyyy HH:mm') }}
-									</div>
-								</div>
-							</div>
-							<div v-else class="payment-empty">
-								<UIcon name="i-heroicons-currency-dollar" class="w-12 h-12 text-neutral-300" />
-								<p class="payment-empty-text">{{ $t('components.orderDetail.noPaymentRecorded') }}</p>
-								<UButton size="sm" color="primary" :icon="ICONS.ADD_OUTLINE" @click="addPaymentInfo">
-									{{ $t('components.orderDetail.addPayment') }}
-								</UButton>
-							</div>
-						</UCard>
+						<!-- Shipment Information -->
+						<div v-if="(record?.order_type ?? 'pickup') === 'delivery'">
+							<ZSectionOrderDetailShipment
+								:order="orderForModal"
+								:is-read-only="isSaleReadOnly"
+								@refresh="getOrderDetails"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<CreateShipmentModal
-			:open="isCreateShipmentModalOpen"
-			:methods="shipmentModalMethods"
-			:loading="shipmentStore.creating || shipmentStore.updating"
-			:title="shipmentModalTitle"
-			:submit-label="shipmentModalSubmitLabel"
-			:initial-value="shipmentModalInitialValue"
-			@update:open="isCreateShipmentModalOpen = $event"
-			@submit="handleShipmentSubmit"
-		/>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
-import { ZModalConfirmation, ZModalOrderDetailCustomer, ZModalOrderDetailPayment } from '#components';
-import { OrderStatus, PaymentStatus, getFormattedDate } from 'wemotoo-common';
+import { ZModalConfirmation, ZModalOrderDetailCustomer } from '#components';
+import { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
-import type { PaymentModel } from '~/utils/models';
 import { ICONS } from '~/utils/icons';
 import type { OrderHistory } from '~/utils/types/order-history';
-import FulfillmentCard from '~/components/Fulfillment/FulfillmentCard.vue';
-import ShipmentCard from '~/components/Shipment/ShipmentCard.vue';
-import CreateShipmentModal from '~/components/Shipment/CreateShipmentModal.vue';
 import Activities from '~/components/ActivityLog/Activities.vue';
 import { useFulfillmentStore } from '~/stores/Fulfillment/Fulfillment';
-import { useShipmentStore } from '~/stores/Shipment/Shipment';
-import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
 
 const orderStore = useOrderStore();
 const saleStore = useSaleStore();
 const fulfillmentStore = useFulfillmentStore();
-const shipmentStore = useShipmentStore();
-const shippingStore = useShippingMethodStore();
 const { updating } = storeToRefs(orderStore);
 
 const loading = computed(() => orderStore.loading || saleStore.loading);
@@ -294,18 +219,6 @@ const type = computed(() => String(route.query.type ?? ''));
 const isSaleReadOnly = computed(() => type.value === 'sale');
 
 const order = ref<OrderHistory | undefined>();
-const isCreateShipmentModalOpen = ref(false);
-const shipmentModalMethods = ref<ShippingMethodOption[]>([]);
-const shipmentModalMode = ref<'create' | 'update'>('create');
-const shipmentModalInitialValue = ref<{
-	shipping_method_id?: number;
-	courier_name: string;
-	tracking_no: string;
-}>({
-	shipping_method_id: undefined,
-	courier_name: '',
-	tracking_no: '',
-});
 
 const record = computed(() => order.value);
 
@@ -317,23 +230,6 @@ const overlay = useOverlay();
 const new_order_status = ref<OrderStatus>(OrderStatus.PENDING_PAYMENT);
 
 const customer = computed(() => record.value?.customer);
-
-const loadShipmentMethodsForModal = async () => {
-	// const addr = customer.value?.shipping_address;
-	// if (addr?.country_code) {
-	// 	try {
-	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods({
-	// 			country_code: addr.country_code,
-	// 			state: addr.state,
-	// 			postal_code: addr.postal_code,
-	// 		});
-	// 	} catch {
-	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
-	// 	}
-	// } else {
-	// 	shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
-	// }
-};
 
 const items = computed(() => record.value?.items);
 const currency_code = computed(() => record.value?.currency.code);
@@ -360,12 +256,6 @@ watch(
 
 const { t } = useI18n();
 useHead({ title: () => t('pages.orderDetailTitle') + (record.value?.order_no ?? '') });
-
-const shipmentModalTitle = computed(() =>
-	shipmentModalMode.value === 'create' ? t('components.shipment.createShipment') : t('components.shipment.updateShipment'),
-);
-
-const shipmentModalSubmitLabel = computed(() => (shipmentModalMode.value === 'create' ? t('common.create') : t('common.save')));
 
 onMounted(() => {
 	checkMobile();
@@ -418,98 +308,6 @@ const handleFulfillmentAction = async (action: 'processing' | 'packed' | 'fulfil
 		await fulfillmentStore.markFulfilled(record.value.order_no);
 	}
 
-	await getOrderDetails();
-};
-
-const openCreateShipmentModal = async () => {
-	if (isSaleReadOnly.value) {
-		return;
-	}
-
-	shipmentModalMode.value = 'create';
-	shipmentModalInitialValue.value = {
-		shipping_method_id: undefined,
-		courier_name: '',
-		tracking_no: '',
-	};
-	await loadShipmentMethodsForModal();
-	isCreateShipmentModalOpen.value = true;
-};
-
-const openEditShipmentModal = async () => {
-	if (!record.value?.shipment || isSaleReadOnly.value) {
-		return;
-	}
-
-	shipmentModalMode.value = 'update';
-	shipmentModalInitialValue.value = {
-		shipping_method_id: undefined,
-		courier_name: record.value.shipment.courier_name,
-		tracking_no: record.value.shipment.tracking_no,
-	};
-	await loadShipmentMethodsForModal();
-	isCreateShipmentModalOpen.value = true;
-};
-
-const handleShipmentSubmit = async (payload: { shipping_method_id?: number; courier_name: string; tracking_no: string }) => {
-	if (!record.value || isSaleReadOnly.value) {
-		return;
-	}
-
-	if (shipmentModalMode.value === 'create' && payload.shipping_method_id == null) {
-		failedNotification(t('components.shipment.shippingMethod') + ' ' + t('common.required'));
-		return;
-	}
-
-	if (shipmentModalMode.value === 'create') {
-		await shipmentStore.createShipment({
-			order_no: record.value.order_no,
-			inv_no: record.value.inv_no,
-			shipping_method_id: Number(payload.shipping_method_id),
-			courier_name: payload.courier_name,
-			tracking_no: payload.tracking_no,
-		});
-	} else if (record.value.shipment?.id) {
-		await shipmentStore.updateShipment(record.value.shipment.id, {
-			shipping_method_id: payload.shipping_method_id,
-			courier_name: payload.courier_name,
-			tracking_no: payload.tracking_no,
-		});
-	}
-
-	isCreateShipmentModalOpen.value = false;
-	await getOrderDetails();
-};
-
-const handleDeleteShipment = async () => {
-	if (!record.value?.shipment?.id || isSaleReadOnly.value) {
-		return;
-	}
-
-	const confirmModal = overlay.create(ZModalConfirmation, {
-		props: {
-			message: t('components.shipment.confirmDelete'),
-			action: 'delete',
-			onConfirm: async () => {
-				await shipmentStore.deleteShipment(record.value!.shipment!.id);
-				confirmModal.close();
-				await getOrderDetails();
-			},
-			onCancel: () => {
-				confirmModal.close();
-			},
-		},
-	});
-
-	confirmModal.open();
-};
-
-const handleMarkDelivered = async () => {
-	if (!record.value?.shipment?.id || isSaleReadOnly.value) {
-		return;
-	}
-
-	await shipmentStore.markDelivered(record.value.shipment.id);
 	await getOrderDetails();
 };
 
@@ -631,45 +429,6 @@ const editCustomerDetail = async () => {
 	});
 
 	customerModal.open();
-};
-
-const addPaymentInfo = () => {
-	if (!orderForModal.value) return;
-
-	const paymentModal = overlay.create(ZModalOrderDetailPayment, {
-		props: {
-			order: orderForModal.value,
-			onUpdate: () => {
-				paymentModal.close();
-				refreshOrder();
-			},
-			onCancel: () => {
-				paymentModal.close();
-			},
-		},
-	});
-
-	paymentModal.open();
-};
-
-const viewPaymentInfo = (payment: PaymentModel) => {
-	if (!orderForModal.value) return;
-
-	const paymentModal = overlay.create(ZModalOrderDetailPayment, {
-		props: {
-			order: orderForModal.value,
-			payment: payment,
-			onUpdate: () => {
-				paymentModal.close();
-				refreshOrder();
-			},
-			onCancel: () => {
-				paymentModal.close();
-			},
-		},
-	});
-
-	paymentModal.open();
 };
 </script>
 
@@ -836,13 +595,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	align-items: center;
 }
 
-.card-header-sidebar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-}
-
 .card-title {
 	display: flex;
 	align-items: center;
@@ -882,8 +634,7 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 }
 
 .quick-actions-card,
-.status-management-card,
-.payment-info-card {
+.status-management-card {
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -905,86 +656,6 @@ const viewPaymentInfo = (payment: PaymentModel) => {
 	color: var(--color-gray-700);
 	text-transform: uppercase;
 	letter-spacing: 0.025em;
-}
-
-.payments-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.75rem;
-}
-
-.payment-item {
-	padding: 1rem;
-	background: var(--color-gray-50);
-	border-radius: 0.5rem;
-	border: 1px solid var(--color-gray-200);
-	cursor: pointer;
-	transition: all 0.2s ease;
-}
-
-.payment-item:hover {
-	background: var(--color-gray-100);
-	border-color: var(--color-primary-300);
-	transform: translateY(-2px);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.payment-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.5rem;
-}
-
-.payment-type {
-	font-size: 0.875rem;
-	font-weight: 600;
-	color: var(--color-gray-800);
-}
-
-.payment-amount {
-	font-size: 1rem;
-	font-weight: 700;
-	color: var(--color-primary-600);
-}
-
-.payment-ref {
-	display: flex;
-	gap: 0.5rem;
-	font-size: 0.75rem;
-	margin-bottom: 0.25rem;
-}
-
-.payment-ref-label {
-	color: var(--color-gray-500);
-}
-
-.payment-ref-value {
-	color: var(--color-gray-700);
-	font-weight: 500;
-}
-
-.payment-date {
-	display: flex;
-	align-items: center;
-	gap: 0.25rem;
-	font-size: 0.75rem;
-	color: var(--color-gray-500);
-}
-
-.payment-empty {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 2rem;
-	text-align: center;
-	gap: 1rem;
-}
-
-.payment-empty-text {
-	color: var(--color-gray-500);
-	font-size: 0.875rem;
 }
 
 @media (max-width: 640px) {

@@ -994,6 +994,7 @@
 			"confirmDelete": "Adakah anda pasti mahu memadam penghantaran ini?",
 			"confirmDeleteShippingMethod": "Adakah anda pasti mahu memadam kaedah penghantaran ini?",
 			"noShipment": "Belum ada penghantaran dicipta.",
+			"customerSelection": "Pilihan pelanggan",
 			"readOnlyHint": "Tindakan penghantaran adalah baca sahaja untuk jualan."
 		},
 		"shippingMethodForm": {
