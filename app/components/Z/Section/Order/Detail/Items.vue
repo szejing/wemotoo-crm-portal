@@ -1,171 +1,68 @@
 <template>
-	<table class="w-full">
-		<thead>
-			<tr class="border-b">
-				<th class="cell-header text-left">{{ $t('components.orderDetail.item') }}</th>
-				<th class="cell-header">{{ $t('components.orderDetail.unitSellPrice') }}</th>
-				<th class="cell-header">{{ $t('components.orderDetail.qty') }}</th>
-				<th class="cell-header">{{ $t('components.orderDetail.price') }}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr
-				v-for="item in items"
-				:key="item.prod_code"
-				class="border-b"
-				:class="{ 'editable-cell': editable && item.status == OrderItemStatus.ACTIVE }"
-				@click="editable && item.status == OrderItemStatus.ACTIVE && editItem(item)"
-			>
-				<td class="cell-item">
-					<div class="flex items-center gap-2">
-						<div>
-							<div v-if="item.status == OrderItemStatus.ACTIVE">
-								<UIcon :name="ICONS.CHECK_OUTLINE_ROUNDED" class="text-green-500 w-5 h-5" />
-							</div>
-							<div v-else-if="item.status == OrderItemStatus.REFUNDED">
-								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
-							</div>
-							<div v-else-if="item.status == OrderItemStatus.VOIDED">
-								<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
-							</div>
-						</div>
+	<template v-if="column === 'item'">
+		<div class="flex items-center gap-2">
+			<div>
+				<div v-if="item.status == OrderItemStatus.ACTIVE">
+					<UIcon :name="ICONS.CHECK_OUTLINE_ROUNDED" class="text-green-500 w-5 h-5" />
+				</div>
+				<div v-else-if="item.status == OrderItemStatus.REFUNDED">
+					<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
+				</div>
+				<div v-else-if="item.status == OrderItemStatus.VOIDED">
+					<UIcon :name="ICONS.ERROR_OUTLINE" class="text-red-500 w-5 h-5" />
+				</div>
+			</div>
 
-						<div class="ml-2">
-							<div class="font-medium" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.prod_code }}</div>
-							<div
-								class="text-xs"
-								:class="{
-									'italic text-neutral-300': item.status == OrderItemStatus.VOIDED,
-									'text-neutral-500': item.status == OrderItemStatus.ACTIVE,
-								}"
-							>
-								{{ item.prod_name.substring(0, 10) }}
-							</div>
+			<div class="ml-2">
+				<div class="font-medium" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.prod_code }}</div>
+				<div
+					class="text-xs"
+					:class="{
+						'italic text-neutral-300': item.status == OrderItemStatus.VOIDED,
+						'text-neutral-500': item.status == OrderItemStatus.ACTIVE,
+					}"
+				>
+					{{ item.prod_name.substring(0, 10) }}
+				</div>
 
-							<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
+				<div v-if="item.prod_variant_code" class="text-xs italic text-neutral-300">{{ item.prod_variant_code }} : {{ item.prod_variant_name }}</div>
 
-							<div v-if="item.appointment" class="flex items-center gap-2 mt-2">
-								<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
-								<div class="flex flex-col text-xs font-bold italic">
-									<span class="text-neutral-400">{{ item.appointment.code }}</span>
-									{{ formatAppointmentDateRange(item.appointment.start_date_time, item.appointment.end_date_time) }}
-								</div>
-							</div>
-						</div>
+				<div v-if="item.appointment" class="flex items-center gap-2 mt-2">
+					<UIcon :name="ICONS.CALENDAR" class="w-5 h-5" />
+					<div class="flex flex-col text-xs font-bold italic">
+						<span class="text-neutral-400">{{ item.appointment.code }}</span>
+						{{ formatAppointmentDateRange(item.appointment.start_date_time, item.appointment.end_date_time) }}
 					</div>
-				</td>
-
-				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
-					{{ formatCurrency(item.unit_sell_price, currencyCode) }}
-				</td>
-				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.qty }}</td>
-				<td class="cell-center" :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
-					{{ item.status == OrderItemStatus.ACTIVE ? formatCurrency(item.net_amt, currencyCode) : 0 }}
-				</td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2"></td>
-				<td class="cell-header border-b">{{ $t('components.orderDetail.subTotal') }}</td>
-				<td class="cell-center font-bold text-lg italic border-b">{{ formatCurrency(totalGrossAmt ?? 0, currencyCode) }}</td>
-			</tr>
-			<tr v-for="tax in taxes" :key="tax.tax_code">
-				<td colspan="2"></td>
-				<td class="cell-header border-b">{{ tax.tax_desc }}</td>
-				<td class="cell-center text-red-500 italic border-b">-{{ formatCurrency(tax.tax_amt, currencyCode) }}</td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td class="cell-header border-b-4 border-double">{{ $t('components.orderDetail.netTotal') }}</td>
-				<td class="cell-center font-bold text-lg italic border-b-4 border-double">{{ formatCurrency(totalNetAmt ?? 0, currencyCode) }}</td>
-			</tr>
-		</tfoot>
-	</table>
+				</div>
+			</div>
+		</div>
+	</template>
+	<template v-else-if="column === 'unitSellPrice'">
+		<span :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
+			{{ formatCurrency(item.unit_sell_price, currencyCode) }}
+		</span>
+	</template>
+	<template v-else-if="column === 'qty'">
+		<span :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">{{ item.qty }}</span>
+	</template>
+	<template v-else-if="column === 'lineTotal'">
+		<span :class="{ 'italic text-neutral-300': item.status == OrderItemStatus.VOIDED }">
+			{{ item.status == OrderItemStatus.ACTIVE ? formatCurrency(item.net_amt, currencyCode) : 0 }}
+		</span>
+	</template>
 </template>
 
 <script lang="ts" setup>
-import { ZModalInformation, ZModalOrderDetailItem } from '#components';
 import { OrderItemStatus, formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models/item.model';
-import type { TaxModel } from '~/utils/models/tax.model';
-import type { Order } from '~/utils/types/order';
+import { ICONS } from '~/utils/icons';
 import { formatAppointmentDateRange } from '~/utils/utils';
 
-const props = defineProps<{
-	order: Order;
-	items: ItemModel[];
-	taxes: TaxModel[];
+export type OrderDetailItemsColumn = 'item' | 'unitSellPrice' | 'qty' | 'lineTotal';
+
+defineProps<{
+	item: ItemModel;
+	column: OrderDetailItemsColumn;
 	currencyCode: string | undefined;
-	totalGrossAmt: number | undefined;
-	totalNetAmt: number | undefined;
-	editable: boolean;
 }>();
-
-const emit = defineEmits(['refresh']);
-
-const overlay = useOverlay();
-const editItem = (item: ItemModel) => {
-	if (item.status == OrderItemStatus.ACTIVE) {
-		const itemModal = overlay.create(ZModalOrderDetailItem, {
-			props: {
-				order: props.order,
-				item: JSON.parse(JSON.stringify(item)),
-				onCancel: () => {
-					itemModal.close();
-				},
-				onUpdate: (requiresRefresh: boolean) => {
-					if (requiresRefresh) {
-						emit('refresh');
-					}
-					itemModal.close();
-				},
-			},
-		});
-
-		itemModal.open();
-	} else {
-		const infoModal = overlay.create(ZModalInformation, {
-			props: {
-				title: 'Warning',
-				message: 'Unable to edit this item because it is already voided by customer.',
-				action: 'confirm',
-				onConfirm: () => {
-					infoModal.close();
-				},
-			},
-		});
-
-		infoModal.open();
-	}
-};
 </script>
-
-<style scoped>
-.cell-header {
-	padding: 1rem;
-	color: var(--color-neutral-400);
-	font-weight: 400;
-	font-style: italic;
-}
-
-.cell-item {
-	padding: 1rem;
-	text-align: left;
-	width: 400px;
-}
-
-.cell-center {
-	padding: 1rem;
-	text-align: center;
-}
-
-.editable-cell {
-	cursor: pointer;
-	transition: background-color 150ms;
-}
-
-.editable-cell:hover {
-	background-color: var(--color-neutral-50);
-}
-</style>
