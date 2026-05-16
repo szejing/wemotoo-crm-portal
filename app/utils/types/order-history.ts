@@ -1,13 +1,8 @@
-import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { OrderStatus, OrderType, PaymentStatus } from 'wemotoo-common';
 import type { TaxModel } from '../models/tax.model';
 import type { Currency } from './currency';
 import type { ItemModel, PaymentModel, CustomerModel } from '../models';
-import type {
-	FulfillmentLifecycleStatusValue,
-	OrderActivity,
-	OrderFulfillment,
-	OrderShipment,
-} from './order-fulfillment-shipping';
+import type { FulfillmentLifecycleStatusValue, OrderActivity, OrderFulfillment, OrderShipment } from './order-fulfillment-shipping';
 
 export type OrderHistory = {
 	biz_date: string;
@@ -47,7 +42,7 @@ export type OrderHistory = {
 	shipping_method_id?: number;
 	shipping_method?: { id: number; description: string };
 	/** Pickup vs delivery (defaults to pickup on API when omitted) */
-	order_type?: 'pickup' | 'delivery';
+	order_type?: OrderType;
 };
 
 export type NextFulfillmentAction = FulfillmentLifecycleStatusValue | 'none';

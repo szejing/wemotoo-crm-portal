@@ -26,13 +26,13 @@
 						</div>
 						<div v-if="record" class="metadata-item fulfillment-meta mt-2">
 							<UIcon
-								:name="(record?.order_type ?? 'pickup') === 'delivery' ? 'i-heroicons-truck' : 'i-heroicons-building-storefront'"
+								:name="(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY ? 'i-heroicons-truck' : 'i-heroicons-building-storefront'"
 								class="w-4 h-4 shrink-0 text-main"
 							/>
 							<div class="flex flex-wrap items-center gap-1.5">
 								<UBadge color="primary" variant="subtle" size="md">
 									{{
-										(record?.order_type ?? 'pickup') === 'delivery'
+										(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY
 											? $t('components.orderDetail.orderTypeDelivery')
 											: $t('components.orderDetail.orderTypePickup')
 									}}
@@ -127,13 +127,7 @@
 							</div>
 						</template>
 
-						<UTable
-							:data="items ?? []"
-							:columns="order_detail_item_columns"
-							:meta="order_items_table_meta"
-							class="w-full"
-							@select="onOrderItemRowSelect"
-						>
+						<UTable :data="items ?? []" :columns="order_detail_item_columns" :meta="order_items_table_meta" class="w-full" @select="onOrderItemRowSelect">
 							<template #item-cell="{ row }">
 								<ZSectionOrderDetailItems column="item" :item="row.original" :currency-code="currency_code" />
 							</template>
@@ -210,7 +204,7 @@
 						<ZSectionOrderDetailPayment :order="orderForModal" @refresh="refreshOrder" />
 
 						<!-- Shipment Information -->
-						<div v-if="(record?.order_type ?? 'pickup') === 'delivery'">
+						<div v-if="(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY">
 							<ZSectionOrderDetailShipment :order="orderForModal" :is-read-only="isSaleReadOnly" @refresh="getOrderDetails" />
 						</div>
 					</div>
@@ -224,7 +218,7 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { TableMeta, Row } from '@tanstack/vue-table';
 import { ZModalConfirmation, ZModalInformation, ZModalOrderDetailCustomer, ZModalOrderDetailItem } from '#components';
-import { OrderItemStatus, OrderStatus, PaymentStatus, formatCurrency } from 'wemotoo-common';
+import { OrderItemStatus, OrderStatus, OrderType, PaymentStatus, formatCurrency } from 'wemotoo-common';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import { ICONS } from '~/utils/icons';
 import type { ItemModel } from '~/utils/models/item.model';

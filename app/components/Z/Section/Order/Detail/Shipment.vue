@@ -17,8 +17,11 @@
 		</div>
 
 		<div v-if="shipment" class="space-y-3 text-sm">
-			<p>{{ $t('components.shipment.courierName') }}: {{ shipment.courier_name }}</p>
-			<p>{{ $t('components.shipment.trackingNo') }}: {{ shipment.tracking_no }}</p>
+			<p v-if="isPendingPlaceholder" class="text-xs text-muted">
+				{{ $t('components.shipment.pendingShipmentHint') }}
+			</p>
+			<p>{{ $t('components.shipment.courierName') }}: {{ courierDisplay }}</p>
+			<p>{{ $t('components.shipment.trackingNo') }}: {{ trackingDisplay }}</p>
 			<p>{{ $t('components.shipment.shippingFee') }}: {{ shipment.shipping_fee }}</p>
 
 			<div class="flex flex-wrap gap-2">
@@ -76,6 +79,28 @@ const overlay = useOverlay();
 const shipmentStore = useShipmentStore();
 
 const shipment = computed(() => props.order?.shipment);
+
+const isPendingPlaceholder = computed(() => {
+	const s = shipment.value;
+	if (!s || s.status !== 'pending') {
+		return false;
+	}
+	const c = (s.courier_name ?? '').trim();
+	const t = (s.tracking_no ?? '').trim();
+	return !c && !t;
+});
+
+const courierDisplay = computed(() => {
+	const s = shipment.value;
+	const c = (s?.courier_name ?? '').trim();
+	return c || t('components.shipment.notYetProvided');
+});
+
+const trackingDisplay = computed(() => {
+	const s = shipment.value;
+	const x = (s?.tracking_no ?? '').trim();
+	return x || t('components.shipment.notYetProvided');
+});
 
 const shippingMethodLabel = computed(() => {
 	const o = props.order;
@@ -183,8 +208,8 @@ const openEditShipmentModal = async () => {
 			submitLabel: t('common.save'),
 			initialValue: {
 				shipping_method_id: undefined,
-				courier_name: ship.courier_name,
-				tracking_no: ship.tracking_no,
+				courier_name: ship.courier_name ?? '',
+				tracking_no: ship.tracking_no ?? '',
 			},
 			save: async (payload) => {
 				await shipmentStore.updateShipment(shipmentId, {

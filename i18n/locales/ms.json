@@ -995,7 +995,9 @@
 			"confirmDeleteShippingMethod": "Adakah anda pasti mahu memadam kaedah penghantaran ini?",
 			"noShipment": "Belum ada penghantaran dicipta.",
 			"customerSelection": "Pilihan pelanggan",
-			"readOnlyHint": "Tindakan penghantaran adalah baca sahaja untuk jualan."
+			"readOnlyHint": "Tindakan penghantaran adalah baca sahaja untuk jualan.",
+			"notYetProvided": "Belum ditetapkan",
+			"pendingShipmentHint": "Menunggu kurier dan penjejakan selepas pemenuhan."
 		},
 		"shippingMethodForm": {
 			"reviewTitle": "Semakan",

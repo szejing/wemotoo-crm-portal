@@ -996,7 +996,9 @@
 			"confirmDeleteShippingMethod": "Are you sure you want to delete this shipping method?",
 			"noShipment": "No shipment created yet.",
 			"customerSelection": "Customer selection",
-			"readOnlyHint": "Shipment actions are read-only for sales."
+			"readOnlyHint": "Shipment actions are read-only for sales.",
+			"notYetProvided": "Not assigned yet",
+			"pendingShipmentHint": "Awaiting courier and tracking after fulfillment."
 		},
 		"shippingMethodForm": {
 			"reviewTitle": "Review",

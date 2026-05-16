@@ -93,14 +93,17 @@ export type OrderShipment = {
 	id: string;
 	order_no: string;
 	inv_no: string;
-	courier_name: string;
-	tracking_no: string;
+	/** Set when courier is assigned post-fulfillment (placeholder checkout rows may omit). */
+	courier_name?: string | null;
+	tracking_no?: string | null;
 	shipping_fee: number;
 	status: ShipmentStatusValue;
 	shipped_at?: string | Date | null;
 	delivered_at?: string | Date | null;
 	created_at?: string | Date;
 	updated_at?: string | Date;
+	/** Joined snapshot when API includes relation */
+	shipping_method?: ShippingMethodOption | { id?: number; description?: string };
 };
 
 export type OrderActivity = {

@@ -1,6 +1,6 @@
 # AI Rules Documentation (Cursor & Antigravity)
 
-This directory contains coding rules and conventions for the Wemotoo CRM Portal (Nuxt 3 / Vue 3). **Shared across Cursor and Antigravity** via `.agent/rules/`.
+This directory contains coding rules and conventions for the Wemotoo CRM Portal (Nuxt 4 compatibility / Vue 3). **Shared across Cursor and Antigravity** via `.agent/rules/`.
 
 - **Cursor**: Reads via `.cursorrules` symlink → `.agent/rules/`
 - **Antigravity**: Reads `.agent/rules/` directly
@@ -15,7 +15,7 @@ File extension: `.mdc` (Markdown with Cursor frontmatter; valid for both editors
 
 ### Server and API
 
-- **`server-routes.mdc`** – Nitro API route handlers in `server/routes/merchant/`. Proxy to backend using `generateHeaders` and `Routes`; file naming follows `[param].get.ts`, `create.post.ts`, `many.get.ts`, etc.
+- **`server-routes.mdc`** – Nitro API route handlers in `server/routes/merchant/`. Proxy to backend using `signedFetch()` / shared helpers from `server/base_api.ts`; file naming follows `[param].get.ts`, `create.post.ts`, `many.get.ts`, etc.
 
 - **`repository.mdc`** – Client API layer: `app/repository/` modules, `HttpFactory`, route definitions (`routes.client.ts`), and request/response models.
 

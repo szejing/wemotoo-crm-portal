@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { formatCurrency, OrderStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus, OrderType } from 'wemotoo-common';
 import { UBadge } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
 import { getSortableHeader } from '../sortable';
@@ -30,10 +30,10 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 		},
 		{
 			id: 'order_type',
-			accessorFn: (row) => ((row.order_type ?? 'pickup') === 'delivery' ? 1 : 0),
+			accessorFn: (row) => ((row.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY ? 1 : 0),
 			header: ({ column }) => getSortableHeader(column, t('table.orderType')),
 			cell: ({ row }) => {
-				const orderType = row.original.order_type ?? 'pickup';
+				const orderType = row.original.order_type ?? OrderType.PICKUP;
 				const orderTypeLabel = orderType === 'delivery' ? t('components.orderDetail.orderTypeDelivery') : t('components.orderDetail.orderTypePickup');
 
 				return h(
