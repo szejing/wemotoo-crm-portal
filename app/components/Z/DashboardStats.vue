@@ -1,5 +1,5 @@
 <template>
-	<UPageGrid class="lg:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+	<UPageGrid class="grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
 		<UCard
 			v-for="(stat, index) in stats"
 			:key="index"
