@@ -13,6 +13,7 @@ import CrmUserModule from './crm-user/crm-user';
 import DiscountModule from './discount/discount';
 import FulfillmentModule from './fulfillment/fulfillment';
 import ShipmentModule from './shipment/shipment';
+import CourierModule from './courier/courier';
 import ShippingMethodModule from './shipping-method/shipping-method';
 import ShippingZoneModule from './shipping-zone/shipping-zone';
 
@@ -197,6 +198,59 @@ describe('ShipmentModule', () => {
 		await mod.remove('s1');
 
 		expect(lastFetch().url).toBe(MerchantRoutes.Shipment.Delete('s1'));
+		expect(lastFetch().opts.method).toBe('DELETE');
+	});
+});
+
+describe('CourierModule', () => {
+	it('calls courier many route', async () => {
+		setMockFetch(async () => ({ data: [], value: [], count: 0 }));
+
+		const mod = new CourierModule();
+		const query = { $top: 10, $count: true };
+		await mod.getMany(query);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.Couriers.Many());
+		expect(lastFetch().opts.method).toBe('GET');
+		expect(lastFetch().opts.query).toEqual(query);
+	});
+
+	it('calls courier create route', async () => {
+		setMockFetch(async () => ({ courier: { id: 1, name: 'Pos Laju' } }));
+
+		const mod = new CourierModule();
+		const payload = {
+			merchant_id: 'm1',
+			name: 'Pos Laju',
+			description: 'Domestic courier',
+			is_active: true,
+		};
+		await mod.create(payload);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.Couriers.Create());
+		expect(lastFetch().opts.method).toBe('POST');
+		expect(lastFetch().opts.body).toEqual(payload);
+	});
+
+	it('calls courier update route', async () => {
+		setMockFetch(async () => ({ courier: { id: 1, name: 'Pos Laju' } }));
+
+		const mod = new CourierModule();
+		const payload = { merchant_id: 'm1', is_active: false };
+		await mod.update(1, payload);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.Couriers.Update(1));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual(payload);
+	});
+
+	it('calls courier delete route', async () => {
+		setMockFetch(async () => ({ courier: { id: 1, name: 'Pos Laju' } }));
+
+		const mod = new CourierModule();
+		await mod.remove(1);
+
+		expect(lastFetch().url).toBe(MerchantRoutes.Couriers.Delete(1));
 		expect(lastFetch().opts.method).toBe('DELETE');
 	});
 });

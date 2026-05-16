@@ -122,9 +122,9 @@ import { LazyShipmentCreationModal, ZModalConfirmation } from '#components';
 import { formatCurrency } from 'wemotoo-common';
 import { ICONS } from '~/utils/icons';
 import { getShipmentStatusColor } from '~/utils/options';
+import { useCourierStore } from '~/stores/Courier/Courier';
 import { useShipmentStore } from '~/stores/Shipment/Shipment';
 import type { OrderHistory } from '~/utils/types/order-history';
-import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
 
 const props = defineProps<{
 	order?: OrderHistory;
@@ -139,6 +139,7 @@ const { t } = useI18n();
 const toast = useToast();
 const overlay = useOverlay();
 const shipmentStore = useShipmentStore();
+const courierStore = useCourierStore();
 
 const shipment = computed(() => props.order?.shipment);
 
@@ -193,23 +194,32 @@ const shippingMethodLabel = computed(() => {
 
 const loading = computed(() => shipmentStore.creating || shipmentStore.updating || shipmentStore.removing);
 
-const shipmentModalMethods = ref<ShippingMethodOption[]>([]);
+const shipmentModalCouriers = computed(() => courierStore.activeCouriers);
 
-const loadShipmentMethodsForModal = async () => {
-	// const addr = customer.value?.shipping_address;
-	// if (addr?.country_code) {
-	// 	try {
-	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods({
-	// 			country_code: addr.country_code,
-	// 			state: addr.state,
-	// 			postal_code: addr.postal_code,
-	// 		});
-	// 	} catch {
-	// 		shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
-	// 	}
-	// } else {
-	// 	shipmentModalMethods.value = await shippingStore.fetchAllShippingMethods();
-	// }
+const loadCouriers = async () => {
+	if (courierStore.activeCouriers.length) {
+		return;
+	}
+
+	await courierStore.getCouriers({
+		$top: 100,
+		$count: true,
+		$orderby: 'name asc',
+		$filter: 'is_active eq true',
+	});
+};
+
+const resolveShipmentCourierId = (courierId: number | null | undefined, courierName: string | null | undefined) => {
+	if (courierId != null) {
+		return courierId;
+	}
+
+	const normalized = (courierName ?? '').trim().toLowerCase();
+	if (!normalized) {
+		return undefined;
+	}
+
+	return shipmentModalCouriers.value.find((courier) => courier.name.trim().toLowerCase() === normalized)?.id;
 };
 
 const statusLabel = computed(() => {
@@ -251,26 +261,33 @@ const openCreateShipmentModal = async () => {
 		return;
 	}
 
-	await loadShipmentMethodsForModal();
+	await loadCouriers();
 
 	const rec = props.order;
 	const shipmentModal = overlay.create(LazyShipmentCreationModal, {
 		props: {
 			open: true,
-			methods: shipmentModalMethods.value,
+			couriers: shipmentModalCouriers.value,
 			mode: 'create' as const,
 			title: t('components.shipment.createShipment'),
 			submitLabel: t('common.create'),
 			initialValue: {
-				shipping_method_id: undefined,
+				courier_id: undefined,
 				courier_name: '',
 				tracking_no: '',
 			},
 			save: async (payload) => {
+				const shippingMethodId = rec.shipping_method?.id ?? rec.shipping_method_id;
+				if (shippingMethodId == null) {
+					toast.add({ title: t('components.shipment.shippingMethod') + ' ' + t('common.required'), color: 'error' });
+					throw new Error('Missing shipping method');
+				}
+
 				await shipmentStore.createShipment({
 					order_no: rec.order_no,
 					inv_no: rec.inv_no,
-					shipping_method_id: Number(payload.shipping_method_id),
+					shipping_method_id: Number(shippingMethodId),
+					courier_id: payload.courier_id,
 					courier_name: payload.courier_name,
 					tracking_no: payload.tracking_no,
 				});
@@ -290,7 +307,7 @@ const openEditShipmentModal = async () => {
 		return;
 	}
 
-	await loadShipmentMethodsForModal();
+	await loadCouriers();
 
 	const rec = props.order;
 	const ship = rec.shipment!;
@@ -299,18 +316,18 @@ const openEditShipmentModal = async () => {
 	const shipmentModal = overlay.create(LazyShipmentCreationModal, {
 		props: {
 			open: true,
-			methods: shipmentModalMethods.value,
+			couriers: shipmentModalCouriers.value,
 			mode: 'update' as const,
 			title: t('components.shipment.updateShipment'),
 			submitLabel: t('common.save'),
 			initialValue: {
-				shipping_method_id: undefined,
+				courier_id: resolveShipmentCourierId(ship.courier_id, ship.courier_name),
 				courier_name: ship.courier_name ?? '',
 				tracking_no: ship.tracking_no ?? '',
 			},
 			save: async (payload) => {
 				await shipmentStore.updateShipment(shipmentId, {
-					shipping_method_id: payload.shipping_method_id,
+					courier_id: payload.courier_id,
 					courier_name: payload.courier_name,
 					tracking_no: payload.tracking_no,
 				});
@@ -358,4 +375,8 @@ const handleMarkDelivered = async () => {
 	await shipmentStore.markDelivered(props.order.shipment.id);
 	emit('refresh');
 };
+
+onMounted(() => {
+	loadCouriers().catch(() => undefined);
+});
 </script>

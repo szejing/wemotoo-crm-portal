@@ -239,6 +239,13 @@ const MerchantRoutes = {
 		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}`,
 		MarkDelivered: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPMENT}/${id}/delivered`,
 	},
+	Couriers: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COURIERS}/many`,
+		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COURIERS}/create`,
+		Single: (id: number | string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COURIERS}/${id}`,
+		Update: (id: number | string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COURIERS}/${id}`,
+		Delete: (id: number | string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.COURIERS}/${id}`,
+	},
 	ShippingMethods: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/many`,
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_METHODS}/create`,

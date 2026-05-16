@@ -34,6 +34,7 @@ const shippingGroups = computed(() => [
 		icon: ICONS.ORDER,
 		color: 'green' as const,
 		items: [
+			{ label: t('pages.couriers'), to: '/settings/shipping/couriers' },
 			{ label: t('pages.shippingMethods'), to: '/settings/shipping/methods' },
 			{ label: t('nav.shippingZones'), to: '/settings/shipping/zones' },
 		],

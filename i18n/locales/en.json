@@ -253,6 +253,10 @@
 			"descriptionRequired": "Description is required",
 			"priorityMin": "Priority must be zero or greater"
 		},
+		"courier": {
+			"nameRequired": "Courier name is required",
+			"nameMax": "Courier name must be at most 191 characters"
+		},
 		"category": {
 			"codeRequired": "Code is required",
 			"descriptionRequired": "Description is required"
@@ -335,11 +339,14 @@
 		"orderNotFound": "Order number {orderNo} was not found.",
 		"orderDetailTitle": "Wemotoo CRM - Order Detail #",
 		"shippingMethods": "Shipping Methods",
+		"couriers": "Couriers",
 		"shippingSettingsDesc": "Configure delivery options and rates for checkout and fulfillment.",
 		"shippingMethodsDesc": "Define shipping service types (names and priority). Set fees and delivery estimates under each shipping zone.",
 		"shippingSettingsTitle": "Wemotoo CRM - Shipping Settings",
 		"shippingMethodsPageTitle": "Wemotoo CRM - Shipping Methods",
+		"couriersPageTitle": "Wemotoo CRM - Couriers",
 		"noShippingMethodsFound": "No shipping methods available.",
+		"noCouriersFound": "No couriers found.",
 		"estimatedDays": "Estimated Days",
 		"shippingPriority": "Priority",
 		"restrictShippingRegions": "Limit to regions",
@@ -356,6 +363,12 @@
 		"removeShippingZone": "Remove zone",
 		"shippingZonesSectionHint": "Each card is one zone rule. Use a 2-letter country code; rows without it are ignored when saving.",
 		"shippingMethodDetails": "Method details",
+		"courierDetails": "Courier details",
+		"createCourierTitle": "Add courier",
+		"createCourierPageTitle": "Wemotoo CRM - Add courier",
+		"createCourierButton": "Create courier",
+		"editCourierTitle": "Edit courier",
+		"editCourierPageTitle": "Wemotoo CRM - Edit courier",
 		"createShippingMethodTitle": "Add shipping method",
 		"createShippingMethodPageTitle": "Wemotoo CRM - Add shipping method",
 		"createShippingMethodButton": "Create method",
@@ -835,6 +848,7 @@
 			"searchOrderNo": "Search order no...",
 			"searchCategories": "Search categories...",
 			"searchBrands": "Search brands...",
+			"searchCouriers": "Search courier name or description...",
 			"searchShippingMethods": "Search shipping method name or code...",
 			"searchShippingZones": "Search zone name, country, or state...",
 			"searchDiscounts": "Search discount code, name, or description...",
@@ -1021,6 +1035,18 @@
 				"status": "Turn off to hide this method at checkout.",
 				"fee": "Set per zone that offers this method.",
 				"estimatedDays": "Set per zone that offers this method."
+			}
+		},
+		"courierForm": {
+			"reviewTitle": "Review",
+			"reviewSubtitleCreate": "Summary before you create this courier",
+			"reviewSubtitleEdit": "Summary of this courier before you save",
+			"detailsSectionSubtitle": "Name, describe, and enable the courier services admins can assign to shipments.",
+			"confirmDelete": "Are you sure you want to delete this courier?",
+			"fieldHints": {
+				"name": "Shown in shipment creation and order shipment details.",
+				"description": "Optional internal note about this courier service.",
+				"status": "Turn off to hide this courier from shipment selection."
 			}
 		},
 		"shippingZoneForm": {

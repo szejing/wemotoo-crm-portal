@@ -253,6 +253,10 @@
 			"descriptionRequired": "Keterangan wajib",
 			"priorityMin": "Keutamaan mestilah sifar atau lebih besar"
 		},
+		"courier": {
+			"nameRequired": "Nama kurier wajib",
+			"nameMax": "Nama kurier mestilah tidak melebihi 191 aksara"
+		},
 		"category": {
 			"codeRequired": "Kod wajib",
 			"descriptionRequired": "Keterangan wajib"
@@ -335,11 +339,14 @@
 		"orderNotFound": "Nombor pesanan {orderNo} tidak dijumpai.",
 		"orderDetailTitle": "Wemotoo CRM - Butiran Pesanan #",
 		"shippingMethods": "Kaedah Penghantaran",
+		"couriers": "Kurier",
 		"shippingSettingsDesc": "Konfigur pilihan penghantaran dan kadar untuk pembayaran dan pemenuhan pesanan.",
 		"shippingMethodsDesc": "Tetapkan jenis perkhidmatan penghantaran (nama dan keutamaan). Tetapkan yuran dan anggaran hari di bawah setiap zon penghantaran.",
 		"shippingSettingsTitle": "Wemotoo CRM - Tetapan Penghantaran",
 		"shippingMethodsPageTitle": "Wemotoo CRM - Kaedah Penghantaran",
+		"couriersPageTitle": "Wemotoo CRM - Kurier",
 		"noShippingMethodsFound": "Tiada kaedah penghantaran tersedia.",
+		"noCouriersFound": "Tiada kurier dijumpai.",
 		"estimatedDays": "Anggaran Hari",
 		"shippingPriority": "Keutamaan",
 		"restrictShippingRegions": "Hadkan mengikut wilayah",
@@ -356,6 +363,12 @@
 		"removeShippingZone": "Buang zon",
 		"shippingZonesSectionHint": "Setiap kad ialah satu peraturan zon. Gunakan kod negara 2 huruf; baris tanpa kod akan diabaikan semasa simpan.",
 		"shippingMethodDetails": "Butiran kaedah",
+		"courierDetails": "Butiran kurier",
+		"createCourierTitle": "Tambah kurier",
+		"createCourierPageTitle": "Wemotoo CRM - Tambah kurier",
+		"createCourierButton": "Cipta kurier",
+		"editCourierTitle": "Edit kurier",
+		"editCourierPageTitle": "Wemotoo CRM - Edit kurier",
 		"createShippingMethodTitle": "Tambah kaedah penghantaran",
 		"createShippingMethodPageTitle": "Wemotoo CRM - Tambah kaedah penghantaran",
 		"createShippingMethodButton": "Cipta kaedah",
@@ -834,6 +847,7 @@
 			"searchOrderNo": "Cari no. pesanan...",
 			"searchCategories": "Cari kategori...",
 			"searchBrands": "Cari jenama...",
+			"searchCouriers": "Cari nama atau keterangan kurier...",
 			"searchShippingMethods": "Cari nama atau kod kaedah penghantaran...",
 			"searchShippingZones": "Cari nama zon, negara, atau negeri...",
 			"searchDiscounts": "Cari kod diskaun, nama, atau keterangan...",
@@ -1020,6 +1034,18 @@
 				"status": "Matikan untuk sembunyikan kaedah ini di checkout.",
 				"fee": "Tetapkan setiap zon yang menawarkan kaedah ini.",
 				"estimatedDays": "Tetapkan setiap zon yang menawarkan kaedah ini."
+			}
+		},
+		"courierForm": {
+			"reviewTitle": "Semakan",
+			"reviewSubtitleCreate": "Ringkasan sebelum anda mencipta kurier ini",
+			"reviewSubtitleEdit": "Ringkasan kurier ini sebelum anda simpan",
+			"detailsSectionSubtitle": "Namakan, terangkan, dan dayakan perkhidmatan kurier yang boleh dipilih admin untuk penghantaran.",
+			"confirmDelete": "Adakah anda pasti mahu memadam kurier ini?",
+			"fieldHints": {
+				"name": "Dipaparkan semasa cipta penghantaran dan dalam butiran penghantaran pesanan.",
+				"description": "Nota dalaman pilihan tentang perkhidmatan kurier ini.",
+				"status": "Matikan untuk sembunyikan kurier ini daripada pilihan penghantaran."
 			}
 		},
 		"shippingZoneForm": {

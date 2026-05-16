@@ -24,6 +24,7 @@ import { useTaxRuleStore } from './TaxRule/TaxRule';
 import { useVoucherStore } from './voucher/voucher';
 import { useFulfillmentStore } from './Fulfillment/Fulfillment';
 import { useShipmentStore } from './Shipment/Shipment';
+import { useCourierStore } from './Courier/Courier';
 import { useShippingMethodStore } from './ShippingMethod/ShippingMethod';
 import { useShippingZoneStore } from './ShippingZone/ShippingZone';
 
@@ -54,6 +55,7 @@ export {
 	useVoucherStore,
 	useFulfillmentStore,
 	useShipmentStore,
+	useCourierStore,
 	useShippingMethodStore,
 	useShippingZoneStore,
 };

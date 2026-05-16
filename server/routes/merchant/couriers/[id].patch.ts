@@ -1,0 +1,20 @@
+import { signedFetch } from '#root/server/base_api';
+import { Routes } from '#root/server/routes.server';
+
+export default defineEventHandler(async (event) => {
+	try {
+		const id = getRouterParams(event).id;
+		const body = await readBody(event);
+		if (!id) {
+			throw createError({ statusCode: 400, statusMessage: 'Courier id is required' });
+		}
+
+		const result = await signedFetch(event, Routes.Couriers.Update(id), {
+			method: 'PATCH',
+			body,
+		});
+		return result;
+	} catch (err) {
+		return err;
+	}
+});

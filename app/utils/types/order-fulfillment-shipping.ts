@@ -1,3 +1,5 @@
+import type { Courier } from './courier';
+
 export type FulfillmentLifecycleStatusValue =
 	| 'pending'
 	| 'processing'
@@ -94,6 +96,8 @@ export type OrderShipment = {
 	order_no: string;
 	inv_no: string;
 	/** Set when courier is assigned post-fulfillment (placeholder checkout rows may omit). */
+	courier_id?: number | null;
+	courier?: Courier | null;
 	courier_name?: string | null;
 	tracking_no?: string | null;
 	shipping_fee: number;

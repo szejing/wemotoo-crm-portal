@@ -222,6 +222,13 @@ export const Routes = {
 		Delete: (id: string) => `${API_PATH.SHIPMENT}/${id}`,
 		MarkDelivered: (id: string) => `${API_PATH.SHIPMENT}/${id}/delivered`,
 	},
+	Couriers: {
+		Many: () => `${API_PATH.COURIERS}/`,
+		Create: () => `${API_PATH.COURIERS}/`,
+		Single: (id: number | string) => `${API_PATH.COURIERS}/${id}`,
+		Update: (id: number | string) => `${API_PATH.COURIERS}/${id}`,
+		Delete: (id: number | string) => `${API_PATH.COURIERS}/${id}`,
+	},
 	ShippingMethods: {
 		Many: () => `${API_PATH.SHIPPING_METHODS}/`,
 		Create: () => `${API_PATH.SHIPPING_METHODS}/`,
