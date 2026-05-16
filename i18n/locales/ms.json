@@ -983,7 +983,9 @@
 			"waitSeconds": "Tunggu {n}s",
 			"refresh": "Muat semula",
 			"orderTypePickup": "Ambil sendiri",
-			"orderTypeDelivery": "Penghantaran"
+			"orderTypeDelivery": "Penghantaran",
+			"manageOrder": "Urus pesanan",
+			"orderActionsTitle": "Tindakan pesanan"
 		},
 		"fulfillment": {
 			"title": "Pemenuhan",

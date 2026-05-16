@@ -984,7 +984,9 @@
 			"waitSeconds": "Wait {n}s",
 			"refresh": "Refresh",
 			"orderTypePickup": "Pickup",
-			"orderTypeDelivery": "Delivery"
+			"orderTypeDelivery": "Delivery",
+			"manageOrder": "Manage order",
+			"orderActionsTitle": "Order actions"
 		},
 		"fulfillment": {
 			"title": "Fulfillment",

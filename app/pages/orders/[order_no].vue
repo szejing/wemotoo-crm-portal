@@ -6,7 +6,7 @@
 			<p class="order-not-found-text">{{ $t('pages.orderNotFound', { orderNo: order_no_param }) }}</p>
 			<UButton color="primary" variant="soft" :to="'/orders'">{{ $t('nav.orders') }}</UButton>
 		</div>
-		<div v-else class="order-detail-container">
+		<div v-else class="order-detail-container pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
 			<!-- Header Section -->
 			<div class="order-header">
 				<div class="order-header-left">
@@ -187,29 +187,15 @@
 					<Activities :activities="record?.activities" />
 				</div>
 
-				<!-- Sidebar -->
-				<div v-if="record !== undefined" class="side-wrapper">
+				<!-- Sidebar (desktop) -->
+				<div v-if="record !== undefined && isLgUp" class="side-wrapper">
 					<div class="sticky-sidebar">
-						<!-- Status Management -->
-						<UCard class="status-management-card">
-							<template #header>
-								<h3 class="sidebar-title">{{ $t('components.orderDetail.orderStatus') }}</h3>
-							</template>
-
-							<div class="status-section">
-								<ZSelectMenuOrderStatus v-model:status="new_order_status" />
-								<UButton
-									block
-									color="primary"
-									:icon="ICONS.SAVE"
-									:disabled="new_order_status === order?.status || updating"
-									:loading="updating"
-									@click="handleUpdateOrderStatus"
-								>
-									{{ $t('components.orderDetail.updateOrderStatus') }}
-								</UButton>
-							</div>
-						</UCard>
+						<ZSectionOrderDetailOrderStatus
+							v-model:status="new_order_status"
+							:current-status="order?.status"
+							:updating="updating"
+							@submit="handleUpdateOrderStatus"
+						/>
 
 						<ZSectionOrderDetailPayment :order="orderForModal" @refresh="refreshOrder" />
 
@@ -219,6 +205,34 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- Mobile: sticky entry to order actions drawer (status, payment, shipment) -->
+			<div
+				v-if="record !== undefined && !isLgUp"
+				class="mobile-actions-bar fixed inset-x-0 bottom-0 z-40 border-t border-default bg-default/95 px-4 pt-3 backdrop-blur-md pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]"
+			>
+				<UDrawer v-model:open="isOrderActionsOpen" :title="$t('components.orderDetail.orderActionsTitle')" direction="bottom">
+					<UButton block color="primary" :icon="ICONS.SETTINGS_ROUNDED" class="mobile-actions-open-trigger w-full">
+						{{ $t('components.orderDetail.manageOrder') }}
+					</UButton>
+					<template #body>
+						<div class="mobile-actions-drawer-body space-y-4 max-h-[min(70vh,32rem)] overflow-y-auto overscroll-contain px-0.5 pb-4">
+							<ZSectionOrderDetailOrderStatus
+								v-model:status="new_order_status"
+								:current-status="order?.status"
+								:updating="updating"
+								@submit="handleUpdateOrderStatus"
+							/>
+
+							<ZSectionOrderDetailPayment :order="orderForModal" @refresh="refreshOrder" />
+
+							<div v-if="(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY">
+								<ZSectionOrderDetailShipment :order="orderForModal" :is-read-only="isSaleReadOnly" @refresh="getOrderDetails" />
+							</div>
+						</div>
+					</template>
+				</UDrawer>
 			</div>
 		</div>
 	</ZPagePanel>
@@ -235,6 +249,7 @@ import type { ItemModel } from '~/utils/models/item.model';
 import type { OrderHistory } from '~/utils/types/order-history';
 import Activities from '~/components/ActivityLog/Activities.vue';
 import { useFulfillmentStore } from '~/stores/Fulfillment/Fulfillment';
+import { useMediaQuery } from '@vueuse/core';
 
 const orderStore = useOrderStore();
 const saleStore = useSaleStore();
@@ -245,6 +260,14 @@ const loading = computed(() => orderStore.loading || saleStore.loading);
 
 const route = useRoute();
 const order_not_found = ref(false);
+const isLgUp = useMediaQuery('(min-width: 1024px)');
+const isOrderActionsOpen = ref(false);
+
+watch(isLgUp, (lg) => {
+	if (lg) {
+		isOrderActionsOpen.value = false;
+	}
+});
 const order_no_param = computed(() => String(route.params.order_no ?? ''));
 const type = computed(() => String(route.query.type ?? ''));
 const isSaleReadOnly = computed(() => type.value === 'sale');
@@ -722,15 +745,7 @@ const editCustomerDetail = async () => {
 }
 
 .side-wrapper {
-	display: none;
-	grid-column: span 1 / span 1;
-}
-
-@media (min-width: 1024px) {
-	.side-wrapper {
-		display: block;
-		grid-column: span 4 / span 4;
-	}
+	grid-column: span 4 / span 4;
 }
 
 .sticky-sidebar {
@@ -756,15 +771,6 @@ const editCustomerDetail = async () => {
 	color: var(--color-gray-800);
 }
 
-.sidebar-title {
-	font-size: 1rem;
-	font-weight: 600;
-	color: var(--color-gray-800);
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-}
-
 .customer-card,
 .items-card,
 .remarks-card {
@@ -785,8 +791,7 @@ const editCustomerDetail = async () => {
 	white-space: pre-wrap;
 }
 
-.quick-actions-card,
-.status-management-card {
+.quick-actions-card {
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -794,20 +799,6 @@ const editCustomerDetail = async () => {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-}
-
-.status-section {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-}
-
-.status-section-label {
-	font-size: 0.875rem;
-	font-weight: 600;
-	color: var(--color-gray-700);
-	text-transform: uppercase;
-	letter-spacing: 0.025em;
 }
 
 @media (max-width: 640px) {
