@@ -998,7 +998,13 @@
 			"customerSelection": "Customer selection",
 			"readOnlyHint": "Shipment actions are read-only for sales.",
 			"notYetProvided": "Not assigned yet",
-			"pendingShipmentHint": "Awaiting courier and tracking after fulfillment."
+			"pendingShipmentHint": "Awaiting courier and tracking after fulfillment.",
+			"noShipmentHint": "Create a shipment to assign courier details and tracking for this delivery order.",
+			"copyTrackingNo": "Copy tracking number",
+			"copyTrackingSuccess": "Tracking number copied",
+			"copyTrackingFailed": "Could not copy tracking number",
+			"shippedAt": "Shipped at",
+			"deliveredAt": "Delivered at"
 		},
 		"shippingMethodForm": {
 			"reviewTitle": "Review",

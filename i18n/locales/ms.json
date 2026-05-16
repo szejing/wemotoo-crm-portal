@@ -997,7 +997,13 @@
 			"customerSelection": "Pilihan pelanggan",
 			"readOnlyHint": "Tindakan penghantaran adalah baca sahaja untuk jualan.",
 			"notYetProvided": "Belum ditetapkan",
-			"pendingShipmentHint": "Menunggu kurier dan penjejakan selepas pemenuhan."
+			"pendingShipmentHint": "Menunggu kurier dan penjejakan selepas pemenuhan.",
+			"noShipmentHint": "Cipta penghantaran untuk tetapkan butiran kurier dan penjejakan bagi pesanan penghantaran ini.",
+			"copyTrackingNo": "Salin nombor penjejakan",
+			"copyTrackingSuccess": "Nombor penjejakan disalin",
+			"copyTrackingFailed": "Tidak dapat menyalin nombor penjejakan",
+			"shippedAt": "Dihantar pada",
+			"deliveredAt": "Diterima pada"
 		},
 		"shippingMethodForm": {
 			"reviewTitle": "Semakan",

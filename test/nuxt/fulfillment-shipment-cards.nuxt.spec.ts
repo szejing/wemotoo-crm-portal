@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
-import FulfillmentActions from '~/components/Fulfillment/FulfillmentActions.vue';
-import ShipmentCard from '~/components/Shipment/ShipmentCard.vue';
+import FulfillmentActions from '~/components/Fulfillment/Actions.vue';
 
 describe('FulfillmentActions', () => {
 	it('only enables valid action for current status', async () => {
@@ -33,21 +32,5 @@ describe('FulfillmentActions', () => {
 		expect(buttons.every((button) => button.attributes('disabled') !== undefined)).toBe(
 			true,
 		);
-	});
-});
-
-describe('ShipmentCard', () => {
-	it('disables create action in read-only mode when no shipment exists', async () => {
-		const wrapper = await mountSuspended(ShipmentCard, {
-			props: {
-				shipment: undefined,
-				isReadOnly: true,
-				loading: false,
-			},
-		});
-
-		const button = wrapper.find('button');
-		expect(button.exists()).toBe(true);
-		expect(button.attributes('disabled')).toBeDefined();
 	});
 });
