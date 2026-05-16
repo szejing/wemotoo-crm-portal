@@ -31,11 +31,7 @@
 							/>
 							<div class="flex flex-wrap items-center gap-1.5">
 								<UBadge color="primary" variant="subtle" size="md">
-									{{
-										(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY
-											? $t('components.orderDetail.orderTypeDelivery')
-											: $t('components.orderDetail.orderTypePickup')
-									}}
+									{{ order_fulfillment_method_label }}
 								</UBadge>
 							</div>
 						</div>
@@ -148,6 +144,20 @@
 								<div class="p-4 text-left text-muted italic font-normal">{{ $t('components.orderDetail.subTotal') }}</div>
 								<div class="p-4 text-center font-bold text-lg italic">{{ formatCurrency(record?.gross_amt ?? 0, currency_code) }}</div>
 							</div>
+							<div v-if="(record?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY" class="grid grid-cols-[2fr_1fr_1fr_1fr] items-center">
+								<div class="col-span-2" />
+								<div class="p-4 text-left text-muted italic font-normal">
+									{{ $t('components.shipment.shippingFee') }}
+									<span v-if="shipping_fee_method_hint" class="text-xs font-normal not-italic text-muted leading-tight max-w-full">
+										{{ shipping_fee_method_hint }}
+									</span>
+								</div>
+								<div class="p-4 text-center font-bold text-lg italic">
+									<div class="flex flex-col items-center gap-0.5">
+										<span>{{ formatCurrency(record?.shipment?.shipping_fee ?? 0, currency_code) }}</span>
+									</div>
+								</div>
+							</div>
 							<div v-for="tax in record?.taxes ?? []" :key="tax.tax_code" class="grid grid-cols-[2fr_1fr_1fr_1fr] items-center">
 								<div class="col-span-2" />
 								<div class="p-4 text-left text-muted italic font-normal">{{ tax.tax_desc }}</div>
@@ -155,8 +165,8 @@
 							</div>
 							<div class="grid grid-cols-[2fr_1fr_1fr_1fr] items-center border-b-4 border-double border-default">
 								<div class="col-span-2" />
-								<div class="p-4 text-left text-muted italic font-normal">{{ $t('components.orderDetail.netTotal') }}</div>
-								<div class="p-4 text-center font-bold text-lg italic">{{ formatCurrency(order?.net_total ?? 0, currency_code) }}</div>
+								<div class="p-4 text-left italic font-bold">{{ $t('components.orderDetail.netTotal') }}</div>
+								<div class="p-4 text-center font-bold text-lg italic">{{ formatCurrency(order?.payable_total ?? 0, currency_code) }}</div>
 							</div>
 						</div>
 					</UCard>
@@ -242,6 +252,27 @@ const isSaleReadOnly = computed(() => type.value === 'sale');
 const order = ref<OrderHistory | undefined>();
 
 const record = computed(() => order.value);
+
+/** Shipping method name when present; otherwise delivery vs pickup label */
+const order_fulfillment_method_label = computed(() => {
+	const r = record.value;
+	const desc = r?.shipping_method?.description?.trim();
+	if (desc) {
+		return desc;
+	}
+	const isDelivery = (r?.order_type ?? OrderType.PICKUP) === OrderType.DELIVERY;
+	return isDelivery ? t('components.orderDetail.orderTypeDelivery') : t('components.orderDetail.orderTypePickup');
+});
+
+/** Shipment snapshot first, then order-level method (for bill summary hint). */
+const shipping_fee_method_hint = computed(() => {
+	const r = record.value;
+	const fromShipment = r?.shipment?.shipping_method?.description?.trim();
+	if (fromShipment) {
+		return fromShipment;
+	}
+	return r?.shipping_method?.description?.trim() ?? '';
+});
 
 const orderForModal = computed((): OrderHistory | undefined => {
 	return order.value;

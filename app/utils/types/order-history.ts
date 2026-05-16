@@ -16,6 +16,7 @@ export type OrderHistory = {
 	payment_status: PaymentStatus;
 	customer_no: string;
 	gross_amt: number;
+	payable_total: number;
 	net_amt: number;
 	net_total: number;
 	disc_amt?: number;

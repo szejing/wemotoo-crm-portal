@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { formatCurrency, OrderStatus, OrderType } from 'wemotoo-common';
-import { UBadge } from '#components';
+import { UBadge, UIcon, UTooltip } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
 import { getSortableHeader } from '../sortable';
 
@@ -34,18 +34,23 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 			header: ({ column }) => getSortableHeader(column, t('table.orderType')),
 			cell: ({ row }) => {
 				const orderType = row.original.order_type ?? OrderType.PICKUP;
-				const orderTypeLabel = orderType === 'delivery' ? t('components.orderDetail.orderTypeDelivery') : t('components.orderDetail.orderTypePickup');
+				const isDelivery = orderType === OrderType.DELIVERY;
+				const orderTypeLabel = isDelivery ? t('components.orderDetail.orderTypeDelivery') : t('components.orderDetail.orderTypePickup');
+				const description = row.original.shipping_method?.description?.trim();
+				const tooltipText = description && description.length > 0 ? description : orderTypeLabel;
+				const iconName = isDelivery ? 'i-heroicons-truck' : 'i-heroicons-building-storefront';
 
-				return h(
-					UBadge,
-					{
-						size: 'lg',
-						variant: 'subtle',
-						class: 'capitalize',
-						color: 'primary',
-					},
-					() => orderTypeLabel,
-				);
+				return h('div', { class: 'flex justify-center' }, [
+					h(
+						UTooltip,
+						{ text: tooltipText, popper: { placement: 'top' } },
+						() =>
+							h(UIcon, {
+								name: iconName,
+								class: 'size-5 shrink-0 text-main',
+							}),
+					),
+				]);
 			},
 			meta: {
 				class: {
