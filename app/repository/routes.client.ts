@@ -117,6 +117,9 @@ const MerchantRoutes = {
 		Process: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/process`,
 		Export: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/export`,
 	},
+	Notifications: {
+		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.NOTIFICATIONS}/many`,
+	},
 	Sales: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SALES}/many`,
 		Single: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SALES}/${order_no}`,

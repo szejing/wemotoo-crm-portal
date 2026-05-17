@@ -164,6 +164,18 @@
 		"mustContain": "Must contain:",
 		"emailPlaceholder": "you{'@'}example.com"
 	},
+	"notifications": {
+		"open": "Open notifications",
+		"title": "Notifications",
+		"detailTitle": "Notification detail",
+		"actionCenter": "Action center",
+		"empty": "No admin actions waiting right now.",
+		"reference": "Reference",
+		"scheduledAt": "Scheduled at",
+		"createdAt": "Created at",
+		"readAt": "Read at",
+		"openedAt": "Opened at"
+	},
 	"validation": {
 		"auth": {
 			"merchantIdRequired": "Merchant Id is required.",

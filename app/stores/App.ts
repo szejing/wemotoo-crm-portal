@@ -18,6 +18,7 @@ export const useAppStore = defineStore('appStore', {
 			const summOrderStore = useSummOrderStore();
 			const summSalesStore = useSummSaleStore();
 			const customerStore = useCustomerStore();
+			const notificationStore = useNotificationStore();
 
 			// const outletStore = useOutletStore();
 			// const taxStore = useTaxStore();
@@ -37,6 +38,7 @@ export const useAppStore = defineStore('appStore', {
 				paymentMethodStore.getPaymentMethods(),
 				summOrderStore.getDashboardSummary(),
 				summSalesStore.getDashboardSummary(),
+				notificationStore.getNotifications(),
 				// customerStore.getCustomers(),
 				// productStore.getProducts(),
 				// outletStore.getOutlets(),

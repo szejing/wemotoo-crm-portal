@@ -164,6 +164,18 @@
 		"mustContain": "Mesti mengandungi:",
 		"emailPlaceholder": "anda{'@'}contoh.com"
 	},
+	"notifications": {
+		"open": "Buka notifikasi",
+		"title": "Notifikasi",
+		"detailTitle": "Butiran notifikasi",
+		"actionCenter": "Pusat tindakan",
+		"empty": "Tiada tindakan admin menunggu buat masa ini.",
+		"reference": "Rujukan",
+		"scheduledAt": "Dijadualkan pada",
+		"createdAt": "Dicipta pada",
+		"readAt": "Dibaca pada",
+		"openedAt": "Dibuka pada"
+	},
 	"validation": {
 		"auth": {
 			"merchantIdRequired": "Id Peniaga wajib.",
