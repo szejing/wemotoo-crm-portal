@@ -119,8 +119,8 @@ const refreshNotifications = async () => {
 	await notificationStore.getNotifications();
 };
 
-const openNotification = (type: NotificationType, itemId: string) => {
-	const item = notificationStore.openNotificationItem(type, itemId);
+const openNotification = async (type: NotificationType, itemId: string) => {
+	const item = await notificationStore.openNotificationItem(type, itemId);
 
 	if (!item) {
 		return;

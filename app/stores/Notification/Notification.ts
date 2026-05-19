@@ -1,15 +1,12 @@
 import { defineStore } from 'pinia';
 import { failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
-import type { Notification, NotificationCenter } from '~/utils/types/notification';
+import type {
+	Notification,
+	NotificationCenter,
+	NotificationItem,
+} from '~/utils/types/notification';
 import type { NotificationType } from 'wemotoo-common';
-
-type NotificationReadState = {
-	read_at?: string;
-	opened_at?: string;
-};
-
-const NOTIFICATION_READ_STATE_KEY = 'wemotoo:crm:notification-read-state';
 
 export const useNotificationStore = defineStore('notificationStore', {
 	state: () => ({
@@ -18,14 +15,30 @@ export const useNotificationStore = defineStore('notificationStore', {
 		generated_at: undefined as string | Date | undefined,
 		notifications: [] as Notification[],
 		handled_scenarios: [] as NotificationCenter['handled_scenarios'],
-		read_state: {} as Record<string, NotificationReadState>,
 	}),
 	getters: {
-		activeNotifications: (state) => state.notifications.filter((notification) => notification.count > 0),
-		hasNotifications: (state) => state.total_count > 0,
+		activeNotifications: (state) =>
+			state.notifications
+				.map((notification) => ({
+					...notification,
+					items: notification.items.filter(
+						(item) => !item.read_at && !item.opened_at,
+					),
+					count: notification.items.filter(
+						(item) => !item.read_at && !item.opened_at,
+					).length,
+				}))
+				.filter((notification) => notification.count > 0),
+		hasNotifications: (state) =>
+			state.notifications.some((notification) =>
+				notification.items.some((item) => !item.read_at && !item.opened_at),
+			),
 		unreadCount: (state) =>
 			state.notifications.reduce(
-				(total, notification) => total + notification.items.filter((item) => !item.read_at).length,
+				(total, notification) =>
+					total +
+					notification.items.filter((item) => !item.read_at && !item.opened_at)
+						.length,
 				0,
 			),
 	},
@@ -34,12 +47,11 @@ export const useNotificationStore = defineStore('notificationStore', {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				this.loadReadState();
 				const data = await $api.notification.getMany();
 
 				this.total_count = data.total_count ?? 0;
 				this.generated_at = data.generated_at;
-				this.notifications = this.applyReadState(data.notifications ?? []);
+				this.notifications = this.decorateNotifications(data.notifications ?? []);
 				this.handled_scenarios = data.handled_scenarios ?? [];
 			} catch (err: unknown | ErrorResponse) {
 				const message = (err as ErrorResponse).message ?? 'Failed to load notifications';
@@ -48,17 +60,17 @@ export const useNotificationStore = defineStore('notificationStore', {
 				this.loading = false;
 			}
 		},
-		openNotificationItem(type: NotificationType, itemId: string) {
-			const key = this.getItemKey(type, itemId);
-			const now = new Date().toISOString();
-			const current = this.read_state[key] ?? {};
-			const next = {
-				read_at: current.read_at ?? now,
-				opened_at: now,
-			};
+		async openNotificationItem(type: NotificationType, itemId: string) {
+			const { $api } = useNuxtApp();
+			let updated: NotificationItem;
 
-			this.read_state[key] = next;
-			this.persistReadState();
+			try {
+				updated = await $api.notification.open(itemId);
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to open notification';
+				failedNotification(message);
+				return undefined;
+			}
 
 			this.notifications = this.notifications.map((notification) => {
 				if (notification.type !== type) {
@@ -71,7 +83,11 @@ export const useNotificationStore = defineStore('notificationStore', {
 						item.id === itemId
 							? {
 									...item,
-									...next,
+									...updated,
+									notification_type: notification.type,
+									notification_title: notification.title,
+									notification_description: notification.description,
+									notification_severity: notification.severity,
 								}
 							: item,
 					),
@@ -82,40 +98,17 @@ export const useNotificationStore = defineStore('notificationStore', {
 				.find((notification) => notification.type === type)
 				?.items.find((item) => item.id === itemId);
 		},
-		applyReadState(notifications: Notification[]): Notification[] {
+		decorateNotifications(notifications: Notification[]): Notification[] {
 			return notifications.map((notification) => ({
 				...notification,
 				items: notification.items.map((item) => ({
 					...item,
-					...this.read_state[this.getItemKey(notification.type, item.id)],
 					notification_type: notification.type,
 					notification_title: notification.title,
 					notification_description: notification.description,
 					notification_severity: notification.severity,
 				})),
 			}));
-		},
-		loadReadState(): void {
-			if (!import.meta.client) {
-				return;
-			}
-
-			try {
-				const raw = localStorage.getItem(NOTIFICATION_READ_STATE_KEY);
-				this.read_state = raw ? JSON.parse(raw) : {};
-			} catch {
-				this.read_state = {};
-			}
-		},
-		persistReadState(): void {
-			if (!import.meta.client) {
-				return;
-			}
-
-			localStorage.setItem(NOTIFICATION_READ_STATE_KEY, JSON.stringify(this.read_state));
-		},
-		getItemKey(type: NotificationType, itemId: string): string {
-			return `${type}:${itemId}`;
 		},
 	},
 });
