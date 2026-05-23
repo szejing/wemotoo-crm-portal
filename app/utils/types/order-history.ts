@@ -40,6 +40,7 @@ export type OrderHistory = {
 	fulfillment?: OrderFulfillment;
 	shipment?: OrderShipment;
 	activities?: OrderActivity[];
+	logs?: OrderActivity[];
 	shipping_method_id?: number;
 	shipping_method?: { id: number; description: string };
 	/** Pickup vs delivery (defaults to pickup on API when omitted) */

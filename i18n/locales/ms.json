@@ -171,6 +171,7 @@
 		"actionCenter": "Pusat tindakan",
 		"empty": "Tiada tindakan admin menunggu buat masa ini.",
 		"reference": "Rujukan",
+		"timestamps": "Garis masa",
 		"scheduledAt": "Dijadualkan pada",
 		"createdAt": "Dicipta pada",
 		"readAt": "Dibaca pada",
@@ -1099,6 +1100,8 @@
 		"activities": {
 			"title": "Log Aktiviti",
 			"createdBy": "Dicipta oleh",
+			"courierService": "Perkhidmatan Kurier",
+			"trackingNo": "Nombor Penjejakan",
 			"empty": "Tiada aktiviti tersedia."
 		},
 		"productUpdate": {

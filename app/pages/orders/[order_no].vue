@@ -184,7 +184,7 @@
 						<p class="remarks-text">{{ record?.remarks }}</p>
 					</UCard>
 
-					<Activities :activities="record?.activities" />
+					<Activities :activities="activityLogEntries" />
 				</div>
 
 				<!-- Sidebar (desktop) -->
@@ -275,6 +275,13 @@ const isSaleReadOnly = computed(() => type.value === 'sale');
 const order = ref<OrderHistory | undefined>();
 
 const record = computed(() => order.value);
+
+const activityLogEntries = computed(() => {
+	if (record.value?.activities?.length) {
+		return record.value.activities;
+	}
+	return record.value?.logs;
+});
 
 /** Shipping method name when present; otherwise delivery vs pickup label */
 const order_fulfillment_method_label = computed(() => {

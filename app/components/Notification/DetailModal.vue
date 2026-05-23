@@ -22,27 +22,42 @@
 				<div class="detail-grid">
 					<div class="detail-field">
 						<span>{{ $t('common.status') }}</span>
-						<strong>{{ item.status ?? $t('common.notSet') }}</strong>
+						<UBadge
+							v-if="item.status"
+							:color="statusColor"
+							variant="subtle"
+							size="sm"
+							class="capitalize w-fit"
+						>
+							{{ item.status }}
+						</UBadge>
+						<UBadge v-else color="neutral" variant="subtle" size="sm">
+							{{ $t('common.notSet') }}
+						</UBadge>
 					</div>
 					<div class="detail-field">
 						<span>{{ $t('notifications.reference') }}</span>
-						<strong>{{ item.ref_no ?? $t('common.notSet') }}</strong>
+						<UBadge
+							v-if="item.ref_no"
+							color="neutral"
+							variant="subtle"
+							size="sm"
+							class="font-mono w-fit max-w-full truncate"
+						>
+							{{ item.ref_no }}
+						</UBadge>
+						<UBadge v-else color="neutral" variant="subtle" size="sm">
+							{{ $t('common.notSet') }}
+						</UBadge>
 					</div>
-					<div class="detail-field">
-						<span>{{ $t('notifications.scheduledAt') }}</span>
-						<strong>{{ formatDate(item.scheduled_at) }}</strong>
-					</div>
-					<div class="detail-field">
-						<span>{{ $t('notifications.createdAt') }}</span>
-						<strong>{{ formatDate(item.created_at) }}</strong>
-					</div>
-					<div class="detail-field">
-						<span>{{ $t('notifications.readAt') }}</span>
-						<strong>{{ formatDate(item.read_at) }}</strong>
-					</div>
-					<div class="detail-field">
-						<span>{{ $t('notifications.openedAt') }}</span>
-						<strong>{{ formatDate(item.opened_at) }}</strong>
+					<div class="detail-dates">
+						<span>{{ $t('notifications.timestamps') }}</span>
+						<div class="detail-dates-grid">
+							<div v-for="field in dateFields" :key="field.key" class="detail-date-item">
+								<span>{{ $t(field.labelKey) }}</span>
+								<strong>{{ formatDate(field.value) }}</strong>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -68,7 +83,9 @@
 
 <script setup lang="ts">
 import { format } from 'date-fns';
+import type { AppointmentStatus } from 'wemotoo-common';
 import type { NotificationItem } from '~/utils/types/notification';
+import { getAppointmentStatusColor, getOrderStatusColor, getPaymentStatusColor } from '~/utils/options';
 
 const open = defineModel<boolean>('open', { default: false });
 
@@ -85,6 +102,34 @@ const severityColor = computed(() => {
 		default:
 			return 'info';
 	}
+});
+
+const statusColor = computed(() => {
+	const status = props.item?.status;
+	if (!status) {
+		return 'neutral';
+	}
+
+	return (
+		getOrderStatusColor(status) ??
+		getPaymentStatusColor(status) ??
+		getAppointmentStatusColor(status as AppointmentStatus) ??
+		'neutral'
+	);
+});
+
+const dateFields = computed(() => {
+	const item = props.item;
+	if (!item) {
+		return [];
+	}
+
+	return [
+		{ key: 'scheduled_at', labelKey: 'notifications.scheduledAt', value: item.scheduled_at },
+		{ key: 'created_at', labelKey: 'notifications.createdAt', value: item.created_at },
+		{ key: 'read_at', labelKey: 'notifications.readAt', value: item.read_at },
+		{ key: 'opened_at', labelKey: 'notifications.openedAt', value: item.opened_at },
+	] as const;
 });
 
 const formatDate = (date?: string | Date) => {
@@ -164,12 +209,45 @@ const goToAction = async () => {
 	color: var(--color-neutral-500);
 }
 
-.detail-field strong {
+.detail-field > :not(span) {
+	margin-top: 0.35rem;
+}
+
+.detail-dates {
+	grid-column: 1 / -1;
+	border: 1px solid var(--color-neutral-200);
+	border-radius: 0.875rem;
+	padding: 0.75rem;
+	background: white;
+}
+
+.detail-dates > span {
 	display: block;
-	margin-top: 0.2rem;
-	font-size: 0.9rem;
+	font-size: 0.72rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--color-neutral-500);
+}
+
+.detail-dates-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.75rem 1rem;
+	margin-top: 0.5rem;
+}
+
+.detail-date-item span {
+	display: block;
+	font-size: 0.72rem;
+	color: var(--color-neutral-500);
+}
+
+.detail-date-item strong {
+	display: block;
+	margin-top: 0.15rem;
+	font-size: 0.88rem;
+	font-weight: 600;
 	color: var(--color-neutral-950);
-	word-break: break-word;
 }
 
 .detail-note p {
@@ -190,7 +268,8 @@ const goToAction = async () => {
 		flex-direction: column;
 	}
 
-	.detail-grid {
+	.detail-grid,
+	.detail-dates-grid {
 		grid-template-columns: 1fr;
 	}
 }

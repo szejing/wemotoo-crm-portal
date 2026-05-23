@@ -171,6 +171,7 @@
 		"actionCenter": "Action center",
 		"empty": "No admin actions waiting right now.",
 		"reference": "Reference",
+		"timestamps": "Timeline",
 		"scheduledAt": "Scheduled at",
 		"createdAt": "Created at",
 		"readAt": "Read at",
@@ -1100,6 +1101,8 @@
 		"activities": {
 			"title": "Activity Log",
 			"createdBy": "Created by",
+			"courierService": "Courier Service",
+			"trackingNo": "Tracking Number",
 			"empty": "No activity available."
 		},
 		"productUpdate": {
