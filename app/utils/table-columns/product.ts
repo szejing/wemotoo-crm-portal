@@ -24,7 +24,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 
 				const variantBadge =
 					variants && variants.length > 0
-						? variants.map((variant) => h(UBadge, { class: 'capitalize', variant: 'subtle', color: 'info' }, `${variant.name || variant.variant_code}`))
+						? variants.map((variant) => h(UBadge, { class: 'capitalize', variant: 'subtle', color: 'info' }, () => variant.name || variant.variant_code))
 						: [];
 
 				const children: any[] = [

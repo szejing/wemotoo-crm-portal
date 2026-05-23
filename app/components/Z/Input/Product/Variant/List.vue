@@ -27,10 +27,10 @@
 			<table class="w-full text-sm">
 				<thead class="bg-neutral-50 border-b border-neutral-200">
 					<tr>
-						<th v-for="variation in validVariations" :key="'header-' + variation.name" class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
+						<th v-for="(variation, vIdx) in validVariations" :key="'header-' + vIdx" class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
 							<div class="flex items-center gap-1">
 								<span class="w-2 h-2 rounded-full bg-primary-500 shrink-0" />
-								{{ variation.name }}
+								{{ variationDisplayName(variation, vIdx) }}
 							</div>
 						</th>
 						<th class="text-left px-3 py-2 text-xs font-semibold text-neutral-700">
@@ -106,6 +106,9 @@ import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 import type { ProductOptionInput } from '~/utils/types/product-option';
 import type { ProductVariationInput } from '~/utils/types/product-variation';
+import { getValidProductOptions, getValidProductVariations, resolveProductVariationId } from '~/utils/product-variant-list';
+
+const { t } = useI18n();
 
 const props = defineProps<{
 	product: Product | ProductCreate;
@@ -129,12 +132,13 @@ type VariantRow = {
 
 const variantRows = ref<VariantRow[]>([]);
 
-const validVariations = computed(() => {
-	return (props.variations ?? []).filter((v) => v.name.trim() !== '' && v.options.some((o) => o.value.trim() !== ''));
-});
+const validVariations = computed(() => getValidProductVariations(props.variations));
 
-const validOptions = (variation: ProductVariationInput) => {
-	return variation.options.filter((o) => o.value.trim() !== '');
+const validOptions = (variation: ProductVariationInput) => getValidProductOptions(variation);
+
+const variationDisplayName = (variation: ProductVariationInput, index: number) => {
+	const trimmed = variation.name?.trim();
+	return trimmed || t('components.variations.variationLabel', { index: index + 1 });
 };
 
 const groupSize = computed(() => {
@@ -176,13 +180,20 @@ const emitVariants = () => {
 	emit('update:variants', variants);
 };
 
-// Rebuild variant rows when variations change, preserving existing variant data
+// Rebuild variant rows when variations change, preserving existing variant data.
+// Do not watch props.variants here — emitVariants() updates the parent, which would re-trigger the watch and loop.
+const hasInitializedVariantRows = ref(false);
+
 watch(
 	validVariations,
 	(vars) => {
 		if (vars.length === 0) {
 			variantRows.value = [];
-			emitVariants();
+			if (hasInitializedVariantRows.value) {
+				emitVariants();
+			} else {
+				hasInitializedVariantRows.value = true;
+			}
 			return;
 		}
 
@@ -210,11 +221,12 @@ watch(
 					newRows.push(existing);
 				} else {
 					const propsVariant = propsMap.get(key);
+					const options: ProductOptionInput[] = [{ variation_id: resolveProductVariationId(first, opt), value: opt.value }];
 					newRows.push({
 						key,
 						optionLabels: [opt.value],
-						options: [{ variation_id: first.id, value: opt.value }],
-						variant: propsVariant ? JSON.parse(JSON.stringify(propsVariant)) : createDefaultVariant(key, [{ variation_id: first.id, value: opt.value }]),
+						options,
+						variant: propsVariant ? JSON.parse(JSON.stringify(propsVariant)) : createDefaultVariant(key, options),
 					});
 				}
 			}
@@ -228,8 +240,8 @@ watch(
 					} else {
 						const propsVariant = propsMap.get(key);
 						const options: ProductOptionInput[] = [
-							{ variation_id: first.id, value: opt1.value },
-							{ variation_id: second.id, value: opt2.value },
+							{ variation_id: resolveProductVariationId(first, opt1), value: opt1.value },
+							{ variation_id: resolveProductVariationId(second, opt2), value: opt2.value },
 						];
 						newRows.push({
 							key,
@@ -243,7 +255,11 @@ watch(
 		}
 
 		variantRows.value = newRows;
-		emitVariants();
+		if (hasInitializedVariantRows.value) {
+			emitVariants();
+		} else {
+			hasInitializedVariantRows.value = true;
+		}
 	},
 	{ immediate: true, deep: true },
 );
