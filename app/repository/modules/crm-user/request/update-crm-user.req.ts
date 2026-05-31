@@ -7,4 +7,5 @@ export type UpdateCrmUserReq = {
 	phone_no?: string;
 	role?: UserRoles;
 	is_active?: boolean;
+	staff_department_id?: number | null;
 };

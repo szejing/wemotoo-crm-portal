@@ -13,11 +13,11 @@
 
 			<template v-if="initialize">
 				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
-					<div class="grid grid-cols-4 gap-4 p-4">
-						<USkeleton v-for="i in 4" :key="i" class="h-4 flex-1 min-w-0" />
+					<div class="grid grid-cols-5 gap-4 p-4">
+						<USkeleton v-for="i in 5" :key="i" class="h-4 flex-1 min-w-0" />
 					</div>
-					<div v-for="i in 5" :key="i" class="grid grid-cols-4 gap-4 p-4 items-center">
-						<USkeleton v-for="j in 4" :key="j" class="h-4 flex-1 min-w-0" />
+					<div v-for="i in 5" :key="i" class="grid grid-cols-5 gap-4 p-4 items-center">
+						<USkeleton v-for="j in 5" :key="j" class="h-4 flex-1 min-w-0" />
 					</div>
 				</div>
 			</template>
@@ -25,8 +25,12 @@
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCrmUsersFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingSearch') }}</p>
+						<p class="text-sm text-gray-600 dark:text-gray-400">
+							{{ $t('pages.noCrmUsersFound') }}
+						</p>
+						<p class="text-xs text-gray-500 dark:text-gray-500">
+							{{ $t('pages.tryAdjustingSearch') }}
+						</p>
 					</div>
 				</template>
 			</UTable>
@@ -53,7 +57,9 @@ useHead({ title: () => t('pages.crmUsersTitle') });
 
 const crmUserStore = useCRMUserStore();
 const overlay = useOverlay();
-const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+const loadingModal = overlay.create(ZModalLoading, {
+	props: { key: 'loading' },
+});
 const { loading, updating, crm_users, filter, total_count } = storeToRefs(crmUserStore);
 
 watch(

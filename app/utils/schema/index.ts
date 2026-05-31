@@ -42,6 +42,7 @@ import { UpdateVoucherFormValidation } from './Voucher/Update/UpdateVoucherFormV
 import { CreateShippingZoneValidation, UpdateShippingZoneValidation } from './ShippingZone/Create/ShippingZoneValidation';
 import { CreateShippingMethodValidation, UpdateShippingMethodFormValidation } from './ShippingMethod/ShippingMethodFormValidation';
 import { CreateCourierValidation, UpdateCourierFormValidation } from './Courier/CourierFormValidation';
+import { CreateStaffDepartmentValidation, UpdateStaffDepartmentValidation } from './StaffDepartment/StaffDepartmentValidation';
 
 export {
 	LoginValidation,
@@ -95,4 +96,6 @@ export {
 	UpdateShippingMethodFormValidation,
 	CreateCourierValidation,
 	UpdateCourierFormValidation,
+	CreateStaffDepartmentValidation,
+	UpdateStaffDepartmentValidation,
 };

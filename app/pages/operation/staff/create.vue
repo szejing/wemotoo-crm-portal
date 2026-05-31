@@ -19,7 +19,7 @@ const { new_crm_user } = storeToRefs(crmUserStore);
 
 const isDirty = computed(() => {
 	const u = new_crm_user.value;
-	return !!(u.name || u.email_address || u.phone_no);
+	return !!(u.name || u.email_address || u.phone_no || u.staff_department_id);
 });
 
 useLeavePageGuard(isDirty);

@@ -33,6 +33,7 @@ import CourierModule from './courier/courier';
 import ShippingMethodModule from './shipping-method/shipping-method';
 import ShippingZoneModule from './shipping-zone/shipping-zone';
 import NotificationModule from './notification/notification';
+import StaffDepartmentModule from './staff-department/staff-department';
 
 export {
 	CrmUserModule,
@@ -70,4 +71,5 @@ export {
 	ShippingMethodModule,
 	ShippingZoneModule,
 	NotificationModule,
+	StaffDepartmentModule,
 };

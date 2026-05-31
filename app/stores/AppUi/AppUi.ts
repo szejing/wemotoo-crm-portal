@@ -82,6 +82,7 @@ const default_navigations = [
 				value: 'operation',
 				children: [
 					{ label: 'nav.staffs', to: '/operation/staff' },
+					{ label: 'nav.staffDepartments', to: '/operation/staff-departments' },
 					{ label: 'nav.outlets', to: '/operation/outlets' },
 				],
 			},

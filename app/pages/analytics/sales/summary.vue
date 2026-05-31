@@ -5,67 +5,53 @@
 		</template>
 
 		<div class="space-y-6">
-			<div v-if="!loading && groupedByDate.length == 0">
-				<div class="flex flex-col items-center justify-center py-6">
-					<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesSummaryFound') }}</p>
-					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-				</div>
-			</div>
+			<ZTableToolbar
+				v-model="sale_summ.page_size"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="sale_summ.exporting"
+				@update:model-value="updatePageSize"
+				@export="salesSummStore.exportSalesSummary"
+			/>
 
-			<div v-else>
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="sale_summ.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="sale_summ.exporting"
-					@update:model-value="updatePageSize"
-					@export="salesSummStore.exportSalesSummary"
-				/>
-
-				<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
-					<!-- Date Header -->
-					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-4">
-								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
-								<div class="flex items-center gap-3 text-sm">
-									<div class="flex items-center gap-1.5 text-neutral-600">
-										<Icon name="i-heroicons-banknotes" class="text-base" />
-										<span class="font-medium">{{ group.total_txns }} {{ $t('pages.transactionsLabel') }}</span>
-									</div>
-								</div>
-							</div>
-							<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-								<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
-							</div>
+			<UCard class="overflow-hidden">
+				<UTable
+					:data="dailyRows"
+					:columns="dailyColumns"
+					:loading="loading"
+					:ui="{
+						root: 'relative overflow-auto',
+						base: 'min-w-[760px]',
+						th: 'whitespace-nowrap',
+						td: 'whitespace-nowrap',
+						tfoot: 'bg-elevated/50 border-t border-default',
+					}"
+				>
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesSummaryFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
-					</div>
+					</template>
+				</UTable>
+			</UCard>
 
-					<!-- Items Table -->
-					<div class="px-6 pb-6 pt-4">
-						<UTable :data="group.items" :columns="sale_summ_columns" :loading="loading" />
-					</div>
-				</div>
+			<div v-if="data.length > 0" class="flex justify-center">
+				<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
 			</div>
-		</div>
-
-		<!-- Pagination -->
-		<div v-if="data.length > 0" class="mt-6 flex justify-center">
-			<UPagination v-model="current_page" :items-per-page="sale_summ.page_size" :total="sale_summ.total_data" @update:page="updatePage" />
 		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
 import { getFormattedDate, formatCurrency } from 'wemotoo-common';
-import { getSaleSummColumns } from '~/utils/table-columns';
+import type { TableColumn, TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
+import type { SummSaleBill } from '~/utils/types/summ-sales';
 
 const route = useRoute();
 const { t } = useI18n();
-const sale_summ_columns = computed(() => getSaleSummColumns(t));
 useHead({ title: () => t('pages.saleSummaryTitle') });
 
 const salesSummStore = useSummSaleStore();
@@ -99,14 +85,101 @@ watch(
 		salesSummStore.getSaleSummary();
 	},
 );
-const { sale_summ, loading } = storeToRefs(salesSummStore);
+const { sale_summ } = storeToRefs(salesSummStore);
+const loading = computed(() => sale_summ.value.loading);
 
 const data = computed(() => sale_summ.value.data);
 
-const current_page = computed(() => sale_summ.value.current_page);
+const current_page = computed({
+	get: () => sale_summ.value.current_page,
+	set: (page: number) => {
+		sale_summ.value.current_page = page;
+	},
+});
 
-// Group data by date
-const groupedByDate = computed(() => {
+type SaleDailyRow = {
+	date: string;
+	currency_code: string;
+	total_txns: number;
+	total_items: number;
+	voided_items: number;
+	gross_amt: number;
+	net_amt: number;
+	tax_amt: number;
+	shipping_amt: number;
+};
+
+const alignRight = 'text-right tabular-nums';
+
+const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
+const numberCell = (value: number) => h('div', { class: alignRight }, value);
+const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
+
+const getTaxAmount = (item: Pick<SummSaleBill, 'tax_amt_inc' | 'tax_amt_exc'>) => (item.tax_amt_inc ?? 0) + (item.tax_amt_exc ?? 0);
+
+const getShippingAmount = (item: SummSaleBill) => {
+	const fields = item as SummSaleBill & { shipping_amt?: number; shipping_fee?: number };
+	if (typeof fields.shipping_amt === 'number') return fields.shipping_amt;
+	if (typeof fields.shipping_fee === 'number') return fields.shipping_fee;
+
+	return Math.max(item.net_amt - item.gross_amt - getTaxAmount(item), 0);
+};
+
+const sumColumn = (rows: TableRow<SaleDailyRow>[], key: keyof Pick<SaleDailyRow, 'total_txns' | 'total_items' | 'voided_items' | 'gross_amt' | 'net_amt' | 'tax_amt' | 'shipping_amt'>) =>
+	rows.reduce((total, row) => total + row.original[key], 0);
+
+const dailyColumns = computed<TableColumn<SaleDailyRow>[]>(() => [
+	{
+		accessorKey: 'date',
+		header: () => headerCell(t('table.bizDate')),
+		cell: ({ row }) => h('div', { class: 'font-medium text-default' }, getFormattedDate(new Date(row.original.date))),
+		footer: () => h('div', { class: 'font-semibold text-default' }, t('pages.totalLabel')),
+	},
+	{
+		accessorKey: 'total_txns',
+		header: () => headerCell(t('table.totalTransactions'), 'right'),
+		cell: ({ row }) => numberCell(row.original.total_txns),
+		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'total_txns')),
+	},
+	{
+		accessorKey: 'total_items',
+		header: () => headerCell(t('table.totalItems'), 'right'),
+		cell: ({ row }) => numberCell(row.original.total_items),
+		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'total_items')),
+	},
+	{
+		accessorKey: 'net_amt',
+		header: () => headerCell(t('table.netAmt'), 'right'),
+		cell: ({ row }) => moneyCell(row.original.net_amt, row.original.currency_code),
+		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'net_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
+	},
+	{
+		accessorKey: 'gross_amt',
+		header: () => headerCell(t('table.grossAmt'), 'right'),
+		cell: ({ row }) => moneyCell(row.original.gross_amt, row.original.currency_code),
+		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'gross_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
+	},
+	{
+		accessorKey: 'tax_amt',
+		header: () => headerCell(t('table.taxes'), 'right'),
+		cell: ({ row }) => moneyCell(row.original.tax_amt, row.original.currency_code),
+		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'tax_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
+	},
+	{
+		accessorKey: 'shipping_amt',
+		header: () => headerCell(t('table.shipment.shippingFee'), 'right'),
+		cell: ({ row }) => moneyCell(row.original.shipping_amt, row.original.currency_code),
+		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'shipping_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
+	},
+	{
+		accessorKey: 'voided_items',
+		header: () => headerCell(t('pages.voidedLabel'), 'right'),
+		cell: ({ row }) => numberCell(row.original.voided_items),
+		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'voided_items')),
+	},
+]);
+
+const dailyRows = computed<SaleDailyRow[]>(() => {
 	const grouped: { [key: string]: (typeof data.value)[0][] } = {};
 
 	data.value.forEach((item) => {
@@ -121,19 +194,21 @@ const groupedByDate = computed(() => {
 		const totals = items.reduce(
 			(acc, item) => {
 				acc.total_txns += item.total_txns;
-				acc.total_qty += item.total_qty;
+				acc.total_items += item.total_qty - (item.total_voided_qty || 0);
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
+				acc.tax_amt += getTaxAmount(item);
+				acc.shipping_amt += getShippingAmount(item);
 				acc.currency_code = item.currency_code;
+				acc.voided_items += item.total_voided_qty || 0;
 
 				return acc;
 			},
-			{ total_txns: 0, total_qty: 0, gross_amt: 0, net_amt: 0, currency_code: 'MYR' },
+			{ total_txns: 0, total_items: 0, gross_amt: 0, net_amt: 0, tax_amt: 0, shipping_amt: 0, voided_items: 0, currency_code: 'MYR' },
 		);
 
 		return {
 			date,
-			items: items,
 			...totals,
 		};
 	});
@@ -154,9 +229,7 @@ const updatePageSize = async (size: number) => {
 </script>
 
 <style scoped>
-/* `tr:last-child` would wrongly match the last tbody row; footer lives in tfoot */
 :deep(tfoot tr) {
-	background-color: rgb(249 250 251);
-	border-top: 2px solid rgb(209 213 219);
+	font-weight: 600;
 }
 </style>
