@@ -1,4 +1,5 @@
 import { UserRoles } from 'wemotoo-common';
+import type { StaffDepartment } from './staff-department';
 
 type TranslateFn = (key: string) => string;
 
@@ -11,6 +12,8 @@ export type CRMUser = {
 	phone_no: string;
 	role: UserRoles;
 	is_active: boolean;
+	staff_department_id?: number | null;
+	staff_department?: StaffDepartment;
 	metadata?: Record<string, unknown>;
 	created_at?: string;
 	updated_at?: string;
@@ -23,6 +26,7 @@ export type CrmUserCreate = {
 	phone_no: string | undefined;
 	role: UserRoles | undefined;
 	is_active: boolean;
+	staff_department_id?: number | null;
 };
 
 /** Form value for CRM user create / edit */
@@ -33,4 +37,5 @@ export type CrmUserUpdate = {
 	phone_no: string;
 	role: UserRoles | undefined;
 	is_active: boolean;
+	staff_department_id?: number | null;
 };

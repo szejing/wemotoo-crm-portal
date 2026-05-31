@@ -249,4 +249,8 @@ export const Routes = {
 		Update: (code: string) => `${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
 		Delete: (code: string) => `${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
 	},
+	StaffCommissions: {
+		Departments: () => `staff-commissions/departments`,
+		Department: (id: number | string) => `staff-commissions/departments/${id}`,
+	},
 };

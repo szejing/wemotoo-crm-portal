@@ -71,6 +71,7 @@
 		"addTaxCode": "Add Tax Code",
 		"addOutlet": "Add Outlet",
 		"addStaff": "Add Staff",
+		"addStaffDepartment": "Add Staff Department",
 		"confirm": "Confirm",
 		"select": "Select",
 		"apply": "Apply",
@@ -112,6 +113,7 @@
 		"automations": "Automations",
 		"operation": "Operation",
 		"staffs": "Staff",
+		"staffDepartments": "Staff Departments",
 		"affiliates": "Affiliates",
 		"outlets": "Outlets",
 		"reports": "Reports",
@@ -270,6 +272,12 @@
 			"nameRequired": "Courier name is required",
 			"nameMax": "Courier name must be at most 191 characters"
 		},
+		"staffDepartment": {
+			"nameRequired": "Staff department name is required",
+			"nameMax": "Staff department name must be at most 191 characters",
+			"commissionMin": "Commission rate must be at least 0",
+			"commissionMax": "Commission rate must be at most 100"
+		},
 		"category": {
 			"codeRequired": "Code is required",
 			"descriptionRequired": "Description is required"
@@ -360,6 +368,17 @@
 		"couriersPageTitle": "Wemotoo CRM - Couriers",
 		"noShippingMethodsFound": "No shipping methods available.",
 		"noCouriersFound": "No couriers found.",
+		"staffDepartmentsPageTitle": "Wemotoo CRM - Staff Departments",
+		"noStaffDepartmentsFound": "No staff departments found.",
+		"staffDepartmentDetails": "Staff department details",
+		"createStaffDepartmentTitle": "Add staff department",
+		"createStaffDepartmentPageTitle": "Wemotoo CRM - Add staff department",
+		"createStaffDepartmentButton": "Create staff department",
+		"editStaffDepartmentTitle": "Edit staff department",
+		"editStaffDepartmentPageTitle": "Wemotoo CRM - Edit staff department",
+		"staffDepartmentAssignedUsers": "Assigned staff",
+		"staffDepartmentAssignedUsersDesc": "Staff members currently assigned to this department.",
+		"noStaffInDepartment": "No staff assigned to this department.",
 		"estimatedDays": "Estimated Days",
 		"shippingPriority": "Priority",
 		"restrictShippingRegions": "Limit to regions",
@@ -728,6 +747,7 @@
 		"email": "Email",
 		"phone": "Phone",
 		"role": "Role",
+		"staffDepartment": "Staff department",
 		"taxes": "Taxes",
 		"address": "Address",
 		"code": "Code",
@@ -821,6 +841,10 @@
 			"email": "Email",
 			"phone": "Phone number",
 			"role": "Role",
+			"staffDepartment": "Staff department",
+			"staffDepartments": "Staff departments",
+			"defaultCommissionRate": "Default commission %",
+			"noStaffDepartments": "No staff departments yet.",
 			"roleSuperAdmin": "Super Admin",
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Merchant Admin",
@@ -862,6 +886,7 @@
 			"searchCategories": "Search categories...",
 			"searchBrands": "Search brands...",
 			"searchCouriers": "Search courier name or description...",
+			"searchStaffDepartments": "Search staff department name...",
 			"searchShippingMethods": "Search shipping method name or code...",
 			"searchShippingZones": "Search zone name, country, or state...",
 			"searchDiscounts": "Search discount code, name, or description...",
@@ -1063,6 +1088,13 @@
 				"description": "Optional internal note about this courier service.",
 				"status": "Turn off to hide this courier from shipment selection."
 			}
+		},
+		"staffDepartmentForm": {
+			"reviewTitle": "Review",
+			"reviewSubtitleCreate": "Summary before you create this staff department",
+			"reviewSubtitleEdit": "Summary of this staff department before you save",
+			"detailsSectionSubtitle": "Set the department name, default commission rate, and active status.",
+			"confirmDelete": "Are you sure you want to delete this staff department?"
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Zone details",

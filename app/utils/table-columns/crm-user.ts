@@ -8,19 +8,12 @@ import { getSortableHeader } from './sortable';
 
 type TranslateFn = (key: string) => string;
 
-// function roleLabel(role: UserRoles, t: TranslateFn): string {
-// 	const keyMap: Record<UserRoles, string> = {
-// 		[UserRoles.SUPER_ADMIN]: 'components.crmUserForm.roleSuperAdmin',
-// 		[UserRoles.SUPER_STAFF]: 'components.crmUserForm.roleSuperStaff',
-// 		[UserRoles.MERCHANT_ADMIN]: 'components.crmUserForm.roleMerchantAdmin',
-// 		[UserRoles.MERCHANT_STAFF]: 'components.crmUserForm.roleMerchantStaff',
-// 		[UserRoles.CUSTOMER]: 'table.customer',
-// 	};
-// 	return keyMap[role] ? t(keyMap[role]) : role;
-// }
+type CrmUserColumnOptions = {
+	hideStaffDepartment?: boolean;
+};
 
-export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
-	return [
+export function getCrmUserColumns(t: TranslateFn, options?: CrmUserColumnOptions): ColumnDef<CRMUser>[] {
+	const columns: ColumnDef<CRMUser>[] = [
 		{
 			accessorKey: 'row_index',
 			header: t('table.noLabel'),
@@ -34,10 +27,7 @@ export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
 			cell: ({ row }) => {
 				const u = row.original;
 				const fullName = u.name || '—';
-				return h('div', [
-					h('div', { class: 'font-semibold text-neutral-900 dark:text-neutral-100' }, fullName),
-					h('div', { class: 'text-sm text-neutral-600 dark:text-neutral-400' }, u.email_address),
-				]);
+				return h('div', [h('div', { class: 'font-semibold text-neutral-900 dark:text-neutral-100' }, fullName), h('div', { class: 'text-sm text-neutral-600 dark:text-neutral-400' }, u.email_address)]);
 			},
 		},
 		{
@@ -55,34 +45,50 @@ export function getCrmUserColumns(t: TranslateFn): ColumnDef<CRMUser>[] {
 				return h(
 					'span',
 					{
-						class:
-							'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-200',
+						class: 'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-200',
 					},
 					label,
 				);
 			},
 		},
-		{
-			accessorKey: 'is_active',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
-			cell: ({ row }) => {
-				const crmUserStore = useCRMUserStore();
-				return h(
-					'div',
-					{
-						class: 'flex justify-center',
-						onClick: (e: Event) => e.stopPropagation(),
-					},
-					[
-						h(USwitch, {
-							'class': 'size-5',
-							'modelValue': row.original.is_active,
-							'disabled': false,
-							'onUpdate:modelValue': (value: boolean) => crmUserStore.updateStatus(row.original, value),
-						}),
-					],
-				);
-			},
-		},
 	];
+
+	if (!options?.hideStaffDepartment) {
+		columns.push({
+			accessorKey: 'staff_department_id',
+			header: ({ column }) => getSortableHeader(column, t('table.staffDepartment')),
+			cell: ({ row }) => {
+				const department = row.original.staff_department;
+				if (!department) {
+					return h('span', { class: 'text-muted' }, '—');
+				}
+				return h('div', [h('div', { class: 'font-medium text-neutral-900 dark:text-neutral-100' }, department.name), h('div', { class: 'text-xs text-neutral-600 dark:text-neutral-400' }, `${department.default_commission_rate}%`)]);
+			},
+		});
+	}
+
+	columns.push({
+		accessorKey: 'is_active',
+		header: () => h('div', { class: 'text-center' }, t('table.active')),
+		cell: ({ row }) => {
+			const crmUserStore = useCRMUserStore();
+			return h(
+				'div',
+				{
+					class: 'flex justify-center',
+					onClick: (e: Event) => e.stopPropagation(),
+				},
+				[
+					h(USwitch, {
+						class: 'size-5',
+						modelValue: row.original.is_active,
+						disabled: false,
+						'onUpdate:modelValue': (value: unknown) => crmUserStore.updateStatus(row.original, Boolean(value)),
+					}),
+				],
+			);
+		},
+	});
+
+	return columns;
 }

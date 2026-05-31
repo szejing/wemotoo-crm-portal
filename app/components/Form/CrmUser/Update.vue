@@ -15,6 +15,17 @@
 				/>
 			</UFormField>
 
+			<UFormField name="staff_department_id" :label="$t('components.crmUserForm.staffDepartment')">
+				<USelect
+					:model-value="state.staff_department_id"
+					:items="staffDepartmentOptions"
+					value-attribute="value"
+					:disabled="!canEditStaffDepartment"
+					:placeholder="$t('components.crmUserForm.staffDepartment')"
+					@update:model-value="(v: number | null) => set('staff_department_id', v)"
+				/>
+			</UFormField>
+
 			<UFormField name="email_address" :label="$t('components.crmUserForm.email')" class="sm:col-span-2">
 				<UInput
 					:model-value="state.email_address"
@@ -56,6 +67,7 @@ import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { CreateCRMUserValidation } from '~/utils/schema';
 import { roleOptions } from '~/utils/options/user-roles';
+import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));
@@ -66,9 +78,19 @@ const formRef = ref<{ submit: () => void } | null>(null);
 const props = withDefaults(
 	defineProps<{
 		modelValue?: CrmUserUpdate | null;
+		canEditStaffDepartment?: boolean;
 	}>(),
 	{
-		modelValue: () => ({ name: '', email_address: '', dial_code: '', phone_no: '', role: undefined, is_active: true }),
+		canEditStaffDepartment: false,
+		modelValue: () => ({
+			name: '',
+			email_address: '',
+			dial_code: '',
+			phone_no: '',
+			role: undefined,
+			is_active: true,
+			staff_department_id: null,
+		}),
 	},
 );
 
@@ -94,6 +116,17 @@ const state = reactive<CrmUserUpdate>({
 	phone_no: props.modelValue?.phone_no ?? '',
 	role: props.modelValue?.role ?? undefined,
 	is_active: props.modelValue?.is_active ?? true,
+	staff_department_id: props.modelValue?.staff_department_id ?? null,
+});
+
+const staffDepartmentStore = useStaffDepartmentStore();
+const staffDepartmentOptions = computed(() => [{ label: t('common.notSet'), value: null }, ...staffDepartmentStore.options]);
+const canEditStaffDepartment = computed(() => props.canEditStaffDepartment);
+
+onMounted(async () => {
+	if (canEditStaffDepartment.value) {
+		await staffDepartmentStore.getStaffDepartments();
+	}
 });
 
 watch(

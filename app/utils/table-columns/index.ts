@@ -32,6 +32,7 @@ import { getVoucherColumns } from './voucher/voucher';
 import { getShippingMethodColumns } from './shipping-method';
 import { getShippingZoneColumns } from './shipping-zone';
 import { getCourierColumns } from './courier';
+import { getStaffDepartmentColumns } from './staff-department';
 
 export {
 	getCustomerColumns,
@@ -69,4 +70,5 @@ export {
 	getShippingMethodColumns,
 	getShippingZoneColumns,
 	getCourierColumns,
+	getStaffDepartmentColumns,
 };

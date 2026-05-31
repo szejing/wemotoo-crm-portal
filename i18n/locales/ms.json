@@ -71,6 +71,7 @@
 		"addTaxCode": "Tambah Kod Cukai",
 		"addOutlet": "Tambah Cawangan",
 		"addStaff": "Tambah Kakitangan",
+		"addStaffDepartment": "Tambah Jabatan Kakitangan",
 		"confirm": "Konfirmasi",
 		"select": "Pilih",
 		"apply": "Guna",
@@ -112,6 +113,7 @@
 		"automations": "Automasi",
 		"operation": "Operasi",
 		"staffs": "Kakitangan",
+		"staffDepartments": "Jabatan Kakitangan",
 		"affiliates": "Ahli Gabungan",
 		"outlets": "Cawangan",
 		"reports": "Laporan",
@@ -270,6 +272,12 @@
 			"nameRequired": "Nama kurier wajib",
 			"nameMax": "Nama kurier mestilah tidak melebihi 191 aksara"
 		},
+		"staffDepartment": {
+			"nameRequired": "Nama jabatan kakitangan wajib",
+			"nameMax": "Nama jabatan kakitangan mestilah tidak melebihi 191 aksara",
+			"commissionMin": "Kadar komisen mestilah sekurang-kurangnya 0",
+			"commissionMax": "Kadar komisen mestilah tidak melebihi 100"
+		},
 		"category": {
 			"codeRequired": "Kod wajib",
 			"descriptionRequired": "Keterangan wajib"
@@ -360,6 +368,17 @@
 		"couriersPageTitle": "Wemotoo CRM - Kurier",
 		"noShippingMethodsFound": "Tiada kaedah penghantaran tersedia.",
 		"noCouriersFound": "Tiada kurier dijumpai.",
+		"staffDepartmentsPageTitle": "Wemotoo CRM - Jabatan Kakitangan",
+		"noStaffDepartmentsFound": "Tiada jabatan kakitangan dijumpai.",
+		"staffDepartmentDetails": "Butiran jabatan kakitangan",
+		"createStaffDepartmentTitle": "Tambah jabatan kakitangan",
+		"createStaffDepartmentPageTitle": "Wemotoo CRM - Tambah jabatan kakitangan",
+		"createStaffDepartmentButton": "Cipta jabatan kakitangan",
+		"editStaffDepartmentTitle": "Edit jabatan kakitangan",
+		"editStaffDepartmentPageTitle": "Wemotoo CRM - Edit jabatan kakitangan",
+		"staffDepartmentAssignedUsers": "Kakitangan ditugaskan",
+		"staffDepartmentAssignedUsersDesc": "Kakitangan yang ditugaskan kepada jabatan ini.",
+		"noStaffInDepartment": "Tiada kakitangan ditugaskan kepada jabatan ini.",
 		"estimatedDays": "Anggaran Hari",
 		"shippingPriority": "Keutamaan",
 		"restrictShippingRegions": "Hadkan mengikut wilayah",
@@ -727,6 +746,7 @@
 		"email": "E-mel",
 		"phone": "Telefon",
 		"role": "Peranan",
+		"staffDepartment": "Jabatan kakitangan",
 		"taxes": "Cukai",
 		"address": "Alamat",
 		"code": "Kod",
@@ -820,6 +840,10 @@
 			"email": "E-mel",
 			"phone": "Nombor telefon",
 			"role": "Peranan",
+			"staffDepartment": "Jabatan kakitangan",
+			"staffDepartments": "Jabatan kakitangan",
+			"defaultCommissionRate": "Komisen lalai %",
+			"noStaffDepartments": "Tiada jabatan kakitangan lagi.",
 			"roleSuperAdmin": "Super Admin",
 			"roleSuperStaff": "Super Staff",
 			"roleMerchantAdmin": "Admin Peniaga",
@@ -861,6 +885,7 @@
 			"searchCategories": "Cari kategori...",
 			"searchBrands": "Cari jenama...",
 			"searchCouriers": "Cari nama atau keterangan kurier...",
+			"searchStaffDepartments": "Cari nama jabatan kakitangan...",
 			"searchShippingMethods": "Cari nama atau kod kaedah penghantaran...",
 			"searchShippingZones": "Cari nama zon, negara, atau negeri...",
 			"searchDiscounts": "Cari kod diskaun, nama, atau keterangan...",
@@ -1062,6 +1087,13 @@
 				"description": "Nota dalaman pilihan tentang perkhidmatan kurier ini.",
 				"status": "Matikan untuk sembunyikan kurier ini daripada pilihan penghantaran."
 			}
+		},
+		"staffDepartmentForm": {
+			"reviewTitle": "Semakan",
+			"reviewSubtitleCreate": "Ringkasan sebelum anda mencipta jabatan kakitangan ini",
+			"reviewSubtitleEdit": "Ringkasan jabatan kakitangan ini sebelum anda simpan",
+			"detailsSectionSubtitle": "Tetapkan nama jabatan, kadar komisen lalai, dan status aktif.",
+			"confirmDelete": "Adakah anda pasti mahu memadam jabatan kakitangan ini?"
 		},
 		"shippingZoneForm": {
 			"detailsTitle": "Butiran zon",

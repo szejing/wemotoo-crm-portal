@@ -32,6 +32,15 @@
 					@update:model-value="(v: UserRoles) => set('role', v as UserRoles)"
 				/>
 			</UFormField>
+			<UFormField :label="$t('components.crmUserForm.staffDepartment')" name="staff_department_id">
+				<USelect
+					:model-value="new_crm_user.staff_department_id"
+					:items="staffDepartmentOptions"
+					value-attribute="value"
+					:placeholder="$t('components.crmUserForm.staffDepartment')"
+					@update:model-value="(v: number | null) => set('staff_department_id', v)"
+				/>
+			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.status')" name="is_active">
 				<USwitch
 					v-model="new_crm_user.is_active"
@@ -63,20 +72,25 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import { roleOptions } from '~/utils/options/user-roles';
 import type { UserRoles } from 'wemotoo-common';
 import type { CrmUserCreate } from '~/utils/types/crm-user';
+import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));
 type Schema = z.infer<ReturnType<typeof CreateCRMUserValidation>>;
 
 const crmUserStore = useCRMUserStore();
+const staffDepartmentStore = useStaffDepartmentStore();
 const { adding, new_crm_user } = storeToRefs(crmUserStore);
 
-onMounted(() => {
+const staffDepartmentOptions = computed(() => [{ label: t('common.notSet'), value: null }, ...staffDepartmentStore.options]);
+
+onMounted(async () => {
 	crmUserStore.resetNewCrmUser();
+	await staffDepartmentStore.getStaffDepartments();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-	const { name, email_address, dial_code, phone_no: phone_number, role } = event.data;
+	const { name, email_address, dial_code, phone_no: phone_number, role, is_active, staff_department_id } = event.data;
 
 	new_crm_user.value = {
 		name,
@@ -84,7 +98,8 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
 		dial_code,
 		phone_no: phone_number,
 		role,
-		is_active: true,
+		is_active,
+		staff_department_id: staff_department_id ?? null,
 	};
 
 	const success = await crmUserStore.createCrmUser();

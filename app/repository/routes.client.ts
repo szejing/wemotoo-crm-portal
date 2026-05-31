@@ -106,6 +106,13 @@ const MerchantRoutes = {
 		Delete: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/${id}`,
 		Restore: (id: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.CRM_USERS}/restore/${id}`,
 	},
+	StaffCommissions: {
+		Departments: () => `${prefix}/${API_PATH.MERCHANT}/staff-commissions/departments`,
+		Department: (id: number) => `${prefix}/${API_PATH.MERCHANT}/staff-commissions/departments/${id}`,
+		DepartmentCreate: () => `${prefix}/${API_PATH.MERCHANT}/staff-commissions/departments`,
+		DepartmentUpdate: (id: number) => `${prefix}/${API_PATH.MERCHANT}/staff-commissions/departments/${id}`,
+		DepartmentDelete: (id: number) => `${prefix}/${API_PATH.MERCHANT}/staff-commissions/departments/${id}`,
+	},
 	Orders: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/many`,
 		Single: (order_no: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.ORDERS}/${order_no}`,
@@ -262,12 +269,9 @@ const MerchantRoutes = {
 	ShippingZones: {
 		Many: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/many`,
 		Create: () => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}`,
-		Single: (code: string) =>
-			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
-		Update: (code: string) =>
-			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
-		Delete: (code: string) =>
-			`${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
+		Single: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
+		Update: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
+		Delete: (code: string) => `${prefix}/${API_PATH.MERCHANT}/${API_PATH.SHIPPING_ZONES}/${encodeURIComponent(code)}`,
 	},
 };
 

@@ -14,7 +14,7 @@
 							{{ $t('pages.crmUserDetailUserInformation') }}
 						</h2>
 						<div class="flex items-center gap-2">
-							<UButton v-if="isViewingSelf" color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
+							<UButton v-if="canEditCurrentUser" color="success" :loading="updating" :disabled="!hasChanges" @click="editFormRef?.submit()">
 								<UIcon :name="ICONS.SAVE" class="w-4 h-4" />
 								{{ $t('common.save') }}
 							</UButton>
@@ -36,9 +36,10 @@
 
 				<div v-if="current_crm_user" class="space-y-4">
 					<FormCrmUserUpdate
-						v-if="isViewingSelf"
+						v-if="canEditCurrentUser"
 						ref="editFormRef"
 						:model-value="current_crm_user"
+						:can-edit-staff-department="isAdmin"
 						@update:model-value="
 							(v: CrmUserUpdate) => {
 								crmUserStore.new_crm_user = v;
@@ -50,15 +51,27 @@
 					<div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
 						<div>
 							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.name') }}</span>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.name || '—' }}</p>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">
+								{{ current_crm_user.name || '—' }}
+							</p>
 						</div>
 						<div>
 							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.role') }}</span>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.role ? roleLabel(current_crm_user.role, $t) : '—' }}</p>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">
+								{{ current_crm_user.role ? roleLabel(current_crm_user.role, $t) : '—' }}
+							</p>
 						</div>
 						<div class="sm:col-span-2">
 							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.email') }}</span>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{{ current_crm_user.email_address || '—' }}</p>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">
+								{{ current_crm_user.email_address || '—' }}
+							</p>
+						</div>
+						<div>
+							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.staffDepartment') }}</span>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">
+								{{ currentStaffDepartmentName }}
+							</p>
 						</div>
 						<div>
 							<span class="text-neutral-500 dark:text-neutral-400">{{ $t('components.crmUserForm.phone') }}</span>
@@ -100,6 +113,7 @@
 import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
+import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
 import { roleLabel } from '~/utils/options/user-roles';
 import { ZModalConfirmation, ZModalLoading } from '#components';
 import { useAuthStore } from '~/stores';
@@ -107,9 +121,12 @@ import { useAuthStore } from '~/stores';
 const route = useRoute();
 const id = computed(() => String(route.params.id ?? ''));
 const crmUserStore = useCRMUserStore();
+const staffDepartmentStore = useStaffDepartmentStore();
 const authStore = useAuthStore();
 const overlay = useOverlay();
-const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
+const loadingModal = overlay.create(ZModalLoading, {
+	props: { key: 'loading' },
+});
 const { updating, loading, current_crm_user } = storeToRefs(crmUserStore);
 const { user: authUser } = storeToRefs(authStore);
 
@@ -122,10 +139,15 @@ const isCurrentUserStaff = computed(() => {
 	const role = current_crm_user.value?.role;
 	return role === UserRoles.MERCHANT_STAFF || role === UserRoles.SUPER_STAFF;
 });
+const canEditCurrentUser = computed(() => isViewingSelf.value || (isAdmin.value && isCurrentUserStaff.value));
 const canDeleteCurrentUser = computed(() => isAdmin.value && isCurrentUserStaff.value);
 /** Only admin can reset another staff's password; own password change is allowed for everyone. */
 const canResetOtherStaffPassword = computed(() => !isViewingSelf.value && isAdmin.value);
 const showPasswordSection = computed(() => isViewingSelf.value || canResetOtherStaffPassword.value);
+const currentStaffDepartmentName = computed(() => {
+	const position = current_crm_user.value?.staff_department ?? staffDepartmentStore.departments.find((item) => item.id === current_crm_user.value?.staff_department_id);
+	return position?.name ?? '—';
+});
 
 const { t } = useI18n();
 const pageTitle = computed(() => {
@@ -169,7 +191,8 @@ const hasChanges = computed(() => {
 		edited.email_address !== original.email_address ||
 		edited.dial_code !== original.dial_code ||
 		edited.phone_no !== original.phone_no ||
-		edited.role !== original.role
+		edited.role !== original.role ||
+		edited.staff_department_id !== (original.staff_department_id ?? null)
 	);
 });
 
@@ -180,13 +203,14 @@ useLeavePageGuard(hasChanges, {
 	},
 });
 
-const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role'] }) => {
+const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role']; staff_department_id?: number | null }) => {
 	await crmUserStore.updateCrmUser(id.value, {
 		name: payload.name || undefined,
 		email_address: payload.email_address || undefined,
 		dial_code: payload.dial_code || undefined,
 		phone_no: payload.phone_no || undefined,
 		role: payload.role || undefined,
+		staff_department_id: payload.staff_department_id ?? null,
 	});
 	const refreshed = await crmUserStore.getCrmUser(id.value);
 	if (refreshed) {
@@ -239,7 +263,7 @@ const deleteUser = async () => {
 };
 
 onMounted(async () => {
-	const user = await crmUserStore.getCrmUser(id.value);
+	const [user] = await Promise.all([crmUserStore.getCrmUser(id.value), isAdmin.value ? staffDepartmentStore.getStaffDepartments() : Promise.resolve()]);
 	if (user) {
 		current_crm_user.value = user;
 	}

@@ -28,6 +28,7 @@ const initialEmptyCrmUser: CrmUserCreate = {
 	phone_no: undefined as string | undefined,
 	role: UserRoles.MERCHANT_STAFF,
 	is_active: true,
+	staff_department_id: null,
 };
 
 export const useCRMUserStore = defineStore('crmUserStore', {
@@ -41,6 +42,13 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 		errors: [] as string[],
 		current_crm_user: undefined as CRMUser | undefined,
 		filter: initialFilter,
+		department_users: [] as CRMUser[],
+		department_users_total: 0 as number,
+		department_users_loading: false as boolean,
+		department_users_filter: {
+			page_size: options_page_size[0] as number,
+			current_page: 1,
+		},
 	}),
 	actions: {
 		async updatePageSize(size: number) {
@@ -88,6 +96,48 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 			}
 		},
 
+		async fetchUsersByStaffDepartment(staffDepartmentId: number) {
+			this.department_users_loading = true;
+			const { $api } = useNuxtApp();
+			try {
+				const queryParams: BaseODataReq = {
+					$top: this.department_users_filter.page_size,
+					$count: true,
+					$skip: (this.department_users_filter.current_page - 1) * this.department_users_filter.page_size,
+					$filter: `staff_department_id eq ${staffDepartmentId}`,
+					$orderby: 'name asc',
+				};
+
+				const resp = await $api.crmUser.getMany(queryParams);
+				const data = (resp as { data?: CRMUser[] }).data ?? (resp as { value?: CRMUser[] }).value ?? [];
+				const total = (resp as { '@odata.count'?: number })['@odata.count'] ?? 0;
+
+				this.department_users = data;
+				this.department_users_total = total;
+				return data;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to load staff for department';
+				failedNotification(message);
+				return [];
+			} finally {
+				this.department_users_loading = false;
+			}
+		},
+
+		async updateDepartmentUsersPage(staffDepartmentId: number, page: number) {
+			this.department_users_filter.current_page = page;
+			if (this.department_users_filter.current_page < 1) {
+				return;
+			}
+			await this.fetchUsersByStaffDepartment(staffDepartmentId);
+		},
+
+		resetDepartmentUsers() {
+			this.department_users = [];
+			this.department_users_total = 0;
+			this.department_users_filter.current_page = 1;
+		},
+
 		async getCrmUser(id: string) {
 			const { $api } = useNuxtApp();
 			this.loading = true;
@@ -115,6 +165,7 @@ export const useCRMUserStore = defineStore('crmUserStore', {
 					phone_no: this.new_crm_user.phone_no!,
 					role: this.new_crm_user.role as UserRoles,
 					is_active: this.new_crm_user.is_active,
+					staff_department_id: this.new_crm_user.staff_department_id ?? null,
 				});
 
 				if (resp?.user) {
