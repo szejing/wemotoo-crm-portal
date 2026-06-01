@@ -103,6 +103,19 @@
 							</div>
 						</template>
 
+						<!-- Customer insights -->
+						<template #insights>
+							<div class="py-2">
+								<CustomerInsightsPanel
+									:customer-no="custNo"
+									:insights="current_customer?.insights ?? []"
+									:processing="processing"
+									@add="handleAddInsight"
+									@remove="handleRemoveInsight"
+								/>
+							</div>
+						</template>
+
 						<!-- Appointments -->
 						<template #appointments>
 							<div class="py-2">
@@ -165,12 +178,14 @@ import { formatCurrency } from 'wemotoo-common';
 import type { ItemModel } from '~/utils/models';
 import { getCustomerAppointmentColumns, getCustomerOrderHistoryColumns } from '~/utils/table-columns';
 import type { Appointment } from '~/utils/types/appointment';
+import type { CustomerInsightKey, CustomerInsightConfidence, CustomerInsightSeverity } from 'wemotoo-common';
+import { customerInsightTraitOptions } from '~/utils/options/customer-insights';
 
 const route = useRoute();
 const custNo = computed(() => String(route.params.customer_no ?? ''));
 const customerStore = useCustomerStore();
 const appointmentStore = useAppointmentStore();
-const { loading, current_customer, customer_orders } = storeToRefs(customerStore);
+const { loading, processing, current_customer, customer_orders } = storeToRefs(customerStore);
 const { t } = useI18n();
 
 useHead({ title: () => t('pages.customerDetailTitle') });
@@ -216,6 +231,7 @@ const lastActivityDisplay = computed(() => {
 const activeTab = ref('overview');
 const tabItems = computed(() => [
 	{ label: t('pages.overview'), value: 'overview', slot: 'overview' },
+	{ label: t('pages.customerInsights.title'), value: 'insights', slot: 'insights' },
 	{ label: t('nav.appointments'), value: 'appointments', slot: 'appointments' },
 	{ label: t('nav.orders'), value: 'orders', slot: 'orders' },
 	// { label: t('pages.invoices'), value: 'invoices', slot: 'invoices' },
@@ -263,6 +279,28 @@ const pagedCustomerOrders = computed(() => {
 
 const updateOrdersPage = (page: number) => {
 	ordersPagination.current_page = page;
+};
+
+const handleAddInsight = async (payload: {
+	key: CustomerInsightKey;
+	note?: string;
+	confidence?: string;
+	severity?: string;
+}) => {
+	const trait = customerInsightTraitOptions(t).find((item) => item.value === payload.key);
+	if (!trait) return;
+
+	await customerStore.addCustomerInsight(custNo.value, {
+		key: payload.key,
+		category: trait.category,
+		note: payload.note,
+		confidence: payload.confidence as CustomerInsightConfidence | undefined,
+		severity: payload.severity as CustomerInsightSeverity | undefined,
+	});
+};
+
+const handleRemoveInsight = async (insightId: string) => {
+	await customerStore.removeCustomerInsight(custNo.value, insightId);
 };
 
 const onEdit = () => {

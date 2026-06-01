@@ -700,7 +700,48 @@
 		"noInvoicesFound": "Tiada invois dijumpai.",
 		"customersTitle": "Wemotoo CRM - Pelanggan",
 		"addOrder": "Pesanan",
-		"addAppointment": "Temujanji"
+		"addAppointment": "Temujanji",
+		"customerInsights": {
+			"title": "Wawasan pelanggan",
+			"trait": "Ciri",
+			"severity": "Keterukan",
+			"confidence": "Keyakinan",
+			"category": "Kategori",
+			"note": "Nota",
+			"notePlaceholder": "Tambah konteks untuk ciri pelanggan ini…",
+			"selectTrait": "Pilih ciri pelanggan",
+			"addInsight": "Tambah wawasan",
+			"removeInsight": "Buang wawasan",
+			"empty": "Tiada wawasan pelanggan lagi.",
+			"categories": {
+				"purchase": "Pembelian",
+				"service": "Perkhidmatan",
+				"communication": "Komunikasi",
+				"risk": "Risiko",
+				"preference": "Keutamaan"
+			},
+			"severities": {
+				"info": "Maklumat",
+				"warning": "Amaran",
+				"risk": "Risiko"
+			},
+			"confidences": {
+				"low": "Rendah",
+				"medium": "Sederhana",
+				"high": "Tinggi"
+			},
+			"traits": {
+				"price_sensitive": "Sensitif harga",
+				"high_intent_buyer": "Pembeli berpotensi tinggi",
+				"frequent_refund": "Kerap bayar balik",
+				"requires_follow_up": "Perlu susulan",
+				"complaint_prone": "Cenderung aduan",
+				"polite": "Sopan",
+				"vip_candidate": "Calon VIP",
+				"support_sensitive": "Sensitif sokongan",
+				"aggressive_buyer": "Pembeli agresif"
+			}
+		}
 	},
 	"table": {
 		"orderId": "ID Pesanan",

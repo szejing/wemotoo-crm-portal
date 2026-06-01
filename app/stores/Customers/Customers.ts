@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia';
+import { KEY } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import type { Customer } from '~/utils/types/customer';
 import type { OrderHistory } from '~/utils/types/order-history';
-import { failedNotification } from '../AppUi/AppUi';
+import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 import { getFormattedDate } from 'wemotoo-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
+import type { CustomerInsightInput } from '~/repository/modules/customer/models/request/customer-insights.req';
 
 type CustomerFilter = {
 	query: string;
@@ -29,6 +31,7 @@ const initialEmptyCustomerFilter: CustomerFilter = {
 export const useCustomerStore = defineStore('customerStore', {
 	state: () => ({
 		loading: false as boolean,
+		processing: false as boolean,
 		exporting: false as boolean,
 		customers: [] as Customer[],
 		total_customers: 0 as number,
@@ -136,6 +139,52 @@ export const useCustomerStore = defineStore('customerStore', {
 				return [];
 			} finally {
 				this.loading = false;
+			}
+		},
+
+		async addCustomerInsight(cust_no: string, insight: CustomerInsightInput): Promise<Customer | null> {
+			const { $api } = useNuxtApp();
+			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
+			this.processing = true;
+
+			try {
+				const response = await $api.customer.updateInsights(cust_no, {
+					merchant_id: String(merchant_id ?? ''),
+					action: 'add',
+					insight,
+				});
+				this.current_customer = response?.customer ?? this.current_customer;
+				successNotification('Customer insight added');
+				return this.current_customer;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to add customer insight';
+				failedNotification(message);
+				return null;
+			} finally {
+				this.processing = false;
+			}
+		},
+
+		async removeCustomerInsight(cust_no: string, insight_id: string): Promise<Customer | null> {
+			const { $api } = useNuxtApp();
+			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
+			this.processing = true;
+
+			try {
+				const response = await $api.customer.updateInsights(cust_no, {
+					merchant_id: String(merchant_id ?? ''),
+					action: 'remove',
+					insight_id,
+				});
+				this.current_customer = response?.customer ?? this.current_customer;
+				successNotification('Customer insight removed');
+				return this.current_customer;
+			} catch (err: unknown | ErrorResponse) {
+				const message = (err as ErrorResponse).message ?? 'Failed to remove customer insight';
+				failedNotification(message);
+				return null;
+			} finally {
+				this.processing = false;
 			}
 		},
 

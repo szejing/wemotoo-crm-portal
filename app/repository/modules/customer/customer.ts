@@ -5,6 +5,7 @@ import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { Customer } from '~/utils/types/customer';
 import type { OrderHistory } from '~/utils/types/order-history';
+import type { UpdateCustomerInsightsReq } from './models/request/customer-insights.req';
 
 class CustomerModule extends HttpFactory {
 	private RESOURCE = MerchantRoutes.Customers;
@@ -28,6 +29,14 @@ class CustomerModule extends HttpFactory {
 		return await this.call<BaseODataResp<OrderHistory>>({
 			method: 'GET',
 			url: `${this.RESOURCE.Orders(cust_no)}`,
+		});
+	}
+
+	async updateInsights(cust_no: string, body: UpdateCustomerInsightsReq): Promise<CustomerResp> {
+		return await this.call<CustomerResp>({
+			method: 'PATCH',
+			url: `${this.RESOURCE.UpdateInsights(cust_no)}`,
+			body,
 		});
 	}
 }

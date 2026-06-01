@@ -701,7 +701,48 @@
 		"noInvoicesFound": "No invoices found.",
 		"customersTitle": "Wemotoo CRM - Customers",
 		"addOrder": "Order",
-		"addAppointment": "Appointment"
+		"addAppointment": "Appointment",
+		"customerInsights": {
+			"title": "Customer insights",
+			"trait": "Trait",
+			"severity": "Severity",
+			"confidence": "Confidence",
+			"category": "Category",
+			"note": "Note",
+			"notePlaceholder": "Add context for this customer trait…",
+			"selectTrait": "Select a customer trait",
+			"addInsight": "Add insight",
+			"removeInsight": "Remove insight",
+			"empty": "No customer insights yet.",
+			"categories": {
+				"purchase": "Purchase",
+				"service": "Service",
+				"communication": "Communication",
+				"risk": "Risk",
+				"preference": "Preference"
+			},
+			"severities": {
+				"info": "Info",
+				"warning": "Warning",
+				"risk": "Risk"
+			},
+			"confidences": {
+				"low": "Low",
+				"medium": "Medium",
+				"high": "High"
+			},
+			"traits": {
+				"price_sensitive": "Price sensitive",
+				"high_intent_buyer": "High intent buyer",
+				"frequent_refund": "Frequent refund",
+				"requires_follow_up": "Requires follow-up",
+				"complaint_prone": "Complaint prone",
+				"polite": "Polite",
+				"vip_candidate": "VIP candidate",
+				"support_sensitive": "Support sensitive",
+				"aggressive_buyer": "Aggressive buyer"
+			}
+		}
 	},
 	"table": {
 		"orderId": "Order ID",

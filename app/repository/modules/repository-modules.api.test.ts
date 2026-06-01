@@ -508,6 +508,44 @@ describe('CustomerModule', () => {
 		await mod.getOrders('CUST');
 		expect(lastFetch().url).toBe(MerchantRoutes.Customers.Orders('CUST'));
 	});
+
+	it('updateInsights add', async () => {
+		await mod.updateInsights('CUST', {
+			merchant_id: 'M1',
+			action: 'add',
+			insight: {
+				key: 'polite' as any,
+				category: 'communication' as any,
+				note: 'Very courteous',
+			},
+		});
+		expect(lastFetch().url).toBe(MerchantRoutes.Customers.UpdateInsights('CUST'));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual({
+			merchant_id: 'M1',
+			action: 'add',
+			insight: {
+				key: 'polite',
+				category: 'communication',
+				note: 'Very courteous',
+			},
+		});
+	});
+
+	it('updateInsights remove', async () => {
+		await mod.updateInsights('CUST', {
+			merchant_id: 'M1',
+			action: 'remove',
+			insight_id: 'insight-1',
+		});
+		expect(lastFetch().url).toBe(MerchantRoutes.Customers.UpdateInsights('CUST'));
+		expect(lastFetch().opts.method).toBe('PATCH');
+		expect(lastFetch().opts.body).toEqual({
+			merchant_id: 'M1',
+			action: 'remove',
+			insight_id: 'insight-1',
+		});
+	});
 });
 
 describe('CurrencyModule', () => {
