@@ -445,7 +445,27 @@ const deleteAppointment = async (code: string) => {
 // 	{ immediate: false },
 // );
 
+const route = useRoute();
+
+const applyDashboardDateQueryToFilter = () => {
+	const start = route.query.start_date;
+	const end = route.query.end_date;
+	if (typeof start === 'string' && start) {
+		const d = new Date(start);
+		if (!Number.isNaN(d.getTime())) {
+			filter.value.date_range.start = d;
+		}
+	}
+	if (typeof end === 'string' && end) {
+		const d = new Date(end);
+		if (!Number.isNaN(d.getTime())) {
+			filter.value.date_range.end = d;
+		}
+	}
+};
+
 onMounted(async () => {
+	applyDashboardDateQueryToFilter();
 	await appointmentStore.getAppointments();
 });
 

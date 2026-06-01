@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { getOrderColumns } from '~/utils/table-columns';
 import type { TableRow } from '@nuxt/ui';
@@ -128,11 +128,18 @@ const storeStatusFromQuery = (status: string): OrderStatus | undefined => {
 };
 
 const VALID_ORDER_STATUSES = new Set(Object.values(OrderStatus));
+const VALID_PAYMENT_STATUSES = new Set(Object.values(PaymentStatus));
 
 const applyQueryToFilter = () => {
 	const start = route.query.start_date;
 	const end = route.query.end_date;
 	const status = route.query.status;
+	const paymentStatus = route.query.payment_status;
+	const paymentMethod = route.query.payment_method;
+
+	filter.value.payment_status = undefined;
+	filter.value.payment_method = undefined;
+
 	if (typeof start === 'string' && start) {
 		const d = new Date(start);
 		if (!Number.isNaN(d.getTime())) {
@@ -152,6 +159,12 @@ const applyQueryToFilter = () => {
 			selectedTab.value = tabIndexForStatus(status);
 		}
 	}
+	if (typeof paymentStatus === 'string' && VALID_PAYMENT_STATUSES.has(paymentStatus as PaymentStatus)) {
+		filter.value.payment_status = paymentStatus as PaymentStatus;
+	}
+	if (typeof paymentMethod === 'string' && paymentMethod) {
+		filter.value.payment_method = paymentMethod;
+	}
 };
 
 const initialize = ref(true);
@@ -169,7 +182,11 @@ onMounted(async () => {
 const selectTab = async (index: number) => {
 	selectedTab.value = index;
 	filter.value.current_page = 1;
-	filter.value.status = tabItems.value[index]?.value as OrderStatus;
+	filter.value.payment_status = undefined;
+	filter.value.payment_method = undefined;
+	const tabValue = tabItems.value[index]?.value;
+	filter.value.status =
+		tabValue === 'All' ? undefined : (tabValue as OrderStatus);
 	await orderStore.getOrders();
 };
 

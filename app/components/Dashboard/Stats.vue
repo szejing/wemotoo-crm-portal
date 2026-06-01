@@ -35,23 +35,19 @@
 </template>
 
 <script setup lang="ts">
-import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
-import { sub } from 'date-fns';
+import { formatCurrency, getFormattedDate, OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { useDashboardStatsConfig, ALL_DASHBOARD_STAT_KEYS, type DashboardStatKey } from '~/composables/useDashboardStatsConfig';
 
-const defaultRangeEnd = new Date();
-defaultRangeEnd.setHours(0, 0, 0, 0);
-const defaultRangeStart = sub(defaultRangeEnd, { days: 7 });
-function defaultQuery(extra?: { status?: string }) {
-	return {
-		start_date: getFormattedDate(defaultRangeStart, 'yyyy-MM-dd'),
-		end_date: getFormattedDate(defaultRangeEnd, 'yyyy-MM-dd'),
-		...(extra?.status != null && { status: extra.status }),
-	};
-}
-
 const summOrderStore = useSummOrderStore();
-const { new_appointments, new_orders, pending_payments, pending_actions, total_order_amt, new_customers } = storeToRefs(summOrderStore);
+const {
+	new_appointments,
+	new_orders,
+	pending_payments,
+	pending_actions,
+	total_order_amt,
+	new_customers,
+	dashboard_date_range,
+} = storeToRefs(summOrderStore);
 
 const { t } = useI18n();
 const { selectedKeys, toggleStat, isSelected, resetToDefault } = useDashboardStatsConfig();
@@ -70,33 +66,64 @@ function statLabel(key: DashboardStatKey): string {
 	return labels[key];
 }
 
+type StatLinkQuery = {
+	start_date: string;
+	end_date: string;
+	status?: string;
+	payment_status?: string;
+	payment_method?: string;
+};
+
+function dashboardQuery(extra?: Omit<StatLinkQuery, 'start_date' | 'end_date'>): StatLinkQuery | undefined {
+	const range = dashboard_date_range.value;
+	if (!range?.start || !range?.end) {
+		return undefined;
+	}
+	return {
+		start_date: getFormattedDate(range.start, 'yyyy-MM-dd'),
+		end_date: getFormattedDate(range.end, 'yyyy-MM-dd'),
+		...extra,
+	};
+}
+
 const statDefs: Record<
 	DashboardStatKey,
 	{
 		icon: string;
 		to?: string;
-		status?: OrderStatus;
+		query?: () => StatLinkQuery | undefined;
 		formatter?: (v: number) => string;
 	}
 > = {
 	appointment_orders: {
 		icon: 'i-heroicons-calendar-days',
 		to: '/appointments',
+		query: () => dashboardQuery(),
 	},
 	item_orders: {
 		icon: 'i-heroicons-shopping-cart',
 		to: '/orders',
-		status: OrderStatus.PROCESSING,
+		query: () =>
+			dashboardQuery({
+				payment_status: PaymentStatus.PAID,
+			}),
 	},
 	pending_payments: {
 		icon: 'i-heroicons-credit-card',
 		to: '/orders',
-		status: OrderStatus.PENDING_PAYMENT,
+		query: () =>
+			dashboardQuery({
+				status: OrderStatus.PENDING_PAYMENT,
+				payment_method: 'CASH',
+			}),
 	},
 	pending_actions: {
 		icon: 'i-heroicons-bell',
 		to: '/orders',
-		status: OrderStatus.REQUIRES_ACTION,
+		query: () =>
+			dashboardQuery({
+				status: OrderStatus.REQUIRES_ACTION,
+			}),
 	},
 	revenue: {
 		icon: 'i-heroicons-currency-dollar',
@@ -138,7 +165,13 @@ const visibleStats = computed(() => {
 				value = 0;
 		}
 		const formattedValue = def.formatter ? def.formatter(value) : String(value);
-		const to = def.to != null ? { path: def.to, query: defaultQuery(def.status != null ? { status: def.status } : undefined) } : undefined;
+		const linkQuery = def.query?.();
+		const to =
+			def.to != null && linkQuery != null
+				? { path: def.to, query: linkQuery }
+				: def.to != null
+					? def.to
+					: undefined;
 		return {
 			key,
 			title: statLabel(key),

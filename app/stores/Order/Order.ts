@@ -1,7 +1,13 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import { defaultOrderRelations, getFormattedDate, removeDuplicateExpands, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import {
+	defaultOrderRelations,
+	getFormattedDate,
+	removeDuplicateExpands,
+	OrderStatus,
+	PaymentStatus,
+} from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
@@ -16,6 +22,8 @@ import type { Order } from '~/utils/types/order';
 type OrderFilter = {
 	query: string;
 	status: OrderStatus | undefined;
+	payment_status: PaymentStatus | undefined;
+	payment_method: string | undefined;
 	date_range: Range;
 	page_size: number;
 	current_page: number;
@@ -25,6 +33,8 @@ type OrderFilter = {
 const initialEmptyOrderFilter: OrderFilter = {
 	query: '',
 	status: undefined,
+	payment_status: undefined,
+	payment_method: undefined,
 	date_range: {
 		start: sub(new Date(), { days: 14 }),
 		end: new Date(),
@@ -72,7 +82,15 @@ export const useOrderStore = defineStore('orderStore', {
 				let filter = '';
 
 				// For 'All' status, don't add any status filter - let all statuses through
-				if (this.filter.status === OrderStatus.PENDING_PAYMENT || this.filter.status === OrderStatus.PROCESSING) {
+				if (
+					this.filter.payment_method === 'CASH' &&
+					this.filter.status === OrderStatus.PENDING_PAYMENT
+				) {
+					filter = `status eq '${OrderStatus.PENDING_PAYMENT}' and payment_status eq '${PaymentStatus.PENDING}'`;
+				} else if (
+					this.filter.status === OrderStatus.PENDING_PAYMENT ||
+					this.filter.status === OrderStatus.PROCESSING
+				) {
 					filter = `status in ('${OrderStatus.PENDING_PAYMENT}', '${OrderStatus.PROCESSING}')`;
 				} else if (this.filter.status === OrderStatus.COMPLETED) {
 					filter = `status eq '${OrderStatus.COMPLETED}'`;
@@ -82,6 +100,11 @@ export const useOrderStore = defineStore('orderStore', {
 					filter = `status eq '${OrderStatus.REQUIRES_ACTION}'`;
 				} else if (this.filter.status === OrderStatus.REFUNDED) {
 					filter = `status eq '${OrderStatus.REFUNDED}'`;
+				}
+
+				if (this.filter.payment_status) {
+					const paymentFilter = `payment_status eq '${this.filter.payment_status}'`;
+					filter = filter ? `${filter} and ${paymentFilter}` : paymentFilter;
 				}
 
 				let { start, end } = range ?? this.filter.date_range;

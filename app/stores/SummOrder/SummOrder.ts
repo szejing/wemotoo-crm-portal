@@ -25,6 +25,7 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 		new_appointments: 0 as number,
 		pending_payments: 0 as number,
 		pending_actions: 0 as number,
+		dashboard_date_range: null as Range | null,
 		order_summ: initialEmptyOrderSumm,
 		order_summ_item: initialEmptyOrderSummItem,
 		order_summ_customer: initialEmptyOrderSummCustomer,
@@ -44,6 +45,8 @@ export const useSummOrderStore = defineStore('summOrderStore', {
 				start = new Date(end);
 				start.setDate(start.getDate() - 7);
 			}
+
+			this.dashboard_date_range = { start: start!, end: end! };
 
 			try {
 				const data = await $api.summOrder.getDashboardOrderSummary({
