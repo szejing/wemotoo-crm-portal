@@ -24,21 +24,12 @@
 				</UFormField>
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.role')">
-				<USelect
-					:model-value="new_crm_user.role"
-					:items="roleOptions(t)"
-					value-attribute="value"
-					:placeholder="$t('components.crmUserForm.role')"
-					@update:model-value="(v: UserRoles) => set('role', v as UserRoles)"
-				/>
+				<ZSelectMenuCrmUserRole :role="new_crm_user.role" @update:role="(v) => set('role', v)" />
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.staffDepartment')" name="staff_department_id">
-				<USelect
-					:model-value="new_crm_user.staff_department_id"
-					:items="staffDepartmentOptions"
-					value-attribute="value"
-					:placeholder="$t('components.crmUserForm.staffDepartment')"
-					@update:model-value="(v: number | null) => set('staff_department_id', v)"
+				<ZSelectMenuStaffDepartment
+					:staff-department-id="new_crm_user.staff_department_id"
+					@update:staff-department-id="(v) => set('staff_department_id', v)"
 				/>
 			</UFormField>
 			<UFormField :label="$t('components.crmUserForm.status')" name="is_active">
@@ -69,24 +60,17 @@ import { CreateCRMUserValidation } from '~/utils/schema';
 import type { z } from 'zod';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { roleOptions } from '~/utils/options/user-roles';
-import type { UserRoles } from 'wemotoo-common';
 import type { CrmUserCreate } from '~/utils/types/crm-user';
-import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));
 type Schema = z.infer<ReturnType<typeof CreateCRMUserValidation>>;
 
 const crmUserStore = useCRMUserStore();
-const staffDepartmentStore = useStaffDepartmentStore();
 const { adding, new_crm_user } = storeToRefs(crmUserStore);
-
-const staffDepartmentOptions = computed(() => [{ label: t('common.notSet'), value: null }, ...staffDepartmentStore.options]);
 
 onMounted(async () => {
 	crmUserStore.resetNewCrmUser();
-	await staffDepartmentStore.getStaffDepartments();
 });
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {

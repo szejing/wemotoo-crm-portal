@@ -6,23 +6,15 @@
 			</UFormField>
 
 			<UFormField name="role" :label="$t('components.crmUserForm.role')">
-				<USelect
-					:model-value="state.role"
-					:items="roleOptions(t)"
-					value-attribute="value"
-					:placeholder="$t('components.crmUserForm.role')"
-					@update:model-value="(v: UserRoles) => set('role', v)"
-				/>
+				<ZSelectMenuCrmUserRole :role="state.role" @update:role="(v) => set('role', v)" />
 			</UFormField>
 
 			<UFormField name="staff_department_id" :label="$t('components.crmUserForm.staffDepartment')">
-				<USelect
-					:model-value="state.staff_department_id"
-					:items="staffDepartmentOptions"
-					value-attribute="value"
+				<ZSelectMenuStaffDepartment
+					:staff-department-id="state.staff_department_id"
 					:disabled="!canEditStaffDepartment"
-					:placeholder="$t('components.crmUserForm.staffDepartment')"
-					@update:model-value="(v: number | null) => set('staff_department_id', v)"
+					:load-departments="canEditStaffDepartment"
+					@update:staff-department-id="(v) => set('staff_department_id', v)"
 				/>
 			</UFormField>
 
@@ -63,11 +55,8 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { z } from 'zod';
-import { UserRoles } from 'wemotoo-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { CreateCRMUserValidation } from '~/utils/schema';
-import { roleOptions } from '~/utils/options/user-roles';
-import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
 
 const { t } = useI18n();
 const crmUserSchema = computed(() => CreateCRMUserValidation(t));
@@ -119,15 +108,7 @@ const state = reactive<CrmUserUpdate>({
 	staff_department_id: props.modelValue?.staff_department_id ?? null,
 });
 
-const staffDepartmentStore = useStaffDepartmentStore();
-const staffDepartmentOptions = computed(() => [{ label: t('common.notSet'), value: null }, ...staffDepartmentStore.options]);
 const canEditStaffDepartment = computed(() => props.canEditStaffDepartment);
-
-onMounted(async () => {
-	if (canEditStaffDepartment.value) {
-		await staffDepartmentStore.getStaffDepartments();
-	}
-});
 
 watch(
 	() => props.modelValue,
