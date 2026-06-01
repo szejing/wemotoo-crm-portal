@@ -33,6 +33,8 @@ import { getShippingMethodColumns } from './shipping-method';
 import { getShippingZoneColumns } from './shipping-zone';
 import { getCourierColumns } from './courier';
 import { getStaffDepartmentColumns } from './staff-department';
+import { SALE_SUMM_COLUMN_LABELS } from './sale-summ/sale-summ';
+import type { SaleSummTableRow } from './sale-summ/sale-summ';
 
 export {
 	getCustomerColumns,
@@ -71,4 +73,7 @@ export {
 	getShippingZoneColumns,
 	getCourierColumns,
 	getStaffDepartmentColumns,
+	SALE_SUMM_COLUMN_LABELS,
 };
+
+export type { SaleSummTableRow };

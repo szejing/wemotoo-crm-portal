@@ -10,9 +10,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportCategories"
 			/>
@@ -34,7 +36,7 @@
 				v-else
 				v-model:expanded="expanded"
 				:data="getDisplayCategories"
-				:columns="category_tree_columns"
+				:columns="visibleColumns"
 				:get-row-id="(row) => row.code"
 				:get-sub-rows="getSubRows"
 				:loading="loading"
@@ -66,13 +68,21 @@
 <script lang="ts" setup>
 import { ZModalCategoryDetail, ZModalConfirmation } from '#components';
 import { getCategoryTreeColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Category } from '~/utils/types/category';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 
+const CATEGORY_COLUMN_LABELS = {
+	category: 'table.code',
+	total_products: 'table.noOfItems',
+} as const;
+
 const { t } = useI18n();
 const category_tree_columns = computed(() => getCategoryTreeColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, CATEGORY_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(category_tree_columns, columnOptions);
 useHead({ title: () => t('pages.categoriesTitle') });
 
 const overlay = useOverlay();

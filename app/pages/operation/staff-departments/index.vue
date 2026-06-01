@@ -8,7 +8,14 @@
 		</template>
 
 		<div class="space-y-6">
-			<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="staffDepartmentStore.updatePageSize" />
+			<ZTableToolbar
+				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="false"
+				:column-options="columnOptions"
+				@update:model-value="staffDepartmentStore.updatePageSize"
+			/>
 
 			<template v-if="initialize">
 				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -20,7 +27,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayDepartments" :columns="columns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectDepartment">
+			<UTable v-else :data="getDisplayDepartments" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectDepartment">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.USER_GROUP_ROUNDED" class="w-12 h-12 text-gray-400" />
@@ -42,8 +49,16 @@ import type { TableRow } from '@nuxt/ui';
 import { ICONS } from '~/utils/icons';
 import { options_page_size } from '~/utils/options';
 import { getStaffDepartmentColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { StaffDepartment } from '~/utils/types/staff-department';
 import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
+
+const STAFF_DEPARTMENT_COLUMN_LABELS = {
+	name: 'common.name',
+	default_commission_rate: 'components.crmUserForm.defaultCommissionRate',
+	is_active: 'common.status',
+	updated_at: 'table.lastUpdated',
+} as const;
 
 const { t } = useI18n();
 const staffDepartmentStore = useStaffDepartmentStore();
@@ -52,6 +67,8 @@ const { loading, getDisplayDepartments, total_count, filter } = storeToRefs(staf
 const initialize = ref(true);
 
 const columns = computed(() => getStaffDepartmentColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, STAFF_DEPARTMENT_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(columns, columnOptions);
 
 useHead({ title: () => t('pages.staffDepartmentsPageTitle') });
 

@@ -10,9 +10,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="shippingStore.updatePageSize"
 				@export="exportShippingMethods"
 			/>
@@ -29,7 +31,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayMethods" :columns="columns" :loading="loading" @select="selectMethod">
+			<UTable v-else :data="getDisplayMethods" :columns="visibleColumns" :loading="loading" @select="selectMethod">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -51,13 +53,23 @@ import type { TableRow } from '@nuxt/ui';
 import { ICONS } from '~/utils/icons';
 import { options_page_size } from '~/utils/options';
 import { getShippingMethodColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { ShippingMethodOption } from '~/utils/types/order-fulfillment-shipping';
+
+const SHIPPING_METHOD_COLUMN_LABELS = {
+	description: 'common.description',
+	is_active: 'common.status',
+} as const;
 
 const { t } = useI18n();
 const shippingStore = useShippingMethodStore();
 const { loading, getDisplayMethods, total_shipping_methods, filter, exporting } = storeToRefs(shippingStore);
 
 const initialize = ref(true);
+
+const columns = computed(() => getShippingMethodColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, SHIPPING_METHOD_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(columns, columnOptions);
 
 const selectMethod = (_e: Event, row: TableRow<ShippingMethodOption>) => {
 	void navigateTo(`/settings/shipping/methods/${row.original.id}`);
@@ -70,8 +82,6 @@ const updatePage = async (page: number) => {
 const exportShippingMethods = async () => {
 	await shippingStore.exportShippingMethods();
 };
-
-const columns = computed(() => getShippingMethodColumns(t));
 
 useHead({ title: () => t('pages.shippingMethodsPageTitle') });
 

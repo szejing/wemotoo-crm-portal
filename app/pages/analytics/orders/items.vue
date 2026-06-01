@@ -15,9 +15,11 @@
 		<div v-else class="mt-4 space-y-6">
 			<ZTableToolbar
 				v-model="order_summ_item.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="order_summ_item.exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportToCsv"
 			/>
@@ -56,7 +58,7 @@
 					<div class="px-6 pb-6 pt-4">
 						<UTable
 							:data="group.items"
-							:columns="order_summ_item_columns"
+							:columns="visibleColumns"
 							:ui="{
 								root: 'relative overflow-auto',
 								base: 'table-fixed',
@@ -78,11 +80,31 @@
 <script lang="ts" setup>
 import { OrderItemStatus, getFormattedDate, formatCurrency, OrderStatus } from 'wemotoo-common';
 import { getOrderSummItemColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
 const route = useRoute();
+const ORDER_SUMM_ITEM_COLUMN_LABELS = {
+	prod_name: 'table.codeAndName',
+	prod_variant_code: 'table.prodVariantCode',
+	item_status: 'table.itemStatus',
+	total_orders: 'table.totalOrders',
+	total_qty: 'table.qty',
+	gross_amt: 'table.grossAmt',
+	disc_amt: 'table.discountAmt',
+	net_amt: 'table.netAmt',
+	gross_amt_exc: 'table.grossAmtExc',
+	disc_amt_exc: 'table.discAmtExc',
+	net_amt_exc: 'table.netAmtExc',
+	tax_amt_inc: 'table.taxAmtInc',
+	tax_amt_exc: 'table.taxAmtExc',
+	adj_amt: 'table.adjAmt',
+} as const;
+
 const { t } = useI18n();
 const order_summ_item_columns = computed(() => getOrderSummItemColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, ORDER_SUMM_ITEM_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(order_summ_item_columns, columnOptions);
 useHead({ title: () => t('pages.orderItemSummary') });
 
 const orderSummStore = useSummOrderStore();

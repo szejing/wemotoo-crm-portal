@@ -4,30 +4,33 @@
 			<ZSectionFilterSaleSummItems />
 		</template>
 
-		<!-- Grouped by Date -->
 		<div class="space-y-6">
-			<div v-if="!loading && groupedByDate.length == 0">
-				<div class="flex flex-col items-center justify-center py-6">
-					<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesItemSummaryFound') }}</p>
-					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-				</div>
-			</div>
+			<ZTableToolbar
+				v-model="sale_summ_items.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="sale_summ_items.exporting"
+				:column-options="columnOptions"
+				@update:model-value="updatePageSize"
+				@export="salesSummStore.exportSaleItemSummary"
+			/>
 
-			<div v-else>
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="sale_summ_items.page_size"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="sale_summ_items.exporting"
-					@update:model-value="updatePageSize"
-					@export="salesSummStore.exportSaleItemSummary"
-				/>
+			<UCard v-if="groupedByDate.length === 0" class="overflow-hidden">
+				<UTable :data="[]" :columns="visibleColumns" :loading="loading" :ui="salesItemTableUi">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesItemSummaryFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
-				<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
-					<!-- Date Header -->
-					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
+			<UCard v-for="group in groupedByDate" :key="group.date" class="overflow-hidden">
+				<template #header>
+					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4 -m-6">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center gap-4">
 								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
@@ -51,18 +54,14 @@
 							</div>
 						</div>
 					</div>
+				</template>
 
-					<!-- Items Table -->
-					<div class="px-6 pb-6 pt-4">
-						<UTable :data="group.items" :columns="sale_summ_item_columns" :loading="loading" />
-					</div>
-				</div>
+				<UTable :data="group.items" :columns="visibleColumns" :loading="loading" :ui="salesItemTableUi" />
+			</UCard>
+
+			<div v-if="data.length > 0" class="flex justify-center">
+				<UPagination v-model="current_page" :items-per-page="sale_summ_items.page_size" :total="sale_summ_items.total_data" @update:page="updatePage" />
 			</div>
-		</div>
-
-		<!-- Pagination -->
-		<div v-if="data.length > 0" class="mt-6 flex justify-center">
-			<UPagination v-model="current_page" :items-per-page="sale_summ_items.page_size" :total="sale_summ_items.total_data" @update:page="updatePage" />
 		</div>
 	</ZPagePanel>
 </template>
@@ -70,15 +69,42 @@
 <script lang="ts" setup>
 import { getFormattedDate, OrderItemStatus, formatCurrency } from 'wemotoo-common';
 import { getSaleSummItemColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
 const route = useRoute();
+const SALE_SUMM_ITEM_COLUMN_LABELS = {
+	prod_name: 'table.codeAndName',
+	prod_variant_code: 'table.prodVariantCode',
+	item_status: 'table.itemStatus',
+	total_txns: 'table.totalTxns',
+	total_qty: 'table.qty',
+	gross_amt: 'table.grossAmt',
+	disc_amt: 'table.discountAmt',
+	net_amt: 'table.netAmt',
+	gross_amt_exc: 'table.grossAmtExc',
+	disc_amt_exc: 'table.discAmtExc',
+	net_amt_exc: 'table.netAmtExc',
+	tax_amt_inc: 'table.taxAmtInc',
+	tax_amt_exc: 'table.taxAmtExc',
+	adj_amt: 'table.adjAmt',
+} as const;
+
 const { t } = useI18n();
 const sale_summ_item_columns = computed(() => getSaleSummItemColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_ITEM_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(sale_summ_item_columns, columnOptions);
 useHead({ title: () => t('pages.saleItemSummary') });
 
 const salesSummStore = useSummSaleStore();
 const { sale_summ_items, loading } = storeToRefs(salesSummStore);
+const salesItemTableUi = {
+	root: 'relative overflow-auto',
+	base: 'min-w-[1180px]',
+	th: 'whitespace-nowrap',
+	td: 'whitespace-nowrap',
+	tfoot: 'bg-elevated/50 border-t border-default',
+} as const;
 
 function applyQueryToFilter() {
 	const start = route.query.start_date;
@@ -110,7 +136,12 @@ watch(
 	},
 );
 const data = computed(() => sale_summ_items.value.data);
-const current_page = computed(() => sale_summ_items.value.current_page);
+const current_page = computed({
+	get: () => sale_summ_items.value.current_page,
+	set: (page: number) => {
+		sale_summ_items.value.current_page = page;
+	},
+});
 
 // Group data by date
 const groupedByDate = computed(() => {

@@ -11,9 +11,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportTaxes"
 			/>
@@ -30,7 +32,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="tax_rules" :columns="tax_rule_columns" :loading="loading" @select="selectTaxRule">
+			<UTable v-else :data="tax_rules" :columns="visibleColumns" :loading="loading" @select="selectTaxRule">
 				<template #empty-state>
 					<div class="flex-col-center section-empty">
 						<h2>{{ $t('pages.noTaxRulesFound') }}</h2>
@@ -50,14 +52,22 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getTaxRuleColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalLoading } from '#components';
+
+const TAX_RULE_COLUMN_LABELS = {
+	code: 'table.code',
+	details: 'table.details',
+} as const;
 
 const taxRuleStore = useTaxRuleStore();
 const overlay = useOverlay();
 const { t } = useI18n();
 const tax_rule_columns = computed(() => getTaxRuleColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, TAX_RULE_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(tax_rule_columns, columnOptions);
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 useHead({ title: () => t('pages.taxRulesTitle') });
 

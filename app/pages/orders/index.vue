@@ -23,9 +23,11 @@
 				<!-- Table Actions -->
 				<ZTableToolbar
 					v-model="filter.page_size"
+					v-model:selected-column-keys="selectedColumnKeys"
 					:page-size-options="options_page_size"
 					:export-enabled="true"
 					:exporting="exporting"
+					:column-options="columnOptions"
 					@update:model-value="updatePageSize"
 					@export="exportOrders"
 				/>
@@ -43,7 +45,7 @@
 			</template>
 
 			<!-- Orders Table -->
-			<UTable v-if="!initialize && !loading" :data="orders" :columns="order_columns" @select="selectOrder">
+			<UTable v-if="!initialize && !loading" :data="orders" :columns="visibleColumns" @select="selectOrder">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
@@ -87,12 +89,26 @@
 import { OrderStatus, PaymentStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
 import { getOrderColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TableRow } from '@nuxt/ui';
 import type { OrderHistory } from '~/utils/types/order-history';
 
 const route = useRoute();
+const ORDER_COLUMN_LABELS = {
+	index: 'table.no',
+	order_no: 'table.orderNo',
+	order_type: 'table.orderType',
+	customer: 'table.customer',
+	status: 'table.status',
+	gross_amt: 'table.grossAmt',
+	tax_amt_exc: 'table.taxAmtExc',
+	net_amt: 'table.netAmt',
+} as const;
+
 const { t } = useI18n();
 const order_columns = computed(() => getOrderColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, ORDER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(order_columns, columnOptions);
 useHead({ title: () => t('pages.ordersTitle') });
 
 const orderStore = useOrderStore();

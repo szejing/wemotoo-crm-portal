@@ -10,9 +10,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="courierStore.updatePageSize"
 				@export="exportCouriers"
 			/>
@@ -29,7 +31,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayCouriers" :columns="columns" :loading="loading" @select="selectCourier">
+			<UTable v-else :data="getDisplayCouriers" :columns="visibleColumns" :loading="loading" @select="selectCourier">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.TRUCK" class="w-12 h-12 text-gray-400" />
@@ -51,13 +53,24 @@ import type { TableRow } from '@nuxt/ui';
 import { ICONS } from '~/utils/icons';
 import { options_page_size } from '~/utils/options';
 import { getCourierColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Courier } from '~/utils/types/courier';
+
+const COURIER_COLUMN_LABELS = {
+	name: 'common.name',
+	description: 'common.description',
+	is_active: 'common.status',
+} as const;
 
 const { t } = useI18n();
 const courierStore = useCourierStore();
 const { loading, getDisplayCouriers, total_couriers, filter, exporting } = storeToRefs(courierStore);
 
 const initialize = ref(true);
+
+const columns = computed(() => getCourierColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, COURIER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(columns, columnOptions);
 
 const selectCourier = (_e: Event, row: TableRow<Courier>) => {
 	void navigateTo(`/settings/shipping/couriers/${row.original.id}`);
@@ -70,8 +83,6 @@ const updatePage = async (page: number) => {
 const exportCouriers = async () => {
 	await courierStore.exportCouriers();
 };
-
-const columns = computed(() => getCourierColumns(t));
 
 useHead({ title: () => t('pages.couriersPageTitle') });
 

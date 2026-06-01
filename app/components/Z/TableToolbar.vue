@@ -10,22 +10,56 @@
 			<UIcon :name="ICONS.EXCEL" class="w-4 h-4" />
 			{{ $t('common.export') }}
 		</UButton>
+
+		<USelectMenu
+			v-if="showColumnSelection"
+			v-model="selectedColumns"
+			:items="columnOptions"
+			multiple
+			value-key="key"
+			label-key="label"
+			:ui="{ content: 'w-56 max-h-60 overflow-y-auto' }"
+		>
+			<UButton icon="i-heroicons-view-columns" color="neutral" variant="ghost" size="xs">
+				{{ $t('components.selectMenu.showColumns') }}
+			</UButton>
+		</USelectMenu>
 	</div>
 </template>
 
 <script lang="ts" setup>
-withDefaults(
+type ColumnOption = {
+	key: string;
+	label: string;
+};
+
+const props = withDefaults(
 	defineProps<{
 		modelValue: number;
 		pageSizeOptions: number[];
 		exportEnabled?: boolean;
 		exporting?: boolean;
+		columnOptions?: ColumnOption[];
+		selectedColumnKeys?: string[];
 	}>(),
-	{ exportEnabled: true, exporting: false },
+	{
+		exportEnabled: true,
+		exporting: false,
+		columnOptions: () => [],
+		selectedColumnKeys: () => [],
+	},
 );
 
-defineEmits<{
+const emit = defineEmits<{
 	(e: 'update:modelValue', value: number): void;
+	(e: 'update:selectedColumnKeys', value: string[]): void;
 	(e: 'export'): void;
 }>();
+
+const showColumnSelection = computed(() => props.columnOptions.length > 0);
+
+const selectedColumns = computed({
+	get: () => props.selectedColumnKeys,
+	set: (value: string[]) => emit('update:selectedColumnKeys', value),
+});
 </script>

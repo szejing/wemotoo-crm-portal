@@ -9,7 +9,14 @@
 
 		<div class="space-y-6">
 			<!-- Table controls: page size -->
-			<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
+			<ZTableToolbar
+				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="false"
+				:column-options="columnOptions"
+				@update:model-value="updatePageSize"
+			/>
 
 			<template v-if="initialize">
 				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -21,7 +28,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="crm_users" :columns="crm_user_columns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectCrmUser">
+			<UTable v-else :data="crm_users" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectCrmUser">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -46,13 +53,25 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getCrmUserColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { CRMUser } from '~/utils/types/crm-user';
 import type { TableRow } from '@nuxt/ui';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import { ZModalLoading } from '#components';
 
+const CRM_USER_COLUMN_LABELS = {
+	row_index: 'table.noLabel',
+	name: 'table.name',
+	phone_no: 'table.phone',
+	role: 'table.role',
+	staff_department_id: 'table.staffDepartment',
+	is_active: 'table.active',
+} as const;
+
 const { t } = useI18n();
 const crm_user_columns = computed(() => getCrmUserColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, CRM_USER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(crm_user_columns, columnOptions);
 useHead({ title: () => t('pages.crmUsersTitle') });
 
 const crmUserStore = useCRMUserStore();

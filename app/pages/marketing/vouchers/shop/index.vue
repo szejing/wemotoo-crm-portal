@@ -10,9 +10,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="voucherStore.updatePageSize"
 				@export="exportVouchers"
 			/>
@@ -29,7 +31,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="vouchers" :columns="voucher_columns" :loading="loading" @select="selectVoucher">
+			<UTable v-else :data="vouchers" :columns="visibleColumns" :loading="loading" @select="selectVoucher">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -49,14 +51,24 @@
 <script lang="ts" setup>
 import { AllocationType } from 'wemotoo-common';
 import { getVoucherColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TableRow } from '@nuxt/ui';
 import type { Voucher } from '~/utils/types/voucher';
 import { options_page_size } from '~/utils/options';
 import { ICONS } from '~/utils/icons';
 import { useVoucherStore } from '~/stores/voucher/voucher';
 
+const VOUCHER_COLUMN_LABELS = {
+	code: 'table.code',
+	discount_code: 'table.linkedDiscount',
+	usage_count: 'table.usage',
+	status: 'table.active',
+} as const;
+
 const { t } = useI18n();
 const voucher_columns = computed(() => getVoucherColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, VOUCHER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(voucher_columns, columnOptions);
 useHead({ title: () => t('pages.shopVouchersTitle') });
 
 const voucherStore = useVoucherStore();

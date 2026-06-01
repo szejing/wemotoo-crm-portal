@@ -9,9 +9,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="brandStore.updatePageSize"
 				@export="exportBrands"
 			/>
@@ -28,7 +30,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayBrands" :columns="brand_columns" :loading="loading" @select="selectBrand">
+			<UTable v-else :data="getDisplayBrands" :columns="visibleColumns" :loading="loading" @select="selectBrand">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -49,8 +51,14 @@
 <script lang="ts" setup>
 import { ZModalBrandDetail, ZModalConfirmation } from '#components';
 import { getBrandColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Brand } from '~/utils/types/brand';
 import { options_page_size } from '~/utils/options';
+
+const BRAND_COLUMN_LABELS = {
+	code: 'table.code',
+	total_products: 'table.noOfItems',
+} as const;
 import type { TableRow } from '@nuxt/ui';
 import { failedNotification } from '~/stores/AppUi/AppUi';
 
@@ -59,6 +67,8 @@ const brandStore = useBrandStore();
 
 const { t } = useI18n();
 const brand_columns = computed(() => getBrandColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, BRAND_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(brand_columns, columnOptions);
 useHead({ title: () => t('pages.brandsTitle') });
 
 const { loading, getDisplayBrands, total_brands, filter, exporting } = storeToRefs(brandStore);

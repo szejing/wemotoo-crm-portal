@@ -8,9 +8,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportTaxes"
 			/>
@@ -27,7 +29,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="taxes" :columns="tax_code_columns" :loading="loading" @select="selectTax">
+			<UTable v-else :data="taxes" :columns="visibleColumns" :loading="loading" @select="selectTax">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
@@ -48,12 +50,21 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalLoading, ZModalTaxDetail } from '#components';
 import { getTaxCodeColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Tax } from '~/utils/types/tax';
 import type { TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
 
+const TAX_CODE_COLUMN_LABELS = {
+	code: 'table.code',
+	type: 'table.taxType',
+	is_active: 'table.active',
+} as const;
+
 const { t } = useI18n();
 const tax_code_columns = computed(() => getTaxCodeColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, TAX_CODE_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(tax_code_columns, columnOptions);
 useHead({ title: () => t('pages.taxCodesTitle') });
 
 const overlay = useOverlay();

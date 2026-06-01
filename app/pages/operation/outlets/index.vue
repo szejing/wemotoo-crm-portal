@@ -11,9 +11,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportOutlets"
 			/>
@@ -30,7 +32,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="outlets" :columns="outlet_columns" :loading="loading" loading-state="loading" @select="openOutlet">
+			<UTable v-else :data="outlets" :columns="visibleColumns" :loading="loading" loading-state="loading" @select="openOutlet">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-building-office" class="w-12 h-12 text-gray-400" />
@@ -50,13 +52,21 @@
 
 <script lang="ts" setup>
 import { getOutletColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Outlet } from '~/utils/types/outlet';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
+const OUTLET_COLUMN_LABELS = {
+	code: 'table.code',
+	address: 'table.address',
+} as const;
+
 const outletStore = useOutletStore();
 const { t } = useI18n();
 const outlet_columns = computed(() => getOutletColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, OUTLET_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(outlet_columns, columnOptions);
 
 useHead({ title: () => t('pages.outletsTitle') });
 

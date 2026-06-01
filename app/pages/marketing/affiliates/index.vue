@@ -9,7 +9,14 @@
 			<ZSectionFilterAffiliates />
 		</template>
 		<div class="space-y-6">
-			<ZTableToolbar v-model="filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
+			<ZTableToolbar
+				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="false"
+				:column-options="columnOptions"
+				@update:model-value="updatePageSize"
+			/>
 
 			<template v-if="initialize">
 				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -21,7 +28,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="affiliates" :columns="affiliate_columns" :loading="loading" @select="selectAffiliate">
+			<UTable v-else :data="affiliates" :columns="visibleColumns" :loading="loading" @select="selectAffiliate">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -41,13 +48,25 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getAffiliateColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Affiliate } from '~/utils/types/affiliate';
 import type { TableRow } from '@nuxt/ui';
 import { useAffiliateStore } from '~/stores/Affiliate/Affiliate';
 import { ZModalLoading } from '#components';
 
+const AFFILIATE_COLUMN_LABELS = {
+	row_index: 'table.noLabel',
+	slug: 'affiliate.slug',
+	tier: 'affiliate.tier',
+	total_referrals_count: 'affiliate.referrals',
+	current_balance: 'affiliate.balance',
+	created_at: 'affiliate.createdAt',
+} as const;
+
 const { t } = useI18n();
 const affiliate_columns = computed(() => getAffiliateColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, AFFILIATE_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(affiliate_columns, columnOptions);
 useHead({ title: () => t('pages.affiliatesTitle') });
 
 const affiliateStore = useAffiliateStore();

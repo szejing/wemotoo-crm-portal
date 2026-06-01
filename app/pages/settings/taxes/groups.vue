@@ -11,15 +11,17 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportTaxGroups"
 			/>
 
 			<!-- Table  -->
-			<UTable :data="tax_groups" :columns="tax_group_columns" :loading="loading" @select="selectTaxGroup">
+			<UTable :data="tax_groups" :columns="visibleColumns" :loading="loading" @select="selectTaxGroup">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.TAX" class="w-12 h-12 text-gray-400" />
@@ -40,6 +42,7 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTaxGroupDetail } from '#components';
 import { getTaxGroupColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TaxGroup } from '~/utils/types/tax-group';
 import type { TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
@@ -48,8 +51,15 @@ const overlay = useOverlay();
 const taxGroupStore = useTaxGroupStore();
 const { loading, tax_groups, filter, total_tax_groups, exporting } = storeToRefs(taxGroupStore);
 
+const TAX_GROUP_COLUMN_LABELS = {
+	code: 'table.code',
+	taxes: 'table.taxes',
+} as const;
+
 const { t } = useI18n();
 const tax_group_columns = computed(() => getTaxGroupColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, TAX_GROUP_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(tax_group_columns, columnOptions);
 useHead({ title: () => t('pages.taxGroupsTitle') });
 
 onMounted(async () => {

@@ -17,15 +17,17 @@
 				<!-- Table Controls -->
 				<ZTableToolbar
 					v-model="order_summ_customer.page_size"
+					v-model:selected-column-keys="selectedColumnKeys"
 					:page-size-options="options_page_size"
 					:export-enabled="true"
 					:exporting="order_summ_customer.exporting"
+					:column-options="columnOptions"
 					@update:model-value="updatePageSize"
 					@export="exportOrderCustomerSummaryToCsv"
 				/>
 
 				<!-- Table -->
-				<UTable :data="data" :columns="order_summ_customer_columns" :loading="is_loading" class="mt-4">
+				<UTable :data="data" :columns="visibleColumns" :loading="is_loading" class="mt-4">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
 							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -45,10 +47,21 @@
 
 <script lang="ts" setup>
 import { getOrderSummCustomerColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
+
+const ORDER_SUMM_CUSTOMER_COLUMN_LABELS = {
+	biz_date: 'table.date',
+	customer: 'table.customer',
+	status: 'table.orderStatus',
+	gross_amt: 'table.grossAmt',
+	net_amt: 'table.netAmt',
+} as const;
 
 const { t } = useI18n();
 const order_summ_customer_columns = computed(() => getOrderSummCustomerColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, ORDER_SUMM_CUSTOMER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(order_summ_customer_columns, columnOptions);
 useHead({ title: () => t('pages.orderCustomerSummary') });
 
 onMounted(async () => {

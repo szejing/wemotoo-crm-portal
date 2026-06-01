@@ -9,9 +9,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="productOptionsStore.updatePage"
 				@export="exportOptions"
 			/>
@@ -34,7 +36,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="prod_variations" :columns="product_variation_columns" :loading="loading" @select="selectProductOption">
+			<UTable v-else :data="prod_variations" :columns="visibleColumns" :loading="loading" @select="selectProductOption">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -55,13 +57,21 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalOptionDetail } from '#components';
 import { getProductVariationColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { ProductVariation } from '~/utils/types/product-variation';
 import type { ProductOption } from '~/utils/types/product-option';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
 
+const PRODUCT_VARIATION_COLUMN_LABELS = {
+	name: 'table.name',
+	options: 'table.options',
+} as const;
+
 const { t } = useI18n();
 const product_variation_columns = computed(() => getProductVariationColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, PRODUCT_VARIATION_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(product_variation_columns, columnOptions);
 useHead({ title: () => t('pages.optionsTitle') });
 
 const overlay = useOverlay();

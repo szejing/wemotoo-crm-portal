@@ -7,9 +7,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="false"
 				:exporting="customerStore.exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportCustomers"
 			/>
@@ -24,7 +26,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="customers" :columns="customer_columns" :loading="loading" @select="selectCustomer">
+			<UTable v-else :data="customers" :columns="visibleColumns" :loading="loading" @select="selectCustomer">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
@@ -44,11 +46,21 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getCustomerColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Customer } from '~/utils/types/customer';
 import type { TableRow } from '@nuxt/ui';
 
+const CUSTOMER_COLUMN_LABELS = {
+	customer_no: 'table.noLabel',
+	name: 'table.name',
+	email_address: 'table.email',
+	phone_number: 'table.phone',
+} as const;
+
 const { t } = useI18n();
 const customer_columns = computed(() => getCustomerColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, CUSTOMER_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(customer_columns, columnOptions);
 useHead({ title: () => t('pages.customersTitle') });
 
 const customerStore = useCustomerStore();

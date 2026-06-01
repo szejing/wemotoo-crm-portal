@@ -9,9 +9,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="tagsStore.updatePage"
 				@export="exportTags"
 			/>
@@ -28,7 +30,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayTags" :columns="tag_columns" :loading="loading" @select="selectTag">
+			<UTable v-else :data="getDisplayTags" :columns="visibleColumns" :loading="loading" @select="selectTag">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -49,6 +51,7 @@
 <script lang="ts" setup>
 import { ZModalConfirmation, ZModalTagDetail } from '#components';
 import { getTagColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Tag } from '~/utils/types/tag';
 import { options_page_size } from '~/utils/options';
 import type { TableRow } from '@nuxt/ui';
@@ -57,8 +60,15 @@ import { failedNotification } from '~/stores/AppUi/AppUi';
 const overlay = useOverlay();
 const tagsStore = useProductTagStore();
 
+const TAG_COLUMN_LABELS = {
+	value: 'table.description',
+	total_products: 'table.noOfItems',
+} as const;
+
 const { t } = useI18n();
 const tag_columns = computed(() => getTagColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, TAG_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(tag_columns, columnOptions);
 useHead({ title: () => t('pages.tagsTitle') });
 
 const { loading, getDisplayTags, total_tags, filter, exporting } = storeToRefs(tagsStore);

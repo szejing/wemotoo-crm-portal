@@ -7,9 +7,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="sale_summ.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="sale_summ.exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="salesSummStore.exportSalesSummary"
 			/>
@@ -17,11 +19,11 @@
 			<UCard class="overflow-hidden">
 				<UTable
 					:data="dailyRows"
-					:columns="dailyColumns"
+					:columns="visibleDailyColumns"
 					:loading="loading"
 					:ui="{
 						root: 'relative overflow-auto',
-						base: 'min-w-[760px]',
+						base: 'min-w-[980px]',
 						th: 'whitespace-nowrap',
 						td: 'whitespace-nowrap',
 						tfoot: 'bg-elevated/50 border-t border-default',
@@ -45,10 +47,10 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate, formatCurrency } from 'wemotoo-common';
-import type { TableColumn, TableRow } from '@nuxt/ui';
 import { options_page_size } from '~/utils/options';
-import type { SummSaleBill } from '~/utils/types/summ-sales';
+import { getSaleSummColumns, SALE_SUMM_COLUMN_LABELS } from '~/utils/table-columns';
+import type { SaleSummTableRow } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -97,89 +99,13 @@ const current_page = computed({
 	},
 });
 
-type SaleDailyRow = {
-	date: string;
-	currency_code: string;
-	total_txns: number;
-	total_items: number;
-	voided_items: number;
-	gross_amt: number;
-	net_amt: number;
-	tax_amt: number;
-	shipping_amt: number;
-};
+const saleSummColumns = computed(() => getSaleSummColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns: visibleDailyColumns } = useTableColumnVisibility(saleSummColumns, columnOptions, {
+	defaultHiddenKeys: ['currency_code', 'total_voided_qty'],
+});
 
-const alignRight = 'text-right tabular-nums';
-
-const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
-const numberCell = (value: number) => h('div', { class: alignRight }, value);
-const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
-
-const getTaxAmount = (item: Pick<SummSaleBill, 'tax_amt_inc' | 'tax_amt_exc'>) => (item.tax_amt_inc ?? 0) + (item.tax_amt_exc ?? 0);
-
-const getShippingAmount = (item: SummSaleBill) => {
-	const fields = item as SummSaleBill & { shipping_amt?: number; shipping_fee?: number };
-	if (typeof fields.shipping_amt === 'number') return fields.shipping_amt;
-	if (typeof fields.shipping_fee === 'number') return fields.shipping_fee;
-
-	return Math.max(item.net_amt - item.gross_amt - getTaxAmount(item), 0);
-};
-
-const sumColumn = (rows: TableRow<SaleDailyRow>[], key: keyof Pick<SaleDailyRow, 'total_txns' | 'total_items' | 'voided_items' | 'gross_amt' | 'net_amt' | 'tax_amt' | 'shipping_amt'>) =>
-	rows.reduce((total, row) => total + row.original[key], 0);
-
-const dailyColumns = computed<TableColumn<SaleDailyRow>[]>(() => [
-	{
-		accessorKey: 'date',
-		header: () => headerCell(t('table.bizDate')),
-		cell: ({ row }) => h('div', { class: 'font-medium text-default' }, getFormattedDate(new Date(row.original.date))),
-		footer: () => h('div', { class: 'font-semibold text-default' }, t('pages.totalLabel')),
-	},
-	{
-		accessorKey: 'total_txns',
-		header: () => headerCell(t('table.totalTransactions'), 'right'),
-		cell: ({ row }) => numberCell(row.original.total_txns),
-		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'total_txns')),
-	},
-	{
-		accessorKey: 'total_items',
-		header: () => headerCell(t('table.totalItems'), 'right'),
-		cell: ({ row }) => numberCell(row.original.total_items),
-		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'total_items')),
-	},
-	{
-		accessorKey: 'net_amt',
-		header: () => headerCell(t('table.netAmt'), 'right'),
-		cell: ({ row }) => moneyCell(row.original.net_amt, row.original.currency_code),
-		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'net_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
-	},
-	{
-		accessorKey: 'gross_amt',
-		header: () => headerCell(t('table.grossAmt'), 'right'),
-		cell: ({ row }) => moneyCell(row.original.gross_amt, row.original.currency_code),
-		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'gross_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
-	},
-	{
-		accessorKey: 'tax_amt',
-		header: () => headerCell(t('table.taxes'), 'right'),
-		cell: ({ row }) => moneyCell(row.original.tax_amt, row.original.currency_code),
-		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'tax_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
-	},
-	{
-		accessorKey: 'shipping_amt',
-		header: () => headerCell(t('table.shipment.shippingFee'), 'right'),
-		cell: ({ row }) => moneyCell(row.original.shipping_amt, row.original.currency_code),
-		footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, 'shipping_amt'), column.getFacetedRowModel().rows[0]?.original.currency_code ?? 'MYR'),
-	},
-	{
-		accessorKey: 'voided_items',
-		header: () => headerCell(t('pages.voidedLabel'), 'right'),
-		cell: ({ row }) => numberCell(row.original.voided_items),
-		footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, 'voided_items')),
-	},
-]);
-
-const dailyRows = computed<SaleDailyRow[]>(() => {
+const dailyRows = computed<SaleSummTableRow[]>(() => {
 	const grouped: { [key: string]: (typeof data.value)[0][] } = {};
 
 	data.value.forEach((item) => {
@@ -191,24 +117,45 @@ const dailyRows = computed<SaleDailyRow[]>(() => {
 	});
 
 	return Object.entries(grouped).map(([date, items]) => {
+		const statuses = new Set(items.map((item) => item.status).filter(Boolean));
 		const totals = items.reduce(
 			(acc, item) => {
 				acc.total_txns += item.total_txns;
-				acc.total_items += item.total_qty - (item.total_voided_qty || 0);
+				acc.total_qty += item.total_qty;
+				acc.total_voided_qty += item.total_voided_qty || 0;
 				acc.gross_amt += item.gross_amt;
 				acc.net_amt += item.net_amt;
-				acc.tax_amt += getTaxAmount(item);
-				acc.shipping_amt += getShippingAmount(item);
+				acc.disc_amt += item.disc_amt ?? 0;
+				acc.gross_amt_exc += item.gross_amt_exc;
+				acc.net_amt_exc += item.net_amt_exc;
+				acc.tax_amt_inc += item.tax_amt_inc ?? 0;
+				acc.tax_amt_exc += item.tax_amt_exc ?? 0;
+				acc.void_amt += item.void_amt ?? 0;
+				acc.adj_amt += item.adj_amt ?? 0;
 				acc.currency_code = item.currency_code;
-				acc.voided_items += item.total_voided_qty || 0;
 
 				return acc;
 			},
-			{ total_txns: 0, total_items: 0, gross_amt: 0, net_amt: 0, tax_amt: 0, shipping_amt: 0, voided_items: 0, currency_code: 'MYR' },
+			{
+				total_txns: 0,
+				total_qty: 0,
+				total_voided_qty: 0,
+				gross_amt: 0,
+				net_amt: 0,
+				disc_amt: 0,
+				gross_amt_exc: 0,
+				net_amt_exc: 0,
+				tax_amt_inc: 0,
+				tax_amt_exc: 0,
+				void_amt: 0,
+				adj_amt: 0,
+				currency_code: 'MYR',
+			},
 		);
 
 		return {
-			date,
+			biz_date: new Date(date),
+			status: statuses.size === 1 ? Array.from(statuses)[0] : undefined,
 			...totals,
 		};
 	});

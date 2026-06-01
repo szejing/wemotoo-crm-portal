@@ -10,9 +10,11 @@
 		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="discountStore.updatePageSize"
 				@export="exportDiscounts"
 			/>
@@ -29,7 +31,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="discounts" :columns="discount_columns" :loading="loading" @select="selectDiscount">
+			<UTable v-else :data="discounts" :columns="visibleColumns" :loading="loading" @select="selectDiscount">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
@@ -49,12 +51,22 @@
 
 <script lang="ts" setup>
 import { getDiscountColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TableRow } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { options_page_size } from '~/utils/options';
 
+const DISCOUNT_COLUMN_LABELS = {
+	code: 'table.code',
+	disc_type: 'table.rule',
+	usage_count: 'table.usage',
+	is_disabled: 'table.active',
+} as const;
+
 const { t } = useI18n();
 const discount_columns = computed(() => getDiscountColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, DISCOUNT_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(discount_columns, columnOptions);
 useHead({ title: () => t('pages.discountsTitle') });
 
 const discountStore = useDiscountStore();

@@ -8,9 +8,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportPaymentTypes"
 			/>
@@ -27,7 +29,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="payment_type_groups" :columns="payment_type_group_columns" :loading="loading">
+			<UTable v-else :data="payment_type_groups" :columns="visibleColumns" :loading="loading">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
@@ -47,9 +49,17 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getPaymentTypeGroupColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
+
+const PAYMENT_TYPE_GROUP_COLUMN_LABELS = {
+	index: 'table.no',
+	code: 'table.groupCode',
+} as const;
 
 const { t } = useI18n();
 const payment_type_group_columns = computed(() => getPaymentTypeGroupColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, PAYMENT_TYPE_GROUP_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(payment_type_group_columns, columnOptions);
 useHead({ title: () => t('pages.paymentTypesTitle') });
 
 const paymentTypeStore = usePaymentTypeStore();

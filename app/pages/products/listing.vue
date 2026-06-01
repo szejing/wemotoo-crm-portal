@@ -10,9 +10,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportProducts"
 			/>
@@ -27,7 +29,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="products" :columns="product_columns" :loading="loading" @select="selectProduct">
+			<UTable v-else :data="products" :columns="visibleColumns" :loading="loading" @select="selectProduct">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.PRODUCT" class="w-12 h-12 text-gray-400" />
@@ -47,6 +49,7 @@
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
 import { getProductColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { Product } from '~/utils/types/product';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalLoading } from '#components';
@@ -55,8 +58,18 @@ const productStore = useProductStore();
 const overlay = useOverlay();
 const loadingModal = overlay.create(ZModalLoading, { props: { key: 'loading' } });
 
+const PRODUCT_COLUMN_LABELS = {
+	name: 'table.codeAndName',
+	type: 'table.type',
+	is_active: 'table.status',
+	updated_at: 'table.lastUpdated',
+	price_types: 'table.price',
+} as const;
+
 const { t } = useI18n();
 const product_columns = computed(() => getProductColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, PRODUCT_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(product_columns, columnOptions);
 useHead({ title: () => t('pages.productsTitle') });
 
 const { products, loading, filter, total_products, exporting, updating } = storeToRefs(productStore);

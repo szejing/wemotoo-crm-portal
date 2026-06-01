@@ -8,9 +8,11 @@
 			<!-- Table Controls -->
 			<ZTableToolbar
 				v-model="filter.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
 				:page-size-options="options_page_size"
 				:export-enabled="true"
 				:exporting="exporting"
+				:column-options="columnOptions"
 				@update:model-value="updatePageSize"
 				@export="exportPaymentMethods"
 			/>
@@ -27,7 +29,7 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="payment_methods" :columns="payment_method_columns" :loading="loading">
+			<UTable v-else :data="payment_methods" :columns="visibleColumns" :loading="loading">
 				<template #empty>
 					<div class="flex flex-col items-center justify-center py-12 gap-3">
 						<UIcon :name="ICONS.PAYMENT_METHODS" class="w-12 h-12 text-gray-400" />
@@ -48,9 +50,17 @@
 import { ZModalLoading } from '#components';
 import { options_page_size } from '~/utils/options';
 import { getPaymentMethodColumns } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
+
+const PAYMENT_METHOD_COLUMN_LABELS = {
+	code: 'table.code',
+	active: 'table.active',
+} as const;
 
 const { t } = useI18n();
 const payment_method_columns = computed(() => getPaymentMethodColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, PAYMENT_METHOD_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(payment_method_columns, columnOptions);
 useHead({ title: () => t('pages.paymentMethodsTitle') });
 
 const overlay = useOverlay();
