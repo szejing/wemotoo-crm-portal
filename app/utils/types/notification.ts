@@ -7,8 +7,11 @@ export type NotificationAction = {
 
 export type NotificationItem = {
 	id: string;
+	notification_ids?: string[];
 	title: string;
 	subtitle?: string;
+	order_no?: string;
+	summary_lines?: string[];
 	ref_no?: string;
 	status?: string;
 	scheduled_at?: string | Date;

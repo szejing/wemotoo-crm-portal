@@ -3,8 +3,10 @@ import { Routes } from '#root/server/routes.server';
 
 export default defineEventHandler(async (event) => {
 	try {
+		const query = getQuery(event);
 		const result = await signedFetch(event, `${Routes.Notifications.Many()}`, {
 			method: 'GET',
+			query,
 		});
 		return result;
 	} catch (err) {

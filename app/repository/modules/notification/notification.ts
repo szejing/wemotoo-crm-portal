@@ -8,10 +8,11 @@ import type {
 class NotificationModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Notifications;
 
-	async getMany(): Promise<NotificationResp> {
+	async getMany(options: { includeRead?: boolean } = {}): Promise<NotificationResp> {
 		return await this.call<NotificationResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
+			query: options.includeRead ? { include_read: true } : undefined,
 		});
 	}
 

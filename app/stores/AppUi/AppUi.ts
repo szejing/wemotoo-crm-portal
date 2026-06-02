@@ -40,6 +40,11 @@ const default_navigations = [
 				// 	// Coming soon: { label: 'nav.refunds', to: '/sales/refunds' },
 				// ],
 			},
+			{
+				label: 'nav.notifications',
+				icon: ICONS.BELL,
+				to: '/notifications',
+			},
 			// Products
 			{
 				label: 'nav.products',
