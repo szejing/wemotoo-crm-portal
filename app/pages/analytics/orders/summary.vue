@@ -47,11 +47,11 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate, formatCurrency, OrderStatus } from 'wemotoo-common';
-import type { TableColumn, TableRow } from '@nuxt/ui';
-import { UBadge } from '#components';
-import type { SummOrderBill } from '~/utils/types/summ-orders';
+import { OrderStatus } from 'wemotoo-common';
 import { options_page_size } from '~/utils/options';
+import { getSummColumns, getSummColumnLabels } from '~/utils/table-columns';
+import type { SummBillTableRow } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -106,133 +106,13 @@ const current_page = computed({
 	},
 });
 
-type OrderSummaryColumnKey = keyof SummOrderBill;
-type OrderDailyRow = Omit<SummOrderBill, 'status'> & {
-	status?: OrderStatus;
-};
-type NumericOrderSummaryColumnKey = keyof Pick<
-	OrderDailyRow,
-	| 'gross_amt'
-	| 'net_amt'
-	| 'disc_amt'
-	| 'gross_amt_exc'
-	| 'net_amt_exc'
-	| 'tax_amt_inc'
-	| 'tax_amt_exc'
-	| 'void_amt'
-	| 'adj_amt'
-	| 'total_orders'
-	| 'total_qty'
-	| 'total_voided_qty'
->;
-type ColumnOption = {
-	key: OrderSummaryColumnKey;
-	label: string;
-};
-const alignRight = 'text-right tabular-nums';
-
-const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
-const numberCell = (value: number) => h('div', { class: alignRight }, value);
-const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
-const optionalCell = (value?: number) => (value == null ? h('span', { class: 'text-muted' }, '-') : numberCell(value));
-const optionalMoneyCell = (value: number | undefined, currencyCode: string) =>
-	value == null ? h('span', { class: 'text-muted' }, '-') : moneyCell(value, currencyCode);
-
-const sumColumn = (rows: TableRow<OrderDailyRow>[], key: NumericOrderSummaryColumnKey) => rows.reduce((total, row) => total + (row.original[key] ?? 0), 0);
-const footerCurrency = (rows: TableRow<OrderDailyRow>[]) => rows[0]?.original.currency_code ?? 'MYR';
-
-const orderStatusLabels = computed<Partial<Record<OrderStatus, string>>>(() => ({
-	[OrderStatus.COMPLETED]: t('options.completed'),
-	[OrderStatus.CANCELLED]: t('options.cancelled'),
-	[OrderStatus.REFUNDED]: t('options.refunded'),
-	[OrderStatus.PENDING_PAYMENT]: t('options.pendingPayment'),
-	[OrderStatus.PROCESSING]: t('options.processing'),
-	[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
-}));
-
-const orderStatusColors: Partial<Record<OrderStatus, 'success' | 'error' | 'info' | 'warning' | 'neutral'>> = {
-	[OrderStatus.COMPLETED]: 'success',
-	[OrderStatus.CANCELLED]: 'error',
-	[OrderStatus.REFUNDED]: 'error',
-	[OrderStatus.PENDING_PAYMENT]: 'info',
-	[OrderStatus.PROCESSING]: 'info',
-	[OrderStatus.REQUIRES_ACTION]: 'warning',
-};
-
-const statusCell = (status?: OrderStatus) => {
-	if (!status) return h('span', { class: 'text-muted' }, '-');
-
-	return h(UBadge, { variant: 'subtle', color: orderStatusColors[status] ?? 'neutral', class: 'capitalize' }, () => orderStatusLabels.value[status] ?? status);
-};
-
-const createNumberColumn = (key: NumericOrderSummaryColumnKey, label: string): TableColumn<OrderDailyRow> => ({
-	accessorKey: key,
-	header: () => headerCell(label, 'right'),
-	cell: ({ row }) => optionalCell(row.original[key]),
-	footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, key)),
-});
-
-const createMoneyColumn = (key: NumericOrderSummaryColumnKey, label: string): TableColumn<OrderDailyRow> => ({
-	accessorKey: key,
-	header: () => headerCell(label, 'right'),
-	cell: ({ row }) => optionalMoneyCell(row.original[key], row.original.currency_code),
-	footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, key), footerCurrency(column.getFacetedRowModel().rows)),
-});
-
-const columnOptions = computed<ColumnOption[]>(() => [
-	{ key: 'biz_date', label: t('table.bizDate') },
-	{ key: 'currency_code', label: t('table.currency') },
-	{ key: 'status', label: t('table.orderStatus') },
-	{ key: 'gross_amt', label: t('table.grossAmt') },
-	{ key: 'net_amt', label: t('table.netAmt') },
-	{ key: 'disc_amt', label: t('table.discountAmt') },
-	{ key: 'gross_amt_exc', label: t('table.grossAmtExc') },
-	{ key: 'net_amt_exc', label: t('table.netAmtExc') },
-	{ key: 'tax_amt_inc', label: t('table.taxAmtInc') },
-	{ key: 'tax_amt_exc', label: t('table.taxAmtExc') },
-	{ key: 'void_amt', label: t('table.voidAmt') },
-	{ key: 'adj_amt', label: t('table.adjAmt') },
-	{ key: 'total_orders', label: t('table.totalOrders') },
-	{ key: 'total_qty', label: t('table.totalItems') },
-	{ key: 'total_voided_qty', label: t('pages.voidedLabel') },
-]);
-
-const dailyColumns = computed<TableColumn<OrderDailyRow>[]>(() => [
-	{
-		accessorKey: 'biz_date',
-		header: () => headerCell(t('table.bizDate')),
-		cell: ({ row }) => h('div', { class: 'font-medium text-default' }, getFormattedDate(new Date(row.original.biz_date))),
-		footer: () => h('div', { class: 'font-semibold text-default' }, t('pages.totalLabel')),
-	},
-	{
-		accessorKey: 'currency_code',
-		header: () => headerCell(t('table.currency')),
-		cell: ({ row }) => h('div', { class: 'font-medium text-default' }, row.original.currency_code),
-	},
-	{
-		accessorKey: 'status',
-		header: () => headerCell(t('table.orderStatus')),
-		cell: ({ row }) => statusCell(row.original.status),
-	},
-	createMoneyColumn('gross_amt', t('table.grossAmt')),
-	createMoneyColumn('net_amt', t('table.netAmt')),
-	createMoneyColumn('disc_amt', t('table.discountAmt')),
-	createMoneyColumn('gross_amt_exc', t('table.grossAmtExc')),
-	createMoneyColumn('net_amt_exc', t('table.netAmtExc')),
-	createMoneyColumn('tax_amt_inc', t('table.taxAmtInc')),
-	createMoneyColumn('tax_amt_exc', t('table.taxAmtExc')),
-	createMoneyColumn('void_amt', t('table.voidAmt')),
-	createMoneyColumn('adj_amt', t('table.adjAmt')),
-	createNumberColumn('total_orders', t('table.totalOrders')),
-	createNumberColumn('total_qty', t('table.totalItems')),
-	createNumberColumn('total_voided_qty', t('pages.voidedLabel')),
-]);
-
-const { selectedColumnKeys, visibleColumns: visibleDailyColumns } = useTableColumnVisibility(dailyColumns, columnOptions, {
+const orderSummColumns = computed(() => getSummColumns(t, 'total_orders'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummColumnLabels('total_orders')));
+const { selectedColumnKeys, visibleColumns: visibleDailyColumns } = useTableColumnVisibility(orderSummColumns, columnOptions, {
 	defaultHiddenKeys: ['currency_code', 'total_voided_qty'],
 });
 
-const dailyRows = computed<OrderDailyRow[]>(() => {
+const dailyRows = computed<SummBillTableRow[]>(() => {
 	const grouped: { [key: string]: (typeof data.value)[0][] } = {};
 
 	data.value.forEach((item) => {

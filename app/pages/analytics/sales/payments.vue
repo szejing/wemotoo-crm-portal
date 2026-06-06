@@ -64,21 +64,14 @@
 <script lang="ts" setup>
 import { getFormattedDate, formatCurrency } from 'wemotoo-common';
 import OrderStatus from '~/components/Z/SelectMenu/OrderStatus.vue';
-import { getSaleSummPaymentColumns } from '~/utils/table-columns';
+import { getSummPaymentColumns, SUMM_PAYMENT_COLUMN_LABELS } from '~/utils/table-columns';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
-const SALE_SUMM_PAYMENT_COLUMN_LABELS = {
-	payment_type_desc: 'table.desc',
-	status: 'table.orderStatus',
-	payment_amt: 'table.paymentAmt',
-	total_txns: 'table.totalTxns',
-} as const;
-
 const { t } = useI18n();
-const sale_summ_payment_columns = computed(() => getSaleSummPaymentColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_PAYMENT_COLUMN_LABELS));
-const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(sale_summ_payment_columns, columnOptions);
+const summ_payment_columns = computed(() => getSummPaymentColumns(t));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, SUMM_PAYMENT_COLUMN_LABELS));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(summ_payment_columns, columnOptions);
 useHead({ title: () => t('pages.salePaymentSummary') });
 
 onMounted(async () => {

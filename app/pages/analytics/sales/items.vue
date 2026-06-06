@@ -28,32 +28,25 @@
 				</UTable>
 			</UCard>
 
-			<UCard v-for="group in groupedByDate" :key="group.date" class="overflow-hidden">
+			<UCard
+				v-for="group in groupedByDate"
+				:key="group.date"
+				class="overflow-hidden"
+				:ui="{
+					header: 'bg-elevated/40 px-4 py-3 sm:px-6',
+					body: 'p-0 sm:p-0',
+				}"
+			>
 				<template #header>
-					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4 -m-6">
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-4">
-								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
-								<div class="flex items-center gap-3 text-sm">
-									<div class="flex items-center gap-1.5 text-neutral-600">
-										<Icon name="i-heroicons-banknotes" class="text-base" />
-										<span class="font-medium">{{ group.total_txns }} {{ $t('pages.transactionsLabel') }}</span>
-									</div>
-									<div class="flex items-center gap-1.5 text-green-600 border-l border-neutral-300 pl-3">
-										<Icon name="i-heroicons-cube" class="text-base" />
-										<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
-									</div>
-									<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600 border-l border-neutral-300 pl-3">
-										<Icon name="i-heroicons-x-circle" class="text-base" />
-										<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
-									</div>
-								</div>
-							</div>
-							<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-								<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
-							</div>
-						</div>
-					</div>
+					<ZAnalyticsItemDateSummary
+						:date="group.date"
+						:primary-count="group.total_txns"
+						:primary-stat-label="$t('table.totalTransactions')"
+						:active-qty="group.active_qty"
+						:voided-qty="group.voided_qty"
+						:net-amt="group.net_amt"
+						:currency-code="group.currency_code"
+					/>
 				</template>
 
 				<UTable :data="group.items" :columns="visibleColumns" :loading="loading" :ui="salesItemTableUi" />
@@ -67,33 +60,17 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate, OrderItemStatus, formatCurrency } from 'wemotoo-common';
-import { getSaleSummItemColumns } from '~/utils/table-columns';
+import { OrderItemStatus } from 'wemotoo-common';
+import { getSummItemColumns, getSummItemColumnLabels } from '~/utils/table-columns';
+import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
 const route = useRoute();
-const SALE_SUMM_ITEM_COLUMN_LABELS = {
-	prod_name: 'table.codeAndName',
-	prod_variant_code: 'table.prodVariantCode',
-	item_status: 'table.itemStatus',
-	total_txns: 'table.totalTxns',
-	total_qty: 'table.qty',
-	gross_amt: 'table.grossAmt',
-	disc_amt: 'table.discountAmt',
-	net_amt: 'table.netAmt',
-	gross_amt_exc: 'table.grossAmtExc',
-	disc_amt_exc: 'table.discAmtExc',
-	net_amt_exc: 'table.netAmtExc',
-	tax_amt_inc: 'table.taxAmtInc',
-	tax_amt_exc: 'table.taxAmtExc',
-	adj_amt: 'table.adjAmt',
-} as const;
-
 const { t } = useI18n();
-const sale_summ_item_columns = computed(() => getSaleSummItemColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_ITEM_COLUMN_LABELS));
-const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(sale_summ_item_columns, columnOptions);
+const summ_item_columns = computed(() => getSummItemColumns<SummSaleItem>(t, 'total_txns'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummItemColumnLabels('total_txns')));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(summ_item_columns, columnOptions);
 useHead({ title: () => t('pages.saleItemSummary') });
 
 const salesSummStore = useSummSaleStore();

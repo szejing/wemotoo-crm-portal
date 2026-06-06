@@ -44,6 +44,20 @@ app/utils/
 
 - Export functions or arrays that define column configs (field, label, sortable, formatter, etc.) for use in table components.
 - Keep definitions data-only; no API or store calls inside column definitions.
+- **Analytics pages:** see `analytics-table-columns.mdc` — shared column defs live in `table-columns/analytics/`; pages pass `countKey` or `variant` when order vs sale field names differ.
+
+### Analytics column modules
+
+```
+app/utils/table-columns/analytics/
+├── types.ts
+├── summ.ts              # getSummColumns, getSummColumnLabels
+├── summ-item.ts         # getSummItemColumns, getSummItemColumnLabels
+├── summ-customer.ts     # getSummCustomerColumns, getSummCustomerColumnLabels
+└── summ-payment.ts      # getSummPaymentColumns, SUMM_PAYMENT_COLUMN_LABELS
+```
+
+Re-export public getters, label helpers, and row types from `table-columns/index.ts`.
 
 ## Constants
 

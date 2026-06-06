@@ -1,17 +1,11 @@
 import { h } from 'vue';
-import { UBadge } from '#components';
+import { UBadge, UIcon } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
-import type { SummSaleBill } from '~/utils/types/summ-sales';
+import type { SummBillTableRow, SummCountKey, TranslateFn } from './types';
 
-type TranslateFn = (key: string) => string;
-
-export type SaleSummTableRow = Omit<SummSaleBill, 'status'> & {
-	status?: OrderStatus;
-};
-
-type NumericSaleSummColumnKey = keyof Pick<
-	SaleSummTableRow,
+type NumericSummColumnKey = keyof Pick<
+	SummBillTableRow,
 	| 'gross_amt'
 	| 'net_amt'
 	| 'disc_amt'
@@ -21,12 +15,18 @@ type NumericSaleSummColumnKey = keyof Pick<
 	| 'tax_amt_exc'
 	| 'void_amt'
 	| 'adj_amt'
+	| 'total_orders'
 	| 'total_txns'
 	| 'total_qty'
 	| 'total_voided_qty'
 >;
 
-export const SALE_SUMM_COLUMN_LABELS = {
+const SUMM_COUNT_LABELS: Record<SummCountKey, string> = {
+	total_orders: 'table.totalOrders',
+	total_txns: 'table.totalTransactions',
+};
+
+const SUMM_BASE_COLUMN_LABELS = {
 	biz_date: 'table.bizDate',
 	currency_code: 'table.currency',
 	status: 'table.orderStatus',
@@ -39,14 +39,39 @@ export const SALE_SUMM_COLUMN_LABELS = {
 	tax_amt_exc: 'table.taxAmtExc',
 	void_amt: 'table.voidAmt',
 	adj_amt: 'table.adjAmt',
-	total_txns: 'table.totalTransactions',
 	total_qty: 'table.totalItems',
 	total_voided_qty: 'pages.voidedLabel',
-} as const satisfies Record<keyof SummSaleBill, string>;
+} as const;
+
+export function getSummColumnLabels(countKey: SummCountKey) {
+	return {
+		biz_date: SUMM_BASE_COLUMN_LABELS.biz_date,
+		currency_code: SUMM_BASE_COLUMN_LABELS.currency_code,
+		status: SUMM_BASE_COLUMN_LABELS.status,
+		gross_amt: SUMM_BASE_COLUMN_LABELS.gross_amt,
+		net_amt: SUMM_BASE_COLUMN_LABELS.net_amt,
+		disc_amt: SUMM_BASE_COLUMN_LABELS.disc_amt,
+		gross_amt_exc: SUMM_BASE_COLUMN_LABELS.gross_amt_exc,
+		net_amt_exc: SUMM_BASE_COLUMN_LABELS.net_amt_exc,
+		tax_amt_inc: SUMM_BASE_COLUMN_LABELS.tax_amt_inc,
+		tax_amt_exc: SUMM_BASE_COLUMN_LABELS.tax_amt_exc,
+		void_amt: SUMM_BASE_COLUMN_LABELS.void_amt,
+		adj_amt: SUMM_BASE_COLUMN_LABELS.adj_amt,
+		[countKey]: SUMM_COUNT_LABELS[countKey],
+		total_qty: SUMM_BASE_COLUMN_LABELS.total_qty,
+		total_voided_qty: SUMM_BASE_COLUMN_LABELS.total_voided_qty,
+	} as const;
+}
 
 const alignRight = 'text-right tabular-nums';
 
 const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
+const numberCell = (value: number) => h('div', { class: alignRight }, value);
+const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
+const optionalCell = (value?: number) => (value == null ? h('span', { class: 'text-muted' }, '-') : numberCell(value));
+const optionalMoneyCell = (value: number | undefined, currencyCode: string) =>
+	value == null ? h('span', { class: 'text-muted' }, '-') : moneyCell(value, currencyCode);
+
 const statusColors: Partial<Record<OrderStatus, 'success' | 'error' | 'info' | 'warning' | 'neutral'>> = {
 	[OrderStatus.COMPLETED]: 'success',
 	[OrderStatus.CANCELLED]: 'error',
@@ -65,34 +90,31 @@ const statusLabelKeys: Partial<Record<OrderStatus, string>> = {
 	[OrderStatus.REQUIRES_ACTION]: 'options.requiresAction',
 };
 
-const numberCell = (value: number) => h('div', { class: alignRight }, value);
-const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
-const optionalMoneyCell = (value: number | undefined, currencyCode: string) =>
-	value == null ? h('span', { class: 'text-muted' }, '-') : moneyCell(value, currencyCode);
+const sumColumn = (rows: TableRow<SummBillTableRow>[], key: NumericSummColumnKey) => rows.reduce((total, row) => total + (row.original[key] ?? 0), 0);
+const footerCurrency = (rows: TableRow<SummBillTableRow>[]) => rows[0]?.original.currency_code ?? 'MYR';
 
-const sumColumn = (rows: TableRow<SaleSummTableRow>[], key: NumericSaleSummColumnKey) => rows.reduce((total, row) => total + (row.original[key] ?? 0), 0);
-const footerCurrency = (rows: TableRow<SaleSummTableRow>[]) => rows[0]?.original.currency_code ?? 'MYR';
-
-const createNumberColumn = (key: NumericSaleSummColumnKey, label: string): TableColumn<SaleSummTableRow> => ({
+const createNumberColumn = (key: NumericSummColumnKey, label: string, optional = false): TableColumn<SummBillTableRow> => ({
 	accessorKey: key,
 	header: () => headerCell(label, 'right'),
-	cell: ({ row }) => numberCell(row.original[key] ?? 0),
+	cell: ({ row }) => (optional ? optionalCell(row.original[key]) : numberCell(row.original[key] ?? 0)),
 	footer: ({ column }) => numberCell(sumColumn(column.getFacetedRowModel().rows, key)),
 });
 
-const createMoneyColumn = (key: NumericSaleSummColumnKey, label: string): TableColumn<SaleSummTableRow> => ({
+const createMoneyColumn = (key: NumericSummColumnKey, label: string): TableColumn<SummBillTableRow> => ({
 	accessorKey: key,
 	header: () => headerCell(label, 'right'),
 	cell: ({ row }) => optionalMoneyCell(row.original[key], row.original.currency_code),
 	footer: ({ column }) => moneyCell(sumColumn(column.getFacetedRowModel().rows, key), footerCurrency(column.getFacetedRowModel().rows)),
 });
 
-export function getSaleSummColumns(t: TranslateFn): TableColumn<SaleSummTableRow>[] {
+export function getSummColumns(t: TranslateFn, countKey: SummCountKey): TableColumn<SummBillTableRow>[] {
+	const useOptionalNumbers = countKey === 'total_orders';
+
 	return [
 		{
 			accessorKey: 'biz_date',
 			header: () => headerCell(t('table.bizDate')),
-			cell: ({ row }) => h('div', { class: 'font-medium text-default' }, getFormattedDate(new Date(row.original.biz_date))),
+			cell: ({ row }) => h(UBadge, { variant: 'outline', color: 'primary' }, () => getFormattedDate(new Date(row.original.biz_date))),
 			footer: () => h('div', { class: 'font-semibold text-default' }, t('pages.totalLabel')),
 		},
 		{
@@ -120,8 +142,8 @@ export function getSaleSummColumns(t: TranslateFn): TableColumn<SaleSummTableRow
 		createMoneyColumn('tax_amt_exc', t('table.taxAmtExc')),
 		createMoneyColumn('void_amt', t('table.voidAmt')),
 		createMoneyColumn('adj_amt', t('table.adjAmt')),
-		createNumberColumn('total_txns', t('table.totalTransactions')),
-		createNumberColumn('total_qty', t('table.totalItems')),
-		createNumberColumn('total_voided_qty', t('pages.voidedLabel')),
+		createNumberColumn(countKey, t(SUMM_COUNT_LABELS[countKey]), useOptionalNumbers),
+		createNumberColumn('total_qty', t('table.totalItems'), useOptionalNumbers),
+		createNumberColumn('total_voided_qty', t('pages.voidedLabel'), useOptionalNumbers),
 	];
 }

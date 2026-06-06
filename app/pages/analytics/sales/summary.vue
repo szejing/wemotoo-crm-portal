@@ -48,8 +48,8 @@
 
 <script lang="ts" setup>
 import { options_page_size } from '~/utils/options';
-import { getSaleSummColumns, SALE_SUMM_COLUMN_LABELS } from '~/utils/table-columns';
-import type { SaleSummTableRow } from '~/utils/table-columns';
+import { getSummColumns, getSummColumnLabels } from '~/utils/table-columns';
+import type { SummBillTableRow } from '~/utils/table-columns';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 
 const route = useRoute();
@@ -99,13 +99,13 @@ const current_page = computed({
 	},
 });
 
-const saleSummColumns = computed(() => getSaleSummColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_COLUMN_LABELS));
+const saleSummColumns = computed(() => getSummColumns(t, 'total_txns'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummColumnLabels('total_txns')));
 const { selectedColumnKeys, visibleColumns: visibleDailyColumns } = useTableColumnVisibility(saleSummColumns, columnOptions, {
 	defaultHiddenKeys: ['currency_code', 'total_voided_qty'],
 });
 
-const dailyRows = computed<SaleSummTableRow[]>(() => {
+const dailyRows = computed<SummBillTableRow[]>(() => {
 	const grouped: { [key: string]: (typeof data.value)[0][] } = {};
 
 	data.value.forEach((item) => {

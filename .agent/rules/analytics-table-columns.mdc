@@ -1,0 +1,72 @@
+---
+description: Extract analytics UTable column definitions to app/utils/table-columns/analytics/
+globs: app/pages/analytics/**/*.vue, app/utils/table-columns/analytics/**/*.ts
+alwaysApply: false
+---
+
+# Analytics Table Columns
+
+Analytics pages under `app/pages/analytics/` must **not** define UTable column configs inline. Keep pages thin: data loading, grouping, pagination, and visibility wiring only.
+
+## Folder Layout
+
+All analytics column modules live under `app/utils/table-columns/analytics/`:
+
+```
+app/utils/table-columns/analytics/
+├── types.ts           # SummBillTableRow, SummItemRow, SummCountKey, SummCustomerVariant
+├── summ.ts            # daily bill summary (orders + sales)
+├── summ-item.ts       # item breakdown (orders + sales)
+├── summ-customer.ts   # customer breakdown (orders + sales)
+└── summ-payment.ts    # payment breakdown (sales only)
+```
+
+Do **not** split by order vs sale folders. Share one module per report shape; pass options when order/sale field names differ.
+
+## Page → Module Mapping
+
+| Analytics page | Column module | Options |
+|----------------|---------------|---------|
+| `orders/summary.vue`, `sales/summary.vue` | `summ.ts` | `countKey: 'total_orders' \| 'total_txns'` |
+| `orders/items.vue`, `sales/items.vue` | `summ-item.ts` | `countKey: 'total_orders' \| 'total_txns'` |
+| `orders/customers.vue`, `sales/customers.vue` | `summ-customer.ts` | `variant: 'order' \| 'sale'` |
+| `sales/payments.vue` | `summ-payment.ts` | none |
+
+## Module Contract
+
+Each analytics column module exports:
+
+1. **`get*Columns(t, options?)`** — returns `TableColumn<RowType>[]`; accepts i18n `t`.
+2. **`get*ColumnLabels(options?)`** or **`*_COLUMN_LABELS`** — label map for column visibility; keys must match column `accessorKey`.
+3. **Row types** in `types.ts` when aggregated rows differ from API DTOs.
+
+Re-export from `app/utils/table-columns/index.ts`.
+
+## Page Pattern
+
+```vue
+<script lang="ts" setup>
+import { getSummItemColumns, getSummItemColumnLabels } from '~/utils/table-columns';
+import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
+
+const { t } = useI18n();
+const countKey = 'total_orders'; // or 'total_txns' on sales pages
+const columns = computed(() => getSummItemColumns(t, countKey));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummItemColumnLabels(countKey)));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(columns, columnOptions);
+</script>
+```
+
+## Column Module Rules
+
+- Use `h()` render functions for cells, headers, and footers; import UI pieces (`UBadge`) from `#components`.
+- Keep helpers inside the column module, not in pages.
+- Use `wemotoo-common` for `formatCurrency`, `getFormattedDate`, enums.
+- Do **not** call stores, composables, or API from column modules.
+- Add or update unit tests in `test/unit/analytics-*-columns.spec.ts` when changing accessor keys or label maps.
+
+## Anti-Patterns
+
+- ❌ Separate `order-summ/` and `sale-summ/` folders with duplicated column logic
+- ❌ Defining `TableColumn[]` or cell renderers in analytics pages
+- ❌ Inline label maps in pages when the column module owns those keys

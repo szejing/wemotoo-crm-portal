@@ -1,17 +1,55 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { formatCurrency, OrderItemStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
-import type { SummSaleItem } from '~/utils/types/summ-sales';
 import { getSortableHeader } from '../sortable';
+import type { SummCountKey, SummItemRow, TranslateFn } from './types';
 
-type TranslateFn = (key: string) => string;
+const SUMM_ITEM_COUNT_LABELS: Record<SummCountKey, string> = {
+	total_orders: 'table.totalOrders',
+	total_txns: 'table.totalTxns',
+};
+
+const SUMM_ITEM_BASE_COLUMN_LABELS = {
+	prod_name: 'table.codeAndName',
+	prod_variant_code: 'table.prodVariantCode',
+	item_status: 'table.itemStatus',
+	total_qty: 'table.qty',
+	gross_amt: 'table.grossAmt',
+	disc_amt: 'table.discountAmt',
+	net_amt: 'table.netAmt',
+	gross_amt_exc: 'table.grossAmtExc',
+	disc_amt_exc: 'table.discAmtExc',
+	net_amt_exc: 'table.netAmtExc',
+	tax_amt_inc: 'table.taxAmtInc',
+	tax_amt_exc: 'table.taxAmtExc',
+	adj_amt: 'table.adjAmt',
+} as const;
+
+export function getSummItemColumnLabels(countKey: SummCountKey) {
+	return {
+		prod_name: SUMM_ITEM_BASE_COLUMN_LABELS.prod_name,
+		prod_variant_code: SUMM_ITEM_BASE_COLUMN_LABELS.prod_variant_code,
+		item_status: SUMM_ITEM_BASE_COLUMN_LABELS.item_status,
+		[countKey]: SUMM_ITEM_COUNT_LABELS[countKey],
+		total_qty: SUMM_ITEM_BASE_COLUMN_LABELS.total_qty,
+		gross_amt: SUMM_ITEM_BASE_COLUMN_LABELS.gross_amt,
+		disc_amt: SUMM_ITEM_BASE_COLUMN_LABELS.disc_amt,
+		net_amt: SUMM_ITEM_BASE_COLUMN_LABELS.net_amt,
+		gross_amt_exc: SUMM_ITEM_BASE_COLUMN_LABELS.gross_amt_exc,
+		disc_amt_exc: SUMM_ITEM_BASE_COLUMN_LABELS.disc_amt_exc,
+		net_amt_exc: SUMM_ITEM_BASE_COLUMN_LABELS.net_amt_exc,
+		tax_amt_inc: SUMM_ITEM_BASE_COLUMN_LABELS.tax_amt_inc,
+		tax_amt_exc: SUMM_ITEM_BASE_COLUMN_LABELS.tax_amt_exc,
+		adj_amt: SUMM_ITEM_BASE_COLUMN_LABELS.adj_amt,
+	} as const;
+}
 
 type MoneyKey = keyof Pick<
-	SummSaleItem,
+	SummItemRow,
 	'gross_amt' | 'disc_amt' | 'net_amt' | 'gross_amt_exc' | 'disc_amt_exc' | 'net_amt_exc' | 'tax_amt_inc' | 'tax_amt_exc' | 'adj_amt'
 >;
 
-const sumMoneyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<SummSaleItem>[] } }, key: MoneyKey) => {
+const sumMoneyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<SummItemRow>[] } }, key: MoneyKey) => {
 	const rows = column.getFacetedRowModel().rows;
 	const total = rows.reduce((acc, row) => {
 		const v = row.original[key];
@@ -21,12 +59,12 @@ const sumMoneyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<Sum
 	return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, cc))]);
 };
 
-const optionalMoneyCell = (row: SummSaleItem, value: number | undefined) => {
+const optionalMoneyCell = (row: SummItemRow, value: number | undefined) => {
 	if (value == null) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
 	return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(value, row.currency_code ?? 'MYR'))]);
 };
 
-export const getSaleSummItemColumns = (t: TranslateFn): TableColumn<SummSaleItem>[] => {
+export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countKey: SummCountKey): TableColumn<T>[] {
 	return [
 		{
 			accessorKey: 'prod_name',
@@ -65,13 +103,6 @@ export const getSaleSummItemColumns = (t: TranslateFn): TableColumn<SummSaleItem
 				return h('p', { class: 'font-mono text-sm text-neutral-800 dark:text-neutral-200' }, code);
 			},
 		},
-		// {
-		// 	accessorKey: 'currency_code',
-		// 	header: ({ column }) => getSortableHeader(column, t('table.currency')),
-		// 	cell: ({ row }) => {
-		// 		return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.original.currency_code)]);
-		// 	},
-		// },
 		{
 			accessorKey: 'item_status',
 			header: ({ column }) => getSortableHeader(column, t('table.itemStatus')),
@@ -92,22 +123,22 @@ export const getSaleSummItemColumns = (t: TranslateFn): TableColumn<SummSaleItem
 			},
 		},
 		{
-			accessorKey: 'total_txns',
-			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),
+			accessorKey: countKey,
+			header: ({ column }) => getSortableHeader(column, t(SUMM_ITEM_COUNT_LABELS[countKey])),
 			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleItem>) => acc + row.original.total_txns, 0);
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummItemRow>) => acc + (row.original[countKey] ?? 0), 0);
 
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
 			},
 			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_txns)]);
+				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original[countKey] ?? 0)]);
 			},
 		},
 		{
 			accessorKey: 'total_qty',
 			header: ({ column }) => getSortableHeader(column, t('table.qty')),
 			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSaleItem>) => acc + row.original.total_qty, 0);
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummItemRow>) => acc + row.original.total_qty, 0);
 
 				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
 			},
@@ -169,5 +200,5 @@ export const getSaleSummItemColumns = (t: TranslateFn): TableColumn<SummSaleItem
 			footer: ({ column }) => sumMoneyFooter(column, 'adj_amt'),
 			cell: ({ row }) => optionalMoneyCell(row.original, row.original.adj_amt),
 		},
-	];
-};
+	] as TableColumn<T>[];
+}

@@ -4,15 +4,7 @@
 			<ZSectionFilterOrderSummItems />
 		</template>
 
-		<!-- Empty State -->
-		<div v-if="!is_loading && groupedByDate.length === 0" class="flex flex-col items-center justify-center py-12 gap-3">
-			<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-			<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderItemSummaryFound') }}</p>
-			<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-		</div>
-
-		<!-- Grouped by Date -->
-		<div v-else class="mt-4 space-y-6">
+		<div class="space-y-6">
 			<ZTableToolbar
 				v-model="order_summ_item.page_size"
 				v-model:selected-column-keys="selectedColumnKeys"
@@ -24,91 +16,72 @@
 				@export="exportToCsv"
 			/>
 
-			<UCard class="overflow-hidden">
-				<div v-for="(group, index) in groupedByDate" :key="group.date" class="mt-4">
-					<!-- Date Header -->
-					<div class="bg-linear-to-r from-primary/5 to-primary/10 border-l-4 border-primary px-6 py-4" :class="{ 'border-t border-neutral-200': index > 0 }">
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-4">
-								<h3 class="text-lg font-bold text-neutral-900">{{ getFormattedDate(new Date(group.date)) }}</h3>
-								<div class="flex items-center gap-3 text-sm">
-									<div class="flex items-center gap-1.5 text-neutral-600">
-										<Icon name="i-heroicons-shopping-cart" class="text-base" />
-										<span class="font-medium">{{ group.total_orders }} {{ $t('pages.ordersLabel') }}</span>
-									</div>
-									<div class="h-4 w-px bg-neutral-300"></div>
-									<div class="flex items-center gap-1.5 text-green-600">
-										<Icon name="i-heroicons-cube" class="text-base" />
-										<span class="font-medium">{{ group.active_qty }} {{ $t('pages.itemsLabel') }}</span>
-									</div>
-									<div v-if="group.voided_qty > 0" class="h-4 w-px bg-neutral-300"></div>
-									<div v-if="group.voided_qty > 0" class="flex items-center gap-1.5 text-red-600">
-										<Icon name="i-heroicons-x-circle" class="text-base" />
-										<span class="font-medium">{{ group.voided_qty }} {{ $t('pages.voidedLabel') }}</span>
-									</div>
-								</div>
-							</div>
-							<div class="flex items-center gap-2 text-sm font-semibold text-primary">
-								<span>{{ $t('pages.totalLabel') }}: {{ formatCurrency(group.net_amt, group.currency_code) }}</span>
-							</div>
+			<UCard v-if="groupedByDate.length === 0" class="overflow-hidden">
+				<UTable :data="[]" :columns="visibleColumns" :loading="is_loading" :ui="orderItemTableUi">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrderItemSummaryFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
-					</div>
-
-					<!-- Items Table -->
-					<div class="px-6 pb-6 pt-4">
-						<UTable
-							:data="group.items"
-							:columns="visibleColumns"
-							:ui="{
-								root: 'relative overflow-auto',
-								base: 'table-fixed',
-								tbody: 'divide-y divide-gray-200',
-							}"
-						/>
-					</div>
-				</div>
+					</template>
+				</UTable>
 			</UCard>
-		</div>
 
-		<!-- Pagination -->
-		<div v-if="data.length > 0" class="mt-6 flex justify-center">
-			<UPagination v-model="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
+			<UCard
+				v-for="group in groupedByDate"
+				:key="group.date"
+				class="overflow-hidden"
+				:ui="{
+					header: 'bg-elevated/40 px-4 py-3 sm:px-6',
+					body: 'p-0 sm:p-0',
+				}"
+			>
+				<template #header>
+					<ZAnalyticsItemDateSummary
+						:date="group.date"
+						:primary-count="group.total_orders"
+						:primary-stat-label="$t('table.totalOrders')"
+						:active-qty="group.active_qty"
+						:voided-qty="group.voided_qty"
+						:net-amt="group.net_amt"
+						:currency-code="group.currency_code"
+					/>
+				</template>
+
+				<UTable :data="group.items" :columns="visibleColumns" :loading="is_loading" :ui="orderItemTableUi" />
+			</UCard>
+
+			<div v-if="data.length > 0" class="flex justify-center">
+				<UPagination v-model="current_page" :items-per-page="order_summ_item.page_size" :total="order_summ_item.total_data" @update:page="updatePage" />
+			</div>
 		</div>
 	</ZPagePanel>
 </template>
 
 <script lang="ts" setup>
-import { OrderItemStatus, getFormattedDate, formatCurrency, OrderStatus } from 'wemotoo-common';
-import { getOrderSummItemColumns } from '~/utils/table-columns';
+import { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import { getSummItemColumns, getSummItemColumnLabels } from '~/utils/table-columns';
+import type { SummOrderItem } from '~/utils/types/summ-orders';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
 const route = useRoute();
-const ORDER_SUMM_ITEM_COLUMN_LABELS = {
-	prod_name: 'table.codeAndName',
-	prod_variant_code: 'table.prodVariantCode',
-	item_status: 'table.itemStatus',
-	total_orders: 'table.totalOrders',
-	total_qty: 'table.qty',
-	gross_amt: 'table.grossAmt',
-	disc_amt: 'table.discountAmt',
-	net_amt: 'table.netAmt',
-	gross_amt_exc: 'table.grossAmtExc',
-	disc_amt_exc: 'table.discAmtExc',
-	net_amt_exc: 'table.netAmtExc',
-	tax_amt_inc: 'table.taxAmtInc',
-	tax_amt_exc: 'table.taxAmtExc',
-	adj_amt: 'table.adjAmt',
-} as const;
-
 const { t } = useI18n();
-const order_summ_item_columns = computed(() => getOrderSummItemColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, ORDER_SUMM_ITEM_COLUMN_LABELS));
-const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(order_summ_item_columns, columnOptions);
+const summ_item_columns = computed(() => getSummItemColumns<SummOrderItem>(t, 'total_orders'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummItemColumnLabels('total_orders')));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(summ_item_columns, columnOptions);
 useHead({ title: () => t('pages.orderItemSummary') });
 
 const orderSummStore = useSummOrderStore();
 const { order_summ_item } = storeToRefs(orderSummStore);
+const orderItemTableUi = {
+	root: 'relative overflow-auto',
+	base: 'min-w-[1180px]',
+	th: 'whitespace-nowrap',
+	td: 'whitespace-nowrap',
+	tfoot: 'bg-elevated/50 border-t border-default',
+} as const;
 
 const VALID_ORDER_STATUSES = new Set(Object.values(OrderStatus));
 
@@ -146,7 +119,12 @@ watch(
 	},
 	{ deep: true },
 );
-const current_page = computed(() => order_summ_item.value.current_page);
+const current_page = computed({
+	get: () => order_summ_item.value.current_page,
+	set: (page: number) => {
+		order_summ_item.value.current_page = page;
+	},
+});
 
 const is_loading = computed(() => order_summ_item.value.loading);
 const data = computed(() => order_summ_item.value.data);
@@ -213,12 +191,31 @@ const exportToCsv = async () => {
 }
 
 :deep(table) {
-	table-layout: auto;
-	min-width: 100%;
+	table-layout: fixed;
 }
 
-:deep(th:first-child),
-:deep(td:first-child) {
-	min-width: 14rem;
+:deep(th:nth-child(1)),
+:deep(td:nth-child(1)) {
+	width: 30%;
+}
+
+:deep(th:nth-child(2)),
+:deep(td:nth-child(2)) {
+	width: 18%;
+}
+
+:deep(th:nth-child(3)),
+:deep(td:nth-child(3)) {
+	width: 17%;
+}
+
+:deep(th:nth-child(4)),
+:deep(td:nth-child(4)) {
+	width: 17%;
+}
+
+:deep(th:nth-child(5)),
+:deep(td:nth-child(5)) {
+	width: 18%;
 }
 </style>

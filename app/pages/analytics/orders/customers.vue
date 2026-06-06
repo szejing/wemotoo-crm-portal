@@ -46,22 +46,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getOrderSummCustomerColumns } from '~/utils/table-columns';
+import { getSummCustomerColumns, getSummCustomerColumnLabels } from '~/utils/table-columns';
+import type { SummOrderCustomer } from '~/utils/types/summ-orders';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
-const ORDER_SUMM_CUSTOMER_COLUMN_LABELS = {
-	biz_date: 'table.date',
-	customer: 'table.customer',
-	status: 'table.orderStatus',
-	gross_amt: 'table.grossAmt',
-	net_amt: 'table.netAmt',
-} as const;
-
 const { t } = useI18n();
-const order_summ_customer_columns = computed(() => getOrderSummCustomerColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, ORDER_SUMM_CUSTOMER_COLUMN_LABELS));
-const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(order_summ_customer_columns, columnOptions);
+const summ_customer_columns = computed(() => getSummCustomerColumns<SummOrderCustomer>(t, 'order'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummCustomerColumnLabels('order')));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(summ_customer_columns, columnOptions);
 useHead({ title: () => t('pages.orderCustomerSummary') });
 
 onMounted(async () => {

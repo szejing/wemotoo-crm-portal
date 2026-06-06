@@ -3,18 +3,35 @@ import type { TableColumn, TableRow } from '@nuxt/ui';
 import { formatCurrency, OrderStatus } from 'wemotoo-common';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
 import { getSortableHeader } from '../sortable';
+import type { TranslateFn } from './types';
 
-type TranslateFn = (key: string) => string;
+const statusColors: Partial<Record<OrderStatus, 'success' | 'error' | 'info' | 'warning'>> = {
+	[OrderStatus.COMPLETED]: 'success',
+	[OrderStatus.CANCELLED]: 'error',
+	[OrderStatus.REFUNDED]: 'error',
+	[OrderStatus.PENDING_PAYMENT]: 'info',
+	[OrderStatus.PROCESSING]: 'info',
+	[OrderStatus.REQUIRES_ACTION]: 'warning',
+};
 
-export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSalePayment>[] {
+const statusLabelKeys: Partial<Record<OrderStatus, string>> = {
+	[OrderStatus.COMPLETED]: 'options.completed',
+	[OrderStatus.CANCELLED]: 'options.cancelled',
+	[OrderStatus.REFUNDED]: 'options.refunded',
+	[OrderStatus.PENDING_PAYMENT]: 'options.pendingPayment',
+	[OrderStatus.PROCESSING]: 'options.processing',
+	[OrderStatus.REQUIRES_ACTION]: 'options.requiresAction',
+};
+
+export const SUMM_PAYMENT_COLUMN_LABELS = {
+	payment_type_desc: 'table.desc',
+	status: 'table.orderStatus',
+	payment_amt: 'table.paymentAmt',
+	total_txns: 'table.totalTxns',
+} as const;
+
+export function getSummPaymentColumns(t: TranslateFn): TableColumn<SummSalePayment>[] {
 	return [
-		// {
-		// 	accessorKey: 'currency_code',
-		// 	header: ({ column }) => getSortableHeader(column, t('table.currency')),
-		// 	cell: ({ row }) => {
-		// 		return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('currency_code'))]);
-		// 	},
-		// },
 		{
 			accessorKey: 'payment_type_desc',
 			header: ({ column }) => getSortableHeader(column, t('table.desc')),
@@ -26,28 +43,13 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 			accessorKey: 'status',
 			header: ({ column }) => getSortableHeader(column, t('table.orderStatus')),
 			cell: ({ row }) => {
-				const color = {
-					[OrderStatus.COMPLETED]: 'success' as const,
-					[OrderStatus.CANCELLED]: 'error' as const,
-					[OrderStatus.REFUNDED]: 'error' as const,
-					[OrderStatus.PENDING_PAYMENT]: 'info' as const,
-					[OrderStatus.PROCESSING]: 'info' as const,
-					[OrderStatus.REQUIRES_ACTION]: 'warning' as const,
-				}[row.original.status as OrderStatus];
+				const status = row.original.status as OrderStatus;
+				const color = statusColors[status];
+				const labelKey = statusLabelKeys[status];
 
-				const value = {
-					[OrderStatus.COMPLETED]: t('options.completed'),
-					[OrderStatus.CANCELLED]: t('options.cancelled'),
-					[OrderStatus.REFUNDED]: t('options.refunded'),
-					[OrderStatus.PENDING_PAYMENT]: t('options.pendingPayment'),
-					[OrderStatus.PROCESSING]: t('options.processing'),
-					[OrderStatus.REQUIRES_ACTION]: t('options.requiresAction'),
-				}[row.original.status as OrderStatus];
-
-				return h(UBadge, { variant: 'subtle', color }, () => value);
+				return h(UBadge, { variant: 'subtle', color }, () => (labelKey ? t(labelKey) : status));
 			},
 		},
-
 		{
 			accessorKey: 'payment_amt',
 			header: ({ column }) => getSortableHeader(column, t('table.paymentAmt')),
@@ -69,7 +71,6 @@ export function getSaleSummPaymentColumns(t: TranslateFn): TableColumn<SummSaleP
 				]);
 			},
 		},
-
 		{
 			accessorKey: 'total_txns',
 			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),

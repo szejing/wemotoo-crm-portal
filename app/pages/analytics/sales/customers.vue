@@ -45,24 +45,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getSaleSummCustomerColumns } from '~/utils/table-columns';
+import { getSummCustomerColumns, getSummCustomerColumnLabels } from '~/utils/table-columns';
+import type { SummSaleCustomer } from '~/utils/types/summ-sales';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';
 
-const SALE_SUMM_CUSTOMER_COLUMN_LABELS = {
-	biz_date: 'table.date',
-	customer: 'table.customer',
-	status: 'table.status',
-	total_txns: 'table.totalTxns',
-	total_qty: 'table.totalQty',
-	gross_amt: 'table.grossAmt',
-	net_amt: 'table.netAmt',
-} as const;
-
 const { t } = useI18n();
-const sale_summ_customer_columns = computed(() => getSaleSummCustomerColumns(t));
-const columnOptions = computed(() => columnOptionsFromLabelMap(t, SALE_SUMM_CUSTOMER_COLUMN_LABELS));
-const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(sale_summ_customer_columns, columnOptions);
+const summ_customer_columns = computed(() => getSummCustomerColumns<SummSaleCustomer>(t, 'sale'));
+const columnOptions = computed(() => columnOptionsFromLabelMap(t, getSummCustomerColumnLabels('sale')));
+const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(summ_customer_columns, columnOptions);
 useHead({ title: () => t('pages.saleCustomerSummary') });
 
 onMounted(async () => {
