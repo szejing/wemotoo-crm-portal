@@ -1,5 +1,6 @@
-import HttpFactory from '../../factory';
-import MerchantRoutes from '../../routes.client';
+import HttpFactory from '~/repository/factory';
+import MerchantRoutes from '~/repository/routes.client';
+import type { BaseODataReq } from '~/repository/base/base.req';
 import type {
 	NotificationItemResp,
 	NotificationResp,
@@ -8,11 +9,11 @@ import type {
 class NotificationModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Notifications;
 
-	async getMany(options: { includeRead?: boolean } = {}): Promise<NotificationResp> {
+	async getMany(query: BaseODataReq = {}): Promise<NotificationResp> {
 		return await this.call<NotificationResp>({
 			method: 'GET',
 			url: `${this.RESOURCE.Many()}`,
-			query: options.includeRead ? { include_read: true } : undefined,
+			query,
 		});
 	}
 

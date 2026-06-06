@@ -33,6 +33,7 @@ import CurrencyModule from './currency/currency';
 import CustomerModule from './customer/customer';
 import ImageModule from './image/image';
 import MerchantInfoModule from './merchant-info/merchant-info';
+import NotificationModule from './notification/notification';
 import OrderModule from './order/order';
 import OutletModule from './outlets/outlet';
 import PaymentMethodModule from './payment-method/payment-method';
@@ -553,6 +554,17 @@ describe('CurrencyModule', () => {
 		const mod = new CurrencyModule();
 		await mod.getCurrencies(odata);
 		expect(lastFetch().url).toBe(MerchantRoutes.Currencies.Many());
+		expect(lastFetch().opts.query).toEqual(odata);
+	});
+});
+
+describe('NotificationModule', () => {
+	const mod = new NotificationModule();
+
+	it('getMany forwards OData query', async () => {
+		await mod.getMany(odata);
+		expect(lastFetch().url).toBe(MerchantRoutes.Notifications.Many());
+		expect(lastFetch().opts.method).toBe('GET');
 		expect(lastFetch().opts.query).toEqual(odata);
 	});
 });

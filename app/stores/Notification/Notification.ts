@@ -6,7 +6,12 @@ import type {
 	NotificationCenter,
 	NotificationItem,
 } from '~/utils/types/notification';
+import type { BaseODataReq } from '~/repository/base/base.req';
 import type { NotificationType } from 'wemotoo-common';
+
+type NotificationQueryOptions = BaseODataReq & {
+	includeRead?: boolean;
+};
 
 export const useNotificationStore = defineStore('notificationStore', {
 	state: () => ({
@@ -43,17 +48,18 @@ export const useNotificationStore = defineStore('notificationStore', {
 			),
 	},
 	actions: {
-		async getNotifications(options: { includeRead?: boolean } = {}): Promise<void> {
+		async getNotifications(options: NotificationQueryOptions = {}): Promise<void> {
 			this.loading = true;
 			const { $api } = useNuxtApp();
 			try {
-				const data = await $api.notification.getMany(options);
+				const { includeRead, ...query } = options;
+				const data = await $api.notification.getMany(query);
 
 				this.total_count = data.total_count ?? 0;
 				this.generated_at = data.generated_at;
-				const decorated = this.decorateNotifications(data.notifications ?? []);
+				const decorated = this.decorateNotifications(data.data ?? []);
 
-				if (options.includeRead) {
+				if (includeRead) {
 					this.all_notifications = decorated;
 				} else {
 					this.notifications = decorated;
