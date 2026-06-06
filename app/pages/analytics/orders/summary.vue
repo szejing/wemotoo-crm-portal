@@ -16,7 +16,7 @@
 				@export="orderSummStore.exportOrderSummary"
 			/>
 
-			<UCard class="overflow-hidden">
+			<UCard class="overflow-hidden" :ui="{ body: 'p-0 sm:p-0' }">
 				<UTable
 					:data="dailyRows"
 					:columns="visibleDailyColumns"

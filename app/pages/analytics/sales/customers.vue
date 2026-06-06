@@ -5,39 +5,30 @@
 		</template>
 
 		<div class="space-y-6">
-			<div v-if="!loading && data.length == 0">
-				<div class="flex flex-col items-center justify-center py-6">
-					<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
-					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesCustomerSummaryFound') }}</p>
-					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-				</div>
-			</div>
+			<ZTableToolbar
+				v-model="sale_summ_customer.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="sale_summ_customer.exporting"
+				:column-options="columnOptions"
+				@update:model-value="updatePageSize"
+				@export="saleSummStore.exportSaleCustomerSummary"
+			/>
 
-			<div v-else>
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="sale_summ_customer.page_size"
-					v-model:selected-column-keys="selectedColumnKeys"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="sale_summ_customer.exporting"
-					:column-options="columnOptions"
-					@update:model-value="updatePageSize"
-					@export="saleSummStore.exportSaleCustomerSummary"
-				/>
-
-				<UTable :data="data" :columns="visibleColumns" :loading="loading" class="mt-4">
+			<UCard class="w-full overflow-hidden" :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable :data="data" :columns="visibleColumns" :loading="loading" :ui="saleCustomerTableUi">
 					<template #empty>
-						<div class="flex flex-col items-center justify-center py-6">
-							<UIcon name="i-heroicons-inbox" class="w-12 h-12 text-gray-400" />
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.REPORT_SALES" class="w-12 h-12 text-gray-400" />
 							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noSalesCustomerSummaryFound') }}</p>
 							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
-			</div>
+			</UCard>
 
-			<div v-if="sale_summ_customer.data.length > 0" class="section-pagination">
+			<div v-if="data.length > 0" class="flex justify-center">
 				<UPagination v-model="current_page" :items-per-page="sale_summ_customer.page_size" :total="sale_summ_customer.total_data" @update:page="updatePage" />
 			</div>
 		</div>
@@ -62,6 +53,14 @@ onMounted(async () => {
 
 const saleSummStore = useSummSaleStore();
 const { sale_summ_customer, loading } = storeToRefs(saleSummStore);
+const saleCustomerTableUi = {
+	root: 'relative w-full overflow-auto',
+	base: 'w-full',
+	th: 'whitespace-nowrap',
+	td: 'whitespace-nowrap',
+	tfoot: 'bg-elevated/50 border-t border-default',
+} as const;
+
 const data = computed(() => sale_summ_customer.value.data);
 const current_page = computed(() => sale_summ_customer.value.current_page);
 
@@ -83,9 +82,11 @@ const updatePageSize = async (size: number) => {
 </script>
 
 <style scoped>
-/* `tr:last-child` would wrongly match the last tbody row; footer lives in tfoot */
 :deep(tfoot tr) {
-	background-color: rgb(249 250 251);
-	border-top: 2px solid rgb(209 213 219);
+	font-weight: 600;
+}
+
+:deep(table) {
+	width: 100%;
 }
 </style>

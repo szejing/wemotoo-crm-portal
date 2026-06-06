@@ -5,40 +5,30 @@
 		</template>
 
 		<div class="space-y-6">
-			<div v-if="!is_loading && data.length == 0">
-				<div class="flex flex-col items-center justify-center py-6">
-					<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
-					<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
-					<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-				</div>
-			</div>
+			<ZTableToolbar
+				v-model="order_summ_customer.page_size"
+				v-model:selected-column-keys="selectedColumnKeys"
+				:page-size-options="options_page_size"
+				:export-enabled="true"
+				:exporting="order_summ_customer.exporting"
+				:column-options="columnOptions"
+				@update:model-value="updatePageSize"
+				@export="exportOrderCustomerSummaryToCsv"
+			/>
 
-			<div v-else>
-				<!-- Table Controls -->
-				<ZTableToolbar
-					v-model="order_summ_customer.page_size"
-					v-model:selected-column-keys="selectedColumnKeys"
-					:page-size-options="options_page_size"
-					:export-enabled="true"
-					:exporting="order_summ_customer.exporting"
-					:column-options="columnOptions"
-					@update:model-value="updatePageSize"
-					@export="exportOrderCustomerSummaryToCsv"
-				/>
-
-				<!-- Table -->
-				<UTable :data="data" :columns="visibleColumns" :loading="is_loading" class="mt-4">
+			<UCard class="w-full overflow-hidden" :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable :data="data" :columns="visibleColumns" :loading="is_loading" :ui="orderCustomerTableUi">
 					<template #empty>
 						<div class="flex flex-col items-center justify-center py-12 gap-3">
-							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
+							<UIcon :name="ICONS.REPORT_ORDER" class="w-12 h-12 text-gray-400" />
 							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noDataFound') }}</p>
 							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
 						</div>
 					</template>
 				</UTable>
-			</div>
+			</UCard>
 
-			<div v-if="order_summ_customer.data.length > 0" class="section-pagination">
+			<div v-if="data.length > 0" class="flex justify-center">
 				<UPagination v-model="current_page" :items-per-page="order_summ_customer.page_size" :total="order_summ_customer.total_data" @update:page="updatePage" />
 			</div>
 		</div>
@@ -63,6 +53,13 @@ onMounted(async () => {
 
 const orderSummStore = useSummOrderStore();
 const { order_summ_customer } = storeToRefs(orderSummStore);
+const orderCustomerTableUi = {
+	root: 'relative w-full overflow-auto',
+	base: 'w-full',
+	th: 'whitespace-nowrap',
+	td: 'whitespace-nowrap',
+	tfoot: 'bg-elevated/50 border-t border-default',
+} as const;
 
 const is_loading = computed(() => order_summ_customer.value.loading);
 const data = computed(() => order_summ_customer.value.data);
@@ -83,9 +80,11 @@ const exportOrderCustomerSummaryToCsv = async () => {
 </script>
 
 <style scoped>
-/* `tr:last-child` would wrongly match the last tbody row; footer lives in tfoot */
 :deep(tfoot tr) {
-	background-color: rgb(249 250 251);
-	border-top: 2px solid rgb(209 213 219);
+	font-weight: 600;
+}
+
+:deep(table) {
+	width: 100%;
 }
 </style>
