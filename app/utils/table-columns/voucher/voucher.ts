@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Voucher } from '~/utils/types/voucher';
 import { useVoucherStore } from '~/stores/voucher/voucher';
 import { getSortableHeader } from '../sortable';
+import { headerCell, mutedCell, tableCellMeta } from '../styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -13,35 +14,36 @@ export function getVoucherColumns(t: TranslateFn): TableColumn<Voucher>[] {
 			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
-					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
-					h('h5', { class: 'text-neutral-400' }, row.original.description),
+					h('p', { class: 'font-semibold text-highlighted' }, row.original.code),
+					h('p', { class: 'text-sm text-muted' }, row.original.description),
 				]);
 			},
 		},
 		{
 			accessorKey: 'discount_code',
-			header: t('table.linkedDiscount'),
+			header: () => headerCell(t('table.linkedDiscount')),
 			cell: ({ row }) => {
 				const code = row.original.discount.code;
-				if (!code) return '—';
+				if (!code) return mutedCell();
 				return h(UBadge, { variant: 'subtle', color: 'info', size: 'md' }, () => code);
 			},
 		},
 		{
 			accessorKey: 'usage_count',
-			header: t('table.usage'),
+			header: () => headerCell(t('table.usage'), 'right'),
 			cell: ({ row }) => {
 				const limit = row.original.usage_limit;
 				const count = row.original.usage_count || 0;
 				if (limit) {
-					return h('span', {}, `${count} / ${limit}`);
+					return h('span', { class: 'text-sm text-default tabular-nums' }, `${count} / ${limit}`);
 				}
-				return h('span', {}, `${count} (∞)`);
+				return h('span', { class: 'text-sm text-default tabular-nums' }, `${count} (∞)`);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'status',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
+			header: () => headerCell(t('table.active')),
 			cell: ({ row }) => {
 				const voucherStore = useNuxtApp().$pinia ? useVoucherStore() : null;
 				const isActive = !row.original.is_disabled;

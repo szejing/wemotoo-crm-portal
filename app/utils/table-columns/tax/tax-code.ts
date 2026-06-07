@@ -2,6 +2,7 @@ import { UBadge, USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { Tax } from '~/utils/types/tax';
 import { getSortableHeader } from '../sortable';
+import { headerCell } from '../styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -12,14 +13,14 @@ export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
 				return h('div', { class: 'flex flex-col gap-1' }, [
-					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
-					h('h5', { class: 'text-neutral-400' }, row.original.description),
+					h('p', { class: 'font-semibold text-highlighted' }, row.original.code),
+					h('p', { class: 'text-sm text-muted' }, row.original.description),
 				]);
 			},
 		},
 		{
 			accessorKey: 'type',
-			header: t('table.taxType'),
+			header: () => headerCell(t('table.taxType')),
 			cell: ({ row }) => {
 				return h(UBadge, { color: row.original.is_inclusive ? 'primary' : 'warning', variant: 'subtle' }, () =>
 					row.original.is_inclusive ? t('table.inclusive') : t('table.exclusive'),
@@ -28,7 +29,7 @@ export function getTaxCodeColumns(t: TranslateFn): TableColumn<Tax>[] {
 		},
 		{
 			accessorKey: 'is_active',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
+			header: () => headerCell(t('table.active')),
 			cell: ({ row }) => {
 				const taxStore = useTaxStore();
 				return h(USwitch, {

@@ -2,6 +2,7 @@ import type { TableColumn } from '@nuxt/ui';
 import { UBadge, UButton } from '#components';
 import type { Category } from '~/utils/types/category';
 import { getSortableHeader } from './sortable';
+import { headerCell, numberCell, tableCellMeta } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -11,20 +12,17 @@ export function getCategoryColumns(t: TranslateFn): TableColumn<Category>[] {
 			accessorKey: 'code',
 			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
-				return h('div', [
-					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.description),
-					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-semibold text-sm text-highlighted' }, row.original.description),
+					h('p', { class: 'text-xs text-muted font-mono italic' }, row.original.code),
 				]);
 			},
 		},
 		{
 			accessorKey: 'total_items',
-			header: () => t('table.noOfItems'),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex justify-end w-full' }, [
-					h('div', { class: 'text-center', style: 'min-width: 90px' }, [h('p', { class: 'text-neutral-900' }, row.original.total_products)]),
-				]);
-			},
+			header: () => headerCell(t('table.noOfItems'), 'right'),
+			cell: ({ row }) => numberCell(row.original.total_products ?? 0),
+			...tableCellMeta.rightNumeric,
 		},
 	];
 }
@@ -34,7 +32,7 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 	return [
 		{
 			id: 'category',
-			header: () => t('table.code'),
+			header: () => headerCell(t('table.code')),
 			cell: ({ row }) => {
 				const depth = row.depth;
 				const isParent = row.getCanExpand();
@@ -42,8 +40,8 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 				const isRoot = depth === 0;
 
 				// Typography weight/color
-				const nameClass = 'font-semibold text-sm text-neutral-900 dark:text-neutral-100';
-				const descClass = 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic';
+				const nameClass = 'font-semibold text-sm text-highlighted';
+				const descClass = 'text-xs text-muted font-mono italic';
 
 				// Active/inactive dot
 				const statusDot = h('span', {
@@ -96,13 +94,8 @@ export function getCategoryTreeColumns(t: TranslateFn): TableColumn<Category>[] 
 		},
 		{
 			accessorKey: 'total_products',
-			header: () => t('table.noOfItems'),
-			meta: {
-				class: {
-					th: 'text-right',
-					td: 'text-right',
-				},
-			},
+			header: () => headerCell(t('table.noOfItems'), 'right'),
+			...tableCellMeta.rightNumeric,
 			cell: ({ row }) => {
 				const count = row.original.total_products ?? 0;
 				return h(

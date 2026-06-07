@@ -1,7 +1,8 @@
+import { h } from 'vue';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, OrderItemStatus } from 'wemotoo-common';
+import { OrderItemStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
-import { getSortableHeader } from '../sortable';
+import { headerCell, moneyCell, mutedCell, numberCell, optionalMoneyCell, tableCellMeta } from '../styles';
 import type { SummCountKey, SummItemRow, TranslateFn } from './types';
 
 const SUMM_ITEM_COUNT_LABELS: Record<SummCountKey, string> = {
@@ -56,19 +57,26 @@ const sumMoneyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<Sum
 		return acc + (typeof v === 'number' && !Number.isNaN(v) ? v : 0);
 	}, 0);
 	const cc = rows[0]?.original.currency_code ?? 'MYR';
-	return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(total, cc))]);
+	return moneyCell(total, cc);
 };
 
-const optionalMoneyCell = (row: SummItemRow, value: number | undefined) => {
-	if (value == null) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
-	return h('div', { class: 'flex items-center gap-2' }, [h('p', formatCurrency(value, row.currency_code ?? 'MYR'))]);
+const countFooter = (column: { getFacetedRowModel: () => { rows: TableRow<SummItemRow>[] } }, key: SummCountKey) => {
+	const total = column.getFacetedRowModel().rows.reduce((acc, row) => acc + (row.original[key] ?? 0), 0);
+
+	return numberCell(total);
+};
+
+const qtyFooter = (column: { getFacetedRowModel: () => { rows: TableRow<SummItemRow>[] } }) => {
+	const total = column.getFacetedRowModel().rows.reduce((acc, row) => acc + row.original.total_qty, 0);
+
+	return numberCell(total);
 };
 
 export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countKey: SummCountKey): TableColumn<T>[] {
-	return [
+	const columns: TableColumn<SummItemRow>[] = [
 		{
 			accessorKey: 'prod_name',
-			header: ({ column }) => getSortableHeader(column, t('table.codeAndName')),
+			header: () => headerCell(t('table.codeAndName')),
 			cell: ({ row }) => {
 				const o = row.original;
 				const variantNameBadge =
@@ -84,9 +92,9 @@ export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countK
 					}),
 					h('div', { class: 'flex-1 min-w-0' }, [
 						h('div', { class: 'flex items-center gap-1.5' }, [
-							h('span', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, o.prod_name || '—'),
+							h('span', { class: 'font-semibold text-sm text-highlighted' }, o.prod_name || '—'),
 						]),
-						h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, o.prod_code ?? ''),
+						h('div', { class: 'text-xs text-muted font-mono italic' }, o.prod_code ?? ''),
 						variantNameBadge,
 					]),
 				]);
@@ -94,18 +102,18 @@ export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countK
 		},
 		{
 			accessorKey: 'prod_variant_code',
-			header: ({ column }) => getSortableHeader(column, t('table.prodVariantCode')),
+			header: () => headerCell(t('table.prodVariantCode')),
 			cell: ({ row }) => {
 				const code = row.original.prod_variant_code;
 				if (code == null || String(code).trim() === '') {
-					return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '-');
+					return mutedCell();
 				}
-				return h('p', { class: 'font-mono text-sm text-neutral-800 dark:text-neutral-200' }, code);
+				return h('p', { class: 'font-mono text-sm text-default' }, code);
 			},
 		},
 		{
 			accessorKey: 'item_status',
-			header: ({ column }) => getSortableHeader(column, t('table.itemStatus')),
+			header: () => headerCell(t('table.itemStatus')),
 			cell: ({ row }) => {
 				const color = {
 					[OrderItemStatus.ACTIVE]: 'success' as const,
@@ -124,81 +132,82 @@ export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countK
 		},
 		{
 			accessorKey: countKey,
-			header: ({ column }) => getSortableHeader(column, t(SUMM_ITEM_COUNT_LABELS[countKey])),
-			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummItemRow>) => acc + (row.original[countKey] ?? 0), 0);
-
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
-			},
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original[countKey] ?? 0)]);
-			},
+			header: () => headerCell(t(SUMM_ITEM_COUNT_LABELS[countKey]), 'right'),
+			footer: ({ column }) => countFooter(column, countKey),
+			cell: ({ row }) => numberCell(row.original[countKey] ?? 0),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'total_qty',
-			header: ({ column }) => getSortableHeader(column, t('table.qty')),
-			footer: ({ column }) => {
-				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummItemRow>) => acc + row.original.total_qty, 0);
-
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, total)]);
-			},
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', row.original.total_qty)]);
-			},
+			header: () => headerCell(t('table.qty'), 'right'),
+			footer: ({ column }) => qtyFooter(column),
+			cell: ({ row }) => numberCell(row.original.total_qty),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'gross_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.grossAmt')),
+			header: () => headerCell(t('table.grossAmt'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'gross_amt'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.gross_amt),
+			cell: ({ row }) => optionalMoneyCell(row.original.gross_amt, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'disc_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.discountAmt')),
+			header: () => headerCell(t('table.discountAmt'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'disc_amt'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.disc_amt),
+			cell: ({ row }) => optionalMoneyCell(row.original.disc_amt, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'net_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.netAmt')),
+			header: () => headerCell(t('table.netAmt'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'net_amt'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.net_amt),
+			cell: ({ row }) => optionalMoneyCell(row.original.net_amt, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'gross_amt_exc',
-			header: ({ column }) => getSortableHeader(column, t('table.grossAmtExc')),
+			header: () => headerCell(t('table.grossAmtExc'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'gross_amt_exc'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.gross_amt_exc),
+			cell: ({ row }) => optionalMoneyCell(row.original.gross_amt_exc, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'disc_amt_exc',
-			header: ({ column }) => getSortableHeader(column, t('table.discAmtExc')),
+			header: () => headerCell(t('table.discAmtExc'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'disc_amt_exc'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.disc_amt_exc),
+			cell: ({ row }) => optionalMoneyCell(row.original.disc_amt_exc, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'net_amt_exc',
-			header: ({ column }) => getSortableHeader(column, t('table.netAmtExc')),
+			header: () => headerCell(t('table.netAmtExc'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'net_amt_exc'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.net_amt_exc),
+			cell: ({ row }) => optionalMoneyCell(row.original.net_amt_exc, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'tax_amt_inc',
-			header: ({ column }) => getSortableHeader(column, t('table.taxAmtInc')),
+			header: () => headerCell(t('table.taxAmtInc'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'tax_amt_inc'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.tax_amt_inc),
+			cell: ({ row }) => optionalMoneyCell(row.original.tax_amt_inc, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'tax_amt_exc',
-			header: ({ column }) => getSortableHeader(column, t('table.taxAmtExc')),
+			header: () => headerCell(t('table.taxAmtExc'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'tax_amt_exc'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.tax_amt_exc),
+			cell: ({ row }) => optionalMoneyCell(row.original.tax_amt_exc, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'adj_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.adjAmt')),
+			header: () => headerCell(t('table.adjAmt'), 'right'),
 			footer: ({ column }) => sumMoneyFooter(column, 'adj_amt'),
-			cell: ({ row }) => optionalMoneyCell(row.original, row.original.adj_amt),
+			cell: ({ row }) => optionalMoneyCell(row.original.adj_amt, row.original.currency_code ?? 'MYR'),
+			...tableCellMeta.rightNumeric,
 		},
-	] as TableColumn<T>[];
+	];
+
+	return columns as TableColumn<T>[];
 }

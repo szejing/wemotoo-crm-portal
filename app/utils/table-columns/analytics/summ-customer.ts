@@ -1,23 +1,9 @@
 import { h } from 'vue';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderStatus } from 'wemotoo-common';
 import { UBadge } from '#components';
+import { headerCell, moneyCell, numberCell, tableCellMeta } from '../styles';
 import type { SummCustomerRow, SummCustomerVariant, TranslateFn } from './types';
-
-const alignRight = 'text-right tabular-nums';
-
-const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
-const numberCell = (value: number) => h('div', { class: alignRight }, value);
-const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
-
-const rightAlignMeta = {
-	meta: {
-		class: {
-			th: 'text-right',
-			td: 'text-right',
-		},
-	},
-};
 
 const SUMM_CUSTOMER_BASE_COLUMN_LABELS = {
 	biz_date: 'table.bizDate',
@@ -91,9 +77,9 @@ export function getSummCustomerColumns<T extends SummCustomerRow>(t: TranslateFn
 			accessorFn: (row) => row.customer_no,
 			header: () => headerCell(t('table.customer')),
 			cell: ({ row }) => {
-				return h('div', [
-					h('div', { class: 'font-bold text-neutral-900' }, row.original.customer_no),
-					h('div', { class: 'text-neutral-600' }, row.original.customer_name),
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-semibold text-highlighted' }, row.original.customer_no),
+					h('p', { class: 'text-sm text-muted' }, row.original.customer_name),
 				]);
 			},
 		},
@@ -111,14 +97,14 @@ export function getSummCustomerColumns<T extends SummCustomerRow>(t: TranslateFn
 				header: () => headerCell(t('table.totalTxns'), 'right'),
 				footer: ({ column }) => countFooter(column, 'total_txns'),
 				cell: ({ row }) => numberCell(row.original.total_txns ?? 0),
-				...rightAlignMeta,
+				...tableCellMeta.rightNumeric,
 			},
 			{
 				accessorKey: 'total_qty',
 				header: () => headerCell(t('table.totalQty'), 'right'),
 				footer: ({ column }) => countFooter(column, 'total_qty'),
 				cell: ({ row }) => numberCell(row.original.total_qty ?? 0),
-				...rightAlignMeta,
+				...tableCellMeta.rightNumeric,
 			},
 		);
 	}
@@ -129,14 +115,14 @@ export function getSummCustomerColumns<T extends SummCustomerRow>(t: TranslateFn
 			header: () => headerCell(t('table.grossAmt'), 'right'),
 			footer: ({ column }) => moneyFooter(column, 'gross_amt'),
 			cell: ({ row }) => moneyCell(row.original.gross_amt, row.original.currency_code),
-			...rightAlignMeta,
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'net_amt',
 			header: () => headerCell(t('table.netAmt'), 'right'),
 			footer: ({ column }) => moneyFooter(column, 'net_amt'),
 			cell: ({ row }) => moneyCell(row.original.net_amt, row.original.currency_code),
-			...rightAlignMeta,
+			...tableCellMeta.rightNumeric,
 		},
 	);
 

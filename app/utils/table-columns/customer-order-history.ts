@@ -5,6 +5,7 @@ import { UBadge, UIcon } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
 import type { ItemModel } from '~/utils/models';
 import { getSortableHeader } from './sortable';
+import { headerCell, moneyCell, tableCellMeta } from './styles';
 import { getOrderStatusColor } from '../options';
 
 type TranslateFn = (key: string) => string;
@@ -39,7 +40,7 @@ export function getCustomerOrderHistoryColumns(
 		},
 		{
 			id: 'items',
-			header: t('table.items'),
+			header: () => headerCell(t('table.items')),
 			cell: ({ row }) => h('span', { class: 'text-default' }, formatOrderItemsSummary(row.original.items)),
 		},
 		{
@@ -61,12 +62,13 @@ export function getCustomerOrderHistoryColumns(
 			id: 'net_total',
 			accessorKey: 'net_total',
 			accessorFn: (row) => row.net_total ?? 0,
-			header: ({ column }) => getSortableHeader(column, t('table.totalAmt')),
+			header: ({ column }) => getSortableHeader(column, t('table.totalAmt'), 'right'),
 			cell: ({ row }) => {
 				const o = row.original;
 				const code = o.currency?.code ?? 'MYR';
-				return h('span', { class: 'font-medium text-default' }, formatCurrency(o.net_total ?? 0, code));
+				return moneyCell(o.net_total ?? 0, code);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 	];
 }

@@ -1,0 +1,42 @@
+import { h } from 'vue';
+import { formatCurrency } from 'wemotoo-common';
+
+export const TABLE_ALIGN_RIGHT = 'text-right tabular-nums';
+
+export type TableCellAlign = 'left' | 'right';
+
+export function headerCell(label: string, align: TableCellAlign = 'left') {
+	return h('div', { class: align === 'right' ? TABLE_ALIGN_RIGHT : undefined }, label);
+}
+
+export function numberCell(value: number) {
+	return h('div', { class: TABLE_ALIGN_RIGHT }, value);
+}
+
+export function moneyCell(value: number, currencyCode: string) {
+	return h('div', { class: TABLE_ALIGN_RIGHT }, formatCurrency(value, currencyCode));
+}
+
+export function optionalCell(value?: number) {
+	return value == null ? mutedCell() : numberCell(value);
+}
+
+export function optionalMoneyCell(value: number | undefined, currencyCode: string) {
+	return value == null ? mutedCell() : moneyCell(value, currencyCode);
+}
+
+export function mutedCell(content = '-') {
+	return h('span', { class: 'text-muted' }, content);
+}
+
+export function primaryCell(content: string | number) {
+	return h('div', { class: 'font-medium text-default' }, String(content));
+}
+
+export const tableCellMeta = {
+	rightNumeric: {
+		class: {
+			td: TABLE_ALIGN_RIGHT,
+		},
+	},
+} as const;

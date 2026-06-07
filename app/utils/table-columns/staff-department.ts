@@ -5,6 +5,7 @@ import { getFormattedDate } from 'wemotoo-common';
 import { USwitch } from '#components';
 import type { StaffDepartment } from '~/utils/types/staff-department';
 import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
+import { headerCell, mutedCell, tableCellMeta } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -13,7 +14,7 @@ export function getStaffDepartmentColumns(t: TranslateFn): TableColumn<StaffDepa
 		{
 			id: 'name',
 			accessorKey: 'name',
-			header: t('common.name'),
+			header: () => headerCell(t('common.name')),
 			cell: ({ row }) => {
 				const name = row.original.name?.trim() ?? '';
 				return h('span', { class: 'min-w-0 font-medium' }, name);
@@ -22,15 +23,16 @@ export function getStaffDepartmentColumns(t: TranslateFn): TableColumn<StaffDepa
 		{
 			id: 'default_commission_rate',
 			accessorKey: 'default_commission_rate',
-			header: t('components.crmUserForm.defaultCommissionRate'),
+			header: () => headerCell(t('components.crmUserForm.defaultCommissionRate'), 'right'),
 			cell: ({ row }) => {
 				const rate = Number(row.original.default_commission_rate ?? 0);
-				return h('span', { class: 'tabular-nums text-muted' }, `${rate}%`);
+				return h('span', { class: 'text-sm text-muted tabular-nums' }, `${rate}%`);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'is_active',
-			header: t('common.status'),
+			header: () => headerCell(t('common.status')),
 			cell: ({ row }) => {
 				const staffDepartmentStore = useStaffDepartmentStore();
 				return h(
@@ -54,10 +56,10 @@ export function getStaffDepartmentColumns(t: TranslateFn): TableColumn<StaffDepa
 		},
 		{
 			accessorKey: 'updated_at',
-			header: t('table.lastUpdated'),
+			header: () => headerCell(t('table.lastUpdated')),
 			cell: ({ row }) => {
 				if (!row.original.updated_at) {
-					return h('span', { class: 'text-muted text-xs' }, '—');
+					return mutedCell('—');
 				}
 				const dateStr = getFormattedDate(new Date(row.original.updated_at), 'dd/MM/yyyy');
 				return h('span', { class: 'text-sm text-muted tabular-nums' }, dateStr);

@@ -2,6 +2,7 @@ import { UCheckbox, UIcon } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { ProductVariation } from '~/utils/types/product-variation';
 import { getSortableHeader } from './sortable';
+import { headerCell } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -28,20 +29,18 @@ export function getSelectableProductVariationColumns(t: TranslateFn): TableColum
 			cell: ({ row }) => {
 				const count = row.original.options?.length || 0;
 				const valueLabel = count === 1 ? t('table.value') : t('table.values');
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h('div', [
-						h('p', { class: 'text-sm font-semibold text-neutral-900' }, row.original.name),
-						h('p', { class: 'text-xs text-neutral-500' }, `${count} ${valueLabel}`),
-					]),
+				return h('div', { class: 'flex flex-col gap-0.5' }, [
+					h('p', { class: 'text-sm font-semibold text-highlighted' }, row.original.name),
+					h('p', { class: 'text-xs text-muted' }, `${count} ${valueLabel}`),
 				]);
 			},
 		},
 		{
 			accessorKey: 'values',
-			header: () => h('span', { class: 'text-xs font-semibold text-neutral-700 uppercase tracking-wider' }, t('table.values')),
+			header: () => headerCell(t('table.values')),
 			cell: ({ row }) => {
 				if (!row.original.options || row.original.options.length === 0) {
-					return h('div', { class: 'flex items-center gap-1.5 text-xs text-amber-600' }, [
+					return h('div', { class: 'flex items-center gap-1.5 text-xs text-warning' }, [
 						h(UIcon, { name: 'i-heroicons-exclamation-triangle', class: 'w-3 h-3' }),
 						h('span', t('table.noValues')),
 					]);
@@ -53,7 +52,7 @@ export function getSelectableProductVariationColumns(t: TranslateFn): TableColum
 					row.original.options.map((value) =>
 						h(
 							'span',
-							{ class: 'inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-neutral-100 text-neutral-700 border border-neutral-200' },
+							{ class: 'inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted text-default border border-border' },
 							value.value,
 						),
 					),

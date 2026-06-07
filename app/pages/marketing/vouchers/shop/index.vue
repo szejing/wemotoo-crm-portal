@@ -31,15 +31,18 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="vouchers" :columns="visibleColumns" :loading="loading" @select="selectVoucher">
-				<template #empty>
-					<div class="flex flex-col items-center justify-center py-12 gap-3">
-						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noVouchersFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
-				</template>
-			</UTable>
+
+			<UCard v-else :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable :data="vouchers" :columns="visibleColumns" :loading="loading" @select="selectVoucher">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noVouchersFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
 			<div v-if="!initialize && vouchers.length > 0" class="section-pagination">
 				<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_vouchers" @update:page="updatePage" />

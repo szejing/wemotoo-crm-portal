@@ -5,6 +5,7 @@ import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
 import { formatCurrency, getFormattedDate, ProductType } from 'wemotoo-common';
 import { getSortableHeader } from './sortable';
+import { mutedCell, tableCellMeta } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -38,9 +39,9 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 					h('div', { class: 'flex-1 min-w-0' }, [
 						h('div', { class: 'flex items-center gap-1.5' }, [
 							statusDot,
-							h('span', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.name),
+							h('span', { class: 'font-semibold text-sm text-highlighted' }, row.original.name),
 						]),
-						h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
+						h('div', { class: 'text-xs text-muted font-mono italic' }, row.original.code),
 						variantBadge.length > 0 ? h('div', { class: 'mt-1 flex flex-wrap items-center gap-1' }, [...variantBadge]) : null,
 					]),
 				];
@@ -121,10 +122,10 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 			accessorKey: 'updated_at',
 			header: ({ column }) => getSortableHeader(column, t('table.lastUpdated')),
 			cell: ({ row }) => {
-				if (!row.original.updated_at) return h('span', { class: 'text-neutral-400 dark:text-neutral-500 text-xs' }, '—');
+				if (!row.original.updated_at) return mutedCell('—');
 				const dateStr = getFormattedDate(row.original.updated_at, 'dd/MM/yyyy');
 				const timeStr = getFormattedDate(row.original.updated_at, 'hh:mm a');
-				return h('div', { class: 'flex flex-col gap-0.5 text-neutral-600 dark:text-neutral-400 font-medium italic' }, [
+				return h('div', { class: 'flex flex-col gap-0.5 text-sm text-muted' }, [
 					h('div', {}, timeStr),
 					h('div', {}, dateStr),
 				]);
@@ -138,11 +139,11 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 
 				return priceType.sale_price != null && priceType.sale_price > 0 ? priceType.sale_price : (priceType.orig_sell_price ?? 0);
 			},
-			header: ({ column }) => getSortableHeader(column, t('table.price')),
+			header: ({ column }) => getSortableHeader(column, t('table.price'), 'right'),
 			cell: ({ row }) => {
 				const price_types: PriceInput[] | undefined = row.original.price_types;
 				const pt = price_types?.[0];
-				if (!pt) return h('span', { class: 'text-neutral-400 text-xs' }, '—');
+				if (!pt) return mutedCell('—');
 
 				const hasSalePrice = pt.sale_price != null && pt.sale_price > 0;
 				const sellingFormatted = pt.orig_sell_price != null ? formatCurrency(pt.orig_sell_price, pt.currency_code) : 'N/A';
@@ -151,12 +152,13 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				if (hasSalePrice && saleFormatted) {
 					return h('div', { class: 'flex flex-col gap-0.5' }, [
 						h('span', { class: 'text-sm font-semibold text-green-600 dark:text-green-400' }, saleFormatted),
-						h('span', { class: 'text-xs text-neutral-400 line-through' }, sellingFormatted),
+						h('span', { class: 'text-xs text-muted line-through' }, sellingFormatted),
 					]);
 				}
 
-				return h('div', { class: 'flex flex-col' }, [h('span', { class: 'text-sm font-semibold text-neutral-900 dark:text-neutral-100' }, sellingFormatted)]);
+				return h('div', { class: 'flex flex-col' }, [h('span', { class: 'text-sm font-semibold text-default' }, sellingFormatted)]);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 	];
 }

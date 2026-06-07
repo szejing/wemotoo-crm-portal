@@ -1,7 +1,8 @@
 import { h } from 'vue';
-import { UBadge, UIcon } from '#components';
+import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { headerCell, moneyCell, mutedCell, numberCell, optionalCell, optionalMoneyCell } from '../styles';
 import type { SummBillTableRow, SummCountKey, TranslateFn } from './types';
 
 type NumericSummColumnKey = keyof Pick<
@@ -63,15 +64,6 @@ export function getSummColumnLabels(countKey: SummCountKey) {
 	} as const;
 }
 
-const alignRight = 'text-right tabular-nums';
-
-const headerCell = (label: string, align: 'left' | 'right' = 'left') => h('div', { class: align === 'right' ? alignRight : undefined }, label);
-const numberCell = (value: number) => h('div', { class: alignRight }, value);
-const moneyCell = (value: number, currencyCode: string) => h('div', { class: alignRight }, formatCurrency(value, currencyCode));
-const optionalCell = (value?: number) => (value == null ? h('span', { class: 'text-muted' }, '-') : numberCell(value));
-const optionalMoneyCell = (value: number | undefined, currencyCode: string) =>
-	value == null ? h('span', { class: 'text-muted' }, '-') : moneyCell(value, currencyCode);
-
 const statusColors: Partial<Record<OrderStatus, 'success' | 'error' | 'info' | 'warning' | 'neutral'>> = {
 	[OrderStatus.COMPLETED]: 'success',
 	[OrderStatus.CANCELLED]: 'error',
@@ -128,7 +120,7 @@ export function getSummColumns(t: TranslateFn, countKey: SummCountKey): TableCol
 			cell: ({ row }) => {
 				const status = row.original.status;
 
-				if (!status) return h('span', { class: 'text-muted' }, '-');
+				if (!status) return mutedCell();
 
 				return h(UBadge, { variant: 'subtle', color: statusColors[status] ?? 'neutral', class: 'capitalize' }, () => t(statusLabelKeys[status] ?? status));
 			},

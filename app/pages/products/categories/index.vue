@@ -32,30 +32,32 @@
 				</div>
 			</template>
 			<!-- Tree table (WooCommerce-style hierarchy) -->
-			<UTable
-				v-else
-				v-model:expanded="expanded"
-				:data="getDisplayCategories"
-				:columns="visibleColumns"
-				:get-row-id="(row) => row.code"
-				:get-sub-rows="getSubRows"
-				:loading="loading"
-				:ui="{
-					base: 'border-separate border-spacing-0',
-					tbody: '[&>tr]:last:[&>td]:border-b-0',
-					tr: 'group data-[expanded=true]:bg-elevated/50',
-					td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default group-data-[expanded=true]:first:border-l-2 group-data-[expanded=true]:first:border-l-primary-400',
-				}"
-				@select="selectCategory"
-			>
-				<template #empty>
-					<div class="flex flex-col items-center justify-center py-12 gap-3">
-						<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCategoriesFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
-				</template>
-			</UTable>
+
+			<UCard v-else :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable
+					v-model:expanded="expanded"
+					:data="getDisplayCategories"
+					:columns="visibleColumns"
+					:get-row-id="(row) => row.code"
+					:get-sub-rows="getSubRows"
+					:loading="loading"
+					:ui="{
+						base: 'border-separate border-spacing-0',
+						tbody: '[&>tr]:last:[&>td]:border-b-0',
+						tr: 'group data-[expanded=true]:bg-elevated/50',
+						td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default group-data-[expanded=true]:first:border-l-2 group-data-[expanded=true]:first:border-l-primary-400',
+					}"
+					@select="selectCategory"
+				>
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.ADDITIONAL" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noCategoriesFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
 			<!-- Count (tree view shows all categories) -->
 			<div v-if="!initialize && getDisplayCategories.length > 0" class="section-pagination text-sm text-muted">

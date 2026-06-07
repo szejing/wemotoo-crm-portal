@@ -3,6 +3,7 @@ import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
 import { USwitch } from '#components';
 import type { Courier } from '~/utils/types/courier';
+import { headerCell } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -11,7 +12,7 @@ export function getCourierColumns(t: TranslateFn): TableColumn<Courier>[] {
 		{
 			id: 'name',
 			accessorKey: 'name',
-			header: t('common.name'),
+			header: () => headerCell(t('common.name')),
 			cell: ({ row }) => {
 				const name = row.original.name?.trim() ?? '';
 				return h('span', { class: 'min-w-0 font-medium' }, name);
@@ -20,7 +21,7 @@ export function getCourierColumns(t: TranslateFn): TableColumn<Courier>[] {
 		{
 			id: 'description',
 			accessorKey: 'description',
-			header: t('common.description'),
+			header: () => headerCell(t('common.description')),
 			cell: ({ row }) => {
 				const description = row.original.description?.trim() ?? '';
 				return h('span', { class: 'min-w-0 text-muted' }, description || t('common.notSet'));
@@ -28,7 +29,7 @@ export function getCourierColumns(t: TranslateFn): TableColumn<Courier>[] {
 		},
 		{
 			accessorKey: 'is_active',
-			header: t('common.status'),
+			header: () => headerCell(t('common.status')),
 			cell: ({ row }) => {
 				const courierStore = useCourierStore();
 				return h(

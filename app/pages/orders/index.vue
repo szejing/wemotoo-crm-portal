@@ -45,15 +45,17 @@
 			</template>
 
 			<!-- Orders Table -->
-			<UTable v-if="!initialize && !loading" :data="orders" :columns="visibleColumns" @select="selectOrder">
-				<template #empty>
-					<div class="flex flex-col items-center justify-center py-12 gap-3">
-						<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrdersFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
-				</template>
-			</UTable>
+			<UCard :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable v-if="!initialize && !loading" :data="orders" :columns="visibleColumns" @select="selectOrder">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-shopping-cart" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noOrdersFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
 			<!-- Pagination -->
 			<div
@@ -201,8 +203,7 @@ const selectTab = async (index: number) => {
 	filter.value.payment_status = undefined;
 	filter.value.payment_method = undefined;
 	const tabValue = tabItems.value[index]?.value;
-	filter.value.status =
-		tabValue === 'All' ? undefined : (tabValue as OrderStatus);
+	filter.value.status = tabValue === 'All' ? undefined : (tabValue as OrderStatus);
 	await orderStore.getOrders();
 };
 

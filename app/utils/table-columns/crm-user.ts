@@ -5,6 +5,7 @@ import { USwitch } from '#components';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import { roleLabel } from '../options/user-roles';
 import { getSortableHeader } from './sortable';
+import { headerCell, mutedCell, numberCell, primaryCell } from './styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -16,10 +17,8 @@ export function getCrmUserColumns(t: TranslateFn, options?: CrmUserColumnOptions
 	const columns: ColumnDef<CRMUser>[] = [
 		{
 			accessorKey: 'row_index',
-			header: t('table.noLabel'),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900 dark:text-neutral-100' }, String(row.index + 1))]);
-			},
+			header: () => headerCell(t('table.noLabel')),
+			cell: ({ row }) => numberCell(row.index + 1),
 		},
 		{
 			accessorKey: 'name',
@@ -27,15 +26,16 @@ export function getCrmUserColumns(t: TranslateFn, options?: CrmUserColumnOptions
 			cell: ({ row }) => {
 				const u = row.original;
 				const fullName = u.name || '—';
-				return h('div', [h('div', { class: 'font-semibold text-neutral-900 dark:text-neutral-100' }, fullName), h('div', { class: 'text-sm text-neutral-600 dark:text-neutral-400' }, u.email_address)]);
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-semibold text-highlighted' }, fullName),
+					h('p', { class: 'text-sm text-muted' }, u.email_address),
+				]);
 			},
 		},
 		{
 			accessorKey: 'phone_no',
 			header: ({ column }) => getSortableHeader(column, t('table.phone')),
-			cell: ({ row }) => {
-				return h('p', { class: 'text-neutral-600 dark:text-neutral-400' }, formatCrmUserPhone(row.original));
-			},
+			cell: ({ row }) => primaryCell(formatCrmUserPhone(row.original)),
 		},
 		{
 			accessorKey: 'role',
@@ -60,16 +60,19 @@ export function getCrmUserColumns(t: TranslateFn, options?: CrmUserColumnOptions
 			cell: ({ row }) => {
 				const department = row.original.staff_department;
 				if (!department) {
-					return h('span', { class: 'text-muted' }, '—');
+					return mutedCell('—');
 				}
-				return h('div', [h('div', { class: 'font-medium text-neutral-900 dark:text-neutral-100' }, department.name), h('div', { class: 'text-xs text-neutral-600 dark:text-neutral-400' }, `${department.default_commission_rate}%`)]);
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-medium text-default' }, department.name),
+					h('p', { class: 'text-xs text-muted tabular-nums' }, `${department.default_commission_rate}%`),
+				]);
 			},
 		});
 	}
 
 	columns.push({
 		accessorKey: 'is_active',
-		header: () => h('div', { class: 'text-center' }, t('table.active')),
+		header: () => headerCell(t('table.active')),
 		cell: ({ row }) => {
 			const crmUserStore = useCRMUserStore();
 			return h(

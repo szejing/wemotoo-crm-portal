@@ -1,13 +1,23 @@
 <template>
-	<div class="mt-4 p-4 rounded-lg">
-		<h1 class="text-lg font-bold">{{ $t('nav.orders') }}</h1>
-		<UTable :data="orders" :columns="order_columns" :loading="loading" @select="selectOrder">
-			<template #empty>
-				<div class="flex flex-col items-center justify-center py-6 gap-3">
-					<span class="italic text-sm">{{ $t('pages.noOrdersFound') }}</span>
-				</div>
+	<div class="mt-4 rounded-lg">
+		<UCard
+			:ui="{
+				header: 'bg-elevated/40 px-4 py-3 sm:px-6',
+				body: 'p-0 sm:p-0',
+			}"
+		>
+			<template #header>
+				<h1 class="text-lg font-bold">{{ $t('nav.orders') }}</h1>
 			</template>
-		</UTable>
+
+			<UTable :data="orders" :columns="order_columns" :loading="loading" @select="selectOrder">
+				<template #empty>
+					<div class="flex flex-col items-center justify-center py-6 gap-3">
+						<span class="italic text-sm">{{ $t('pages.noOrdersFound') }}</span>
+					</div>
+				</template>
+			</UTable>
+		</UCard>
 	</div>
 </template>
 

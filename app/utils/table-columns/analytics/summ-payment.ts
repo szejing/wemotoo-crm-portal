@@ -1,8 +1,10 @@
+import { h } from 'vue';
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { formatCurrency, OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'wemotoo-common';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
 import { getSortableHeader } from '../sortable';
+import { moneyCell, numberCell, primaryCell, tableCellMeta } from '../styles';
 import type { TranslateFn } from './types';
 
 const statusColors: Partial<Record<OrderStatus, 'success' | 'error' | 'info' | 'warning'>> = {
@@ -35,9 +37,7 @@ export function getSummPaymentColumns(t: TranslateFn): TableColumn<SummSalePayme
 		{
 			accessorKey: 'payment_type_desc',
 			header: ({ column }) => getSortableHeader(column, t('table.desc')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('payment_type_desc'))]);
-			},
+			cell: ({ row }) => primaryCell(row.getValue('payment_type_desc')),
 		},
 		{
 			accessorKey: 'status',
@@ -52,40 +52,24 @@ export function getSummPaymentColumns(t: TranslateFn): TableColumn<SummSalePayme
 		},
 		{
 			accessorKey: 'payment_amt',
-			header: ({ column }) => getSortableHeader(column, t('table.paymentAmt')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h('p', { class: 'font-medium text-neutral-900' }, formatCurrency(row.original.payment_amt, row.original.currency_code)),
-				]);
-			},
+			header: ({ column }) => getSortableHeader(column, t('table.paymentAmt'), 'right'),
+			cell: ({ row }) => moneyCell(row.original.payment_amt, row.original.currency_code),
 			footer: ({ column }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h(
-						'p',
-						{ class: 'font-medium text-neutral-900' },
-						formatCurrency(
-							column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSalePayment>) => acc + row.original.payment_amt, 0),
-							column.getFacetedRowModel().rows[0]?.original.currency_code,
-						),
-					),
-				]);
+				const rows = column.getFacetedRowModel().rows;
+				const total = rows.reduce((acc: number, row: TableRow<SummSalePayment>) => acc + row.original.payment_amt, 0);
+				return moneyCell(total, rows[0]?.original.currency_code ?? 'MYR');
 			},
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'total_txns',
-			header: ({ column }) => getSortableHeader(column, t('table.totalTxns')),
-			cell: ({ row }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [h('p', { class: 'font-medium text-neutral-900' }, row.getValue('total_txns'))]);
-			},
+			header: ({ column }) => getSortableHeader(column, t('table.totalTxns'), 'right'),
+			cell: ({ row }) => numberCell(row.getValue('total_txns') as number),
 			footer: ({ column }) => {
-				return h('div', { class: 'flex items-center gap-2' }, [
-					h(
-						'p',
-						{ class: 'font-medium text-neutral-900' },
-						column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSalePayment>) => acc + row.original.total_txns, 0),
-					),
-				]);
+				const total = column.getFacetedRowModel().rows.reduce((acc: number, row: TableRow<SummSalePayment>) => acc + row.original.total_txns, 0);
+				return numberCell(total);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 	];
 }

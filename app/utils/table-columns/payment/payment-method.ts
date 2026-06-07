@@ -2,6 +2,7 @@ import { USwitch } from '#components';
 import type { TableColumn } from '@nuxt/ui';
 import type { PaymentMethod } from '~/utils/types/payment-method';
 import { getSortableHeader } from '../sortable';
+import { headerCell } from '../styles';
 
 type TranslateFn = (key: string) => string;
 
@@ -11,15 +12,15 @@ export function getPaymentMethodColumns(t: TranslateFn): TableColumn<PaymentMeth
 			accessorKey: 'code',
 			header: ({ column }) => getSortableHeader(column, t('table.code')),
 			cell: ({ row }) => {
-				return h('div', [
-					h('div', { class: 'font-semibold text-sm text-neutral-900 dark:text-neutral-100' }, row.original.short_desc),
-					h('div', { class: 'text-xs text-neutral-400 dark:text-neutral-500 font-mono italic' }, row.original.code),
+				return h('div', { class: 'flex flex-col gap-1' }, [
+					h('p', { class: 'font-semibold text-sm text-highlighted' }, row.original.short_desc),
+					h('p', { class: 'text-xs text-muted font-mono italic' }, row.original.code),
 				]);
 			},
 		},
 		{
 			accessorKey: 'active',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
+			header: () => headerCell(t('table.active')),
 			cell: ({ row }) => {
 				const paymentMethodStore = usePaymentMethodStore();
 				return h(

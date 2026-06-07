@@ -28,19 +28,22 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="crm_users" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectCrmUser">
-				<template #empty>
-					<div class="flex flex-col items-center justify-center py-12 gap-3">
-						<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">
-							{{ $t('pages.noCrmUsersFound') }}
-						</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">
-							{{ $t('pages.tryAdjustingSearch') }}
-						</p>
-					</div>
-				</template>
-			</UTable>
+
+			<UCard v-else :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable :data="crm_users" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectCrmUser">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon name="i-heroicons-user-group" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">
+								{{ $t('pages.noCrmUsersFound') }}
+							</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">
+								{{ $t('pages.tryAdjustingSearch') }}
+							</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
 			<!-- Pagination -->
 			<div v-if="!initialize && crm_users.length > 0" class="section-pagination">

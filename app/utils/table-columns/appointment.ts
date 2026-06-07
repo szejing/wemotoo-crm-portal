@@ -5,6 +5,7 @@ import { UBadge } from '#components';
 import { getAppointmentStatusColor } from '~/utils/options';
 import type { Appointment } from '~/utils/types/appointment';
 import { getSortableHeader } from './sortable';
+import { headerCell, mutedCell } from './styles';
 
 type TranslateFn = (key: string, params?: Record<string, number | string>) => string;
 
@@ -17,43 +18,43 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 			cell: ({ row }) => {
 				const start = row.original.start_date_time ? new Date(row.original.start_date_time) : null;
 				const end = row.original.end_date_time ? new Date(row.original.end_date_time) : null;
-				if (!start) return h('span', { class: 'text-neutral-400' }, '—');
+				if (!start) return mutedCell('—');
 				const dateLine = getFormattedDate(start, 'dd MMM yyyy');
 				const timeLine =
 					!end || isSameDate(start, end)
 						? getFormattedDate(start, 'hh:mm aa') + (end ? ` - ${getFormattedDate(end, 'hh:mm aa')}` : '')
 						: `${getFormattedDate(start, 'hh:mm aa')} - ${getFormattedDate(end, 'dd MMM yyyy, hh:mm aa')}`;
 				return h('div', { class: 'flex flex-col gap-0.5' }, [
-					h('span', { class: 'font-medium text-neutral-800 dark:text-neutral-100' }, dateLine),
-					h('span', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, timeLine),
+					h('span', { class: 'font-medium text-default' }, dateLine),
+					h('span', { class: 'text-sm text-muted' }, timeLine),
 				]);
 			},
 		},
 		{
 			accessorKey: 'code',
-			header: t('table.code'),
-			cell: ({ row }) => h('span', { class: 'font-semibold text-neutral-800 dark:text-neutral-100' }, row.original.code),
+			header: () => headerCell(t('table.code')),
+			cell: ({ row }) => h('span', { class: 'font-semibold text-highlighted' }, row.original.code),
 		},
 		{
 			id: 'customer',
 			accessorFn: (row) => row.customer_name ?? '',
-			header: t('table.customer'),
+			header: () => headerCell(t('table.customer')),
 			cell: ({ row }) =>
 				h('div', { class: 'flex flex-col gap-0.5' }, [
-					h('p', { class: 'font-medium text-neutral-800 dark:text-neutral-100 truncate max-w-[180px]' }, row.original.customer_name),
-					h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400 truncate max-w-[180px]' }, row.original.customer_phone || '—'),
+					h('p', { class: 'font-medium text-default truncate max-w-[180px]' }, row.original.customer_name),
+					h('p', { class: 'text-sm text-muted truncate max-w-[180px]' }, row.original.customer_phone || '—'),
 				]),
 		},
 		{
 			id: 'service',
 			accessorKey: 'appt_desc',
-			header: t('pages.service'),
+			header: () => headerCell(t('pages.service')),
 			cell: ({ row }) => {
 				const desc = row.original.appt_desc || t('pages.noDescription');
 				const n = row.original.duration;
-				const children = [h('p', { class: 'text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]' }, desc)];
+				const children = [h('p', { class: 'text-sm text-default truncate max-w-[200px]' }, desc)];
 				if (n != null) {
-					children.push(h('p', { class: 'text-sm text-neutral-500 dark:text-neutral-400' }, t('pages.durationMinutes', { n })));
+					children.push(h('p', { class: 'text-sm text-muted' }, t('pages.durationMinutes', { n })));
 				}
 				return h('div', { class: 'flex flex-col gap-0.5' }, children);
 			},
@@ -69,7 +70,6 @@ export function getAppointmentColumns(t: TranslateFn): TableColumn<Appointment>[
 			},
 			meta: {
 				class: {
-					th: 'text-center',
 					td: 'text-center',
 				},
 			},

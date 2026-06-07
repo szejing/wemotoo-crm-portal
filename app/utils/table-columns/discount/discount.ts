@@ -4,6 +4,7 @@ import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
 import { getSortableHeader } from '../sortable';
+import { headerCell, tableCellMeta } from '../styles';
 import { useDiscountStore } from '~/stores/discount/discount';
 
 type TranslateFn = (key: string) => string;
@@ -28,14 +29,14 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 			cell: ({ row }) => {
 				const desc = row.original.description?.trim();
 				return h('div', { class: 'flex flex-col gap-1' }, [
-					h('h3', { class: 'text-neutral-800 font-bold' }, row.original.code),
-					h('h5', { class: 'text-neutral-400' }, desc || '—'),
+					h('p', { class: 'font-semibold text-highlighted' }, row.original.code),
+					h('p', { class: 'text-sm text-muted' }, desc || '—'),
 				]);
 			},
 		},
 		{
 			accessorKey: 'disc_type',
-			header: t('table.rule'),
+			header: () => headerCell(t('table.rule')),
 			cell: ({ row }) => {
 				const rt = row.original.disc_type;
 				const labelKey = DISC_TYPE_I18N[rt];
@@ -47,7 +48,7 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 					children.push(
 						h(
 							'span',
-							{ class: 'text-sm font-semibold tabular-nums text-neutral-900 dark:text-neutral-100' },
+							{ class: 'text-sm font-semibold tabular-nums text-default' },
 							formatDiscountDiscValue(rt, row.original.disc_value),
 						),
 					);
@@ -57,19 +58,20 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 		},
 		{
 			accessorKey: 'usage_count',
-			header: t('table.usage'),
+			header: () => headerCell(t('table.usage'), 'right'),
 			cell: ({ row }) => {
 				const limit = row.original.usage_limit;
 				const count = row.original.usage_count || 0;
 				if (limit) {
-					return h('span', {}, `${count} / ${limit}`);
+					return h('span', { class: 'text-sm text-default tabular-nums' }, `${count} / ${limit}`);
 				}
-				return h('span', {}, `${count}  (∞)`);
+				return h('span', { class: 'text-sm text-default tabular-nums' }, `${count}  (∞)`);
 			},
+			...tableCellMeta.rightNumeric,
 		},
 		{
 			accessorKey: 'is_disabled',
-			header: () => h('div', { class: 'text-center' }, t('table.active')),
+			header: () => headerCell(t('table.active')),
 			cell: ({ row }) => {
 				const discountStore = useNuxtApp().$pinia ? useDiscountStore() : null;
 				const isActive = !row.original.is_disabled;

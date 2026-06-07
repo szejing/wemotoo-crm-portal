@@ -27,15 +27,18 @@
 					</div>
 				</div>
 			</template>
-			<UTable v-else :data="getDisplayDepartments" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectDepartment">
-				<template #empty>
-					<div class="flex flex-col items-center justify-center py-12 gap-3">
-						<UIcon :name="ICONS.USER_GROUP_ROUNDED" class="w-12 h-12 text-gray-400" />
-						<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noStaffDepartmentsFound') }}</p>
-						<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
-					</div>
-				</template>
-			</UTable>
+
+			<UCard v-else :ui="{ body: 'p-0 sm:p-0' }">
+				<UTable :data="getDisplayDepartments" :columns="visibleColumns" :loading="loading" :ui="{ tr: 'cursor-pointer' }" @select="selectDepartment">
+					<template #empty>
+						<div class="flex flex-col items-center justify-center py-12 gap-3">
+							<UIcon :name="ICONS.USER_GROUP_ROUNDED" class="w-12 h-12 text-gray-400" />
+							<p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('pages.noStaffDepartmentsFound') }}</p>
+							<p class="text-xs text-gray-500 dark:text-gray-500">{{ $t('pages.tryAdjustingFilters') }}</p>
+						</div>
+					</template>
+				</UTable>
+			</UCard>
 
 			<div v-if="!initialize && getDisplayDepartments.length > 0" class="section-pagination">
 				<UPagination v-model="filter.current_page" :items-per-page="filter.page_size" :total="total_count" @update:page="updatePage" />
