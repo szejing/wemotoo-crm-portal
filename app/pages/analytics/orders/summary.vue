@@ -39,7 +39,7 @@
 				</UTable>
 			</UCard>
 
-			<div v-if="data.length > 0" class="flex justify-center">
+			<div v-if="data.length > 0" class="section-pagination">
 				<UPagination v-model="current_page" :items-per-page="order_summ.page_size" :total="order_summ.total_data" @update:page="updatePage" />
 			</div>
 		</div>

@@ -52,7 +52,7 @@
 				<UTable :data="group.items" :columns="visibleColumns" :loading="loading" :ui="salesItemTableUi" />
 			</UCard>
 
-			<div v-if="data.length > 0" class="flex justify-center">
+			<div v-if="data.length > 0" class="section-pagination">
 				<UPagination v-model="current_page" :items-per-page="sale_summ_items.page_size" :total="sale_summ_items.total_data" @update:page="updatePage" />
 			</div>
 		</div>
