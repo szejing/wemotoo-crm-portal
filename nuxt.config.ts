@@ -119,6 +119,13 @@ export default defineNuxtConfig({
 			// Prefer "browser" entry for client build so wemotoo-common uses browser-safe bundle (no Node crypto).
 			conditions: ['browser', 'import', 'module', 'default'],
 		},
+		// Ensure zod is pre-bundled for SSR to avoid undefined errors
+		optimizeDeps: {
+			include: ['zod'],
+		},
+		ssr: {
+			noExternal: ['zod'],
+		},
 		css: {
 			preprocessorOptions: {
 				scss: {
