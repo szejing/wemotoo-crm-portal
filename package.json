@@ -7,7 +7,7 @@
 		"build:prod": "NODE_OPTIONS=--max-old-space-size=8192 bun --bun nuxt build --dotenv .env.prod",
 		"build:prod:docker": "node node_modules/nuxt/bin/nuxt.mjs build --dotenv .env.prod",
 		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lock bun.lockb",
-		"rebuild": "bun run clean && bun install",
+		"rebuild": "bun run clean && bun install && bun update wemotoo-common",
 		"start:local": "bun --bun nuxt dev --dotenv .env.local",
 		"start:dev": "bun --bun nuxt dev --dotenv .env.dev",
 		"start:prod": "bun --bun nuxt dev --dotenv .env.prod",

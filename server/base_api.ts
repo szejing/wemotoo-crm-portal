@@ -74,17 +74,19 @@ export function rawBodyForSignature(method: string, body: unknown): string | und
 	return JSON.stringify(body);
 }
 
+type UpstreamFetchBody = Record<string, any> | BodyInit | null | undefined;
+
 /**
  * Body bytes sent upstream. For POST/PUT/PATCH, plain objects are JSON.stringify'd once so the
  * signature matches Nest's `req.rawBody` (SignatureGuard hashes raw bytes, not a re-stringified object).
  */
-export function upstreamFetchBody(method: string, body: unknown): unknown {
+export function upstreamFetchBody(method: string, body: unknown): UpstreamFetchBody {
 	const m = (method || 'GET').toUpperCase();
 	if (m === 'GET' || m === 'HEAD' || m === 'OPTIONS') {
 		return undefined;
 	}
 	if (m === 'DELETE') {
-		return body;
+		return body as UpstreamFetchBody;
 	}
 	if (body === undefined || body === null) {
 		return body;
