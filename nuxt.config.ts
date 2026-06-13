@@ -1,9 +1,11 @@
 import { fileURLToPath } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const isProductionBuild = process.env.NODE_ENV === 'production';
+
 export default defineNuxtConfig({
 	modules: [
-		'@nuxt/test-utils/module',
+		...(isProductionBuild ? [] : ['@nuxt/test-utils/module']),
 		'@pinia/nuxt',
 		'@nuxt/image',
 		'@nuxtjs/i18n',
@@ -112,6 +114,7 @@ export default defineNuxtConfig({
 
 	nitro: {
 		compressPublicAssets: true,
+		sourceMap: !isProductionBuild,
 	},
 
 	vite: {
@@ -135,7 +138,7 @@ export default defineNuxtConfig({
 		},
 		build: {
 			cssCodeSplit: false,
-			sourcemap: true,
+			sourcemap: !isProductionBuild,
 		},
 		server: {
 			fs: {

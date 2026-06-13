@@ -22,12 +22,12 @@ RUN apt-get update && apt-get install -y git npm curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files first (better caching)
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 
 # Install ALL deps (dev + prod) with frozen lockfile
 # Skip postinstall scripts to avoid esbuild version check issues
 # We'll run necessary postinstall scripts manually after copying files
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN bun install --frozen-lockfile --ignore-scripts --network-concurrency 8
 
 # Install optional native dependencies that are skipped with --ignore-scripts
 # Rollup native bindings for better performance
@@ -97,13 +97,15 @@ RUN if [ ! -d "node_modules/vite" ] || [ ! -f "node_modules/vite/package.json" ]
 # This ensures Nuxt config is properly set up
 RUN bun run nuxt prepare
 
-# Build Nuxt app (production) with increased memory (Nitro bundling can exceed 4GB)
-# Ensure Node.js is used (not bun runtime) for vite builds to support crypto.hash
-ENV NODE_OPTIONS="--max-old-space-size=8192"
-ENV BUN_RUNTIME_TRANSPILER=node
-# Use node explicitly for the build to ensure crypto.hash is available
+# Build Nuxt app (production). Nitro bundling is memory-heavy; keep heap within Docker limits.
+# Override at build time: docker build --build-arg NODE_MEMORY_MB=6144 ...
+ARG NODE_MEMORY_MB=4096
+ENV NODE_ENV=production
+ENV NUXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=${NODE_MEMORY_MB}"
+# Use Node (not bun runtime) for nuxt build — lower peak memory than `bun --bun nuxt build`
 RUN node --version && \
-    bun run build:prod
+    node node_modules/nuxt/bin/nuxt.mjs build --dotenv .env.prod
 
 
 # ==============================
