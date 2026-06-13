@@ -1,11 +1,10 @@
 # ==============================
 # Build stage
 # ==============================
-# Use buildx for multi-platform support
-# For local development: native architecture (arm64 on Apple Silicon)
-# For production: amd64 for Digital Ocean
+# Use buildx/compose target platform so native packages match the final image.
+# For production, docker-compose.yml targets amd64 for Digital Ocean.
 # Use bun:latest or bun:1 with Node.js 20+ for crypto.hash support (required by vite 7.x)
-FROM --platform=${BUILDPLATFORM:-linux/arm64} oven/bun:1 AS builder
+FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
@@ -99,7 +98,7 @@ RUN bun run nuxt prepare
 
 # Build Nuxt app (production). Nitro bundling is memory-heavy; keep heap within Docker limits.
 # Override at build time: docker build --build-arg NODE_MEMORY_MB=6144 ...
-ARG NODE_MEMORY_MB=4096
+ARG NODE_MEMORY_MB=5120
 ENV NODE_ENV=production
 ENV NUXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--max-old-space-size=${NODE_MEMORY_MB}"
