@@ -1,4 +1,4 @@
-import { UserRoles } from 'wemotoo-common';
+import { UserRoles } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

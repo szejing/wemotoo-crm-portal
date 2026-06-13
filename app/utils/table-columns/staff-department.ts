@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import { USwitch } from '#components';
 import type { StaffDepartment } from '~/utils/types/staff-department';
 import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';

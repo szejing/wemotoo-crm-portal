@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 import { getSummPaymentColumns, SUMM_PAYMENT_COLUMN_LABELS } from '~/utils/table-columns';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import { options_page_size } from '~/utils/options';

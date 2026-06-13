@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 import { getOrderStatusOptions, getOrderStatusColor } from '~/utils/options';
 
 const { t } = useI18n();

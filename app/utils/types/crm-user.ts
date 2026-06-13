@@ -1,4 +1,4 @@
-import { UserRoles } from 'wemotoo-common';
+import { UserRoles } from 'yeppi-common';
 import type { StaffDepartment } from './staff-department';
 
 type TranslateFn = (key: string) => string;

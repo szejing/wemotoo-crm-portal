@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { OrderItemStatus } from 'wemotoo-common';
+import type { OrderItemStatus } from 'yeppi-common';
 import { getOrderItemStatusOptions, getOrderItemStatusColor } from '~/utils/options';
 
 const { t } = useI18n();

@@ -1,4 +1,4 @@
-import { AllocationType } from 'wemotoo-common';
+import { AllocationType } from 'yeppi-common';
 
 export const VOUCHER_CREATE_TYPE = {
 	SHOP: 'shop',

@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, subWeeks } from 'date-fns';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { Range } from '~/utils/interface';
 import type { DateRange as PickerDateRange } from '~/components/Z/DateRangePicker.vue';
 

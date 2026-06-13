@@ -4,7 +4,7 @@ import MerchantRoutes from '../../routes.client';
 import type { GetSaleResp } from './models/response/get-sale.resp';
 import type { GetSalesResp } from './models/response/get-sales.resp';
 import type { UpdateSaleStatusResp } from './models/response/update-sale.resp';
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
 
 class SaleModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Sales;

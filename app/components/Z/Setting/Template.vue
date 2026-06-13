@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
 import type { SettingTempl } from '~/utils/types/setting-templ';
-import { InputType as InputTypeEnum } from 'wemotoo-common';
+import { InputType as InputTypeEnum } from 'yeppi-common';
 import { Setting } from '~/utils/types/setting';
 
 const props = defineProps({

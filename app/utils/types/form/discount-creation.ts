@@ -1,4 +1,4 @@
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { Discount, DiscountCondition } from '~/utils/types/discount';
 

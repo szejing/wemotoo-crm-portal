@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { defaultShippingMethodRelations, KEY, removeDuplicateExpands } from 'wemotoo-common';
+import { defaultShippingMethodRelations, KEY, removeDuplicateExpands } from 'yeppi-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
@@ -188,10 +188,7 @@ export const useShippingMethodStore = defineStore('shippingMethodStore', {
 			await this.updateShippingMethod(String(method.id), { is_active });
 		},
 
-		async updateShippingMethod(
-			id: string | number,
-			payload: ShippingMethodUpdateBody,
-		): Promise<ShippingMethodOption | undefined> {
+		async updateShippingMethod(id: string | number, payload: ShippingMethodUpdateBody): Promise<ShippingMethodOption | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.updating = true;

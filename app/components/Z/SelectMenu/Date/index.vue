@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 
 const props = defineProps<{ date: Date | undefined; placeholder: string; minDate?: Date; maxDate?: Date }>();
 

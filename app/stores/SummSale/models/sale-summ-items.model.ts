@@ -1,4 +1,4 @@
-import type { OrderItemStatus } from 'wemotoo-common';
+import type { OrderItemStatus } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { SummSaleItem } from '~/utils/types/summ-sales';
 import type { Range } from '~/utils/interface';

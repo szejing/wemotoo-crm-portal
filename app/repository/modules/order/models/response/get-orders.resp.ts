@@ -1,5 +1,5 @@
 import type { Currency } from '~/utils/types/currency';
-import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'yeppi-common';
 import type { ItemModel, PaymentModel, CustomerModel } from '~/utils/models';
 import type { TaxModel } from '~/utils/models/tax.model';
 

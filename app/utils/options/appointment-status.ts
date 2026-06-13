@@ -1,4 +1,4 @@
-import { AppointmentStatus } from 'wemotoo-common';
+import { AppointmentStatus } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

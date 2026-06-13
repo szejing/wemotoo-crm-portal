@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ProductStatus } from 'wemotoo-common';
+import { ProductStatus } from 'yeppi-common';
 import type { CategoryInput, Category } from '~/utils/types/category';
 import type { PriceInput } from '~/utils/types/price';
 import type { ProductVariantInput } from '~/utils/types/product';
@@ -281,7 +281,11 @@ const reviewSummary = computed(() => ({
 			?.filter((v) => v.name?.trim())
 			.map((v) => ({
 				name: v.name,
-				values: v.options.map((o) => o.value).filter((val) => val?.trim()).join('_') || '—',
+				values:
+					v.options
+						.map((o) => o.value)
+						.filter((val) => val?.trim())
+						.join('_') || '—',
 			}))
 			.filter((d) => d.values !== '—') ?? [],
 	variantsCount: new_product.value.variants?.length ?? 0,
@@ -348,9 +352,7 @@ const deleteThumbnail = () => {
 
 const deleteImage = (_image: Image) => {
 	if (!new_product.value.images) return;
-	new_product.value.images = new_product.value.images.filter((img) => img !== _image) as
-		| File[]
-		| Image[];
+	new_product.value.images = new_product.value.images.filter((img) => img !== _image) as File[] | Image[];
 };
 
 // Methods: Currency

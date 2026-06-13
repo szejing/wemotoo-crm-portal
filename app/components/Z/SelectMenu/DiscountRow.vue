@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 import type { DiscountSelectMenuRow } from '~/utils/types/discount-select-menu';
 import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 

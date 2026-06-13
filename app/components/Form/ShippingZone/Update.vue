@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import type { z } from 'zod';
 import { UpdateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';

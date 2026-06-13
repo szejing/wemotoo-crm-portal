@@ -88,7 +88,7 @@
 
 <script lang="ts" setup>
 import { ZSelectMenuDateTime } from '#components';
-import { OrderItemStatus } from 'wemotoo-common';
+import { OrderItemStatus } from 'yeppi-common';
 import type { AppointmentModel } from '~/utils/models';
 import type { ProductVariant } from '~/utils/types/product-variant';
 import { getOrderItemStatusOptions, getOrderItemStatusColor } from '~/utils/options';

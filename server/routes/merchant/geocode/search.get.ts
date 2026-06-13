@@ -2,13 +2,13 @@
  * Proxies forward geocoding to OpenStreetMap Nominatim (no API key).
  * See https://operations.osmfoundation.org/policies/nominatim/ — server-side only, identifiable User-Agent, light use.
  */
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 
 import { parseNominatimSearchFirstHit } from '#root/app/utils/address-geocode';
 
 const NOMINATIM_BASE = 'https://nominatim.openstreetmap.org/search';
 /** Policy: identify the application; update contact if you publish a public URL. */
-const NOMINATIM_USER_AGENT = 'Wemotoo-CRM-Portal/1.0';
+const NOMINATIM_USER_AGENT = 'Wemotoo-Portal/1.0';
 
 export default defineEventHandler(async (event) => {
 	const token = getCookie(event, KEY.ACCESS_TOKEN);

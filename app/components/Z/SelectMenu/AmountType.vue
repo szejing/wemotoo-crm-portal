@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AmountType } from 'wemotoo-common';
+import type { AmountType } from 'yeppi-common';
 import { getAmountTypeOptions } from '~/utils/options';
 
 const { t } = useI18n();

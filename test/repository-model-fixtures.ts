@@ -1,4 +1,4 @@
-import { UserRoles } from 'wemotoo-common';
+import { UserRoles } from 'yeppi-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { LoginReq } from '~/repository/modules/auth/models/request/login.req';
 import type { PasswordResetReq } from '~/repository/modules/auth/models/request/password-reset.req';

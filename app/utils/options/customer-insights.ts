@@ -5,7 +5,7 @@ import {
 	CustomerInsightKey,
 	CustomerInsightSeverity,
 	type CustomerInsightPreset,
-} from 'wemotoo-common';
+} from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 
@@ -48,8 +48,7 @@ export const customerInsightConfidenceOptions = (t: TranslateFn) =>
 		value,
 	}));
 
-export const customerInsightLabel = (t: TranslateFn, key: CustomerInsightKey | string) =>
-	t(insightLabelKey(key as CustomerInsightKey));
+export const customerInsightLabel = (t: TranslateFn, key: CustomerInsightKey | string) => t(insightLabelKey(key as CustomerInsightKey));
 
 export const customerInsightSeverityColor = (severity?: CustomerInsightSeverity) => {
 	switch (severity) {

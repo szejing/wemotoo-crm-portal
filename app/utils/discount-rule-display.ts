@@ -1,4 +1,4 @@
-import { DiscountType, formatCurrency } from 'wemotoo-common';
+import { DiscountType, formatCurrency } from 'yeppi-common';
 
 export function formatDiscountDiscValue(discType: DiscountType, discValue: number): string {
 	if (discType === DiscountType.PERCENTAGE) {

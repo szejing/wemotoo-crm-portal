@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AppointmentStatus } from 'wemotoo-common';
+import type { AppointmentStatus } from 'yeppi-common';
 import { getAppointmentStatusOptions, getAppointmentStatusColor } from '~/utils/options';
 
 const { t } = useI18n();

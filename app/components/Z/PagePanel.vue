@@ -10,14 +10,7 @@
 						<slot v-if="$slots['navbar-right']" name="navbar-right" />
 
 						<UPopover v-model:open="notificationPopoverOpen" :content="{ align: 'end' }">
-							<UButton
-								class="notification-btn"
-								color="secondary"
-								variant="soft"
-								square
-								:aria-label="$t('notifications.open')"
-								@click="refreshNotifications"
-							>
+							<UButton class="notification-btn" color="secondary" variant="soft" square :aria-label="$t('notifications.open')" @click="refreshNotifications">
 								<UIcon :name="ICONS.BELL" class="size-5" />
 								<span v-if="notificationStore.unreadCount > 0" class="notification-count">
 									{{ notificationStore.unreadCount > 99 ? '99+' : notificationStore.unreadCount }}
@@ -92,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { NotificationType } from 'wemotoo-common';
+import type { NotificationType } from 'yeppi-common';
 import type { NotificationItem } from '~/utils/types/notification';
 
 withDefaults(

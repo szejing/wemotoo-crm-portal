@@ -27,7 +27,7 @@
 
 ## Imports
 
-- `~/` for app; `#root/` for server in Nitro; wemotoo-common for API_PATH, KEY, enums.
+- `~/` for app; `#root/` for server in Nitro; yeppi-common for API_PATH, KEY, enums.
 
 ## Security & Errors
 

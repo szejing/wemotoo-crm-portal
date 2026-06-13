@@ -1,4 +1,4 @@
-import type { PaymentStatus, OrderStatus } from 'wemotoo-common';
+import type { PaymentStatus, OrderStatus } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
 import type { Range } from '~/utils/interface';

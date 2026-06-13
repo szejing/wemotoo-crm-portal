@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { FilterOperator } from 'wemotoo-common';
+import { FilterOperator } from 'yeppi-common';
 
 const DEFAULT_NONE = '__none__' as const;
 

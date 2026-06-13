@@ -43,13 +43,7 @@
 							<span class="notifications-row__order">{{ row.orderId }}</span>
 							<span class="notifications-row__time">{{ row.dateTime }}</span>
 							<span class="notifications-row__description">
-								<span
-									:class="[
-										'notifications-row__dot',
-										{ 'notifications-row__dot--read': row.isRead },
-										`notifications-row__dot--${row.severity}`,
-									]"
-								/>
+								<span :class="['notifications-row__dot', { 'notifications-row__dot--read': row.isRead }, `notifications-row__dot--${row.severity}`]" />
 								<span>{{ row.descriptionPrefix ?? row.description }}</span>
 								<UBadge v-if="row.statusBadge" :color="row.statusBadge.color" variant="subtle" size="sm" class="notifications-row__badge">
 									{{ row.statusBadge.label }}
@@ -69,7 +63,7 @@
 
 <script setup lang="ts">
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
-import type { NotificationSeverity, NotificationType } from 'wemotoo-common';
+import type { NotificationSeverity, NotificationType } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
 import { getOrderStatusColor, getPaymentStatusColor } from '~/utils/options';
 import type { NotificationItem } from '~/utils/types/notification';
@@ -146,11 +140,9 @@ const openNotification = async (type: NotificationType, item: NotificationItem) 
 	await navigateTo(updated.action?.url ?? item.action?.url ?? '/notifications');
 };
 
-const getItemTime = (item: NotificationItem) =>
-	new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? 0).getTime();
+const getItemTime = (item: NotificationItem) => new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? 0).getTime();
 
-const getItemDate = (item: NotificationItem) =>
-	new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? Date.now());
+const getItemDate = (item: NotificationItem) => new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? Date.now());
 
 const createDisplayRows = (entry: NotificationEntry): NotificationDisplayRow[] => {
 	const lines = getActionLines(entry.item);
@@ -213,15 +205,15 @@ const normalizeDescription = (description: string) => {
 	return trimmed.replace(/\.$/, '');
 };
 
-const isAppointmentCreated = (description: string, item: NotificationItem) =>
-	/appointment created/i.test(description) && !!item.ref_no;
+const isAppointmentCreated = (description: string, item: NotificationItem) => /appointment created/i.test(description) && !!item.ref_no;
 
-const createReferenceBadge = (refNo?: string) => refNo
-	? {
-			label: refNo,
-			color: 'neutral' as BadgeColor,
-		}
-	: undefined;
+const createReferenceBadge = (refNo?: string) =>
+	refNo
+		? {
+				label: refNo,
+				color: 'neutral' as BadgeColor,
+			}
+		: undefined;
 
 const formatStatusLabel = (status: string) => {
 	const statusLabelKeys: Record<string, string> = {

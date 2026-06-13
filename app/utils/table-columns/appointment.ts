@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { getFormattedDate, isSameDate } from 'wemotoo-common';
+import { getFormattedDate, isSameDate } from 'yeppi-common';
 import { UBadge } from '#components';
 import { getAppointmentStatusColor } from '~/utils/options';
 import type { Appointment } from '~/utils/types/appointment';

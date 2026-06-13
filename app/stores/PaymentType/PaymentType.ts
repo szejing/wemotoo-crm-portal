@@ -2,7 +2,7 @@ import type { PaymentTypeGroup } from '~/utils/types/payment-type';
 import { failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { options_page_size } from '~/utils/options';
-import { defaultPaymentTypeGroupRelations } from 'wemotoo-common';
+import { defaultPaymentTypeGroupRelations } from 'yeppi-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
 type PaymentTypeFilter = {

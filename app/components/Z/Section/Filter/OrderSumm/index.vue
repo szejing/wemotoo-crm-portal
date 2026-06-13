@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 import type { Range } from '~/utils/interface';
 import { format } from 'date-fns';
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 
 const orderSummStore = useSummOrderStore();
 const { order_summ } = storeToRefs(orderSummStore);

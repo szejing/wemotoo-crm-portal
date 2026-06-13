@@ -1,4 +1,4 @@
-import { FilterCondition, FilterOperator } from 'wemotoo-common';
+import { FilterCondition, FilterOperator } from 'yeppi-common';
 import type { CreateDiscountConditionReq } from '../../repository/modules/discount/models/request/create-discount.req';
 import { conditionHasCartFilter, formatConditionCartFilterSummary } from './condition-cart-filter-summary';
 import { parseFilterValueCsv } from './filter-value-csv';

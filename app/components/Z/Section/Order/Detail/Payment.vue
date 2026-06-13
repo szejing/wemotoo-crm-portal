@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import { ZModalOrderDetailPayment } from '#components';
-import { PaymentStatus, getFormattedDate } from 'wemotoo-common';
+import { PaymentStatus, getFormattedDate } from 'yeppi-common';
 import type { PaymentModel } from '~/utils/models';
 import type { OrderHistory } from '~/utils/types/order-history';
 import { ICONS } from '~/utils/icons';

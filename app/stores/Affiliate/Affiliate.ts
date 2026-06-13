@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { Affiliate, AffiliateTier, AffiliateReport } from '~/utils/types/affiliate';
 import { failedNotification, successNotification } from '../AppUi/AppUi';

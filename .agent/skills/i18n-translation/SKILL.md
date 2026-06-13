@@ -121,7 +121,7 @@ export {
 
 ```typescript
 // app/utils/options/order-status.ts
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 
 export type TranslateFn = (key: string) => string;
 

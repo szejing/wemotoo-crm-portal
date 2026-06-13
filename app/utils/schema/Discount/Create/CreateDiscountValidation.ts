@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AllocationType, DiscountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import { AllocationType, DiscountType, FilterCondition, FilterOperator } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 import { CreateDiscountValidation } from '../../app/utils/schema/Discount/Create/CreateDiscountValidation';
 
 const t = (key: string) => key;

@@ -6,14 +6,7 @@
 
 		<div class="status-section">
 			<ZSelectMenuOrderStatus v-model:status="status" />
-			<UButton
-				block
-				color="primary"
-				:icon="ICONS.SAVE"
-				:disabled="status === currentStatus || updating"
-				:loading="updating"
-				@click="emit('submit')"
-			>
+			<UButton block color="primary" :icon="ICONS.SAVE" :disabled="status === currentStatus || updating" :loading="updating" @click="emit('submit')">
 				{{ $t('components.orderDetail.updateOrderStatus') }}
 			</UButton>
 		</div>
@@ -21,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
 
 defineProps<{

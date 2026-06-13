@@ -33,7 +33,7 @@ export function useExample(refOrOptions: MaybeRefOrGetter<Options>) {
 ```
 
 ### Re-exports / Shared Keys
-- When encapsulating constants or keys (e.g. from wemotoo-common), expose them under a clear name (e.g. `KEY`, `API_PATH`) so pages and components import from one place.
+- When encapsulating constants or keys (e.g. from yeppi-common), expose them under a clear name (e.g. `KEY`, `API_PATH`) so pages and components import from one place.
 
 ## Conventions
 

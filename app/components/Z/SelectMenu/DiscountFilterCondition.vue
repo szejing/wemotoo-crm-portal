@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { FilterCondition } from 'wemotoo-common';
+import { FilterCondition } from 'yeppi-common';
 
 const DEFAULT_NONE = '__none__' as const;
 

@@ -1,14 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-	CUSTOMER_INSIGHT_PRESETS,
-	CustomerInsightKey,
-	CustomerInsightSeverity,
-} from 'wemotoo-common';
-import {
-	customerInsightLabel,
-	customerInsightSeverityColor,
-	customerInsightTraitOptions,
-} from '../../app/utils/options/customer-insights';
+import { CUSTOMER_INSIGHT_PRESETS, CustomerInsightKey, CustomerInsightSeverity } from 'yeppi-common';
+import { customerInsightLabel, customerInsightSeverityColor, customerInsightTraitOptions } from '../../app/utils/options/customer-insights';
 
 describe('customer-insights options', () => {
 	const t = (key: string) => key;

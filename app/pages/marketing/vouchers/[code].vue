@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { ZModalConfirmation } from '#components';
 import { ICONS } from '~/utils/icons';
-import { AllocationType } from 'wemotoo-common';
+import { AllocationType } from 'yeppi-common';
 import { voucherListingPathForAllocation } from '~/utils/voucher/create-type';
 
 const route = useRoute();

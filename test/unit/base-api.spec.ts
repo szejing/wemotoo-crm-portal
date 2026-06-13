@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hashBody } from 'wemotoo-common';
+import { hashBody } from 'yeppi-common';
 import { pathForSignature, rawBodyForSignature, upstreamFetchBody } from '../../server/base_api';
 
 describe('rawBodyForSignature (matches backend SignatureGuard)', () => {
@@ -45,8 +45,6 @@ describe('pathForSignature (signed upstream path)', () => {
 		const signedPath = pathForSignature('shipping-methods/id-1', {
 			defaultRelations: ['zones', 'zones.shipping_zone'],
 		});
-		expect(signedPath).toBe(
-			'/api/shipping-methods/id-1?defaultRelations=zones&defaultRelations=zones.shipping_zone',
-		);
+		expect(signedPath).toBe('/api/shipping-methods/id-1?defaultRelations=zones&defaultRelations=zones.shipping_zone');
 	});
 });

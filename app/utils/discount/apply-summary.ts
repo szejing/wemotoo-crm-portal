@@ -1,4 +1,4 @@
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 
 type Translate = (key: string, values?: Record<string, unknown>) => string;
 

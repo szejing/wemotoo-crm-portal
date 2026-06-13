@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 import { formatDiscountDiscValue } from '../../app/utils/discount-rule-display';
 
 describe('formatDiscountDiscValue', () => {

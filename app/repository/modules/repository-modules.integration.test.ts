@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test';
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 import MerchantRoutes from '~/repository/routes.client';
 import { ApiErrorModel } from '~/utils/types/api-error-model';
 import { loginPayload } from '../../../test/repository-model-fixtures';

@@ -29,7 +29,7 @@ alwaysApply: false
 - Avoid duplicating the same shape in both `utils/types` and `repository/.../models`; import from one place when they represent the same thing.
 
 ### Enums and Constants
-- Prefer enums and constants from `wemotoo-common` for status, role, and shared codes.
+- Prefer enums and constants from `yeppi-common` for status, role, and shared codes.
 - Define app-only enums or const objects in `utils/types` or `utils/constants` when they don’t belong in the shared package.
 
 ## Anti-Patterns

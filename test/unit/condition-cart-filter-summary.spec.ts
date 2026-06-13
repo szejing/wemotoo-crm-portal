@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FilterCondition, FilterOperator } from 'wemotoo-common';
+import { FilterCondition, FilterOperator } from 'yeppi-common';
 import type { CreateDiscountConditionReq } from '../../app/repository/modules/discount/models/request/create-discount.req';
 import { conditionHasCartFilter, formatConditionCartFilterSummary } from '../../app/utils/discount/condition-cart-filter-summary';
 

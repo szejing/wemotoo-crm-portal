@@ -7,7 +7,7 @@ import type { UpdateOrderStatusResp } from './models/response/update-order.resp'
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { BaseODataResp } from '~/repository/base/base.resp';
 import type { OrderHistory } from '~/utils/types/order-history';
-import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'yeppi-common';
 
 class OrderModule extends HttpFactory {
 	private readonly RESOURCE = MerchantRoutes.Orders;

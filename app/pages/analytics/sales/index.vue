@@ -29,10 +29,7 @@
 						class="group flex flex-col gap-2 rounded-lg border border-default bg-default/40 p-4 transition-all hover:border-primary/40 hover:bg-elevated/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 					>
 						<div class="flex items-start justify-between gap-2">
-							<div
-								class="flex size-10 shrink-0 items-center justify-center rounded-lg"
-								:class="link.iconWrapClass"
-							>
+							<div class="flex size-10 shrink-0 items-center justify-center rounded-lg" :class="link.iconWrapClass">
 								<UIcon :name="link.icon" class="size-5" :class="link.iconClass" />
 							</div>
 							<UIcon
@@ -161,7 +158,7 @@
 
 <script lang="ts" setup>
 import { VisXYContainer, VisLine, VisAxis, VisArea, VisCrosshair, VisTooltip } from '@unovis/vue';
-import { getFormattedDate, parseDate, formatCurrency } from 'wemotoo-common';
+import { getFormattedDate, parseDate, formatCurrency } from 'yeppi-common';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 

@@ -1,4 +1,4 @@
-import type { PaymentMethodType } from 'wemotoo-common';
+import type { PaymentMethodType } from 'yeppi-common';
 
 // Input type for create/update operations
 export type PaymentMethodInput = {

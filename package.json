@@ -1,13 +1,13 @@
 {
-	"name": "wemotoo-crm-portal",
+	"name": "wemotoo-portal",
 	"private": true,
 	"type": "module",
 	"scripts": {
 		"build:dev": "NODE_OPTIONS=--max-old-space-size=8192 bun --bun nuxt build --dotenv .env.dev",
 		"build:prod": "NODE_OPTIONS=--max-old-space-size=8192 bun --bun nuxt build --dotenv .env.prod",
 		"build:prod:docker": "node node_modules/nuxt/bin/nuxt.mjs build --dotenv .env.prod",
-		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lock bun.lockb",
-		"rebuild": "bun run clean && bun install && bun update wemotoo-common",
+		"clean": "rm -rf node_modules && rm -rf dist && rm -rf .nuxt && rm -rf bun.lock",
+		"rebuild": "bun run clean && bun install && bun update yeppi-common",
 		"start:local": "bun --bun nuxt dev --dotenv .env.local",
 		"start:dev": "bun --bun nuxt dev --dotenv .env.dev",
 		"start:prod": "bun --bun nuxt dev --dotenv .env.prod",
@@ -23,8 +23,8 @@
 		"lint:fix": "eslint . --fix",
 		"docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
 		"docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
-		"docker:build:dev": "docker buildx build --platform linux/arm64 -t wemotoo-crm:dev .",
-		"docker:build:prod": "docker buildx build --platform linux/amd64 -t wemotoo-crm:prod ."
+		"docker:build:dev": "docker buildx build --platform linux/arm64 -t wemotoo:dev .",
+		"docker:build:prod": "docker buildx build --platform linux/amd64 -t wemotoo:prod ."
 	},
 	"dependencies": {
 		"@nuxt/eslint": "^1.16.0",
@@ -48,7 +48,7 @@
 		"vee-validate": "^4.15.1",
 		"vue": "latest",
 		"vue-router": "latest",
-		"wemotoo-common": "git+https://github.com/szejing/wemotoo-common.git",
+		"yeppi-common": "git+https://github.com/szejing/yeppi-common.git",
 		"zod": "^4.0.17"
 	},
 	"devDependencies": {

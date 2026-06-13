@@ -1,4 +1,4 @@
-import { KEY, buildCanonicalString, hashBody, signRequest } from 'wemotoo-common';
+import { KEY, buildCanonicalString, hashBody, signRequest } from 'yeppi-common';
 
 const API_PATH_PREFIX = '/api';
 
@@ -21,15 +21,13 @@ function canonicalPathAndQueryForSignature(pathname: string, query?: Record<stri
 	}
 
 	entries.sort((a, b) => a[0].localeCompare(b[0]));
-	const queryString = entries
-		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-		.join('&');
+	const queryString = entries.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
 	return `${pathNormalized}?${queryString}`;
 }
 
 function getSignatureHeaders(event: any, method: string, pathForSignature: string, body: string | undefined | null): Record<string, string> {
 	const config = useRuntimeConfig(event);
-	const secret = config.apiKeySecret || config.apiKey;
+	const secret = config.requestSignatureSecret || config.apiKeySecret || config.apiKey;
 	if (!secret) {
 		return {};
 	}
@@ -47,7 +45,7 @@ function getSignatureHeaders(event: any, method: string, pathForSignature: strin
  * Build canonical path+query as used for X-Signature (path no trailing slash, query keys sorted).
  * Must match Nest `request.originalUrl`: the CRM sends `/api/auth/login`, `/api/shipping-methods/...`, etc.
  * RouterMiddleware rewrites `req.url` to `/merchant/...` for routing, but `originalUrl` stays `/api/...`
- * (see ecommerce-nestjs RouterMiddleware + SignatureGuard).
+ * (see yeppi-ecommerce-backend RouterMiddleware + SignatureGuard).
  */
 export function pathForSignature(pathSegment: string, query?: Record<string, any>): string {
 	const trimmed = pathSegment.replace(/^\//, '').replace(/\/+$/, '');
@@ -58,7 +56,7 @@ export function pathForSignature(pathSegment: string, query?: Record<string, any
 
 /**
  * Raw body bytes used for X-Signature body hash (passed to hashBody).
- * Must match ecommerce-nestjs SignatureGuard: DELETE uses empty hash, not JSON body.
+ * Must match yeppi-ecommerce-backend SignatureGuard: DELETE uses empty hash, not JSON body.
  */
 export function rawBodyForSignature(method: string, body: unknown): string | undefined {
 	const m = (method || 'GET').toUpperCase();

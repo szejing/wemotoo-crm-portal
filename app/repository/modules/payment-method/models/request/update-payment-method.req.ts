@@ -1,4 +1,4 @@
-import type { PaymentMethodType } from 'wemotoo-common';
+import type { PaymentMethodType } from 'yeppi-common';
 
 /** Request shape for updateStatus (code + is_active). */
 export type UpdatePaymentMethodReq = {

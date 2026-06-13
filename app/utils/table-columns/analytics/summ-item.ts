@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { OrderItemStatus } from 'wemotoo-common';
+import { OrderItemStatus } from 'yeppi-common';
 import { UBadge } from '#components';
 import { headerCell, moneyCell, mutedCell, numberCell, optionalMoneyCell, tableCellMeta } from '../styles';
 import type { SummCountKey, SummItemRow, TranslateFn } from './types';
@@ -91,9 +91,7 @@ export function getSummItemColumns<T extends SummItemRow>(t: TranslateFn, countK
 						class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
 					}),
 					h('div', { class: 'flex-1 min-w-0' }, [
-						h('div', { class: 'flex items-center gap-1.5' }, [
-							h('span', { class: 'font-semibold text-sm text-highlighted' }, o.prod_name || '—'),
-						]),
+						h('div', { class: 'flex items-center gap-1.5' }, [h('span', { class: 'font-semibold text-sm text-highlighted' }, o.prod_name || '—')]),
 						h('div', { class: 'text-xs text-muted font-mono italic' }, o.prod_code ?? ''),
 						variantNameBadge,
 					]),

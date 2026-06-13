@@ -1,5 +1,5 @@
 import { UBadge, USwitch } from '#components';
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 import { formatDiscountDiscValue } from '~/utils/discount-rule-display';
 import type { TableColumn } from '@nuxt/ui';
 import type { Discount } from '~/utils/types/discount';
@@ -45,13 +45,7 @@ export const getDiscountColumns = (t: TranslateFn): TableColumn<Discount>[] => {
 					h(UBadge, { variant: 'subtle', color, class: 'capitalize w-fit' }, () => (labelKey ? t(labelKey) : String(rt))),
 				];
 				if (rt !== DiscountType.FREE_SHIPPING) {
-					children.push(
-						h(
-							'span',
-							{ class: 'text-sm font-semibold tabular-nums text-default' },
-							formatDiscountDiscValue(rt, row.original.disc_value),
-						),
-					);
+					children.push(h('span', { class: 'text-sm font-semibold tabular-nums text-default' }, formatDiscountDiscValue(rt, row.original.disc_value)));
 				}
 				return h('div', { class: 'flex flex-col gap-1 items-start' }, children);
 			},

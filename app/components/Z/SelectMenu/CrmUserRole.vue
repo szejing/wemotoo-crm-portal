@@ -1,14 +1,9 @@
 <template>
-	<USelect
-		v-model="role"
-		:items="roleItems"
-		value-attribute="value"
-		:placeholder="$t('components.crmUserForm.role')"
-	/>
+	<USelect v-model="role" :items="roleItems" value-attribute="value" :placeholder="$t('components.crmUserForm.role')" />
 </template>
 
 <script lang="ts" setup>
-import type { UserRoles } from 'wemotoo-common';
+import type { UserRoles } from 'yeppi-common';
 import { roleOptions } from '~/utils/options/user-roles';
 
 const props = defineProps<{ role?: UserRoles }>();

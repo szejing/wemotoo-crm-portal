@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import { getSummColumns, getSummColumnLabels } from '~/utils/table-columns';
 import type { SummBillTableRow } from '~/utils/table-columns';

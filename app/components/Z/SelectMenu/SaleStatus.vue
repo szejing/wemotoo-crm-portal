@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { getOrderStatusOptions, getOrderStatusColor } from '~/utils/options';
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
 
 const { t } = useI18n();
 

@@ -207,7 +207,7 @@
 
 <script lang="ts" setup>
 import { ZModalLoading } from '#components';
-import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'wemotoo-common';
+import { getFormattedDate, GROUP_CODE, MERCHANT, Package } from 'yeppi-common';
 import { useDataStore } from '~/stores/Data/Data';
 import type { Country } from '~/utils/types/country';
 import { ICONS } from '~/utils/icons';

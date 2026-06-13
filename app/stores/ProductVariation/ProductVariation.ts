@@ -5,7 +5,7 @@ import type { ProductVariation } from '~/utils/types/product-variation';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { ProductOption } from '~/utils/types/product-option';
-import { defaultProductVariationRelations } from 'wemotoo-common';
+import { defaultProductVariationRelations } from 'yeppi-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 
 type ProductVariationFilter = {

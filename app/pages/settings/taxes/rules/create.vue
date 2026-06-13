@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import { ZModalTaxRuleDetail } from '#components';
-import type { AmountType, FilterOperator, FilterCondition } from 'wemotoo-common';
+import type { AmountType, FilterOperator, FilterCondition } from 'yeppi-common';
 import type { TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 import type { TaxRuleDetail } from '~/utils/types/tax-rule-detail';
 

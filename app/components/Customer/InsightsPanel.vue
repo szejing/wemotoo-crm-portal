@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CustomerInsight, CustomerInsightKey } from 'wemotoo-common';
+import type { CustomerInsight, CustomerInsightKey } from 'yeppi-common';
 import {
 	customerInsightConfidenceOptions,
 	customerInsightLabel,
@@ -116,9 +116,7 @@ const categoryLabel = computed(() => {
 	return category ? t(`pages.customerInsights.categories.${category}`) : '—';
 });
 
-const sortedInsights = computed(() =>
-	[...props.insights].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
-);
+const sortedInsights = computed(() => [...props.insights].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
 watch(selectedTrait, (trait) => {
 	if (trait && !form.severity) {

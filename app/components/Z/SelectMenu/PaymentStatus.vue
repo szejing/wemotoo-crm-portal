@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { PaymentStatus } from 'wemotoo-common';
+import type { PaymentStatus } from 'yeppi-common';
 import { getPaymentStatusOptions, getPaymentStatusColor } from '~/utils/options';
 
 const { t } = useI18n();

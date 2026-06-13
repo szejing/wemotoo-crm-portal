@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { ErrorResponse } from '~/repository/base/error';

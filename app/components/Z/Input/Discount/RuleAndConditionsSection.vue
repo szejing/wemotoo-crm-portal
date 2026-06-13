@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 import type { CreateDiscountConditionReq } from '~/repository/modules/discount/models/request/create-discount.req';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 import { ICONS } from '~/utils/icons';

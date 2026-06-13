@@ -1,4 +1,4 @@
-import type { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import type { OrderItemStatus, OrderStatus } from 'yeppi-common';
 
 type SummOrderTxnDaily = {
 	biz_date: string;

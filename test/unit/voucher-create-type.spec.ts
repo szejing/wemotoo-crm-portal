@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType } from 'wemotoo-common';
+import { AllocationType } from 'yeppi-common';
 import {
 	resolveAllocationFromVoucherCreateType,
 	resolveVoucherCreateType,

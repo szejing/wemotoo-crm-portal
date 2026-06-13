@@ -1,9 +1,4 @@
-import type {
-	CustomerInsightCategory,
-	CustomerInsightConfidence,
-	CustomerInsightKey,
-	CustomerInsightSeverity,
-} from 'wemotoo-common';
+import type { CustomerInsightCategory, CustomerInsightConfidence, CustomerInsightKey, CustomerInsightSeverity } from 'yeppi-common';
 
 export type CustomerInsightInput = {
 	key: CustomerInsightKey;

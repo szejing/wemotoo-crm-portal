@@ -12,7 +12,7 @@ Pair with **`implementation-and-tests`** when adding or changing repository beha
 
 ## 1. Routes
 
-- **`app/repository/routes.client.ts`**: add a namespace (e.g. `MerchantRoutes.Products`) with **`API_PATH`** from `wemotoo-common`; methods return path strings — `Many()`, `Single(id)`, `Create()`, `Update(id)`, `Delete(id)`, `Restore(id)` as needed.
+- **`app/repository/routes.client.ts`**: add a namespace (e.g. `MerchantRoutes.Products`) with **`API_PATH`** from `yeppi-common`; methods return path strings — `Many()`, `Single(id)`, `Create()`, `Update(id)`, `Delete(id)`, `Restore(id)` as needed.
 - **`server/`**: if the portal proxies this resource, add matching handlers using the same path builders (see **`server-routes`** rule).
 
 ## 2. Folder layout
@@ -36,7 +36,7 @@ app/repository/modules/{domain}/
 - **`Update{Domain}Req`**: usually `Partial<Create{Domain}Req>` in **`update-{domain}.req.ts`** (import create req).
 - **`{Domain}Req`**: minimal identifier for **`delete`/`restore`** when the pattern matches **`ProductModule.delete(product: ProductReq)`** — e.g. `{ code: string }`.
 
-Use **`type`**, **`wemotoo-common`** enums where applicable, and **`BaseODataReq`** for list query params.
+Use **`type`**, **`yeppi-common`** enums where applicable, and **`BaseODataReq`** for list query params.
 
 ## 4. Response types (`models/response/`)
 

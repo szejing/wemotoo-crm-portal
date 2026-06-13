@@ -1,4 +1,4 @@
-import { API_PATH } from 'wemotoo-common';
+import { API_PATH } from 'yeppi-common';
 
 const prefix: string = '';
 

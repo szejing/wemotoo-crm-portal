@@ -1,4 +1,4 @@
-import type { OrderItemStatus } from 'wemotoo-common';
+import type { OrderItemStatus } from 'yeppi-common';
 import type { AppointmentModel } from './appointment.model';
 import type { ItemTaxModel } from './item-tax.model';
 

@@ -18,14 +18,14 @@
 
 ## Data Flow
 
-- UI (pages/components) → composables or direct `$api.{module}` → Nuxt server routes (`/api/...`) → backend (ecommerce-nestjs). Server routes add headers via generateHeaders (api key, merchant id, bearer token).
+- UI (pages/components) → composables or direct `$api.{module}` → Nuxt server routes (`/api/...`) → backend (yeppi-ecommerce-backend). Server routes add headers via generateHeaders (api key, merchant id, bearer token).
 - List endpoints typically use OData-style query (BaseODataReq/BaseODataResp). Table columns and filter schemas live in app/utils/table-columns/ and app/utils/schema/.
 - Forms use Zod schemas from app/utils/schema/{Entity}/ and VeeValidate; submit via repository create/update methods.
 
 ## Key Files for Understanding Flows
 
 - `app/plugins/01.api.ts` – exposes all repository modules as `$api`.
-- `app/repository/routes.client.ts` – client path builders (prefix + API_PATH from wemotoo-common).
+- `app/repository/routes.client.ts` – client path builders (prefix + API_PATH from yeppi-common).
 - `server/routes.server.ts` – server-side Routes used in Nitro handlers; same API_PATH.
 - `server/base_api.ts` – generateHeaders, generateImageHeaders (for uploads).
 - `app/middleware/auth.global.ts` – redirect to login when no access token.

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { OrderShipment } from '~/utils/types/order-fulfillment-shipping';
@@ -50,9 +50,7 @@ export const useShipmentStore = defineStore('shipmentStore', {
 			}
 		},
 
-		async createShipment(
-			payload: Omit<CreateShipmentReq, 'merchant_id'>,
-		): Promise<OrderShipment | undefined> {
+		async createShipment(payload: Omit<CreateShipmentReq, 'merchant_id'>): Promise<OrderShipment | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.creating = true;
@@ -74,10 +72,7 @@ export const useShipmentStore = defineStore('shipmentStore', {
 			}
 		},
 
-		async updateShipment(
-			id: string,
-			payload: Omit<UpdateShipmentReq, 'merchant_id'>,
-		): Promise<OrderShipment | undefined> {
+		async updateShipment(id: string, payload: Omit<UpdateShipmentReq, 'merchant_id'>): Promise<OrderShipment | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.updating = true;
@@ -88,9 +83,7 @@ export const useShipmentStore = defineStore('shipmentStore', {
 					...payload,
 				});
 				this.lastShipment = response.shipment;
-				this.shipments = this.shipments.map((shipment) =>
-					shipment.id === id ? response.shipment : shipment,
-				);
+				this.shipments = this.shipments.map((shipment) => (shipment.id === id ? response.shipment : shipment));
 				successNotification('Shipment updated');
 				return response.shipment;
 			} catch (err: unknown | ErrorResponse) {
@@ -131,9 +124,7 @@ export const useShipmentStore = defineStore('shipmentStore', {
 					merchant_id: String(merchant_id ?? ''),
 				});
 				this.lastShipment = response.shipment;
-				this.shipments = this.shipments.map((shipment) =>
-					shipment.id === id ? response.shipment : shipment,
-				);
+				this.shipments = this.shipments.map((shipment) => (shipment.id === id ? response.shipment : shipment));
 				successNotification('Shipment marked as delivered');
 				return response.shipment;
 			} catch (err: unknown | ErrorResponse) {

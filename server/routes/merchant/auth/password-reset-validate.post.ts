@@ -1,6 +1,6 @@
 import { signedFetch } from '#root/server/base_api';
 import { Routes } from '#root/server/routes.server';
-import { decodebase64 } from 'wemotoo-common';
+import { decodebase64 } from 'yeppi-common';
 
 export default defineEventHandler(async (event) => {
 	try {

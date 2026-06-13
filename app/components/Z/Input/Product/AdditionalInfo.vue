@@ -64,7 +64,7 @@
 import type { ProductCreate } from '~/utils/types/form/product-creation';
 import type { Product, ProductVariantInput } from '~/utils/types/product';
 import type { ProductVariationInput } from '~/utils/types/product-variation';
-import { ProductType } from 'wemotoo-common';
+import { ProductType } from 'yeppi-common';
 
 const props = defineProps({
 	product: {

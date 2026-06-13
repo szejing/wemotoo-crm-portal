@@ -1,4 +1,4 @@
-import type { UserRoles } from 'wemotoo-common';
+import type { UserRoles } from 'yeppi-common';
 
 export type CrmUserReq = {
 	id: string;

@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { formatCurrency, OrderStatus } from 'wemotoo-common';
+import { formatCurrency, OrderStatus } from 'yeppi-common';
 import { UBadge, UIcon } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
 import type { ItemModel } from '~/utils/models';

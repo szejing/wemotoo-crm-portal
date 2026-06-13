@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { OrderStatus } from 'wemotoo-common';
+import { OrderStatus } from 'yeppi-common';
 import type { SummSalePayment } from '~/utils/types/summ-sales';
 import { getSortableHeader } from '../sortable';
 import { moneyCell, numberCell, primaryCell, tableCellMeta } from '../styles';

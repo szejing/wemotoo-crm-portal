@@ -160,7 +160,7 @@
 
 <script lang="ts" setup>
 import { VisXYContainer, VisLine, VisAxis, VisArea, VisCrosshair, VisTooltip } from '@unovis/vue';
-import { getFormattedDate, parseDate, formatCurrency, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, parseDate, formatCurrency, OrderStatus } from 'yeppi-common';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
 

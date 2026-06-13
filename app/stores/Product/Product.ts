@@ -1,4 +1,4 @@
-import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from 'wemotoo-common';
+import { defaultProductRelations, ProductStatus, removeDuplicateExpands } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { Product } from '~/utils/types/product';
 import { failedNotification, successNotification } from '../AppUi/AppUi';

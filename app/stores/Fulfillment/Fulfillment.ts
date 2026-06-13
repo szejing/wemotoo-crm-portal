@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { OrderFulfillment } from '~/utils/types/order-fulfillment-shipping';
@@ -25,8 +25,7 @@ export const useFulfillmentStore = defineStore('fulfillmentStore', {
 				successNotification('Fulfillment created');
 				return response.fulfillment;
 			} catch (err: unknown | ErrorResponse) {
-				const message =
-					(err as ErrorResponse).message ?? 'Failed to create fulfillment';
+				const message = (err as ErrorResponse).message ?? 'Failed to create fulfillment';
 				failedNotification(message);
 				throw err;
 			} finally {
@@ -46,10 +45,7 @@ export const useFulfillmentStore = defineStore('fulfillmentStore', {
 			return this.updateState(order_no, 'fulfilled');
 		},
 
-		async updateState(
-			order_no: string,
-			next: 'processing' | 'packed' | 'fulfilled',
-		): Promise<OrderFulfillment | undefined> {
+		async updateState(order_no: string, next: 'processing' | 'packed' | 'fulfilled'): Promise<OrderFulfillment | undefined> {
 			const { $api } = useNuxtApp();
 			const merchant_id = useCookie(KEY.X_MERCHANT_ID).value;
 			this.updating = true;
@@ -67,8 +63,7 @@ export const useFulfillmentStore = defineStore('fulfillmentStore', {
 				successNotification(`Fulfillment marked as ${next}`);
 				return response.fulfillment;
 			} catch (err: unknown | ErrorResponse) {
-				const message =
-					(err as ErrorResponse).message ?? 'Failed to update fulfillment';
+				const message = (err as ErrorResponse).message ?? 'Failed to update fulfillment';
 				failedNotification(message);
 				throw err;
 			} finally {

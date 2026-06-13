@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductStatus } from 'wemotoo-common';
+import type { ProductStatus } from 'yeppi-common';
 
 const productStore = useProductStore();
 const { filter } = storeToRefs(productStore);

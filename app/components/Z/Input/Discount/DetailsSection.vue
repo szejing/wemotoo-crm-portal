@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import { endOfDay, startOfDay } from 'date-fns';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { DiscountCreate } from '~/utils/types/form/discount-creation';
 import { ICONS } from '~/utils/icons';
 

@@ -62,10 +62,10 @@ Re-export public getters, label helpers, and row types from `table-columns/index
 ## Constants
 
 - Use `utils/constants/` for app-specific constants (e.g. dir names, file names).
-- Use `wemotoo-common` for API paths, cookie keys, enums, and shared constants.
+- Use `yeppi-common` for API paths, cookie keys, enums, and shared constants.
 
 ## Anti-Patterns
 
 - ❌ Side effects or I/O in utility functions
 - ❌ Business rules that belong in the backend or in schema/composables
-- ❌ Duplicating types that already exist in repository models or wemotoo-common
+- ❌ Duplicating types that already exist in repository models or yeppi-common

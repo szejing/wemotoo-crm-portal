@@ -1,4 +1,4 @@
-import { Package } from 'wemotoo-common';
+import { Package } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

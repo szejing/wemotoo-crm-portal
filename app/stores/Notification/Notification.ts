@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia';
 import { failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
-import type {
-	Notification,
-	NotificationCenter,
-	NotificationItem,
-} from '~/utils/types/notification';
+import type { Notification, NotificationCenter, NotificationItem } from '~/utils/types/notification';
 import type { BaseODataReq } from '~/repository/base/base.req';
-import type { NotificationType } from 'wemotoo-common';
+import type { NotificationType } from 'yeppi-common';
 
 type NotificationQueryOptions = BaseODataReq & {
 	includeRead?: boolean;
@@ -27,25 +23,12 @@ export const useNotificationStore = defineStore('notificationStore', {
 			state.notifications
 				.map((notification) => ({
 					...notification,
-					items: notification.items.filter(
-						(item) => !item.read_at,
-					),
-					count: notification.items.filter(
-						(item) => !item.read_at,
-					).length,
+					items: notification.items.filter((item) => !item.read_at),
+					count: notification.items.filter((item) => !item.read_at).length,
 				}))
 				.filter((notification) => notification.count > 0),
-		hasNotifications: (state) =>
-			state.notifications.some((notification) =>
-				notification.items.some((item) => !item.read_at),
-			),
-		unreadCount: (state) =>
-			state.notifications.reduce(
-				(total, notification) =>
-					total +
-					notification.items.filter((item) => !item.read_at).length,
-				0,
-			),
+		hasNotifications: (state) => state.notifications.some((notification) => notification.items.some((item) => !item.read_at)),
+		unreadCount: (state) => state.notifications.reduce((total, notification) => total + notification.items.filter((item) => !item.read_at).length, 0),
 	},
 	actions: {
 		async getNotifications(options: NotificationQueryOptions = {}): Promise<void> {
@@ -94,34 +77,33 @@ export const useNotificationStore = defineStore('notificationStore', {
 				opened_at: openedAt,
 			};
 
-			const updateCollection = (notifications: Notification[]) => notifications.map((notification) => {
-				if (notification.type !== type) {
-					return notification;
-				}
+			const updateCollection = (notifications: Notification[]) =>
+				notifications.map((notification) => {
+					if (notification.type !== type) {
+						return notification;
+					}
 
-				return {
-					...notification,
-					items: notification.items.map((item) =>
-						itemIds.includes(item.id) || item.notification_ids?.some((id) => itemIds.includes(id))
-							? {
-									...item,
-									...updatedGroup,
-									notification_type: notification.type,
-									notification_title: notification.title,
-									notification_description: notification.description,
-									notification_severity: notification.severity,
-								}
-							: item,
-					),
-				};
-			});
+					return {
+						...notification,
+						items: notification.items.map((item) =>
+							itemIds.includes(item.id) || item.notification_ids?.some((id) => itemIds.includes(id))
+								? {
+										...item,
+										...updatedGroup,
+										notification_type: notification.type,
+										notification_title: notification.title,
+										notification_description: notification.description,
+										notification_severity: notification.severity,
+									}
+								: item,
+						),
+					};
+				});
 
 			this.notifications = updateCollection(this.notifications);
 			this.all_notifications = updateCollection(this.all_notifications);
 
-			return this.notifications
-				.find((notification) => notification.type === type)
-				?.items.find((candidate) => candidate.id === item.id) ?? updatedGroup;
+			return this.notifications.find((notification) => notification.type === type)?.items.find((candidate) => candidate.id === item.id) ?? updatedGroup;
 		},
 		decorateNotifications(notifications: Notification[]): Notification[] {
 			return notifications.map((notification) => ({

@@ -1,4 +1,4 @@
-import type { ProductStatus } from 'wemotoo-common';
+import type { ProductStatus } from 'yeppi-common';
 import type { ImageReq } from '../../../image/models/request/image.req';
 
 import type { PriceInput } from '~/utils/types/price';

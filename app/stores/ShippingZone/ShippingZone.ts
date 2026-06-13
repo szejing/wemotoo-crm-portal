@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { defaultShippingZoneRelations, KEY, removeDuplicateExpands } from 'wemotoo-common';
+import { defaultShippingZoneRelations, KEY, removeDuplicateExpands } from 'yeppi-common';
 import { options_page_size } from '../../utils/options';
 import { successNotification, failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';

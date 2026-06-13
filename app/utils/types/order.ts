@@ -1,4 +1,4 @@
-import type { OrderItemStatus, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { OrderItemStatus, OrderStatus, PaymentStatus } from 'yeppi-common';
 import type { AddressModel } from '~/utils/models/customer.model';
 import type { Appointment } from './appointment';
 import type { Currency } from './currency';

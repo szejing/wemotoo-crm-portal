@@ -74,7 +74,7 @@
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
 import { CreateTaxRuleValidation } from '~/utils/schema';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
 
 const { t } = useI18n();

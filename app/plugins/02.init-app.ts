@@ -1,4 +1,4 @@
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { useAuthStore } from '~/stores';
 
 export default defineNuxtPlugin(async (_) => {

@@ -1,4 +1,4 @@
-import type { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import type { OrderStatus, PaymentStatus } from 'yeppi-common';
 import type { TaxModel } from '../models/tax.model';
 import type { Currency } from './currency';
 import type { ItemModel, PaymentModel, CustomerModel } from '../models';

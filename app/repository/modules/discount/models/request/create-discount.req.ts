@@ -1,13 +1,13 @@
-import type { AllocationType, DiscountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import type { AllocationType, DiscountType, FilterCondition, FilterOperator } from 'yeppi-common';
 
-/** Matches ecommerce-nestjs `CreateDiscountConditionDto` (flat filter fields). */
+/** Matches yeppi-ecommerce-backend `CreateDiscountConditionDto` (flat filter fields). */
 export type CreateDiscountConditionReq = {
 	filter_operator?: FilterOperator;
 	filter_condition?: FilterCondition;
 	filter_value?: string;
 };
 
-/** Matches ecommerce-nestjs `CreateDiscountDto`. */
+/** Matches yeppi-ecommerce-backend `CreateDiscountDto`. */
 export type CreateDiscountReq = {
 	code?: string;
 	description?: string;

@@ -4,7 +4,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { Currency } from '~/utils/types/currency';
 import { dir } from '~/utils/constants/dir';
-import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
+import { GROUP_CODE, MERCHANT } from 'yeppi-common';
 
 const initial: MerchantInfo[] = [];
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY } from 'wemotoo-common';
+import { KEY } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { Customer } from '~/utils/types/customer';
 import type { OrderHistory } from '~/utils/types/order-history';
@@ -7,7 +7,7 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import { sub } from 'date-fns';
 import type { Range } from '~/utils/interface';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import type { CustomerInsightInput } from '~/repository/modules/customer/models/request/customer-insights.req';
 

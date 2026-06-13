@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UserRoles } from 'wemotoo-common';
+import { UserRoles } from 'yeppi-common';
 import { type CrmUserUpdate } from '~/utils/types/crm-user';
 import { useCRMUserStore } from '~/stores/CRMUser/CRMUser';
 import { useStaffDepartmentStore } from '~/stores/StaffDepartment/StaffDepartment';
@@ -145,7 +145,8 @@ const canDeleteCurrentUser = computed(() => isAdmin.value && isCurrentUserStaff.
 const canResetOtherStaffPassword = computed(() => !isViewingSelf.value && isAdmin.value);
 const showPasswordSection = computed(() => isViewingSelf.value || canResetOtherStaffPassword.value);
 const currentStaffDepartmentName = computed(() => {
-	const position = current_crm_user.value?.staff_department ?? staffDepartmentStore.departments.find((item) => item.id === current_crm_user.value?.staff_department_id);
+	const position =
+		current_crm_user.value?.staff_department ?? staffDepartmentStore.departments.find((item) => item.id === current_crm_user.value?.staff_department_id);
 	return position?.name ?? '—';
 });
 
@@ -203,7 +204,14 @@ useLeavePageGuard(hasChanges, {
 	},
 });
 
-const onEditFormSubmit = async (payload: { name: string; email_address: string; dial_code: string; phone_no: string; role: CrmUserUpdate['role']; staff_department_id?: number | null }) => {
+const onEditFormSubmit = async (payload: {
+	name: string;
+	email_address: string;
+	dial_code: string;
+	phone_no: string;
+	role: CrmUserUpdate['role'];
+	staff_department_id?: number | null;
+}) => {
 	await crmUserStore.updateCrmUser(id.value, {
 		name: payload.name || undefined,
 		email_address: payload.email_address || undefined,

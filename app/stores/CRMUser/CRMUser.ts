@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { KEY, UserRoles } from 'wemotoo-common';
+import { KEY, UserRoles } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import type { CRMUser, CrmUserCreate } from '~/utils/types/crm-user';
 import { failedNotification, successNotification } from '../AppUi/AppUi';

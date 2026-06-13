@@ -2,7 +2,7 @@ import { options_page_size } from '~/utils/options';
 import { defineStore } from 'pinia';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
-import { AppointmentStatus, getFormattedDate } from 'wemotoo-common';
+import { AppointmentStatus, getFormattedDate } from 'yeppi-common';
 import type { Range } from '~/utils/interface';
 import { addMonths, endOfMonth, startOfMonth } from 'date-fns';
 import type { Appointment } from '~/utils/types/appointment';

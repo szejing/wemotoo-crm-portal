@@ -1,8 +1,8 @@
 /* eslint-disable indent */
 /* eslint-disable @stylistic/indent */
 import { defineStore } from 'pinia';
-import type { OrderStatus } from 'wemotoo-common';
-import { getFormattedDate } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
+import { getFormattedDate } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';

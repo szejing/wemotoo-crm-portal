@@ -1,4 +1,4 @@
-import { GROUP_CODE } from 'wemotoo-common';
+import { GROUP_CODE } from 'yeppi-common';
 import { defineStore } from 'pinia';
 import { Setting } from '~/utils/types/setting';
 import type { SettingSegment } from '~/utils/types/setting-segment';

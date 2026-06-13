@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { OrderStatus, PaymentStatus } from 'yeppi-common';
 import { options_page_size } from '~/utils/options';
 import { getOrderColumns } from '~/utils/table-columns';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';

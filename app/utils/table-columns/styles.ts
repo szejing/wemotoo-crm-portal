@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 
 export const TABLE_ALIGN_RIGHT = 'text-right tabular-nums';
 

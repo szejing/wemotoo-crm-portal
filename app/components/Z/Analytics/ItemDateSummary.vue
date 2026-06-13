@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { formatCurrency, getFormattedDate } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate } from 'yeppi-common';
 import { computed } from 'vue';
 
 const props = defineProps<{

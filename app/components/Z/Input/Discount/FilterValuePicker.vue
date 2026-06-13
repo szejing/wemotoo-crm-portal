@@ -65,12 +65,7 @@
 			<!-- Nested category tree (same pattern as Z/Modal/Category/Picker.vue) -->
 			<div v-if="isCategoryTreeMode" class="space-y-4">
 				<div class="flex items-center justify-between gap-3">
-					<UInput
-						v-model="categorySearchTerm"
-						:placeholder="$t('components.zModal.categoryPicker.searchPlaceholder')"
-						class="max-w-xs"
-						size="md"
-					>
+					<UInput v-model="categorySearchTerm" :placeholder="$t('components.zModal.categoryPicker.searchPlaceholder')" class="max-w-xs" size="md">
 						<template #leading>
 							<UIcon :name="ICONS.SEARCH_ROUNDED" class="size-4 text-muted" />
 						</template>
@@ -129,11 +124,7 @@
 								</li>
 							</ul>
 							<div v-else class="flex h-full min-h-[200px] items-center justify-center px-3 text-center text-sm text-muted">
-								{{
-									selectedLevel1
-										? $t('components.zModal.categoryPicker.noSubcategories')
-										: $t('components.zModal.categoryPicker.selectParent')
-								}}
+								{{ selectedLevel1 ? $t('components.zModal.categoryPicker.noSubcategories') : $t('components.zModal.categoryPicker.selectParent') }}
 							</div>
 						</div>
 
@@ -150,11 +141,7 @@
 								</li>
 							</ul>
 							<div v-else class="flex h-full min-h-[200px] items-center justify-center px-3 text-center text-sm text-muted">
-								{{
-									selectedLevel2
-										? $t('components.zModal.categoryPicker.noSubcategories')
-										: $t('components.zModal.categoryPicker.selectSubcategory')
-								}}
+								{{ selectedLevel2 ? $t('components.zModal.categoryPicker.noSubcategories') : $t('components.zModal.categoryPicker.selectSubcategory') }}
 							</div>
 						</div>
 					</div>
@@ -181,12 +168,7 @@
 						</template>
 					</UInput>
 
-					<USelectMenu
-						v-model="sortField"
-						value-key="value"
-						:items="sortFieldItems"
-						:search-input="{ placeholder: $t('components.discountForm.sortBy') }"
-					/>
+					<USelectMenu v-model="sortField" value-key="value" :items="sortFieldItems" :search-input="{ placeholder: $t('components.discountForm.sortBy') }" />
 
 					<USelectMenu
 						v-model="sortDirection"
@@ -197,9 +179,7 @@
 				</div>
 
 				<div class="overflow-hidden rounded-lg border border-default">
-					<div
-						class="grid grid-cols-[auto_minmax(0,1fr)] gap-3 border-b border-default bg-muted/30 px-4 py-2 text-xs font-medium uppercase text-muted"
-					>
+					<div class="grid grid-cols-[auto_minmax(0,1fr)] gap-3 border-b border-default bg-muted/30 px-4 py-2 text-xs font-medium uppercase text-muted">
 						<span>{{ $t('common.select') }}</span>
 						<span>{{ entityLabel }}</span>
 					</div>
@@ -213,15 +193,8 @@
 					</div>
 
 					<div v-else class="max-h-80 divide-y divide-default overflow-y-auto">
-						<label
-							v-for="row in rows"
-							:key="row.value"
-							class="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-3 px-4 py-2 hover:bg-muted/40"
-						>
-							<UCheckbox
-								:model-value="isDraftSelected(row.value)"
-								@update:model-value="toggleSelection(row.value, $event)"
-							/>
+						<label v-for="row in rows" :key="row.value" class="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-3 px-4 py-2 hover:bg-muted/40">
+							<UCheckbox :model-value="isDraftSelected(row.value)" @update:model-value="toggleSelection(row.value, $event)" />
 							<div class="min-w-0">
 								<p class="truncate text-sm font-medium text-highlighted">{{ row.value }}</p>
 								<p v-if="row.description" class="truncate text-xs text-muted">{{ row.description }}</p>
@@ -235,12 +208,7 @@
 						{{ $t('components.discountForm.filterValuePickerTotal', { total }) }}
 					</p>
 					<div class="flex items-center gap-3">
-						<USelectMenu
-							v-model="pageSize"
-							value-key="value"
-							:items="pageSizeItems"
-							@update:model-value="page = 1"
-						/>
+						<USelectMenu v-model="pageSize" value-key="value" :items="pageSizeItems" @update:model-value="page = 1" />
 						<UPagination v-model:page="page" :items-per-page="itemsPerPage" :total="total" />
 					</div>
 				</div>
@@ -262,7 +230,7 @@
 </template>
 
 <script setup lang="ts">
-import { FilterCondition } from 'wemotoo-common';
+import { FilterCondition } from 'yeppi-common';
 import type { BaseODataReq } from '~/repository/base/base.req';
 import { options_page_size } from '~/utils/options';
 import { parseFilterValueCsv, stringifyFilterValueCsv } from '~/utils/discount/filter-value-csv';
@@ -313,9 +281,7 @@ const hasCondition = computed(() => props.filterCondition != null);
 const isCategoryTreeMode = computed(() => props.filterCondition === FilterCondition.CATG_CODE);
 
 const pickerModalDescription = computed(() =>
-	isCategoryTreeMode.value
-		? t('components.discountForm.filterValuePickerCategoryDescription')
-		: t('components.discountForm.filterValuePickerDescription'),
+	isCategoryTreeMode.value ? t('components.discountForm.filterValuePickerCategoryDescription') : t('components.discountForm.filterValuePickerDescription'),
 );
 
 const pickerModalUi = computed(() => ({
@@ -346,9 +312,7 @@ const searchPlaceholder = computed(() => {
 	return t('components.discountForm.filterValuePickerSearchPlaceholder', { entity: entityLabel.value.toLowerCase() });
 });
 
-const selectedCountLabel = computed(() =>
-	t('components.discountForm.filterValuePickerSelected', { count: currentSelectedValues.value.length }),
-);
+const selectedCountLabel = computed(() => t('components.discountForm.filterValuePickerSelected', { count: currentSelectedValues.value.length }));
 
 const sortFieldItems = computed(() => {
 	switch (props.filterCondition) {

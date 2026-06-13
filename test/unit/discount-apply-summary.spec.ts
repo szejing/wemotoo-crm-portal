@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 import { buildDiscountApplySummaryLine, discountRuleShortForReview } from '../../app/utils/discount/apply-summary';
 
 const t = ((key: string, values?: Record<string, unknown>) => {

@@ -3,8 +3,8 @@ import { failedNotification, successNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { TaxRule } from '~/utils/types/tax-rule';
 import type { TaxDetailCreate, TaxRuleCreate } from '~/utils/types/form/tax/tax-rule-creation';
-import { defaultTaxRulesRelations } from 'wemotoo-common';
-import type { AmountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import { defaultTaxRulesRelations } from 'yeppi-common';
+import type { AmountType, FilterCondition, FilterOperator } from 'yeppi-common';
 import { filterRelations } from '~/utils/filter-relations';
 
 export type TaxRuleFilter = {

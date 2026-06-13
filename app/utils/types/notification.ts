@@ -1,4 +1,4 @@
-import type { NotificationSeverity, NotificationType } from 'wemotoo-common';
+import type { NotificationSeverity, NotificationType } from 'yeppi-common';
 
 export type NotificationAction = {
 	label: string;

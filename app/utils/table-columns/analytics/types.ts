@@ -1,4 +1,4 @@
-import type { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import type { OrderItemStatus, OrderStatus } from 'yeppi-common';
 
 export type SummCountKey = 'total_orders' | 'total_txns';
 

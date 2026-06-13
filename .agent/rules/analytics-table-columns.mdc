@@ -61,7 +61,7 @@ const { selectedColumnKeys, visibleColumns } = useTableColumnVisibility(columns,
 
 - Use `h()` render functions for cells, headers, and footers; import UI pieces (`UBadge`) from `#components`.
 - Keep helpers inside the column module, not in pages.
-- Use `wemotoo-common` for `formatCurrency`, `getFormattedDate`, enums.
+- Use `yeppi-common` for `formatCurrency`, `getFormattedDate`, enums.
 - Do **not** call stores, composables, or API from column modules.
 - Add or update unit tests in `test/unit/analytics-*-columns.spec.ts` when changing accessor keys or label maps.
 

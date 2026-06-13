@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/vue-table';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import { getSortableHeader } from '../sortable';
 import { moneyCell, numberCell, primaryCell, tableCellMeta } from '../styles';
 

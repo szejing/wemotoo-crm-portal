@@ -54,7 +54,7 @@ import TaxRuleModule from './tax-rules/tax-rule';
 import TaxModule from './taxes/tax';
 import VoucherModule from './voucher/voucher';
 import type { CreateVoucherReq } from './voucher/models/request/create-voucher.req';
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 
 const odata: BaseODataReq = { $top: 10 };
 const dashboardRange = { start_date: '2025-01-01', end_date: '2025-01-31' };

@@ -1,4 +1,4 @@
-import type { FilterType, OrderItemStatus } from 'wemotoo-common';
+import type { FilterType, OrderItemStatus } from 'yeppi-common';
 
 export type GetSummOrderItemsReq = {
 	start_date: string;

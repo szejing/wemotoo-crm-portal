@@ -1,4 +1,4 @@
-// Temporary workaround for Docker build issues with wemotoo-common
+// Temporary workaround for Docker build issues with yeppi-common
 // This re-exports the KEY constants needed by the application
 
 export const KEY = {
@@ -8,4 +8,4 @@ export const KEY = {
 	REFRESH_TOKEN: 'refresh-token',
 };
 
-// You can add other exports from wemotoo-common here as needed
+// You can add other exports from yeppi-common here as needed

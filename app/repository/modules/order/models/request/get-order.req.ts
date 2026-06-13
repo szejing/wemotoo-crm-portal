@@ -1,4 +1,4 @@
-import type { FilterType, OrderStatus } from 'wemotoo-common';
+import type { FilterType, OrderStatus } from 'yeppi-common';
 
 type FilterableOrderProps = {
 	order_no?: string;

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import { parsePricingSummarySegments } from '~/utils/shipping-zone-pricing-summary';
 import { UBadge, USwitch } from '#components';
 import type { ShippingZone } from '../types/shipping-zone';

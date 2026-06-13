@@ -57,21 +57,11 @@
 			</template>
 			<div v-else class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-2">
 				<div class="w-full sm:w-40 shrink-0">
-					<ZSelectMenuTime
-						:title="$t('components.zInput.selectTime')"
-						:time="prodMetadata.start_time"
-						type="start"
-						@update:time="updateStartTime"
-					/>
+					<ZSelectMenuTime :title="$t('components.zInput.selectTime')" :time="prodMetadata.start_time" type="start" @update:time="updateStartTime" />
 				</div>
 				<span class="hidden sm:inline text-muted shrink-0" aria-hidden="true">–</span>
 				<div class="w-full sm:w-40 shrink-0">
-					<ZSelectMenuTime
-						:title="$t('components.zInput.selectTime')"
-						:time="prodMetadata.end_time"
-						type="end"
-						@update:time="updateEndTime"
-					/>
+					<ZSelectMenuTime :title="$t('components.zInput.selectTime')" :time="prodMetadata.end_time" type="end" @update:time="updateEndTime" />
 				</div>
 			</div>
 		</div>
@@ -79,8 +69,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { ServiceMetadata } from 'wemotoo-common';
-import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
+import type { ServiceMetadata } from 'yeppi-common';
+import { GROUP_CODE, MERCHANT } from 'yeppi-common';
 
 type ServiceMetadataExtended = ServiceMetadata & { follow_operation_hour?: boolean };
 
@@ -148,7 +138,10 @@ const offDayArray = computed({
 		const raw = prodMetadata.value.off_day;
 		if (raw == null || raw === '') return null;
 		if (Array.isArray(raw)) return raw as string[];
-		return raw.split(',').map((s) => s.trim()).filter(Boolean);
+		return raw
+			.split(',')
+			.map((s) => s.trim())
+			.filter(Boolean);
 	},
 	set(value: string[] | null) {
 		const next = value?.length ? value.join(',') : null;

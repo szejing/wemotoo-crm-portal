@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CustomerInsightKey } from 'wemotoo-common';
+import type { CustomerInsightKey } from 'yeppi-common';
 import { customerInsightTraitOptions, type CustomerInsightSelectOption } from '~/utils/options/customer-insights';
 
 const props = defineProps<{ modelValue?: CustomerInsightKey | null }>();

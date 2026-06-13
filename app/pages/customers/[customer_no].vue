@@ -174,11 +174,11 @@
 </template>
 
 <script lang="ts" setup>
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import type { ItemModel } from '~/utils/models';
 import { getCustomerAppointmentColumns, getCustomerOrderHistoryColumns } from '~/utils/table-columns';
 import type { Appointment } from '~/utils/types/appointment';
-import type { CustomerInsightKey, CustomerInsightConfidence, CustomerInsightSeverity } from 'wemotoo-common';
+import type { CustomerInsightKey, CustomerInsightConfidence, CustomerInsightSeverity } from 'yeppi-common';
 import { customerInsightTraitOptions } from '~/utils/options/customer-insights';
 
 const route = useRoute();
@@ -281,12 +281,7 @@ const updateOrdersPage = (page: number) => {
 	ordersPagination.current_page = page;
 };
 
-const handleAddInsight = async (payload: {
-	key: CustomerInsightKey;
-	note?: string;
-	confidence?: string;
-	severity?: string;
-}) => {
+const handleAddInsight = async (payload: { key: CustomerInsightKey; note?: string; confidence?: string; severity?: string }) => {
 	const trait = customerInsightTraitOptions(t).find((item) => item.value === payload.key);
 	if (!trait) return;
 

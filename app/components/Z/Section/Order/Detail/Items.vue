@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderItemStatus, formatCurrency } from 'wemotoo-common';
+import { OrderItemStatus, formatCurrency } from 'yeppi-common';
 import type { ItemModel } from '~/utils/models/item.model';
 import { ICONS } from '~/utils/icons';
 import { formatAppointmentDateRange } from '~/utils/utils';

@@ -242,7 +242,7 @@
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import type { TableMeta, Row } from '@tanstack/vue-table';
 import { ZModalConfirmation, ZModalInformation, ZModalOrderDetailCustomer, ZModalOrderDetailItem } from '#components';
-import { OrderItemStatus, OrderStatus, OrderType, PaymentStatus, formatCurrency } from 'wemotoo-common';
+import { OrderItemStatus, OrderStatus, OrderType, PaymentStatus, formatCurrency } from 'yeppi-common';
 import { failedNotification, successNotification } from '~/stores/AppUi/AppUi';
 import { ICONS } from '~/utils/icons';
 import type { ItemModel } from '~/utils/models/item.model';

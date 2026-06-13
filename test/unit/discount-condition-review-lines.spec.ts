@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FilterCondition, FilterOperator } from 'wemotoo-common';
+import { FilterCondition, FilterOperator } from 'yeppi-common';
 import type { CreateDiscountConditionReq } from '../../app/repository/modules/discount/models/request/create-discount.req';
 import { buildDiscountConditionReviewItems, getConditionFilterReviewPart } from '../../app/utils/discount/discount-condition-review-lines';
 
@@ -37,9 +37,7 @@ describe('buildDiscountConditionReviewItems', () => {
 	});
 
 	it('skips completely empty condition rows', () => {
-		const conditions: CreateDiscountConditionReq[] = [
-			{ filter_operator: undefined, filter_condition: undefined, filter_value: '' },
-		];
+		const conditions: CreateDiscountConditionReq[] = [{ filter_operator: undefined, filter_condition: undefined, filter_value: '' }];
 		expect(buildDiscountConditionReviewItems(conditions, t, 'RM')).toEqual([]);
 	});
 });

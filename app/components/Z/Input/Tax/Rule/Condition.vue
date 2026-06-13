@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AmountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import type { AmountType, FilterCondition, FilterOperator } from 'yeppi-common';
 
 const props = defineProps<{
 	// taxCode?: string;

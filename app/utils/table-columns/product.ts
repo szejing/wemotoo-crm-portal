@@ -3,7 +3,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Product } from '~/utils/types/product';
 import type { PriceInput } from '../types/price';
 import { UBadge, USwitch } from '#components';
-import { formatCurrency, getFormattedDate, ProductType } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate, ProductType } from 'yeppi-common';
 import { getSortableHeader } from './sortable';
 import { mutedCell, tableCellMeta } from './styles';
 
@@ -37,10 +37,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 								class: 'w-10 h-10 rounded-md object-cover flex-shrink-0',
 							}),
 					h('div', { class: 'flex-1 min-w-0' }, [
-						h('div', { class: 'flex items-center gap-1.5' }, [
-							statusDot,
-							h('span', { class: 'font-semibold text-sm text-highlighted' }, row.original.name),
-						]),
+						h('div', { class: 'flex items-center gap-1.5' }, [statusDot, h('span', { class: 'font-semibold text-sm text-highlighted' }, row.original.name)]),
 						h('div', { class: 'text-xs text-muted font-mono italic' }, row.original.code),
 						variantBadge.length > 0 ? h('div', { class: 'mt-1 flex flex-wrap items-center gap-1' }, [...variantBadge]) : null,
 					]),
@@ -75,8 +72,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				isService ||= typeof typeLabel === 'string' && typeLabel.toLowerCase().includes('service');
 
 				const typeColors = ['primary', 'success', 'warning', 'error', 'info', 'secondary'] as const;
-				let badgeColor: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'neutral' =
-					'neutral';
+				let badgeColor: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'neutral' = 'neutral';
 
 				if (typeof kind === 'string') {
 					const badgeColorIdx = Object.values(ProductType).indexOf(kind as ProductType);
@@ -111,8 +107,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 							'class': 'size-4 cursor-pointer',
 							'modelValue': row.original.is_active,
 							'disabled': false,
-							'onUpdate:modelValue': (value: unknown) =>
-								void productStore.updateStatus(row.original, value === true),
+							'onUpdate:modelValue': (value: unknown) => void productStore.updateStatus(row.original, value === true),
 						}),
 					],
 				);
@@ -125,10 +120,7 @@ export function getProductColumns(t: TranslateFn): TableColumn<Product>[] {
 				if (!row.original.updated_at) return mutedCell('—');
 				const dateStr = getFormattedDate(row.original.updated_at, 'dd/MM/yyyy');
 				const timeStr = getFormattedDate(row.original.updated_at, 'hh:mm a');
-				return h('div', { class: 'flex flex-col gap-0.5 text-sm text-muted' }, [
-					h('div', {}, timeStr),
-					h('div', {}, dateStr),
-				]);
+				return h('div', { class: 'flex flex-col gap-0.5 text-sm text-muted' }, [h('div', {}, timeStr), h('div', {}, dateStr)]);
 			},
 		},
 		{

@@ -119,7 +119,7 @@
 
 <script lang="ts" setup>
 import { LazyShipmentCreationModal, ZModalConfirmation } from '#components';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
 import { getShipmentStatusColor } from '~/utils/options';
 import { useCourierStore } from '~/stores/Courier/Courier';

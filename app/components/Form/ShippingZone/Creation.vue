@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types';
-import { formatCurrency } from 'wemotoo-common';
+import { formatCurrency } from 'yeppi-common';
 import type { z } from 'zod';
 import { CreateShippingZoneValidation } from '~/utils/schema';
 import type { ShippingZonePostcodePattern } from '~/utils/types/order-fulfillment-shipping';
@@ -72,9 +72,7 @@ const reviewSummary = computed(() => {
 
 	const pricingSummaryLabel = !pricingLines?.length ? t('common.notSet') : pricingLines.join(' · ');
 
-	const methodLabelsResolved = z.shipping_method_ids
-		.map((id) => methodOptions.value.find((o) => o.value === id)?.label)
-		.filter((x): x is string => Boolean(x));
+	const methodLabelsResolved = z.shipping_method_ids.map((id) => methodOptions.value.find((o) => o.value === id)?.label).filter((x): x is string => Boolean(x));
 	const methodLabels = methodLabelsResolved.length ? methodLabelsResolved : undefined;
 
 	return {

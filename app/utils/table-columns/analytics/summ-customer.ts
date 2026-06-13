@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderStatus } from 'yeppi-common';
 import { UBadge } from '#components';
 import { headerCell, moneyCell, numberCell, tableCellMeta } from '../styles';
 import type { SummCustomerRow, SummCustomerVariant, TranslateFn } from './types';

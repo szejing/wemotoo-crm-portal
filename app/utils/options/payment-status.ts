@@ -1,4 +1,4 @@
-import { PaymentStatus } from 'wemotoo-common';
+import { PaymentStatus } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

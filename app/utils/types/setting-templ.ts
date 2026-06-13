@@ -1,4 +1,4 @@
-import type { InputType } from 'wemotoo-common';
+import type { InputType } from 'yeppi-common';
 
 export type SettingTempl = {
 	group_code: string;

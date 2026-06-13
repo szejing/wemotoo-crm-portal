@@ -217,7 +217,7 @@ import { CalendarDate, type DateValue } from '@internationalized/date';
 import type { TableRow } from '@nuxt/ui';
 import { ZModalAppointmentDetail, ZModalConfirmation } from '#components';
 import { add, addMonths, endOfMonth, endOfDay, endOfWeek, format, getISOWeek, isWithinInterval, startOfDay, startOfMonth, startOfWeek, sub } from 'date-fns';
-import { AppointmentStatus } from 'wemotoo-common';
+import { AppointmentStatus } from 'yeppi-common';
 import type { Appointment } from '~/utils/types/appointment';
 import { getAppointmentColumns } from '~/utils/table-columns';
 import { getAppointmentStatusColor } from '~/utils/options';

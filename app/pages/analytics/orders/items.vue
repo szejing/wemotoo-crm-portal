@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OrderItemStatus, OrderStatus } from 'wemotoo-common';
+import { OrderItemStatus, OrderStatus } from 'yeppi-common';
 import { getSummItemColumns, getSummItemColumnLabels } from '~/utils/table-columns';
 import type { SummOrderItem } from '~/utils/types/summ-orders';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';

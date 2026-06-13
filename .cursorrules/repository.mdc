@@ -29,7 +29,7 @@ app/repository/
 ## Route Definitions
 
 ### routes.client.ts (and server routes.server.ts)
-- Use `API_PATH` from `wemotoo-common` so paths stay in sync with the backend.
+- Use `API_PATH` from `yeppi-common` so paths stay in sync with the backend.
 - Client: add `prefix` when the app calls via a prefixed proxy (e.g. `/api`); use functions that return path strings, e.g. `Many()`, `Single(id)`, `Create()`, `Update(id)`, `Delete(id)`, `Restore(id)`.
 - Server: `server/routes.server.ts` uses the same path builders for `$fetch` in server routes; no extra prefix if calling backend directly.
 

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AllocationType } from 'wemotoo-common';
+import { AllocationType } from 'yeppi-common';
 import { getVoucherColumns } from '~/utils/table-columns';
 import { columnOptionsFromLabelMap } from '~/utils/table-columns/visibility';
 import type { TableRow } from '@nuxt/ui';

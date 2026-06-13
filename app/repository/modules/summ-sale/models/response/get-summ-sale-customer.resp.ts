@@ -1,4 +1,4 @@
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
 
 type SummSaleCustomer = {
 	customer_no: string;

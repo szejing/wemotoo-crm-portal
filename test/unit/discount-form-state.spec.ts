@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AllocationType, DiscountType } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
 import { applyDiscountToFormState, discountToFormEditableState, emptyDiscountFormEditableState } from '../../app/utils/types/form/discount-creation';
 import type { Discount } from '../../app/utils/types/discount';
 

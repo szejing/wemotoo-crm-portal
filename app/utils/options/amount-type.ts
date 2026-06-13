@@ -1,4 +1,4 @@
-import { AmountType } from 'wemotoo-common';
+import { AmountType } from 'yeppi-common';
 
 type TranslateFn = (key: string) => string;
 

@@ -1,7 +1,7 @@
 import { options_page_size } from '~/utils/options';
 import type { SummOrderBill } from '~/utils/types/summ-orders';
 import type { Range } from '~/utils/interface';
-import type { OrderStatus } from 'wemotoo-common';
+import type { OrderStatus } from 'yeppi-common';
 import { sub } from 'date-fns';
 
 type OrderSumm = {

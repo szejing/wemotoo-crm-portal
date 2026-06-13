@@ -1,4 +1,4 @@
-import type { AppointmentStatus } from 'wemotoo-common';
+import type { AppointmentStatus } from 'yeppi-common';
 
 export type AppointmentInput = {
 	code: string;

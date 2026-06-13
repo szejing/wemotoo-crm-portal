@@ -72,8 +72,8 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '#ui/types';
 import type { z } from 'zod';
-import type { AmountType } from 'wemotoo-common';
-import { getFormattedDate } from 'wemotoo-common';
+import type { AmountType } from 'yeppi-common';
+import { getFormattedDate } from 'yeppi-common';
 import { UpdateTaxRuleValidation } from '~/utils/schema';
 import type { TaxRule } from '~/utils/types/tax-rule';
 

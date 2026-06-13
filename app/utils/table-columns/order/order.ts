@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { TableColumn } from '@nuxt/ui';
-import { OrderStatus, OrderType } from 'wemotoo-common';
+import { OrderStatus, OrderType } from 'yeppi-common';
 import { UBadge, UIcon, UTooltip } from '#components';
 import type { OrderHistory } from '~/utils/types/order-history';
 import { headerCell, moneyCell, numberCell, tableCellMeta } from '../styles';
@@ -39,14 +39,11 @@ export function getOrderColumns(t: TranslateFn): TableColumn<OrderHistory>[] {
 				const iconName = isDelivery ? 'i-heroicons-truck' : 'i-heroicons-building-storefront';
 
 				return h('div', { class: 'flex justify-center' }, [
-					h(
-						UTooltip,
-						{ text: tooltipText, popper: { placement: 'top' } },
-						() =>
-							h(UIcon, {
-								name: iconName,
-								class: 'size-5 shrink-0 text-main',
-							}),
+					h(UTooltip, { text: tooltipText, popper: { placement: 'top' } }, () =>
+						h(UIcon, {
+							name: iconName,
+							class: 'size-5 shrink-0 text-main',
+						}),
 					),
 				]);
 			},

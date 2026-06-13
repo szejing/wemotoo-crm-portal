@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ProductStatus } from 'wemotoo-common';
+import type { ProductStatus } from 'yeppi-common';
 import type { Image } from '~/utils/types/image';
 import { ICONS } from '~/utils/icons';
 

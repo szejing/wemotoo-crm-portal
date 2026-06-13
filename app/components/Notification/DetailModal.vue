@@ -1,9 +1,5 @@
 <template>
-	<UModal
-		v-model:open="open"
-		:title="item?.title ?? $t('notifications.detailTitle')"
-		:ui="{ content: 'w-full sm:max-w-2xl' }"
-	>
+	<UModal v-model:open="open" :title="item?.title ?? $t('notifications.detailTitle')" :ui="{ content: 'w-full sm:max-w-2xl' }">
 		<template #body>
 			<div v-if="item" class="notification-detail">
 				<div class="detail-hero">
@@ -22,13 +18,7 @@
 				<div class="detail-grid">
 					<div class="detail-field">
 						<span>{{ $t('common.status') }}</span>
-						<UBadge
-							v-if="item.status"
-							:color="statusColor"
-							variant="subtle"
-							size="sm"
-							class="capitalize w-fit"
-						>
+						<UBadge v-if="item.status" :color="statusColor" variant="subtle" size="sm" class="capitalize w-fit">
 							{{ item.status }}
 						</UBadge>
 						<UBadge v-else color="neutral" variant="subtle" size="sm">
@@ -37,13 +27,7 @@
 					</div>
 					<div class="detail-field">
 						<span>{{ $t('notifications.reference') }}</span>
-						<UBadge
-							v-if="item.ref_no"
-							color="neutral"
-							variant="subtle"
-							size="sm"
-							class="font-mono w-fit max-w-full truncate"
-						>
+						<UBadge v-if="item.ref_no" color="neutral" variant="subtle" size="sm" class="font-mono w-fit max-w-full truncate">
 							{{ item.ref_no }}
 						</UBadge>
 						<UBadge v-else color="neutral" variant="subtle" size="sm">
@@ -83,7 +67,7 @@
 
 <script setup lang="ts">
 import { format } from 'date-fns';
-import type { AppointmentStatus } from 'wemotoo-common';
+import type { AppointmentStatus } from 'yeppi-common';
 import type { NotificationItem } from '~/utils/types/notification';
 import { getAppointmentStatusColor, getOrderStatusColor, getPaymentStatusColor } from '~/utils/options';
 
@@ -110,12 +94,7 @@ const statusColor = computed(() => {
 		return 'neutral';
 	}
 
-	return (
-		getOrderStatusColor(status) ??
-		getPaymentStatusColor(status) ??
-		getAppointmentStatusColor(status as AppointmentStatus) ??
-		'neutral'
-	);
+	return getOrderStatusColor(status) ?? getPaymentStatusColor(status) ?? getAppointmentStatusColor(status as AppointmentStatus) ?? 'neutral';
 });
 
 const dateFields = computed(() => {

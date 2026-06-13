@@ -101,7 +101,7 @@ function load() {
 
 - Use `~/` for `app/` (e.g. `~/utils/types/product`, `~/repository/factory`).
 - Use `#root/` or `#imports` where project expects root/import aliases (e.g. `#root/server/base_api`).
-- Import from `wemotoo-common` for API_PATH, KEY, enums, and shared constants.
+- Import from `yeppi-common` for API_PATH, KEY, enums, and shared constants.
 
 ## Error Handling
 

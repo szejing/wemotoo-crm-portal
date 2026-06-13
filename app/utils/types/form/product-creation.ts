@@ -1,4 +1,4 @@
-import type { ProductStatus } from 'wemotoo-common';
+import type { ProductStatus } from 'yeppi-common';
 import type { PriceInput } from '../price';
 import type { ProductVariantInput } from '../product';
 import type { Image } from '../image';

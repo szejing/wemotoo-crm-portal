@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { UBadge } from '#components';
 import type { TableColumn, TableRow } from '@nuxt/ui';
-import { getFormattedDate, OrderStatus } from 'wemotoo-common';
+import { getFormattedDate, OrderStatus } from 'yeppi-common';
 import { headerCell, moneyCell, mutedCell, numberCell, optionalCell, optionalMoneyCell } from '../styles';
 import type { SummBillTableRow, SummCountKey, TranslateFn } from './types';
 

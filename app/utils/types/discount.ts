@@ -1,5 +1,5 @@
-import type { AllocationType, DiscountType, FilterOperator } from 'wemotoo-common';
-import type { FilterCondition } from 'wemotoo-common';
+import type { AllocationType, DiscountType, FilterOperator } from 'yeppi-common';
+import type { FilterCondition } from 'yeppi-common';
 
 export type Discount = {
 	code: string;

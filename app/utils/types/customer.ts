@@ -1,4 +1,4 @@
-import type { CustomerInsight } from 'wemotoo-common';
+import type { CustomerInsight } from 'yeppi-common';
 
 export type { CustomerInsight };
 

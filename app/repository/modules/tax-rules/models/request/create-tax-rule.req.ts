@@ -1,4 +1,4 @@
-import type { AmountType, FilterCondition, FilterOperator } from 'wemotoo-common';
+import type { AmountType, FilterCondition, FilterOperator } from 'yeppi-common';
 
 export type CreateTaxFilter = {
 	filter_operator: FilterOperator | undefined;

@@ -1,4 +1,4 @@
-import { isSameDate, getFormattedDate } from 'wemotoo-common';
+import { isSameDate, getFormattedDate } from 'yeppi-common';
 import type { CRMUser } from './types/crm-user';
 
 export const fractionDigits = 2;

@@ -1,11 +1,7 @@
 <template>
 	<div class="cursor-pointer" @click="navigateTo('/settings/store-profile')">
 		<ClientOnly>
-			<UUser
-				:name="collapsed ? undefined : merchantId"
-				:description="collapsed ? undefined : merchantName"
-				:avatar="avatarProps"
-			/>
+			<UUser :name="collapsed ? undefined : merchantId" :description="collapsed ? undefined : merchantName" :avatar="avatarProps" />
 			<template #fallback>
 				<div class="inline-flex items-center gap-3">
 					<USkeleton class="size-8 shrink-0 rounded-full" />
@@ -20,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GROUP_CODE, MERCHANT } from 'wemotoo-common';
+import { GROUP_CODE, MERCHANT } from 'yeppi-common';
 
 const merchantInfoStore = useMerchantInfoStore();
 

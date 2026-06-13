@@ -39,10 +39,7 @@
 			</div>
 
 			<div class="grid grid-cols-12">
-				<div
-					id="section-voucher-validity"
-					class="col-span-12 scroll-mt-4 space-y-3 border-t border-default pt-4 lg:col-span-6"
-				>
+				<div id="section-voucher-validity" class="col-span-12 scroll-mt-4 space-y-3 border-t border-default pt-4 lg:col-span-6">
 					<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
 						<div class="flex min-w-0 items-center gap-2">
 							<UIcon :name="ICONS.CALENDAR" class="text-primary-500 w-5 h-5 shrink-0" />
@@ -108,7 +105,7 @@
 
 <script lang="ts" setup>
 import { endOfDay, startOfDay } from 'date-fns';
-import { getFormattedDate } from 'wemotoo-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 import type { Discount } from '~/utils/types/discount';
 import { ICONS } from '~/utils/icons';

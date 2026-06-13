@@ -1,4 +1,4 @@
-import type { DiscountType } from 'wemotoo-common';
+import type { DiscountType } from 'yeppi-common';
 
 export type DiscountSelectMenuRow = {
 	code: string;

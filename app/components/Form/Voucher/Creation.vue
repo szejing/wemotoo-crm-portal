@@ -23,8 +23,8 @@
 
 <script lang="ts" setup>
 import { startOfDay } from 'date-fns';
-import { AllocationType, DiscountType } from 'wemotoo-common';
-import { getFormattedDate } from 'wemotoo-common';
+import { AllocationType, DiscountType } from 'yeppi-common';
+import { getFormattedDate } from 'yeppi-common';
 import type { FormErrorEvent, FormSubmitEvent } from '#ui/types';
 import { ZModalLoading } from '#components';
 import type { z } from 'zod';

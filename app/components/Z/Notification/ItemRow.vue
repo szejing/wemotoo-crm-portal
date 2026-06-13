@@ -1,23 +1,13 @@
 <template>
 	<UButton
-		:class="[
-			'z-notification-item-row',
-			`z-notification-item-row--${layout}`,
-			{ 'z-notification-item-row--read': isRead },
-		]"
+		:class="['z-notification-item-row', `z-notification-item-row--${layout}`, { 'z-notification-item-row--read': isRead }]"
 		color="neutral"
 		variant="ghost"
 		block
 		:aria-label="item.title"
 		@click="emit('select')"
 	>
-		<span
-			:class="[
-				'z-notification-item-row__dot',
-				{ 'z-notification-item-row__dot--read': isRead },
-				`z-notification-item-row__dot--${severity}`,
-			]"
-		/>
+		<span :class="['z-notification-item-row__dot', { 'z-notification-item-row__dot--read': isRead }, `z-notification-item-row__dot--${severity}`]" />
 		<span class="z-notification-item-row__body">
 			<span class="z-notification-item-row__title">{{ item.title }}</span>
 			<span v-for="line in summaryLines" :key="line" class="z-notification-item-row__line">{{ line }}</span>
@@ -30,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NotificationSeverity } from 'wemotoo-common';
+import type { NotificationSeverity } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
 import type { NotificationItem } from '~/utils/types/notification';
 

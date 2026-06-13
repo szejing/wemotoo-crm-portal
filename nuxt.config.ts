@@ -79,6 +79,7 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		version: process.env.APP_VERSION,
 		apiKey: process.env.API_KEY,
+		requestSignatureSecret: process.env.REQUEST_SIGNATURE_SECRET || process.env.API_KEY_SECRET,
 		apiKeySecret: process.env.API_KEY_SECRET,
 		jwtSecret: process.env.JWT_SECRET,
 		public: {
@@ -119,7 +120,7 @@ export default defineNuxtConfig({
 
 	vite: {
 		resolve: {
-			// Prefer "browser" entry for client build so wemotoo-common uses browser-safe bundle (no Node crypto).
+			// Prefer "browser" entry for client build so yeppi-common uses browser-safe bundle (no Node crypto).
 			conditions: ['browser', 'import', 'module', 'default'],
 		},
 		// Ensure zod is pre-bundled for SSR to avoid undefined errors

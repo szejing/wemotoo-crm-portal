@@ -35,19 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import { formatCurrency, getFormattedDate, OrderStatus, PaymentStatus } from 'wemotoo-common';
+import { formatCurrency, getFormattedDate, OrderStatus, PaymentStatus } from 'yeppi-common';
 import { useDashboardStatsConfig, ALL_DASHBOARD_STAT_KEYS, type DashboardStatKey } from '~/composables/useDashboardStatsConfig';
 
 const summOrderStore = useSummOrderStore();
-const {
-	new_appointments,
-	new_orders,
-	pending_payments,
-	pending_actions,
-	total_order_amt,
-	new_customers,
-	dashboard_date_range,
-} = storeToRefs(summOrderStore);
+const { new_appointments, new_orders, pending_payments, pending_actions, total_order_amt, new_customers, dashboard_date_range } = storeToRefs(summOrderStore);
 
 const { t } = useI18n();
 const { selectedKeys, toggleStat, isSelected, resetToDefault } = useDashboardStatsConfig();
@@ -166,12 +158,7 @@ const visibleStats = computed(() => {
 		}
 		const formattedValue = def.formatter ? def.formatter(value) : String(value);
 		const linkQuery = def.query?.();
-		const to =
-			def.to != null && linkQuery != null
-				? { path: def.to, query: linkQuery }
-				: def.to != null
-					? def.to
-					: undefined;
+		const to = def.to != null && linkQuery != null ? { path: def.to, query: linkQuery } : def.to != null ? def.to : undefined;
 		return {
 			key,
 			title: statLabel(key),

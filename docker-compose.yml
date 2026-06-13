@@ -1,5 +1,5 @@
 services:
-  wemotoo-crm:
+  wemotoo-portal:
     build:
       context: .
       dockerfile: Dockerfile

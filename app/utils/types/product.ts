@@ -1,4 +1,4 @@
-import type { ProductStatus, ProductType as ProductKind } from 'wemotoo-common';
+import type { ProductStatus, ProductType as ProductKind } from 'yeppi-common';
 import type { Price, PriceInput } from './price';
 import type { Category } from './category';
 import type { Tag } from './tag';

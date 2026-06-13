@@ -6,8 +6,8 @@ import type { CreateVoucherReq } from '~/repository/modules/voucher/models/reque
 import type { UpdateVoucherReq } from '~/repository/modules/voucher/models/request/update-voucher.req';
 import type { VoucherFormState } from '~/utils/types/form/voucher-creation';
 import type { Voucher } from '~/utils/types/voucher';
-import { defaultVoucherRelations, removeDuplicateExpands } from 'wemotoo-common';
-import type { AllocationType } from 'wemotoo-common';
+import { defaultVoucherRelations, removeDuplicateExpands } from 'yeppi-common';
+import type { AllocationType } from 'yeppi-common';
 
 type VoucherFilter = {
 	query: string;

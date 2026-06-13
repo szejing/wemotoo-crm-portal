@@ -33,7 +33,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 ### Conventions
 - Use `navigateTo('/path')` to redirect; return it from the middleware.
 - Prefer checking `import.meta.client` when logic is client-only (e.g. cookies, Pinia).
-- Use shared constants (e.g. `KEY` from `wemotoo-common` or `~/composables/useWemotooCommon`) for cookie keys and routes.
+- Use shared constants (e.g. `KEY` from `yeppi-common` or `~/composables/useWemotooCommon`) for cookie keys and routes.
 - Keep middleware focused: auth, role checks, or redirects. No heavy data loading.
 
 ## Server Middleware (server/middleware/)

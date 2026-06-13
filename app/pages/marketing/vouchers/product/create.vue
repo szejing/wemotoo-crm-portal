@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AllocationType } from 'wemotoo-common';
+import { AllocationType } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
 
 const { t } = useI18n();

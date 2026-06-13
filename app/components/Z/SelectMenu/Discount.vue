@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DiscountType } from 'wemotoo-common';
+import { DiscountType } from 'yeppi-common';
 import type { Discount } from '~/utils/types/discount';
 import type { DiscountSelectMenuRow } from '~/utils/types/discount-select-menu';
 import { formatDiscountDiscValue } from '~/utils/discount-rule-display';

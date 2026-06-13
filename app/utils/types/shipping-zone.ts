@@ -1,12 +1,12 @@
 import type { ShippingZonePostcodePattern } from './order-fulfillment-shipping';
 
-/** Mirrors `ShippingMethodBriefDto` in ecommerce-nestjs shipping-zone response DTO. */
+/** Mirrors `ShippingMethodBriefDto` in yeppi-ecommerce-backend shipping-zone response DTO. */
 export type ShippingMethodBrief = {
 	id: number;
 	description: string;
 };
 
-/** Mirrors `ShippingMethodZoneWithMethodDto` in ecommerce-nestjs shipping-zone response DTO. */
+/** Mirrors `ShippingMethodZoneWithMethodDto` in yeppi-ecommerce-backend shipping-zone response DTO. */
 export type ShippingMethodZoneWithMethod = {
 	id: string;
 	fee: number;
@@ -14,7 +14,7 @@ export type ShippingMethodZoneWithMethod = {
 	shipping_method?: ShippingMethodBrief;
 };
 
-/** Mirrors `ShippingZoneWithLinksDto` in ecommerce-nestjs shipping-zone response DTO. */
+/** Mirrors `ShippingZoneWithLinksDto` in yeppi-ecommerce-backend shipping-zone response DTO. */
 export type ShippingZone = {
 	code: string;
 	description?: string;
@@ -27,12 +27,12 @@ export type ShippingZone = {
 	methods?: ShippingMethodZoneWithMethod[];
 };
 
-/** Mirrors `GetShippingZoneResponseDto` in ecommerce-nestjs shipping-zone response DTO. */
+/** Mirrors `GetShippingZoneResponseDto` in yeppi-ecommerce-backend shipping-zone response DTO. */
 export type GetShippingZoneResponse = {
 	shipping_zone: ShippingZone;
 };
 
-/** Mirrors `GetShippingZonesResponseDto` in ecommerce-nestjs shipping-zone response DTO. */
+/** Mirrors `GetShippingZonesResponseDto` in yeppi-ecommerce-backend shipping-zone response DTO. */
 export type GetShippingZonesResponse = {
 	shipping_zones: ShippingZone[];
 	total: number;
