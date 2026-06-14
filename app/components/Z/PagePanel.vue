@@ -37,7 +37,7 @@
 									<ZNotificationEmptyState v-if="notificationStore.activeNotifications.length === 0" compact />
 
 									<div v-else class="notification-list">
-										<template v-for="notification in notificationStore.activeNotifications" :key="notification.type">
+										<template v-for="notification in notificationStore.activeNotifications" :key="notification.items[0]?.id ?? notification.type">
 											<ZNotificationItemRow
 												v-for="item in notification.items"
 												:key="item.id"

@@ -42,3 +42,29 @@ export type NotificationCenter = {
 	notifications: Notification[];
 	handled_scenarios: NotificationType[];
 };
+
+export type NotificationEntry = {
+	type: NotificationType;
+	severity: NotificationSeverity;
+	item: NotificationItem;
+};
+
+export type NotificationBadgeColor = 'primary' | 'error' | 'success' | 'warning' | 'secondary' | 'info' | 'neutral';
+
+export type NotificationDisplayRow = NotificationEntry & {
+	key: string;
+	ref_no: string;
+	dateTime: string;
+	description: string;
+	lastUpdated: string;
+	descriptionPrefix?: string;
+	statusBadge?: {
+		label: string;
+		color: NotificationBadgeColor;
+	};
+	referenceBadge?: {
+		label: string;
+		color: NotificationBadgeColor;
+	};
+	isRead: boolean;
+};

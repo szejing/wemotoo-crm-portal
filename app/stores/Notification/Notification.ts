@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { options_page_size } from '~/utils/options';
 import { failedNotification } from '../AppUi/AppUi';
 import type { ErrorResponse } from '~/repository/base/error';
 import type { Notification, NotificationCenter, NotificationItem } from '~/utils/types/notification';
@@ -9,13 +10,25 @@ type NotificationQueryOptions = BaseODataReq & {
 	includeRead?: boolean;
 };
 
+type NotificationListFilter = {
+	page_size: number;
+	current_page: number;
+};
+
+const initialNotificationListFilter: NotificationListFilter = {
+	page_size: options_page_size[0] as number,
+	current_page: 1,
+};
+
 export const useNotificationStore = defineStore('notificationStore', {
 	state: () => ({
 		loading: false as boolean,
 		total_count: 0 as number,
+		all_total_count: 0 as number,
 		generated_at: undefined as string | Date | undefined,
 		notifications: [] as Notification[],
 		all_notifications: [] as Notification[],
+		all_filter: { ...initialNotificationListFilter },
 		handled_scenarios: [] as NotificationCenter['handled_scenarios'],
 	}),
 	getters: {
@@ -36,7 +49,16 @@ export const useNotificationStore = defineStore('notificationStore', {
 			const { $api } = useNuxtApp();
 			try {
 				const { includeRead, ...query } = options;
-				const data = await $api.notification.getMany(query);
+				const queryParams: BaseODataReq = { ...query };
+
+				if (includeRead) {
+					queryParams.$top = this.all_filter.page_size;
+					queryParams.$skip = (this.all_filter.current_page - 1) * this.all_filter.page_size;
+					queryParams.$count = true;
+					queryParams.$orderby = 'created_at desc';
+				}
+
+				const data = await $api.notification.getMany(queryParams);
 
 				this.total_count = data.total_count ?? 0;
 				this.generated_at = data.generated_at;
@@ -44,6 +66,7 @@ export const useNotificationStore = defineStore('notificationStore', {
 
 				if (includeRead) {
 					this.all_notifications = decorated;
+					this.all_total_count = data['@odata.count'] ?? data.count ?? 0;
 				} else {
 					this.notifications = decorated;
 				}
@@ -55,6 +78,15 @@ export const useNotificationStore = defineStore('notificationStore', {
 			} finally {
 				this.loading = false;
 			}
+		},
+		async updateAllPage(page: number) {
+			this.all_filter.current_page = page;
+			await this.getNotifications({ includeRead: true });
+		},
+		async updateAllPageSize(size: number) {
+			this.all_filter.page_size = size;
+			this.all_filter.current_page = 1;
+			await this.getNotifications({ includeRead: true });
 		},
 		async openNotificationItem(type: NotificationType, item: NotificationItem) {
 			const { $api } = useNuxtApp();

@@ -30,6 +30,7 @@ import { getShippingMethodColumns } from './shipping-method';
 import { getShippingZoneColumns } from './shipping-zone';
 import { getCourierColumns } from './courier';
 import { getStaffDepartmentColumns } from './staff-department';
+import { getNotificationColumns } from './notification';
 import type { SummBillTableRow, SummCountKey, SummCustomerVariant, SummItemRow } from './analytics/types';
 
 export {
@@ -69,6 +70,7 @@ export {
 	getShippingZoneColumns,
 	getCourierColumns,
 	getStaffDepartmentColumns,
+	getNotificationColumns,
 	SUMM_PAYMENT_COLUMN_LABELS,
 };
 

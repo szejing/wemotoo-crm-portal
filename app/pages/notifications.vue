@@ -1,104 +1,147 @@
 <template>
 	<ZPagePanel id="notifications" :title="$t('notifications.title')">
-		<div class="notifications-page">
+		<div class="space-y-6">
 			<div class="notifications-toolbar">
 				<div>
 					<p class="notifications-kicker">{{ $t('notifications.actionCenter') }}</p>
 					<h1>{{ $t('notifications.allTitle') }}</h1>
 				</div>
-				<UButton color="neutral" variant="soft" :icon="ICONS.REFRESH" :loading="notificationStore.loading" @click="loadNotifications">
+				<UButton color="neutral" variant="soft" :icon="ICONS.REFRESH" :loading="loading" @click="loadNotifications">
 					{{ $t('common.refresh') }}
 				</UButton>
 			</div>
 
-			<ZLoading v-if="notificationStore.loading && notificationStore.all_notifications.length === 0" />
+			<ZTableToolbar v-model="all_filter.page_size" :page-size-options="options_page_size" :export-enabled="false" @update:model-value="updatePageSize" />
 
-			<ZNotificationEmptyState v-else-if="dateGroups.length === 0" />
-
-			<div v-else class="notifications-inbox">
-				<section v-for="group in dateGroups" :key="group.key" class="notifications-date-group">
-					<div class="notifications-date-header">
-						<h2>{{ group.label }}</h2>
-						<span>{{ group.items.length }}</span>
+			<template v-if="loading">
+				<div class="rounded-lg overflow-hidden divide-y divide-neutral-200 dark:divide-neutral-700">
+					<div class="grid grid-cols-3 gap-4 p-4">
+						<USkeleton v-for="i in 3" :key="i" class="h-4 flex-1 min-w-0" />
 					</div>
+					<div v-for="i in 5" :key="i" class="grid grid-cols-3 gap-4 p-4 items-center">
+						<USkeleton v-for="j in 3" :key="j" class="h-4 flex-1 min-w-0" />
+					</div>
+				</div>
+			</template>
 
-					<div class="notifications-table">
-						<div class="notifications-table-header" role="row">
-							<span>{{ $t('notifications.orderId') }}</span>
-							<span>{{ $t('notifications.dateTime') }}</span>
-							<span>{{ $t('notifications.description') }}</span>
+			<template v-else-if="!initialize">
+				<ZNotificationEmptyState v-if="dateGroups.length === 0" />
+
+				<div v-else class="notifications-inbox">
+					<section v-for="group in dateGroups" :key="group.key" class="notifications-date-group">
+						<div class="notifications-date-header">
+							<h2>{{ group.label }}</h2>
 						</div>
 
-						<UButton
-							v-for="row in group.items"
-							:key="row.key"
-							class="notifications-row"
-							:class="{ 'notifications-row--read': row.isRead }"
-							color="neutral"
-							variant="ghost"
-							block
-							:aria-label="`${row.orderId} ${row.description}`"
-							@click="openNotification(row.type, row.item)"
-						>
-							<span class="notifications-row__order">{{ row.orderId }}</span>
-							<span class="notifications-row__time">{{ row.dateTime }}</span>
-							<span class="notifications-row__description">
-								<span :class="['notifications-row__dot', { 'notifications-row__dot--read': row.isRead }, `notifications-row__dot--${row.severity}`]" />
-								<span>{{ row.descriptionPrefix ?? row.description }}</span>
-								<UBadge v-if="row.statusBadge" :color="row.statusBadge.color" variant="subtle" size="sm" class="notifications-row__badge">
-									{{ row.statusBadge.label }}
-								</UBadge>
-								<UBadge v-if="row.referenceBadge" :color="row.referenceBadge.color" variant="subtle" size="sm" class="notifications-row__badge">
-									{{ row.referenceBadge.label }}
-								</UBadge>
-								<UIcon :name="ICONS.CHEVRON_RIGHT" class="notifications-row__icon" />
-							</span>
-						</UButton>
+						<UCard class="notifications-table" :ui="{ body: 'p-0 sm:p-0' }">
+							<UTable
+								:data="group.items"
+								:columns="notificationColumns"
+								:meta="notificationTableMeta"
+								:get-row-id="(row) => row.key"
+								@select="selectNotificationRow"
+							>
+								<template #ref_no-cell="{ row }">
+									<span class="notifications-row__order">{{ row.original.ref_no === '-' ? '-' : `# ${row.original.ref_no}` }}</span>
+								</template>
+
+								<template #description-cell="{ row }">
+									<span class="notifications-row__description">
+										<span
+											:class="[
+												'notifications-row__dot',
+												{ 'notifications-row__dot--read': row.original.isRead },
+												`notifications-row__dot--${row.original.severity}`,
+											]"
+										/>
+										<span>{{ row.original.descriptionPrefix ?? row.original.description }}</span>
+										<UBadge v-if="row.original.statusBadge" :color="row.original.statusBadge.color" variant="subtle" size="sm" class="notifications-row__badge">
+											{{ row.original.statusBadge.label }}
+										</UBadge>
+										<UBadge
+											v-if="row.original.referenceBadge"
+											:color="row.original.referenceBadge.color"
+											variant="subtle"
+											size="sm"
+											class="notifications-row__badge"
+										>
+											{{ row.original.referenceBadge.label }}
+										</UBadge>
+									</span>
+								</template>
+
+								<template #lastUpdated-cell="{ row }">
+									<span class="notifications-row__time">{{ row.original.lastUpdated }}</span>
+								</template>
+							</UTable>
+						</UCard>
+					</section>
+				</div>
+
+				<div v-if="dateGroups.length > 0" class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+					<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+						<div class="text-sm text-gray-700 dark:text-gray-300">
+							{{
+								$t('pages.showingToOf', {
+									from: (all_filter.current_page - 1) * all_filter.page_size + 1,
+									to: Math.min(all_filter.current_page * all_filter.page_size, all_total_count),
+									total: all_total_count,
+								})
+							}}
+						</div>
+						<UPagination
+							v-model="all_filter.current_page"
+							:total="all_total_count"
+							:page-size="all_filter.page_size"
+							show-last
+							show-first
+							size="sm"
+							@update:page="updatePage"
+						/>
 					</div>
-				</section>
-			</div>
+				</div>
+			</template>
 		</div>
 	</ZPagePanel>
 </template>
 
 <script setup lang="ts">
+import type { Row, TableMeta } from '@tanstack/vue-table';
+import type { TableRow } from '@nuxt/ui';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
-import type { NotificationSeverity, NotificationType } from 'yeppi-common';
+import type { NotificationType } from 'yeppi-common';
 import { ICONS } from '~/utils/icons';
+import { getNotificationDisplayDescription, getNotificationDisplayReferenceId } from '~/utils/notification-display';
+import { options_page_size } from '~/utils/options';
 import { getOrderStatusColor, getPaymentStatusColor } from '~/utils/options';
-import type { NotificationItem } from '~/utils/types/notification';
-
-type NotificationEntry = {
-	type: NotificationType;
-	severity: NotificationSeverity;
-	item: NotificationItem;
-};
-
-type BadgeColor = NonNullable<ReturnType<typeof getOrderStatusColor>>;
-
-type NotificationDisplayRow = NotificationEntry & {
-	key: string;
-	orderId: string;
-	dateTime: string;
-	description: string;
-	descriptionPrefix?: string;
-	statusBadge?: {
-		label: string;
-		color: BadgeColor;
-	};
-	referenceBadge?: {
-		label: string;
-		color: BadgeColor;
-	};
-	isRead: boolean;
-};
+import { getNotificationColumns } from '~/utils/table-columns';
+import type { NotificationBadgeColor, NotificationDisplayRow, NotificationEntry, NotificationItem } from '~/utils/types/notification';
 
 const { t } = useI18n();
 const notificationStore = useNotificationStore();
-const { formatDateTime, getSummaryLines } = useNotificationItemDisplay();
+const { formatDateTime } = useNotificationItemDisplay();
+const { loading, all_filter, all_total_count } = storeToRefs(notificationStore);
+
+const initialize = ref(true);
+
+const notificationColumns = computed(() => getNotificationColumns(t));
+
+const notificationTableMeta = computed<TableMeta<NotificationDisplayRow>>(() => ({
+	class: {
+		tr: (row: Row<NotificationDisplayRow>) => (row.original.isRead ? 'notifications-row notifications-row--read' : 'notifications-row'),
+	},
+}));
 
 const loadNotifications = async () => {
 	await notificationStore.getNotifications({ includeRead: true });
+};
+
+const updatePage = async (page: number) => {
+	await notificationStore.updateAllPage(page);
+};
+
+const updatePageSize = async (size: number) => {
+	await notificationStore.updateAllPageSize(size);
 };
 
 const flatNotifications = computed<NotificationEntry[]>(() =>
@@ -119,8 +162,8 @@ const dateGroups = computed(() => {
 	for (const entry of flatNotifications.value) {
 		const date = getItemDate(entry.item);
 		const key = format(date, 'yyyy-MM-dd');
-		const rows = createDisplayRows(entry);
-		groups.set(key, [...(groups.get(key) ?? []), ...rows]);
+		const row = createDisplayRow(entry);
+		groups.set(key, [...(groups.get(key) ?? []), row]);
 	}
 
 	return Array.from(groups.entries()).map(([key, items]) => ({
@@ -140,41 +183,31 @@ const openNotification = async (type: NotificationType, item: NotificationItem) 
 	await navigateTo(updated.action?.url ?? item.action?.url ?? '/notifications');
 };
 
-const getItemTime = (item: NotificationItem) => new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? 0).getTime();
-
-const getItemDate = (item: NotificationItem) => new Date(item.created_at ?? item.updated_at ?? item.scheduled_at ?? Date.now());
-
-const createDisplayRows = (entry: NotificationEntry): NotificationDisplayRow[] => {
-	const lines = getActionLines(entry.item);
-
-	return lines.map((line, index) => {
-		const statusChange = parseStatusChange(line);
-		const normalizedDescription = normalizeDescription(line);
-
-		return {
-			...entry,
-			key: `${entry.item.id}-${index}-${line}`,
-			orderId: getOrderId(entry.item),
-			dateTime: formatDateTime(entry.item.created_at ?? entry.item.updated_at ?? entry.item.scheduled_at),
-			description: normalizedDescription,
-			descriptionPrefix: statusChange ? t('notifications.orderStatusChangedTo') : undefined,
-			statusBadge: statusChange,
-			referenceBadge: isAppointmentCreated(line, entry.item) ? createReferenceBadge(entry.item.ref_no) : undefined,
-			isRead: !!entry.item.read_at,
-		};
-	});
+const selectNotificationRow = (_event: Event, row: TableRow<NotificationDisplayRow>) => {
+	void openNotification(row.original.type, row.original.item);
 };
 
-const getActionLines = (item: NotificationItem) => {
-	const lines = getSummaryLines(item).filter((line) => !/^(Status|Payment):/i.test(line.trim()));
+const getItemTime = (item: NotificationItem) => new Date(item.updated_at ?? item.created_at ?? item.scheduled_at ?? 0).getTime();
 
-	return lines.length ? lines : [item.subtitle ?? item.notification_description ?? item.title];
-};
+const getItemDate = (item: NotificationItem) => new Date(item.updated_at ?? item.created_at ?? item.scheduled_at ?? Date.now());
 
-const getOrderId = (item: NotificationItem) => {
-	const titleOrderId = item.title.match(/#([A-Z0-9-]+)/i)?.[1];
+const createDisplayRow = (entry: NotificationEntry): NotificationDisplayRow => {
+	const description = getNotificationDisplayDescription(entry.item);
+	const statusChange = parseStatusChange(description);
+	const normalizedDescription = normalizeDescription(description);
 
-	return item.order_no ?? titleOrderId ?? '-';
+	return {
+		...entry,
+		key: entry.item.id,
+		ref_no: getNotificationDisplayReferenceId(entry.item),
+		dateTime: formatDateTime(entry.item.created_at ?? entry.item.updated_at ?? entry.item.scheduled_at),
+		description: normalizedDescription,
+		lastUpdated: formatDateTime(entry.item.updated_at ?? entry.item.created_at ?? entry.item.scheduled_at),
+		descriptionPrefix: statusChange ? t('notifications.orderStatusChangedTo') : undefined,
+		statusBadge: statusChange,
+		referenceBadge: isAppointmentCreated(description, entry.item) ? createReferenceBadge(entry.item.ref_no) : undefined,
+		isRead: !!entry.item.read_at,
+	};
 };
 
 const parseStatusChange = (description: string) => {
@@ -211,7 +244,7 @@ const createReferenceBadge = (refNo?: string) =>
 	refNo
 		? {
 				label: refNo,
-				color: 'neutral' as BadgeColor,
+				color: 'neutral' as NotificationBadgeColor,
 			}
 		: undefined;
 
@@ -247,21 +280,22 @@ const formatDateGroupLabel = (key: string) => {
 
 useHead({ title: () => t('notifications.allTitle') });
 
-onMounted(loadNotifications);
+onMounted(async () => {
+	initialize.value = true;
+	try {
+		await loadNotifications();
+	} finally {
+		initialize.value = false;
+	}
+});
 </script>
 
 <style scoped>
-.notifications-page {
-	width: 100%;
-	padding-bottom: 2rem;
-}
-
 .notifications-toolbar {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 1rem;
-	margin-bottom: 1.25rem;
 }
 
 .notifications-kicker {
@@ -310,58 +344,22 @@ onMounted(loadNotifications);
 .notifications-table {
 	width: 100%;
 	overflow: hidden;
-	border: 1px solid var(--color-neutral-200);
-	border-radius: 0.5rem;
-	background: white;
 }
 
-.notifications-table-header,
-.notifications-row {
-	display: grid !important;
-	grid-template-columns: minmax(12rem, 1.2fr) minmax(10rem, 0.8fr) minmax(0, 3fr);
-	align-items: center;
-	gap: 1rem;
-	width: 100%;
-}
-
-.notifications-table-header {
-	padding: 0.65rem 1rem;
-	border-bottom: 1px solid var(--color-neutral-200);
-	background: var(--color-neutral-50);
-	font-size: 0.72rem;
-	font-weight: 700;
-	color: var(--color-neutral-500);
-	text-transform: uppercase;
-}
-
-.notifications-row {
-	height: auto;
-	min-height: 3.25rem;
-	padding: 0.75rem 1rem;
-	border-radius: 0;
-	text-align: left;
-	white-space: normal;
-	cursor: pointer !important;
-}
-
-.notifications-row + .notifications-row {
-	border-top: 1px solid var(--color-neutral-100);
-}
-
-.notifications-row:not(.notifications-row--read) {
+.notifications-table :deep(.notifications-row:not(.notifications-row--read)) {
 	background: var(--color-main-50);
 }
 
-.notifications-row:not(.notifications-row--read):hover {
+.notifications-table :deep(.notifications-row:not(.notifications-row--read):hover) {
 	background: var(--color-main-100);
 }
 
-.notifications-row--read {
+.notifications-table :deep(.notifications-row--read) {
 	color: var(--color-neutral-500);
 	background: white;
 }
 
-.notifications-row--read:hover {
+.notifications-table :deep(.notifications-row--read:hover) {
 	background: var(--color-neutral-50);
 }
 
@@ -422,10 +420,10 @@ onMounted(loadNotifications);
 	color: var(--color-neutral-400);
 }
 
-.notifications-row--read .notifications-row__order,
-.notifications-row--read .notifications-row__description,
-.notifications-row--read .notifications-row__time,
-.notifications-row--read .notifications-row__icon {
+.notifications-table :deep(.notifications-row--read .notifications-row__order),
+.notifications-table :deep(.notifications-row--read .notifications-row__description),
+.notifications-table :deep(.notifications-row--read .notifications-row__time),
+.notifications-table :deep(.notifications-row--read .notifications-row__icon) {
 	color: var(--color-neutral-400);
 }
 
@@ -433,16 +431,6 @@ onMounted(loadNotifications);
 	.notifications-toolbar {
 		align-items: stretch;
 		flex-direction: column;
-	}
-
-	.notifications-table-header {
-		display: none !important;
-	}
-
-	.notifications-row {
-		grid-template-columns: 1fr;
-		gap: 0.35rem;
-		padding: 0.85rem;
 	}
 
 	.notifications-row__description {
