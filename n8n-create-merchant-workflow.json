@@ -1,0 +1,379 @@
+{
+  "name": "Wemotoo Merchant Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Credential setup: create/select two n8n credentials. 1) HTTP Header Auth named \"Wemotoo API Key\" with Name \"x-api-key\" and Value set to backend API_KEY. 2) Crypto credential named \"Wemotoo Signature Secret\" with Hmac Secret set to backend REQUEST_SIGNATURE_SECRET.",
+        "height": 160,
+        "width": 420
+      },
+      "id": "9f8a2f3f-4a0f-4e7b-96fd-9a70adfbfe81",
+      "name": "Credential Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "Merchant Onboarding",
+        "formDescription": "Create a Wemotoo merchant and seed the merchant workspace.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "merchant_id",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "package",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "wemotoo_seller"
+                  },
+                  {
+                    "option": "wemotoo_organizer"
+                  },
+                  {
+                    "option": "wemotoo_vip"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "duration",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "12"
+                  },
+                  {
+                    "option": "1"
+                  },
+                  {
+                    "option": "3"
+                  },
+                  {
+                    "option": "6"
+                  },
+                  {
+                    "option": "9"
+                  },
+                  {
+                    "option": "999"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "joined_date",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "account",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "new"
+                  },
+                  {
+                    "option": "active"
+                  },
+                  {
+                    "option": "inactive"
+                  },
+                  {
+                    "option": "expired"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_ssm",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_contact_person",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_phone_no",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_dial_code",
+              "placeholder": "+60",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_address1",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_address2"
+            },
+            {
+              "fieldLabel": "company_address3"
+            },
+            {
+              "fieldLabel": "company_city",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_state",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_country",
+              "placeholder": "MY",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "company_postal_code",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "operation_off_days",
+              "placeholder": "Sun"
+            },
+            {
+              "fieldLabel": "operation_start_time",
+              "placeholder": "09:00"
+            },
+            {
+              "fieldLabel": "operation_end_time",
+              "placeholder": "18:00"
+            },
+            {
+              "fieldLabel": "latitude",
+              "fieldType": "number",
+              "placeholder": "0"
+            },
+            {
+              "fieldLabel": "longitude",
+              "fieldType": "number",
+              "placeholder": "0"
+            },
+            {
+              "fieldLabel": "thumbnail",
+              "placeholder": "https://..."
+            }
+          ]
+        },
+        "options": {
+          "path": "wemotoo-merchant-onboarding"
+        }
+      },
+      "id": "90b172fb-d7d2-4385-a45e-6306ec8d669c",
+      "name": "Merchant Onboarding Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -620,
+        0
+      ],
+      "webhookId": "wemotoo-merchant-onboarding"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst text = (key, fallback = '') => {\n  const value = input[key];\n  return value === undefined || value === null ? fallback : String(value).trim();\n};\n\nconst optionalText = (key) => {\n  const value = input[key];\n  if (value === undefined || value === null) return undefined;\n\n  const trimmed = String(value).trim();\n  return trimmed === '' ? undefined : trimmed;\n};\n\nconst number = (key, fallback = 0) => {\n  const value = input[key];\n  if (value === undefined || value === null || value === '') return fallback;\n  const parsed = Number(value);\n  return Number.isFinite(parsed) ? parsed : fallback;\n};\n\nconst optionalNumber = (key) => {\n  const value = input[key];\n  if (value === undefined || value === null || value === '') return undefined;\n\n  const parsed = Number(value);\n  return Number.isFinite(parsed) ? parsed : undefined;\n};\n\nconst addIfPresent = (target, key, value) => {\n  if (value !== undefined) {\n    target[key] = value;\n  }\n};\n\nconst joinedDate = input.joined_date\n  ? new Date(input.joined_date).toISOString()\n  : new Date().toISOString();\n\nconst payload = {\n  merchant_id: text('merchant_id'),\n  name: text('name'),\n  package: text('package', 'wemotoo_seller'),\n  duration: number('duration', 12),\n  joined_date: joinedDate,\n  account: text('account', 'new'),\n  company_name: text('company_name'),\n  company_ssm: text('company_ssm'),\n  company_email: text('company_email'),\n  company_contact_person: text('company_contact_person'),\n  company_phone_no: text('company_phone_no'),\n  company_dial_code: text('company_dial_code', '+60'),\n  company_address1: text('company_address1'),\n  company_city: text('company_city'),\n  company_state: text('company_state'),\n  company_country: text('company_country', 'MY'),\n  company_postal_code: text('company_postal_code')\n};\n\naddIfPresent(payload, 'company_address2', optionalText('company_address2'));\naddIfPresent(payload, 'company_address3', optionalText('company_address3'));\naddIfPresent(payload, 'thumbnail', optionalText('thumbnail'));\naddIfPresent(payload, 'operation_off_days', optionalText('operation_off_days'));\naddIfPresent(payload, 'operation_start_time', optionalText('operation_start_time'));\naddIfPresent(payload, 'operation_end_time', optionalText('operation_end_time'));\naddIfPresent(payload, 'latitude', optionalNumber('latitude'));\naddIfPresent(payload, 'longitude', optionalNumber('longitude'));\n\nreturn [{\n  json: {\n    method: 'POST',\n    pathWithQuery: '/api/admin/merchants',\n    timestamp: new Date().toISOString(),\n    bodyRaw: JSON.stringify(payload)\n  }\n}];"
+      },
+      "id": "0ead7079-3cd4-4bd1-96a6-56609a7ee196",
+      "name": "Build Create Merchant Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8888/api/admin/merchants",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "content-type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-signature",
+              "value": "={{ $json.x_signature }}"
+            },
+            {
+              "name": "x-timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.bodyRaw }}",
+        "options": {
+          "timeout": 300000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "cb592c73-3800-4922-a30c-6d60ba6761f0",
+      "name": "Create Merchant API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_N8N_HTTP_HEADER_AUTH_CREDENTIAL_ID",
+          "name": "Wemotoo API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "value": "={{ $json.bodyRaw }}",
+        "dataPropertyName": "bodyHash",
+        "encoding": "hex"
+      },
+      "id": "84e0e257-405f-4e0d-a5bf-6d7d3f94c0ad",
+      "name": "Hash Request Body",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\nreturn [{\n  json: {\n    ...item,\n    canonical: [\n      item.method,\n      item.pathWithQuery,\n      item.timestamp,\n      item.bodyHash\n    ].join('\\n')\n  }\n}];"
+      },
+      "id": "4e4c1863-3547-4b3a-b88f-51da8d0c3083",
+      "name": "Build Canonical String",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.canonical }}",
+        "dataPropertyName": "x_signature",
+        "encoding": "hex"
+      },
+      "id": "f15bc0f3-1662-4f1f-a3b9-2731cd2ca32f",
+      "name": "Generate X Signature",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        420,
+        0
+      ],
+      "credentials": {
+        "crypto": {
+          "id": "REPLACE_WITH_N8N_CRYPTO_CREDENTIAL_ID",
+          "name": "Wemotoo Signature Secret"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Merchant Onboarding Form": {
+      "main": [
+        [
+          {
+            "node": "Build Create Merchant Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Create Merchant Payload": {
+      "main": [
+        [
+          {
+            "node": "Hash Request Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash Request Body": {
+      "main": [
+        [
+          {
+            "node": "Build Canonical String",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Canonical String": {
+      "main": [
+        [
+          {
+            "node": "Generate X Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate X Signature": {
+      "main": [
+        [
+          {
+            "node": "Create Merchant API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ed17a758-db61-4ae5-8d0c-c8192c215cc0",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "wemotoo-merchant-onboarding",
+  "tags": []
+}
